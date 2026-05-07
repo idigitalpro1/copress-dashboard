@@ -366,6 +366,77 @@
     opacity: .4;
   }
   #shell, #topbar, #sidebar, #statusbar { position: relative; z-index: 1; }
+
+  /* ── Press Atmosphere: Gears + Spotlight ───────────────────── */
+  #press-atm {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  #gears-svg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: .10; transition: opacity .4s;
+  }
+  body.dark #gears-svg { opacity: .07; }
+
+  /* Gear rotation keyframes — CW and CCW at various speeds */
+  @keyframes gear-cw-slow  { from { transform-origin: center; transform: rotate(0deg); }   to { transform: rotate(360deg); } }
+  @keyframes gear-ccw-slow { from { transform-origin: center; transform: rotate(0deg); }   to { transform: rotate(-360deg); } }
+
+  .gear-a { animation: gear-cw-slow  72s linear infinite; transform-origin: 240px 780px; }
+  .gear-b { animation: gear-ccw-slow 48s linear infinite; transform-origin: calc(100vw - 180px) 160px; }
+  .gear-c { animation: gear-cw-slow  28s linear infinite; transform-origin: calc(100vw - 60px) 310px; }
+  .gear-d { animation: gear-ccw-slow 58s linear infinite; transform-origin: calc(100vw - 140px) calc(100vh - 100px); }
+  .gear-e { animation: gear-cw-slow  22s linear infinite; transform-origin: 80px 140px; }
+
+  /* Spotlight */
+  #spotlight {
+    position: absolute;
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+      rgba(255,248,220,.07) 0%,
+      rgba(255,248,220,.04) 25%,
+      transparent 70%
+    );
+    animation: spot-drift 55s ease-in-out infinite;
+    transform: translate(-50%, -50%);
+    top: 40%; left: 40%;
+  }
+  body.dark #spotlight {
+    background: radial-gradient(circle at center,
+      rgba(200,168,75,.05) 0%,
+      rgba(200,168,75,.02) 30%,
+      transparent 68%
+    );
+  }
+  @keyframes spot-drift {
+    0%   { top: 35%;  left: 45%;  }
+    15%  { top: 20%;  left: 65%;  }
+    30%  { top: 50%;  left: 75%;  }
+    45%  { top: 70%;  left: 55%;  }
+    60%  { top: 60%;  left: 30%;  }
+    75%  { top: 30%;  left: 20%;  }
+    90%  { top: 15%;  left: 40%;  }
+    100% { top: 35%;  left: 45%;  }
+  }
+
+  /* Under-construction gear overlay (visible inside placeholder views) */
+  .module-placeholder {
+    position: relative; overflow: hidden;
+  }
+  .module-placeholder::before {
+    content: '';
+    position: absolute; inset: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 40% at 10% 90%, rgba(94,100,120,.06) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 90% 10%, rgba(94,100,120,.05) 0%, transparent 55%);
+  }
+  .module-placeholder-gear-hint {
+    position: absolute; bottom: -40px; right: -40px;
+    width: 180px; height: 180px; opacity: .06;
+    animation: gear-cw-slow 40s linear infinite;
+    transform-origin: 90px 90px;
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
@@ -930,6 +1001,190 @@ document.addEventListener('keydown', e => {
 // ── Init ────────────────────────────────────────────────────────
 loadKeys();
 updateStatusDots();
+</script>
+
+<!-- ── Press Atmosphere: Gears + Spotlight ─────────────────────── -->
+<div id="press-atm" aria-hidden="true">
+  <div id="spotlight"></div>
+  <svg id="gears-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"></svg>
+</div>
+
+<script>
+(function() {
+  // ── Gear path generator ──────────────────────────────────────
+  // Returns SVG path string for a gear centered at (cx,cy)
+  // R=outer radius, r=inner radius, n=tooth count, hub=hub radius
+  function gearPath(cx, cy, R, r, n, hub) {
+    const step = (Math.PI * 2) / n;
+    const half = step * 0.22; // tooth width fraction
+    const rim  = step * 0.04; // root fillet
+    let d = '';
+    for (let i = 0; i < n; i++) {
+      const a = i * step - Math.PI / 2;
+      const pts = [
+        [r,  a - half - rim],   // valley approach
+        [R,  a - half],          // tooth leading edge
+        [R,  a + half],          // tooth trailing edge
+        [r,  a + half + rim],    // valley exit
+      ];
+      pts.forEach(([rad, ang], j) => {
+        const x = +(cx + rad * Math.cos(ang)).toFixed(2);
+        const y = +(cy + rad * Math.sin(ang)).toFixed(2);
+        d += (i === 0 && j === 0) ? `M${x},${y}` : `L${x},${y}`;
+      });
+    }
+    d += 'Z';
+    // Hub cutout (even-odd fill)
+    d += ` M${+(cx+hub).toFixed(2)},${+cy.toFixed(2)}`;
+    d += ` A${hub},${hub},0,1,0,${+(cx-hub).toFixed(2)},${+cy.toFixed(2)}`;
+    d += ` A${hub},${hub},0,1,0,${+(cx+hub).toFixed(2)},${+cy.toFixed(2)}Z`;
+    return d;
+  }
+
+  // ── Gear bolt detail (3 bolts on hub ring) ──────────────────
+  function boltCircles(cx, cy, boltR, boltRad) {
+    let d = '';
+    for (let i = 0; i < 3; i++) {
+      const a = (i * Math.PI * 2) / 3;
+      const bx = +(cx + boltR * Math.cos(a)).toFixed(2);
+      const by = +(cy + boltR * Math.sin(a)).toFixed(2);
+      d += `M${+(bx+boltRad).toFixed(2)},${by}`;
+      d += ` A${boltRad},${boltRad},0,1,0,${+(bx-boltRad).toFixed(2)},${by}`;
+      d += ` A${boltRad},${boltRad},0,1,0,${+(bx+boltRad).toFixed(2)},${by}Z`;
+    }
+    return d;
+  }
+
+  // ── Steel color palette ──────────────────────────────────────
+  const STEEL = {
+    dark:    '#455a64',  // dark teal-steel
+    mid:     '#607d8b',  // mid blue-steel
+    light:   '#90a4ae',  // light steel
+    brushed: '#78909c',  // brushed steel
+    aged:    '#4e6070',  // aged press steel
+    highlight:'#b0bec5', // highlight
+  };
+
+  // ── Gear definitions ─────────────────────────────────────────
+  // Each: { cx, cy, R, r, hub, teeth, color, boltColor, animClass }
+  // Positions are in the 1440×900 viewBox
+  const gears = [
+    // A — LARGE, bottom-left, partially off-screen
+    { cx:240, cy:780, R:220, r:192, hub:38, teeth:14, color:STEEL.dark,
+      bolt:STEEL.mid, boltRad:6, boltR:60, animClass:'gear-a', spokes:6 },
+    // B — MEDIUM, top-right area
+    { cx:1300, cy:160, R:140, r:120, hub:26, teeth:10, color:STEEL.mid,
+      bolt:STEEL.light, boltRad:4.5, boltR:38, animClass:'gear-b', spokes:5 },
+    // C — SMALL, meshing with B
+    { cx:1405, cy:302, R:80, r:68,  hub:16, teeth:8,  color:STEEL.light,
+      bolt:STEEL.brushed, boltRad:3, boltR:22, animClass:'gear-c', spokes:4 },
+    // D — MEDIUM, bottom-right
+    { cx:1340, cy:820, R:160, r:138, hub:30, teeth:11, color:STEEL.aged,
+      bolt:STEEL.mid, boltRad:5, boltR:44, animClass:'gear-d', spokes:5 },
+    // E — SMALL, top-left accent
+    { cx:80, cy:140, R:70, r:60, hub:14, teeth:7, color:STEEL.brushed,
+      bolt:STEEL.light, boltRad:3, boltR:20, animClass:'gear-e', spokes:3 },
+  ];
+
+  const svg = document.getElementById('gears-svg');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  // Spoke path between hub and inner radius
+  function spokePath(cx, cy, hubR, innerR, n) {
+    let d = '';
+    const w = 4; // spoke width half
+    for (let i = 0; i < n; i++) {
+      const a = (i * Math.PI * 2) / n;
+      const ax = Math.cos(a), ay = Math.sin(a);
+      const perp_x = -ay * w, perp_y = ax * w;
+      const sx = cx + (hubR + 4) * ax, sy = cy + (hubR + 4) * ay;
+      const ex = cx + (innerR - 8) * ax, ey = cy + (innerR - 8) * ay;
+      d += `M${+(sx+perp_x).toFixed(1)},${+(sy+perp_y).toFixed(1)}`;
+      d += `L${+(ex+perp_x).toFixed(1)},${+(ey+perp_y).toFixed(1)}`;
+      d += `L${+(ex-perp_x).toFixed(1)},${+(ey-perp_y).toFixed(1)}`;
+      d += `L${+(sx-perp_x).toFixed(1)},${+(sy-perp_y).toFixed(1)}Z`;
+    }
+    return d;
+  }
+
+  gears.forEach(g => {
+    const grp = document.createElementNS(NS, 'g');
+    grp.setAttribute('class', g.animClass);
+
+    // Main gear body (even-odd for hub hole)
+    const body = document.createElementNS(NS, 'path');
+    body.setAttribute('d', gearPath(g.cx, g.cy, g.R, g.r, g.teeth, g.hub));
+    body.setAttribute('fill', g.color);
+    body.setAttribute('fill-rule', 'evenodd');
+    body.setAttribute('stroke', g.bolt);
+    body.setAttribute('stroke-width', '1');
+    body.setAttribute('stroke-opacity', '0.35');
+    grp.appendChild(body);
+
+    // Spokes
+    if (g.spokes > 0) {
+      const spk = document.createElementNS(NS, 'path');
+      spk.setAttribute('d', spokePath(g.cx, g.cy, g.hub, g.r, g.spokes));
+      spk.setAttribute('fill', g.bolt);
+      spk.setAttribute('opacity', '0.5');
+      grp.appendChild(spk);
+    }
+
+    // Bolt detail circles
+    if (g.boltRad) {
+      const bolts = document.createElementNS(NS, 'path');
+      bolts.setAttribute('d', boltCircles(g.cx, g.cy, g.boltR, g.boltRad));
+      bolts.setAttribute('fill', 'none');
+      bolts.setAttribute('stroke', g.bolt);
+      bolts.setAttribute('stroke-width', '1.5');
+      bolts.setAttribute('opacity', '0.55');
+      grp.appendChild(bolts);
+    }
+
+    // Hub highlight ring
+    const hubRing = document.createElementNS(NS, 'circle');
+    hubRing.setAttribute('cx', g.cx); hubRing.setAttribute('cy', g.cy);
+    hubRing.setAttribute('r', g.hub + 2);
+    hubRing.setAttribute('fill', 'none');
+    hubRing.setAttribute('stroke', g.highlight || STEEL.highlight);
+    hubRing.setAttribute('stroke-width', '1.2');
+    hubRing.setAttribute('opacity', '0.3');
+    grp.appendChild(hubRing);
+
+    svg.appendChild(grp);
+  });
+
+  // ── Per-gear transform-origin correction ─────────────────────
+  // CSS transform-origin in pixels only works reliably with direct style
+  gears.forEach(g => {
+    const el = svg.querySelector('.' + g.animClass);
+    if (el) {
+      el.style.transformOrigin = `${g.cx}px ${g.cy}px`;
+    }
+  });
+
+  // ── Under-construction placeholder gear hints ─────────────────
+  // Inject a small decorative gear SVG into each .module-placeholder
+  document.querySelectorAll('.module-placeholder').forEach(ph => {
+    const svg2 = document.createElementNS(NS, 'svg');
+    svg2.setAttribute('class', 'module-placeholder-gear-hint');
+    svg2.setAttribute('viewBox', '0 0 180 180');
+    svg2.setAttribute('xmlns', NS);
+    const p = document.createElementNS(NS, 'path');
+    p.setAttribute('d', gearPath(90, 90, 85, 74, 12, 18));
+    p.setAttribute('fill', STEEL.mid);
+    p.setAttribute('fill-rule', 'evenodd');
+    // Spokes for the hint gear
+    const spk2 = document.createElementNS(NS, 'path');
+    spk2.setAttribute('d', spokePath(90, 90, 18, 74, 5));
+    spk2.setAttribute('fill', STEEL.light);
+    spk2.setAttribute('opacity', '0.6');
+    svg2.appendChild(p);
+    svg2.appendChild(spk2);
+    ph.appendChild(svg2);
+  });
+
+})();
 </script>
 </body>
 </html>
