@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Network HQ — copress.news</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#08111e;
+  --surface:#0d1a2d;
+  --surface2:#122035;
+  --border:#1e2f47;
+  --text:#e8edf5;
+  --muted:#5a7090;
+  --gold:#c8a84b;
+  --gold-bright:#f5c842;
+  --green:#22d3a0;
+  --red:#e5534b;
+  --blue:#4d8ef0;
+  --navy:#0a1628;
+  --r:12px;
+  --font:'Space Grotesk',system-ui,sans-serif;
+  --serif:'Playfair Display',Georgia,serif;
+  --mono:'JetBrains Mono',monospace;
+}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ── Top Nav ── */
+#topnav{
+  display:flex;align-items:center;gap:16px;
+  padding:0 28px;height:54px;
+  background:var(--navy);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:100;
+}
+.nav-logo{font-family:var(--serif);font-size:1.05rem;color:var(--gold);letter-spacing:-.3px}
+.nav-logo span{color:var(--muted);font-family:var(--font);font-weight:400;font-size:.72rem;margin-left:8px;letter-spacing:.05em;text-transform:uppercase}
+.nav-pill{
+  padding:5px 14px;border-radius:20px;
+  font-size:.78rem;font-weight:600;
+  cursor:pointer;transition:all .2s;
+  text-decoration:none;border:1px solid var(--border);color:var(--muted);
+}
+.nav-pill:hover{border-color:var(--gold);color:var(--gold)}
+.nav-pill.active{background:var(--gold);color:#08111e;border-color:var(--gold)}
+.nav-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.ip-badge{
+  font-family:var(--mono);font-size:.72rem;font-weight:600;
+  background:rgba(77,142,240,.12);border:1px solid rgba(77,142,240,.3);
+  color:var(--blue);padding:4px 10px;border-radius:6px;
+  cursor:help;
+}
+.ip-badge::before{content:'⬤ ';color:var(--green);font-size:.6rem}
+
+/* ── Layout ── */
+.page{max-width:1320px;margin:0 auto;padding:32px 24px 80px}
+
+/* ── Hero ── */
+.hero{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  gap:32px;margin-bottom:40px;flex-wrap:wrap;
+}
+.hero-left{}
+.hero-eyebrow{
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:10px;
+}
+.hero-title{
+  font-family:var(--serif);
+  font-size:clamp(2.2rem,5vw,3.4rem);
+  line-height:1.05;
+  margin-bottom:8px;
+}
+.hero-title em{font-style:italic;color:var(--gold)}
+.hero-sub{color:var(--muted);font-size:.9rem;max-width:460px;line-height:1.6}
+
+/* Server stats cards */
+.hero-stats{
+  display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;
+  flex-shrink:0;
+}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:16px 20px;min-width:130px;
+  transition:border-color .2s;
+}
+.stat-card:hover{border-color:var(--gold)}
+.stat-val{font-family:var(--mono);font-size:1.1rem;font-weight:600;margin-bottom:3px}
+.stat-label{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.stat-green{color:var(--green)}
+.stat-blue{color:var(--blue)}
+.stat-gold{color:var(--gold)}
+
+/* ── Section label ── */
+.sec-label{
+  font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ── Property Card Grid ── */
+.props-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(380px,1fr));
+  gap:24px;
+  margin-bottom:48px;
+}
+.prop-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  transition:transform .22s,box-shadow .22s,border-color .22s;
+  display:flex;flex-direction:column;
+  position:relative;
+}
+.prop-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  border-color:var(--prop-color,var(--gold));
+}
+/* tier left stripe */
+.prop-card::before{
+  content:'';
+  position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--prop-color,var(--gold));
+}
+
+/* Thumbnail */
+.prop-thumb{
+  width:100%;height:200px;
+  position:relative;overflow:hidden;
+  background:var(--surface2);
+  cursor:pointer;
+  flex-shrink:0;
+}
+.prop-thumb img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:top center;
+  transition:transform .5s ease;
+  display:block;
+}
+.prop-card:hover .prop-thumb img{transform:scale(1.04)}
+.prop-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 40%,rgba(8,17,30,.9) 100%);
+  pointer-events:none;
+}
+.prop-thumb-url{
+  position:absolute;bottom:10px;left:14px;
+  font-family:var(--mono);font-size:.68rem;color:rgba(255,255,255,.75);
+  text-shadow:0 1px 3px rgba(0,0,0,.8);
+}
+.prop-thumb-status{
+  position:absolute;top:10px;right:10px;
+  padding:3px 10px;border-radius:20px;
+  font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+}
+.status-live{background:rgba(34,211,160,.2);color:var(--green);border:1px solid rgba(34,211,160,.4)}
+.status-dev {background:rgba(77,142,240,.2);color:var(--blue);border:1px solid rgba(77,142,240,.4)}
+.status-plan{background:rgba(90,112,144,.15);color:var(--muted);border:1px solid rgba(90,112,144,.3)}
+.prop-thumb-ip{
+  position:absolute;top:10px;left:14px;
+  font-family:var(--mono);font-size:.62rem;
+  color:rgba(255,255,255,.5);
+}
+
+/* Card body */
+.prop-body{padding:18px 20px 14px 22px;flex:1;display:flex;flex-direction:column}
+.prop-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px}
+.prop-icon{font-size:1.6rem;flex-shrink:0;line-height:1}
+.prop-meta{}
+.prop-name{font-weight:700;font-size:1rem;margin-bottom:2px;line-height:1.2}
+.prop-tagline{font-size:.78rem;color:var(--muted);line-height:1.4}
+.prop-tags{
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;
+}
+.prop-tag{
+  padding:2px 8px;border-radius:4px;font-size:.67rem;font-weight:600;
+  background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border);
+}
+
+/* Department action buttons — THE SPINE LINKS */
+.prop-actions{
+  display:grid;grid-template-columns:1fr 1fr;gap:7px;
+  margin-top:auto;
+  border-top:1px solid var(--border);
+  padding-top:14px;
+}
+.dept-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:8px 10px;
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:7px;
+  color:var(--text);
+  font-family:var(--font);font-size:.76rem;font-weight:500;
+  text-decoration:none;cursor:pointer;
+  transition:all .18s;
+  white-space:nowrap;
+}
+.dept-btn:hover{
+  background:rgba(255,255,255,.06);
+  border-color:var(--dept-color,var(--gold));
+  color:var(--dept-color,var(--gold));
+  transform:translateX(1px);
+}
+.dept-icon{font-size:.9rem}
+
+/* ── City Sites Grid ── */
+.cities-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:16px;
+  margin-bottom:48px;
+}
+.city-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  transition:transform .2s,border-color .2s,box-shadow .2s;
+  cursor:pointer;
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+.city-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--gold);
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.city-thumb{
+  width:100%;height:130px;
+  background:var(--surface2);
+  position:relative;overflow:hidden;
+}
+.city-thumb img{
+  width:100%;height:100%;object-fit:cover;object-position:center;
+  transition:transform .4s;
+  display:block;
+}
+.city-card:hover .city-thumb img{transform:scale(1.06)}
+.city-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 30%,rgba(8,17,30,.85));
+}
+.city-body{padding:12px 14px}
+.city-name{font-weight:700;font-size:.9rem;margin-bottom:2px}
+.city-county{font-size:.72rem;color:var(--muted)}
+.city-status{
+  display:inline-block;margin-top:6px;
+  padding:2px 8px;border-radius:20px;
+  font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+}
+/* dept mini-strip */
+.city-depts{
+  display:flex;gap:4px;padding:0 14px 12px;flex-wrap:wrap;
+}
+.city-dept{
+  padding:2px 7px;border-radius:4px;
+  font-size:.62rem;font-weight:600;
+  background:rgba(255,255,255,.05);color:var(--muted);
+  border:1px solid var(--border);
+  text-decoration:none;
+  transition:all .15s;
+}
+.city-dept:hover{background:rgba(200,168,75,.1);color:var(--gold);border-color:var(--gold)}
+
+/* ── Server Panel ── */
+.server-panel{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-bottom:48px;
+}
+.server-panel-header{
+  display:flex;align-items:center;gap:12px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  background:var(--surface2);
+}
+.server-panel-title{font-weight:700;font-size:.95rem}
+.server-panel-ip{
+  font-family:var(--mono);font-size:.8rem;
+  color:var(--blue);margin-left:auto;
+  background:rgba(77,142,240,.1);padding:3px 10px;border-radius:6px;
+}
+.server-rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.server-row{
+  padding:14px 20px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.server-row:nth-child(n) { border-right:1px solid var(--border); }
+.server-row-key{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.server-row-val{font-family:var(--mono);font-size:.82rem;font-weight:600;color:var(--text)}
+.server-row-val.green{color:var(--green)}
+.server-row-val.blue{color:var(--blue)}
+.server-row-val.gold{color:var(--gold)}
+
+/* ── Thumbnail loading state ── */
+.thumb-loading{
+  display:flex;align-items:center;justify-content:center;
+  width:100%;height:100%;
+  color:var(--muted);font-size:.8rem;gap:8px;
+}
+.thumb-loading::before{
+  content:'';width:16px;height:16px;border-radius:50%;
+  border:2px solid var(--border);border-top-color:var(--gold);
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Card entrance ── */
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.prop-card,.city-card{animation:cardIn .4s ease both}
+
+/* ── Responsive ── */
+@media(max-width:600px){
+  .props-grid{grid-template-columns:1fr}
+  .hero{flex-direction:column}
+  .hero-stats{width:100%}
+}
+</style>
+</head>
+<body>
+
+<nav id="topnav">
+  <div class="nav-logo">copress <span>Network HQ</span></div>
+  <a href="/" class="nav-pill">⬛ Dashboard</a>
+  <a href="/network" class="nav-pill active">🌐 Properties</a>
+  <a href="/newsletter" class="nav-pill">📧 Newsletter</a>
+  <a href="/docs" class="nav-pill">📚 Docs</a>
+  <div class="nav-right">
+    <div class="ip-badge" title="Production server — AWS Lightsail us-west-2a">44.236.197.183</div>
+    <a href="/" class="nav-pill">← Spine</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- ── HERO ── -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">📰 Sweeney Media Group</div>
+      <h1 class="hero-title">Network<br><em>Properties</em></h1>
+      <p class="hero-sub">Every site, domain, and server in the portfolio. Click any property to visit — or use the department buttons to route directly to Editorial, Marketing, Accounting, or Campaign Kits in the main spine.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-val stat-green">● Live</div>
+        <div class="stat-label">Server Status</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val stat-blue" style="font-size:.88rem">44.236.197.183</div>
+        <div class="stat-label">Production IP</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val stat-gold">6</div>
+        <div class="stat-label">Live Properties</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val">5</div>
+        <div class="stat-label">City Sites</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val stat-blue">16 GB</div>
+        <div class="stat-label">Server RAM</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SERVER PANEL ── -->
+  <div class="sec-label">⚙️ Infrastructure — AWS Lightsail mmtkplesk</div>
+  <div class="server-panel" style="margin-bottom:40px">
+    <div class="server-panel-header">
+      <span>🖥️</span>
+      <span class="server-panel-title">Production Server — mmtkplesk</span>
+      <span class="server-panel-ip">44.236.197.183</span>
+    </div>
+    <div class="server-rows">
+      <div class="server-row"><div class="server-row-key">Instance</div><div class="server-row-val">mmtkplesk-16gb</div></div>
+      <div class="server-row"><div class="server-row-key">Region</div><div class="server-row-val blue">us-west-2a (Oregon)</div></div>
+      <div class="server-row"><div class="server-row-key">Platform</div><div class="server-row-val">Plesk on Ubuntu</div></div>
+      <div class="server-row"><div class="server-row-key">RAM / CPU</div><div class="server-row-val">16 GB · 4 vCPU</div></div>
+      <div class="server-row"><div class="server-row-key">Storage</div><div class="server-row-val">320 GB + 128 GB</div></div>
+      <div class="server-row"><div class="server-row-key">SSH Key</div><div class="server-row-val">~/Docker/keys/lightsail.pem</div></div>
+      <div class="server-row"><div class="server-row-key">SSH Command</div><div class="server-row-val" style="font-size:.68rem">ssh -i ~/Docker/keys/lightsail.pem ubuntu@44.236.197.183</div></div>
+      <div class="server-row"><div class="server-row-key">DNS (5280.menu)</div><div class="server-row-val">ns1/ns2.5280.menu (Plesk self-hosted)</div></div>
+      <div class="server-row"><div class="server-row-key">DNS (conews.press)</div><div class="server-row-val blue">Cloudflare · CF Zone: 6f90b56a</div></div>
+      <div class="server-row"><div class="server-row-key">Status</div><div class="server-row-val green">● Live — Do NOT touch</div></div>
+      <div class="server-row"><div class="server-row-key">Plesk Panel</div><div class="server-row-val blue">https://44.236.197.183:8443</div></div>
+      <div class="server-row"><div class="server-row-key">Snapshot</div><div class="server-row-val">mmtk-backup-april05 ✓</div></div>
+    </div>
+  </div>
+
+  <!-- ── MAIN PROPERTIES ── -->
+  <div class="sec-label">🗞️ Live Publications & Platforms</div>
+  <div class="props-grid" id="props-grid">
+
+    <!-- 1. registercall.com -->
+    <div class="prop-card" style="--prop-color:#c8a84b" id="card-wrc">
+      <div class="prop-thumb" onclick="window.open('https://registercall.com','_blank')">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=800&h=400"
+             alt="registercall.com"
+             onerror="this.parentElement.innerHTML='<div class=thumb-loading>Loading preview…</div>'"
+             loading="lazy">
+        <div class="prop-thumb-overlay"></div>
+        <div class="prop-thumb-status status-live">● Live</div>
+        <div class="prop-thumb-ip">44.236.197.183</div>
+        <div class="prop-thumb-url">registercall.com</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-header">
+          <div class="prop-icon">🗞️</div>
+          <div class="prop-meta">
+            <div class="prop-name">The Weekly Register-Call</div>
+            <div class="prop-tagline">Colorado's oldest paper · Georgetown · Clear Creek County</div>
+          </div>
+        </div>
+        <div class="prop-tags">
+          <span class="prop-tag">Vite + React SPA</span>
+          <span class="prop-tag">Supabase backend</span>
+          <span class="prop-tag">WordPress CMS</span>
+          <span class="prop-tag">Voluntary paywall</span>
+        </div>
+        <div class="prop-actions">
+          <a class="dept-btn" href="/" style="--dept-color:#c8a84b"><span class="dept-icon">✒</span> Editorial</a>
+          <a class="dept-btn" href="/newsletter" style="--dept-color:#f8834f"><span class="dept-icon">📧</span> Marketing</a>
+          <a class="dept-btn" href="/" style="--dept-color:#22d3a0"><span class="dept-icon">📒</span> Accounting</a>
+          <a class="dept-btn" href="/" style="--dept-color:#a67cf8"><span class="dept-icon">🎯</span> Campaigns</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 5280.menu -->
+    <div class="prop-card" style="--prop-color:#4d8ef0" id="card-5280">
+      <div class="prop-thumb" onclick="window.open('https://5280.menu','_blank')">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2F5280.menu%2F?w=800&h=400"
+             alt="5280.menu"
+             onerror="this.parentElement.innerHTML='<div class=thumb-loading>Loading preview…</div>'"
+             loading="lazy">
+        <div class="prop-thumb-overlay"></div>
+        <div class="prop-thumb-status status-live">● Live</div>
+        <div class="prop-thumb-ip">44.236.197.183</div>
+        <div class="prop-thumb-url">5280.menu</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-header">
+          <div class="prop-icon">🏔️</div>
+          <div class="prop-meta">
+            <div class="prop-name">5280 Mountain Hub</div>
+            <div class="prop-tagline">Mountain dining · lifestyle · Factory API host · self-hosted DNS</div>
+          </div>
+        </div>
+        <div class="prop-tags">
+          <span class="prop-tag">Flask :8080</span>
+          <span class="prop-tag">Nginx :8090</span>
+          <span class="prop-tag">Admin SPA :8091</span>
+          <span class="prop-tag">Self-hosted DNS</span>
+        </div>
+        <div class="prop-actions">
+          <a class="dept-btn" href="/" style="--dept-color:#c8a84b"><span class="dept-icon">✒</span> Editorial</a>
+          <a class="dept-btn" href="/newsletter" style="--dept-color:#f8834f"><span class="dept-icon">📧</span> Marketing</a>
+          <a class="dept-btn" href="/" style="--dept-color:#22d3a0"><span class="dept-icon">📒</span> Accounting</a>
+          <a class="dept-btn" href="/" style="--dept-color:#a67cf8"><span class="dept-icon">🎯</span> Campaigns</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. admin.conews.press -->
+    <div class="prop-card" style="--prop-color:#a67cf8" id="card-admin">
+      <div class="prop-thumb" onclick="window.open('https://admin.conews.press/console/en','_blank')">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fadmin.conews.press%2Fconsole%2Fen?w=800&h=400"
+             alt="admin.conews.press"
+             onerror="this.parentElement.innerHTML='<div class=thumb-loading>Loading preview…</div>'"
+             loading="lazy">
+        <div class="prop-thumb-overlay"></div>
+        <div class="prop-thumb-status status-live">● Live</div>
+        <div class="prop-thumb-ip">44.236.197.183</div>
+        <div class="prop-thumb-url">admin.conews.press</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-header">
+          <div class="prop-icon">🤖</div>
+          <div class="prop-meta">
+            <div class="prop-name">CoNews Admin Console</div>
+            <div class="prop-tagline">Hermes AI · Dashtail · Editorial command · Cloudflare DNS</div>
+          </div>
+        </div>
+        <div class="prop-tags">
+          <span class="prop-tag">Next.js</span>
+          <span class="prop-tag">Hermes AI</span>
+          <span class="prop-tag">conews-admin :8093</span>
+          <span class="prop-tag">Cloudflare</span>
+        </div>
+        <div class="prop-actions">
+          <a class="dept-btn" href="https://admin.conews.press/console/en" target="_blank" style="--dept-color:#a67cf8"><span class="dept-icon">🤖</span> Open Hermes</a>
+          <a class="dept-btn" href="/newsletter" style="--dept-color:#f8834f"><span class="dept-icon">📧</span> Newsletter</a>
+          <a class="dept-btn" href="/" style="--dept-color:#22d3a0"><span class="dept-icon">📒</span> Accounting</a>
+          <a class="dept-btn" href="/" style="--dept-color:#c8a84b"><span class="dept-icon">✒</span> Editorial</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. admin.registercall.com -->
+    <div class="prop-card" style="--prop-color:#22d3a0" id="card-rcadmin">
+      <div class="prop-thumb" onclick="window.open('https://admin.registercall.com/console/en','_blank')">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fadmin.registercall.com%2Fconsole%2Fen?w=800&h=400"
+             alt="admin.registercall.com"
+             onerror="this.parentElement.innerHTML='<div class=thumb-loading>Loading preview…</div>'"
+             loading="lazy">
+        <div class="prop-thumb-overlay"></div>
+        <div class="prop-thumb-status status-live">● Live</div>
+        <div class="prop-thumb-ip">44.236.197.183</div>
+        <div class="prop-thumb-url">admin.registercall.com</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-header">
+          <div class="prop-icon">📋</div>
+          <div class="prop-meta">
+            <div class="prop-name">Register-Call Admin</div>
+            <div class="prop-tagline">WRC editorial · AI receptionist · SMS operations · Twilio</div>
+          </div>
+        </div>
+        <div class="prop-tags">
+          <span class="prop-tag">Next.js admin</span>
+          <span class="prop-tag">codex-admin :8092</span>
+          <span class="prop-tag">Twilio SMS</span>
+          <span class="prop-tag">AI receptionist</span>
+        </div>
+        <div class="prop-actions">
+          <a class="dept-btn" href="https://admin.registercall.com/console/en" target="_blank" style="--dept-color:#22d3a0"><span class="dept-icon">📋</span> Open Admin</a>
+          <a class="dept-btn" href="/" style="--dept-color:#c8a84b"><span class="dept-icon">✒</span> Editorial</a>
+          <a class="dept-btn" href="/" style="--dept-color:#22d3a0"><span class="dept-icon">📒</span> Accounting</a>
+          <a class="dept-btn" href="/" style="--dept-color:#a67cf8"><span class="dept-icon">🎯</span> Campaigns</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. copress-dashboard (THIS PLATFORM) -->
+    <div class="prop-card" style="--prop-color:#f5c842" id="card-copress">
+      <div class="prop-thumb" onclick="window.open('https://copress-dashboard.vercel.app','_blank')">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fcopress-dashboard.vercel.app%2F?w=800&h=400"
+             alt="copress-dashboard"
+             onerror="this.parentElement.innerHTML='<div class=thumb-loading>Loading preview…</div>'"
+             loading="lazy">
+        <div class="prop-thumb-overlay"></div>
+        <div class="prop-thumb-status status-live">● Live</div>
+        <div class="prop-thumb-ip" style="color:var(--gold-bright)">Vercel · auto-deploy</div>
+        <div class="prop-thumb-url">copress-dashboard.vercel.app</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-header">
+          <div class="prop-icon">⬛</div>
+          <div class="prop-meta">
+            <div class="prop-name">Publishing Ops — THE SPINE</div>
+            <div class="prop-tagline">Command center · All departments route here · GitHub auto-deploy</div>
+          </div>
+        </div>
+        <div class="prop-tags">
+          <span class="prop-tag">Static HTML</span>
+          <span class="prop-tag">Vercel CDN</span>
+          <span class="prop-tag">idigitalpro1/copress-dashboard</span>
+          <span class="prop-tag">6 modules</span>
+        </div>
+        <div class="prop-actions">
+          <a class="dept-btn" href="/" style="--dept-color:#f5c842"><span class="dept-icon">⬛</span> Dashboard</a>
+          <a class="dept-btn" href="/newsletter" style="--dept-color:#f8834f"><span class="dept-icon">📧</span> Newsletter</a>
+          <a class="dept-btn" href="/docs" style="--dept-color:#5b8ef5"><span class="dept-icon">📚</span> Docs Hub</a>
+          <a class="dept-btn" href="/learn" style="--dept-color:#a67cf8"><span class="dept-icon">🎓</span> Academy</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. empire-courier.com -->
+    <div class="prop-card" style="--prop-color:#f8834f" id="card-empire">
+      <div class="prop-thumb" onclick="window.open('https://empire-courier.com','_blank')">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fempire-courier.com%2F?w=800&h=400"
+             alt="empire-courier.com"
+             onerror="this.parentElement.innerHTML='<div class=thumb-loading>Loading preview…</div>'"
+             loading="lazy">
+        <div class="prop-thumb-overlay"></div>
+        <div class="prop-thumb-status status-dev">⚡ Dev</div>
+        <div class="prop-thumb-ip">44.236.197.183</div>
+        <div class="prop-thumb-url">empire-courier.com</div>
+      </div>
+      <div class="prop-body">
+        <div class="prop-header">
+          <div class="prop-icon">📮</div>
+          <div class="prop-meta">
+            <div class="prop-name">Empire Courier</div>
+            <div class="prop-tagline">Mountain publication · Villager Media Group portfolio</div>
+          </div>
+        </div>
+        <div class="prop-tags">
+          <span class="prop-tag">Publication</span>
+          <span class="prop-tag">Villager Media Group</span>
+          <span class="prop-tag">In development</span>
+        </div>
+        <div class="prop-actions">
+          <a class="dept-btn" href="/" style="--dept-color:#c8a84b"><span class="dept-icon">✒</span> Editorial</a>
+          <a class="dept-btn" href="/newsletter" style="--dept-color:#f8834f"><span class="dept-icon">📧</span> Marketing</a>
+          <a class="dept-btn" href="/" style="--dept-color:#22d3a0"><span class="dept-icon">📒</span> Accounting</a>
+          <a class="dept-btn" href="/" style="--dept-color:#a67cf8"><span class="dept-icon">🎯</span> Campaigns</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /props-grid -->
+
+  <!-- ── CITY SITES ── -->
+  <div class="sec-label">🏔️ Mountain City Sites — Colorado Coverage Network</div>
+  <div class="cities-grid">
+
+    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:0ms">
+      <div class="city-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
+             alt="Black Hawk" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="city-thumb-overlay"></div>
+      </div>
+      <div class="city-body">
+        <div class="city-name">⛏ Black Hawk</div>
+        <div class="city-county">Gilpin County · Casino District</div>
+        <span class="city-status status-live">● Live via WRC</span>
+      </div>
+      <div class="city-depts">
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
+        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:60ms">
+      <div class="city-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
+             alt="Central City" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="city-thumb-overlay"></div>
+      </div>
+      <div class="city-body">
+        <div class="city-name">🎰 Central City</div>
+        <div class="city-county">Gilpin County · Historic District</div>
+        <span class="city-status status-live">● Live via WRC</span>
+      </div>
+      <div class="city-depts">
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
+        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:120ms">
+      <div class="city-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
+             alt="Nederland" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="city-thumb-overlay"></div>
+      </div>
+      <div class="city-body">
+        <div class="city-name">🏔️ Nederland</div>
+        <div class="city-county">Boulder County · Mountain Town</div>
+        <span class="city-status status-dev">⚡ Site Planned</span>
+      </div>
+      <div class="city-depts">
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
+        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:180ms">
+      <div class="city-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
+             alt="Georgetown" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="city-thumb-overlay"></div>
+      </div>
+      <div class="city-body">
+        <div class="city-name">🚂 Georgetown</div>
+        <div class="city-county">Clear Creek County · County Seat</div>
+        <span class="city-status status-live">● Live via WRC</span>
+      </div>
+      <div class="city-depts">
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
+        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+      </div>
+    </a>
+
+    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:240ms">
+      <div class="city-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
+             alt="Idaho Springs" loading="lazy"
+             onerror="this.style.display='none'">
+        <div class="city-thumb-overlay"></div>
+      </div>
+      <div class="city-body">
+        <div class="city-name">⛷️ Idaho Springs</div>
+        <div class="city-county">Clear Creek County · Gateway City</div>
+        <span class="city-status status-dev">⚡ Site Planned</span>
+      </div>
+      <div class="city-depts">
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
+        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
+        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+      </div>
+    </a>
+
+  </div><!-- /cities-grid -->
+
+</div><!-- /page -->
+
+<script>
+// Auto-refresh thumbnails that fail to load with retry
+document.querySelectorAll('.prop-thumb img, .city-thumb img').forEach(img => {
+  img.addEventListener('load', () => { img.style.opacity = 1; });
+  img.style.opacity = 0;
+  img.style.transition = 'opacity .4s';
+  // If first load fails, try once more after 3s (mshots can be slow on first render)
+  img.addEventListener('error', () => {
+    const originalSrc = img.src;
+    setTimeout(() => {
+      img.src = originalSrc + '&t=' + Date.now();
+    }, 4000);
+  });
+});
+</script>
+</body>
+</html>

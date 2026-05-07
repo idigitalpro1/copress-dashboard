@@ -410,6 +410,9 @@
     </div>
     <hr class="sidebar-rule">
     <div class="sidebar-section-label">Tools</div>
+    <div class="nav-item" onclick="window.location.href='/network'">
+      <span class="nav-icon">🌐</span> Network HQ
+    </div>
     <div class="nav-item" onclick="window.location.href='/docs'">
       <span class="nav-icon">📚</span> Docs Hub
     </div>
@@ -479,7 +482,7 @@
         </div>
 
         <!-- City Sites -->
-        <div class="module-card" data-target="cities">
+        <div class="module-card" data-target="cities" onclick="window.location.href='/network'" style="cursor:pointer;">
           <div class="card-header">
             <div class="card-icon">🏔</div>
             <div class="card-title-block">
@@ -489,9 +492,9 @@
           </div>
           <hr class="card-rule">
           <div class="card-actions">
-            <button class="card-btn primary" onclick="event.stopPropagation(); navTo('cities')">+ New City Site</button>
-            <button class="card-btn" onclick="event.stopPropagation(); navTo('cities')">Manage Towns</button>
-            <button class="card-btn" onclick="event.stopPropagation(); toast('Opening preview…')">Preview</button>
+            <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/network'">🌐 Network HQ</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/network'">All Properties</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/network'">City Sites</button>
           </div>
           <div class="card-footer">
             <span class="card-status ok">5 towns configured</span>
