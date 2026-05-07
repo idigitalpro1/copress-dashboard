@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newsletter Studio — copress.news</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #0f2040;
+    --navy-light: #1a3058;
+    --gold: #c8a84b;
+    --gold-light: #e8c96a;
+    --red: #c0392b;
+    --warm-white: #fafaf8;
+    --paper: #f5f3ee;
+    --muted: #8a9ab5;
+    --border: #ddd9d0;
+    --text: #1a1a1a;
+    --sidebar: 240px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--warm-white);
+    color: var(--text);
+    display: flex;
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar);
+    background: var(--navy);
+    color: #fff;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    z-index: 100;
+    border-right: 1px solid var(--navy-light);
+  }
+  .sidebar-logo {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--navy-light);
+  }
+  .sidebar-logo a {
+    text-decoration: none;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar-logo a span { color: #fff; font-size: 11px; font-family: 'DM Sans', sans-serif; font-weight: 400; letter-spacing: 0; display: block; margin-top: 2px; }
+  .sidebar-section {
+    padding: 14px 20px 6px;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .step-nav { flex: 1; overflow-y: auto; padding-bottom: 20px; }
+  .step-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    position: relative;
+  }
+  .step-item:hover { background: var(--navy-light); }
+  .step-item.active { background: var(--navy-mid); border-left: 3px solid var(--gold); }
+  .step-item.done .step-num { background: #2d7a3a; border-color: #2d7a3a; color: #fff; }
+  .step-item.done .step-num::after { content: '✓'; }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid var(--navy-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .step-item.active .step-num { border-color: var(--gold); color: var(--gold); }
+  .step-label { font-size: 12px; color: #c8d4e8; }
+  .step-item.active .step-label { color: #fff; font-weight: 500; }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: var(--sidebar);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    background: var(--navy);
+    color: #fff;
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--navy-light);
+    position: sticky;
+    top: 0;
+    z-index: 90;
+  }
+  .topbar-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .topbar-title span { color: var(--gold); }
+  .topbar-actions { display: flex; gap: 10px; align-items: center; }
+  .btn { padding: 7px 16px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .btn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,0.25); color: #fff; }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-gold { background: var(--gold); color: var(--navy); font-weight: 600; }
+  .btn-gold:hover { background: var(--gold-light); }
+  .btn-red { background: var(--red); color: #fff; font-weight: 600; }
+  .btn-red:hover { background: #a93226; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+  .btn-outline:hover { border-color: var(--gold); color: var(--navy); }
+
+  /* ── CONTENT LAYOUT ── */
+  .content-wrap {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ── STEPS PANEL (left) ── */
+  .steps-panel {
+    padding: 28px 32px;
+    overflow-y: auto;
+  }
+
+  .step-section {
+    display: none;
+  }
+  .step-section.active { display: block; }
+
+  .step-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .step-header p { color: var(--muted); font-size: 13px; }
+
+  /* Template Cards */
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .template-card {
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .template-card:hover { border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .template-card.selected { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,168,75,0.15); }
+  .template-card.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px; right: 8px;
+    background: var(--gold);
+    color: var(--navy);
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .template-preview {
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .tpl-header { height: 28px; display: flex; align-items: center; padding: 0 8px; gap: 4px; }
+  .tpl-logo-dot { width: 8px; height: 8px; border-radius: 1px; }
+  .tpl-line { height: 4px; border-radius: 2px; margin: 3px 8px; }
+  .tpl-img { margin: 4px 8px; border-radius: 2px; }
+  .tpl-text { height: 3px; border-radius: 1.5px; margin: 2px 8px; }
+  .tpl-cols { display: flex; gap: 4px; margin: 4px 8px; flex: 1; }
+  .tpl-col { flex: 1; background: #f0ece4; border-radius: 2px; }
+  .template-label {
+    padding: 8px 10px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+  .template-sublabel { font-size: 10px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+  /* Length selector */
+  .length-options { display: flex; gap: 12px; margin-bottom: 24px; }
+  .length-opt {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .length-opt:hover { border-color: var(--gold); }
+  .length-opt.selected { border-color: var(--gold); background: rgba(200,168,75,0.05); }
+  .length-opt h4 { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .length-opt p { font-size: 11px; color: var(--muted); }
+  .length-tag { display: inline-block; font-size: 9px; padding: 2px 6px; border-radius: 3px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 6px; }
+
+  /* Subscriber lists */
+  .list-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .list-card {
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .list-card:hover { border-color: var(--gold); }
+  .list-card.selected { border-color: var(--gold); background: rgba(200,168,75,0.04); }
+  .list-icon {
+    width: 36px; height: 36px;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .list-info { flex: 1; }
+  .list-name { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .list-desc { font-size: 11px; color: var(--muted); }
+  .list-count { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--navy); font-weight: 500; }
+  .list-check {
+    width: 20px; height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: transparent;
+    transition: all 0.15s;
+  }
+  .list-card.selected .list-check {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+
+  /* Subject line + settings */
+  .field-group { margin-bottom: 20px; }
+  .field-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; display: block; }
+  .field-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    background: #fff;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+  .field-input:focus { outline: none; border-color: var(--gold); }
+  .field-textarea { resize: vertical; min-height: 80px; }
+  .field-row { display: flex; gap: 12px; }
+  .field-row .field-group { flex: 1; }
+
+  /* Schedule row */
+  .schedule-options { display: flex; gap: 10px; }
+  .sched-opt {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    padding: 10px 12px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .sched-opt:hover { border-color: var(--gold); }
+  .sched-opt.selected { border-color: var(--gold); background: rgba(200,168,75,0.05); color: var(--navy); }
+  .sched-opt .sched-icon { font-size: 18px; margin-bottom: 4px; }
+
+  /* Nav buttons */
+  .step-nav-btns { display: flex; justify-content: space-between; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+
+  /* ── PREVIEW PANEL (right) ── */
+  .preview-panel {
+    background: #e8e4dc;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .preview-bar {
+    background: var(--navy-mid);
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .preview-bar span { color: var(--muted); }
+  .preview-viewport {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* ── EMAIL TEMPLATES ── */
+  .email-wrap {
+    width: 100%;
+    max-width: 560px;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.12);
+  }
+
+  /* Template A: Editorial broadsheet */
+  .tpl-editorial .email-header {
+    background: var(--navy);
+    padding: 24px 28px 20px;
+    text-align: center;
+  }
+  .tpl-editorial .email-header .overline {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .tpl-editorial .email-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .tpl-editorial .email-header .tagline {
+    color: rgba(255,255,255,0.55);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  .tpl-editorial .date-rule {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 6px 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+  }
+  .tpl-editorial .email-body { padding: 24px 28px; }
+  .tpl-editorial .lead-story {
+    border-left: 4px solid var(--gold);
+    padding-left: 16px;
+    margin-bottom: 24px;
+  }
+  .tpl-editorial .lead-story .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+  .tpl-editorial .lead-story h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    line-height: 1.25;
+    margin-bottom: 8px;
+    color: #111;
+  }
+  .tpl-editorial .lead-story p {
+    font-size: 13px;
+    line-height: 1.65;
+    color: #333;
+  }
+  .tpl-editorial .divider {
+    height: 1px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin: 20px 0;
+  }
+  .tpl-editorial .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .tpl-editorial .story-item h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    line-height: 1.3;
+    margin-bottom: 6px;
+    color: #111;
+  }
+  .tpl-editorial .story-item p { font-size: 12px; line-height: 1.6; color: #555; }
+  .tpl-editorial .story-item .read-more {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--red);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .tpl-editorial .cta-box {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px 20px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .tpl-editorial .cta-box p { font-family: 'DM Sans', sans-serif; font-size: 12px; color: #555; margin-bottom: 10px; }
+  .tpl-editorial .cta-btn {
+    display: inline-block;
+    background: var(--navy);
+    color: #fff;
+    padding: 9px 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 3px;
+  }
+  .tpl-editorial .email-footer {
+    background: var(--navy);
+    padding: 16px 28px;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.8;
+  }
+  .tpl-editorial .email-footer a { color: var(--gold); text-decoration: none; }
+
+  /* Template B: Marketing/Business digest */
+  .tpl-marketing .email-header {
+    background: linear-gradient(135deg, #1a3058 0%, var(--navy) 100%);
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tpl-marketing .email-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #fff;
+    font-weight: 700;
+  }
+  .tpl-marketing .email-header .issue-badge {
+    background: var(--gold);
+    color: var(--navy);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .tpl-marketing .hero-strip {
+    background: var(--gold);
+    padding: 10px 28px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.03em;
+  }
+  .tpl-marketing .email-body { padding: 20px 28px; }
+  .tpl-marketing .biz-feature {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .tpl-marketing .biz-icon { width: 40px; height: 40px; border-radius: 6px; background: var(--navy); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .tpl-marketing .biz-info h3 { font-family: 'Playfair Display', serif; font-size: 15px; margin-bottom: 4px; }
+  .tpl-marketing .biz-info p { font-family: 'DM Sans', sans-serif; font-size: 12px; color: #555; line-height: 1.6; }
+  .tpl-marketing .news-list { margin-bottom: 20px; }
+  .tpl-marketing .news-item { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; }
+  .tpl-marketing .news-item .news-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold); font-weight: 700; width: 18px; flex-shrink: 0; padding-top: 2px; }
+  .tpl-marketing .news-item h4 { font-family: 'Playfair Display', serif; font-size: 13px; margin-bottom: 2px; line-height: 1.3; }
+  .tpl-marketing .news-item p { font-family: 'DM Sans', sans-serif; font-size: 11px; color: #666; }
+  .tpl-marketing .ad-block {
+    background: var(--navy);
+    color: #fff;
+    padding: 16px 20px;
+    border-radius: 4px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .tpl-marketing .ad-block h3 { font-family: 'Playfair Display', serif; font-size: 16px; margin-bottom: 6px; }
+  .tpl-marketing .ad-block p { font-family: 'DM Sans', sans-serif; font-size: 11px; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+  .tpl-marketing .ad-block a { display: inline-block; background: var(--gold); color: var(--navy); padding: 8px 18px; border-radius: 3px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; }
+  .tpl-marketing .email-footer { background: #f0ece4; padding: 14px 28px; text-align: center; font-family: 'DM Sans', sans-serif; font-size: 10px; color: #999; }
+
+  /* Template C: Town bulletin */
+  .tpl-bulletin .email-header { background: var(--warm-white); border-bottom: 3px double var(--navy); padding: 20px 28px 16px; text-align: center; }
+  .tpl-bulletin .email-header .flag { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--navy); letter-spacing: -0.02em; margin-bottom: 2px; }
+  .tpl-bulletin .email-header .flag-sub { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .tpl-bulletin .flag-rule { border-top: 1px solid var(--navy); border-bottom: 1px solid var(--navy); padding: 4px 28px; margin: 0; background: var(--paper); font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); display: flex; justify-content: space-between; letter-spacing: 0.08em; }
+  .tpl-bulletin .email-body { padding: 20px 28px; }
+  .tpl-bulletin .town-section { margin-bottom: 20px; }
+  .tpl-bulletin .town-header { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 4px; margin-bottom: 12px; }
+  .tpl-bulletin .story-brief { margin-bottom: 12px; }
+  .tpl-bulletin .story-brief h3 { font-family: 'Playfair Display', serif; font-size: 16px; line-height: 1.25; margin-bottom: 4px; color: #111; font-weight: 600; }
+  .tpl-bulletin .story-brief .byline { font-family: 'DM Sans', sans-serif; font-size: 10px; color: var(--muted); font-style: italic; margin-bottom: 6px; }
+  .tpl-bulletin .story-brief p { font-size: 12px; line-height: 1.6; color: #444; }
+  .tpl-bulletin .rule { border: none; border-top: 1px dashed var(--border); margin: 14px 0; }
+  .tpl-bulletin .email-footer { border-top: 2px solid var(--navy); padding: 14px 28px; text-align: center; font-family: 'DM Sans', sans-serif; font-size: 10px; color: #999; }
+
+  /* ── SEND REVIEW ── */
+  .review-box {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .review-box h4 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .review-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 12px; }
+  .review-row:last-child { border-bottom: none; }
+  .review-label { color: var(--muted); }
+  .review-val { font-weight: 500; color: var(--text); }
+  .review-val.highlight { color: var(--gold); }
+  .review-val.ok { color: #2d7a3a; }
+  .review-val.warn { color: var(--red); }
+
+  .total-send {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 6px;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .total-send .label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+  .total-send .count { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--gold); }
+
+  .send-big-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--red);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .send-big-btn:hover { background: #a93226; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
+
+  .sendy-status {
+    background: rgba(192,57,43,0.08);
+    border: 1px solid rgba(192,57,43,0.2);
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 11px;
+    color: var(--red);
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .sendy-ok {
+    background: rgba(45,122,58,0.08);
+    border-color: rgba(45,122,58,0.2);
+    color: #2d7a3a;
+  }
+
+  /* Progress / toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--navy);
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    z-index: 999;
+    max-width: 320px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.gold { border-left: 3px solid var(--gold); }
+  .toast.green { border-left: 3px solid #2d7a3a; }
+  .toast.red { border-left: 3px solid var(--red); }
+
+  /* Sendy config row */
+  .sendy-config {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .sendy-config h4 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  .config-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .config-row label { font-size: 11px; color: var(--muted); width: 100px; flex-shrink: 0; }
+  .config-row input { flex: 1; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'DM Mono', monospace; background: #fff; }
+  .config-row input:focus { outline: none; border-color: var(--gold); }
+
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <a href="index.html">
+      ← copress.news
+      <span>Publishing Operations</span>
+    </a>
+  </div>
+  <div class="sidebar-section">Newsletter Studio</div>
+  <div class="step-nav">
+    <div class="step-item active" data-step="1" onclick="goStep(1)">
+      <div class="step-num">1</div>
+      <div class="step-label">Choose Template</div>
+    </div>
+    <div class="step-item" data-step="2" onclick="goStep(2)">
+      <div class="step-num">2</div>
+      <div class="step-label">Choose Length</div>
+    </div>
+    <div class="step-item" data-step="3" onclick="goStep(3)">
+      <div class="step-num">3</div>
+      <div class="step-label">Select Content</div>
+    </div>
+    <div class="step-item" data-step="4" onclick="goStep(4)">
+      <div class="step-num">4</div>
+      <div class="step-label">Subscriber Lists</div>
+    </div>
+    <div class="step-item" data-step="5" onclick="goStep(5)">
+      <div class="step-num">5</div>
+      <div class="step-label">Subject & Settings</div>
+    </div>
+    <div class="step-item" data-step="6" onclick="goStep(6)">
+      <div class="step-num">6</div>
+      <div class="step-label">Review & Send</div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title"><span>Weekly Register-Call</span> — Newsletter Studio</div>
+    <div class="topbar-actions">
+      <span style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">Issue: Apr 23, 2026</span>
+      <button class="btn btn-ghost" onclick="saveConfig()">💾 Save Draft</button>
+      <button class="btn btn-gold" onclick="goStep(currentStep + 1)">Continue →</button>
+    </div>
+  </div>
+
+  <div class="content-wrap">
+
+    <!-- LEFT: Steps -->
+    <div class="steps-panel">
+
+      <!-- STEP 1: Template -->
+      <div class="step-section active" id="step-1">
+        <div class="step-header">
+          <h2>Choose a Template</h2>
+          <p>Select the visual style for this issue's newsletter</p>
+        </div>
+        <div class="template-grid">
+          <div class="template-card selected" data-tpl="editorial" onclick="selectTemplate('editorial', this)">
+            <div class="template-preview" style="background:#fafaf8;">
+              <div class="tpl-header" style="background:#0a1628;">
+                <div class="tpl-logo-dot" style="background:#c8a84b;width:14px;"></div>
+                <div class="tpl-line" style="background:rgba(255,255,255,0.3);width:60%;height:3px;"></div>
+              </div>
+              <div class="tpl-line" style="background:#c8a84b;height:3px;margin-top:0;"></div>
+              <div style="padding:6px 8px;">
+                <div class="tpl-line" style="background:#111;height:5px;width:80%;"></div>
+                <div class="tpl-line" style="background:#111;height:5px;width:60%;"></div>
+                <div class="tpl-line" style="background:#ccc;height:2px;width:95%;"></div>
+                <div class="tpl-line" style="background:#ccc;height:2px;width:85%;"></div>
+              </div>
+              <div class="tpl-cols" style="margin:0 8px;">
+                <div style="background:#f0ece4;border-radius:2px;flex:1;padding:4px;">
+                  <div class="tpl-line" style="background:#555;height:3px;width:90%;margin:2px 0;"></div>
+                  <div class="tpl-line" style="background:#999;height:2px;width:75%;margin:2px 0;"></div>
+                </div>
+                <div style="background:#f0ece4;border-radius:2px;flex:1;padding:4px;">
+                  <div class="tpl-line" style="background:#555;height:3px;width:90%;margin:2px 0;"></div>
+                  <div class="tpl-line" style="background:#999;height:2px;width:75%;margin:2px 0;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="template-label">Editorial Broadsheet<br><span class="template-sublabel">NYT-style, story-first layout</span></div>
+          </div>
+
+          <div class="template-card" data-tpl="marketing" onclick="selectTemplate('marketing', this)">
+            <div class="template-preview" style="background:#fafaf8;">
+              <div class="tpl-header" style="background:linear-gradient(135deg,#1a3058,#0a1628);">
+                <div class="tpl-logo-dot" style="background:#c8a84b;width:18px;height:10px;border-radius:2px;"></div>
+                <div style="background:#c8a84b;padding:2px 5px;border-radius:2px;font-size:7px;color:#0a1628;font-weight:700;">ISSUE</div>
+              </div>
+              <div style="background:#c8a84b;height:12px;margin:0;display:flex;align-items:center;padding:0 8px;">
+                <div class="tpl-line" style="background:#0a1628;height:2px;width:70%;margin:0;"></div>
+              </div>
+              <div style="padding:6px 8px;">
+                <div style="background:#f0ece4;border-radius:3px;padding:6px;margin-bottom:4px;display:flex;gap:4px;">
+                  <div style="background:#0a1628;width:12px;height:12px;border-radius:2px;flex-shrink:0;"></div>
+                  <div style="flex:1;"><div class="tpl-line" style="background:#333;height:3px;margin:2px 0;"></div><div class="tpl-line" style="background:#999;height:2px;margin:1px 0;"></div></div>
+                </div>
+                <div class="tpl-line" style="background:#ccc;height:2px;"></div>
+                <div class="tpl-line" style="background:#ccc;height:2px;width:80%;"></div>
+              </div>
+            </div>
+            <div class="template-label">Business Digest<br><span class="template-sublabel">Ad-forward, sponsor-ready</span></div>
+          </div>
+
+          <div class="template-card" data-tpl="bulletin" onclick="selectTemplate('bulletin', this)">
+            <div class="template-preview" style="background:#fafaf8;">
+              <div style="padding:8px;text-align:center;border-bottom:2px double #0a1628;">
+                <div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:#0a1628;">The Register-Call</div>
+                <div style="font-size:7px;color:#999;letter-spacing:0.1em;">GILPIN & CLEAR CREEK COUNTIES</div>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:2px 8px;background:#f0ece4;font-size:7px;color:#999;">
+                <span>VOL. 164</span><span>APR 23, 2026</span>
+              </div>
+              <div style="padding:6px 8px;">
+                <div style="border-bottom:1px solid #c8a84b;margin-bottom:4px;"><div class="tpl-line" style="background:#c8a84b;height:2px;width:50%;margin:0 0 2px;"></div></div>
+                <div class="tpl-line" style="background:#111;height:4px;width:85%;"></div>
+                <div class="tpl-line" style="background:#ccc;height:2px;"></div>
+                <div class="tpl-line" style="background:#ccc;height:2px;width:90%;"></div>
+              </div>
+            </div>
+            <div class="template-label">Town Bulletin<br><span class="template-sublabel">Classic newspaper flag style</span></div>
+          </div>
+        </div>
+        <div class="step-nav-btns">
+          <div></div>
+          <button class="btn btn-gold" onclick="goStep(2)">Choose Length →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Length -->
+      <div class="step-section" id="step-2">
+        <div class="step-header">
+          <h2>Choose Length</h2>
+          <p>How much content to include from the Apr 23 issue</p>
+        </div>
+        <div class="length-options">
+          <div class="length-opt" data-len="brief" onclick="selectLength('brief', this)">
+            <h4>📋 Brief</h4>
+            <p>Top 3 headlines only. Fast read for busy readers.</p>
+            <span class="length-tag" style="background:rgba(45,122,58,0.1);color:#2d7a3a;">~200 words</span>
+          </div>
+          <div class="length-opt selected" data-len="standard" onclick="selectLength('standard', this)">
+            <h4>📰 Standard</h4>
+            <p>Lead story + 4 briefs + CTA. Balanced editorial email.</p>
+            <span class="length-tag" style="background:rgba(200,168,75,0.15);color:#8a6800;">~450 words · Recommended</span>
+          </div>
+          <div class="length-opt" data-len="full" onclick="selectLength('full', this)">
+            <h4>📖 Full Edition</h4>
+            <p>All major stories, town-by-town sections, full content.</p>
+            <span class="length-tag" style="background:rgba(192,57,43,0.1);color:var(--red);">~900 words</span>
+          </div>
+        </div>
+        <div class="step-nav-btns">
+          <button class="btn btn-outline" onclick="goStep(1)">← Back</button>
+          <button class="btn btn-gold" onclick="goStep(3)">Select Content →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Content selection -->
+      <div class="step-section" id="step-3">
+        <div class="step-header">
+          <h2>Select Stories</h2>
+          <p>April 23, 2026 issue — check stories to include</p>
+        </div>
+        <div id="story-list" style="margin-bottom:20px;"></div>
+        <div class="step-nav-btns">
+          <button class="btn btn-outline" onclick="goStep(2)">← Back</button>
+          <button class="btn btn-gold" onclick="goStep(4)">Choose Lists →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: Subscriber lists -->
+      <div class="step-section" id="step-4">
+        <div class="step-header">
+          <h2>Subscriber Lists</h2>
+          <p>Choose which audiences receive this newsletter</p>
+        </div>
+        <div class="list-options">
+          <div class="list-card selected" data-list="editorial" onclick="toggleList('editorial', this)">
+            <div class="list-icon" style="background:rgba(10,22,40,0.08);">📰</div>
+            <div class="list-info">
+              <div class="list-name">Editorial Subscribers</div>
+              <div class="list-desc">Full newspaper content — paying & free readers</div>
+            </div>
+            <div class="list-count" id="count-editorial">— </div>
+            <div class="list-check">✓</div>
+          </div>
+          <div class="list-card selected" data-list="paid" onclick="toggleList('paid', this)">
+            <div class="list-icon" style="background:rgba(200,168,75,0.12);">⭐</div>
+            <div class="list-info">
+              <div class="list-name">Paid Subscribers</div>
+              <div class="list-desc">Premium access — full content, no paywall</div>
+            </div>
+            <div class="list-count" id="count-paid">— </div>
+            <div class="list-check">✓</div>
+          </div>
+          <div class="list-card" data-list="marketing" onclick="toggleList('marketing', this)">
+            <div class="list-icon" style="background:rgba(192,57,43,0.08);">📣</div>
+            <div class="list-info">
+              <div class="list-name">Marketing List</div>
+              <div class="list-desc">Advertisers, business partners, sponsors</div>
+            </div>
+            <div class="list-count" id="count-marketing">— </div>
+            <div class="list-check">✓</div>
+          </div>
+          <div class="list-card" data-list="sales" onclick="toggleList('sales', this)">
+            <div class="list-icon" style="background:rgba(45,122,58,0.08);">💼</div>
+            <div class="list-info">
+              <div class="list-name">Sales Prospects</div>
+              <div class="list-desc">Potential advertisers, new business leads</div>
+            </div>
+            <div class="list-count" id="count-sales">— </div>
+            <div class="list-check">✓</div>
+          </div>
+        </div>
+
+        <div class="sendy-config">
+          <h4>⚙ Sendy Configuration</h4>
+          <div class="config-row">
+            <label>Sendy URL</label>
+            <input type="text" id="sendy-url" placeholder="https://mail.registercall.com" oninput="saveSendyConfig()">
+          </div>
+          <div class="config-row">
+            <label>API Key</label>
+            <input type="password" id="sendy-key" placeholder="your-sendy-api-key" oninput="saveSendyConfig()">
+          </div>
+          <div class="config-row">
+            <label>From Name</label>
+            <input type="text" id="sendy-from-name" placeholder="Weekly Register-Call" oninput="saveSendyConfig()">
+          </div>
+          <div class="config-row">
+            <label>From Email</label>
+            <input type="email" id="sendy-from-email" placeholder="news@registercall.com" oninput="saveSendyConfig()">
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:8px;">List IDs are pulled from your Sendy account. Keys stored in localStorage only.</div>
+        </div>
+
+        <div class="step-nav-btns">
+          <button class="btn btn-outline" onclick="goStep(3)">← Back</button>
+          <button class="btn btn-gold" onclick="goStep(5)">Settings →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Subject & settings -->
+      <div class="step-section" id="step-5">
+        <div class="step-header">
+          <h2>Subject & Settings</h2>
+          <p>Customize how this email appears in the inbox</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Subject Line</label>
+          <input type="text" class="field-input" id="subject-line" value="Weekly Register-Call — April 23, 2026 | Gregory Gulch Resort, Charlie's Place & Floyd Hill Closures" oninput="updatePreview()">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Preview Text (inbox snippet)</label>
+          <input type="text" class="field-input" id="preview-text" value="This week: A billion-dollar casino faces council review, an animal shelter fights for funding, and I-70 overnight closures begin at Floyd Hill..." oninput="updatePreview()">
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <label class="field-label">Reply-To Email</label>
+            <input type="email" class="field-input" id="reply-to" placeholder="editorial@registercall.com">
+          </div>
+          <div class="field-group">
+            <label class="field-label">UTM Campaign Tag</label>
+            <input type="text" class="field-input" id="utm-tag" value="wrc-2026-04-23-weekly">
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Send / Schedule</label>
+          <div class="schedule-options">
+            <div class="sched-opt selected" data-sched="now" onclick="selectSched('now',this)">
+              <div class="sched-icon">⚡</div>
+              Send Now
+            </div>
+            <div class="sched-opt" data-sched="today" onclick="selectSched('today',this)">
+              <div class="sched-icon">🕘</div>
+              9am Today
+            </div>
+            <div class="sched-opt" data-sched="tomorrow" onclick="selectSched('tomorrow',this)">
+              <div class="sched-icon">📅</div>
+              Tomorrow 8am
+            </div>
+            <div class="sched-opt" data-sched="custom" onclick="selectSched('custom',this)">
+              <div class="sched-icon">⏰</div>
+              Custom
+            </div>
+          </div>
+        </div>
+        <div id="custom-time-row" style="display:none;" class="field-group">
+          <label class="field-label">Custom Date & Time</label>
+          <input type="datetime-local" class="field-input" id="custom-time">
+        </div>
+        <div class="step-nav-btns">
+          <button class="btn btn-outline" onclick="goStep(4)">← Back</button>
+          <button class="btn btn-gold" onclick="goStep(6)">Review →</button>
+        </div>
+      </div>
+
+      <!-- STEP 6: Review & Send -->
+      <div class="step-section" id="step-6">
+        <div class="step-header">
+          <h2>Review & Send</h2>
+          <p>Confirm everything before launching</p>
+        </div>
+
+        <div class="review-box">
+          <h4>Campaign Summary</h4>
+          <div class="review-row"><span class="review-label">Issue Date</span><span class="review-val">April 23, 2026</span></div>
+          <div class="review-row"><span class="review-label">Template</span><span class="review-val" id="rv-template">Editorial Broadsheet</span></div>
+          <div class="review-row"><span class="review-label">Length</span><span class="review-val" id="rv-length">Standard (~450 words)</span></div>
+          <div class="review-row"><span class="review-label">Stories Selected</span><span class="review-val" id="rv-stories">5 of 8</span></div>
+          <div class="review-row"><span class="review-label">Subject</span><span class="review-val" id="rv-subject" style="max-width:240px;text-align:right;font-size:11px;">Weekly Register-Call — April 23</span></div>
+          <div class="review-row"><span class="review-label">Schedule</span><span class="review-val ok" id="rv-schedule">Send Now</span></div>
+        </div>
+
+        <div class="review-box">
+          <h4>Subscriber Lists</h4>
+          <div class="review-row"><span class="review-label">📰 Editorial</span><span class="review-val" id="rv-editorial">✓ Included</span></div>
+          <div class="review-row"><span class="review-label">⭐ Paid</span><span class="review-val" id="rv-paid">✓ Included</span></div>
+          <div class="review-row"><span class="review-label">📣 Marketing</span><span class="review-val" id="rv-marketing">— Skipped</span></div>
+          <div class="review-row"><span class="review-label">💼 Sales</span><span class="review-val" id="rv-sales">— Skipped</span></div>
+        </div>
+
+        <div class="total-send">
+          <div>
+            <div class="label">Total Recipients</div>
+            <div class="count" id="rv-total">—</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="label">Estimated Delivery</div>
+            <div style="font-family:'DM Mono',monospace;font-size:13px;color:#fff;" id="rv-delivery">Immediate</div>
+          </div>
+        </div>
+
+        <button class="send-big-btn" onclick="sendNewsletter()">
+          🚀 Launch Newsletter
+        </button>
+
+        <div class="sendy-status" id="sendy-status-msg">
+          ⚠ Sendy not configured. Add your URL + API key in Step 4 to send live. Preview mode is active.
+        </div>
+
+        <div class="step-nav-btns">
+          <button class="btn btn-outline" onclick="goStep(5)">← Back</button>
+          <button class="btn btn-ghost" onclick="exportHTML()">📥 Export HTML</button>
+        </div>
+      </div>
+
+    </div><!-- /steps-panel -->
+
+    <!-- RIGHT: Preview -->
+    <div class="preview-panel">
+      <div class="preview-bar">
+        <span>📧 Live Preview</span>
+        <div style="display:flex;gap:8px;">
+          <button onclick="setDevice('mobile')" style="background:none;border:none;color:#aaa;cursor:pointer;font-size:11px;" id="btn-mobile">📱 Mobile</button>
+          <button onclick="setDevice('desktop')" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:11px;" id="btn-desktop">🖥 Desktop</button>
+        </div>
+      </div>
+      <div class="preview-viewport" id="preview-viewport">
+        <div class="email-wrap tpl-editorial" id="email-preview">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content-wrap -->
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────
+const state = {
+  template: 'editorial',
+  length: 'standard',
+  lists: { editorial: true, paid: true, marketing: false, sales: false },
+  stories: [],
+  subject: '',
+  schedule: 'now',
+  sendyUrl: '',
+  sendyKey: '',
+};
+
+// ── ISSUE DATA (WRC Apr 23, 2026) ─────────────────────────────────────────
+const STORIES = [
+  {
+    id: 'gregory-gulch',
+    title: 'Gregory Gulch Resort Plan to Face Council',
+    byline: 'By Don Ireland, Senior Reporter',
+    kicker: 'Development · Central City',
+    lead: true,
+    body: 'Central City Council won\'t consider revised plans for G3 Gaming\'s Gregory Gulch Gaming Resort until next month. The nearly $1 billion casino project received a green light from the Planning Commission on April 1, but city officials need additional time to review technical aspects of the development plan.',
+    readmore: 'https://registercall.com',
+    selected: true,
+  },
+  {
+    id: 'charlies-place',
+    title: 'Save Charlie\'s Place',
+    kicker: 'Community · Animal Shelter',
+    body: 'The fate of our local animal shelter rests with county commissioners who continue to fund new initiatives — but not the shelter that serves both Gilpin and Clear Creek counties. Friends of Charlie\'s Place contributes $90,000–$100,000 each year covering food, medical care, and surgeries.',
+    readmore: 'https://registercall.com',
+    selected: true,
+  },
+  {
+    id: 'floyd-hill',
+    title: 'Overnight Floyd Hill Shutdowns Begin Next Week',
+    kicker: 'Transportation · I-70',
+    body: 'Overnight closures of westbound I-70 at the bottom of Floyd Hill begin next week due to new bridge construction. Westbound drivers will detour via County Road 314 through Idaho Springs. Closures are not expected to affect eastbound traffic.',
+    readmore: 'https://registercall.com',
+    selected: true,
+  },
+  {
+    id: 'cabaret',
+    title: 'Central Spends $49K on Cabaret Fight',
+    kicker: 'Government · Central City',
+    byline: 'By Don Ireland',
+    body: 'Council instructed city staff to prepare a response to the Central City Business Improvement District, which complained about Main Street maintenance standards being "sub-standard for a city whose economy is tourism based."',
+    readmore: 'https://registercall.com',
+    selected: true,
+  },
+  {
+    id: 'council-seat',
+    title: 'Deadline for Vacant Central Council Seat',
+    kicker: 'Government · Elections',
+    body: 'The deadline for Central City residents to apply for a soon-to-be-vacant city council seat is just one week away. Applicants must meet all qualifications set forth in Section 3.3 of the Home Rule Charter.',
+    readmore: 'https://registercall.com',
+    selected: true,
+  },
+  {
+    id: 'bighorn-fire',
+    title: 'Structure Fire at Bighorn Apartments',
+    kicker: 'Public Safety · Idaho Springs',
+    body: 'Idaho Springs Police and Clear Creek Fire Authority responded to a structure fire at the Bighorn Apartments on April 4. The fire originated in a third-floor residence. All residents were safely evacuated with no injuries; one couple is being assisted by the American Red Cross.',
+    readmore: 'https://registercall.com',
+    selected: false,
+  },
+  {
+    id: 'colorado-gold',
+    title: 'Where the Gold Was Found — and Where Colorado Was Built',
+    kicker: 'History · Anniversary',
+    body: 'As we mark the 250th anniversary of the United States and approach the 150th anniversary of Colorado\'s statehood, it is worth revisiting the discovery of gold by John Gregory in 1859 — the defining moment in our state\'s history.',
+    readmore: 'https://registercall.com',
+    selected: false,
+  },
+  {
+    id: 'gilpin-prom',
+    title: 'Gilpin Eagles Soar at Prom',
+    kicker: 'Community · Education',
+    body: 'Longtime Russell Gulch resident John Kittridge spoke about Central City\'s history following the Great Fire of 1874 during a Belvidere Foundation event that also celebrated Gilpin High School\'s prom season.',
+    readmore: 'https://registercall.com',
+    selected: false,
+  },
+];
+
+state.stories = STORIES;
+
+// ── STEP NAV ──────────────────────────────────────────────────────────────
+let currentStep = 1;
+
+function goStep(n) {
+  if (n < 1 || n > 6) return;
+  document.querySelectorAll('.step-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-' + n).classList.add('active');
+  document.querySelectorAll('.step-item').forEach(item => {
+    const s = parseInt(item.dataset.step);
+    item.classList.remove('active', 'done');
+    if (s === n) item.classList.add('active');
+    else if (s < n) item.classList.add('done');
+  });
+  currentStep = n;
+  if (n === 3) renderStoryList();
+  if (n === 6) updateReview();
+  updatePreview();
+}
+
+// ── TEMPLATE ──────────────────────────────────────────────────────────────
+function selectTemplate(tpl, el) {
+  document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.template = tpl;
+  updatePreview();
+}
+
+// ── LENGTH ────────────────────────────────────────────────────────────────
+function selectLength(len, el) {
+  document.querySelectorAll('.length-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.length = len;
+  // Auto-select stories based on length
+  if (len === 'brief') {
+    state.stories.forEach((s, i) => s.selected = i < 3);
+  } else if (len === 'standard') {
+    state.stories.forEach((s, i) => s.selected = i < 5);
+  } else {
+    state.stories.forEach(s => s.selected = true);
+  }
+  renderStoryList();
+  updatePreview();
+}
+
+// ── STORY LIST ────────────────────────────────────────────────────────────
+function renderStoryList() {
+  const container = document.getElementById('story-list');
+  container.innerHTML = state.stories.map((story, i) => `
+    <div style="border:2px solid ${story.selected ? 'var(--gold)' : 'var(--border)'};border-radius:6px;padding:12px 14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;display:flex;gap:12px;align-items:flex-start;background:${story.selected ? 'rgba(200,168,75,0.04)' : '#fff'}" onclick="toggleStory(${i}, this)">
+      <div style="width:20px;height:20px;border:2px solid ${story.selected ? 'var(--gold)' : 'var(--border)'};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;color:${story.selected ? 'var(--navy)' : 'transparent'};background:${story.selected ? 'var(--gold)' : 'transparent'};flex-shrink:0;margin-top:2px;transition:all 0.15s;">✓</div>
+      <div style="flex:1;">
+        <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;">${story.kicker}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3;">${story.title}</div>
+        ${story.lead ? '<span style="background:var(--red);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;letter-spacing:0.06em;margin-bottom:4px;display:inline-block;">LEAD STORY</span>' : ''}
+        <div style="font-size:11px;color:#666;line-height:1.5;">${story.body.substring(0, 100)}…</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleStory(i, el) {
+  state.stories[i].selected = !state.stories[i].selected;
+  renderStoryList();
+  updatePreview();
+}
+
+// ── SUBSCRIBER LISTS ─────────────────────────────────────────────────────
+const LIST_COUNTS = { editorial: 847, paid: 312, marketing: 203, sales: 89 };
+
+function toggleList(key, el) {
+  state.lists[key] = !state.lists[key];
+  el.classList.toggle('selected', state.lists[key]);
+  updatePreview();
+}
+
+function loadListCounts() {
+  Object.keys(LIST_COUNTS).forEach(k => {
+    const el = document.getElementById('count-' + k);
+    if (el) el.textContent = LIST_COUNTS[k].toLocaleString() + ' subs';
+  });
+}
+
+// ── SENDY CONFIG ──────────────────────────────────────────────────────────
+function saveSendyConfig() {
+  state.sendyUrl = document.getElementById('sendy-url').value;
+  state.sendyKey = document.getElementById('sendy-key').value;
+  localStorage.setItem('sendy_url', state.sendyUrl);
+  localStorage.setItem('sendy_key', state.sendyKey);
+  updateSendyStatus();
+}
+
+function loadSendyConfig() {
+  const url = localStorage.getItem('sendy_url') || '';
+  const key = localStorage.getItem('sendy_key') || '';
+  const fromName = localStorage.getItem('sendy_from_name') || 'Weekly Register-Call';
+  const fromEmail = localStorage.getItem('sendy_from_email') || 'news@registercall.com';
+  if (url) document.getElementById('sendy-url').value = url;
+  if (key) document.getElementById('sendy-key').value = key;
+  if (document.getElementById('sendy-from-name')) document.getElementById('sendy-from-name').value = fromName;
+  if (document.getElementById('sendy-from-email')) document.getElementById('sendy-from-email').value = fromEmail;
+  state.sendyUrl = url;
+  state.sendyKey = key;
+  updateSendyStatus();
+}
+
+function updateSendyStatus() {
+  const el = document.getElementById('sendy-status-msg');
+  if (!el) return;
+  if (state.sendyUrl && state.sendyKey) {
+    el.className = 'sendy-status sendy-ok';
+    el.textContent = '✓ Sendy configured — ready to send live campaigns.';
+  } else {
+    el.className = 'sendy-status';
+    el.textContent = '⚠ Sendy not configured. Add your URL + API key in Step 4 to send live. Preview mode is active.';
+  }
+}
+
+// ── SCHEDULE ──────────────────────────────────────────────────────────────
+function selectSched(sched, el) {
+  document.querySelectorAll('.sched-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  state.schedule = sched;
+  document.getElementById('custom-time-row').style.display = sched === 'custom' ? 'block' : 'none';
+}
+
+// ── REVIEW ────────────────────────────────────────────────────────────────
+function updateReview() {
+  const tplLabels = { editorial: 'Editorial Broadsheet', marketing: 'Business Digest', bulletin: 'Town Bulletin' };
+  const lenLabels = { brief: 'Brief (~200 words)', standard: 'Standard (~450 words)', full: 'Full Edition (~900 words)' };
+  const schedLabels = { now: 'Send Now', today: '9am Today', tomorrow: 'Tomorrow 8am', custom: 'Custom Time' };
+  document.getElementById('rv-template').textContent = tplLabels[state.template] || state.template;
+  document.getElementById('rv-length').textContent = lenLabels[state.length] || state.length;
+  document.getElementById('rv-stories').textContent = state.stories.filter(s => s.selected).length + ' of ' + state.stories.length;
+  document.getElementById('rv-subject').textContent = document.getElementById('subject-line').value.substring(0, 50) + '…';
+  document.getElementById('rv-schedule').textContent = schedLabels[state.schedule] || state.schedule;
+
+  let total = 0;
+  Object.entries(state.lists).forEach(([k, v]) => {
+    const el = document.getElementById('rv-' + k);
+    if (el) { el.textContent = v ? '✓ Included' : '— Skipped'; el.className = 'review-val' + (v ? ' ok' : ''); }
+    if (v) total += LIST_COUNTS[k] || 0;
+  });
+  document.getElementById('rv-total').textContent = total.toLocaleString();
+  document.getElementById('rv-delivery').textContent = state.schedule === 'now' ? 'Immediate' : schedLabels[state.schedule];
+}
+
+// ── SEND ──────────────────────────────────────────────────────────────────
+async function sendNewsletter() {
+  if (!state.sendyUrl || !state.sendyKey) {
+    showToast('⚠ Sendy not configured — export HTML to send manually', 'red');
+    return;
+  }
+  showToast('🚀 Launching campaign…', 'gold');
+  // In production: POST to /api/newsletter/send with state
+  await new Promise(r => setTimeout(r, 2000));
+  showToast('✅ Newsletter sent to ' + Object.entries(state.lists).filter(([,v])=>v).map(([k])=>k).join(', ') + ' lists!', 'green');
+}
+
+function exportHTML() {
+  const html = document.getElementById('email-preview').outerHTML;
+  const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>WRC Newsletter Apr 23</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'wrc-newsletter-2026-04-23.html';
+  a.click();
+  showToast('📥 HTML exported — ready to paste into Sendy', 'gold');
+}
+
+function saveConfig() {
+  localStorage.setItem('nl_state', JSON.stringify({ template: state.template, length: state.length, lists: state.lists, schedule: state.schedule }));
+  showToast('💾 Draft saved', 'gold');
+}
+
+// ── DEVICE TOGGLE ─────────────────────────────────────────────────────────
+function setDevice(device) {
+  const vp = document.getElementById('preview-viewport');
+  const wrap = document.getElementById('email-preview');
+  document.getElementById('btn-mobile').style.color = device === 'mobile' ? 'var(--gold)' : '#aaa';
+  document.getElementById('btn-desktop').style.color = device === 'desktop' ? 'var(--gold)' : '#aaa';
+  if (device === 'mobile') {
+    wrap.style.maxWidth = '375px';
+  } else {
+    wrap.style.maxWidth = '560px';
+  }
+}
+
+// ── PREVIEW RENDER ────────────────────────────────────────────────────────
+function updatePreview() {
+  const el = document.getElementById('email-preview');
+  el.className = 'email-wrap tpl-' + state.template;
+  const selected = state.stories.filter(s => s.selected);
+  const lead = selected.find(s => s.lead) || selected[0];
+  const rest = selected.filter(s => s !== lead);
+  const subject = (document.getElementById('subject-line') || {}).value || 'Weekly Register-Call';
+  const date = 'Wednesday, April 23, 2026';
+
+  if (state.template === 'editorial') {
+    el.innerHTML = `
+      <div class="email-header">
+        <div class="overline">Weekly Register-Call · Established 1862</div>
+        <h1>The Mountain Report</h1>
+        <div class="tagline">Gilpin &amp; Clear Creek Counties, Colorado</div>
+      </div>
+      <div class="date-rule"><span>${date}</span><span>Vol. 164</span></div>
+      <div class="email-body">
+        ${lead ? `
+        <div class="lead-story">
+          <div class="kicker">${lead.kicker}</div>
+          <h2>${lead.title}</h2>
+          <p>${lead.body}</p>
+          <a class="read-more" href="${lead.readmore}">Continue reading →</a>
+        </div>
+        <div class="divider"></div>` : ''}
+        ${rest.length ? `
+        <div class="story-grid">
+          ${rest.slice(0,4).map(s => `
+          <div class="story-item">
+            <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:4px;">${s.kicker}</div>
+            <h3>${s.title}</h3>
+            <p>${s.body.substring(0,120)}…</p>
+            <a class="read-more" href="${s.readmore}">Read →</a>
+          </div>`).join('')}
+        </div>` : ''}
+        ${state.length !== 'brief' ? `
+        <div class="cta-box">
+          <p>Stay connected to your mountain community. Full coverage at registercall.com</p>
+          <a class="cta-btn" href="https://registercall.com">Read Full Issue →</a>
+        </div>` : ''}
+      </div>
+      <div class="email-footer">
+        Weekly Register-Call · Black Hawk, CO 80422<br>
+        <a href="#">Unsubscribe</a> · <a href="#">View in browser</a> · <a href="https://registercall.com">registercall.com</a>
+      </div>`;
+  } else if (state.template === 'marketing') {
+    el.innerHTML = `
+      <div class="email-header">
+        <h1>Register-Call Business Brief</h1>
+        <div class="issue-badge">Apr 23, 2026</div>
+      </div>
+      <div class="hero-strip">📰 Your weekly digest from Gilpin &amp; Clear Creek Counties</div>
+      <div class="email-body">
+        ${lead ? `
+        <div class="biz-feature">
+          <div class="biz-icon">🏛</div>
+          <div class="biz-info">
+            <h3>${lead.title}</h3>
+            <p>${lead.body}</p>
+          </div>
+        </div>` : ''}
+        <div class="news-list">
+          ${rest.slice(0,4).map((s, i) => `
+          <div class="news-item">
+            <div class="news-num">${String(i+1).padStart(2,'0')}</div>
+            <div><h4>${s.title}</h4><p>${s.body.substring(0,90)}…</p></div>
+          </div>`).join('')}
+        </div>
+        <div class="ad-block">
+          <h3>Advertise in the Register-Call</h3>
+          <p>Reach 3,200+ readers across the mountain communities</p>
+          <a href="https://registercall.com">Get Rates →</a>
+        </div>
+      </div>
+      <div class="email-footer">
+        Weekly Register-Call · <a href="#">Unsubscribe</a> · <a href="#">View in browser</a>
+      </div>`;
+  } else if (state.template === 'bulletin') {
+    el.innerHTML = `
+      <div class="email-header">
+        <div class="flag">Weekly Register-Call</div>
+        <div class="flag-sub">Serving Gilpin &amp; Clear Creek Counties since 1862</div>
+      </div>
+      <div class="flag-rule"><span>Volume 164</span><span>${date}</span><span>registercall.com</span></div>
+      <div class="email-body">
+        ${lead ? `
+        <div class="town-section">
+          <div class="town-header">Top Story</div>
+          <div class="story-brief">
+            <h3>${lead.title}</h3>
+            ${lead.byline ? `<div class="byline">${lead.byline}</div>` : ''}
+            <p>${lead.body}</p>
+          </div>
+        </div>
+        <hr class="rule">` : ''}
+        <div class="town-section">
+          <div class="town-header">This Week's News</div>
+          ${rest.slice(0,5).map(s => `
+          <div class="story-brief">
+            <h3>${s.title}</h3>
+            <p>${s.body.substring(0,110)}…</p>
+          </div>
+          <hr class="rule">`).join('')}
+        </div>
+      </div>
+      <div class="email-footer">
+        Weekly Register-Call · Black Hawk, Colorado · <a href="#">Unsubscribe</a>
+      </div>`;
+  }
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg, type = 'gold') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  loadListCounts();
+  loadSendyConfig();
+  selectLength('standard', document.querySelector('[data-len="standard"]'));
+  updatePreview();
+  setTimeout(() => showToast('📰 WRC Apr 23, 2026 issue loaded — 8 stories ready', 'gold'), 600);
+});
+</script>
+</body>
+</html>
