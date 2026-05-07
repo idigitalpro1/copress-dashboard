@@ -419,6 +419,10 @@
     <div class="nav-item" onclick="window.location.href='/apistore'">
       <span class="nav-icon">🔑</span> API Vault
     </div>
+    <div class="nav-item" onclick="window.location.href='/learn'" style="margin-top:4px; border-top: 1px solid rgba(255,255,255,.06); padding-top:12px;">
+      <span class="nav-icon">🎓</span> Staff Academy
+      <span class="nav-badge" style="background:linear-gradient(135deg,#f5c842,#f8834f);color:#0b0f1a;">NEW</span>
+    </div>
   </nav>
 
   <!-- Main -->
@@ -534,6 +538,26 @@
           </div>
         </div>
 
+        <!-- Staff Academy -->
+        <div class="module-card" onclick="window.location.href='/learn'" style="cursor:pointer; --deck-color:#f5c842;">
+          <div class="card-header">
+            <div class="card-icon">🎓</div>
+            <div class="card-title-block">
+              <div class="card-title">Staff Academy</div>
+              <div class="card-subtitle">Flash cards · Rewards · Linked to .md docs</div>
+            </div>
+          </div>
+          <hr class="card-rule">
+          <div class="card-actions">
+            <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/learn'">⚡ Daily Challenge</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/learn'">Study Decks</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/learn'">Leaderboard</button>
+          </div>
+          <div class="card-footer">
+            <span class="card-status ok">72 flash cards · 6 decks</span>
+          </div>
+        </div>
+
         <!-- Docs Hub -->
         <div class="module-card" onclick="window.location.href='/docs'" style="cursor:pointer;">
           <div class="card-header">
@@ -583,6 +607,9 @@
           </div>
           <div class="quick-pill" onclick="window.location.href='/apistore'">
             🔑 API Vault <span class="pill-kbd">⌘8</span>
+          </div>
+          <div class="quick-pill" onclick="window.location.href='/learn'">
+            🎓 Staff Academy <span class="pill-kbd">⌘9</span>
           </div>
         </div>
       </div>

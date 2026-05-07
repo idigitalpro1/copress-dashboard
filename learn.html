@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>copress.news — Staff Academy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:       #0b0f1a;
+  --surface:  #131929;
+  --surface2: #1a2236;
+  --border:   #253047;
+  --text:     #e8edf5;
+  --muted:    #7a8aaa;
+  --gold:     #f5c842;
+  --green:    #22d3a0;
+  --red:      #f05a5a;
+  --blue:     #5b8ef5;
+  --purple:   #a67cf8;
+  --orange:   #f8834f;
+  --pink:     #f472b6;
+  --r:        14px;
+  --r-sm:     8px;
+  --font:     'Space Grotesk', system-ui, sans-serif;
+  --serif:    'Playfair Display', Georgia, serif;
+  --mono:     'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── Top nav ─────────────────────────────────────────────────────── */
+#topnav {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 28px;
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: -.5px;
+}
+.nav-logo span { color: var(--muted); font-family: var(--font); font-weight: 400; font-size: .75rem; margin-left: 8px; }
+.nav-back {
+  margin-left: auto;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .85rem;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  transition: all .2s;
+}
+.nav-back:hover { color: var(--text); border-color: var(--blue); }
+
+/* Streak + XP in nav */
+.nav-stats { display: flex; align-items: center; gap: 14px; margin-left: auto; }
+.nav-stat  { display: flex; align-items: center; gap: 5px; font-size: .85rem; }
+.nav-stat .label { color: var(--muted); }
+.nav-stat .val   { font-weight: 700; }
+.streak-val { color: var(--orange); }
+.xp-val     { color: var(--gold); }
+.level-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: .75rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, var(--purple), var(--blue));
+}
+#player-name-display { font-size: .85rem; color: var(--muted); }
+
+/* ── Layout ──────────────────────────────────────────────────────── */
+#app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* ── Views ───────────────────────────────────────────────────────── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── Hero / Welcome ──────────────────────────────────────────────── */
+#view-home .hero {
+  text-align: center;
+  padding: 48px 0 24px;
+}
+#view-home .hero-eyebrow {
+  font-size: .75rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+#view-home .hero-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  background: linear-gradient(135deg, var(--gold) 0%, var(--orange) 50%, var(--pink) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+#view-home .hero-sub {
+  color: var(--muted);
+  font-size: 1rem;
+  max-width: 520px;
+  margin: 0 auto 32px;
+  line-height: 1.6;
+}
+
+/* Profile setup */
+.profile-setup {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px;
+  max-width: 420px;
+  margin: 0 auto 40px;
+}
+.profile-setup h3 { font-size: 1rem; margin-bottom: 14px; color: var(--text); }
+.setup-row { display: flex; gap: 10px; }
+.setup-input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: .9rem;
+  padding: 10px 14px;
+  outline: none;
+  transition: border .2s;
+}
+.setup-input:focus { border-color: var(--blue); }
+.btn-primary {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  color: #fff;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: opacity .2s, transform .1s;
+  white-space: nowrap;
+}
+.btn-primary:hover { opacity: .9; }
+.btn-primary:active { transform: scale(.97); }
+
+/* Daily challenge banner */
+.daily-banner {
+  background: linear-gradient(135deg, #1a1442 0%, #14302b 100%);
+  border: 1px solid #2a3855;
+  border-radius: var(--r);
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 32px;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  position: relative;
+  overflow: hidden;
+}
+.daily-banner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(245,200,66,.05), rgba(34,211,160,.05));
+  pointer-events: none;
+}
+.daily-banner:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,.4); }
+.daily-icon { font-size: 2.5rem; flex-shrink: 0; }
+.daily-info { flex: 1; }
+.daily-info h2 { font-size: 1.1rem; margin-bottom: 4px; }
+.daily-info p  { color: var(--muted); font-size: .85rem; }
+.daily-cta {
+  padding: 10px 22px;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  color: #0b0f1a;
+  font-weight: 700;
+  border: none;
+  border-radius: 20px;
+  font-family: var(--font);
+  font-size: .9rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity .2s;
+}
+.daily-cta:hover { opacity: .9; }
+
+/* ── Deck Grid ───────────────────────────────────────────────────── */
+.section-title {
+  font-size: .7rem;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.decks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.deck-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+  position: relative;
+  overflow: hidden;
+}
+.deck-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--deck-color);
+}
+.deck-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  border-color: var(--deck-color);
+}
+.deck-emoji  { font-size: 1.8rem; margin-bottom: 8px; }
+.deck-name   { font-weight: 600; font-size: 1rem; margin-bottom: 4px; }
+.deck-desc   { color: var(--muted); font-size: .8rem; line-height: 1.4; margin-bottom: 14px; }
+.deck-meta   { display: flex; align-items: center; justify-content: space-between; }
+.deck-count  { color: var(--muted); font-size: .78rem; }
+.deck-progress-wrap {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+}
+.deck-progress-bar {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--deck-color);
+  transition: width .5s ease;
+}
+.deck-mastered {
+  background: rgba(34,211,160,.08);
+  border-color: rgba(34,211,160,.4);
+}
+.deck-mastered .deck-name::after {
+  content: ' ✓';
+  color: var(--green);
+  font-size: .85rem;
+}
+
+/* ── Leaderboard ─────────────────────────────────────────────────── */
+.leaderboard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.lb-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+.lb-row:last-child { border-bottom: none; }
+.lb-row:hover { background: var(--surface2); }
+.lb-rank  { width: 28px; font-weight: 700; color: var(--muted); font-size: .85rem; }
+.lb-rank.top { color: var(--gold); font-size: 1rem; }
+.lb-name  { flex: 1; font-size: .9rem; }
+.lb-level { font-size: .75rem; color: var(--purple); }
+.lb-xp    { font-weight: 700; color: var(--gold); font-size: .9rem; }
+.lb-streak{ font-size: .85rem; color: var(--orange); }
+
+/* ── Badges ──────────────────────────────────────────────────────── */
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.badge-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  text-align: center;
+  transition: transform .2s;
+}
+.badge-item.earned {
+  border-color: var(--gold);
+  background: rgba(245,200,66,.05);
+}
+.badge-item:hover { transform: translateY(-2px); }
+.badge-icon { font-size: 2rem; margin-bottom: 8px; }
+.badge-name { font-size: .8rem; font-weight: 600; margin-bottom: 4px; }
+.badge-desc { font-size: .7rem; color: var(--muted); line-height: 1.3; }
+.badge-locked { opacity: .35; }
+
+/* ── Card Study View ─────────────────────────────────────────────── */
+#view-study .study-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.study-deck-name { font-weight: 600; font-size: 1.1rem; }
+.study-progress-text { margin-left: auto; color: var(--muted); font-size: .85rem; }
+
+.study-progress-bar-wrap {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.study-progress-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  transition: width .4s ease;
+}
+
+/* Flash card */
+.card-scene {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 640px;
+  height: 340px;
+  margin: 0 auto 28px;
+}
+.flash-card {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.4,0,.2,1);
+  cursor: pointer;
+}
+.flash-card.flipped { transform: rotateY(180deg); }
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--r);
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px solid var(--border);
+}
+.card-front {
+  background: var(--surface);
+  background: linear-gradient(145deg, var(--surface2), var(--surface));
+}
+.card-back {
+  background: linear-gradient(145deg, #0d1f1a, #0f1a2e);
+  transform: rotateY(180deg);
+  border-color: var(--green);
+}
+.card-deck-label {
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-deck-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--deck-color, var(--blue));
+  flex-shrink: 0;
+}
+.card-q {
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  line-height: 1.4;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.card-front .card-hint {
+  text-align: center;
+  color: var(--muted);
+  font-size: .78rem;
+  margin-top: 16px;
+}
+.card-a-label {
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.card-a {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  line-height: 1.5;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.card-a code {
+  font-family: var(--mono);
+  background: rgba(255,255,255,.08);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: .9em;
+}
+.card-source {
+  margin-top: 14px;
+  font-size: .72rem;
+  color: var(--muted);
+}
+.card-source a { color: var(--blue); text-decoration: none; }
+.card-source a:hover { text-decoration: underline; }
+
+/* Answer buttons */
+.answer-btns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+.answer-btns.visible { opacity: 1; pointer-events: all; }
+.btn-correct, .btn-wrong {
+  padding: 13px 36px;
+  border: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform .1s, opacity .2s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-correct { background: var(--green); color: #0b1a14; }
+.btn-wrong   { background: var(--red);   color: #fff; }
+.btn-correct:hover { opacity: .9; transform: scale(1.02); }
+.btn-wrong:hover   { opacity: .9; transform: scale(1.02); }
+
+.card-actions { text-align: center; }
+.btn-skip {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-family: var(--font);
+  font-size: .82rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-skip:hover { color: var(--text); border-color: var(--muted); }
+
+/* XP burst animation */
+.xp-burst {
+  position: fixed;
+  pointer-events: none;
+  font-weight: 700;
+  font-size: 1.4rem;
+  z-index: 9999;
+  animation: xpFloat 1.2s ease-out forwards;
+}
+@keyframes xpFloat {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  80%  { opacity: 1; transform: translateY(-60px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-80px) scale(.8); }
+}
+
+/* ── Session Complete ─────────────────────────────────────────────── */
+#view-complete {
+  text-align: center;
+  padding: 60px 20px;
+}
+.complete-icon { font-size: 5rem; margin-bottom: 20px; }
+.complete-title {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+}
+.complete-sub { color: var(--muted); font-size: 1rem; margin-bottom: 32px; }
+.complete-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+.complete-stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 20px 28px;
+  min-width: 130px;
+}
+.complete-stat .cs-val {
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.complete-stat .cs-label { font-size: .78rem; color: var(--muted); }
+.cs-correct  .cs-val { color: var(--green); }
+.cs-wrong    .cs-val { color: var(--red); }
+.cs-xp       .cs-val { color: var(--gold); }
+.cs-streak   .cs-val { color: var(--orange); }
+
+/* New badges earned */
+.new-badges { margin-bottom: 36px; }
+.new-badges h3 { margin-bottom: 16px; font-size: .85rem; color: var(--gold); letter-spacing: .08em; text-transform: uppercase; }
+.new-badge-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.new-badge {
+  background: linear-gradient(135deg, rgba(245,200,66,.1), rgba(248,131,79,.1));
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: badgePop .5s cubic-bezier(.17,.67,.24,1.3) both;
+}
+@keyframes badgePop {
+  0%   { transform: scale(0) rotate(-10deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+.new-badge-icon { font-size: 1.5rem; }
+.new-badge-text .nb-name { font-weight: 600; font-size: .9rem; }
+.new-badge-text .nb-desc { font-size: .75rem; color: var(--muted); }
+
+.complete-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn-secondary {
+  padding: 12px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: var(--r-sm);
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+
+/* ── Toast ───────────────────────────────────────────────────────── */
+#toast-area {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 200;
+}
+.toast-msg {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 12px 18px;
+  font-size: .85rem;
+  max-width: 300px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+  animation: toastIn .3s ease both;
+}
+.toast-msg.out { animation: toastOut .25s ease forwards; }
+@keyframes toastIn  { from { opacity:0; transform: translateX(20px); } to { opacity:1; transform: none; } }
+@keyframes toastOut { to   { opacity:0; transform: translateX(20px); } }
+
+/* ── Card entrance ───────────────────────────────────────────────── */
+@keyframes cardIn { from { opacity:0; transform: translateY(18px) scale(.97); } to { opacity:1; transform: none; } }
+.deck-card { animation: cardIn .35s ease both; }
+
+/* ── Level up animation ──────────────────────────────────────────── */
+.levelup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn .3s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.levelup-box {
+  background: var(--surface);
+  border: 2px solid var(--gold);
+  border-radius: var(--r);
+  padding: 48px 56px;
+  text-align: center;
+  animation: popIn .4s cubic-bezier(.17,.67,.24,1.3) both;
+}
+@keyframes popIn { from { transform: scale(.7); opacity:0; } to { transform: scale(1); opacity:1; } }
+.levelup-icon  { font-size: 4rem; margin-bottom: 12px; }
+.levelup-sub   { color: var(--muted); font-size: .9rem; margin-bottom: 8px; }
+.levelup-title { font-family: var(--serif); font-size: 2.5rem; color: var(--gold); margin-bottom: 24px; }
+.levelup-close {
+  padding: 10px 28px;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  color: #0b0f1a;
+  border: none;
+  border-radius: 20px;
+  font-family: var(--font);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .card-scene { height: 280px; }
+  .card-face  { padding: 24px 20px; }
+  .complete-stats { gap: 12px; }
+  .complete-stat  { padding: 14px 16px; min-width: 100px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<nav id="topnav">
+  <div class="nav-logo">copress <span>Staff Academy</span></div>
+  <div class="nav-stats">
+    <div class="nav-stat" id="nav-streak">
+      <span class="label">🔥</span>
+      <span class="val streak-val" id="nav-streak-val">0</span>
+    </div>
+    <div class="nav-stat" id="nav-xp">
+      <span class="label">⭐ XP</span>
+      <span class="val xp-val" id="nav-xp-val">0</span>
+    </div>
+    <div class="level-badge" id="nav-level">Cub Reporter</div>
+    <div id="player-name-display"></div>
+    <a href="/" class="nav-back">← Dashboard</a>
+  </div>
+</nav>
+
+<!-- Toast area -->
+<div id="toast-area"></div>
+
+<!-- App shell -->
+<div id="app">
+
+  <!-- ── HOME VIEW ──────────────────────────────────────────────── -->
+  <div class="view active" id="view-home">
+    <div class="hero">
+      <div class="hero-eyebrow">📰 copress.news · Staff Academy</div>
+      <h1 class="hero-title">Learn the Press.<br>Earn Your Byline.</h1>
+      <p class="hero-sub">Flash cards built from the actual .md docs powering this platform. Master editorial, tech, and workflow — one card at a time.</p>
+    </div>
+
+    <!-- Profile setup -->
+    <div class="profile-setup" id="profile-setup">
+      <h3>Who's studying today?</h3>
+      <div class="setup-row">
+        <input class="setup-input" id="name-input" type="text" placeholder="Your name or initials…" maxlength="32" />
+        <button class="btn-primary" onclick="setPlayer()">Start ›</button>
+      </div>
+    </div>
+
+    <!-- Daily Challenge -->
+    <div class="daily-banner" onclick="startDaily()">
+      <div class="daily-icon">⚡</div>
+      <div class="daily-info">
+        <h2>Daily Challenge</h2>
+        <p>10 random cards · All decks · Bonus XP · Resets at midnight</p>
+      </div>
+      <button class="daily-cta">Play Now</button>
+    </div>
+
+    <!-- Decks -->
+    <div class="section-title">Study Decks</div>
+    <div class="decks-grid" id="decks-grid"></div>
+
+    <!-- Badges -->
+    <div class="section-title" style="margin-top:32px;">Achievements</div>
+    <div class="badges-grid" id="badges-grid"></div>
+
+    <!-- Leaderboard -->
+    <div class="section-title" style="margin-top:32px;">Leaderboard</div>
+    <div class="leaderboard" id="leaderboard"></div>
+  </div>
+
+  <!-- ── STUDY VIEW ─────────────────────────────────────────────── -->
+  <div class="view" id="view-study">
+    <div class="study-header">
+      <button class="btn-skip" onclick="exitStudy()">← Back</button>
+      <div class="study-deck-name" id="study-deck-name">Deck</div>
+      <div class="study-progress-text" id="study-progress-text">1 / 10</div>
+    </div>
+    <div class="study-progress-bar-wrap">
+      <div class="study-progress-bar" id="study-prog-bar" style="width:0%"></div>
+    </div>
+
+    <!-- Flash card -->
+    <div class="card-scene">
+      <div class="flash-card" id="flash-card" onclick="flipCard()">
+        <div class="card-face card-front" id="card-front">
+          <div class="card-deck-label">
+            <div class="card-deck-dot" id="card-dot"></div>
+            <span id="card-deck-label-text"></span>
+          </div>
+          <div class="card-q" id="card-question"></div>
+          <div class="card-hint">Tap card to reveal answer</div>
+        </div>
+        <div class="card-face card-back" id="card-back">
+          <div class="card-a-label">✓ Answer</div>
+          <div class="card-a" id="card-answer"></div>
+          <div class="card-source" id="card-source"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Answer buttons -->
+    <div class="answer-btns" id="answer-btns">
+      <button class="btn-wrong"   onclick="answer(false)">✗ Missed It</button>
+      <button class="btn-correct" onclick="answer(true)">✓ Got It!</button>
+    </div>
+    <div class="card-actions">
+      <button class="btn-skip" onclick="skipCard()">Skip →</button>
+    </div>
+  </div>
+
+  <!-- ── COMPLETE VIEW ──────────────────────────────────────────── -->
+  <div class="view" id="view-complete">
+    <div class="complete-icon" id="complete-icon">🎉</div>
+    <div class="complete-title" id="complete-title">Session Complete!</div>
+    <div class="complete-sub" id="complete-sub"></div>
+    <div class="complete-stats">
+      <div class="complete-stat cs-correct">
+        <div class="cs-val" id="cs-correct">0</div>
+        <div class="cs-label">Correct</div>
+      </div>
+      <div class="complete-stat cs-wrong">
+        <div class="cs-val" id="cs-wrong">0</div>
+        <div class="cs-label">Missed</div>
+      </div>
+      <div class="complete-stat cs-xp">
+        <div class="cs-val" id="cs-xp">+0</div>
+        <div class="cs-label">XP Earned</div>
+      </div>
+      <div class="complete-stat cs-streak">
+        <div class="cs-val" id="cs-streak">🔥0</div>
+        <div class="cs-label">Day Streak</div>
+      </div>
+    </div>
+    <div class="new-badges" id="new-badges-section" style="display:none;">
+      <h3>🏅 New Achievements Unlocked!</h3>
+      <div class="new-badge-row" id="new-badges-row"></div>
+    </div>
+    <div class="complete-actions">
+      <button class="btn-secondary" onclick="showView('home')">← All Decks</button>
+      <button class="btn-primary" onclick="startDaily()">⚡ Daily Challenge</button>
+    </div>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// DATA — Flash cards linked to actual .md source files
+// ═══════════════════════════════════════════════════════════════════
+
+const DECKS = [
+  {
+    id: 'ai-stack',
+    name: 'AI Stack & Routing',
+    emoji: '🤖',
+    color: '#5b8ef5',
+    desc: 'Models, tiers, routing policy, cost management',
+    source: 'LOCAL_AI_ROUTING_POLICY.md',
+    sourceUrl: 'https://github.com/idigitalpro1/copress-dashboard/blob/main/docs/LOCAL_AI_ROUTING_POLICY.md',
+    cards: [
+      { q: "What model powers the 'free' Hermes tier?", a: "groq/llama-3.3-70b-versatile — fastest free cloud inference" },
+      { q: "Which AI tier should you use for private or sensitive data?", a: "local — hermes3:8b via Ollama on the Mac. Never routes to cloud." },
+      { q: "What's the first fallback when Claude/paid credits run out?", a: "Cursor + Ollama (local/local_heavy tier) — $0 cost" },
+      { q: "What model does 'local_heavy' use and why?", a: "hermes3:70b via Ollama. Used when 8B isn't powerful enough for heavy reasoning." },
+      { q: "What does LM Studio provide that Ollama doesn't?", a: "An OpenAI-compatible API endpoint at port 1234 — required for LangChain, CrewAI, etc." },
+      { q: "What's Gemini Flash's daily free token limit?", a: "1 million tokens per day — use for drafts, summaries, translations, bulk generation" },
+      { q: "What is OpenClaw's primary role?", a: "Operator execution lane and agent orchestration — use when Cursor is stuck or for complex multi-step ops" },
+      { q: "Name the correct fallback chain from premium down to local.", a: "premium → anthropic → openai → google → free → local_heavy → local" },
+      { q: "What tool is the CODE EDITING specialist in the stack?", a: "Cursor — IDE-integrated completions, file-level edits, refactors, pair programming" },
+      { q: "When should you use Groq in the routing chain?", a: "As the default 'free' tier when local Ollama is unavailable — same Llama 70B model, cloud-side" },
+      { q: "What's the cardinal routing rule before using any cloud model?", a: "Exhaust ALL local lanes completely before authorizing cloud spend." },
+      { q: "Claude Code (this) is reserved for what types of tasks?", a: "Architecture, coding, infra, debugging, complex reasoning, repo work, deploys" },
+    ]
+  },
+  {
+    id: 'editorial',
+    name: 'Editorial Workflow',
+    emoji: '🗞️',
+    color: '#f5c842',
+    desc: 'PDF pipeline, WordPress publishing, content rules',
+    source: 'CONTENT_PIPELINE.md + CLAUDE.md',
+    sourceUrl: 'https://github.com/idigitalpro1/copress-dashboard/blob/main/docs/CONTENT_PIPELINE.md',
+    cards: [
+      { q: "Where do you drop new WRC PDF issues for extraction?", a: "~/Codex/05_PDF_Workflow/00_Drop/ — naming: WRC_YYYY-MM-DD.pdf" },
+      { q: "What command runs the PDF extraction?", a: "~/Codex/bin/wrc-extract — or directly: python3 ~/Codex/02_Source/pdf_extract.py" },
+      { q: "What two folders does pdf_extract.py create?", a: "articles/ (markdown + HTML + metadata) and images/ (min 150×150px extracted)" },
+      { q: "After extraction, where should processed PDFs be archived?", a: "03_Archive/YYYY/Vol###/WRC_YYYY-MM-DD/ — contains original PDF + extracted content" },
+      { q: "What date should you set on a published WordPress post?", a: "The newspaper ISSUE date — NOT the upload date. Set both 'date' and 'date_gmt'." },
+      { q: "Name 4 types of content to DELETE from WordPress after extraction.", a: "SASQUATCH GRIL, Featured Listings, LEGAL & CLASSIFIED ADS, garbled OCR text, price-only posts" },
+      { q: "What WordPress setting makes a top story appear at the top of the homepage?", a: "Set sticky: true on the post — flags it as a sticky post" },
+      { q: "What category gets assigned to casino and gaming stories?", a: "Gaming — keywords: casino, gaming, bigfoot, monarch" },
+      { q: "What's the canonical rule about the PDF pipeline?", a: "It is canonical and must NEVER be recreated. It exists at /home/ubuntu/pdf-workflow/." },
+      { q: "What WordPress API field sets the featured image on a post?", a: "featured_media — set to the media_id after uploading the image via REST API" },
+      { q: "How do you filter ad copy from extracted content?", a: "Review draft for SASQUATCH, Featured Listings, Classifieds, phone-only, price-only posts — delete all" },
+      { q: "What category gets 'letter to' or 'editorial' in the headline?", a: "Opinion" },
+    ]
+  },
+  {
+    id: 'platform',
+    name: 'Platform Overview',
+    emoji: '🏔️',
+    color: '#22d3a0',
+    desc: 'Towns, modules, dashboard, copress stack',
+    source: 'CLAUDE.md + dashboard docs',
+    sourceUrl: 'https://github.com/idigitalpro1/copress-dashboard',
+    cards: [
+      { q: "Name the 5 Colorado mountain towns covered by copress.news.", a: "Black Hawk · Central City · Nederland · Georgetown · Idaho Springs" },
+      { q: "What are the 5 main publishing modules on the Command Center?", a: "Editorial Desk, Shop Local (Business Directory), City Sites, Marketing Hub, Accounting" },
+      { q: "Name the 3 Tools available from the dashboard sidebar.", a: "Docs Hub (/docs), Newsletter Studio (/newsletter), API Vault (/apistore)" },
+      { q: "What is myappstore.biz's core value proposition?", a: '"1Password for AI developers" — centralized secure API key store with MCP bridge injection' },
+      { q: "What keyboard shortcut launches the Email Blast tool?", a: "⌘4 — Newsletter Studio quick pill" },
+      { q: "What does the status bar connection dot turn GREEN for?", a: "When an API key has been saved to localStorage for that service (Gemini, Supabase, Sendy, Stripe)" },
+      { q: "How many pre-loaded docs does the Docs Hub launch with?", a: "24 docs — spanning AI Models, MCP/Plugins, Cloud/Infra, Data, Publishing, Dev Tools, APIs" },
+      { q: "What's the Vercel scope for this project?", a: "patrick-sweeneys-projects-434de4c7" },
+      { q: "What is the copress-dashboard GitHub repo name?", a: "idigitalpro1/copress-dashboard — auto-deploys to Vercel on git push" },
+      { q: "The Docs Hub integrates with which two external tools for AI review?", a: "NotebookLM (Google) — queue URLs then paste as sources; Notion — sync via MCP tools" },
+      { q: "Where are all API keys stored in the dashboard?", a: "localStorage ONLY — nothing is ever sent to any server. Keys are browser-local." },
+      { q: "What port does the local Ollama service run on?", a: "11434 — access via http://127.0.0.1:11434" },
+    ]
+  },
+  {
+    id: 'newsletter',
+    name: 'Newsletter & Sendy',
+    emoji: '📧',
+    color: '#f8834f',
+    desc: 'Sendy setup, subscriber lists, campaign workflow',
+    source: 'NEWSLETTER_SENDY_WORKFLOW.md',
+    sourceUrl: 'https://github.com/idigitalpro1/copress-dashboard/blob/main/docs/NEWSLETTER_SENDY_WORKFLOW.md',
+    cards: [
+      { q: "How many subscriber segments does copress manage?", a: "4 — Editorial (847 subs), Paid (312), Marketing (203), Sales (89)" },
+      { q: "What are the 3 newsletter templates in Newsletter Studio?", a: "Editorial Broadsheet, Business Digest, Town Bulletin" },
+      { q: "What are the 6 steps in Newsletter Studio's wizard?", a: "Template → Length → Stories → Subscriber Lists → Settings → Review & Send" },
+      { q: "What 3 environment variables are required for Sendy integration?", a: "SENDY_URL, SENDY_API_KEY, and at least one SENDY_LIST_ID (per segment)" },
+      { q: "Which subscriber list is 'hard-wired' vs optional for editorial newsletters?", a: "Editorial list is always included. Sales, Marketing, Paid are optional per campaign." },
+      { q: "What does the 'Export HTML' button do in Newsletter Studio?", a: "Downloads the newsletter as HTML for manual paste into Sendy or any other ESP" },
+      { q: "Name 3 of the WRC Apr 23, 2026 stories pre-loaded in Newsletter Studio.", a: "Gregory Gulch Resort · Charlie's Place · Floyd Hill widening · Central City $49K Cabaret · Council Seat race" },
+      { q: "What does the Newsletter Studio preview toggle switch between?", a: "Mobile view and Desktop view of the rendered newsletter" },
+      { q: "What are the scheduling options in Newsletter Studio?", a: "Send Now / 9am Today / Tomorrow 8am / Custom date+time" },
+      { q: "What tool can assist with AI-generated newsletter content in the stack?", a: "Gemini Flash (free tier) — for drafts, summaries, story intros at $0 cost" },
+    ]
+  },
+  {
+    id: 'infra',
+    name: 'Infrastructure & Endpoints',
+    emoji: '⚙️',
+    color: '#a67cf8',
+    desc: 'Servers, ports, SSH, DNS, Docker, deploy commands',
+    source: 'ENDPOINTS_CHEATSHEET.md + CLAUDE.md',
+    sourceUrl: 'https://github.com/idigitalpro1/copress-dashboard/blob/main/docs/ENDPOINTS_CHEATSHEET.md',
+    cards: [
+      { q: "What is the production server IP?", a: "44.236.197.183 — mmtkplesk, Lightsail us-west-2a, 16GB RAM" },
+      { q: "What's the SSH command to connect to production?", a: "ssh -i ~/Docker/keys/lightsail.pem ubuntu@44.236.197.183" },
+      { q: "What port does the local AI Router run on?", a: "127.0.0.1:8950 — main AI dispatch endpoint (POST /api/ai/chat)" },
+      { q: "What port does the Flask backend use?", a: "8080 — also the API port on 5280.menu" },
+      { q: "What port is the MCP server (Node.js) on locally?", a: "localhost:8082 — also codex-mcp.conews.press/mcp externally" },
+      { q: "What's the Admin SPA dev port?", a: "localhost:5173 — production runs on :8091 via Docker" },
+      { q: "Which DNS provider manages conews.press?", a: "Cloudflare — CF_ZONE_ID: 6f90b56a1101e5a06b8919e4065ea589" },
+      { q: "Which DNS provider manages 5280.menu?", a: "Plesk self-hosted (ns1/ns2.5280.menu) — NEVER use GoDaddy or Cloudflare for this." },
+      { q: "What command deploys the wrc-frontend to production?", a: "rsync dist/ to /tmp/wrc-dist/ via SSH, then rsync to httpdocs/public-next/ on server" },
+      { q: "What's the DocumentRoot for registercall.com on the server?", a: "/var/www/vhosts/registercall.com/httpdocs/public-next/ — NOT httpdocs root" },
+      { q: "What Docker command checks all project statuses?", a: "bash /Users/Ace/Docker/scripts/docker-status.sh" },
+      { q: "What's the GitHub deploy alias for Codex-factory on the server?", a: "github-codex-factory — maps to ~/.ssh/codex_factory_deploy key" },
+    ]
+  },
+  {
+    id: 'api-tools',
+    name: 'APIs & Integrations',
+    emoji: '🔌',
+    color: '#f472b6',
+    desc: 'Stripe, Supabase, Sendy, Twilio, Apify, MCP protocol',
+    source: 'CLAUDE.md + ENDPOINTS_CHEATSHEET.md',
+    sourceUrl: 'https://github.com/idigitalpro1/copress-dashboard',
+    cards: [
+      { q: "What is the Supabase project URL for registercall.com?", a: "https://daxjmynehyuytracntne.supabase.co — tenant filter: site_key = 'registercall'" },
+      { q: "Why can't you INSERT into public_posts in Supabase?", a: "It's a VIEW (read-only). You must INSERT into the underlying 'posts' table directly." },
+      { q: "After inserting a post, what join table must you update?", a: "post_authors (post_id, author_id) — links authors to posts" },
+      { q: "What phone number does the AI Receptionist answer on?", a: "+1 877-357-8499 — Twilio + Claude, routes to 3CX SIP extensions" },
+      { q: "What model powers the AI Receptionist?", a: "claude-opus-4-5 — can downgrade to claude-haiku-4-5 for cost savings" },
+      { q: "What does the MCP execution bridge endpoint do?", a: "POST /api/v1/agent/run — routes agent tool calls to safe execution layer" },
+      { q: "What is the default MCP mode — read or execute?", a: "Read-only / suggest-mode. Destructive actions need separate operator-approved path." },
+      { q: "What does Apify do in this stack?", a: "Web scraping and data extraction — used for business listings, content research" },
+      { q: "What are the 4 Twilio/3CX SIP extensions for call routing?", a: "17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production" },
+      { q: "What Google service is used for business directory data import?", a: "Google Places API — key stored as GOOGLE_PLACES_API_KEY in API Vault" },
+      { q: "What's the MCP SSE heartbeat interval?", a: "Every 15 seconds — proxy read timeout must be >= 60s" },
+      { q: "What's the AI receptionist health check endpoint?", a: "GET http://127.0.0.1:8787/health → {\"status\":\"ok\"}" },
+    ]
+  },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// BADGES
+// ═══════════════════════════════════════════════════════════════════
+
+const BADGES = [
+  { id: 'first-card',   icon: '📋', name: 'First Byline',     desc: 'Answer your first card',         check: s => s.totalCards >= 1 },
+  { id: 'streak-3',     icon: '🔥', name: 'On a Roll',        desc: '3-day study streak',             check: s => s.streak >= 3 },
+  { id: 'streak-7',     icon: '🌟', name: 'Week Warrior',     desc: '7-day study streak',             check: s => s.streak >= 7 },
+  { id: 'streak-30',    icon: '💎', name: 'Correspondent',    desc: '30-day study streak',            check: s => s.streak >= 30 },
+  { id: 'correct-10',   icon: '✅', name: 'Fact Checker',     desc: '10 correct answers',             check: s => s.totalCorrect >= 10 },
+  { id: 'correct-50',   icon: '🏆', name: 'Staff Writer',     desc: '50 correct answers',             check: s => s.totalCorrect >= 50 },
+  { id: 'correct-200',  icon: '👑', name: 'Managing Editor',  desc: '200 correct answers',            check: s => s.totalCorrect >= 200 },
+  { id: 'ai-master',    icon: '🤖', name: 'AI Guru',          desc: 'Complete the AI Stack deck',     check: s => s.decksMastered.includes('ai-stack') },
+  { id: 'editorial-master', icon: '🗞️', name: 'Copy Editor', desc: 'Complete the Editorial deck',    check: s => s.decksMastered.includes('editorial') },
+  { id: 'platform-pro', icon: '🏔️', name: 'Mountain Pro',    desc: 'Complete the Platform deck',     check: s => s.decksMastered.includes('platform') },
+  { id: 'newsletter-pro', icon: '📧', name: 'Blast Master',   desc: 'Complete the Newsletter deck',   check: s => s.decksMastered.includes('newsletter') },
+  { id: 'infra-pro',    icon: '⚙️', name: 'Sysadmin',        desc: 'Complete the Infra deck',        check: s => s.decksMastered.includes('infra') },
+  { id: 'api-pro',      icon: '🔌', name: 'API Wizard',       desc: 'Complete the APIs deck',         check: s => s.decksMastered.includes('api-tools') },
+  { id: 'all-decks',    icon: '🌐', name: 'Publisher',        desc: 'Complete ALL decks',             check: s => DECKS.every(d => s.decksMastered.includes(d.id)) },
+  { id: 'daily-done',   icon: '⚡', name: 'Daily Grind',      desc: 'Complete a Daily Challenge',     check: s => s.dailyCompleted >= 1 },
+  { id: 'speed-demon',  icon: '⚡', name: 'Speed Demon',      desc: 'Answer 5 cards in under 30s each', check: s => s.speedCards >= 5 },
+  { id: 'xp-500',       icon: '⭐', name: 'Star Reporter',    desc: 'Earn 500 XP',                   check: s => s.totalXP >= 500 },
+  { id: 'xp-2000',      icon: '🌠', name: 'Veteran',          desc: 'Earn 2,000 XP',                  check: s => s.totalXP >= 2000 },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// LEVELS
+// ═══════════════════════════════════════════════════════════════════
+
+const LEVELS = [
+  { name: 'Cub Reporter',   xp: 0    },
+  { name: 'Staff Writer',   xp: 100  },
+  { name: 'Senior Reporter',xp: 300  },
+  { name: 'Copy Editor',    xp: 600  },
+  { name: 'Section Editor', xp: 1000 },
+  { name: 'Senior Editor',  xp: 1600 },
+  { name: 'Managing Editor',xp: 2400 },
+  { name: 'Editor-in-Chief',xp: 3500 },
+  { name: 'Publisher',      xp: 5000 },
+];
+
+function getLevel(xp) {
+  let lvl = LEVELS[0];
+  for (const l of LEVELS) { if (xp >= l.xp) lvl = l; }
+  return lvl;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════════
+
+const STORE_KEY = 'copress_academy_v2';
+
+function loadState() {
+  try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; }
+}
+function saveState(s) { localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
+
+function getState() {
+  const s = loadState();
+  return {
+    player:         s.player         || '',
+    totalXP:        s.totalXP        || 0,
+    streak:         s.streak         || 0,
+    lastStudyDate:  s.lastStudyDate  || '',
+    totalCards:     s.totalCards     || 0,
+    totalCorrect:   s.totalCorrect   || 0,
+    decksMastered:  s.decksMastered  || [],
+    earnedBadges:   s.earnedBadges   || [],
+    dailyCompleted: s.dailyCompleted || 0,
+    speedCards:     s.speedCards     || 0,
+    dailyDone:      s.dailyDone      || '',
+    deckProgress:   s.deckProgress   || {},
+    leaderboard:    s.leaderboard    || [],
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// SESSION STATE
+// ═══════════════════════════════════════════════════════════════════
+
+let session = {
+  deck: null,
+  cards: [],
+  idx: 0,
+  correct: 0,
+  wrong: 0,
+  xpEarned: 0,
+  flipped: false,
+  cardStart: 0,
+  isDaily: false,
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════
+
+window.addEventListener('DOMContentLoaded', () => {
+  checkStreak();
+  const st = getState();
+  if (st.player) {
+    document.getElementById('profile-setup').style.display = 'none';
+    renderHome();
+  } else {
+    renderHome(true);
+  }
+  updateNavStats();
+});
+
+function checkStreak() {
+  const st = getState();
+  const today = new Date().toDateString();
+  const yest  = new Date(Date.now() - 86400000).toDateString();
+  if (st.lastStudyDate === today) return; // already studied today
+  if (st.lastStudyDate !== yest && st.lastStudyDate !== '') {
+    // streak broken
+    st.streak = 0;
+    saveState(st);
+  }
+}
+
+function setPlayer() {
+  const name = document.getElementById('name-input').value.trim();
+  if (!name) { toast('Enter your name to begin!'); return; }
+  const st = getState();
+  st.player = name;
+
+  // Save to leaderboard entry
+  let entry = st.leaderboard.find(e => e.name === name);
+  if (!entry) {
+    entry = { name, xp: 0, streak: 0, level: 'Cub Reporter' };
+    st.leaderboard.push(entry);
+  }
+  saveState(st);
+  document.getElementById('profile-setup').style.display = 'none';
+  updateNavStats();
+  renderHome();
+  toast('Welcome, ' + name + '! 🎉 Start with the Daily Challenge.');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RENDER HOME
+// ═══════════════════════════════════════════════════════════════════
+
+function renderHome(showProfile) {
+  const st = getState();
+
+  // Deck grid
+  const grid = document.getElementById('decks-grid');
+  grid.innerHTML = DECKS.map((d, i) => {
+    const prog = st.deckProgress[d.id] || 0;
+    const mastered = st.decksMastered.includes(d.id);
+    const pct = Math.round((prog / d.cards.length) * 100);
+    return `<div class="deck-card ${mastered ? 'deck-mastered' : ''}"
+                 style="--deck-color:${d.color}; animation-delay:${i*60}ms"
+                 onclick="startDeck('${d.id}')">
+      <div class="deck-emoji">${d.emoji}</div>
+      <div class="deck-name">${d.name}</div>
+      <div class="deck-desc">${d.desc}</div>
+      <div class="deck-meta">
+        <span class="deck-count">${d.cards.length} cards · <a href="${d.sourceUrl}" target="_blank" style="color:${d.color};text-decoration:none;font-size:.72rem;" onclick="event.stopPropagation()">📄 ${d.source}</a></span>
+      </div>
+      <div class="deck-progress-wrap">
+        <div class="deck-progress-bar" style="width:${pct}%"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Badges
+  const bg = document.getElementById('badges-grid');
+  bg.innerHTML = BADGES.map(b => {
+    const earned = st.earnedBadges.includes(b.id);
+    return `<div class="badge-item ${earned ? 'earned' : 'badge-locked'}">
+      <div class="badge-icon">${b.icon}</div>
+      <div class="badge-name">${b.name}</div>
+      <div class="badge-desc">${b.desc}</div>
+    </div>`;
+  }).join('');
+
+  // Leaderboard
+  const lb = document.getElementById('leaderboard');
+  const sorted = [...(st.leaderboard || [])].sort((a, b) => b.xp - a.xp).slice(0, 8);
+  if (!sorted.length) {
+    lb.innerHTML = '<div class="lb-row" style="color:var(--muted);font-size:.85rem;">No entries yet — complete a session to appear here.</div>';
+  } else {
+    lb.innerHTML = `
+      <div class="lb-header">🏅 Staff Leaderboard</div>
+      ${sorted.map((e, i) => `
+        <div class="lb-row">
+          <div class="lb-rank ${i === 0 ? 'top' : ''}">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i+1}`}</div>
+          <div class="lb-name">${e.name}<br><span class="lb-level">${e.level}</span></div>
+          <div class="lb-streak">🔥${e.streak}</div>
+          <div class="lb-xp">${e.xp} XP</div>
+        </div>`).join('')}`;
+  }
+}
+
+function updateNavStats() {
+  const st = getState();
+  document.getElementById('nav-streak-val').textContent = st.streak;
+  document.getElementById('nav-xp-val').textContent = st.totalXP;
+  document.getElementById('nav-level').textContent = getLevel(st.totalXP).name;
+  document.getElementById('player-name-display').textContent = st.player ? '· ' + st.player : '';
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// START DECK / DAILY
+// ═══════════════════════════════════════════════════════════════════
+
+function startDeck(deckId) {
+  const deck = DECKS.find(d => d.id === deckId);
+  if (!deck) return;
+  const cards = shuffle([...deck.cards]).slice(0, Math.min(deck.cards.length, 12));
+  beginSession(deck, cards, false);
+}
+
+function startDaily() {
+  const st = getState();
+  const today = new Date().toDateString();
+  if (st.dailyDone === today) {
+    toast('Daily Challenge already completed! Come back tomorrow. 🌅');
+    return;
+  }
+  // 10 random cards from all decks
+  const pool = DECKS.flatMap(d => d.cards.map(c => ({ ...c, deckId: d.id, deckName: d.name, deckColor: d.color, source: d.source, sourceUrl: d.sourceUrl })));
+  const cards = shuffle(pool).slice(0, 10);
+  const fakeDeck = { id: 'daily', name: '⚡ Daily Challenge', color: '#f5c842', source: 'All Decks', sourceUrl: '#' };
+  beginSession(fakeDeck, cards, true);
+}
+
+function beginSession(deck, cards, isDaily) {
+  const st = getState();
+  if (!st.player) {
+    toast('Enter your name first!');
+    document.getElementById('name-input').focus();
+    return;
+  }
+  session = { deck, cards, idx: 0, correct: 0, wrong: 0, xpEarned: 0, flipped: false, cardStart: Date.now(), isDaily };
+  document.getElementById('study-deck-name').textContent = deck.name;
+  document.getElementById('study-deck-name').style.color = deck.color;
+  showView('study');
+  renderCard();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// CARD RENDERING
+// ═══════════════════════════════════════════════════════════════════
+
+function renderCard() {
+  const card = session.cards[session.idx];
+  const total = session.cards.length;
+  const pct = (session.idx / total) * 100;
+
+  document.getElementById('study-progress-text').textContent = `${session.idx + 1} / ${total}`;
+  document.getElementById('study-prog-bar').style.width = pct + '%';
+
+  // Front
+  const deckColor = card.deckColor || session.deck.color;
+  document.getElementById('card-dot').style.background = deckColor;
+  document.getElementById('card-deck-label-text').textContent = card.deckName || session.deck.name;
+  document.getElementById('card-question').textContent = card.q;
+
+  // Back
+  document.getElementById('card-answer').innerHTML = card.a.replace(/`([^`]+)`/g, '<code>$1</code>');
+  const src = card.source || session.deck.source;
+  const srcUrl = card.sourceUrl || session.deck.sourceUrl;
+  document.getElementById('card-source').innerHTML = src
+    ? `📄 Source: <a href="${srcUrl}" target="_blank">${src}</a>`
+    : '';
+
+  // Reset flip
+  const fc = document.getElementById('flash-card');
+  fc.classList.remove('flipped');
+  session.flipped = false;
+  document.getElementById('answer-btns').classList.remove('visible');
+  session.cardStart = Date.now();
+}
+
+function flipCard() {
+  if (session.flipped) return;
+  const fc = document.getElementById('flash-card');
+  fc.classList.add('flipped');
+  session.flipped = true;
+  document.getElementById('answer-btns').classList.add('visible');
+}
+
+function answer(correct) {
+  if (!session.flipped) { toast('Flip the card first!'); return; }
+  const elapsed = (Date.now() - session.cardStart) / 1000;
+  const st = getState();
+
+  let xp = 0;
+  if (correct) {
+    xp = elapsed < 10 ? 20 : elapsed < 30 ? 15 : 10;
+    session.correct++;
+    st.totalCorrect++;
+    if (elapsed < 30) st.speedCards = (st.speedCards || 0) + 1;
+    xpBurst(xp, '🌟 +' + xp);
+  } else {
+    xp = 2; // consolation XP for trying
+    session.wrong++;
+    xpBurst(xp, '+' + xp, '#f05a5a');
+  }
+  session.xpEarned += xp;
+  st.totalXP += xp;
+  st.totalCards = (st.totalCards || 0) + 1;
+  st.totalCards++;
+
+  // Streak
+  const today = new Date().toDateString();
+  const yest  = new Date(Date.now() - 86400000).toDateString();
+  if (st.lastStudyDate !== today) {
+    if (st.lastStudyDate === yest) { st.streak++; }
+    else { st.streak = 1; }
+    st.lastStudyDate = today;
+  }
+
+  // Level up check
+  const prevLevel = getLevel(st.totalXP - xp).name;
+  const newLevel  = getLevel(st.totalXP).name;
+  if (prevLevel !== newLevel) showLevelUp(newLevel);
+
+  saveState(st);
+  updateNavStats();
+
+  session.idx++;
+  if (session.idx >= session.cards.length) {
+    endSession();
+  } else {
+    renderCard();
+  }
+}
+
+function skipCard() {
+  session.idx++;
+  if (session.idx >= session.cards.length) { endSession(); return; }
+  renderCard();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// END SESSION
+// ═══════════════════════════════════════════════════════════════════
+
+function endSession() {
+  const st = getState();
+  const today = new Date().toDateString();
+
+  // Update deck mastery
+  if (!session.isDaily && session.deck.id !== 'daily') {
+    const prev = st.deckProgress[session.deck.id] || 0;
+    st.deckProgress[session.deck.id] = prev + session.correct;
+    if (session.correct >= Math.ceil(session.cards.length * .75) && !st.decksMastered.includes(session.deck.id)) {
+      st.decksMastered.push(session.deck.id);
+    }
+  }
+  if (session.isDaily && st.dailyDone !== today) {
+    st.dailyDone = today;
+    st.dailyCompleted = (st.dailyCompleted || 0) + 1;
+    st.totalXP += 50; // daily bonus
+    session.xpEarned += 50;
+    xpBurst(50, '⚡ +50 Daily Bonus!', '#f5c842');
+  }
+
+  // Update leaderboard entry
+  let entry = st.leaderboard.find(e => e.name === st.player);
+  if (!entry) { entry = { name: st.player, xp: 0, streak: 0, level: 'Cub Reporter' }; st.leaderboard.push(entry); }
+  entry.xp = st.totalXP;
+  entry.streak = st.streak;
+  entry.level = getLevel(st.totalXP).name;
+
+  // Check badges
+  const newBadges = [];
+  for (const b of BADGES) {
+    if (!st.earnedBadges.includes(b.id) && b.check(st)) {
+      st.earnedBadges.push(b.id);
+      newBadges.push(b);
+    }
+  }
+
+  saveState(st);
+  updateNavStats();
+
+  // Complete screen
+  const accuracy = session.correct + session.wrong > 0
+    ? Math.round((session.correct / (session.correct + session.wrong)) * 100) : 0;
+  document.getElementById('complete-icon').textContent = accuracy >= 80 ? '🎯' : accuracy >= 50 ? '🎉' : '💪';
+  document.getElementById('complete-title').textContent =
+    accuracy >= 90 ? 'Outstanding!' : accuracy >= 70 ? 'Great Work!' : accuracy >= 50 ? 'Good Effort!' : 'Keep Practicing!';
+  document.getElementById('complete-sub').textContent =
+    `${accuracy}% accuracy · ${session.isDaily ? '⚡ Daily Challenge complete (+50 bonus XP)' : session.deck.name}`;
+  document.getElementById('cs-correct').textContent = session.correct;
+  document.getElementById('cs-wrong').textContent = session.wrong;
+  document.getElementById('cs-xp').textContent = '+' + session.xpEarned;
+  document.getElementById('cs-streak').textContent = '🔥' + st.streak;
+
+  // New badges
+  const nbSection = document.getElementById('new-badges-section');
+  const nbRow     = document.getElementById('new-badges-row');
+  if (newBadges.length) {
+    nbSection.style.display = 'block';
+    nbRow.innerHTML = newBadges.map((b, i) => `
+      <div class="new-badge" style="animation-delay:${i * 150}ms">
+        <div class="new-badge-icon">${b.icon}</div>
+        <div class="new-badge-text">
+          <div class="nb-name">${b.name}</div>
+          <div class="nb-desc">${b.desc}</div>
+        </div>
+      </div>`).join('');
+  } else {
+    nbSection.style.display = 'none';
+  }
+
+  showView('complete');
+  renderHome();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════════
+
+function exitStudy() { showView('home'); }
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function toast(msg) {
+  const area = document.getElementById('toast-area');
+  const el = document.createElement('div');
+  el.className = 'toast-msg';
+  el.textContent = msg;
+  area.appendChild(el);
+  setTimeout(() => {
+    el.classList.add('out');
+    setTimeout(() => el.remove(), 300);
+  }, 2800);
+}
+
+function xpBurst(xp, label, color = '#f5c842') {
+  const el = document.createElement('div');
+  el.className = 'xp-burst';
+  el.style.color = color;
+  el.style.left = (window.innerWidth / 2 - 40) + 'px';
+  el.style.top  = (window.innerHeight / 2) + 'px';
+  el.textContent = label;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+function showLevelUp(levelName) {
+  const overlay = document.createElement('div');
+  overlay.className = 'levelup-overlay';
+  overlay.innerHTML = `
+    <div class="levelup-box">
+      <div class="levelup-icon">🎖️</div>
+      <div class="levelup-sub">Level Up!</div>
+      <div class="levelup-title">${levelName}</div>
+      <button class="levelup-close" onclick="this.closest('.levelup-overlay').remove()">Awesome! →</button>
+    </div>`;
+  document.body.appendChild(overlay);
+}
+</script>
+</body>
+</html>
