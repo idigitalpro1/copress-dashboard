@@ -408,6 +408,17 @@
     <div class="nav-item" data-view="accounting">
       <span class="nav-icon">📒</span> Accounting
     </div>
+    <hr class="sidebar-rule">
+    <div class="sidebar-section-label">Tools</div>
+    <div class="nav-item" onclick="window.location.href='/docs'">
+      <span class="nav-icon">📚</span> Docs Hub
+    </div>
+    <div class="nav-item" onclick="window.location.href='/newsletter'">
+      <span class="nav-icon">📧</span> Newsletter Studio
+    </div>
+    <div class="nav-item" onclick="window.location.href='/apistore'">
+      <span class="nav-icon">🔑</span> API Vault
+    </div>
   </nav>
 
   <!-- Main -->
@@ -495,7 +506,7 @@
           <hr class="card-rule">
           <div class="card-actions">
             <button class="card-btn primary" onclick="event.stopPropagation(); navTo('marketing')">New Campaign</button>
-            <button class="card-btn" onclick="event.stopPropagation(); toast('Opening email blast…')">Email Blast</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/newsletter'">Email Blast</button>
             <button class="card-btn" onclick="event.stopPropagation(); toast('Launching flyer generator…')">Generate Flyer</button>
           </div>
           <div class="card-footer">
@@ -523,6 +534,26 @@
           </div>
         </div>
 
+        <!-- Docs Hub -->
+        <div class="module-card" onclick="window.location.href='/docs'" style="cursor:pointer;">
+          <div class="card-header">
+            <div class="card-icon">📚</div>
+            <div class="card-title-block">
+              <div class="card-title">Docs Hub</div>
+              <div class="card-subtitle">Vendor docs · NotebookLM · Notion sync</div>
+            </div>
+          </div>
+          <hr class="card-rule">
+          <div class="card-actions">
+            <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/docs'">+ Add Docs</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/docs'">Browse Library</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/docs'">NotebookLM Queue</button>
+          </div>
+          <div class="card-footer">
+            <span class="card-status ok">24 docs pre-loaded</span>
+          </div>
+        </div>
+
       </div><!-- /cards-grid -->
 
       <!-- Quick Actions -->
@@ -538,7 +569,7 @@
           <div class="quick-pill" onclick="toast('Opening campaign builder…')">
             📣 New Campaign <span class="pill-kbd">⌘3</span>
           </div>
-          <div class="quick-pill" onclick="toast('Opening email blast…')">
+          <div class="quick-pill" onclick="window.location.href='/newsletter'">
             📧 Send Email Blast <span class="pill-kbd">⌘4</span>
           </div>
           <div class="quick-pill" onclick="toast('Creating invoice…')">
@@ -546,6 +577,12 @@
           </div>
           <div class="quick-pill" onclick="toast('Exporting weekly PDF…')">
             📄 Export Weekly PDF <span class="pill-kbd">⌘6</span>
+          </div>
+          <div class="quick-pill" onclick="window.location.href='/docs'">
+            📚 Docs Hub <span class="pill-kbd">⌘7</span>
+          </div>
+          <div class="quick-pill" onclick="window.location.href='/apistore'">
+            🔑 API Vault <span class="pill-kbd">⌘8</span>
           </div>
         </div>
       </div>
