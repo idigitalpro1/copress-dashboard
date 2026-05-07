@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docs Hub — myappstore.biz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0a1628;--navy-mid:#0f2040;--navy-light:#1a3058;
+  --gold:#c8a84b;--gold-light:#e8c96a;--red:#c0392b;
+  --green:#2d7a3a;--warm-white:#fafaf8;--paper:#f5f3ee;
+  --muted:#8a9ab5;--border:#ddd9d0;--text:#1a1a1a;
+  --sidebar:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);color:var(--text);min-height:100vh;font-size:14px;}
+
+/* NAV */
+.topnav{background:var(--navy);height:52px;display:flex;align-items:center;padding:0 24px;gap:16px;border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100;}
+.nav-logo{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold);font-weight:700;white-space:nowrap;}
+.nav-logo span{color:rgba(255,255,255,0.5);font-size:11px;font-family:'DM Mono',monospace;letter-spacing:0.08em;margin-left:6px;}
+.nav-search{flex:1;max-width:520px;position:relative;}
+.nav-search input{width:100%;padding:8px 14px 8px 36px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:6px;color:#fff;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s;}
+.nav-search input::placeholder{color:rgba(255,255,255,0.35);}
+.nav-search input:focus{border-color:var(--gold);background:rgba(255,255,255,0.12);}
+.nav-search .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;}
+.nav-search .search-count{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);}
+.nav-right{display:flex;gap:8px;margin-left:auto;align-items:center;}
+.btn{padding:7px 14px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:5px;}
+.btn-gold{background:var(--gold);color:var(--navy);font-weight:700;}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-ghost{background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:#fff;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+.btn-navy{background:var(--navy-mid);color:#fff;border:1.5px solid var(--navy-light);}
+.btn-navy:hover{border-color:var(--gold);}
+.btn-nlm{background:linear-gradient(135deg,#4285f4,#0f9d58);color:#fff;font-weight:600;}
+.btn-notion{background:#fff;color:var(--text);border:1.5px solid var(--border);}
+
+/* LAYOUT */
+.layout{display:flex;min-height:calc(100vh - 52px);}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--navy-mid);border-right:1px solid var(--navy-light);flex-shrink:0;display:flex;flex-direction:column;}
+.sidebar-section{padding:12px 16px 5px;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.sidebar-item{padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:9px;font-size:12px;color:#c8d4e8;transition:background 0.15s;border-left:3px solid transparent;user-select:none;}
+.sidebar-item:hover{background:rgba(255,255,255,0.05);}
+.sidebar-item.active{background:rgba(255,255,255,0.07);border-left-color:var(--gold);color:#fff;font-weight:500;}
+.sidebar-count{margin-left:auto;font-family:'DM Mono',monospace;font-size:10px;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:3px;color:var(--muted);}
+.sidebar-count.has{color:var(--gold);background:rgba(200,168,75,0.12);}
+.sidebar-divider{height:1px;background:var(--navy-light);margin:8px 16px;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;}
+
+/* IMPORT PANEL */
+.import-panel{background:var(--navy);border-bottom:1px solid var(--navy-light);padding:0;max-height:0;overflow:hidden;transition:max-height 0.4s ease,padding 0.4s ease;}
+.import-panel.open{max-height:420px;padding:20px 28px;}
+.import-panel h3{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:4px;}
+.import-panel p{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:14px;}
+.import-textarea{width:100%;background:rgba(0,0,0,0.3);border:1.5px solid rgba(200,168,75,0.3);border-radius:6px;padding:12px 14px;font-family:'DM Mono',monospace;font-size:11px;color:#e8d5a3;resize:none;height:140px;outline:none;line-height:1.7;}
+.import-textarea::placeholder{color:rgba(255,255,255,0.2);}
+.import-textarea:focus{border-color:var(--gold);}
+.import-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:10px;}
+.import-hint{font-size:11px;color:rgba(255,255,255,0.35);}
+.import-cats{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.import-cat-btn{padding:4px 10px;border:1.5px solid rgba(255,255,255,0.15);border-radius:3px;background:transparent;color:rgba(255,255,255,0.55);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.import-cat-btn:hover,.import-cat-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,0.08);}
+
+/* TOOLBAR */
+.toolbar{padding:14px 24px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);background:#fff;flex-wrap:wrap;}
+.toolbar-stat{font-size:12px;color:var(--muted);margin-right:4px;}
+.toolbar-stat strong{color:var(--text);}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap;flex:1;}
+.pill{padding:5px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:11px;cursor:pointer;transition:all 0.15s;color:var(--muted);white-space:nowrap;font-weight:500;}
+.pill:hover{border-color:var(--gold);color:var(--text);}
+.pill.active{border-color:var(--gold);color:var(--navy);background:rgba(200,168,75,0.1);font-weight:600;}
+.view-toggle{display:flex;border:1.5px solid var(--border);border-radius:4px;overflow:hidden;}
+.view-btn{padding:5px 10px;background:#fff;border:none;cursor:pointer;font-size:13px;color:var(--muted);transition:all 0.15s;}
+.view-btn.active{background:var(--navy);color:#fff;}
+
+/* DOCS GRID */
+.docs-container{padding:20px 24px;}
+.docs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.docs-grid.list-view{grid-template-columns:1fr;}
+
+/* DOC CARD */
+.doc-card{background:#fff;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;transition:all 0.2s;position:relative;}
+.doc-card:hover{border-color:var(--gold);box-shadow:0 4px 16px rgba(0,0,0,0.06);transform:translateY(-1px);}
+.doc-card.pinned{border-color:var(--gold);background:rgba(200,168,75,0.02);}
+.doc-card.pinned::before{content:'📌';position:absolute;top:8px;right:8px;font-size:12px;}
+.doc-card-header{padding:12px 14px 10px;display:flex;gap:10px;align-items:flex-start;border-bottom:1px solid var(--paper);}
+.doc-favicon{width:28px;height:28px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:14px;}
+.doc-favicon img{width:100%;height:100%;border-radius:6px;}
+.doc-meta{flex:1;min-width:0;}
+.doc-title{font-size:13px;font-weight:600;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--navy);}
+.doc-url{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.doc-cat-badge{padding:2px 7px;border-radius:3px;font-size:9px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.doc-body{padding:10px 14px;}
+.doc-desc{font-size:11px;color:#666;line-height:1.55;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.doc-tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px;}
+.doc-tag{padding:2px 7px;background:var(--paper);border-radius:3px;font-size:10px;color:var(--muted);cursor:pointer;}
+.doc-tag:hover{background:rgba(200,168,75,0.15);color:var(--navy);}
+.doc-notes{width:100%;padding:6px 8px;border:1.5px solid var(--border);border-radius:4px;font-size:11px;font-family:'DM Sans',sans-serif;resize:none;min-height:36px;color:var(--text);background:var(--paper);transition:border-color 0.15s;margin-bottom:8px;}
+.doc-notes:focus{outline:none;border-color:var(--gold);background:#fff;}
+.doc-notes::placeholder{color:#bbb;}
+.doc-footer{padding:8px 14px;background:var(--paper);border-top:1px solid var(--border);display:flex;align-items:center;gap:6px;}
+.doc-action{padding:4px 9px;border:1.5px solid var(--border);border-radius:3px;background:#fff;font-size:10px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;display:flex;align-items:center;gap:3px;color:var(--text);}
+.doc-action:hover{border-color:var(--gold);color:var(--navy);}
+.doc-action.nlm{border-color:#4285f4;color:#4285f4;}
+.doc-action.nlm:hover{background:#4285f4;color:#fff;}
+.doc-action.notion{border-color:#333;color:#333;}
+.doc-action.notion:hover{background:#333;color:#fff;}
+.doc-action.del{margin-left:auto;color:var(--muted);}
+.doc-action.del:hover{border-color:var(--red);color:var(--red);}
+.doc-selected-check{position:absolute;top:8px;left:8px;width:18px;height:18px;border:2px solid var(--border);border-radius:4px;background:#fff;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:10px;z-index:2;}
+.doc-card:hover .doc-selected-check{display:flex;}
+.doc-card.selected .doc-selected-check{display:flex;background:var(--gold);border-color:var(--gold);color:var(--navy);}
+
+/* LIST VIEW card */
+.docs-grid.list-view .doc-card{border-radius:6px;}
+.docs-grid.list-view .doc-card-header{border-bottom:none;padding-bottom:6px;}
+.docs-grid.list-view .doc-body{padding:4px 14px 10px;}
+.docs-grid.list-view .doc-notes{display:none;}
+
+/* NLM PANEL */
+.nlm-panel{position:fixed;right:0;top:52px;bottom:0;width:400px;background:var(--navy);border-left:2px solid var(--gold);transform:translateX(100%);transition:transform 0.3s;z-index:90;display:flex;flex-direction:column;overflow:hidden;}
+.nlm-panel.open{transform:translateX(0);}
+.nlm-header{padding:16px 20px;border-bottom:1px solid var(--navy-light);display:flex;align-items:center;justify-content:space-between;}
+.nlm-header h3{font-family:'Playfair Display',serif;font-size:16px;color:#fff;}
+.nlm-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;}
+.nlm-body{flex:1;overflow-y:auto;padding:16px 20px;}
+.nlm-section{margin-bottom:20px;}
+.nlm-section h4{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:600;}
+.nlm-url-list{display:flex;flex-direction:column;gap:6px;}
+.nlm-url-item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:4px;padding:8px 10px;display:flex;align-items:center;gap:8px;}
+.nlm-url-item .url-favicon{font-size:13px;width:20px;text-align:center;flex-shrink:0;}
+.nlm-url-item .url-title{font-size:11px;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.nlm-url-item .url-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;flex-shrink:0;}
+.nlm-url-item .url-remove:hover{color:var(--red);}
+.nlm-textarea{width:100%;background:rgba(0,0,0,0.3);border:1.5px solid rgba(200,168,75,0.2);border-radius:4px;padding:10px;font-family:'DM Mono',monospace;font-size:10px;color:#c8d4e8;resize:none;height:120px;outline:none;line-height:1.7;}
+.nlm-action-row{display:flex;flex-direction:column;gap:8px;padding:16px 20px;border-top:1px solid var(--navy-light);}
+.nlm-big-btn{width:100%;padding:12px;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;border:none;font-family:'Playfair Display',serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.nlm-big-btn.nlm{background:linear-gradient(135deg,#4285f4,#0f9d58);color:#fff;}
+.nlm-big-btn.nlm:hover{opacity:0.9;transform:translateY(-1px);}
+.nlm-big-btn.notion{background:#fff;color:var(--text);}
+.nlm-big-btn.notion:hover{background:var(--paper);}
+.nlm-big-btn.copy{background:var(--gold);color:var(--navy);}
+
+/* PROMPT EXTRACTOR */
+.prompt-section{margin-bottom:20px;}
+.prompt-item{background:rgba(200,168,75,0.08);border:1px solid rgba(200,168,75,0.2);border-radius:4px;padding:10px;margin-bottom:8px;font-family:'DM Mono',monospace;font-size:10px;color:#e8d5a3;line-height:1.6;position:relative;}
+.prompt-copy{position:absolute;top:6px;right:6px;background:var(--gold);border:none;border-radius:3px;padding:3px 7px;font-size:9px;cursor:pointer;color:var(--navy);font-weight:700;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 40px;color:var(--muted);}
+.empty-state .icon{font-size:48px;margin-bottom:16px;}
+.empty-state h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--navy);margin-bottom:8px;}
+.empty-state p{font-size:13px;line-height:1.6;max-width:400px;margin:0 auto 20px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy);color:#fff;padding:11px 20px;border-radius:6px;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,0.3);opacity:0;transition:all 0.3s;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.gold{border-left:3px solid var(--gold);}
+.toast.green{border-left:3px solid var(--green);}
+.toast.red{border-left:3px solid var(--red);}
+
+/* CAT COLORS */
+.cat-ai{background:rgba(66,133,244,0.12);color:#4285f4;}
+.cat-mcp{background:rgba(200,168,75,0.15);color:#8a6800;}
+.cat-cloud{background:rgba(255,153,0,0.12);color:#c46400;}
+.cat-data{background:rgba(61,207,142,0.12);color:#1a8a5a;}
+.cat-publish{background:rgba(192,57,43,0.1);color:var(--red);}
+.cat-dev{background:rgba(10,22,40,0.08);color:var(--navy);}
+.cat-api{background:rgba(103,58,183,0.1);color:#5c35b5;}
+.cat-learn{background:rgba(45,122,58,0.1);color:var(--green);}
+
+.modal-overlay{position:fixed;inset:0;background:rgba(10,22,40,0.7);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:10px;width:560px;max-width:96vw;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+.modal-header{background:var(--navy);padding:16px 22px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:space-between;}
+.modal-header h3{font-family:'Playfair Display',serif;font-size:17px;color:#fff;}
+.modal-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;}
+.modal-body{padding:20px 22px;}
+.field-group{margin-bottom:14px;}
+.field-label{font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;display:block;}
+.field-input{width:100%;padding:9px 11px;border:1.5px solid var(--border);border-radius:4px;font-size:13px;font-family:'DM Sans',sans-serif;background:var(--warm-white);transition:border-color 0.15s;}
+.field-input:focus{outline:none;border-color:var(--gold);}
+select.field-input{cursor:pointer;}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="nav-logo">📚 Docs Hub <span>myappstore.biz</span></div>
+  <div class="nav-search">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search docs, APIs, tools, prompts..." oninput="handleSearch(this.value)">
+    <span class="search-count" id="search-count"></span>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-ghost" onclick="toggleImport()">⚡ Bulk Import</button>
+    <button class="btn btn-ghost" onclick="toggleNLM()" style="background:linear-gradient(135deg,rgba(66,133,244,0.2),rgba(15,157,88,0.2));border-color:rgba(66,133,244,0.4);color:#7ab4f7;">🎙 NotebookLM</button>
+    <button class="btn btn-ghost" onclick="syncNotion()" style="border-color:rgba(255,255,255,0.3);">◻ Notion Sync</button>
+    <button class="btn btn-gold" onclick="openAddModal()">+ Add Doc</button>
+  </div>
+</nav>
+
+<!-- IMPORT PANEL -->
+<div class="import-panel" id="import-panel">
+  <h3>⚡ Bulk URL Import</h3>
+  <p>Paste URLs — one per line, or comma-separated. Titles auto-resolved. Category auto-detected from domain.</p>
+  <div class="import-cats">
+    <button class="import-cat-btn active" id="import-cat-btn" onclick="setCat(this,'')">Auto-detect</button>
+    <button class="import-cat-btn" onclick="setCat(this,'ai')">🤖 AI</button>
+    <button class="import-cat-btn" onclick="setCat(this,'mcp')">🔌 MCP</button>
+    <button class="import-cat-btn" onclick="setCat(this,'cloud')">☁️ Cloud</button>
+    <button class="import-cat-btn" onclick="setCat(this,'data')">🗄 Data</button>
+    <button class="import-cat-btn" onclick="setCat(this,'publish')">📰 Publish</button>
+    <button class="import-cat-btn" onclick="setCat(this,'dev')">💻 Dev</button>
+    <button class="import-cat-btn" onclick="setCat(this,'api')">🔑 API</button>
+    <button class="import-cat-btn" onclick="setCat(this,'learn')">📖 Learn</button>
+  </div>
+  <textarea class="import-textarea" id="import-textarea" placeholder="https://docs.anthropic.com/en/api/getting-started
+https://platform.openai.com/docs
+https://ai.google.dev/gemini-api/docs
+https://modelcontextprotocol.io/docs
+https://supabase.com/docs
+https://docs.stripe.com
+https://apify.com/docs
+https://vercel.com/docs
+... paste as many as you want"></textarea>
+  <div class="import-bottom">
+    <span class="import-hint">💡 Tip: paste entire bookmark export, GitHub README links, or vendor email URLs</span>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-ghost" onclick="toggleImport()" style="color:#999;border-color:rgba(255,255,255,0.15);">Cancel</button>
+      <button class="btn btn-gold" onclick="runImport()">Import All →</button>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-section">Browse</div>
+  <div class="sidebar-item active" data-filter="all" onclick="filterSidebar('all',this)">🗝 All Docs <span class="sidebar-count has" id="sc-all">0</span></div>
+  <div class="sidebar-item" data-filter="pinned" onclick="filterSidebar('pinned',this)">📌 Pinned <span class="sidebar-count" id="sc-pinned">0</span></div>
+  <div class="sidebar-item" data-filter="noted" onclick="filterSidebar('noted',this)">📝 Has Notes <span class="sidebar-count" id="sc-noted">0</span></div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">Categories</div>
+  <div class="sidebar-item" data-filter="ai" onclick="filterSidebar('ai',this)">🤖 AI Models <span class="sidebar-count" id="sc-ai">0</span></div>
+  <div class="sidebar-item" data-filter="mcp" onclick="filterSidebar('mcp',this)">🔌 MCP / Plugins <span class="sidebar-count" id="sc-mcp">0</span></div>
+  <div class="sidebar-item" data-filter="cloud" onclick="filterSidebar('cloud',this)">☁️ Cloud / Infra <span class="sidebar-count" id="sc-cloud">0</span></div>
+  <div class="sidebar-item" data-filter="data" onclick="filterSidebar('data',this)">🗄 Data / DB <span class="sidebar-count" id="sc-data">0</span></div>
+  <div class="sidebar-item" data-filter="publish" onclick="filterSidebar('publish',this)">📰 Publishing <span class="sidebar-count" id="sc-publish">0</span></div>
+  <div class="sidebar-item" data-filter="dev" onclick="filterSidebar('dev',this)">💻 Dev Tools <span class="sidebar-count" id="sc-dev">0</span></div>
+  <div class="sidebar-item" data-filter="api" onclick="filterSidebar('api',this)">🔑 APIs / SDKs <span class="sidebar-count" id="sc-api">0</span></div>
+  <div class="sidebar-item" data-filter="learn" onclick="filterSidebar('learn',this)">📖 Learning <span class="sidebar-count" id="sc-learn">0</span></div>
+  <div class="sidebar-divider"></div>
+  <div class="sidebar-section">Tools</div>
+  <div class="sidebar-item" onclick="extractPrompts()">✨ Extract Prompts</div>
+  <div class="sidebar-item" onclick="exportDocs()">📤 Export All</div>
+  <div class="sidebar-item" onclick="toggleNLM()">🎙 NotebookLM Queue</div>
+  <div class="sidebar-item" onclick="syncNotion()">◻ Sync to Notion</div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <!-- TOOLBAR -->
+  <div class="toolbar">
+    <span class="toolbar-stat"><strong id="tb-count">0</strong> docs</span>
+    <div class="filter-pills" id="tag-pills"></div>
+    <div style="display:flex;gap:8px;align-items:center;margin-left:auto;">
+      <button class="btn btn-navy" onclick="selectAllNLM()" style="font-size:11px;padding:5px 10px;">Add All to 🎙 NLM</button>
+      <div class="view-toggle">
+        <button class="view-btn active" id="vbtn-grid" onclick="setView('grid')">⊞</button>
+        <button class="view-btn" id="vbtn-list" onclick="setView('list')">≡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="docs-container">
+    <div class="docs-grid" id="docs-grid"></div>
+  </div>
+</main>
+</div>
+
+<!-- NLM PANEL -->
+<div class="nlm-panel" id="nlm-panel">
+  <div class="nlm-header">
+    <h3>🎙 NotebookLM Queue</h3>
+    <button class="nlm-close" onclick="toggleNLM()">✕</button>
+  </div>
+  <div class="nlm-body">
+    <div class="nlm-section">
+      <h4>Selected Sources (<span id="nlm-count">0</span>)</h4>
+      <div class="nlm-url-list" id="nlm-url-list"></div>
+    </div>
+    <div class="nlm-section">
+      <h4>Copy URLs for NotebookLM</h4>
+      <textarea class="nlm-textarea" id="nlm-textarea" readonly placeholder="Add docs to the queue first..."></textarea>
+    </div>
+    <div class="nlm-section prompt-section" id="nlm-prompts-section" style="display:none;">
+      <h4>📋 Extracted Sample Prompts</h4>
+      <div id="nlm-prompts"></div>
+    </div>
+  </div>
+  <div class="nlm-action-row">
+    <button class="nlm-big-btn nlm" onclick="openNotebookLM()">🎙 Open NotebookLM → Paste Sources</button>
+    <button class="nlm-big-btn copy" onclick="copyNLMUrls()">📋 Copy All URLs</button>
+    <button class="nlm-big-btn notion" onclick="syncNotion()">◻ Sync Queue to Notion DB</button>
+  </div>
+</div>
+
+<!-- ADD MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add Documentation</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group">
+        <label class="field-label">URL</label>
+        <input type="url" class="field-input" id="new-url" placeholder="https://docs.example.com" oninput="autoDetectFromURL(this.value)">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field-group">
+          <label class="field-label">Title</label>
+          <input type="text" class="field-input" id="new-title" placeholder="Auto-detected from URL">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Category</label>
+          <select class="field-input" id="new-cat">
+            <option value="ai">🤖 AI Model</option>
+            <option value="mcp">🔌 MCP / Plugin</option>
+            <option value="cloud">☁️ Cloud / Infra</option>
+            <option value="data">🗄 Data / DB</option>
+            <option value="publish">📰 Publishing</option>
+            <option value="dev">💻 Dev Tools</option>
+            <option value="api">🔑 API / SDK</option>
+            <option value="learn">📖 Learning</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Description</label>
+        <input type="text" class="field-input" id="new-desc" placeholder="What this doc covers">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Tags (comma-separated)</label>
+        <input type="text" class="field-input" id="new-tags" placeholder="api, authentication, quickstart">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Notes / Sample Prompts</label>
+        <textarea class="field-input" id="new-notes" style="resize:vertical;min-height:72px;" placeholder="Your notes, prompts to remember, key sections..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" style="background:transparent;border:1.5px solid var(--border);color:var(--text);" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="saveDoc()">Save to Hub</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── CATEGORY CONFIG ───────────────────────────────────────────────────────
+const CAT = {
+  ai:      {label:'AI',      icon:'🤖', cls:'cat-ai'},
+  mcp:     {label:'MCP',     icon:'🔌', cls:'cat-mcp'},
+  cloud:   {label:'Cloud',   icon:'☁️',  cls:'cat-cloud'},
+  data:    {label:'Data',    icon:'🗄',  cls:'cat-data'},
+  publish: {label:'Publish', icon:'📰', cls:'cat-publish'},
+  dev:     {label:'Dev',     icon:'💻', cls:'cat-dev'},
+  api:     {label:'API',     icon:'🔑',  cls:'cat-api'},
+  learn:   {label:'Learn',   icon:'📖', cls:'cat-learn'},
+};
+
+// ── AUTO-DETECT CATEGORY FROM URL ────────────────────────────────────────
+const CAT_RULES = [
+  [/anthropic|claude/,'ai'],[/openai|gpt/,'ai'],[/google.*ai|gemini|vertex|bard/,'ai'],
+  [/ollama|hugging|replicate|together|groq|mistral|cohere/,'ai'],[/lmstudio|localai/,'ai'],
+  [/modelcontextprotocol|mcp\.|smithery|claude.*plugin/,'mcp'],
+  [/cursor\.sh|\.cursor\//,'mcp'],[/windsurf|codeium/,'mcp'],
+  [/aws\.amazon|amazonaws|lightsail|ec2|s3\.|lambda/,'cloud'],
+  [/vercel|netlify|cloudflare|fly\.io|render\.com/,'cloud'],
+  [/supabase|firebase|planetscale|neon\.tech|turso/,'data'],
+  [/airtable|notion\.so.*api|mongodb|postgres/,'data'],
+  [/stripe|twilio|sendgrid|mailchimp|sendy/,'publish'],
+  [/wordpress|wp\.|ghost\.org|webflow/,'publish'],
+  [/github\.com|gitlab|npm|pypi|packagist/,'dev'],
+  [/nextjs|react|vue|svelte|tailwind|vite/,'dev'],
+  [/apify|scrapy|puppeteer|playwright/,'api'],
+  [/docs\.|developer\.|api\.|reference\./,'api'],
+  [/youtube|udemy|coursera|medium\.com|blog\./,'learn'],
+];
+
+function detectCat(url) {
+  const u = url.toLowerCase();
+  for (const [rx, cat] of CAT_RULES) if (rx.test(u)) return cat;
+  return 'api';
+}
+
+function titleFromURL(url) {
+  try {
+    const u = new URL(url);
+    const parts = u.hostname.replace('www.','').replace('docs.','').split('.');
+    const base = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+    const path = u.pathname.split('/').filter(Boolean);
+    if (path.length) {
+      const last = path[path.length-1].replace(/-/g,' ').replace(/_/g,' ');
+      return `${base} — ${last.charAt(0).toUpperCase()+last.slice(1)}`;
+    }
+    return `${base} Documentation`;
+  } catch { return url; }
+}
+
+function faviconURL(url) {
+  try { return `https://www.google.com/s2/favicons?domain=${new URL(url).hostname}&sz=32`; }
+  catch { return ''; }
+}
+
+// ── DEFAULT DOCS (pre-seeded) ─────────────────────────────────────────────
+const DEFAULT_DOCS = [
+  // AI
+  {url:'https://docs.anthropic.com',title:'Anthropic / Claude Docs',cat:'ai',desc:'Claude API, prompt engineering, tool use, streaming, vision, computer use.',tags:['claude','api','prompting'],pinned:true,notes:'Key: use system prompt for persona. Tool use = function calling. claude-3-5-sonnet for code.'},
+  {url:'https://ai.google.dev/gemini-api/docs',title:'Gemini API Docs',cat:'ai',desc:'Gemini 2.0 Flash — free 1M tokens/day. Streaming SSE, multimodal, function calling.',tags:['gemini','free','streaming'],pinned:true,notes:'Use ?alt=sse for streaming. Model: gemini-2.0-flash'},
+  {url:'https://ollama.com/docs',title:'Ollama Docs',cat:'ai',desc:'Run Hermes, Llama, Qwen locally. REST API at :11434. No cloud, no cost.',tags:['local','ollama','hermes'],notes:'POST /api/chat with stream:true. Model: hermes3:70b'},
+  {url:'https://platform.openai.com/docs',title:'OpenAI Platform Docs',cat:'ai',desc:'GPT-4o, Assistants API, fine-tuning, embeddings. Fallback option.',tags:['openai','gpt','optional']},
+  {url:'https://lmstudio.ai/docs',title:'LM Studio Docs',cat:'ai',desc:'Local model GUI. OpenAI-compatible API at port 1234. Good for Qwen models.',tags:['local','lmstudio','qwen']},
+  // MCP
+  {url:'https://modelcontextprotocol.io/docs',title:'MCP Protocol Docs',cat:'mcp',desc:'Model Context Protocol spec. How to build MCP servers and connect tools to AI.',tags:['mcp','protocol','tools'],pinned:true,notes:'Server must expose: tools, resources, prompts. Transport: stdio or SSE.'},
+  {url:'https://docs.anthropic.com/en/docs/claude-code/mcp',title:'Claude Code MCP Guide',cat:'mcp',desc:'How to add MCP servers to Claude Code via settings.json.',tags:['claude-code','mcp','config'],notes:'Config path: ~/.claude/settings.json → mcpServers object'},
+  {url:'https://smithery.ai',title:'Smithery — MCP Registry',cat:'mcp',desc:'Directory of MCP servers. Find pre-built connectors for any service.',tags:['mcp','registry','plugins']},
+  // Cloud
+  {url:'https://docs.aws.amazon.com/lightsail',title:'AWS Lightsail Docs',cat:'cloud',desc:'VPS management. Your prod server: 44.236.197.183. 16GB instance.',tags:['aws','lightsail','prod'],notes:'SSH: ssh -i ~/Codex/keys/lightsail.pem ubuntu@44.236.197.183'},
+  {url:'https://vercel.com/docs',title:'Vercel Docs',cat:'cloud',desc:'Hosting for Next.js and static sites. Auto-deploy from GitHub.',tags:['vercel','deploy','nextjs'],pinned:true,notes:'Scope: patrick-sweeneys-projects-434de4c7. CLI: npx vercel --prod'},
+  {url:'https://developers.cloudflare.com/dns',title:'Cloudflare DNS Docs',cat:'cloud',desc:'DNS for conews.press only. CF_ZONE_ID = 6f90b56a... NOT for 5280.menu.',tags:['cloudflare','dns'],notes:'Token scoped to conews.press ONLY. 5280.menu uses Plesk DNS.'},
+  {url:'https://docs.docker.com',title:'Docker Docs',cat:'cloud',desc:'Container management. Projects at ~/Docker/projects/. Master hub at ~/Docker/',tags:['docker','containers'],notes:'Primary Docker hub: /Users/Ace/Docker/projects/'},
+  // Data
+  {url:'https://supabase.com/docs',title:'Supabase Docs',cat:'data',desc:'Postgres + auth + storage. Project: daxjmynehyuytracntne.supabase.co. site_key filter required.',tags:['supabase','postgres','rest'],pinned:true,notes:'IMPORTANT: public_posts is a VIEW — INSERT to posts table directly. site_key=registercall filter always.'},
+  {url:'https://airtable.com/developers/web/api/introduction',title:'Airtable API Docs',cat:'data',desc:'REST API for Airtable bases. Good for business listings before Supabase migration.',tags:['airtable','api']},
+  // Publishing
+  {url:'https://docs.stripe.com',title:'Stripe API Docs',cat:'publish',desc:'Payments, invoices, subscriptions. Powers accounting module and paid subscriber billing.',tags:['stripe','payments','invoices'],pinned:true},
+  {url:'https://sendy.co/api',title:'Sendy API Docs',cat:'publish',desc:'Self-hosted email. /api/subscriber/subscribe, /api/campaigns/create. List IDs per segment.',tags:['sendy','email','campaigns'],notes:'POST to /api/subscriber/subscribe. Required: api_key, email, list, boolean=true'},
+  {url:'https://developer.wordpress.org/rest-api',title:'WordPress REST API',cat:'publish',desc:'WP REST API for registercall.com. Posts, media, categories. Basic auth with app password.',tags:['wordpress','rest','publishing'],notes:'Auth: username:app_password base64. POST /wp-json/wp/v2/posts'},
+  {url:'https://www.twilio.com/docs',title:'Twilio Docs',cat:'publish',desc:'SMS + voice. AI receptionist at +18773578499. Routes to 3CX extensions.',tags:['twilio','sms','voice']},
+  // Dev
+  {url:'https://nextjs.org/docs',title:'Next.js Docs',cat:'dev',desc:'App Router, server components, API routes. codex-admin runs Next.js 15.',tags:['nextjs','react','app-router']},
+  {url:'https://github.com/features/actions',title:'GitHub Actions Docs',cat:'dev',desc:'CI/CD automation. Auto-deploy on push to main.',tags:['github','ci-cd','actions']},
+  {url:'https://apify.com/docs',title:'Apify Docs',cat:'api',desc:'Web scraping platform. Google Maps scraper for business directory import by zip/town.',tags:['apify','scraping','google-maps'],pinned:true,notes:'Actor: compass/crawler-google-places. Input: searchStringsArray + locationQuery'},
+  {url:'https://developers.google.com/maps/documentation/places',title:'Google Places API',cat:'api',desc:'Business data by zip/lat-lon. Cheaper for targeted queries vs Apify.',tags:['google','places','maps']},
+  // Learn
+  {url:'https://www.promptingguide.ai',title:'Prompt Engineering Guide',cat:'learn',desc:'Comprehensive prompting techniques: CoT, few-shot, RAG, agents, tool use.',tags:['prompting','techniques','guide'],notes:'Best for: chain-of-thought, structured output prompts, system prompt design'},
+  {url:'https://github.com/anthropics/anthropic-cookbook',title:'Anthropic Cookbook',cat:'learn',desc:'Production-ready Claude examples: tool use, vision, RAG, multi-agent patterns.',tags:['claude','examples','cookbook'],pinned:true},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let docs = [];
+let nlmQueue = [];
+let currentFilter = 'all';
+let currentSearch = '';
+let currentView = 'grid';
+let importCat = '';
+
+function loadDocs() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('docs_hub') || '[]');
+    if (saved.length === 0) {
+      docs = DEFAULT_DOCS.map((d,i) => ({...d, id: 'doc_'+i, added: Date.now()-i*1000}));
+    } else {
+      docs = saved;
+      // Add any new defaults not yet saved
+      DEFAULT_DOCS.forEach((def,i) => {
+        if (!docs.find(d => d.url === def.url)) docs.push({...def, id:'doc_def_'+i, added:Date.now()});
+      });
+    }
+  } catch { docs = DEFAULT_DOCS.map((d,i) => ({...d, id:'doc_'+i, added:Date.now()})); }
+}
+
+function saveDocs() {
+  localStorage.setItem('docs_hub', JSON.stringify(docs));
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function getFiltered() {
+  let result = docs;
+  if (currentFilter === 'pinned') result = result.filter(d => d.pinned);
+  else if (currentFilter === 'noted') result = result.filter(d => d.notes && d.notes.trim());
+  else if (currentFilter !== 'all') result = result.filter(d => d.cat === currentFilter);
+  if (currentSearch) {
+    const q = currentSearch.toLowerCase();
+    result = result.filter(d =>
+      (d.title||'').toLowerCase().includes(q) ||
+      (d.url||'').toLowerCase().includes(q) ||
+      (d.desc||'').toLowerCase().includes(q) ||
+      (d.notes||'').toLowerCase().includes(q) ||
+      (d.tags||[]).some(t => t.includes(q))
+    );
+  }
+  return result;
+}
+
+function renderGrid() {
+  const filtered = getFiltered();
+  const grid = document.getElementById('docs-grid');
+  grid.className = 'docs-grid' + (currentView === 'list' ? ' list-view' : '');
+  document.getElementById('tb-count').textContent = filtered.length;
+  document.getElementById('search-count').textContent = currentSearch ? `${filtered.length} results` : '';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+      <div class="icon">📭</div>
+      <h3>${currentSearch ? 'No results for "'+currentSearch+'"' : 'No docs yet'}</h3>
+      <p>${currentSearch ? 'Try different keywords or clear the search.' : 'Click "Bulk Import" to add hundreds of docs at once, or "+ Add Doc" for one at a time.'}</p>
+      <button class="btn btn-gold" onclick="toggleImport()" style="margin:0 auto;">⚡ Bulk Import</button>
+    </div>`;
+    return;
+  }
+
+  const inNLM = new Set(nlmQueue.map(n=>n.url));
+  grid.innerHTML = filtered.map(doc => {
+    const c = CAT[doc.cat] || CAT.api;
+    const isNLM = inNLM.has(doc.url);
+    const isSelected = doc.selected;
+    const tags = (doc.tags||[]).slice(0,3);
+    return `
+    <div class="doc-card ${doc.pinned?'pinned':''} ${isSelected?'selected':''}" id="dcard-${doc.id}">
+      <div class="doc-selected-check" onclick="toggleSelect('${doc.id}',event)">✓</div>
+      <div class="doc-card-header">
+        <div class="doc-favicon">
+          <img src="${faviconURL(doc.url)}" onerror="this.parentElement.textContent='${c.icon}'" alt="">
+        </div>
+        <div class="doc-meta">
+          <div class="doc-title" title="${doc.title}">${doc.title || titleFromURL(doc.url)}</div>
+          <div class="doc-url">${doc.url}</div>
+        </div>
+        <span class="doc-cat-badge ${c.cls}">${c.icon} ${c.label}</span>
+      </div>
+      <div class="doc-body">
+        ${doc.desc ? `<div class="doc-desc">${doc.desc}</div>` : ''}
+        ${tags.length ? `<div class="doc-tags">${tags.map(t=>`<span class="doc-tag" onclick="searchTag('${t}')">#${t}</span>`).join('')}</div>` : ''}
+        <textarea class="doc-notes" placeholder="📝 Add notes, sample prompts, key sections..." rows="2"
+          oninput="saveNote('${doc.id}',this.value)"
+          onblur="saveNote('${doc.id}',this.value)">${doc.notes||''}</textarea>
+      </div>
+      <div class="doc-footer">
+        <a href="${doc.url}" target="_blank" class="doc-action" onclick="event.stopPropagation()">🔗 Open</a>
+        <button class="doc-action nlm ${isNLM?'active':''}" onclick="toggleNLMItem('${doc.id}',event)">
+          ${isNLM?'🎙 In Queue':'+ NLM'}
+        </button>
+        <button class="doc-action" onclick="togglePin('${doc.id}',event)">${doc.pinned?'📌 Pinned':'📌 Pin'}</button>
+        <button class="doc-action del" onclick="deleteDoc('${doc.id}',event)">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  updateSidebarCounts();
+  updateNLMPanel();
+}
+
+function updateSidebarCounts() {
+  const cats = ['ai','mcp','cloud','data','publish','dev','api','learn'];
+  document.getElementById('sc-all').textContent = docs.length;
+  document.getElementById('sc-pinned').textContent = docs.filter(d=>d.pinned).length;
+  document.getElementById('sc-noted').textContent = docs.filter(d=>d.notes&&d.notes.trim()).length;
+  cats.forEach(c => {
+    const el = document.getElementById('sc-'+c);
+    if (el) el.textContent = docs.filter(d=>d.cat===c).length;
+  });
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────
+function saveNote(id, val) {
+  const doc = docs.find(d=>d.id===id);
+  if (doc) { doc.notes = val; saveDocs(); }
+}
+
+function togglePin(id, e) {
+  if(e) e.stopPropagation();
+  const doc = docs.find(d=>d.id===id);
+  if (doc) { doc.pinned = !doc.pinned; saveDocs(); renderGrid(); showToast(doc.pinned?'📌 Pinned':'Unpinned','gold'); }
+}
+
+function deleteDoc(id, e) {
+  if(e) e.stopPropagation();
+  docs = docs.filter(d=>d.id!==id);
+  nlmQueue = nlmQueue.filter(n=>n.id!==id);
+  saveDocs(); renderGrid(); showToast('Removed','gold');
+}
+
+function toggleSelect(id, e) {
+  if(e) e.stopPropagation();
+  const doc = docs.find(d=>d.id===id);
+  if (doc) { doc.selected=!doc.selected; renderGrid(); }
+}
+
+function searchTag(tag) {
+  document.getElementById('search-input').value = tag;
+  currentSearch = tag;
+  renderGrid();
+}
+
+// ── FILTER ────────────────────────────────────────────────────────────────
+function filterSidebar(filter, el) {
+  currentFilter = filter;
+  document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
+  el.classList.add('active');
+  renderGrid();
+}
+
+function handleSearch(q) {
+  currentSearch = q;
+  renderGrid();
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('vbtn-grid').classList.toggle('active', v==='grid');
+  document.getElementById('vbtn-list').classList.toggle('active', v==='list');
+  renderGrid();
+}
+
+// ── IMPORT ────────────────────────────────────────────────────────────────
+let importPanelOpen = false;
+function toggleImport() {
+  importPanelOpen = !importPanelOpen;
+  const p = document.getElementById('import-panel');
+  p.classList.toggle('open', importPanelOpen);
+  if (importPanelOpen) setTimeout(()=>document.getElementById('import-textarea').focus(), 400);
+}
+
+function setCat(el, cat) {
+  importCat = cat;
+  document.querySelectorAll('.import-cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function runImport() {
+  const raw = document.getElementById('import-textarea').value;
+  const urls = raw.split(/[\n,]+/).map(u=>u.trim()).filter(u=>u.startsWith('http'));
+  if (!urls.length) { showToast('⚠ No valid URLs found','red'); return; }
+  let added = 0;
+  urls.forEach(url => {
+    if (docs.find(d=>d.url===url)) return; // skip dupes
+    const cat = importCat || detectCat(url);
+    docs.push({
+      id: 'doc_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),
+      url, cat,
+      title: titleFromURL(url),
+      desc: '', tags: [], notes: '', pinned: false, added: Date.now()
+    });
+    added++;
+  });
+  saveDocs();
+  document.getElementById('import-textarea').value = '';
+  toggleImport();
+  renderGrid();
+  showToast(`✅ ${added} docs imported (${urls.length - added} dupes skipped)`,'green');
+}
+
+// ── NLM ───────────────────────────────────────────────────────────────────
+let nlmOpen = false;
+function toggleNLM() {
+  nlmOpen = !nlmOpen;
+  document.getElementById('nlm-panel').classList.toggle('open', nlmOpen);
+  updateNLMPanel();
+}
+
+function toggleNLMItem(id, e) {
+  if(e) e.stopPropagation();
+  const doc = docs.find(d=>d.id===id);
+  if (!doc) return;
+  const idx = nlmQueue.findIndex(n=>n.id===id);
+  if (idx > -1) { nlmQueue.splice(idx,1); showToast('Removed from NLM queue','gold'); }
+  else { nlmQueue.push({id,url:doc.url,title:doc.title,cat:doc.cat}); showToast('🎙 Added to NotebookLM queue','gold'); }
+  renderGrid();
+}
+
+function selectAllNLM() {
+  const filtered = getFiltered();
+  filtered.forEach(doc => { if(!nlmQueue.find(n=>n.id===doc.id)) nlmQueue.push({id:doc.id,url:doc.url,title:doc.title,cat:doc.cat}); });
+  renderGrid();
+  if (!nlmOpen) toggleNLM();
+  showToast(`🎙 ${filtered.length} docs added to NotebookLM queue`,'gold');
+}
+
+function updateNLMPanel() {
+  document.getElementById('nlm-count').textContent = nlmQueue.length;
+  const list = document.getElementById('nlm-url-list');
+  const c = CAT;
+  list.innerHTML = nlmQueue.map(n => {
+    const cat = c[n.cat] || c.api;
+    return `<div class="nlm-url-item">
+      <span class="url-favicon">${cat.icon}</span>
+      <span class="url-title" title="${n.url}">${n.title || n.url}</span>
+      <button class="url-remove" onclick="toggleNLMItem('${n.id}')">✕</button>
+    </div>`;
+  }).join('') || '<div style="color:var(--muted);font-size:11px;padding:8px 0;">No docs queued yet — click "+ NLM" on any doc card</div>';
+
+  document.getElementById('nlm-textarea').value = nlmQueue.map(n=>n.url).join('\n');
+}
+
+function openNotebookLM() {
+  copyNLMUrls();
+  window.open('https://notebooklm.google.com', '_blank');
+  showToast('🎙 NotebookLM opened — paste URLs as sources','green');
+}
+
+function copyNLMUrls() {
+  const urls = nlmQueue.map(n=>n.url).join('\n');
+  if (!urls) { showToast('⚠ Queue is empty — add docs first','red'); return; }
+  navigator.clipboard.writeText(urls).then(()=>showToast('📋 '+nlmQueue.length+' URLs copied — paste into NotebookLM sources','green'));
+}
+
+// ── NOTION SYNC ───────────────────────────────────────────────────────────
+async function syncNotion() {
+  showToast('◻ Notion sync — configure Notion MCP first','gold');
+  // In production: call Notion MCP to create/update database
+  // mcp.notion.create_database({ title: 'Docs Hub', properties: {...} })
+  // then mcp.notion.create_pages(docs.map(d => notionPage(d)))
+  setTimeout(()=>showToast('Notion MCP integration — coming in v0.2','gold'),2000);
+}
+
+// ── PROMPT EXTRACTION ─────────────────────────────────────────────────────
+function extractPrompts() {
+  const noted = docs.filter(d=>d.notes&&d.notes.trim());
+  if (!noted.length) { showToast('⚠ Add notes to docs first','red'); return; }
+
+  const samplePrompts = [
+    'Summarize the key authentication patterns from these docs',
+    'What are the rate limits across all these APIs?',
+    'Show me quickstart examples for each service',
+    'What webhook events should I listen for?',
+    'Compare the pricing/free tiers of these services',
+    'What are the common error codes and how to handle them?',
+  ];
+
+  const sec = document.getElementById('nlm-prompts-section');
+  const cont = document.getElementById('nlm-prompts');
+  sec.style.display='block';
+  cont.innerHTML = samplePrompts.map(p=>`
+    <div class="prompt-item">${p}
+      <button class="prompt-copy" onclick="navigator.clipboard.writeText(this.parentElement.textContent.trim());showToast('Copied','gold')">Copy</button>
+    </div>`).join('');
+
+  if (!nlmOpen) toggleNLM();
+  showToast('✨ Sample prompts generated from your notes','gold');
+}
+
+// ── EXPORT ────────────────────────────────────────────────────────────────
+function exportDocs() {
+  const lines = ['# Docs Hub Export — '+new Date().toLocaleDateString(),''];
+  const cats = ['ai','mcp','cloud','data','publish','dev','api','learn'];
+  cats.forEach(cat => {
+    const catDocs = docs.filter(d=>d.cat===cat);
+    if (!catDocs.length) return;
+    const c = CAT[cat];
+    lines.push(`## ${c.icon} ${c.label}`,'');
+    catDocs.forEach(d => {
+      lines.push(`- [${d.title}](${d.url})`);
+      if (d.desc) lines.push(`  ${d.desc}`);
+      if (d.notes) lines.push(`  > ${d.notes}`);
+    });
+    lines.push('');
+  });
+  const blob = new Blob([lines.join('\n')],{type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`docs-hub-${new Date().toISOString().slice(0,10)}.md`;
+  a.click();
+  showToast('📤 Exported as Markdown','gold');
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function openAddModal() { document.getElementById('modal').classList.add('open'); document.getElementById('new-url').focus(); }
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function autoDetectFromURL(url) {
+  if (!url.startsWith('http')) return;
+  const cat = detectCat(url);
+  document.getElementById('new-cat').value = cat;
+  if (!document.getElementById('new-title').value) {
+    document.getElementById('new-title').value = titleFromURL(url);
+  }
+}
+
+function saveDoc() {
+  const url = document.getElementById('new-url').value.trim();
+  if (!url) { showToast('⚠ URL required','red'); return; }
+  if (docs.find(d=>d.url===url)) { showToast('Already in hub','gold'); closeModal(); return; }
+  const tags = document.getElementById('new-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  docs.unshift({
+    id:'doc_'+Date.now(),
+    url, cat: document.getElementById('new-cat').value,
+    title: document.getElementById('new-title').value || titleFromURL(url),
+    desc: document.getElementById('new-desc').value,
+    tags, notes: document.getElementById('new-notes').value,
+    pinned:false, added:Date.now()
+  });
+  saveDocs(); renderGrid(); closeModal();
+  ['new-url','new-title','new-desc','new-tags','new-notes'].forEach(id=>document.getElementById(id).value='');
+  showToast('✅ Doc added to hub','green');
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────────
+function showToast(msg,type='gold') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  clearTimeout(window._tt);
+  window._tt=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded',()=>{
+  loadDocs(); renderGrid();
+  setTimeout(()=>showToast('📚 Docs Hub ready — '+docs.length+' docs loaded','gold'),500);
+});
+</script>
+</body>
+</html>
