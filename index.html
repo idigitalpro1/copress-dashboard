@@ -422,6 +422,9 @@
     <div class="nav-item" onclick="window.location.href='/apistore'">
       <span class="nav-icon">🔑</span> API Vault
     </div>
+    <div class="nav-item" onclick="window.location.href='/linear'">
+      <span class="nav-icon">📐</span> Linear
+    </div>
     <div class="nav-item" onclick="window.location.href='/learn'" style="margin-top:4px; border-top: 1px solid rgba(255,255,255,.06); padding-top:12px;">
       <span class="nav-icon">🎓</span> Staff Academy
       <span class="nav-badge" style="background:linear-gradient(135deg,#f5c842,#f8834f);color:#0b0f1a;">NEW</span>
@@ -538,6 +541,32 @@
           </div>
           <div class="card-footer">
             <span class="card-status ok">0 unpaid invoices</span>
+          </div>
+        </div>
+
+        <!-- Linear -->
+        <div class="module-card" onclick="window.location.href='/linear'" style="cursor:pointer;">
+          <div class="card-header">
+            <div class="card-icon" style="background:#5e6ad215;border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:0;">
+              <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="28" height="28" rx="7" fill="#5e6ad2"/>
+                <path d="M6 19.5L14 6L22 19.5" stroke="white" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+                <circle cx="14" cy="19.5" r="1.5" fill="white"/>
+              </svg>
+            </div>
+            <div class="card-title-block">
+              <div class="card-title">Linear</div>
+              <div class="card-subtitle">Issues · Cycles · Projects · Team</div>
+            </div>
+          </div>
+          <hr class="card-rule">
+          <div class="card-actions">
+            <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/linear'">Open Board</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/linear'">My Issues</button>
+            <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/linear'">New Issue</button>
+          </div>
+          <div class="card-footer">
+            <span class="card-status ok">Issue tracking · Cycles · Projects</span>
           </div>
         </div>
 

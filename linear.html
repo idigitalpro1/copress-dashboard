@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linear — copress.news</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:       #0a1628;
+    --navy-mid:   #111f38;
+    --navy-light: #1a2f4a;
+    --gold:       #c8a84b;
+    --gold-pale:  #e8d49a;
+    --red:        #c0392b;
+    --linear:     #5e6ad2;
+    --linear-lt:  #8b97e8;
+    --warm-white: #fafaf8;
+    --paper:      #f4f2ed;
+    --ink:        #1a1a1a;
+    --ink-mid:    #3d3d3d;
+    --ink-muted:  #6b6b6b;
+    --rule:       #d8d4c8;
+    --card-bg:    #ffffff;
+    --sidebar-w:  220px;
+    --topbar-h:   60px;
+    --status-h:   36px;
+    --shadow-sm:  0 1px 4px rgba(0,0,0,.08);
+    --shadow-md:  0 4px 20px rgba(0,0,0,.12);
+    --transition: 220ms cubic-bezier(.4,0,.2,1);
+  }
+  body.dark {
+    --warm-white: #0a0e17;
+    --paper:      #0e1520;
+    --ink:        #e8e4da;
+    --ink-mid:    #b0aaa0;
+    --ink-muted:  #6a7080;
+    --rule:       #1e2d42;
+    --card-bg:    #111827;
+    --shadow-sm:  0 1px 4px rgba(0,0,0,.4);
+    --shadow-md:  0 4px 20px rgba(0,0,0,.5);
+  }
+
+  html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--ink); }
+
+  /* ── Topbar ── */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-h);
+    background: var(--navy); display: flex; align-items: center;
+    padding: 0 24px; z-index: 100; border-bottom: 2px solid var(--gold);
+  }
+  .topbar-logo {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; font-weight: 900; color: var(--warm-white);
+    letter-spacing: .5px; display: flex; align-items: baseline; gap: 6px;
+  }
+  .topbar-logo span { color: var(--gold); font-style: italic; }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+  .topbar-back {
+    font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none;
+    padding: 6px 12px; border: 1px solid rgba(255,255,255,.12); border-radius: 6px;
+    transition: var(--transition); font-family: 'DM Mono', monospace;
+  }
+  .topbar-back:hover { color: var(--gold); border-color: var(--gold); }
+  #dark-toggle {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.2);
+    background: transparent; color: rgba(255,255,255,.7); cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+    transition: var(--transition);
+  }
+  #dark-toggle:hover { background: rgba(255,255,255,.1); color: var(--gold); }
+
+  /* ── Layout ── */
+  #shell { display: flex; padding-top: var(--topbar-h); min-height: 100vh; padding-bottom: var(--status-h); }
+
+  /* ── Sidebar ── */
+  #sidebar {
+    width: var(--sidebar-w); flex-shrink: 0; background: var(--navy);
+    position: fixed; top: var(--topbar-h); bottom: var(--status-h);
+    left: 0; overflow-y: auto; border-right: 1px solid rgba(200,168,75,.25);
+    display: flex; flex-direction: column; padding: 24px 0;
+  }
+  .sidebar-section-label {
+    font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: rgba(255,255,255,.3); padding: 0 20px 8px; font-family: 'DM Mono', monospace;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 10px 20px;
+    font-size: 13px; color: rgba(255,255,255,.6); cursor: pointer;
+    transition: var(--transition); border-left: 3px solid transparent;
+    text-decoration: none; user-select: none;
+  }
+  .nav-item:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.05); }
+  .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(200,168,75,.08); }
+  .nav-icon { font-size: 17px; width: 20px; text-align: center; flex-shrink: 0; }
+  .sidebar-rule { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: 12px 20px; }
+  .nav-badge {
+    margin-left: auto; font-size: 9px; font-weight: 700; padding: 2px 6px;
+    border-radius: 4px; letter-spacing: .5px; text-transform: uppercase;
+  }
+
+  /* ── Main content ── */
+  #main {
+    flex: 1; margin-left: var(--sidebar-w);
+    padding: 32px 36px; max-width: 1400px;
+  }
+
+  /* ── Page header ── */
+  .page-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; gap: 16px; flex-wrap: wrap;
+  }
+  .page-title-block {}
+  .page-title {
+    font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .linear-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--linear); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 3px 10px; border-radius: 20px; font-family: 'DM Mono', monospace;
+    letter-spacing: .5px;
+  }
+  .page-subtitle { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
+  .page-actions { display: flex; gap: 10px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: var(--transition); border: 1px solid transparent;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-primary { background: var(--linear); color: #fff; border-color: var(--linear); }
+  .btn-primary:hover { background: #4b57c7; }
+  .btn-outline { background: transparent; color: var(--ink); border-color: var(--rule); }
+  .btn-outline:hover { border-color: var(--linear); color: var(--linear); }
+  .btn-ghost { background: transparent; color: var(--ink-muted); border: none; }
+  .btn-ghost:hover { color: var(--linear); }
+
+  /* ── Setup Banner ── */
+  #setup-banner {
+    background: linear-gradient(135deg, #1a1a3a 0%, #0f0f28 100%);
+    border: 1px solid rgba(94,106,210,.4); border-radius: 12px;
+    padding: 32px; margin-bottom: 28px; text-align: center;
+  }
+  .setup-logo {
+    width: 48px; height: 48px; margin: 0 auto 16px;
+    background: var(--linear); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 24px;
+  }
+  .setup-title { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .setup-desc { font-size: 14px; color: rgba(255,255,255,.55); margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; }
+  .setup-input-row { display: flex; gap: 10px; max-width: 560px; margin: 0 auto; }
+  .setup-input {
+    flex: 1; padding: 10px 14px; border-radius: 8px;
+    border: 1px solid rgba(94,106,210,.4); background: rgba(255,255,255,.06);
+    color: #fff; font-size: 13px; font-family: 'DM Mono', monospace;
+    outline: none;
+  }
+  .setup-input::placeholder { color: rgba(255,255,255,.3); }
+  .setup-input:focus { border-color: var(--linear); }
+  .setup-link { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,.35); }
+  .setup-link a { color: var(--linear-lt); text-decoration: none; }
+
+  /* ── Stats row ── */
+  .stats-row {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--card-bg); border: 1px solid var(--rule); border-radius: 10px;
+    padding: 18px 20px; box-shadow: var(--shadow-sm);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .stat-label { font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 1px; font-family: 'DM Mono', monospace; }
+  .stat-value { font-size: 28px; font-weight: 700; line-height: 1; }
+  .stat-sub { font-size: 11px; color: var(--ink-muted); }
+  .stat-card.urgent .stat-value { color: #e74c3c; }
+  .stat-card.in-progress .stat-value { color: var(--linear); }
+  .stat-card.done .stat-value { color: #27ae60; }
+  .stat-card.cycle .stat-value { color: var(--gold); }
+
+  /* ── Two-column layout ── */
+  .content-grid {
+    display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start;
+  }
+  @media (max-width: 1100px) { .content-grid { grid-template-columns: 1fr; } }
+
+  /* ── Panel ── */
+  .panel {
+    background: var(--card-bg); border: 1px solid var(--rule); border-radius: 12px;
+    box-shadow: var(--shadow-sm); overflow: hidden; margin-bottom: 20px;
+  }
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .panel-title { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .panel-count {
+    background: var(--linear); color: #fff; font-size: 10px; font-weight: 700;
+    padding: 2px 7px; border-radius: 10px; font-family: 'DM Mono', monospace;
+  }
+  .panel-actions { display: flex; gap: 6px; }
+
+  /* ── Filter tabs ── */
+  .filter-tabs {
+    display: flex; gap: 0; border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+  }
+  .filter-tab {
+    padding: 10px 16px; font-size: 12px; cursor: pointer; border: none;
+    background: transparent; color: var(--ink-muted); transition: var(--transition);
+    border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: 'DM Sans', sans-serif;
+  }
+  .filter-tab.active { color: var(--linear); border-bottom-color: var(--linear); font-weight: 600; }
+  .filter-tab:hover:not(.active) { color: var(--ink); }
+
+  /* ── Issue list ── */
+  .issue-list { list-style: none; }
+  .issue-item {
+    display: flex; align-items: flex-start; gap: 12px; padding: 14px 20px;
+    border-bottom: 1px solid var(--rule); cursor: pointer; transition: var(--transition);
+  }
+  .issue-item:last-child { border-bottom: none; }
+  .issue-item:hover { background: rgba(94,106,210,.04); }
+  .issue-priority {
+    width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px;
+    border-radius: 3px; display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 800;
+  }
+  .prio-urgent { background: rgba(231,76,60,.15); color: #e74c3c; }
+  .prio-high   { background: rgba(230,126,34,.15); color: #e67e22; }
+  .prio-medium { background: rgba(241,196,15,.15); color: #d4ac0d; }
+  .prio-low    { background: rgba(149,165,166,.15); color: #95a5a6; }
+  .prio-none   { background: rgba(149,165,166,.08); color: #bdc3c7; }
+  .issue-status-dot {
+    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; margin-top: 3px;
+    border: 2px solid;
+  }
+  .status-backlog  { border-color: #6b7280; background: transparent; }
+  .status-todo     { border-color: #9ca3af; background: transparent; }
+  .status-progress { border-color: var(--linear); background: rgba(94,106,210,.3); }
+  .status-done     { background: #27ae60; border-color: #27ae60; }
+  .status-cancelled { background: #6b7280; border-color: #6b7280; opacity:.5; }
+  .issue-body { flex: 1; min-width: 0; }
+  .issue-title { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .issue-meta { display: flex; gap: 10px; align-items: center; margin-top: 4px; flex-wrap: wrap; }
+  .issue-id { font-size: 11px; color: var(--ink-muted); font-family: 'DM Mono', monospace; }
+  .issue-label {
+    font-size: 10px; padding: 2px 7px; border-radius: 4px; font-weight: 600;
+    border: 1px solid;
+  }
+  .issue-assignee {
+    width: 20px; height: 20px; border-radius: 50%; background: var(--linear);
+    color: #fff; font-size: 9px; font-weight: 700; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+  }
+  .issue-date { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+
+  /* ── Empty state ── */
+  .empty-state {
+    padding: 48px 20px; text-align: center; color: var(--ink-muted);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+  .empty-desc { font-size: 13px; }
+
+  /* ── Quick Create ── */
+  .quick-create {
+    padding: 16px 20px; border-bottom: 1px solid var(--rule); background: rgba(94,106,210,.04);
+  }
+  .qc-row { display: flex; gap: 8px; align-items: flex-start; }
+  .qc-input {
+    flex: 1; padding: 9px 12px; border: 1px solid var(--rule); border-radius: 8px;
+    font-size: 13px; background: var(--card-bg); color: var(--ink); outline: none;
+    font-family: 'DM Sans', sans-serif; resize: none; min-height: 38px;
+  }
+  .qc-input:focus { border-color: var(--linear); box-shadow: 0 0 0 3px rgba(94,106,210,.15); }
+  .qc-controls { display: flex; gap: 6px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
+  .qc-select {
+    padding: 5px 10px; border: 1px solid var(--rule); border-radius: 6px;
+    font-size: 11px; background: var(--card-bg); color: var(--ink);
+    cursor: pointer; outline: none; font-family: 'DM Sans', sans-serif;
+  }
+  .qc-select:focus { border-color: var(--linear); }
+
+  /* ── Right column panels ── */
+  .cycle-bar {
+    height: 8px; background: var(--rule); border-radius: 4px; overflow: hidden; margin: 10px 0 4px;
+  }
+  .cycle-fill { height: 100%; border-radius: 4px; transition: width .6s ease; }
+  .cycle-legend { display: flex; gap: 14px; font-size: 11px; color: var(--ink-muted); }
+  .cycle-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 4px; }
+
+  .project-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px; border-bottom: 1px solid var(--rule); cursor: pointer;
+    transition: var(--transition);
+  }
+  .project-row:last-child { border-bottom: none; }
+  .project-row:hover { background: rgba(94,106,210,.04); }
+  .project-icon {
+    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .project-info { flex: 1; min-width: 0; }
+  .project-name { font-size: 13px; font-weight: 500; }
+  .project-prog { font-size: 11px; color: var(--ink-muted); margin-top: 2px; }
+  .project-pct { font-size: 12px; font-weight: 700; color: var(--linear); flex-shrink: 0; }
+
+  .member-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 20px; border-bottom: 1px solid var(--rule);
+  }
+  .member-row:last-child { border-bottom: none; }
+  .member-avatar {
+    width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .member-info { flex: 1; }
+  .member-name { font-size: 13px; font-weight: 500; }
+  .member-role { font-size: 11px; color: var(--ink-muted); }
+  .member-count { font-size: 11px; color: var(--ink-muted); font-family: 'DM Mono', monospace; }
+
+  /* ── Loading spinner ── */
+  .spinner {
+    width: 32px; height: 32px; border: 3px solid var(--rule);
+    border-top-color: var(--linear); border-radius: 50%;
+    animation: spin .7s linear infinite; margin: 32px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Status bar ── */
+  #statusbar {
+    position: fixed; bottom: 0; left: 0; right: 0; height: var(--status-h);
+    background: var(--navy); border-top: 1px solid rgba(200,168,75,.25);
+    display: flex; align-items: center; gap: 24px; padding: 0 20px;
+    font-family: 'DM Mono', monospace; font-size: 11px; z-index: 100;
+  }
+  .sb-item { color: rgba(255,255,255,.4); display: flex; align-items: center; gap: 6px; }
+  .sb-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .sb-dot.green { background: #27ae60; box-shadow: 0 0 6px #27ae60; }
+  .sb-dot.yellow { background: #f39c12; }
+  .sb-dot.grey { background: #6b7280; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 52px; right: 20px; z-index: 9000;
+    background: #1a1a2e; color: #fff; padding: 10px 18px; border-radius: 8px;
+    font-size: 13px; border-left: 3px solid var(--linear);
+    opacity: 0; transform: translateY(8px); transition: all .25s ease;
+    pointer-events: none; max-width: 320px;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── Modal ── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 8000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--card-bg); border-radius: 14px; width: 540px; max-width: 95vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,.4); overflow: hidden;
+    transform: translateY(20px); transition: transform .2s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header { padding: 20px 24px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-size: 16px; font-weight: 700; }
+  .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--ink-muted); padding: 0 4px; }
+  .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px; color: var(--ink-mid); text-transform: uppercase; letter-spacing: .5px; }
+  .form-input, .form-select, .form-textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--rule); border-radius: 8px;
+    font-size: 13px; background: var(--warm-white); color: var(--ink);
+    font-family: 'DM Sans', sans-serif; outline: none;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--linear); box-shadow: 0 0 0 3px rgba(94,106,210,.15);
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--rule); display: flex; gap: 10px; justify-content: flex-end; }
+</style>
+</head>
+<body>
+
+<!-- Topbar -->
+<header id="topbar">
+  <div class="topbar-logo">
+    copress<span>.news</span>
+    <sub>Command</sub>
+  </div>
+  <div class="topbar-right">
+    <a href="/" class="topbar-back">← Spine</a>
+    <button id="dark-toggle" onclick="toggleDark()" title="Toggle dark mode">🌙</button>
+  </div>
+</header>
+
+<!-- Layout -->
+<div id="shell">
+
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="sidebar-section-label">Publishing</div>
+    <a class="nav-item" href="/"><span class="nav-icon">⬛</span> Dashboard</a>
+    <a class="nav-item" href="/"><span class="nav-icon">✒</span> Editorial Desk</a>
+    <a class="nav-item" href="/"><span class="nav-icon">📍</span> Shop Local</a>
+    <a class="nav-item" href="/"><span class="nav-icon">🏔</span> City Sites</a>
+    <hr class="sidebar-rule">
+    <div class="sidebar-section-label">Revenue</div>
+    <a class="nav-item" href="/"><span class="nav-icon">📣</span> Marketing Hub</a>
+    <a class="nav-item" href="/"><span class="nav-icon">📒</span> Accounting</a>
+    <hr class="sidebar-rule">
+    <div class="sidebar-section-label">Tools</div>
+    <a class="nav-item" href="/network"><span class="nav-icon">🌐</span> Network HQ</a>
+    <a class="nav-item" href="/docs"><span class="nav-icon">📚</span> Docs Hub</a>
+    <a class="nav-item" href="/newsletter"><span class="nav-icon">📧</span> Newsletter Studio</a>
+    <a class="nav-item" href="/apistore"><span class="nav-icon">🔑</span> API Vault</a>
+    <a class="nav-item active" href="/linear"><span class="nav-icon">📐</span> Linear</a>
+    <a class="nav-item" href="/learn" style="margin-top:4px; border-top:1px solid rgba(255,255,255,.06); padding-top:12px;">
+      <span class="nav-icon">🎓</span> Staff Academy
+      <span class="nav-badge" style="background:linear-gradient(135deg,#f5c842,#f8834f);color:#0b0f1a;">NEW</span>
+    </a>
+  </nav>
+
+  <!-- Main -->
+  <main id="main">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title-block">
+        <div class="page-title">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="7" fill="#5e6ad2"/>
+            <path d="M6 19.5L14 6L22 19.5H6Z" fill="white" fill-opacity="0.2"/>
+            <path d="M6 19.5L14 6L22 19.5" stroke="white" stroke-width="1.8" stroke-linejoin="round" fill="none"/>
+            <circle cx="14" cy="19.5" r="1.5" fill="white"/>
+          </svg>
+          Linear
+          <span class="linear-badge">CONNECTED</span>
+        </div>
+        <div class="page-subtitle">Issue tracking · Cycles · Projects — copress.news workspace</div>
+      </div>
+      <div class="page-actions">
+        <button class="btn btn-outline" onclick="refreshAll()">⟳ Refresh</button>
+        <button class="btn btn-primary" onclick="openCreateModal()">+ New Issue</button>
+      </div>
+    </div>
+
+    <!-- Setup Banner (shown when no API key) -->
+    <div id="setup-banner" style="display:none;">
+      <div class="setup-logo">📐</div>
+      <div class="setup-title">Connect your Linear workspace</div>
+      <div class="setup-desc">Enter your Linear Personal API key to pull issues, cycles, and projects directly into the spine.</div>
+      <div class="setup-input-row">
+        <input type="password" id="api-key-input" class="setup-input" placeholder="lin_api_••••••••••••••••••••••••" autocomplete="off">
+        <button class="btn btn-primary" onclick="saveApiKey()">Connect</button>
+      </div>
+      <span class="setup-link">Get your key at <a href="https://linear.app/settings/api" target="_blank">linear.app/settings/api</a> → Personal API keys</span>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card urgent">
+        <div class="stat-label">Urgent</div>
+        <div class="stat-value" id="stat-urgent">—</div>
+        <div class="stat-sub">open issues</div>
+      </div>
+      <div class="stat-card in-progress">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-value" id="stat-progress">—</div>
+        <div class="stat-sub">active now</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Todo</div>
+        <div class="stat-value" id="stat-todo">—</div>
+        <div class="stat-sub">queued</div>
+      </div>
+      <div class="stat-card done">
+        <div class="stat-label">Done</div>
+        <div class="stat-value" id="stat-done">—</div>
+        <div class="stat-sub">this cycle</div>
+      </div>
+      <div class="stat-card cycle">
+        <div class="stat-label">Cycle</div>
+        <div class="stat-value" id="stat-cycle">—</div>
+        <div class="stat-sub" id="stat-cycle-sub">active sprint</div>
+      </div>
+    </div>
+
+    <!-- Content Grid -->
+    <div class="content-grid">
+
+      <!-- Left: Issues -->
+      <div>
+        <!-- Issues Panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              Issues
+              <span class="panel-count" id="issues-count">0</span>
+            </div>
+            <div class="panel-actions">
+              <input id="issue-search" type="text" placeholder="Search…" style="padding:5px 10px;border:1px solid var(--rule);border-radius:6px;font-size:12px;background:var(--card-bg);color:var(--ink);outline:none;width:160px;" oninput="filterIssues(this.value)">
+            </div>
+          </div>
+          <!-- Filter tabs -->
+          <div class="filter-tabs">
+            <button class="filter-tab active" onclick="switchTab(this,'all')">All</button>
+            <button class="filter-tab" onclick="switchTab(this,'urgent')">🔴 Urgent</button>
+            <button class="filter-tab" onclick="switchTab(this,'progress')">🔵 In Progress</button>
+            <button class="filter-tab" onclick="switchTab(this,'todo')">⬜ Todo</button>
+            <button class="filter-tab" onclick="switchTab(this,'done')">✅ Done</button>
+            <button class="filter-tab" onclick="switchTab(this,'mine')">👤 Mine</button>
+          </div>
+          <!-- Quick Create -->
+          <div class="quick-create">
+            <div class="qc-row">
+              <input id="qc-title" class="qc-input" placeholder="New issue title… (press Enter to create)" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();quickCreate();}">
+              <button class="btn btn-primary" style="height:38px;padding:0 14px;" onclick="quickCreate()">Add</button>
+            </div>
+            <div class="qc-controls">
+              <select id="qc-priority" class="qc-select">
+                <option value="0">🚫 No Priority</option>
+                <option value="1">🔴 Urgent</option>
+                <option value="2">🟠 High</option>
+                <option value="3">🟡 Medium</option>
+                <option value="4">⚪ Low</option>
+              </select>
+              <select id="qc-team" class="qc-select" id="qc-team">
+                <option value="">Select team…</option>
+              </select>
+              <span id="qc-status" style="font-size:11px;color:var(--ink-muted);margin-left:auto;"></span>
+            </div>
+          </div>
+          <!-- Issue List -->
+          <div id="issues-loading"><div class="spinner"></div></div>
+          <ul class="issue-list" id="issue-list" style="display:none;"></ul>
+          <div id="issues-empty" class="empty-state" style="display:none;">
+            <div class="empty-icon">📋</div>
+            <div class="empty-title">No issues found</div>
+            <div class="empty-desc">Try a different filter or create your first issue.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column -->
+      <div>
+        <!-- Active Cycle -->
+        <div class="panel" id="cycle-panel">
+          <div class="panel-header">
+            <div class="panel-title">🔁 Active Cycle</div>
+          </div>
+          <div style="padding:16px 20px;" id="cycle-body">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <!-- Projects -->
+        <div class="panel" id="projects-panel">
+          <div class="panel-header">
+            <div class="panel-title">📁 Projects</div>
+          </div>
+          <div id="projects-body">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <!-- Team Members -->
+        <div class="panel" id="members-panel">
+          <div class="panel-header">
+            <div class="panel-title">👥 Team</div>
+          </div>
+          <div id="members-body">
+            <div class="spinner"></div>
+          </div>
+        </div>
+
+        <!-- API Key management -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">⚙️ Connection</div>
+          </div>
+          <div style="padding:16px 20px;">
+            <div style="font-size:12px;color:var(--ink-muted);margin-bottom:12px;">
+              Linear Personal API Key (stored in localStorage only)
+            </div>
+            <div style="display:flex;gap:8px;">
+              <input type="password" id="api-key-mini" class="qc-input" placeholder="lin_api_••••••••" style="flex:1;" autocomplete="off">
+              <button class="btn btn-primary" style="height:36px;padding:0 12px;font-size:12px;" onclick="saveApiKeyMini()">Save</button>
+              <button class="btn btn-outline" style="height:36px;padding:0 12px;font-size:12px;" onclick="clearApiKey()">Clear</button>
+            </div>
+            <div style="font-size:11px;color:var(--ink-muted);margin-top:8px;">
+              <a href="https://linear.app/settings/api" target="_blank" style="color:var(--linear);">Get API key ↗</a>
+              · Never sent to any server · Browser-only
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Status bar -->
+<div id="statusbar">
+  <div class="sb-item"><span class="sb-dot" id="sb-dot"></span><span id="sb-label">Connecting…</span></div>
+  <div class="sb-item" id="sb-workspace">workspace: —</div>
+  <div class="sb-item" style="margin-left:auto;" id="sb-time"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Create Issue Modal -->
+<div class="modal-overlay" id="create-modal" onclick="if(event.target===this)closeCreateModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Create Issue</div>
+      <button class="modal-close" onclick="closeCreateModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Title *</label>
+        <input type="text" id="m-title" class="form-input" placeholder="Issue title…">
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="m-desc" class="form-textarea" placeholder="Add more context…"></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Team *</label>
+          <select id="m-team" class="form-select"></select>
+        </div>
+        <div class="form-group">
+          <label>Priority</label>
+          <select id="m-priority" class="form-select">
+            <option value="0">No Priority</option>
+            <option value="1">🔴 Urgent</option>
+            <option value="2">🟠 High</option>
+            <option value="3">🟡 Medium</option>
+            <option value="4">⚪ Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Assignee</label>
+          <select id="m-assignee" class="form-select"><option value="">Unassigned</option></select>
+        </div>
+        <div class="form-group">
+          <label>Label</label>
+          <select id="m-label" class="form-select"><option value="">No label</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeCreateModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="createIssue()" id="create-btn">Create Issue</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────
+const STATE = {
+  apiKey: localStorage.getItem('linear_api_key') || '',
+  issues: [],
+  teams: [],
+  members: [],
+  projects: [],
+  cycle: null,
+  viewer: null,
+  activeTab: 'all',
+  searchQuery: '',
+};
+
+const PRIORITY_ICONS = { 0:'⬜', 1:'🔴', 2:'🟠', 3:'🟡', 4:'⚪' };
+const PRIORITY_NAMES = { 0:'No Priority', 1:'Urgent', 2:'High', 3:'Medium', 4:'Low' };
+const STATUS_TYPES = {
+  'backlog':   { cls:'status-backlog',   label:'Backlog' },
+  'unstarted': { cls:'status-todo',      label:'Todo' },
+  'started':   { cls:'status-progress',  label:'In Progress' },
+  'completed': { cls:'status-done',      label:'Done' },
+  'cancelled': { cls:'status-cancelled', label:'Cancelled' },
+};
+
+// ── Linear GraphQL ─────────────────────────────────────────────────────
+async function gql(query, variables = {}) {
+  const key = STATE.apiKey;
+  if (!key) throw new Error('No API key');
+  const res = await fetch('https://api.linear.app/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': key },
+    body: JSON.stringify({ query, variables }),
+  });
+  const json = await res.json();
+  if (json.errors) throw new Error(json.errors[0].message);
+  return json.data;
+}
+
+// ── Queries ────────────────────────────────────────────────────────────
+const Q_VIEWER = `query { viewer { id name email } }`;
+
+const Q_TEAMS = `query {
+  teams { nodes { id name key color } }
+}`;
+
+const Q_ISSUES = `query($first:Int, $filter:IssueFilter) {
+  issues(first:$first, filter:$filter, orderBy:updatedAt) {
+    nodes {
+      id identifier title priority state { name type color }
+      assignee { id name displayName }
+      labels { nodes { name color } }
+      createdAt updatedAt
+      team { id name key }
+    }
+  }
+}`;
+
+const Q_CYCLES = `query($teamId:String!) {
+  team(id:$teamId) {
+    activeCycle {
+      id name number startsAt endsAt
+      issues { nodes { id state { type } } }
+    }
+  }
+}`;
+
+const Q_PROJECTS = `query {
+  projects(first:20) {
+    nodes {
+      id name icon color
+      completedIssueCountByDay
+      progress startDate targetDate
+      state
+    }
+  }
+}`;
+
+const Q_MEMBERS = `query($teamId:String!) {
+  team(id:$teamId) {
+    members { nodes { id name displayName email } }
+  }
+}`;
+
+const M_CREATE_ISSUE = `mutation CreateIssue($input:IssueCreateInput!) {
+  issueCreate(input:$input) {
+    success issue { id identifier title }
+  }
+}`;
+
+// ── Init ───────────────────────────────────────────────────────────────
+async function init() {
+  // Dark mode
+  if (localStorage.getItem('copress_dark') === 'true') {
+    document.body.classList.add('dark');
+    document.getElementById('dark-toggle').textContent = '☀️';
+  }
+  updateClock();
+  setInterval(updateClock, 30000);
+
+  if (!STATE.apiKey) {
+    showSetup();
+    return;
+  }
+  await loadAll();
+}
+
+function showSetup() {
+  document.getElementById('setup-banner').style.display = 'block';
+  document.getElementById('stats-row').style.opacity = '.4';
+  setSBStatus('grey', 'Not connected — enter API key');
+}
+
+async function loadAll() {
+  try {
+    setSBStatus('yellow', 'Connecting to Linear…');
+    document.getElementById('setup-banner').style.display = 'none';
+    document.getElementById('stats-row').style.opacity = '1';
+    // Viewer
+    const vData = await gql(Q_VIEWER);
+    STATE.viewer = vData.viewer;
+    document.getElementById('sb-workspace').textContent = `workspace: ${STATE.viewer.name}`;
+    // Teams
+    const tData = await gql(Q_TEAMS);
+    STATE.teams = tData.teams.nodes;
+    populateTeamSelects();
+    // Issues
+    await loadIssues();
+    // Cycle + Projects + Members (in parallel, using first team)
+    if (STATE.teams.length > 0) {
+      const tid = STATE.teams[0].id;
+      await Promise.all([loadCycle(tid), loadProjects(), loadMembers(tid)]);
+    }
+    setSBStatus('green', `Connected · ${STATE.issues.length} issues`);
+  } catch (e) {
+    setSBStatus('grey', `Error: ${e.message}`);
+    toast(`⚠️ ${e.message}`, 4000);
+    if (e.message.includes('Unauthorized') || e.message.includes('API key')) {
+      showSetup();
+    }
+  }
+}
+
+async function loadIssues() {
+  document.getElementById('issues-loading').style.display = 'block';
+  document.getElementById('issue-list').style.display = 'none';
+  document.getElementById('issues-empty').style.display = 'none';
+
+  const data = await gql(Q_ISSUES, { first: 100 });
+  STATE.issues = data.issues.nodes;
+  updateStats();
+  renderIssues();
+}
+
+async function loadCycle(teamId) {
+  try {
+    const data = await gql(Q_CYCLES, { teamId });
+    STATE.cycle = data.team.activeCycle;
+    renderCycle();
+  } catch { renderCycleError(); }
+}
+
+async function loadProjects() {
+  try {
+    const data = await gql(Q_PROJECTS);
+    STATE.projects = data.projects.nodes;
+    renderProjects();
+  } catch { document.getElementById('projects-body').innerHTML = '<div class="empty-state"><div class="empty-desc">Could not load projects.</div></div>'; }
+}
+
+async function loadMembers(teamId) {
+  try {
+    const data = await gql(Q_MEMBERS, { teamId });
+    STATE.members = data.team.members.nodes;
+    renderMembers();
+    // Populate modal assignee dropdown
+    const sel = document.getElementById('m-assignee');
+    STATE.members.forEach(m => {
+      const opt = document.createElement('option');
+      opt.value = m.id; opt.textContent = m.displayName || m.name;
+      sel.appendChild(opt);
+    });
+  } catch { document.getElementById('members-body').innerHTML = '<div class="empty-state"><div class="empty-desc">Could not load members.</div></div>'; }
+}
+
+// ── Render Issues ──────────────────────────────────────────────────────
+function filteredIssues() {
+  let issues = [...STATE.issues];
+  // Tab filter
+  if (STATE.activeTab === 'urgent')   issues = issues.filter(i => i.priority === 1);
+  if (STATE.activeTab === 'progress') issues = issues.filter(i => i.state.type === 'started');
+  if (STATE.activeTab === 'todo')     issues = issues.filter(i => i.state.type === 'unstarted');
+  if (STATE.activeTab === 'done')     issues = issues.filter(i => i.state.type === 'completed');
+  if (STATE.activeTab === 'mine' && STATE.viewer)
+    issues = issues.filter(i => i.assignee && i.assignee.id === STATE.viewer.id);
+  // Search
+  if (STATE.searchQuery) {
+    const q = STATE.searchQuery.toLowerCase();
+    issues = issues.filter(i =>
+      i.title.toLowerCase().includes(q) || i.identifier.toLowerCase().includes(q)
+    );
+  }
+  return issues;
+}
+
+function renderIssues() {
+  const issues = filteredIssues();
+  const list = document.getElementById('issue-list');
+  const loading = document.getElementById('issues-loading');
+  const empty = document.getElementById('issues-empty');
+  const cnt = document.getElementById('issues-count');
+
+  loading.style.display = 'none';
+  cnt.textContent = issues.length;
+
+  if (issues.length === 0) {
+    list.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  list.style.display = 'block';
+
+  list.innerHTML = issues.map(issue => {
+    const st = STATUS_TYPES[issue.state.type] || STATUS_TYPES.backlog;
+    const label = issue.labels.nodes[0];
+    const prio = issue.priority || 0;
+    const initials = issue.assignee
+      ? (issue.assignee.displayName || issue.assignee.name).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
+      : '';
+    const ago = timeAgo(issue.updatedAt);
+    return `
+      <li class="issue-item" onclick="openIssue('${issue.id}','${escHtml(issue.identifier)}')">
+        <div class="issue-priority prio-${PRIORITY_NAMES[prio].toLowerCase()}" title="${PRIORITY_NAMES[prio]}">
+          ${PRIORITY_ICONS[prio]}
+        </div>
+        <div class="issue-status-dot ${st.cls}" title="${st.label}"></div>
+        <div class="issue-body">
+          <div class="issue-title">${escHtml(issue.title)}</div>
+          <div class="issue-meta">
+            <span class="issue-id">${escHtml(issue.identifier)}</span>
+            ${label ? `<span class="issue-label" style="color:${label.color};border-color:${label.color}20;background:${label.color}12">${escHtml(label.name)}</span>` : ''}
+            <span class="issue-date">${ago}</span>
+          </div>
+        </div>
+        ${issue.assignee ? `<div class="issue-assignee" title="${escHtml(issue.assignee.displayName || issue.assignee.name)}">${initials}</div>` : ''}
+      </li>`;
+  }).join('');
+}
+
+function updateStats() {
+  const issues = STATE.issues;
+  document.getElementById('stat-urgent').textContent  = issues.filter(i => i.priority === 1 && i.state.type !== 'completed' && i.state.type !== 'cancelled').length;
+  document.getElementById('stat-progress').textContent = issues.filter(i => i.state.type === 'started').length;
+  document.getElementById('stat-todo').textContent     = issues.filter(i => i.state.type === 'unstarted').length;
+  document.getElementById('stat-done').textContent     = issues.filter(i => i.state.type === 'completed').length;
+}
+
+// ── Render Cycle ───────────────────────────────────────────────────────
+function renderCycle() {
+  const c = STATE.cycle;
+  const el = document.getElementById('cycle-body');
+  if (!c) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-desc">No active cycle.</div></div>';
+    document.getElementById('stat-cycle').textContent = '—';
+    return;
+  }
+  const issues = c.issues.nodes;
+  const done = issues.filter(i => i.state.type === 'completed' || i.state.type === 'cancelled').length;
+  const total = issues.length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const start = new Date(c.startsAt);
+  const end = new Date(c.endsAt);
+  const now = new Date();
+  const totalDays = Math.round((end - start) / 86400000);
+  const elapsed = Math.round((now - start) / 86400000);
+  const daysLeft = Math.max(0, Math.round((end - now) / 86400000));
+
+  document.getElementById('stat-cycle').textContent = `#${c.number}`;
+  document.getElementById('stat-cycle-sub').textContent = `${daysLeft}d left`;
+
+  el.innerHTML = `
+    <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Cycle #${c.number}${c.name ? ' · ' + escHtml(c.name) : ''}</div>
+    <div style="font-size:12px;color:var(--ink-muted);margin-bottom:10px;">
+      ${fmtDate(start)} → ${fmtDate(end)} · ${daysLeft} day${daysLeft!==1?'s':''} left
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+      <span>${done} / ${total} issues</span>
+      <span style="font-weight:700;color:var(--linear);">${pct}%</span>
+    </div>
+    <div class="cycle-bar">
+      <div class="cycle-fill" style="width:${pct}%;background:linear-gradient(90deg,var(--linear),#8b97e8);"></div>
+    </div>
+    <div class="cycle-legend">
+      <span><span class="cycle-dot" style="background:#27ae60;"></span>${done} Done</span>
+      <span><span class="cycle-dot" style="background:var(--linear);"></span>${issues.filter(i=>i.state.type==='started').length} Active</span>
+      <span><span class="cycle-dot" style="background:#9ca3af;"></span>${issues.filter(i=>i.state.type==='unstarted'||i.state.type==='backlog').length} Todo</span>
+    </div>`;
+}
+
+function renderCycleError() {
+  document.getElementById('cycle-body').innerHTML = '<div class="empty-state"><div class="empty-desc">Could not load cycle.</div></div>';
+}
+
+// ── Render Projects ────────────────────────────────────────────────────
+function renderProjects() {
+  const el = document.getElementById('projects-body');
+  if (!STATE.projects.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-desc">No projects found.</div></div>';
+    return;
+  }
+  el.innerHTML = STATE.projects.slice(0, 8).map(p => {
+    const pct = Math.round((p.progress || 0) * 100);
+    const color = p.color || '#5e6ad2';
+    const icon = p.icon || '📁';
+    return `
+      <div class="project-row">
+        <div class="project-icon" style="background:${color}18;">${icon}</div>
+        <div class="project-info">
+          <div class="project-name">${escHtml(p.name)}</div>
+          <div class="project-prog">${p.state || 'planned'}</div>
+        </div>
+        <div class="project-pct">${pct}%</div>
+      </div>`;
+  }).join('');
+}
+
+// ── Render Members ─────────────────────────────────────────────────────
+const AVATAR_COLORS = ['#5e6ad2','#c8a84b','#27ae60','#e74c3c','#9b59b6','#1abc9c','#e67e22'];
+function renderMembers() {
+  const el = document.getElementById('members-body');
+  if (!STATE.members.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-desc">No members found.</div></div>';
+    return;
+  }
+  el.innerHTML = STATE.members.map((m, i) => {
+    const initials = (m.displayName || m.name).split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const myIssues = STATE.issues.filter(iss => iss.assignee && iss.assignee.id === m.id);
+    const inProgress = myIssues.filter(iss => iss.state.type === 'started').length;
+    return `
+      <div class="member-row">
+        <div class="member-avatar" style="background:${AVATAR_COLORS[i % AVATAR_COLORS.length]};">${initials}</div>
+        <div class="member-info">
+          <div class="member-name">${escHtml(m.displayName || m.name)}</div>
+          <div class="member-role">${escHtml(m.email || '')}</div>
+        </div>
+        <div class="member-count">${inProgress > 0 ? `${inProgress} active` : `${myIssues.length} issues`}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── Create Issue ───────────────────────────────────────────────────────
+function populateTeamSelects() {
+  ['qc-team','m-team'].forEach(id => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = '';
+    STATE.teams.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id; opt.textContent = t.name;
+      sel.appendChild(opt);
+    });
+  });
+}
+
+async function quickCreate() {
+  const title = document.getElementById('qc-title').value.trim();
+  const teamId = document.getElementById('qc-team').value;
+  const priority = parseInt(document.getElementById('qc-priority').value);
+  if (!title) { toast('Enter a title first'); return; }
+  if (!teamId) { toast('Select a team first'); return; }
+  document.getElementById('qc-status').textContent = 'Creating…';
+  try {
+    await gql(M_CREATE_ISSUE, { input: { title, teamId, priority } });
+    document.getElementById('qc-title').value = '';
+    document.getElementById('qc-status').textContent = '✓ Created';
+    toast(`✓ Issue created: ${title}`);
+    setTimeout(() => { document.getElementById('qc-status').textContent = ''; }, 3000);
+    await loadIssues();
+  } catch (e) {
+    document.getElementById('qc-status').textContent = '';
+    toast(`⚠️ ${e.message}`, 4000);
+  }
+}
+
+function openCreateModal() {
+  document.getElementById('create-modal').classList.add('open');
+  document.getElementById('m-title').focus();
+}
+function closeCreateModal() { document.getElementById('create-modal').classList.remove('open'); }
+
+async function createIssue() {
+  const title = document.getElementById('m-title').value.trim();
+  const teamId = document.getElementById('m-team').value;
+  const priority = parseInt(document.getElementById('m-priority').value);
+  const description = document.getElementById('m-desc').value.trim();
+  const assigneeId = document.getElementById('m-assignee').value;
+  if (!title) { toast('Title is required'); return; }
+  if (!teamId) { toast('Select a team'); return; }
+  const btn = document.getElementById('create-btn');
+  btn.disabled = true; btn.textContent = 'Creating…';
+  try {
+    const input = { title, teamId, priority };
+    if (description) input.description = description;
+    if (assigneeId) input.assigneeId = assigneeId;
+    await gql(M_CREATE_ISSUE, { input });
+    toast(`✓ Issue created successfully`);
+    closeCreateModal();
+    document.getElementById('m-title').value = '';
+    document.getElementById('m-desc').value = '';
+    await loadIssues();
+  } catch (e) {
+    toast(`⚠️ ${e.message}`, 4000);
+  }
+  btn.disabled = false; btn.textContent = 'Create Issue';
+}
+
+function openIssue(id, identifier) {
+  // Open in Linear directly
+  const team = STATE.issues.find(i => i.id === id)?.team;
+  if (team) {
+    window.open(`https://linear.app/${team.key}/issue/${identifier}`, '_blank');
+  } else {
+    window.open(`https://linear.app/issue/${identifier}`, '_blank');
+  }
+}
+
+// ── Tab + Filter ───────────────────────────────────────────────────────
+function switchTab(el, tab) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  STATE.activeTab = tab;
+  renderIssues();
+}
+
+function filterIssues(q) {
+  STATE.searchQuery = q;
+  renderIssues();
+}
+
+// ── API Key ────────────────────────────────────────────────────────────
+function saveApiKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) { toast('Enter an API key'); return; }
+  STATE.apiKey = key;
+  localStorage.setItem('linear_api_key', key);
+  loadAll();
+}
+function saveApiKeyMini() {
+  const key = document.getElementById('api-key-mini').value.trim();
+  if (!key) return;
+  STATE.apiKey = key;
+  localStorage.setItem('linear_api_key', key);
+  toast('API key saved — reconnecting…');
+  loadAll();
+}
+function clearApiKey() {
+  STATE.apiKey = '';
+  localStorage.removeItem('linear_api_key');
+  STATE.issues = []; STATE.teams = []; STATE.members = []; STATE.projects = [];
+  document.getElementById('api-key-mini').value = '';
+  showSetup();
+  toast('API key cleared');
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────
+async function refreshAll() {
+  if (!STATE.apiKey) { showSetup(); return; }
+  toast('Refreshing…');
+  await loadAll();
+}
+
+function setSBStatus(color, label) {
+  document.getElementById('sb-dot').className = `sb-dot ${color}`;
+  document.getElementById('sb-label').textContent = label;
+}
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('sb-time').textContent = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+}
+
+function toast(msg, dur = 2500) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), dur);
+}
+
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  const isDark = document.body.classList.contains('dark');
+  localStorage.setItem('copress_dark', isDark);
+  document.getElementById('dark-toggle').textContent = isDark ? '☀️' : '🌙';
+}
+
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 2) return 'just now';
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  return `${d}d ago`;
+}
+
+function fmtDate(d) {
+  return d.toLocaleDateString('en-US', { month:'short', day:'numeric' });
+}
+
+// ── Boot ───────────────────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>
