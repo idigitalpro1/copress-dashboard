@@ -1393,6 +1393,7 @@ body::before {
               <div class="module-status">
                 <span class="pill">Drafts <strong id="editorial-module-drafts">3</strong></span>
                 <span class="pill">Towns <strong>5</strong></span>
+                <span class="pill">Source <strong id="editorial-module-source">Local</strong></span>
                 <span class="pill">PDF <strong>Queued</strong></span>
               </div>
             </div>
@@ -1402,6 +1403,7 @@ body::before {
                 <div class="module-list" id="editorial-story-list"></div>
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="addEditorialStory()">Add Story</button>
+                  <button class="module-btn" onclick="loadSupabaseArticleCounts()">Refresh Supabase</button>
                   <button class="module-btn" onclick="generateDailyStoryList()">Daily List</button>
                   <button class="module-btn" onclick="toast('Weekly PDF packet queued for export')">Weekly PDF</button>
                 </div>
@@ -1764,6 +1766,12 @@ function formatNumber(n) {
   return Number.isFinite(n) ? n.toLocaleString('en-US') : '—';
 }
 
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
 async function loadSendySubscriberCount() {
   const sendyUrl = readVaultValue('sendy_url', 'SENDY_URL').replace(/\/+$/, '');
   const apiKey = readVaultValue('sendy_key', 'SENDY_API_KEY');
@@ -1807,6 +1815,9 @@ async function loadSupabaseArticleCounts() {
   const anonKey = readVaultValue('supabase_anon', 'SUPABASE_ANON_KEY');
   if (!supabaseUrl || !anonKey) {
     setLed('editorial-led', 'warn');
+    setText('editorial-module-source', 'Local');
+    editorialRemoteStories = [];
+    renderEditorialStories();
     return;
   }
 
@@ -1835,9 +1846,15 @@ async function loadSupabaseArticleCounts() {
     setText('live-drafts', formatNumber(draftCount));
     setText('live-published', formatNumber(publishedCount));
     setText('live-this-week', formatNumber(weekCount));
+    editorialRemoteStories = posts.slice(0, 12).map(normalizeSupabaseStory);
+    setText('editorial-module-source', 'Supabase');
+    renderEditorialStories();
     setLed('editorial-led', 'ok');
   } catch (err) {
     console.warn('Supabase articles unavailable', err);
+    editorialRemoteStories = [];
+    setText('editorial-module-source', 'Local');
+    renderEditorialStories();
     setLed('editorial-led', 'warn');
   }
 }
@@ -1850,6 +1867,7 @@ function loadLiveDashboardData() {
 
 // ── Module workbenches ─────────────────────────────────────────────
 const EDITORIAL_STORE = 'copress_editorial_queue_v1';
+let editorialRemoteStories = [];
 
 function defaultEditorialStories() {
   return [
@@ -1872,21 +1890,44 @@ function writeEditorialStories(stories) {
   localStorage.setItem(EDITORIAL_STORE, JSON.stringify(stories));
 }
 
+function normalizeSupabaseStory(post) {
+  const stamp = post.updated_at || post.published_at || post.created_at || '';
+  const date = stamp ? new Date(stamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'No date';
+  const town = post.town || post.city || post.location || post.site_key || 'Register';
+  const title = post.title || post.headline || post.slug || 'Untitled article';
+  const status = post.status || (post.published_at ? 'Published' : 'Draft');
+  const author = post.author || post.byline || post.source || 'Supabase';
+  const url = post.url || post.public_url || post.permalink || '';
+  return {
+    remote: true,
+    town,
+    title,
+    status,
+    url,
+    notes: `${date} · ${author}`,
+  };
+}
+
 function renderEditorialStories() {
-  const stories = readEditorialStories();
+  const hasRemote = editorialRemoteStories.length > 0;
+  const stories = hasRemote ? editorialRemoteStories : readEditorialStories();
   const list = document.getElementById('editorial-story-list');
   if (!list) return;
   list.innerHTML = stories.map((story, index) => `
     <div class="module-row">
-      <span class="module-tag">${story.town}</span>
+      <span class="module-tag">${escapeHTML(story.town)}</span>
       <div>
-        <div class="module-row-title">${story.title}</div>
-        <div class="module-row-meta">${story.notes || 'No notes yet'}</div>
+        <div class="module-row-title">${escapeHTML(story.title)}</div>
+        <div class="module-row-meta">${escapeHTML(story.notes || 'No notes yet')}</div>
       </div>
-      <button class="module-btn" onclick="advanceEditorialStory(${index})">${story.status}</button>
+      <button class="module-btn" onclick="${hasRemote ? `openEditorialStory(${index})` : `advanceEditorialStory(${index})`}">${escapeHTML(hasRemote && story.url ? 'Open' : story.status)}</button>
     </div>
   `).join('');
-  setText('editorial-module-drafts', stories.filter(s => s.status !== 'Ready').length);
+  const activeCount = hasRemote
+    ? stories.filter(s => String(s.status || '').toLowerCase().includes('draft')).length
+    : stories.filter(s => s.status !== 'Ready').length;
+  setText('editorial-module-drafts', activeCount);
+  setText('editorial-module-source', hasRemote ? 'Supabase' : 'Local');
 }
 
 function addEditorialStory() {
@@ -1901,6 +1942,7 @@ function addEditorialStory() {
   const stories = readEditorialStories();
   stories.unshift({ town, title, status, notes });
   writeEditorialStories(stories);
+  editorialRemoteStories = [];
   document.getElementById('editorial-title').value = '';
   document.getElementById('editorial-notes').value = '';
   renderEditorialStories();
@@ -1909,6 +1951,7 @@ function addEditorialStory() {
 }
 
 function advanceEditorialStory(index) {
+  if (editorialRemoteStories.length) return;
   const order = ['Draft', 'Assigned', 'Editing', 'Ready'];
   const stories = readEditorialStories();
   const story = stories[index];
@@ -1916,6 +1959,15 @@ function advanceEditorialStory(index) {
   story.status = order[(order.indexOf(story.status) + 1) % order.length];
   writeEditorialStories(stories);
   renderEditorialStories();
+}
+
+function openEditorialStory(index) {
+  const story = editorialRemoteStories[index];
+  if (story?.url) {
+    window.open(story.url, '_blank');
+    return;
+  }
+  toast('No public URL stored for this Supabase article');
 }
 
 function generateDailyStoryList() {
@@ -1926,6 +1978,7 @@ function generateDailyStoryList() {
     status: 'Draft',
     notes: 'Check council, schools, police, events, weather, and business updates.',
   }));
+  editorialRemoteStories = [];
   writeEditorialStories(stories);
   renderEditorialStories();
   setText('live-drafts', formatNumber(stories.length));

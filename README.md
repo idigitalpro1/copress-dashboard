@@ -67,7 +67,7 @@ The dashboard attempts to hydrate top-level cards from browser-stored API keys:
 
 | Card | Values | Source |
 |------|--------|--------|
-| Editorial Desk | Drafts, published count, this-week count | Supabase REST `public_posts` filtered by `site_key=registercall` |
+| Editorial Desk | Drafts, published count, this-week count, recent article queue | Supabase REST `public_posts` filtered by `site_key=registercall` |
 | Marketing Hub | Subscriber count | Sendy `/api/subscribers/count` |
 
 Keys are read from both the dashboard API panel (`copress_api_*`) and API Vault (`api_vault`), so either setup path works. Required values:
@@ -255,6 +255,7 @@ These views are in `index.html` as `<div id="view-...">` sections. The JS view-s
 ```
 
 Current behavior is intentionally browser-local:
-- Editorial queue stores local drafts in `localStorage.copress_editorial_queue_v1`.
+- Editorial queue stores local drafts in `localStorage.copress_editorial_queue_v1` when Supabase credentials are missing.
+- When `SUPABASE_URL` and `SUPABASE_ANON_KEY` are available, Editorial shows the 12 most recent `public_posts` rows and keeps the local queue as fallback.
 - Directory import, campaign kit, and invoice staging create operator handoff text in-page.
 - Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `invoicemanager-wrc`, Supabase, Stripe, Sendy).
