@@ -48,6 +48,7 @@
   --c-linear:    #5e6ad2;
   --c-network:   #27ae60;
   --c-hermes:    #06b6d4;
+  --c-admin:     #d946ef;
 }
 
 html, body {
@@ -412,6 +413,47 @@ body::before {
 .card-btn.primary:hover {
   filter: brightness(1.1);
   box-shadow: 0 0 12px rgba(200,168,75,.3);
+}
+
+/* Admin HQ launcher */
+.admin-launch-grid {
+  margin: 22px 44px 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1180px) { .admin-launch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px)  { .admin-launch-grid { grid-template-columns: 1fr; margin: 20px; } }
+.admin-launch {
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 132px; padding: 16px;
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--admin-color, var(--c-admin));
+  background: rgba(13,21,32,.82);
+  color: var(--ink); text-decoration: none;
+  transition: var(--transition);
+}
+.admin-launch:hover {
+  border-color: var(--border-hi);
+  box-shadow: 0 0 0 1px rgba(217,70,239,.18), var(--shadow);
+  transform: translateY(-1px);
+}
+.admin-launch-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.admin-launch-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px; font-weight: 700; color: var(--ink);
+}
+.admin-launch-tag {
+  font-family: 'DM Mono', monospace; font-size: 8px;
+  letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--admin-color, var(--c-admin));
+  border: 1px solid color-mix(in srgb, var(--admin-color, var(--c-admin)) 45%, transparent);
+  padding: 3px 6px; border-radius: 2px;
+}
+.admin-launch-desc { font-size: 11.5px; color: var(--ink-mid); line-height: 1.45; }
+.admin-launch-url {
+  margin-top: auto; font-family: 'DM Mono', monospace;
+  font-size: 9.5px; color: var(--ink-muted); word-break: break-all;
 }
 
 /* ── Quick Actions Bar ───────────────────────────────────────────── */
@@ -836,6 +878,11 @@ body::before {
       <span class="nav-icon">◼</span>
       <span class="nav-label">Dashboard</span>
     </div>
+    <div class="nav-item" data-view="admin">
+      <span class="nav-icon">⌘</span>
+      <span class="nav-label">Admin HQ</span>
+      <span class="nav-badge new">HOME</span>
+    </div>
     <div class="nav-item" data-view="editorial">
       <span class="nav-icon">✒</span>
       <span class="nav-label">Editorial Desk</span>
@@ -922,11 +969,52 @@ body::before {
 
       <div class="page-header">
         <div class="page-eyebrow">copress.news · Publishing Operations · Colorado</div>
-        <h1 class="page-title">Today's Operations</h1>
-        <p class="page-subtitle">Black Hawk · Central City · Nederland · Georgetown · Idaho Springs</p>
+        <h1 class="page-title">Command Center</h1>
+        <p class="page-subtitle">This Vercel dashboard is the admin home. Open legacy consoles only from here.</p>
       </div>
 
       <div class="cards-grid">
+
+        <!-- Admin HQ -->
+        <div class="module-card" data-target="admin" style="--card-color:var(--c-admin);--card-glow:rgba(217,70,239,.07);">
+          <div class="card-dept">
+            <span class="card-dept-name">Admin Home</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">⌘</div>
+              <div>
+                <div class="card-title">Admin HQ</div>
+                <div class="card-subtitle">All operator links in one place</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Primary</span>
+                <span class="stat-value highlight" style="font-size:11px;">This App</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Legacy</span>
+                <span class="stat-value" style="font-size:11px;">Linked</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">AI</span>
+                <span class="stat-value ok" style="font-size:11px;">Hermes</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Ops</span>
+                <span class="stat-value ok" style="font-size:11px;">Kanban</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('https://admin.conews.press/console/en','_blank')">DashTail</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787','_blank')">Hermes</button>
+            </div>
+          </div>
+        </div>
 
         <!-- Editorial Desk -->
         <div class="module-card" data-target="editorial" style="--card-color:var(--c-editorial);--card-glow:rgba(200,168,75,.06);">
@@ -1320,6 +1408,41 @@ body::before {
 
       </div><!-- /cards-grid -->
 
+      <div class="admin-launch-grid">
+        <a class="admin-launch" style="--admin-color:var(--c-admin);" href="#admin" onclick="event.preventDefault(); navTo('admin')">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Admin HQ</div>
+            <span class="admin-launch-tag">Start Here</span>
+          </div>
+          <div class="admin-launch-desc">The clean operator hub for all admin, AI, publishing, billing, upload, and service links.</div>
+          <div class="admin-launch-url">copress-dashboard.vercel.app</div>
+        </a>
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787" target="_blank" rel="noopener">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Hermes WebUI</div>
+            <span class="admin-launch-tag">Local AI</span>
+          </div>
+          <div class="admin-launch-desc">Agent sessions, local model routing, and operator prompts without spending cloud credits first.</div>
+          <div class="admin-launch-url">localhost:8787</div>
+        </a>
+        <a class="admin-launch" style="--admin-color:var(--c-network);" href="http://127.0.0.1:8096" target="_blank" rel="noopener">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Kanban Ops</div>
+            <span class="admin-launch-tag">Board</span>
+          </div>
+          <div class="admin-launch-desc">Local Planka board for campaign, editorial, deploy, and troubleshooting handoffs.</div>
+          <div class="admin-launch-url">localhost:8096</div>
+        </a>
+        <a class="admin-launch" style="--admin-color:var(--c-docs);" href="https://admin.conews.press/console/en" target="_blank" rel="noopener">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">DashTail Console</div>
+            <span class="admin-launch-tag">Legacy</span>
+          </div>
+          <div class="admin-launch-desc">Still available for old admin pages, but no longer the place you have to mentally live.</div>
+          <div class="admin-launch-url">admin.conews.press/console/en</div>
+        </a>
+      </div>
+
       <!-- Quick Actions -->
       <div class="quick-bar">
         <div class="quick-bar-header">
@@ -1328,6 +1451,7 @@ body::before {
           <div class="quick-bar-line"></div>
         </div>
         <div class="quick-pills">
+          <div class="quick-pill" onclick="navTo('admin')">⌘ Admin HQ <span class="pill-kbd">⌘0</span></div>
           <div class="quick-pill" onclick="toast('Launching business importer…')">📍 Import Businesses <span class="pill-kbd">⌘1</span></div>
           <div class="quick-pill" onclick="toast('Generating editorial list…')">✒ Generate Editorial <span class="pill-kbd">⌘2</span></div>
           <div class="quick-pill" onclick="toast('Opening campaign builder…')">📣 New Campaign <span class="pill-kbd">⌘3</span></div>
@@ -1662,6 +1786,82 @@ body::before {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-admin">
+      <div class="module-view">
+        <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
+        <div class="page-eyebrow">copress.news · Admin HQ</div>
+        <h1 class="page-title">All admin starts here.</h1>
+        <p class="page-subtitle">Use this Vercel dashboard as the front door. Legacy dashboards and local tools open from these launchers.</p>
+
+        <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
+          <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://copress-dashboard.vercel.app/" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">CoPress Dashboard</div>
+              <span class="admin-launch-tag">Primary</span>
+            </div>
+            <div class="admin-launch-desc">Main operator surface for publishing, admin, tools, training, docs, network, and API storage.</div>
+            <div class="admin-launch-url">https://copress-dashboard.vercel.app/</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-docs);" href="https://admin.conews.press/console/en" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Admin Console</div>
+              <span class="admin-launch-tag">Legacy</span>
+            </div>
+            <div class="admin-launch-desc">DashTail/Next console on port 8092. Keep it linked here; do not make it the default mental home.</div>
+            <div class="admin-launch-url">https://admin.conews.press/console/en</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-editorial);" href="https://admin.registercall.com/console/en/register-call" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Register-Call Admin</div>
+              <span class="admin-launch-tag">Publication</span>
+            </div>
+            <div class="admin-launch-desc">Register-Call lane for ops status, editorial checks, and publication-specific admin work.</div>
+            <div class="admin-launch-url">admin.registercall.com/console/en/register-call</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Hermes WebUI</div>
+              <span class="admin-launch-tag">Local AI</span>
+            </div>
+            <div class="admin-launch-desc">Primary local AI session surface. Use before premium cloud routing for routine/private work.</div>
+            <div class="admin-launch-url">http://127.0.0.1:8787</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8793/health" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Hermes Crew Bridge</div>
+              <span class="admin-launch-tag">Runtime</span>
+            </div>
+            <div class="admin-launch-desc">CrewAI bridge health check. Chat and crew jobs run behind this local service.</div>
+            <div class="admin-launch-url">http://127.0.0.1:8793/health</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-network);" href="http://127.0.0.1:8096" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Kanban Ops</div>
+              <span class="admin-launch-tag">Board</span>
+            </div>
+            <div class="admin-launch-desc">Planka board for deploy, editorial, sales, campaign, and troubleshooting cards.</div>
+            <div class="admin-launch-url">http://127.0.0.1:8096</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-marketing);" href="/newsletter">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Newsletter Studio</div>
+              <span class="admin-launch-tag">Sendy</span>
+            </div>
+            <div class="admin-launch-desc">Campaign email builder and newsletter handoff lane inside this same dashboard.</div>
+            <div class="admin-launch-url">/newsletter</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-accounting);" href="https://banking.5280.menu/admin/billing" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Billing Admin</div>
+              <span class="admin-launch-tag">Finance</span>
+            </div>
+            <div class="admin-launch-desc">Billing and invoice lane. Keep financial actions in the dedicated billing surface.</div>
+            <div class="admin-launch-url">banking.5280.menu/admin/billing</div>
+          </a>
         </div>
       </div>
     </div>
@@ -2626,6 +2826,11 @@ const shortcuts = [
   () => { window.location.href = '/learn'; },
 ];
 document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === '0') {
+    e.preventDefault();
+    navTo('admin');
+    return;
+  }
   if ((e.metaKey || e.ctrlKey) && e.key >= '1' && e.key <= '9') {
     e.preventDefault();
     shortcuts[parseInt(e.key) - 1]();

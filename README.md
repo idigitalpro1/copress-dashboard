@@ -24,6 +24,16 @@ The command center for copress.news — a Colorado mountain newspaper network co
 
 ## Sidebar Navigation
 
+**Admin section**
+- Admin HQ — primary launch surface for all operator/admin tools
+- CoPress Dashboard — `https://copress-dashboard.vercel.app/`
+- Legacy DashTail Console — `https://admin.conews.press/console/en`
+- Register-Call Admin — `https://admin.registercall.com/console/en/register-call`
+- Hermes WebUI — `http://127.0.0.1:8787`
+- Hermes Crew Bridge — `http://127.0.0.1:8793/health`
+- Kanban Ops — `http://127.0.0.1:8096`
+- Billing Admin — `https://banking.5280.menu/admin/billing`
+
 **Publishing section**
 - Dashboard (main view)
 - Editorial Desk 🚧 — article pipeline, draft queue, AI story ideas
@@ -48,6 +58,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 
 | Card | Links to | Description |
 |------|----------|-------------|
+| Admin HQ | `data-view=admin` | Primary operator/admin launcher |
 | Editorial Desk | `data-view=editorial` | Article pipeline entry point |
 | Marketing Hub | `data-view=marketing` | Campaign tools |
 | Shop Local | `data-view=directory` | Business directory |
