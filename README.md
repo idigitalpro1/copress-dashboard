@@ -46,6 +46,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 **Tools section**
 - Network HQ → `/network`
 - Docs Hub → `/docs`
+- Stationery → `data-view=stationery`
 - Newsletter Studio → `/newsletter`
 - API Vault → `/apistore`
 - Linear → `/linear`
@@ -64,6 +65,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 | City Sites | `/network` | Network ownership screen |
 | Accounting | `data-view=accounting` | Financial tools |
 | Docs Hub | `/docs` | Documentation center |
+| Stationery | `data-view=stationery` | Browser-local file template card |
 | Staff Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
 | Hermes Orchestrator | `data-view=brains` | Local/cloud AI routing status |
