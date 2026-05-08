@@ -13,7 +13,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 | Route | File | Status | Description |
 |-------|------|--------|-------------|
 | `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 10 cards, live data hooks, 5 module workbenches |
-| `/network` | `network.html` | ✅ Live | Network HQ — server IP, 7 property cards, 3CX phone system |
+| `/network` | `network.html` | ✅ Live | Network HQ — server IP, 5 property cards, 3CX phone system |
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
 | `/apistore` | `apistore.html` | ✅ Live | API Vault — secure key store, MCP injection, .env export |
@@ -25,14 +25,13 @@ The command center for copress.news — a Colorado mountain newspaper network co
 ## Sidebar Navigation
 
 **Admin section**
-- Admin HQ — primary launch surface for all operator/admin tools
+- Admin HQ — primary launch surface for operator tools
 - CoPress Dashboard — `https://copress-dashboard.vercel.app/`
-- Legacy DashTail Console — `https://admin.conews.press/console/en`
-- Register-Call Admin — `https://admin.registercall.com/console/en/register-call`
 - Hermes WebUI — `http://127.0.0.1:8787`
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
-- Billing Admin — `https://banking.5280.menu/admin/billing`
+
+Old DashTail/Register-Call/Billing admin panels are intentionally not linked from the dashboard. Keep them available only as backend fallback surfaces until their workflows are fully absorbed here.
 
 **Publishing section**
 - Dashboard (main view)
@@ -203,11 +202,9 @@ Shows full infrastructure ownership:
 **Properties:**
 1. registercall.com — WordPress editorial + Vite SPA
 2. 5280.menu — Static watercolor redesign
-3. admin.conews.press — codex-admin (Next.js)
-4. admin.registercall.com — spine-admin
-5. copress-dashboard.vercel.app — THE SPINE (this app)
-6. 3CX Phone System — SIP extensions, AI receptionist
-7. empire-courier.com — placeholder
+3. copress-dashboard.vercel.app — THE SPINE (this app)
+4. 3CX Phone System — SIP extensions, AI receptionist
+5. empire-courier.com — placeholder
 
 **3CX SIP Extensions:**
 - 17410 Patrick · 17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production

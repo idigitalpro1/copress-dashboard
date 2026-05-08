@@ -995,8 +995,8 @@ body::before {
                 <span class="stat-value highlight" style="font-size:11px;">This App</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Legacy</span>
-                <span class="stat-value" style="font-size:11px;">Linked</span>
+                <span class="stat-label">Panels</span>
+                <span class="stat-value ok" style="font-size:11px;">Unified</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">AI</span>
@@ -1010,7 +1010,6 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('https://admin.conews.press/console/en','_blank')">DashTail</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787','_blank')">Hermes</button>
             </div>
           </div>
@@ -1401,7 +1400,7 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
               <button class="card-btn" onclick="toast('OpenClaw swarm → http://localhost:1234')">🦅 OpenClaw</button>
-              <button class="card-btn" onclick="window.open('https://admin.conews.press/console/api/hermes/chat','_blank')">💬 Hermes Chat</button>
+              <button class="card-btn" onclick="window.open('http://127.0.0.1:8787','_blank')">💬 Hermes Chat</button>
             </div>
           </div>
         </div>
@@ -1432,14 +1431,6 @@ body::before {
           </div>
           <div class="admin-launch-desc">Local Planka board for campaign, editorial, deploy, and troubleshooting handoffs.</div>
           <div class="admin-launch-url">localhost:8096</div>
-        </a>
-        <a class="admin-launch" style="--admin-color:var(--c-docs);" href="https://admin.conews.press/console/en" target="_blank" rel="noopener">
-          <div class="admin-launch-top">
-            <div class="admin-launch-title">DashTail Console</div>
-            <span class="admin-launch-tag">Legacy</span>
-          </div>
-          <div class="admin-launch-desc">Still available for old admin pages, but no longer the place you have to mentally live.</div>
-          <div class="admin-launch-url">admin.conews.press/console/en</div>
         </a>
       </div>
 
@@ -1795,7 +1786,7 @@ body::before {
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
         <div class="page-eyebrow">copress.news · Admin HQ</div>
         <h1 class="page-title">All admin starts here.</h1>
-        <p class="page-subtitle">Use this Vercel dashboard as the front door. Legacy dashboards and local tools open from these launchers.</p>
+        <p class="page-subtitle">This is the single operator dashboard. Old admin panels are intentionally not linked from here.</p>
 
         <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
           <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://copress-dashboard.vercel.app/" target="_blank" rel="noopener">
@@ -1805,22 +1796,6 @@ body::before {
             </div>
             <div class="admin-launch-desc">Main operator surface for publishing, admin, tools, training, docs, network, and API storage.</div>
             <div class="admin-launch-url">https://copress-dashboard.vercel.app/</div>
-          </a>
-          <a class="admin-launch" style="--admin-color:var(--c-docs);" href="https://admin.conews.press/console/en" target="_blank" rel="noopener">
-            <div class="admin-launch-top">
-              <div class="admin-launch-title">Admin Console</div>
-              <span class="admin-launch-tag">Legacy</span>
-            </div>
-            <div class="admin-launch-desc">DashTail/Next console on port 8092. Keep it linked here; do not make it the default mental home.</div>
-            <div class="admin-launch-url">https://admin.conews.press/console/en</div>
-          </a>
-          <a class="admin-launch" style="--admin-color:var(--c-editorial);" href="https://admin.registercall.com/console/en/register-call" target="_blank" rel="noopener">
-            <div class="admin-launch-top">
-              <div class="admin-launch-title">Register-Call Admin</div>
-              <span class="admin-launch-tag">Publication</span>
-            </div>
-            <div class="admin-launch-desc">Register-Call lane for ops status, editorial checks, and publication-specific admin work.</div>
-            <div class="admin-launch-url">admin.registercall.com/console/en/register-call</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787" target="_blank" rel="noopener">
             <div class="admin-launch-top">
@@ -1854,14 +1829,6 @@ body::before {
             <div class="admin-launch-desc">Campaign email builder and newsletter handoff lane inside this same dashboard.</div>
             <div class="admin-launch-url">/newsletter</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-accounting);" href="https://banking.5280.menu/admin/billing" target="_blank" rel="noopener">
-            <div class="admin-launch-top">
-              <div class="admin-launch-title">Billing Admin</div>
-              <span class="admin-launch-tag">Finance</span>
-            </div>
-            <div class="admin-launch-desc">Billing and invoice lane. Keep financial actions in the dedicated billing surface.</div>
-            <div class="admin-launch-url">banking.5280.menu/admin/billing</div>
-          </a>
         </div>
       </div>
     </div>
@@ -1883,7 +1850,7 @@ body::before {
 
 <!-- ── Status Bar ──────────────────────────────────────────────────── -->
 <div id="statusbar">
-  <span class="status-left">● LIVE — admin.conews.press · copress.news Platform v0.1</span>
+  <span class="status-left">● LIVE — copress-dashboard.vercel.app · unified admin home</span>
   <div class="status-center">
     <div class="status-dot"><span class="dot" id="dot-gemini"></span> Gemini</div>
     <div class="status-dot"><span class="dot" id="dot-supabase"></span> Supabase</div>
