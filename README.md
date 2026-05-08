@@ -259,6 +259,8 @@ Current behavior is intentionally browser-local:
 - When `SUPABASE_URL` and `SUPABASE_ANON_KEY` are available, Editorial shows the 12 most recent `public_posts` rows and keeps the local queue as fallback.
 - Directory import and invoice staging create operator handoff text in-page.
 - Marketing campaign generation stores the latest kit in `localStorage.copress_campaign_handoff` and exposes a `Send to Newsletter Studio` link to `/newsletter?campaign=latest`; Newsletter Studio auto-loads that copy into the marketing template and shows a handoff banner.
+- Marketing campaign kits follow the showcase pattern from `showcase.registercall.com/billsmobile`: branding first, industry pattern, invoice-manager item mapping, send options, follow-up/drip sequence, and newsletter/digital/print subscriber-list options.
+- Campaign generation is local-first by default: free local Hermes/Ollama models generate copy and structure. Premium artwork is escalated only when the operator selects premium artwork, with Nano Banana 2 / Claude design / Google AI Studio noted as the art lane.
 - Directory has a duplicable demo importer: source adapter → normalized business record → duplicate detection → review actions → JSON export. Demo state lives in `localStorage.copress_directory_batch_v1`.
 - Directory intake includes visual evidence: a generated demo business-card wall plus an upload field for a photo of a card wall or scanned page from a local approved civic organization. Scan metadata lives in `localStorage.copress_directory_scan_meta_v1` and exports with the batch JSON.
 - Directory scan intake now has an OCR / Parse Wall demo step. Parsed fields attach to staged records as `ocrFields`, including field confidence placeholders and scan label.

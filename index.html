@@ -1593,6 +1593,10 @@ body::before {
                 <h3>Campaign Brief</h3>
                 <div class="module-form">
                   <div class="module-field"><label>Business / offer</label><input id="campaign-title" placeholder="Mother's Day brunch at..."></div>
+                  <div class="module-form two">
+                    <div class="module-field"><label>Industry pattern</label><select id="campaign-industry"><option>Service Industry</option><option>Casino / Resort</option><option>Politician / Civic</option><option>Restaurant / Hospitality</option><option>Health & Wellness</option><option>Retail / Shop Local</option></select></div>
+                    <div class="module-field"><label>Artwork route</label><select id="campaign-art-route"><option value="local">Free local models only</option><option value="premium">Premium artwork requested</option><option value="none">Copy kit only</option></select></div>
+                  </div>
                   <div class="module-field"><label>Brief</label><textarea id="campaign-brief" placeholder="Audience, offer, deadline, town, contact, call to action..."></textarea></div>
                 </div>
                 <div class="module-actions">
@@ -2513,16 +2517,71 @@ function resetDirectoryBatch() {
   toast('Directory demo reset');
 }
 
+function getCampaignPattern(industry) {
+  const commonSend = ['Newsletter feature block', 'Digital display', 'Print ad', 'Subscriber email', 'Social captions', 'Sales follow-up'];
+  const patterns = {
+    'Casino / Resort': {
+      tone: 'luxury destination, weekend escape, premium hospitality',
+      invoiceItems: ['IM-210 Full digital showcase', 'IM-310 Newsletter sponsor block', 'IM-410 Half-page print ad', 'IM-510 Drip follow-up sequence'],
+      sendOptions: ['Casino/resort list', 'Paid subscribers', 'Tourism audience', ...commonSend],
+      drip: ['Day 0: launch invitation', 'Day 3: amenity feature', 'Day 7: final weekend reminder'],
+    },
+    'Politician / Civic': {
+      tone: 'public trust, civic invitation, issue-based opinion request',
+      invoiceItems: ['IM-120 Civic outreach kit', 'IM-220 Voter/resident email', 'IM-320 Opinion survey insert', 'IM-420 Print announcement'],
+      sendOptions: ['Resident list', 'Civic organizations', 'Newsletter editorial block', 'Print notice', 'SMS reminder'],
+      drip: ['Day 0: you are invited', 'Day 4: we would like your opinion', 'Day 10: meeting/reminder follow-up'],
+    },
+    'Service Industry': {
+      tone: 'practical local service, trust, availability, clear booking path',
+      invoiceItems: ['IM-110 Business profile kit', 'IM-230 Service-area newsletter feature', 'IM-330 Digital listing boost', 'IM-430 Print directory placement'],
+      sendOptions: ['Shop Local list', 'Service category segment', ...commonSend],
+      drip: ['Day 0: introduce service', 'Day 5: proof/testimonial', 'Day 14: book or request quote'],
+    },
+    'Restaurant / Hospitality': {
+      tone: 'local flavor, reservation-ready, seasonal offer',
+      invoiceItems: ['IM-115 Dining campaign kit', 'IM-235 Menu/newsletter block', 'IM-335 Social offer pack', 'IM-435 Print dining strip'],
+      sendOptions: ['Dining list', 'Weekend newsletter', 'Tourism audience', 'Social campaign queue'],
+      drip: ['Day 0: feature offer', 'Day 2: weekend reminder', 'Day 6: last-call special'],
+    },
+    'Health & Wellness': {
+      tone: 'trusted wellness, calming, credible local care',
+      invoiceItems: ['IM-118 Wellness profile kit', 'IM-238 Wellness newsletter placement', 'IM-338 Educational follow-up', 'IM-438 Print wellness ad'],
+      sendOptions: ['Wellness segment', 'Paid subscribers', 'Newsletter feature', 'Print subscriber list'],
+      drip: ['Day 0: introduce experience', 'Day 5: benefits/how it works', 'Day 12: appointment or visit prompt'],
+    },
+    'Retail / Shop Local': {
+      tone: 'shop local, community support, seasonal retail feature',
+      invoiceItems: ['IM-112 Shop Local kit', 'IM-232 Product feature block', 'IM-332 Social carousel copy', 'IM-432 Print directory placement'],
+      sendOptions: ['Shop Local list', 'Town audience', 'Newsletter feature', 'Social campaign queue'],
+      drip: ['Day 0: local spotlight', 'Day 4: featured product', 'Day 9: visit/store reminder'],
+    },
+  };
+  return patterns[industry] || patterns['Service Industry'];
+}
+
 function generateCampaignKit() {
   const title = document.getElementById('campaign-title').value.trim() || 'Local campaign';
   const brief = document.getElementById('campaign-brief').value.trim() || 'No brief supplied yet.';
+  const industry = document.getElementById('campaign-industry').value;
+  const artRoute = document.getElementById('campaign-art-route').value;
+  const pattern = getCampaignPattern(industry);
+  const artworkLine = artRoute === 'premium'
+    ? 'Artwork route: Premium artwork requested. Escalate to Nano Banana 2 / Claude design / Google AI Studio before final art.'
+    : artRoute === 'none'
+      ? 'Artwork route: Copy kit only. No generated artwork requested.'
+      : 'Artwork route: Free local models only. Use local Hermes/Ollama pattern generation; no premium artwork spend.';
   const output =
-    `Headline: ${title}\n\nEmail subject: ${title} for mountain readers\n\nSocial caption: ${brief}\n\nPrint CTA: Reserve space in the Weekly Register-Call and reach Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`;
+    `Brand: ${title}\nIndustry: ${industry}\nTone: ${pattern.tone}\n${artworkLine}\n\nCampaign spine:\n1. Branding pass: offer, audience, proof, CTA, visual direction\n2. Build kit: landing/showcase copy, newsletter block, digital ad copy, print ad copy, social captions\n3. Invoice mapping: ${pattern.invoiceItems.join(' · ')}\n4. Sending options: ${pattern.sendOptions.join(' · ')}\n5. Follow-up / drip: ${pattern.drip.join(' → ')}\n\nHeadline: ${title} for mountain readers\n\nEmail subject: ${title}: local feature and invitation\n\nNewsletter copy: ${brief}\n\nDigital / social copy: ${title} is ready for a Register-Call campaign across web, newsletter, print, and follow-up channels.\n\nPrint CTA: Reserve space in the Weekly Register-Call and reach Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`;
   document.getElementById('campaign-output').textContent = output;
   localStorage.setItem('copress_campaign_handoff', JSON.stringify({
     title,
     brief,
+    industry,
+    artRoute,
+    pattern,
     output,
+    modelPolicy: artRoute === 'premium' ? 'premium-artwork-escalation' : 'free-local-models',
     createdAt: new Date().toISOString(),
   }));
   const link = document.getElementById('campaign-newsletter-link');
