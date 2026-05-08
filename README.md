@@ -261,6 +261,9 @@ Current behavior is intentionally browser-local:
 - Marketing campaign generation stores the latest kit in `localStorage.copress_campaign_handoff` and exposes a `Send to Newsletter Studio` link to `/newsletter?campaign=latest`; Newsletter Studio auto-loads that copy into the marketing template and shows a handoff banner.
 - Directory has a duplicable demo importer: source adapter → normalized business record → duplicate detection → review actions → JSON export. Demo state lives in `localStorage.copress_directory_batch_v1`.
 - Directory intake includes visual evidence: a generated demo business-card wall plus an upload field for a photo of a card wall or scanned page from a local approved civic organization. Scan metadata lives in `localStorage.copress_directory_scan_meta_v1` and exports with the batch JSON.
+- Directory categories now cover restaurants, lodging, retail, services, civic organizations, schools, faith communities, government offices, tourism, professional services, legal/financial, home/garden, outdoor recreation, nonprofits, and more.
+- Directory publish targets include city sites, print directory, newsletter feature block, social campaign queue, sales CRM follow-up, Build Kit queue, and Send Onboarding queue.
+- Directory campaign kits are stored in `localStorage.copress_directory_campaign_kit` and include templates for Editorial Outreach, You're Invited, We'd Like Your Opinion, Claim Your Listing, Shop Local Welcome, Civic Partner Thank You, and Sponsor Prospect.
 - Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `invoicemanager-wrc`, Supabase, Stripe, Sendy).
 
 Directory importer scaling pattern:

@@ -1509,9 +1509,12 @@ body::before {
                 <h3>Import Batch</h3>
                 <div class="module-form two">
                   <div class="module-field"><label>ZIP or town</label><input id="directory-query" placeholder="80422 or Nederland"></div>
-                  <div class="module-field"><label>Category</label><select id="directory-category"><option>Restaurants</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option></select></div>
+                  <div class="module-field"><label>Category</label><select id="directory-category">
+                    <option>All Categories</option><option>Restaurants</option><option>Cafes & Bakeries</option><option>Bars & Breweries</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option><option>Arts & Culture</option><option>Events & Venues</option><option>Real Estate</option><option>Contractors</option><option>Health & Wellness</option><option>Automotive</option><option>Outdoor Recreation</option><option>Nonprofits</option><option>Civic Organizations</option><option>Schools & Education</option><option>Faith Communities</option><option>Government Offices</option><option>Professional Services</option><option>Legal & Financial</option><option>Home & Garden</option><option>Tourism</option>
+                  </select></div>
                   <div class="module-field"><label>Source</label><select id="directory-source-select"><option value="demo">Demo seed data</option><option value="google">Google Places shape</option><option value="apify">Apify actor shape</option></select></div>
-                  <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>Black Hawk</option><option>Central City</option><option>Nederland</option><option>Georgetown</option><option>Idaho Springs</option></select></div>
+                  <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>Black Hawk city site</option><option>Central City site</option><option>Nederland city site</option><option>Georgetown city site</option><option>Idaho Springs city site</option><option>Weekly print directory</option><option>Newsletter feature block</option><option>Social campaign queue</option><option>Sales CRM follow-up</option><option>Build Kit queue</option><option>Send Onboarding queue</option></select></div>
+                  <div class="module-field"><label>Campaign kit</label><select id="directory-campaign-kit"><option>Editorial Outreach</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Civic Partner Thank You</option><option>Sponsor Prospect</option></select></div>
                   <div class="module-field"><label>Civic source</label><input id="directory-civic-source" placeholder="Chamber, Main Street, tourism board, school booster..."></div>
                   <div class="module-field"><label>Business card wall / scanned page</label><input class="file-input" id="directory-scan-input" type="file" accept="image/*" onchange="handleDirectoryScan(event)"></div>
                 </div>
@@ -1522,6 +1525,8 @@ body::before {
                 </div>
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="stageDirectoryImport()">Run Demo Import</button>
+                  <button class="module-btn" onclick="buildDirectoryCampaignKit()">Build Kit</button>
+                  <button class="module-btn" onclick="sendDirectoryOnboarding()">Send Onboarding</button>
                   <button class="module-btn" onclick="exportDirectoryBatch()">Export JSON</button>
                   <button class="module-btn" onclick="resetDirectoryBatch()">Reset</button>
                   <button class="module-btn" onclick="window.location.href='/apistore'">API Keys</button>
@@ -2300,10 +2305,98 @@ function exportDirectoryBatch() {
   toast('Directory batch JSON exported to panel');
 }
 
+function getDirectoryCampaignTemplate(templateName, business) {
+  const name = business?.name || 'your organization';
+  const templates = {
+    'Editorial Outreach': {
+      subject: `Can we include ${name} in our local directory?`,
+      body: `We are building a verified local directory from approved civic sources and would like to confirm ${name}'s listing details for Register-Call readers.`,
+      cta: 'Reply with any corrections, a preferred photo, and the best contact for future editorial questions.',
+    },
+    "You're Invited": {
+      subject: `${name}, you are invited to join the Shop Local directory`,
+      body: `Your business appeared in a local civic directory source. We are inviting approved local organizations to claim and improve their listing.`,
+      cta: 'Claim your listing, add a photo, and tell readers what makes your business useful to the community.',
+    },
+    "We'd Like Your Opinion": {
+      subject: `${name}, we'd like your opinion`,
+      body: `We are asking local businesses and civic groups to review the new directory intake process before it scales across the mountain towns.`,
+      cta: 'Tell us what category, contact details, or community notes should be included before publication.',
+    },
+    'Claim Your Listing': {
+      subject: `Claim your Register-Call listing: ${name}`,
+      body: `${name} has been staged for the local business directory. Claiming the listing helps us publish accurate hours, contact details, and services.`,
+      cta: 'Confirm your details and send a logo or storefront photo.',
+    },
+    'Shop Local Welcome': {
+      subject: `Welcome to Shop Local, ${name}`,
+      body: `We are preparing a Shop Local feature set for readers across Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`,
+      cta: 'Send a short description, preferred category, and any current promotion.',
+    },
+    'Civic Partner Thank You': {
+      subject: `Thank you for helping verify ${name}`,
+      body: `This listing came from an approved civic source. We are keeping the audit trail attached so community partners can verify updates later.`,
+      cta: 'Send corrections or additional approved listings for the next batch.',
+    },
+    'Sponsor Prospect': {
+      subject: `${name}: sponsor opportunity for local readers`,
+      body: `The directory can support sponsor packages across newsletter, web, print, and social placements.`,
+      cta: 'Ask for current sponsorship placements and pricing.',
+    },
+  };
+  return templates[templateName] || templates['Editorial Outreach'];
+}
+
+function buildDirectoryCampaignKit() {
+  const templateName = document.getElementById('directory-campaign-kit').value;
+  const target = document.getElementById('directory-target').value;
+  const approved = directoryRecords.filter(r => r.status === 'approved');
+  const candidates = approved.length ? approved : directoryRecords.filter(r => r.status !== 'duplicate' && r.status !== 'skipped');
+  if (!candidates.length) {
+    toast('Run an import or approve records first');
+    return;
+  }
+  const kits = candidates.slice(0, 8).map(record => {
+    const template = getDirectoryCampaignTemplate(templateName, record);
+    return { business: record.name, category: record.category, target, template: templateName, ...template };
+  });
+  const handoff = {
+    type: 'directory-campaign-kit',
+    template: templateName,
+    target,
+    civicSource: directoryScanMeta.civicSource,
+    scan: directoryScanMeta,
+    count: kits.length,
+    kits,
+    createdAt: new Date().toISOString(),
+  };
+  localStorage.setItem('copress_directory_campaign_kit', JSON.stringify(handoff));
+  document.getElementById('directory-output').textContent = kits.map(k =>
+    `${k.business}\nSubject: ${k.subject}\n${k.body}\nCTA: ${k.cta}`
+  ).join('\n\n---\n\n');
+  toast(`${templateName} kit built for ${kits.length} records`);
+}
+
+function sendDirectoryOnboarding() {
+  const raw = localStorage.getItem('copress_directory_campaign_kit');
+  const handoff = raw ? JSON.parse(raw) : null;
+  if (!handoff) {
+    buildDirectoryCampaignKit();
+  }
+  const latest = JSON.parse(localStorage.getItem('copress_directory_campaign_kit') || '{}');
+  latest.status = 'queued-for-onboarding';
+  latest.queue = 'directory-onboarding';
+  latest.queuedAt = new Date().toISOString();
+  localStorage.setItem('copress_directory_campaign_kit', JSON.stringify(latest));
+  document.getElementById('directory-output').textContent += `\n\nOnboarding queued locally for ${latest.count || 0} records.\nNext scaled step: connect this handoff to Sendy, CRM, or an onboarding backend.`;
+  toast('Onboarding handoff queued locally');
+}
+
 function resetDirectoryBatch() {
   directoryRecords = [];
   localStorage.removeItem(DIRECTORY_STORE);
   localStorage.removeItem(DIRECTORY_SCAN_STORE);
+  localStorage.removeItem('copress_directory_campaign_kit');
   directoryScanMeta = { label: 'Demo civic card wall', civicSource: '', fileName: '', cardCount: 0 };
   drawDirectoryScanDemo();
   renderDirectoryBatch();
