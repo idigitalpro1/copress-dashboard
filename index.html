@@ -47,6 +47,7 @@
   --c-academy:   #f39c12;
   --c-linear:    #5e6ad2;
   --c-network:   #27ae60;
+  --c-hermes:    #06b6d4;
 }
 
 html, body {
@@ -298,8 +299,35 @@ body::before {
 .module-card:nth-child(6) { animation-delay: 300ms; }
 .module-card:nth-child(7) { animation-delay: 360ms; }
 .module-card:nth-child(8) { animation-delay: 420ms; }
+.module-card:nth-child(9) { animation-delay: 480ms; }
 
 @keyframes cardIn { to { opacity: 1; transform: translateY(0); } }
+
+/* ── Brain Stack (Hermes card) ──────────────────────────────────── */
+.brain-stack {
+  display: flex; flex-direction: column; gap: 5px;
+  margin: 12px 0 4px;
+}
+.brain-row {
+  display: grid; grid-template-columns: 10px 1fr 1fr auto;
+  gap: 8px; align-items: center;
+  padding: 5px 8px;
+  background: rgba(6,182,212,.03);
+  border: 1px solid rgba(6,182,212,.08);
+  border-radius: 4px;
+  font-size: 10.5px;
+}
+.brain-row:hover { background: rgba(6,182,212,.07); border-color: rgba(6,182,212,.18); }
+.brain-led.ok  { width:7px; height:7px; border-radius:50%; background:#27ae60; box-shadow:0 0 5px rgba(39,174,96,.6); flex-shrink:0; }
+.brain-led.warn{ width:7px; height:7px; border-radius:50%; background:#f39c12; box-shadow:0 0 5px rgba(243,156,18,.6); flex-shrink:0; animation: led-pulse 2s ease-in-out infinite; }
+.brain-led.dim { width:7px; height:7px; border-radius:50%; background:#3a4050; flex-shrink:0; }
+.brain-model { font-family:'DM Mono',monospace; font-size:10px; color:var(--ink); font-weight:500; }
+.brain-role  { font-size:10px; color:var(--ink-mid); }
+.brain-host  { font-family:'DM Mono',monospace; font-size:9px; color:rgba(6,182,212,.7); text-align:right; }
+.brain-tier  { font-size:9px; padding:1px 5px; border-radius:3px; font-family:'DM Mono',monospace; white-space:nowrap; }
+.brain-tier.local  { background:rgba(39,174,96,.15); color:#27ae60; }
+.brain-tier.cloud  { background:rgba(200,168,75,.12); color:var(--gold); }
+.brain-tier.ref    { background:rgba(58,64,80,.3); color:var(--ink-mid); }
 
 /* Card dept label strip */
 .card-dept {
@@ -756,7 +784,7 @@ body::before {
         <div class="module-card" data-target="editorial" style="--card-color:var(--c-editorial);--card-glow:rgba(200,168,75,.06);">
           <div class="card-dept">
             <span class="card-dept-name">Editorial</span>
-            <span class="card-led warn"></span>
+            <span class="card-led warn" id="editorial-led"></span>
           </div>
           <div class="card-body">
             <div class="card-icon-row">
@@ -769,7 +797,7 @@ body::before {
             <div class="card-stats">
               <div class="card-stat">
                 <span class="stat-label">Drafts</span>
-                <span class="stat-value warn">3</span>
+                <span class="stat-value warn" id="live-drafts">3</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Towns</span>
@@ -777,11 +805,11 @@ body::before {
               </div>
               <div class="card-stat">
                 <span class="stat-label">Published</span>
-                <span class="stat-value ok">0</span>
+                <span class="stat-value ok" id="live-published">0</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">This Week</span>
-                <span class="stat-value">—</span>
+                <span class="stat-value" id="live-this-week">—</span>
               </div>
             </div>
             <div class="card-rule"></div>
@@ -879,7 +907,7 @@ body::before {
         <div class="module-card" data-target="marketing" style="--card-color:var(--c-marketing);--card-glow:rgba(26,188,156,.06);">
           <div class="card-dept">
             <span class="card-dept-name">Marketing</span>
-            <span class="card-led"></span>
+            <span class="card-led" id="marketing-led"></span>
           </div>
           <div class="card-body">
             <div class="card-icon-row">
@@ -892,7 +920,7 @@ body::before {
             <div class="card-stats">
               <div class="card-stat">
                 <span class="stat-label">Subscribers</span>
-                <span class="stat-value highlight">847</span>
+                <span class="stat-value highlight" id="live-subscribers">847</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Last Sent</span>
@@ -1086,6 +1114,62 @@ body::before {
           </div>
         </div>
 
+        <!-- Hermes Orchestrator Card -->
+        <div class="module-card" data-target="brains" style="--card-color:var(--c-hermes);--card-glow:rgba(6,182,212,.06);">
+          <div class="card-dept">
+            <span class="card-dept-name">AI Brains</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">🧠</div>
+              <div>
+                <div class="card-title">Hermes Orchestrator</div>
+                <div class="card-subtitle">Local AI · Swarm · Fallback Stack</div>
+              </div>
+            </div>
+            <!-- Brain routing stack -->
+            <div class="brain-stack">
+              <div class="brain-row">
+                <span class="brain-led ok"></span>
+                <span class="brain-model">Hermes 70B</span>
+                <span class="brain-role">Primary Orch.</span>
+                <span class="brain-tier local">LOCAL</span>
+              </div>
+              <div class="brain-row">
+                <span class="brain-led ok"></span>
+                <span class="brain-model">Qwen 35B</span>
+                <span class="brain-role">Code / Reason</span>
+                <span class="brain-tier local">LM Studio</span>
+              </div>
+              <div class="brain-row">
+                <span class="brain-led warn"></span>
+                <span class="brain-model">OpenClaw</span>
+                <span class="brain-role">Swarm Agent</span>
+                <span class="brain-tier local">16GB Prod</span>
+              </div>
+              <div class="brain-row">
+                <span class="brain-led ok"></span>
+                <span class="brain-model">Claude Codex</span>
+                <span class="brain-role">Fallback Orch.</span>
+                <span class="brain-tier cloud">CLOUD</span>
+              </div>
+              <div class="brain-row">
+                <span class="brain-led dim"></span>
+                <span class="brain-model">ChatGPT</span>
+                <span class="brain-role">Worker Fallback</span>
+                <span class="brain-tier ref">REF ONLY</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
+              <button class="card-btn" onclick="toast('OpenClaw swarm → http://localhost:1234')">🦅 OpenClaw</button>
+              <button class="card-btn" onclick="window.open('https://admin.conews.press/console/api/hermes/chat','_blank')">💬 Hermes Chat</button>
+            </div>
+          </div>
+        </div>
+
       </div><!-- /cards-grid -->
 
       <!-- Quick Actions -->
@@ -1167,6 +1251,13 @@ body::before {
               </div>
             </div>
             <div class="api-field">
+              <label>Sendy List ID</label>
+              <div class="api-field-wrap">
+                <input type="password" id="key-sendy-list" placeholder="primary list id" data-key="sendy_list_id">
+                <button class="show-toggle" onclick="toggleShow('key-sendy-list', this)">👁</button>
+              </div>
+            </div>
+            <div class="api-field">
               <label>Stripe Secret Key</label>
               <div class="api-field-wrap">
                 <input type="password" id="key-stripe" placeholder="sk_live_..." data-key="stripe_secret">
@@ -1245,6 +1336,18 @@ body::before {
       </div>
     </div>
 
+    <div class="view" id="view-brains">
+      <div class="module-view">
+        <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
+        <div class="module-placeholder">
+          <div class="module-placeholder-stamp">AI Brains · Local First</div>
+          <h2>Hermes is the local orchestration lane.</h2>
+          <p>Use Hermes 70B for private orchestration, Qwen for code and reasoning, OpenClaw for swarm work, and cloud agents only as fallback capacity.</p>
+          <div class="module-placeholder-badge">Gateway expected at 127.0.0.1:8642</div>
+        </div>
+      </div>
+    </div>
+
   </main>
 </div><!-- /shell -->
 
@@ -1292,10 +1395,14 @@ darkToggle.addEventListener('click', () => {
 
 // ── Navigation ─────────────────────────────────────────────────────
 function navTo(section) {
+  const view = document.getElementById('view-' + section);
+  if (!view) {
+    toast('View not wired yet: ' + section);
+    return;
+  }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const view = document.getElementById('view-' + section);
-  if (view) view.classList.add('active');
+  view.classList.add('active');
   const nav = document.querySelector('[data-view="' + section + '"]');
   if (nav) nav.classList.add('active');
   if (section === 'dashboard') {
@@ -1375,6 +1482,124 @@ function updateStatusDots() {
   if (stripeEl) stripeEl.textContent = localStorage.getItem(KEY_PREFIX + 'stripe_secret') ? 'Connected' : '—';
 }
 
+function readVaultValue(...names) {
+  for (const name of names) {
+    const local = localStorage.getItem(KEY_PREFIX + name);
+    if (local) return local;
+  }
+  try {
+    const vault = JSON.parse(localStorage.getItem('api_vault') || '[]');
+    for (const item of vault) {
+      const values = item.values || {};
+      for (const name of names) {
+        const upper = name.toUpperCase();
+        if (values[name]) return values[name];
+        if (values[upper]) return values[upper];
+      }
+    }
+  } catch {}
+  return '';
+}
+
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+function setLed(id, state) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('ok', 'warn', 'active');
+  if (state) el.classList.add(state);
+}
+
+function formatNumber(n) {
+  return Number.isFinite(n) ? n.toLocaleString('en-US') : '—';
+}
+
+async function loadSendySubscriberCount() {
+  const sendyUrl = readVaultValue('sendy_url', 'SENDY_URL').replace(/\/+$/, '');
+  const apiKey = readVaultValue('sendy_key', 'SENDY_API_KEY');
+  const listIds = [
+    readVaultValue('sendy_list_id', 'SENDY_LIST_ID'),
+    readVaultValue('sendy_list_paid', 'SENDY_LIST_PAID'),
+    readVaultValue('sendy_list_editorial', 'SENDY_LIST_EDITORIAL'),
+    readVaultValue('sendy_list_marketing', 'SENDY_LIST_MARKETING'),
+    readVaultValue('sendy_list_sales', 'SENDY_LIST_SALES'),
+  ].filter(Boolean);
+  const uniqueListIds = [...new Set(listIds)];
+
+  if (!sendyUrl || !apiKey || uniqueListIds.length === 0) {
+    setLed('marketing-led', apiKey ? 'warn' : '');
+    return;
+  }
+
+  try {
+    let total = 0;
+    for (const listId of uniqueListIds) {
+      const url = new URL(sendyUrl + '/api/subscribers/count');
+      url.searchParams.set('api_key', apiKey);
+      url.searchParams.set('list_id', listId);
+      const res = await fetch(url.toString(), { method: 'GET' });
+      if (!res.ok) throw new Error(`Sendy ${res.status}`);
+      const raw = (await res.text()).trim();
+      const count = Number(raw.replace(/,/g, ''));
+      if (!Number.isFinite(count)) throw new Error('Sendy count was not numeric');
+      total += count;
+    }
+    setText('live-subscribers', formatNumber(total));
+    setLed('marketing-led', 'ok');
+  } catch (err) {
+    console.warn('Sendy count unavailable', err);
+    setLed('marketing-led', 'warn');
+  }
+}
+
+async function loadSupabaseArticleCounts() {
+  const supabaseUrl = readVaultValue('supabase_url', 'SUPABASE_URL').replace(/\/+$/, '');
+  const anonKey = readVaultValue('supabase_anon', 'SUPABASE_ANON_KEY');
+  if (!supabaseUrl || !anonKey) {
+    setLed('editorial-led', 'warn');
+    return;
+  }
+
+  try {
+    const url = new URL(supabaseUrl + '/rest/v1/public_posts');
+    url.searchParams.set('site_key', 'eq.registercall');
+    url.searchParams.set('select', '*');
+    url.searchParams.set('limit', '200');
+    url.searchParams.set('order', 'created_at.desc');
+    const res = await fetch(url.toString(), {
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${anonKey}`,
+      },
+    });
+    if (!res.ok) throw new Error(`Supabase ${res.status}`);
+    const posts = await res.json();
+    const weekStart = new Date();
+    weekStart.setDate(weekStart.getDate() - 7);
+    const draftCount = posts.filter(p => String(p.status || '').toLowerCase().includes('draft')).length;
+    const publishedCount = posts.filter(p => String(p.status || '').toLowerCase().includes('publish')).length;
+    const weekCount = posts.filter(p => {
+      const stamp = p.published_at || p.created_at || p.updated_at;
+      return stamp && new Date(stamp) >= weekStart;
+    }).length;
+    setText('live-drafts', formatNumber(draftCount));
+    setText('live-published', formatNumber(publishedCount));
+    setText('live-this-week', formatNumber(weekCount));
+    setLed('editorial-led', 'ok');
+  } catch (err) {
+    console.warn('Supabase articles unavailable', err);
+    setLed('editorial-led', 'warn');
+  }
+}
+
+function loadLiveDashboardData() {
+  loadSendySubscriberCount();
+  loadSupabaseArticleCounts();
+}
+
 // ── Keyboard shortcuts ─────────────────────────────────────────────
 const shortcuts = [
   () => toast('Launching business importer…'),
@@ -1397,6 +1622,7 @@ document.addEventListener('keydown', e => {
 // ── Init ───────────────────────────────────────────────────────────
 loadKeys();
 updateStatusDots();
+loadLiveDashboardData();
 </script>
 
 <!-- ── Press Atmosphere: Gears + Spotlight ─────────────────────────── -->

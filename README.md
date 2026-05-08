@@ -12,7 +12,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 
 | Route | File | Status | Description |
 |-------|------|--------|-------------|
-| `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 9 cards, 5 placeholder views |
+| `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 10 cards, live data hooks, 5 placeholder views |
 | `/network` | `network.html` | ✅ Live | Network HQ — server IP, 7 property cards, 3CX phone system |
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
@@ -56,7 +56,28 @@ The command center for copress.news — a Colorado mountain newspaper network co
 | Docs Hub | `/docs` | Documentation center |
 | Staff Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
+| Hermes Orchestrator | `data-view=brains` | Local/cloud AI routing status |
 | (implicit) API Vault | `/apistore` | Key management |
+
+---
+
+## Live Dashboard Data
+
+The dashboard attempts to hydrate top-level cards from browser-stored API keys:
+
+| Card | Values | Source |
+|------|--------|--------|
+| Editorial Desk | Drafts, published count, this-week count | Supabase REST `public_posts` filtered by `site_key=registercall` |
+| Marketing Hub | Subscriber count | Sendy `/api/subscribers/count` |
+
+Keys are read from both the dashboard API panel (`copress_api_*`) and API Vault (`api_vault`), so either setup path works. Required values:
+
+| Service | Required keys |
+|---------|---------------|
+| Supabase | `SUPABASE_URL`, `SUPABASE_ANON_KEY` |
+| Sendy | `SENDY_URL`, `SENDY_API_KEY`, and at least one list ID (`SENDY_LIST_ID`, `SENDY_LIST_PAID`, `SENDY_LIST_EDITORIAL`, `SENDY_LIST_MARKETING`, or `SENDY_LIST_SALES`) |
+
+If credentials are missing or the browser blocks the upstream request, the card keeps its fallback value and the status LED switches to warning.
 
 ---
 
@@ -118,7 +139,7 @@ Connects to Linear's GraphQL API (`https://api.linear.app/graphql`):
 
 ## API Vault (`/apistore`)
 
-Stores API keys in localStorage under `copress_keys_v1`:
+Stores API keys in localStorage under `api_vault`. The dashboard also stores quick API panel values under `copress_api_*`.
 
 | Key ID | Service |
 |--------|---------|
@@ -129,6 +150,7 @@ Stores API keys in localStorage under `copress_keys_v1`:
 | `supabase_anon` | Supabase anon key |
 | `sendy_url` | Sendy instance URL |
 | `sendy_key` | Sendy API key |
+| `sendy_list_id` / `SENDY_LIST_*` | Sendy subscriber list IDs |
 | `stripe_secret` | Stripe secret key |
 
 Export formats: `.env` file, JSON. MCP injection: copies key into clipboard for paste into MCP config.
