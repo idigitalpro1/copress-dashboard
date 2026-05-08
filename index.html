@@ -1541,6 +1541,10 @@ body::before {
               <div class="module-panel">
                 <h3>Generated Output</h3>
                 <div class="output-box" id="campaign-output">No campaign generated yet.</div>
+                <div class="module-actions">
+                  <button class="module-btn primary" id="campaign-newsletter-link" onclick="sendCampaignToNewsletter()" disabled>Send to Newsletter Studio</button>
+                  <button class="module-btn" onclick="window.location.href='/newsletter'">Open Newsletter</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2000,9 +2004,27 @@ function stageDirectoryImport() {
 function generateCampaignKit() {
   const title = document.getElementById('campaign-title').value.trim() || 'Local campaign';
   const brief = document.getElementById('campaign-brief').value.trim() || 'No brief supplied yet.';
-  document.getElementById('campaign-output').textContent =
+  const output =
     `Headline: ${title}\n\nEmail subject: ${title} for mountain readers\n\nSocial caption: ${brief}\n\nPrint CTA: Reserve space in the Weekly Register-Call and reach Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`;
+  document.getElementById('campaign-output').textContent = output;
+  localStorage.setItem('copress_campaign_handoff', JSON.stringify({
+    title,
+    brief,
+    output,
+    createdAt: new Date().toISOString(),
+  }));
+  const link = document.getElementById('campaign-newsletter-link');
+  if (link) link.disabled = false;
   toast('Campaign kit generated');
+}
+
+function sendCampaignToNewsletter() {
+  const raw = localStorage.getItem('copress_campaign_handoff');
+  if (!raw) {
+    toast('Generate a campaign kit first');
+    return;
+  }
+  window.location.href = '/newsletter?campaign=latest';
 }
 
 function stageInvoice() {

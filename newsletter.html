@@ -147,6 +147,27 @@
     overflow: hidden;
   }
 
+  .handoff-banner {
+    display: none;
+    margin-bottom: 18px;
+    border: 1px solid rgba(200,168,75,.35);
+    background: #fffaf0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    color: var(--navy);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+  .handoff-banner strong {
+    display: block; margin-bottom: 4px; color: #8a6800;
+    font: 700 10px 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase;
+  }
+  .handoff-banner button {
+    margin-top: 10px; border: 1px solid var(--gold); background: var(--gold);
+    color: var(--navy); border-radius: 4px; padding: 7px 12px; cursor: pointer;
+    font: 700 10px 'DM Mono', monospace; letter-spacing: .06em; text-transform: uppercase;
+  }
+
   /* ── STEPS PANEL (left) ── */
   .steps-panel {
     padding: 28px 32px;
@@ -733,8 +754,13 @@
     <!-- LEFT: Steps -->
     <div class="steps-panel">
 
-      <!-- STEP 1: Template -->
-      <div class="step-section active" id="step-1">
+    <!-- STEP 1: Template -->
+    <div class="step-section active" id="step-1">
+        <div class="handoff-banner" id="campaign-handoff-banner">
+          <strong>Campaign handoff loaded</strong>
+          <span id="campaign-handoff-text"></span><br>
+          <button onclick="applyCampaignHandoff()">Use Campaign Copy</button>
+        </div>
         <div class="step-header">
           <h2>Choose a Template</h2>
           <p>Select the visual style for this issue's newsletter</p>
@@ -1314,6 +1340,53 @@ function saveConfig() {
   showToast('💾 Draft saved', 'gold');
 }
 
+// ── CAMPAIGN HANDOFF ──────────────────────────────────────────────────────
+function readCampaignHandoff() {
+  try { return JSON.parse(localStorage.getItem('copress_campaign_handoff') || 'null'); }
+  catch { return null; }
+}
+
+function maybeShowCampaignHandoff() {
+  const params = new URLSearchParams(location.search);
+  const handoff = readCampaignHandoff();
+  if (params.get('campaign') !== 'latest' || !handoff) return;
+  const banner = document.getElementById('campaign-handoff-banner');
+  const text = document.getElementById('campaign-handoff-text');
+  if (!banner || !text) return;
+  text.textContent = handoff.title || 'Latest campaign kit';
+  banner.style.display = 'block';
+}
+
+function applyCampaignHandoff() {
+  const handoff = readCampaignHandoff();
+  if (!handoff) {
+    showToast('No campaign handoff found', 'red');
+    return;
+  }
+  state.template = 'marketing';
+  state.length = 'brief';
+  state.stories = [{
+    id: 'campaign-handoff',
+    title: handoff.title || 'Local campaign',
+    byline: 'Campaign Kit',
+    kicker: 'Sponsored Message',
+    lead: true,
+    body: handoff.output || handoff.brief || '',
+    readmore: 'https://registercall.com',
+    selected: true,
+  }];
+  const subject = document.getElementById('subject-line');
+  const preview = document.getElementById('preview-text');
+  if (subject) subject.value = `${handoff.title || 'Local campaign'} for mountain readers`;
+  if (preview) preview.value = handoff.brief || 'A Register-Call campaign message for local readers.';
+  document.querySelectorAll('.template-card').forEach(c => c.classList.toggle('selected', c.dataset.tpl === 'marketing'));
+  document.querySelectorAll('.length-card').forEach(c => c.classList.toggle('selected', c.dataset.len === 'brief'));
+  renderStoryList();
+  updatePreview();
+  goStep(5);
+  showToast('Campaign copy loaded into Newsletter Studio', 'green');
+}
+
 // ── DEVICE TOGGLE ─────────────────────────────────────────────────────────
 function setDevice(device) {
   const vp = document.getElementById('preview-viewport');
@@ -1455,6 +1528,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loadSendyConfig();
   selectLength('standard', document.querySelector('[data-len="standard"]'));
   updatePreview();
+  maybeShowCampaignHandoff();
   setTimeout(() => showToast('📰 WRC Apr 23, 2026 issue loaded — 8 stories ready', 'gold'), 600);
 });
 </script>
