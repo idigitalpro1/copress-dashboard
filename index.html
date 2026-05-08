@@ -1512,7 +1512,8 @@ body::before {
                   <div class="module-field"><label>Category</label><select id="directory-category">
                     <option>All Categories</option><option>Restaurants</option><option>Cafes & Bakeries</option><option>Bars & Breweries</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option><option>Arts & Culture</option><option>Events & Venues</option><option>Real Estate</option><option>Contractors</option><option>Health & Wellness</option><option>Automotive</option><option>Outdoor Recreation</option><option>Nonprofits</option><option>Civic Organizations</option><option>Schools & Education</option><option>Faith Communities</option><option>Government Offices</option><option>Professional Services</option><option>Legal & Financial</option><option>Home & Garden</option><option>Tourism</option>
                   </select></div>
-                  <div class="module-field"><label>Source</label><select id="directory-source-select"><option value="demo">Demo seed data</option><option value="google">Google Places shape</option><option value="apify">Apify actor shape</option></select></div>
+                  <div class="module-field"><label>Source</label><select id="directory-source-select"><option value="demo">Demo seed data</option><option value="scan-ocr">Public wall OCR shape</option><option value="google">Google Places shape</option><option value="apify">Apify actor shape</option></select></div>
+                  <div class="module-field"><label>Geography source</label><select id="directory-geo-type"><option value="town">Town</option><option value="zip">ZIP</option><option value="county">County</option><option value="region">Region</option><option value="event">Event / public wall</option></select></div>
                   <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>Black Hawk city site</option><option>Central City site</option><option>Nederland city site</option><option>Georgetown city site</option><option>Idaho Springs city site</option><option>Weekly print directory</option><option>Newsletter feature block</option><option>Social campaign queue</option><option>Sales CRM follow-up</option><option>Build Kit queue</option><option>Send Onboarding queue</option></select></div>
                   <div class="module-field"><label>Campaign kit</label><select id="directory-campaign-kit"><option>Editorial Outreach</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Civic Partner Thank You</option><option>Sponsor Prospect</option></select></div>
                   <div class="module-field"><label>Source tag</label><input id="directory-source-tag" placeholder="shoplocal, marketing-hub, editorial-outreach, civic-scan..."></div>
@@ -1526,6 +1527,7 @@ body::before {
                 </div>
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="stageDirectoryImport()">Run Demo Import</button>
+                  <button class="module-btn" onclick="runDirectoryOCR()">OCR / Parse Wall</button>
                   <button class="module-btn" onclick="buildDirectoryCampaignKit()">Build Kit</button>
                   <button class="module-btn" onclick="sendDirectoryOnboarding()">Send Onboarding</button>
                   <button class="module-btn" onclick="exportDirectoryBatch()">Export JSON</button>
@@ -2129,7 +2131,10 @@ function drawDirectoryScanDemo() {
 
 function renderDirectoryScanMeta() {
   setText('directory-scan-label', directoryScanMeta.label || 'No scan attached');
-  setText('directory-scan-count', `${directoryScanMeta.cardCount || 0} cards parsed`);
+  const countLabel = directoryScanMeta.ocrStatus === 'parsed'
+    ? `${directoryScanMeta.cardCount || 0} OCR rows parsed`
+    : `${directoryScanMeta.cardCount || 0} cards parsed`;
+  setText('directory-scan-count', countLabel);
 }
 
 function handleDirectoryScan(event) {
@@ -2146,11 +2151,50 @@ function handleDirectoryScan(event) {
     civicSource: document.getElementById('directory-civic-source')?.value.trim() || 'Local approved civic organization',
     fileName: file.name,
     cardCount: Math.max(3, Math.min(12, Math.round(file.size / 85000))),
+    ocrStatus: 'attached',
+    extractedFields: [],
     updatedAt: new Date().toISOString(),
   };
   localStorage.setItem(DIRECTORY_SCAN_STORE, JSON.stringify(directoryScanMeta));
   renderDirectoryScanMeta();
   toast('Directory scan attached locally');
+}
+
+function makeOCRSeedRows(query, category) {
+  const place = query || 'Local';
+  return [
+    { name: `${place} Hardware & Supply`, address: `45 Public Wall Rd, ${place}, CO`, phone: '(303) 555-0201', website: '', category: category === 'All Categories' ? 'Home & Garden' : category, fieldConfidence: { name: .94, phone: .88, address: .72 } },
+    { name: `${place} Civic Association`, address: `PO Box 12, ${place}, CO`, phone: '(303) 555-0202', website: 'https://civic.example', category: 'Civic Organizations', fieldConfidence: { name: .91, phone: .84, address: .66 } },
+    { name: `${place} Family Dental`, address: `210 Main St, ${place}, CO`, phone: '(303) 555-0203', website: '', category: 'Health & Wellness', fieldConfidence: { name: .89, phone: .8, address: .74 } },
+  ];
+}
+
+function runDirectoryOCR() {
+  const query = document.getElementById('directory-query').value.trim() || 'Local';
+  const category = document.getElementById('directory-category').value;
+  const civicSource = document.getElementById('directory-civic-source').value.trim() || directoryScanMeta.civicSource || 'Public wall / approved civic source';
+  const rows = makeOCRSeedRows(query, category);
+  directoryScanMeta = {
+    ...directoryScanMeta,
+    civicSource,
+    ocrStatus: 'parsed',
+    cardCount: rows.length,
+    extractedFields: rows.map(row => ({
+      name: row.name,
+      phone: row.phone,
+      address: row.address,
+      category: row.category,
+      confidence: row.fieldConfidence,
+    })),
+    updatedAt: new Date().toISOString(),
+  };
+  localStorage.setItem(DIRECTORY_SCAN_STORE, JSON.stringify(directoryScanMeta));
+  document.getElementById('directory-source-select').value = 'scan-ocr';
+  renderDirectoryScanMeta();
+  document.getElementById('directory-output').textContent =
+    `OCR demo parsed ${rows.length} rows from ${directoryScanMeta.label}\nCivic source: ${civicSource}\n\n` +
+    rows.map(r => `${r.name}\n${r.phone} · ${r.address}\nCategory: ${r.category}`).join('\n\n');
+  toast('OCR demo fields attached to scan');
 }
 
 function adaptDirectorySource(raw, source) {
@@ -2176,6 +2220,18 @@ function adaptDirectorySource(raw, source) {
       source: 'apify',
     }));
   }
+  if (source === 'scan-ocr') {
+    return raw.map(item => ({
+      name: item.name,
+      address: item.address,
+      phone: item.phone,
+      website: item.website,
+      category: item.category,
+      rating: item.rating,
+      fieldConfidence: item.fieldConfidence || {},
+      source: 'scan-ocr',
+    }));
+  }
   return raw;
 }
 
@@ -2194,8 +2250,11 @@ function normalizeBusinessRecord(item, batch) {
     source: item.source || batch.source,
     sourceTag: batch.sourceTag,
     target: batch.target,
+    geographyType: batch.geographyType,
+    geographyValue: batch.query,
     civicSource: batch.civicSource,
     scanLabel: batch.scan?.label || '',
+    ocrFields: item.fieldConfidence ? { confidence: item.fieldConfidence, scanLabel: batch.scan?.label || '' } : null,
     status: 'new',
     duplicateOf: '',
     duplicateReason: '',
@@ -2272,8 +2331,10 @@ function renderDirectoryBatch() {
           <span class="review-flag">${escapeHTML(record.category)}</span>
           <span class="review-flag">${escapeHTML(record.source)}</span>
           <span class="review-flag">${escapeHTML(record.sourceTag)}</span>
+          <span class="review-flag">${escapeHTML(record.geographyType)}: ${escapeHTML(record.geographyValue)}</span>
           <span class="review-flag">${escapeHTML(record.target)}</span>
           ${record.scanLabel ? `<span class="review-flag">${escapeHTML(record.scanLabel)}</span>` : ''}
+          ${record.ocrFields ? '<span class="review-flag">OCR fields attached</span>' : ''}
           ${record.status === 'duplicate' ? `<span class="review-flag dupe">Dupe: ${escapeHTML(record.duplicateReason)} match ${escapeHTML(record.duplicateOf)}</span>` : ''}
           ${record.status === 'approved' ? '<span class="review-flag">Approved</span>' : ''}
           ${record.status === 'skipped' ? '<span class="review-flag dupe">Skipped</span>' : ''}
@@ -2303,6 +2364,7 @@ function stageDirectoryImport() {
   const query = document.getElementById('directory-query').value.trim();
   const category = document.getElementById('directory-category').value;
   const source = document.getElementById('directory-source-select').value;
+  const geographyType = document.getElementById('directory-geo-type').value;
   const target = document.getElementById('directory-target').value;
   const sourceTag = document.getElementById('directory-source-tag').value.trim() || 'shoplocal';
   const civicSource = document.getElementById('directory-civic-source').value.trim() || directoryScanMeta.civicSource || 'Approved civic organization';
@@ -2315,13 +2377,16 @@ function stageDirectoryImport() {
   directoryScanMeta.cardCount = directoryScanMeta.cardCount || 6;
   localStorage.setItem(DIRECTORY_SCAN_STORE, JSON.stringify(directoryScanMeta));
   renderDirectoryScanMeta();
-  const batch = { query, category, source, sourceTag, target, civicSource, scan: directoryScanMeta };
-  const adapted = adaptDirectorySource(makeSeedBusinesses(query, category), source);
+  const batch = { query, category, source, sourceTag, target, geographyType, civicSource, scan: directoryScanMeta };
+  const seedRows = source === 'scan-ocr' && directoryScanMeta.extractedFields?.length
+    ? makeOCRSeedRows(query, category)
+    : makeSeedBusinesses(query, category);
+  const adapted = adaptDirectorySource(seedRows, source);
   directoryRecords = detectDirectoryDuplicates(adapted.map(item => normalizeBusinessRecord(item, batch)));
   saveDirectoryBatch();
   renderDirectoryBatch();
   setText('directory-source', source);
-  output.textContent = `Demo import complete\nQuery: ${query}\nCategory: ${category}\nSource tag: ${sourceTag}\nTarget: ${target}\nCivic source: ${civicSource}\nImage evidence: ${directoryScanMeta.label}\nRecords: ${directoryRecords.length}\nDuplicate candidates: ${directoryRecords.filter(r => r.status === 'duplicate').length}\n\nThis importer is source-adapter based: Shop Local, Marketing Hub, editorial outreach, civic scans, Google Places, Apify, CSV, OCR, and CRM rows all hit this same normalization/dedupe/review/export flow.`;
+  output.textContent = `Demo import complete\n${geographyType}: ${query}\nCategory: ${category}\nSource tag: ${sourceTag}\nTarget: ${target}\nCivic source: ${civicSource}\nImage evidence: ${directoryScanMeta.label}\nOCR status: ${directoryScanMeta.ocrStatus || 'not parsed'}\nRecords: ${directoryRecords.length}\nDuplicate candidates: ${directoryRecords.filter(r => r.status === 'duplicate').length}\n\nThis importer is source-adapter based: Shop Local, Marketing Hub, editorial outreach, civic scans, Google Places, Apify, CSV, OCR, and CRM rows all hit this same normalization/dedupe/review/export flow.`;
   toast('Directory demo import complete');
 }
 
