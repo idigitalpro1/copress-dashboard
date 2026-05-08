@@ -260,11 +260,12 @@ Current behavior is intentionally browser-local:
 - Directory import and invoice staging create operator handoff text in-page.
 - Marketing campaign generation stores the latest kit in `localStorage.copress_campaign_handoff` and exposes a `Send to Newsletter Studio` link to `/newsletter?campaign=latest`; Newsletter Studio auto-loads that copy into the marketing template and shows a handoff banner.
 - Directory has a duplicable demo importer: source adapter → normalized business record → duplicate detection → review actions → JSON export. Demo state lives in `localStorage.copress_directory_batch_v1`.
+- Directory intake includes visual evidence: a generated demo business-card wall plus an upload field for a photo of a card wall or scanned page from a local approved civic organization. Scan metadata lives in `localStorage.copress_directory_scan_meta_v1` and exports with the batch JSON.
 - Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `invoicemanager-wrc`, Supabase, Stripe, Sendy).
 
 Directory importer scaling pattern:
 1. Replace `makeSeedBusinesses(...)` with a real source fetch or parser.
-2. Keep `adaptDirectorySource(...)` to map Google Places, Apify, CSV, CRM, or scraper-specific shapes.
+2. Keep `adaptDirectorySource(...)` to map Google Places, Apify, CSV, OCR scans, CRM, or scraper-specific shapes.
 3. Keep `normalizeBusinessRecord(...)` as the canonical record contract.
 4. Keep `detectDirectoryDuplicates(...)` and review statuses for operator approval.
 5. Move the same contract behind a backend when keys, publishing, or writes need server-side protection.
