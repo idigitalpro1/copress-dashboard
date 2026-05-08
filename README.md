@@ -4,7 +4,14 @@
 **Stack:** Static HTML/CSS/JS · Vercel · GitHub auto-deploy  
 **Repo:** `idigitalpro1/copress-dashboard`
 
-The command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
+SATCOM is the command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
+
+## SATCOM / SATCO Brand Lane
+
+- **SATCOM:** main dashboard title and operator command surface.
+- **SATCO Academy:** staff learning lane, including the Daily Quick training prompt.
+- **NationalIntelligence.com:** brand domain for the aerospace-intelligence staff academy concept.
+- **Asset rule:** use original aerospace/SATCOM styling only; do not reuse official government seals as brand marks.
 
 ---
 
@@ -17,7 +24,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
 | `/apistore` | `apistore.html` | ✅ Live | API Vault — secure key store, MCP injection, .env export |
-| `/learn` | `learn.html` | ✅ Live | Staff Academy — 72 flash cards, XP system, 9 levels, 18 badges |
+| `/learn` | `learn.html` | ✅ Live | SATCO Academy — 72 flash cards, XP system, 9 levels, 18 badges |
 | `/linear` | `linear.html` | ✅ Live | Linear integration — live issues, cycles, projects, quick-create |
 
 ---
@@ -31,6 +38,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
 - Client Onboarding — `https://onboarding.copress.news` (`idigitalpro1/onboarding-link`; DNS must resolve before public use)
+- Microsoft 365 Login — `https://admin.microsoft.com/Adminportal/Home#/users` for MyAppStore.biz tenant staff mailboxes and aliases
 
 Old DashTail/Register-Call/Billing admin panels are intentionally not linked from the dashboard. Keep them available only as backend fallback surfaces until their workflows are fully absorbed here.
 
@@ -52,7 +60,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 - Newsletter Studio → `/newsletter`
 - API Vault → `/apistore`
 - Linear → `/linear`
-- Staff Academy → `/learn`
+- SATCO Academy → `/learn`
 
 ---
 
@@ -69,7 +77,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
 | Colorado Gambler | `data-view=directory` | Gambling vertical and casino directory loader |
-| Staff Academy | `/learn` | Onboarding flash cards |
+| SATCO Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
 | Hermes Orchestrator | `data-view=brains` | Local Qwen chat, Crew runner, jobs, and routing status |
 | (implicit) API Vault | `/apistore` | Key management |
@@ -144,7 +152,7 @@ The current gateway model id verified locally is `ollama-qwen`.
 
 ---
 
-## Staff Academy (`/learn`)
+## SATCO Academy (`/learn`)
 
 72 flash cards across 6 decks:
 
