@@ -646,6 +646,31 @@ body::before {
 .module-row-title { color: var(--ink); font-size: 13px; font-weight: 600; }
 .module-row-meta { color: var(--ink-muted); font-size: 11px; margin-top: 2px; }
 .module-row-state { color: var(--ink-muted); font: 700 10px 'DM Mono', monospace; text-transform: uppercase; }
+.review-table { display: grid; gap: 8px; max-height: 410px; overflow: auto; padding-right: 4px; }
+.review-card {
+  display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start;
+  border: 1px solid rgba(200,168,75,.12); background: var(--bg-mid);
+  border-radius: 2px; padding: 12px;
+}
+.review-card.is-dupe { border-color: rgba(192,57,43,.38); background: rgba(192,57,43,.055); }
+.review-name { color: var(--ink); font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.review-meta { color: var(--ink-muted); font-size: 11px; line-height: 1.55; }
+.review-flags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.review-flag {
+  color: var(--gold-pale); border: 1px solid rgba(200,168,75,.14);
+  background: rgba(200,168,75,.065); border-radius: 2px; padding: 3px 6px;
+  font: 700 9px 'DM Mono', monospace; text-transform: uppercase;
+}
+.review-flag.dupe { color: #ffb3a8; border-color: rgba(192,57,43,.35); background: rgba(192,57,43,.08); }
+.review-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; min-width: 150px; }
+.mini-btn {
+  border: 1px solid rgba(200,168,75,.14); background: rgba(7,12,20,.65);
+  color: var(--ink-muted); border-radius: 2px; padding: 5px 7px; cursor: pointer;
+  font: 700 9px 'DM Mono', monospace; text-transform: uppercase;
+}
+.mini-btn:hover { color: var(--ink); border-color: var(--gold); }
+.mini-btn.ok { color: #8de0a8; }
+.mini-btn.warn { color: #ffb3a8; }
 .town-grid { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 10px; }
 .town-tile {
   border: 1px solid rgba(200,168,75,.12); background: var(--bg-mid);
@@ -1453,8 +1478,10 @@ body::before {
                 <p>Stage imports by town, review duplicates, and prepare publish batches for Register-Call and the city sites.</p>
               </div>
               <div class="module-status">
-                <span class="pill">Listings <strong>0</strong></span>
-                <span class="pill">Source <strong>Places</strong></span>
+                <span class="pill">Listings <strong id="directory-count-total">0</strong></span>
+                <span class="pill">Dupes <strong id="directory-count-dupes">0</strong></span>
+                <span class="pill">Approved <strong id="directory-count-approved">0</strong></span>
+                <span class="pill">Source <strong id="directory-source">Demo</strong></span>
               </div>
             </div>
             <div class="module-grid-2">
@@ -1463,20 +1490,20 @@ body::before {
                 <div class="module-form two">
                   <div class="module-field"><label>ZIP or town</label><input id="directory-query" placeholder="80422 or Nederland"></div>
                   <div class="module-field"><label>Category</label><select id="directory-category"><option>Restaurants</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option></select></div>
+                  <div class="module-field"><label>Source</label><select id="directory-source-select"><option value="demo">Demo seed data</option><option value="google">Google Places shape</option><option value="apify">Apify actor shape</option></select></div>
+                  <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>Black Hawk</option><option>Central City</option><option>Nederland</option><option>Georgetown</option><option>Idaho Springs</option></select></div>
                 </div>
                 <div class="module-actions">
-                  <button class="module-btn primary" onclick="stageDirectoryImport()">Stage Import</button>
+                  <button class="module-btn primary" onclick="stageDirectoryImport()">Run Demo Import</button>
+                  <button class="module-btn" onclick="exportDirectoryBatch()">Export JSON</button>
+                  <button class="module-btn" onclick="resetDirectoryBatch()">Reset</button>
                   <button class="module-btn" onclick="window.location.href='/apistore'">API Keys</button>
                 </div>
-                <div class="output-box" id="directory-output">Waiting for a town or ZIP. Google Places / Apify keys are read from API Vault.</div>
+                <div class="output-box" id="directory-output">Demo importer normalizes business records, detects duplicates by phone/domain/address, and stages review actions locally. This pattern can be duplicated for any import workflow.</div>
               </div>
               <div class="module-panel">
                 <h3>Review Lanes</h3>
-                <div class="module-list">
-                  <div class="module-row"><span class="module-tag">New</span><div><div class="module-row-title">Fresh imports</div><div class="module-row-meta">Needs editor review before publish</div></div><span class="module-row-state">0</span></div>
-                  <div class="module-row"><span class="module-tag">Dupe</span><div><div class="module-row-title">Possible duplicates</div><div class="module-row-meta">Match by phone, address, domain</div></div><span class="module-row-state">0</span></div>
-                  <div class="module-row"><span class="module-tag">Live</span><div><div class="module-row-title">Published listings</div><div class="module-row-meta">Visible on city pages</div></div><span class="module-row-state">0</span></div>
-                </div>
+                <div class="review-table" id="directory-review-table"></div>
               </div>
             </div>
           </div>
@@ -1871,7 +1898,9 @@ function loadLiveDashboardData() {
 
 // ── Module workbenches ─────────────────────────────────────────────
 const EDITORIAL_STORE = 'copress_editorial_queue_v1';
+const DIRECTORY_STORE = 'copress_directory_batch_v1';
 let editorialRemoteStories = [];
+let directoryRecords = [];
 
 function defaultEditorialStories() {
   return [
@@ -1989,16 +2018,180 @@ function generateDailyStoryList() {
   toast('Daily story list generated');
 }
 
+function makeSeedBusinesses(query, category) {
+  const town = query || 'Nederland';
+  return [
+    { name: `${town} Mountain Market`, address: `101 Main St, ${town}, CO`, phone: '(303) 555-0101', website: 'https://mountainmarket.example', category, source: 'demo', rating: 4.7 },
+    { name: `${town} Mountain Market LLC`, address: `101 Main Street, ${town}, Colorado`, phone: '303-555-0101', website: 'https://mountainmarket.example/menu', category, source: 'demo', rating: 4.6 },
+    { name: `${town} Coffee Works`, address: `18 Bridge Ave, ${town}, CO`, phone: '(303) 555-0199', website: 'https://coffeeworks.example', category, source: 'demo', rating: 4.8 },
+    { name: `Peak & Pine ${category}`, address: `244 Miner Rd, ${town}, CO`, phone: '(720) 555-0144', website: '', category, source: 'demo', rating: 4.4 },
+    { name: `${town} Visitor Center`, address: `1 Welcome Way, ${town}, CO`, phone: '(303) 555-0177', website: 'https://visit.example', category: 'Attractions', source: 'demo', rating: 4.5 },
+  ];
+}
+
+function adaptDirectorySource(raw, source) {
+  if (source === 'google') {
+    return raw.map(item => ({
+      name: item.displayName?.text || item.name,
+      address: item.formattedAddress || item.address,
+      phone: item.nationalPhoneNumber || item.phone,
+      website: item.websiteUri || item.website,
+      category: item.primaryTypeDisplayName?.text || item.category,
+      rating: item.rating,
+      source: 'google',
+    }));
+  }
+  if (source === 'apify') {
+    return raw.map(item => ({
+      name: item.title || item.name,
+      address: item.address,
+      phone: item.phone || item.phoneNumber,
+      website: item.website,
+      category: item.categoryName || item.category,
+      rating: item.totalScore || item.rating,
+      source: 'apify',
+    }));
+  }
+  return raw;
+}
+
+function normalizeBusinessRecord(item, batch) {
+  const phone = String(item.phone || '').replace(/\D/g, '');
+  const domain = String(item.website || '').replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0].toLowerCase();
+  const addressKey = String(item.address || '').toLowerCase().replace(/\bstreet\b/g, 'st').replace(/\bcolorado\b/g, 'co').replace(/[^a-z0-9]/g, '');
+  return {
+    id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    name: item.name || 'Unnamed business',
+    address: item.address || 'Address needed',
+    phone: item.phone || '',
+    website: item.website || '',
+    category: item.category || batch.category,
+    rating: item.rating || '',
+    source: item.source || batch.source,
+    target: batch.target,
+    status: 'new',
+    duplicateOf: '',
+    duplicateReason: '',
+    keys: { phone, domain, address: addressKey },
+  };
+}
+
+function detectDirectoryDuplicates(records) {
+  const seen = { phone: {}, domain: {}, address: {} };
+  records.forEach(record => {
+    record.status = record.status === 'approved' || record.status === 'skipped' ? record.status : 'new';
+    record.duplicateOf = '';
+    record.duplicateReason = '';
+    ['phone', 'domain', 'address'].some(key => {
+      const value = record.keys[key];
+      if (!value) return false;
+      if (seen[key][value]) {
+        record.status = 'duplicate';
+        record.duplicateOf = seen[key][value].name;
+        record.duplicateReason = key;
+        return true;
+      }
+      seen[key][value] = record;
+      return false;
+    });
+  });
+  return records;
+}
+
+function saveDirectoryBatch() {
+  localStorage.setItem(DIRECTORY_STORE, JSON.stringify(directoryRecords));
+}
+
+function loadDirectoryBatch() {
+  try {
+    directoryRecords = JSON.parse(localStorage.getItem(DIRECTORY_STORE) || '[]');
+    if (!Array.isArray(directoryRecords)) directoryRecords = [];
+  } catch {
+    directoryRecords = [];
+  }
+  renderDirectoryBatch();
+}
+
+function renderDirectoryBatch() {
+  const table = document.getElementById('directory-review-table');
+  if (!table) return;
+  const total = directoryRecords.length;
+  const dupes = directoryRecords.filter(r => r.status === 'duplicate').length;
+  const approved = directoryRecords.filter(r => r.status === 'approved').length;
+  setText('directory-count-total', total);
+  setText('directory-count-dupes', dupes);
+  setText('directory-count-approved', approved);
+  if (!total) {
+    table.innerHTML = '<div class="output-box">No records staged yet. Run the demo import to see normalized rows, duplicate flags, and review actions.</div>';
+    return;
+  }
+  table.innerHTML = directoryRecords.map((record, index) => `
+    <div class="review-card ${record.status === 'duplicate' ? 'is-dupe' : ''}">
+      <div>
+        <div class="review-name">${escapeHTML(record.name)}</div>
+        <div class="review-meta">${escapeHTML(record.address)}<br>${escapeHTML(record.phone || 'Phone needed')} · ${escapeHTML(record.website || 'Website needed')}</div>
+        <div class="review-flags">
+          <span class="review-flag">${escapeHTML(record.category)}</span>
+          <span class="review-flag">${escapeHTML(record.source)}</span>
+          <span class="review-flag">${escapeHTML(record.target)}</span>
+          ${record.status === 'duplicate' ? `<span class="review-flag dupe">Dupe: ${escapeHTML(record.duplicateReason)} match ${escapeHTML(record.duplicateOf)}</span>` : ''}
+          ${record.status === 'approved' ? '<span class="review-flag">Approved</span>' : ''}
+          ${record.status === 'skipped' ? '<span class="review-flag dupe">Skipped</span>' : ''}
+        </div>
+      </div>
+      <div class="review-actions">
+        <button class="mini-btn ok" onclick="setDirectoryStatus(${index}, 'approved')">Approve</button>
+        <button class="mini-btn warn" onclick="setDirectoryStatus(${index}, 'duplicate')">Dupe</button>
+        <button class="mini-btn" onclick="setDirectoryStatus(${index}, 'skipped')">Skip</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setDirectoryStatus(index, status) {
+  if (!directoryRecords[index]) return;
+  directoryRecords[index].status = status;
+  if (status !== 'duplicate') {
+    directoryRecords[index].duplicateOf = '';
+    directoryRecords[index].duplicateReason = '';
+  }
+  saveDirectoryBatch();
+  renderDirectoryBatch();
+}
+
 function stageDirectoryImport() {
   const query = document.getElementById('directory-query').value.trim();
   const category = document.getElementById('directory-category').value;
+  const source = document.getElementById('directory-source-select').value;
+  const target = document.getElementById('directory-target').value;
   const output = document.getElementById('directory-output');
   if (!query) {
     toast('Enter a town or ZIP first');
     return;
   }
-  output.textContent = `Import staged for ${query}\nCategory: ${category}\nNext: pull Google Places or Apify results, then review duplicates before publishing.`;
-  toast('Directory import staged');
+  const batch = { query, category, source, target };
+  const adapted = adaptDirectorySource(makeSeedBusinesses(query, category), source);
+  directoryRecords = detectDirectoryDuplicates(adapted.map(item => normalizeBusinessRecord(item, batch)));
+  saveDirectoryBatch();
+  renderDirectoryBatch();
+  setText('directory-source', source);
+  output.textContent = `Demo import complete\nQuery: ${query}\nCategory: ${category}\nTarget: ${target}\nRecords: ${directoryRecords.length}\nDuplicate candidates: ${directoryRecords.filter(r => r.status === 'duplicate').length}\n\nThis importer is source-adapter based: swap makeSeedBusinesses(...) for Google Places, Apify, CSV, or CRM rows and keep the same normalization/review/export flow.`;
+  toast('Directory demo import complete');
+}
+
+function exportDirectoryBatch() {
+  const output = document.getElementById('directory-output');
+  output.textContent = JSON.stringify(directoryRecords, null, 2);
+  toast('Directory batch JSON exported to panel');
+}
+
+function resetDirectoryBatch() {
+  directoryRecords = [];
+  localStorage.removeItem(DIRECTORY_STORE);
+  renderDirectoryBatch();
+  setText('directory-source', 'Demo');
+  document.getElementById('directory-output').textContent = 'Demo importer reset. Run another batch to test a different town, source, category, or publish target.';
+  toast('Directory demo reset');
 }
 
 function generateCampaignKit() {
@@ -2066,6 +2259,7 @@ loadKeys();
 updateStatusDots();
 loadLiveDashboardData();
 renderEditorialStories();
+loadDirectoryBatch();
 refreshModuleStatus();
 </script>
 
