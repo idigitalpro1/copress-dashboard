@@ -30,6 +30,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 - Hermes WebUI — `http://127.0.0.1:8787`
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
+- Client Onboarding — `https://onboarding.copress.news` (`idigitalpro1/onboarding-link`; DNS must resolve before public use)
 
 Old DashTail/Register-Call/Billing admin panels are intentionally not linked from the dashboard. Keep them available only as backend fallback surfaces until their workflows are fully absorbed here.
 
