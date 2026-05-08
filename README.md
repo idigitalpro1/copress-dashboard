@@ -27,7 +27,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 **Admin section**
 - Admin HQ — primary launch surface for operator tools
 - CoPress Dashboard — `https://copress-dashboard.vercel.app/`
-- Hermes WebUI — `http://127.0.0.1:8787`
+- Hermes Dashboard — `http://127.0.0.1:9119/sessions`
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
 - Client Onboarding — `https://onboarding.copress.news` (`idigitalpro1/onboarding-link`; DNS must resolve before public use)
@@ -125,10 +125,10 @@ Hermes Agent has two separate local surfaces:
 
 | URL | Purpose | Use for |
 |-----|---------|---------|
-| `http://127.0.0.1:9119/models` | Hermes Agent dashboard | Human operator UI for sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
+| `http://127.0.0.1:9119/sessions` | Hermes Agent dashboard | Canonical human operator UI for sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
 | `http://127.0.0.1:8642/v1` | OpenAI-compatible gateway | Open WebUI / API clients |
 
-`http://127.0.0.1:9119/models` should show the Hermes Agent dashboard with the Models screen. The dashboard API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean the Open WebUI gateway is down.
+`http://127.0.0.1:9119/sessions` is the canonical Hermes dashboard URL returned by `hermes dashboard`. The dashboard API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean the Hermes dashboard is down.
 
 For Open WebUI, point the OpenAI-compatible base URL at:
 
