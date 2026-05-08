@@ -96,6 +96,34 @@ The main dashboard has a newspaper press atmosphere layer at `z-index:0`:
 
 **Placeholder gear watermarks** — each under-construction view has a ghost gear at bottom-right, 40s rotation, ~6% opacity.
 
+Implementation locations:
+- CSS: `index.html` press-atmosphere rules, `#spotlight`, `#gears-svg`, and `.module-placeholder-gear-hint`
+- HTML: `#spotlight` and `#gears-svg` injected before `</body>`
+- JavaScript: `gearPath(...)`, SVG gear generation, and placeholder watermark injection near the bottom of `index.html`
+
+The atmosphere layer sits below the app shell. `#spotlight` and `#gears-svg` render at `z-index:0`; the sidebar, topbar, and content shell stay above at `z-index:1`.
+
+---
+
+## Hermes Agent Local Dashboard
+
+Hermes Agent has two separate local surfaces:
+
+| URL | Purpose | Use for |
+|-----|---------|---------|
+| `http://127.0.0.1:9119/models` | Hermes Agent dashboard | Human operator UI for sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
+| `http://127.0.0.1:8642/v1` | OpenAI-compatible gateway | Open WebUI / API clients |
+
+`http://127.0.0.1:9119/models` should show the Hermes Agent dashboard with the Models screen. The dashboard API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean the Open WebUI gateway is down.
+
+For Open WebUI, point the OpenAI-compatible base URL at:
+
+```text
+http://127.0.0.1:8642/v1
+```
+
+The current gateway model id verified locally is `ollama-qwen`.
+
 ---
 
 ## Staff Academy (`/learn`)
