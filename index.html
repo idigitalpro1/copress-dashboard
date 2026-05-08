@@ -1515,6 +1515,7 @@ body::before {
                   <div class="module-field"><label>Source</label><select id="directory-source-select"><option value="demo">Demo seed data</option><option value="google">Google Places shape</option><option value="apify">Apify actor shape</option></select></div>
                   <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>Black Hawk city site</option><option>Central City site</option><option>Nederland city site</option><option>Georgetown city site</option><option>Idaho Springs city site</option><option>Weekly print directory</option><option>Newsletter feature block</option><option>Social campaign queue</option><option>Sales CRM follow-up</option><option>Build Kit queue</option><option>Send Onboarding queue</option></select></div>
                   <div class="module-field"><label>Campaign kit</label><select id="directory-campaign-kit"><option>Editorial Outreach</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Civic Partner Thank You</option><option>Sponsor Prospect</option></select></div>
+                  <div class="module-field"><label>Source tag</label><input id="directory-source-tag" placeholder="shoplocal, marketing-hub, editorial-outreach, civic-scan..."></div>
                   <div class="module-field"><label>Civic source</label><input id="directory-civic-source" placeholder="Chamber, Main Street, tourism board, school booster..."></div>
                   <div class="module-field"><label>Business card wall / scanned page</label><input class="file-input" id="directory-scan-input" type="file" accept="image/*" onchange="handleDirectoryScan(event)"></div>
                 </div>
@@ -1595,6 +1596,18 @@ body::before {
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="generateCampaignKit()">Generate Kit</button>
                   <button class="module-btn" onclick="window.location.href='/newsletter'">Open Newsletter</button>
+                </div>
+              </div>
+              <div class="module-panel">
+                <h3>Shared Intake Engine</h3>
+                <p>Use the same intake engine as Shop Local for campaign lists, civic scans, resident/business outreach, and onboarding. Records get a source tag and dedupe against the main directory index.</p>
+                <div class="module-form">
+                  <div class="module-field"><label>Intake source tag</label><input id="marketing-intake-source" value="marketing-hub"></div>
+                  <div class="module-field"><label>Default kit</label><select id="marketing-intake-kit"><option>Editorial Outreach</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Sponsor Prospect</option></select></div>
+                </div>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="openSharedIntakeFromMarketing()">Open Intake</button>
+                  <button class="module-btn" onclick="toast('Shared engine: one dedupe path for Shop Local, Marketing, Editorial outreach, and civic scans')">Explain</button>
                 </div>
               </div>
               <div class="module-panel">
@@ -1936,6 +1949,11 @@ let editorialRemoteStories = [];
 let directoryRecords = [];
 let directoryScanMeta = { label: 'Demo civic card wall', civicSource: '', fileName: '', cardCount: 0 };
 
+const MAIN_DIRECTORY_DB = [
+  { name: 'Existing Mountain Market', phone: '3035550101', domain: 'mountainmarket.example', address: '101mainstnederlandco' },
+  { name: 'Register-Call Visitor Center', phone: '3035550177', domain: 'visit.example', address: '1welcomewaynederlandco' },
+];
+
 function defaultEditorialStories() {
   return [
     { town: 'Black Hawk', title: 'Council packet follow-up', status: 'Draft', notes: 'Check agenda, quotes, and photo needs.' },
@@ -2174,6 +2192,7 @@ function normalizeBusinessRecord(item, batch) {
     category: item.category || batch.category,
     rating: item.rating || '',
     source: item.source || batch.source,
+    sourceTag: batch.sourceTag,
     target: batch.target,
     civicSource: batch.civicSource,
     scanLabel: batch.scan?.label || '',
@@ -2186,6 +2205,11 @@ function normalizeBusinessRecord(item, batch) {
 
 function detectDirectoryDuplicates(records) {
   const seen = { phone: {}, domain: {}, address: {} };
+  MAIN_DIRECTORY_DB.forEach(existing => {
+    ['phone', 'domain', 'address'].forEach(key => {
+      if (existing[key]) seen[key][existing[key]] = existing;
+    });
+  });
   records.forEach(record => {
     record.status = record.status === 'approved' || record.status === 'skipped' ? record.status : 'new';
     record.duplicateOf = '';
@@ -2196,7 +2220,7 @@ function detectDirectoryDuplicates(records) {
       if (seen[key][value]) {
         record.status = 'duplicate';
         record.duplicateOf = seen[key][value].name;
-        record.duplicateReason = key;
+        record.duplicateReason = seen[key][value].target ? key : `main-db ${key}`;
         return true;
       }
       seen[key][value] = record;
@@ -2247,6 +2271,7 @@ function renderDirectoryBatch() {
         <div class="review-flags">
           <span class="review-flag">${escapeHTML(record.category)}</span>
           <span class="review-flag">${escapeHTML(record.source)}</span>
+          <span class="review-flag">${escapeHTML(record.sourceTag)}</span>
           <span class="review-flag">${escapeHTML(record.target)}</span>
           ${record.scanLabel ? `<span class="review-flag">${escapeHTML(record.scanLabel)}</span>` : ''}
           ${record.status === 'duplicate' ? `<span class="review-flag dupe">Dupe: ${escapeHTML(record.duplicateReason)} match ${escapeHTML(record.duplicateOf)}</span>` : ''}
@@ -2279,6 +2304,7 @@ function stageDirectoryImport() {
   const category = document.getElementById('directory-category').value;
   const source = document.getElementById('directory-source-select').value;
   const target = document.getElementById('directory-target').value;
+  const sourceTag = document.getElementById('directory-source-tag').value.trim() || 'shoplocal';
   const civicSource = document.getElementById('directory-civic-source').value.trim() || directoryScanMeta.civicSource || 'Approved civic organization';
   const output = document.getElementById('directory-output');
   if (!query) {
@@ -2289,13 +2315,13 @@ function stageDirectoryImport() {
   directoryScanMeta.cardCount = directoryScanMeta.cardCount || 6;
   localStorage.setItem(DIRECTORY_SCAN_STORE, JSON.stringify(directoryScanMeta));
   renderDirectoryScanMeta();
-  const batch = { query, category, source, target, civicSource, scan: directoryScanMeta };
+  const batch = { query, category, source, sourceTag, target, civicSource, scan: directoryScanMeta };
   const adapted = adaptDirectorySource(makeSeedBusinesses(query, category), source);
   directoryRecords = detectDirectoryDuplicates(adapted.map(item => normalizeBusinessRecord(item, batch)));
   saveDirectoryBatch();
   renderDirectoryBatch();
   setText('directory-source', source);
-  output.textContent = `Demo import complete\nQuery: ${query}\nCategory: ${category}\nTarget: ${target}\nCivic source: ${civicSource}\nImage evidence: ${directoryScanMeta.label}\nRecords: ${directoryRecords.length}\nDuplicate candidates: ${directoryRecords.filter(r => r.status === 'duplicate').length}\n\nThis importer is source-adapter based: swap makeSeedBusinesses(...) for Google Places, Apify, CSV, scanned OCR, or CRM rows and keep the same normalization/review/export flow.`;
+  output.textContent = `Demo import complete\nQuery: ${query}\nCategory: ${category}\nSource tag: ${sourceTag}\nTarget: ${target}\nCivic source: ${civicSource}\nImage evidence: ${directoryScanMeta.label}\nRecords: ${directoryRecords.length}\nDuplicate candidates: ${directoryRecords.filter(r => r.status === 'duplicate').length}\n\nThis importer is source-adapter based: Shop Local, Marketing Hub, editorial outreach, civic scans, Google Places, Apify, CSV, OCR, and CRM rows all hit this same normalization/dedupe/review/export flow.`;
   toast('Directory demo import complete');
 }
 
@@ -2390,6 +2416,23 @@ function sendDirectoryOnboarding() {
   localStorage.setItem('copress_directory_campaign_kit', JSON.stringify(latest));
   document.getElementById('directory-output').textContent += `\n\nOnboarding queued locally for ${latest.count || 0} records.\nNext scaled step: connect this handoff to Sendy, CRM, or an onboarding backend.`;
   toast('Onboarding handoff queued locally');
+}
+
+function openSharedIntakeFromMarketing() {
+  const sourceTag = document.getElementById('marketing-intake-source')?.value.trim() || 'marketing-hub';
+  const kit = document.getElementById('marketing-intake-kit')?.value || 'Editorial Outreach';
+  navTo('directory');
+  setTimeout(() => {
+    const sourceInput = document.getElementById('directory-source-tag');
+    const kitSelect = document.getElementById('directory-campaign-kit');
+    const targetSelect = document.getElementById('directory-target');
+    const categorySelect = document.getElementById('directory-category');
+    if (sourceInput) sourceInput.value = sourceTag;
+    if (kitSelect) kitSelect.value = kit;
+    if (targetSelect) targetSelect.value = 'Build Kit queue';
+    if (categorySelect) categorySelect.value = 'All Categories';
+    toast('Marketing Hub is using the shared intake engine');
+  }, 0);
 }
 
 function resetDirectoryBatch() {

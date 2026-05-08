@@ -264,6 +264,8 @@ Current behavior is intentionally browser-local:
 - Directory categories now cover restaurants, lodging, retail, services, civic organizations, schools, faith communities, government offices, tourism, professional services, legal/financial, home/garden, outdoor recreation, nonprofits, and more.
 - Directory publish targets include city sites, print directory, newsletter feature block, social campaign queue, sales CRM follow-up, Build Kit queue, and Send Onboarding queue.
 - Directory campaign kits are stored in `localStorage.copress_directory_campaign_kit` and include templates for Editorial Outreach, You're Invited, We'd Like Your Opinion, Claim Your Listing, Shop Local Welcome, Civic Partner Thank You, and Sponsor Prospect.
+- Marketing Hub now links into the same shared intake engine instead of duplicating intake logic. Records carry `sourceTag` values such as `shoplocal`, `marketing-hub`, `editorial-outreach`, or `civic-scan`.
+- Demo duplicate detection checks the staged batch plus a simulated main directory index (`MAIN_DIRECTORY_DB`); the same contract can be swapped to a real Supabase/main database lookup later.
 - Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `invoicemanager-wrc`, Supabase, Stripe, Sendy).
 
 Directory importer scaling pattern:
@@ -271,4 +273,5 @@ Directory importer scaling pattern:
 2. Keep `adaptDirectorySource(...)` to map Google Places, Apify, CSV, OCR scans, CRM, or scraper-specific shapes.
 3. Keep `normalizeBusinessRecord(...)` as the canonical record contract.
 4. Keep `detectDirectoryDuplicates(...)` and review statuses for operator approval.
-5. Move the same contract behind a backend when keys, publishing, or writes need server-side protection.
+5. Preserve `sourceTag` on every record so downstream marketing, Shop Local, editorial outreach, onboarding, and resident/business lists can share one dedupe path.
+6. Move the same contract behind a backend when keys, publishing, or writes need server-side protection.
