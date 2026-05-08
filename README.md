@@ -12,7 +12,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 
 | Route | File | Status | Description |
 |-------|------|--------|-------------|
-| `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 10 cards, live data hooks, 5 placeholder views |
+| `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 10 cards, live data hooks, 5 module workbenches |
 | `/network` | `network.html` | ✅ Live | Network HQ — server IP, 7 property cards, 3CX phone system |
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
@@ -242,15 +242,19 @@ Fonts: `Playfair Display` (serif, headlines) · `DM Sans` (body) · `DM Mono` (m
 
 ---
 
-## Under-Construction Views (Next Sprint)
+## Module Workbenches
 
-These views are in `index.html` as `<div data-view="...">` sections. The JS view-switcher is already wired. Just build the HTML inside each section.
+These views are in `index.html` as `<div id="view-...">` sections. The JS view-switcher is already wired through `navTo(section)`.
 
 ```html
-<!-- Find these in index.html and fill in real content -->
-<div data-view="editorial">  <!-- Article pipeline -->
-<div data-view="directory">  <!-- Business directory -->
-<div data-view="cities">     <!-- City site stats -->
-<div data-view="marketing">  <!-- Campaign builder -->
-<div data-view="accounting"> <!-- Stripe + invoices -->
+<div id="view-editorial">   <!-- Story queue, assignment form, daily list generator -->
+<div id="view-directory">   <!-- Directory import staging and review lanes -->
+<div id="view-cities">      <!-- Five-town readiness board -->
+<div id="view-marketing">   <!-- Campaign brief to copy kit generator -->
+<div id="view-accounting">  <!-- Invoice staging and billing handoff -->
 ```
+
+Current behavior is intentionally browser-local:
+- Editorial queue stores local drafts in `localStorage.copress_editorial_queue_v1`.
+- Directory import, campaign kit, and invoice staging create operator handoff text in-page.
+- Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `invoicemanager-wrc`, Supabase, Stripe, Sendy).

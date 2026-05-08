@@ -561,6 +561,103 @@ body::before {
   text-transform: uppercase;
 }
 
+.module-workbench {
+  flex: 1; position: relative; overflow: hidden;
+  border: 1px solid rgba(200,168,75,.16); border-radius: 2px;
+  background: var(--surface); box-shadow: var(--shadow);
+}
+.module-workbench::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(200,168,75,.045), transparent 210px),
+    radial-gradient(ellipse 55% 35% at 85% 10%, rgba(200,168,75,.05), transparent 65%);
+}
+.module-workbench-inner { position: relative; z-index: 1; padding: 26px; }
+.module-kicker {
+  font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 2.5px;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+}
+.module-heading {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+  margin-bottom: 22px; border-bottom: 1px solid rgba(200,168,75,.12); padding-bottom: 18px;
+}
+.module-heading h2 {
+  font-family: 'Playfair Display', serif; font-size: 31px; line-height: 1.1;
+  margin: 0 0 6px; color: var(--ink);
+}
+.module-heading p { margin: 0; color: var(--ink-muted); font-size: 13px; line-height: 1.55; max-width: 620px; }
+.module-status {
+  display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(200,168,75,.16);
+  background: var(--bg-mid); color: var(--ink-muted); padding: 7px 10px;
+  border-radius: 2px; font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase;
+}
+.pill strong { color: var(--gold-pale); font-weight: 700; }
+.module-grid-2 { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 18px; }
+.module-grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.module-panel {
+  border: 1px solid rgba(200,168,75,.12); background: rgba(7,12,20,.42);
+  border-radius: 2px; padding: 16px;
+}
+.module-panel h3 {
+  font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase;
+  color: var(--gold-pale); margin: 0 0 12px; font-family: 'DM Mono', monospace;
+}
+.module-panel p { color: var(--ink-muted); font-size: 12.5px; line-height: 1.6; margin: 0 0 12px; }
+.module-form { display: grid; gap: 10px; }
+.module-form.two { grid-template-columns: 1fr 1fr; }
+.module-field { display: flex; flex-direction: column; gap: 6px; }
+.module-field label {
+  color: var(--ink-muted); font-family: 'DM Mono', monospace;
+  font-size: 9px; letter-spacing: 1.2px; text-transform: uppercase;
+}
+.module-field input,
+.module-field select,
+.module-field textarea {
+  width: 100%; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
+  color: var(--ink); border-radius: 2px; padding: 9px 10px; outline: none;
+  font: 12px 'DM Sans', sans-serif;
+}
+.module-field textarea { min-height: 92px; resize: vertical; line-height: 1.5; }
+.module-field input:focus,
+.module-field select:focus,
+.module-field textarea:focus { border-color: rgba(200,168,75,.45); box-shadow: 0 0 0 2px rgba(200,168,75,.08); }
+.module-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.module-btn {
+  border: 1px solid rgba(200,168,75,.16); background: var(--bg-mid); color: var(--ink);
+  border-radius: 2px; padding: 8px 12px; cursor: pointer; font: 700 10px 'DM Mono', monospace;
+  letter-spacing: .8px; text-transform: uppercase;
+}
+.module-btn.primary { background: var(--gold); color: #08101c; border-color: var(--gold); }
+.module-btn:hover { border-color: var(--gold); }
+.module-list { display: grid; gap: 8px; }
+.module-row {
+  display: grid; grid-template-columns: 92px 1fr auto; gap: 12px; align-items: center;
+  padding: 10px 0; border-bottom: 1px solid rgba(200,168,75,.08);
+}
+.module-row:last-child { border-bottom: 0; }
+.module-tag {
+  color: var(--gold); background: rgba(200,168,75,.08); border: 1px solid rgba(200,168,75,.12);
+  padding: 4px 7px; border-radius: 2px; font: 700 9px 'DM Mono', monospace; text-transform: uppercase;
+  text-align: center;
+}
+.module-row-title { color: var(--ink); font-size: 13px; font-weight: 600; }
+.module-row-meta { color: var(--ink-muted); font-size: 11px; margin-top: 2px; }
+.module-row-state { color: var(--ink-muted); font: 700 10px 'DM Mono', monospace; text-transform: uppercase; }
+.town-grid { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 10px; }
+.town-tile {
+  border: 1px solid rgba(200,168,75,.12); background: var(--bg-mid);
+  border-radius: 2px; padding: 13px; min-height: 116px;
+}
+.town-tile h4 { color: var(--ink); margin: 0 0 8px; font-size: 13px; }
+.town-tile span { display: block; color: var(--ink-muted); font-size: 11px; line-height: 1.5; }
+.output-box {
+  min-height: 98px; border: 1px dashed rgba(200,168,75,.18); background: rgba(200,168,75,.035);
+  color: var(--ink-muted); padding: 12px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap;
+}
+
 /* Ghost gear watermark on placeholders */
 .module-placeholder-gear-hint {
   position: absolute; bottom: -50px; right: -50px;
@@ -568,6 +665,12 @@ body::before {
   animation: gear-cw-slow 40s linear infinite;
   transform-origin: 110px 110px;
   pointer-events: none;
+}
+
+@media (max-width: 1100px) {
+  .module-grid-2, .module-grid-3, .town-grid { grid-template-columns: 1fr; }
+  .module-heading { align-items: flex-start; flex-direction: column; }
+  .module-status { justify-content: flex-start; }
 }
 
 /* ── Status bar ─────────────────────────────────────────────────── */
@@ -1279,11 +1382,59 @@ body::before {
     <div class="view" id="view-editorial">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-placeholder">
-          <div class="module-placeholder-stamp">Sprint 1 · Editorial</div>
-          <h2>The editorial desk awaits.</h2>
-          <p>Daily story list generation, AP-style article drafting, weekly town PDF export, and editorial calendar — powered by Gemini Flash across all five mountain towns.</p>
-          <div class="module-placeholder-badge">🚧 Under Construction — Sprint 1</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Sprint 1 · Editorial Desk</div>
+                <h2>Daily story command.</h2>
+                <p>Build the town story list, track draft status, and prepare weekly Register-Call coverage without leaving the spine.</p>
+              </div>
+              <div class="module-status">
+                <span class="pill">Drafts <strong id="editorial-module-drafts">3</strong></span>
+                <span class="pill">Towns <strong>5</strong></span>
+                <span class="pill">PDF <strong>Queued</strong></span>
+              </div>
+            </div>
+            <div class="module-grid-2">
+              <div class="module-panel">
+                <h3>Story Queue</h3>
+                <div class="module-list" id="editorial-story-list"></div>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="addEditorialStory()">Add Story</button>
+                  <button class="module-btn" onclick="generateDailyStoryList()">Daily List</button>
+                  <button class="module-btn" onclick="toast('Weekly PDF packet queued for export')">Weekly PDF</button>
+                </div>
+              </div>
+              <div class="module-panel">
+                <h3>New Assignment</h3>
+                <div class="module-form">
+                  <div class="module-field">
+                    <label>Headline / slug</label>
+                    <input id="editorial-title" placeholder="City council approves..." autocomplete="off">
+                  </div>
+                  <div class="module-form two">
+                    <div class="module-field">
+                      <label>Town</label>
+                      <select id="editorial-town">
+                        <option>Black Hawk</option><option>Central City</option><option>Nederland</option><option>Georgetown</option><option>Idaho Springs</option>
+                      </select>
+                    </div>
+                    <div class="module-field">
+                      <label>Status</label>
+                      <select id="editorial-status">
+                        <option>Draft</option><option>Assigned</option><option>Editing</option><option>Ready</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="module-field">
+                    <label>Notes</label>
+                    <textarea id="editorial-notes" placeholder="Sources, meeting date, photo needs, deadline..."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1291,11 +1442,42 @@ body::before {
     <div class="view" id="view-directory">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-placeholder">
-          <div class="module-placeholder-stamp">Sprint 1 · Directory</div>
-          <h2>Every local business, catalogued.</h2>
-          <p>Import listings by town, county, or ZIP via Google Places or Apify. Manage, deduplicate, and publish to registercall.com and all city sites automatically.</p>
-          <div class="module-placeholder-badge">🚧 Under Construction — Sprint 1</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Sprint 1 · Shop Local</div>
+                <h2>Business directory intake.</h2>
+                <p>Stage imports by town, review duplicates, and prepare publish batches for Register-Call and the city sites.</p>
+              </div>
+              <div class="module-status">
+                <span class="pill">Listings <strong>0</strong></span>
+                <span class="pill">Source <strong>Places</strong></span>
+              </div>
+            </div>
+            <div class="module-grid-2">
+              <div class="module-panel">
+                <h3>Import Batch</h3>
+                <div class="module-form two">
+                  <div class="module-field"><label>ZIP or town</label><input id="directory-query" placeholder="80422 or Nederland"></div>
+                  <div class="module-field"><label>Category</label><select id="directory-category"><option>Restaurants</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option></select></div>
+                </div>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="stageDirectoryImport()">Stage Import</button>
+                  <button class="module-btn" onclick="window.location.href='/apistore'">API Keys</button>
+                </div>
+                <div class="output-box" id="directory-output">Waiting for a town or ZIP. Google Places / Apify keys are read from API Vault.</div>
+              </div>
+              <div class="module-panel">
+                <h3>Review Lanes</h3>
+                <div class="module-list">
+                  <div class="module-row"><span class="module-tag">New</span><div><div class="module-row-title">Fresh imports</div><div class="module-row-meta">Needs editor review before publish</div></div><span class="module-row-state">0</span></div>
+                  <div class="module-row"><span class="module-tag">Dupe</span><div><div class="module-row-title">Possible duplicates</div><div class="module-row-meta">Match by phone, address, domain</div></div><span class="module-row-state">0</span></div>
+                  <div class="module-row"><span class="module-tag">Live</span><div><div class="module-row-title">Published listings</div><div class="module-row-meta">Visible on city pages</div></div><span class="module-row-state">0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1303,11 +1485,28 @@ body::before {
     <div class="view" id="view-cities">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-placeholder">
-          <div class="module-placeholder-stamp">Sprint 2 · Network</div>
-          <h2>Five towns, one command.</h2>
-          <p>Configure Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs. Local news feeds, business directories, and event calendars — per town.</p>
-          <div class="module-placeholder-badge">🚧 Under Construction — Sprint 2</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Sprint 2 · City Sites</div>
+                <h2>Five towns, one network board.</h2>
+                <p>Monitor content, directory, newsletter, and calendar readiness for each mountain-town property.</p>
+              </div>
+              <div class="module-status"><span class="pill">Properties <strong>7</strong></span><span class="pill">Server <strong>Live</strong></span></div>
+            </div>
+            <div class="town-grid">
+              <div class="town-tile"><h4>Black Hawk</h4><span>News feed: ready</span><span>Directory: staged</span><span>Events: needed</span></div>
+              <div class="town-tile"><h4>Central City</h4><span>News feed: ready</span><span>Directory: staged</span><span>Events: needed</span></div>
+              <div class="town-tile"><h4>Nederland</h4><span>News feed: draft</span><span>Directory: import next</span><span>Events: needed</span></div>
+              <div class="town-tile"><h4>Georgetown</h4><span>News feed: draft</span><span>Directory: import next</span><span>Events: needed</span></div>
+              <div class="town-tile"><h4>Idaho Springs</h4><span>News feed: draft</span><span>Directory: import next</span><span>Events: needed</span></div>
+            </div>
+            <div class="module-actions">
+              <button class="module-btn primary" onclick="window.location.href='/network'">Open Network HQ</button>
+              <button class="module-btn" onclick="toast('City status refresh queued')">Refresh Status</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1315,11 +1514,34 @@ body::before {
     <div class="view" id="view-marketing">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-placeholder">
-          <div class="module-placeholder-stamp">Sprint 1 · Marketing</div>
-          <h2>One input. Full campaign output.</h2>
-          <p>Campaign kit generator — headlines, social captions, ad copy, email blasts via Sendy, SMS campaigns, and print-ready flyer generation from a single brief.</p>
-          <div class="module-placeholder-badge">🚧 Under Construction — Sprint 1</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Sprint 1 · Marketing Hub</div>
+                <h2>Campaign kit generator.</h2>
+                <p>Turn one sales brief into ad copy, newsletter copy, social captions, and a print-ready handoff.</p>
+              </div>
+              <div class="module-status"><span class="pill">Subscribers <strong id="marketing-module-subs">847</strong></span><span class="pill">Sendy <strong id="marketing-module-sendy">Check</strong></span></div>
+            </div>
+            <div class="module-grid-2">
+              <div class="module-panel">
+                <h3>Campaign Brief</h3>
+                <div class="module-form">
+                  <div class="module-field"><label>Business / offer</label><input id="campaign-title" placeholder="Mother's Day brunch at..."></div>
+                  <div class="module-field"><label>Brief</label><textarea id="campaign-brief" placeholder="Audience, offer, deadline, town, contact, call to action..."></textarea></div>
+                </div>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="generateCampaignKit()">Generate Kit</button>
+                  <button class="module-btn" onclick="window.location.href='/newsletter'">Open Newsletter</button>
+                </div>
+              </div>
+              <div class="module-panel">
+                <h3>Generated Output</h3>
+                <div class="output-box" id="campaign-output">No campaign generated yet.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1327,11 +1549,35 @@ body::before {
     <div class="view" id="view-accounting">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-placeholder">
-          <div class="module-placeholder-stamp">Sprint 2 · Accounting</div>
-          <h2>The ledger runs itself.</h2>
-          <p>Weekly billing runs, Stripe invoice creation, subscriber lookup via Google Sheets relay, and revenue reporting. Integrates with invoicemanager-wrc.</p>
-          <div class="module-placeholder-badge">🚧 Under Construction — Sprint 2</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Sprint 2 · Accounting</div>
+                <h2>Billing operations queue.</h2>
+                <p>Prepare invoices, flag weekly billing runs, and hand work to the Register-Call invoice manager.</p>
+              </div>
+              <div class="module-status"><span class="pill">Stripe <strong id="accounting-module-stripe">Check</strong></span><span class="pill">Unpaid <strong>0</strong></span></div>
+            </div>
+            <div class="module-grid-2">
+              <div class="module-panel">
+                <h3>New Invoice Draft</h3>
+                <div class="module-form two">
+                  <div class="module-field"><label>Customer</label><input id="invoice-customer" placeholder="Business or subscriber"></div>
+                  <div class="module-field"><label>Amount</label><input id="invoice-amount" placeholder="250.00"></div>
+                </div>
+                <div class="module-field"><label>Line item</label><input id="invoice-line" placeholder="Display ad, subscription, legal notice..."></div>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="stageInvoice()">Stage Invoice</button>
+                  <button class="module-btn" onclick="toast('Weekly billing run queued')">Run Billing</button>
+                </div>
+              </div>
+              <div class="module-panel">
+                <h3>Accounting Handoff</h3>
+                <div class="output-box" id="invoice-output">No invoice staged. Stripe keys stay in localStorage; invoicemanager-wrc remains the source for final billing.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1456,6 +1702,7 @@ function saveKeys() {
     }
   });
   updateStatusDots();
+  refreshModuleStatus();
   toast('✓ API keys saved to local storage');
 }
 
@@ -1598,6 +1845,126 @@ async function loadSupabaseArticleCounts() {
 function loadLiveDashboardData() {
   loadSendySubscriberCount();
   loadSupabaseArticleCounts();
+  refreshModuleStatus();
+}
+
+// ── Module workbenches ─────────────────────────────────────────────
+const EDITORIAL_STORE = 'copress_editorial_queue_v1';
+
+function defaultEditorialStories() {
+  return [
+    { town: 'Black Hawk', title: 'Council packet follow-up', status: 'Draft', notes: 'Check agenda, quotes, and photo needs.' },
+    { town: 'Central City', title: 'Weekend arts and gaming roundup', status: 'Assigned', notes: 'Pull event details and business mentions.' },
+    { town: 'Nederland', title: 'Mountain weather and road note', status: 'Ready', notes: 'Keep brief for weekly PDF.' },
+  ];
+}
+
+function readEditorialStories() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(EDITORIAL_STORE) || '[]');
+    return Array.isArray(parsed) && parsed.length ? parsed : defaultEditorialStories();
+  } catch {
+    return defaultEditorialStories();
+  }
+}
+
+function writeEditorialStories(stories) {
+  localStorage.setItem(EDITORIAL_STORE, JSON.stringify(stories));
+}
+
+function renderEditorialStories() {
+  const stories = readEditorialStories();
+  const list = document.getElementById('editorial-story-list');
+  if (!list) return;
+  list.innerHTML = stories.map((story, index) => `
+    <div class="module-row">
+      <span class="module-tag">${story.town}</span>
+      <div>
+        <div class="module-row-title">${story.title}</div>
+        <div class="module-row-meta">${story.notes || 'No notes yet'}</div>
+      </div>
+      <button class="module-btn" onclick="advanceEditorialStory(${index})">${story.status}</button>
+    </div>
+  `).join('');
+  setText('editorial-module-drafts', stories.filter(s => s.status !== 'Ready').length);
+}
+
+function addEditorialStory() {
+  const title = document.getElementById('editorial-title').value.trim();
+  const town = document.getElementById('editorial-town').value;
+  const status = document.getElementById('editorial-status').value;
+  const notes = document.getElementById('editorial-notes').value.trim();
+  if (!title) {
+    toast('Add a headline before saving');
+    return;
+  }
+  const stories = readEditorialStories();
+  stories.unshift({ town, title, status, notes });
+  writeEditorialStories(stories);
+  document.getElementById('editorial-title').value = '';
+  document.getElementById('editorial-notes').value = '';
+  renderEditorialStories();
+  setText('live-drafts', formatNumber(stories.filter(s => s.status !== 'Ready').length));
+  toast('Story added to editorial queue');
+}
+
+function advanceEditorialStory(index) {
+  const order = ['Draft', 'Assigned', 'Editing', 'Ready'];
+  const stories = readEditorialStories();
+  const story = stories[index];
+  if (!story) return;
+  story.status = order[(order.indexOf(story.status) + 1) % order.length];
+  writeEditorialStories(stories);
+  renderEditorialStories();
+}
+
+function generateDailyStoryList() {
+  const towns = ['Black Hawk', 'Central City', 'Nederland', 'Georgetown', 'Idaho Springs'];
+  const stories = towns.map(town => ({
+    town,
+    title: `${town} daily brief`,
+    status: 'Draft',
+    notes: 'Check council, schools, police, events, weather, and business updates.',
+  }));
+  writeEditorialStories(stories);
+  renderEditorialStories();
+  setText('live-drafts', formatNumber(stories.length));
+  toast('Daily story list generated');
+}
+
+function stageDirectoryImport() {
+  const query = document.getElementById('directory-query').value.trim();
+  const category = document.getElementById('directory-category').value;
+  const output = document.getElementById('directory-output');
+  if (!query) {
+    toast('Enter a town or ZIP first');
+    return;
+  }
+  output.textContent = `Import staged for ${query}\nCategory: ${category}\nNext: pull Google Places or Apify results, then review duplicates before publishing.`;
+  toast('Directory import staged');
+}
+
+function generateCampaignKit() {
+  const title = document.getElementById('campaign-title').value.trim() || 'Local campaign';
+  const brief = document.getElementById('campaign-brief').value.trim() || 'No brief supplied yet.';
+  document.getElementById('campaign-output').textContent =
+    `Headline: ${title}\n\nEmail subject: ${title} for mountain readers\n\nSocial caption: ${brief}\n\nPrint CTA: Reserve space in the Weekly Register-Call and reach Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`;
+  toast('Campaign kit generated');
+}
+
+function stageInvoice() {
+  const customer = document.getElementById('invoice-customer').value.trim() || 'Unnamed customer';
+  const amount = document.getElementById('invoice-amount').value.trim() || '0.00';
+  const line = document.getElementById('invoice-line').value.trim() || 'Manual line item';
+  document.getElementById('invoice-output').textContent =
+    `Invoice staged\nCustomer: ${customer}\nAmount: $${amount}\nLine item: ${line}\n\nNext: create final invoice in invoicemanager-wrc or Stripe.`;
+  toast('Invoice staged');
+}
+
+function refreshModuleStatus() {
+  setText('marketing-module-subs', document.getElementById('live-subscribers')?.textContent || '—');
+  setText('marketing-module-sendy', localStorage.getItem(KEY_PREFIX + 'sendy_key') ? 'Ready' : 'Missing');
+  setText('accounting-module-stripe', localStorage.getItem(KEY_PREFIX + 'stripe_secret') ? 'Ready' : 'Missing');
 }
 
 // ── Keyboard shortcuts ─────────────────────────────────────────────
@@ -1623,6 +1990,8 @@ document.addEventListener('keydown', e => {
 loadKeys();
 updateStatusDots();
 loadLiveDashboardData();
+renderEditorialStories();
+refreshModuleStatus();
 </script>
 
 <!-- ── Press Atmosphere: Gears + Spotlight ─────────────────────────── -->
