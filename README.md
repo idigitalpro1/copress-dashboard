@@ -48,6 +48,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 - Network HQ → `/network`
 - Docs Hub → `/docs`
 - Stationery → `data-view=stationery`
+- Hermes Crew → `data-view=brains`
 - Newsletter Studio → `/newsletter`
 - API Vault → `/apistore`
 - Linear → `/linear`
@@ -70,7 +71,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 | Colorado Gambler | `data-view=directory` | Gambling vertical and casino directory loader |
 | Staff Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
-| Hermes Orchestrator | `data-view=brains` | Local/cloud AI routing status |
+| Hermes Orchestrator | `data-view=brains` | Local Qwen chat, Crew runner, jobs, and routing status |
 | (implicit) API Vault | `/apistore` | Key management |
 
 ---
@@ -125,7 +126,10 @@ Hermes Agent has two separate local surfaces:
 
 | URL | Purpose | Use for |
 |-----|---------|---------|
+| `https://copress-dashboard.vercel.app/` → Hermes Crew | CoPress operator front end | Chat, crew jobs, status, local endpoint links |
 | `http://127.0.0.1:9119/sessions` | Hermes Agent dashboard | Canonical human operator UI for sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
+| `http://127.0.0.1:8793` | Hermes Crew bridge | Local chat, crew run/status/result API, Qwen/Ollama routing |
+| `http://127.0.0.1:8501` | Streamlit fallback | Local fallback chat and Crew Runner UI |
 | `http://127.0.0.1:8642/v1` | OpenAI-compatible gateway | Open WebUI / API clients |
 
 `http://127.0.0.1:9119/sessions` is the canonical Hermes dashboard URL returned by `hermes dashboard`. The dashboard API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean the Hermes dashboard is down.

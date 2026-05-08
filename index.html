@@ -726,6 +726,54 @@ body::before {
   min-height: 98px; border: 1px dashed rgba(200,168,75,.18); background: rgba(200,168,75,.035);
   color: var(--ink-muted); padding: 12px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap;
 }
+.hermes-console-grid {
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr);
+  gap: 18px; align-items: stretch;
+}
+.hermes-console-grid.lower { grid-template-columns: minmax(320px, .85fr) minmax(0, 1.15fr); margin-top: 18px; }
+.hermes-chat-panel { min-height: 560px; display: flex; flex-direction: column; }
+.hermes-chat-log {
+  min-height: 250px; max-height: 350px; overflow: auto;
+  border: 1px solid rgba(200,168,75,.12); background: rgba(7,12,20,.56);
+  border-radius: 2px; padding: 12px; display: flex; flex-direction: column; gap: 10px;
+  margin-bottom: 12px;
+}
+.hermes-msg {
+  border: 1px solid rgba(200,168,75,.12); border-radius: 2px;
+  padding: 10px 12px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap;
+}
+.hermes-msg.user {
+  align-self: flex-end; max-width: 82%;
+  background: rgba(200,168,75,.1); color: var(--ink); border-color: rgba(200,168,75,.22);
+}
+.hermes-msg.assistant {
+  align-self: flex-start; max-width: 92%;
+  background: rgba(6,182,212,.07); color: var(--ink); border-color: rgba(6,182,212,.16);
+}
+.hermes-msg.error {
+  align-self: stretch; color: #ffb3a8; background: rgba(192,57,43,.08); border-color: rgba(192,57,43,.28);
+}
+.hermes-control-row {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; margin-top: 8px;
+}
+.hermes-control-row select {
+  width: 100%; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
+  color: var(--ink); border-radius: 2px; padding: 8px 10px; outline: none;
+  font: 11px 'DM Mono', monospace; text-transform: uppercase;
+}
+.hermes-checks {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;
+  color: var(--ink-muted); font: 10px 'DM Mono', monospace; text-transform: uppercase;
+}
+.hermes-checks label {
+  display: flex; align-items: center; gap: 7px; border: 1px solid rgba(200,168,75,.12);
+  background: rgba(7,12,20,.48); padding: 8px; border-radius: 2px; cursor: pointer;
+}
+.hermes-endpoint-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+@media (max-width: 1100px) {
+  .hermes-console-grid, .hermes-console-grid.lower { grid-template-columns: 1fr; }
+  .hermes-control-row { grid-template-columns: 1fr; }
+}
 .scan-preview {
   margin-top: 12px; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
   border-radius: 2px; overflow: hidden;
@@ -935,6 +983,10 @@ body::before {
     <div class="nav-item" data-view="stationery">
       <span class="nav-icon">▣</span>
       <span class="nav-label">Stationery</span>
+    </div>
+    <div class="nav-item" data-view="brains">
+      <span class="nav-icon">◈</span>
+      <span class="nav-label">Hermes Crew</span>
     </div>
     <div class="nav-item" onclick="window.location.href='/newsletter'">
       <span class="nav-icon">📧</span>
@@ -1446,8 +1498,8 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
-              <button class="card-btn" onclick="toast('OpenClaw swarm → http://localhost:1234')">🦅 OpenClaw</button>
-              <button class="card-btn" onclick="window.open('http://127.0.0.1:9119/sessions','_blank')">💬 Hermes Dashboard</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew Console</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">Dashboard</button>
             </div>
           </div>
         </div>
@@ -1994,11 +2046,87 @@ body::before {
     <div class="view" id="view-brains">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-placeholder">
-          <div class="module-placeholder-stamp">AI Brains · Local First</div>
-          <h2>Hermes is the local orchestration lane.</h2>
-          <p>Use Hermes 70B for private orchestration, Qwen for code and reasoning, OpenClaw for swarm work, and cloud agents only as fallback capacity.</p>
-          <div class="module-placeholder-badge">Gateway expected at 127.0.0.1:8642</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Hermes · Local Workforce</div>
+                <h2>Agentic front end for Qwen, Crew, and OpenClaw.</h2>
+                <p>Use this panel as the local operator surface. It talks to Hermes Crew on <code>127.0.0.1:8793</code>, keeps writes off by default, and leaves cloud models as explicit fallback.</p>
+              </div>
+              <div class="module-status">
+                <span class="pill">Crew <strong id="hermes-crew-status">Check</strong></span>
+                <span class="pill">Model <strong id="hermes-crew-model">Qwen</strong></span>
+                <span class="pill">Writes <strong id="hermes-crew-writes">Off</strong></span>
+              </div>
+            </div>
+
+            <div class="hermes-console-grid">
+              <div class="module-panel hermes-chat-panel">
+                <h3>Chat</h3>
+                <div class="hermes-chat-log" id="hermes-chat-log">
+                  <div class="hermes-msg assistant">Hermes Crew is ready when the local bridge is running. Ask for strategy, drafting, routing, or a safe execution plan.</div>
+                </div>
+                <div class="module-field">
+                  <label>Prompt</label>
+                  <textarea id="hermes-chat-prompt" placeholder="Ask Hermes Crew anything. Example: Draft a client onboarding handoff for Paul Hill."></textarea>
+                </div>
+                <div class="hermes-control-row">
+                  <select id="hermes-chat-tier" title="Routing tier">
+                    <option value="local">Qwen 35B local</option>
+                    <option value="free">Hermes 8B fast local</option>
+                    <option value="local_heavy">Hermes 70B local heavy</option>
+                    <option value="openclaw">OpenClaw operator lane</option>
+                  </select>
+                  <button class="module-btn primary" onclick="sendHermesChat()">Send</button>
+                  <button class="module-btn" onclick="clearHermesChat()">Clear</button>
+                </div>
+              </div>
+
+              <div class="module-panel">
+                <h3>Crew Runner</h3>
+                <div class="module-form">
+                  <div class="module-field"><label>Topic</label><input id="hermes-crew-topic" placeholder="Red Rocks weekend music guide"></div>
+                  <div class="module-field"><label>Audience</label><input id="hermes-crew-audience" value="Colorado mountain-town residents and visitors"></div>
+                  <div class="module-form two">
+                    <div class="module-field"><label>Words</label><input id="hermes-crew-words" type="number" min="150" max="2500" value="600"></div>
+                    <div class="module-field"><label>Publication</label><input id="hermes-crew-publication" placeholder="Gambler, Villager, WRC"></div>
+                  </div>
+                  <div class="hermes-checks">
+                    <label><input type="checkbox" id="hermes-output-web" checked> Web</label>
+                    <label><input type="checkbox" id="hermes-output-newsletter" checked> Newsletter</label>
+                    <label><input type="checkbox" id="hermes-output-social" checked> Social</label>
+                    <label><input type="checkbox" id="hermes-output-seo" checked> SEO</label>
+                    <label><input type="checkbox" id="hermes-generate-images"> Images</label>
+                  </div>
+                  <div class="module-actions">
+                    <button class="module-btn primary" onclick="runHermesCrew()">Run Crew</button>
+                    <button class="module-btn" onclick="loadHermesJobs()">Refresh Jobs</button>
+                    <button class="module-btn" onclick="window.open('http://127.0.0.1:8501','_blank')">Streamlit Fallback</button>
+                  </div>
+                </div>
+
+                <div class="hermes-endpoint-strip">
+                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:9119/sessions','_blank')">Dashboard</button>
+                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8793/health','_blank')">Health</button>
+                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8501','_blank')">Chat UI</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hermes-console-grid lower">
+              <div class="module-panel">
+                <h3>Jobs</h3>
+                <div class="module-list" id="hermes-job-list">
+                  <div class="module-row"><span class="module-tag">Idle</span><div><div class="module-row-title">No jobs loaded</div><div class="module-row-meta">Click Refresh Jobs or Run Crew.</div></div><span class="module-row-state">Local</span></div>
+                </div>
+              </div>
+              <div class="module-panel">
+                <h3>Output</h3>
+                <div class="output-box" id="hermes-output-box">Crew output and logs will appear here. This panel does not grant write access by itself.</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -2066,6 +2194,10 @@ function navTo(section) {
       c.offsetHeight;
       c.style.animation = `cardIn 380ms ${i * 60}ms forwards`;
     });
+  }
+  if (section === 'brains') {
+    refreshHermesCrewStatus();
+    loadHermesJobs();
   }
 }
 
@@ -3119,6 +3251,207 @@ function refreshModuleStatus() {
   setText('accounting-module-stripe', localStorage.getItem(KEY_PREFIX + 'stripe_secret') ? 'Ready' : 'Missing');
 }
 
+// ── Hermes Crew Console ───────────────────────────────────────────
+const HERMES_CREW_BASE = 'http://127.0.0.1:8793';
+
+function escapeHtml(value) {
+  return String(value || '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[ch]));
+}
+
+function appendHermesMessage(role, text) {
+  const log = document.getElementById('hermes-chat-log');
+  if (!log) return null;
+  const el = document.createElement('div');
+  el.className = `hermes-msg ${role}`;
+  el.textContent = text;
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+  return el;
+}
+
+function clearHermesChat() {
+  const log = document.getElementById('hermes-chat-log');
+  if (!log) return;
+  log.innerHTML = '';
+  appendHermesMessage('assistant', 'Hermes Crew chat cleared. Qwen 35B local remains the default lane.');
+}
+
+async function refreshHermesCrewStatus() {
+  try {
+    const res = await fetch(`${HERMES_CREW_BASE}/health`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    setText('hermes-crew-status', data.ollama_reachable ? 'Online' : 'Bridge');
+    setText('hermes-crew-model', data.default_model || 'Qwen');
+    setText('hermes-crew-writes', data.allow_writes ? 'On' : 'Off');
+    return data;
+  } catch (err) {
+    setText('hermes-crew-status', 'Offline');
+    setText('hermes-crew-model', 'Local');
+    setText('hermes-crew-writes', 'Off');
+    const box = document.getElementById('hermes-output-box');
+    if (box) box.textContent = `Hermes Crew bridge not reachable at ${HERMES_CREW_BASE}.\n\nStart/check it from /Users/Ace/Codex/apps/hermes-crew, then refresh this panel.\n\n${err.message}`;
+    return null;
+  }
+}
+
+async function sendHermesChat() {
+  const input = document.getElementById('hermes-chat-prompt');
+  const tier = document.getElementById('hermes-chat-tier')?.value || 'local';
+  const prompt = input?.value.trim();
+  if (!prompt) {
+    toast('Add a Hermes prompt first');
+    return;
+  }
+  appendHermesMessage('user', prompt);
+  if (input) input.value = '';
+  const assistant = appendHermesMessage('assistant', 'Thinking locally...');
+  let buffer = '';
+  try {
+    const res = await fetch(`${HERMES_CREW_BASE}/chat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tier,
+        temperature: 0.45,
+        messages: [{ role: 'user', content: prompt }],
+      }),
+    });
+    if (!res.ok || !res.body) throw new Error(`Hermes chat HTTP ${res.status}`);
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let pending = '';
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      pending += decoder.decode(value, { stream: true });
+      const events = pending.split('\n\n');
+      pending = events.pop() || '';
+      events.forEach(evt => {
+        const line = evt.split('\n').find(part => part.startsWith('data: '));
+        if (!line) return;
+        const raw = line.slice(6);
+        if (raw === '[DONE]') return;
+        try {
+          const data = JSON.parse(raw);
+          if (data.error) throw new Error(data.error);
+          if (data.delta) {
+            buffer += data.delta;
+            if (assistant) assistant.textContent = buffer;
+          }
+        } catch (err) {
+          if (assistant) {
+            assistant.className = 'hermes-msg error';
+            assistant.textContent = `Hermes chat error: ${err.message}`;
+          }
+        }
+      });
+    }
+    if (assistant && !buffer.trim()) assistant.textContent = 'No response returned. Try Hermes 8B fast local or check the bridge log.';
+  } catch (err) {
+    if (assistant) {
+      assistant.className = 'hermes-msg error';
+      assistant.textContent = `Hermes chat unavailable: ${err.message}`;
+    }
+  }
+}
+
+function selectedHermesOutputs() {
+  const outputs = [];
+  if (document.getElementById('hermes-output-web')?.checked) outputs.push('web');
+  if (document.getElementById('hermes-output-newsletter')?.checked) outputs.push('newsletter');
+  if (document.getElementById('hermes-output-social')?.checked) {
+    outputs.push('facebook', 'instagram');
+  }
+  if (document.getElementById('hermes-output-seo')?.checked) outputs.push('seo');
+  return [...new Set(outputs)];
+}
+
+async function runHermesCrew() {
+  const topic = document.getElementById('hermes-crew-topic')?.value.trim();
+  if (!topic) {
+    toast('Add a crew topic first');
+    return;
+  }
+  const payload = {
+    topic,
+    audience: document.getElementById('hermes-crew-audience')?.value.trim() || 'Colorado mountain-town residents and visitors',
+    words: Number(document.getElementById('hermes-crew-words')?.value || 600),
+    publication: document.getElementById('hermes-crew-publication')?.value.trim() || '',
+    outputs: selectedHermesOutputs(),
+    generate_images: !!document.getElementById('hermes-generate-images')?.checked,
+  };
+  const box = document.getElementById('hermes-output-box');
+  if (box) box.textContent = `Queueing Hermes Crew job...\n${JSON.stringify(payload, null, 2)}`;
+  try {
+    const res = await fetch(`${HERMES_CREW_BASE}/crew/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    toast(`Crew job ${data.job_id} queued`);
+    await loadHermesJobs(data.job_id);
+    pollHermesJob(data.job_id);
+  } catch (err) {
+    if (box) box.textContent = `Could not queue crew job.\n\n${err.message}`;
+  }
+}
+
+async function loadHermesJobs(focusJobId = '') {
+  const list = document.getElementById('hermes-job-list');
+  if (!list) return;
+  try {
+    const res = await fetch(`${HERMES_CREW_BASE}/jobs`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const jobs = data.jobs || [];
+    if (!jobs.length) {
+      list.innerHTML = '<div class="module-row"><span class="module-tag">Idle</span><div><div class="module-row-title">No jobs yet</div><div class="module-row-meta">Run a crew job from this console.</div></div><span class="module-row-state">Ready</span></div>';
+      return;
+    }
+    list.innerHTML = jobs.slice(0, 8).map(job => `
+      <div class="module-row">
+        <span class="module-tag">${escapeHtml(job.state || 'job')}</span>
+        <div>
+          <div class="module-row-title">${escapeHtml(job.topic || job.id)}</div>
+          <div class="module-row-meta">${escapeHtml(job.publication || 'local')} · ${escapeHtml(job.id)}</div>
+        </div>
+        <button class="mini-btn ${job.id === focusJobId ? 'ok' : ''}" onclick="showHermesJob('${escapeHtml(job.id)}')">Open</button>
+      </div>`).join('');
+  } catch (err) {
+    list.innerHTML = `<div class="module-row"><span class="module-tag">Offline</span><div><div class="module-row-title">Hermes Crew bridge unreachable</div><div class="module-row-meta">${escapeHtml(err.message)}</div></div><span class="module-row-state">8793</span></div>`;
+  }
+}
+
+async function showHermesJob(jobId) {
+  const box = document.getElementById('hermes-output-box');
+  try {
+    const status = await fetch(`${HERMES_CREW_BASE}/crew/status/${jobId}`).then(r => r.json());
+    if (status.state === 'done') {
+      const result = await fetch(`${HERMES_CREW_BASE}/crew/result/${jobId}`).then(r => r.json());
+      if (box) box.textContent = result.output || JSON.stringify(result.result || result, null, 2);
+    } else if (box) {
+      box.textContent = `Job ${jobId}: ${status.state}\n\n${status.log_tail || status.error || 'No log yet.'}`;
+    }
+  } catch (err) {
+    if (box) box.textContent = `Could not load job ${jobId}.\n\n${err.message}`;
+  }
+}
+
+function pollHermesJob(jobId, remaining = 80) {
+  if (!remaining) return;
+  setTimeout(async () => {
+    await loadHermesJobs(jobId);
+    await showHermesJob(jobId);
+    const text = document.getElementById('hermes-output-box')?.textContent || '';
+    if (!/^Job .*: (done|error)/.test(text)) pollHermesJob(jobId, remaining - 1);
+  }, 3500);
+}
+
 // ── Keyboard shortcuts ─────────────────────────────────────────────
 const shortcuts = [
   () => toast('Launching business importer…'),
@@ -3151,6 +3484,7 @@ renderEditorialStories();
 loadDirectoryBatch();
 refreshStationeryTemplate();
 refreshModuleStatus();
+refreshHermesCrewStatus();
 </script>
 
 <!-- ── Press Atmosphere: Gears + Spotlight ─────────────────────────── -->
