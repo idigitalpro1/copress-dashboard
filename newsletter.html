@@ -759,7 +759,7 @@
         <div class="handoff-banner" id="campaign-handoff-banner">
           <strong>Campaign handoff loaded</strong>
           <span id="campaign-handoff-text"></span><br>
-          <button onclick="applyCampaignHandoff()">Use Campaign Copy</button>
+          <button onclick="goStep(5)">Review Campaign Settings</button>
         </div>
         <div class="step-header">
           <h2>Choose a Template</h2>
@@ -1346,18 +1346,20 @@ function readCampaignHandoff() {
   catch { return null; }
 }
 
-function maybeShowCampaignHandoff() {
+function maybeLoadCampaignHandoff() {
   const params = new URLSearchParams(location.search);
   const handoff = readCampaignHandoff();
   if (params.get('campaign') !== 'latest' || !handoff) return;
+  applyCampaignHandoff({ silent: true });
   const banner = document.getElementById('campaign-handoff-banner');
   const text = document.getElementById('campaign-handoff-text');
   if (!banner || !text) return;
-  text.textContent = handoff.title || 'Latest campaign kit';
+  text.textContent = `${handoff.title || 'Latest campaign kit'} is loaded into the marketing template.`;
   banner.style.display = 'block';
+  showToast('Campaign copy loaded into Newsletter Studio', 'green');
 }
 
-function applyCampaignHandoff() {
+function applyCampaignHandoff(options = {}) {
   const handoff = readCampaignHandoff();
   if (!handoff) {
     showToast('No campaign handoff found', 'red');
@@ -1383,8 +1385,10 @@ function applyCampaignHandoff() {
   document.querySelectorAll('.length-card').forEach(c => c.classList.toggle('selected', c.dataset.len === 'brief'));
   renderStoryList();
   updatePreview();
-  goStep(5);
-  showToast('Campaign copy loaded into Newsletter Studio', 'green');
+  if (!options.silent) {
+    goStep(5);
+    showToast('Campaign copy loaded into Newsletter Studio', 'green');
+  }
 }
 
 // ── DEVICE TOGGLE ─────────────────────────────────────────────────────────
@@ -1528,7 +1532,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loadSendyConfig();
   selectLength('standard', document.querySelector('[data-len="standard"]'));
   updatePreview();
-  maybeShowCampaignHandoff();
+  maybeLoadCampaignHandoff();
   setTimeout(() => showToast('📰 WRC Apr 23, 2026 issue loaded — 8 stories ready', 'gold'), 600);
 });
 </script>
