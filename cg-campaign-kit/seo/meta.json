@@ -1,0 +1,61 @@
+{
+  "site": {
+    "name": "Colorado Gambler",
+    "tagline": "Colorado's Casino Authority Since 1991",
+    "url": "https://coloradogambler.com",
+    "founder": "Patrick Sweeney",
+    "established": 1991,
+    "description": "Colorado's definitive casino gaming guide — covering Black Hawk, Central City, and Cripple Creek since 1991. Casino directory, sportsbook promos, historic podcasts, and back issues."
+  },
+  "pages": [
+    {
+      "path": "/",
+      "title": "Colorado Gambler — Black Hawk · Central City · Cripple Creek | Est. 1991",
+      "description": "Colorado's casino authority since 1991. Complete casino guide for Black Hawk, Central City, and Cripple Creek — plus 13 Colorado sportsbook promos, historic podcasts, and 35 years of back issues.",
+      "keywords": ["Colorado casinos", "Black Hawk casino", "Central City casino", "Cripple Creek casino", "Colorado gambling", "Colorado sportsbooks", "Colorado Gambler"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/GobgtSSRhpVfSJUk.jpg"
+    },
+    {
+      "path": "/casino-guide",
+      "title": "Colorado Casino Guide 2026 — Black Hawk, Central City & Cripple Creek",
+      "description": "Complete directory of all 22 licensed casinos in Colorado's three gaming towns. Casino profiles, games, hours, amenities, and current promotions.",
+      "keywords": ["Colorado casino guide", "Black Hawk casinos", "Central City casinos", "Cripple Creek casinos", "Ameristar Black Hawk", "Isle Casino", "Monarch Casino", "Colorado casino directory"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/GobgtSSRhpVfSJUk.jpg"
+    },
+    {
+      "path": "/sportsbooks",
+      "title": "Best Colorado Sportsbook Promos 2026 — All 13 Licensed CO Sportsbooks",
+      "description": "Compare welcome bonuses, promo codes, and deposit matches from all 13 licensed Colorado sportsbooks. DraftKings, FanDuel, BetMGM, Caesars, and more. Updated weekly.",
+      "keywords": ["Colorado sportsbooks", "Colorado sports betting promos", "DraftKings Colorado", "FanDuel Colorado", "BetMGM Colorado", "Caesars Colorado", "Colorado sports betting bonus"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/GobgtSSRhpVfSJUk.jpg"
+    },
+    {
+      "path": "/podcasts",
+      "title": "Colorado Gaming History Podcasts — Colorado Gambler",
+      "description": "Historic Colorado gaming stories in audio. From the 1991 vote that legalized casino gaming to the first year of legal sports betting — 35 years of history.",
+      "keywords": ["Colorado gaming history", "Colorado casino history", "Black Hawk history", "Central City history", "Cripple Creek history", "Colorado gambling podcast"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/GobgtSSRhpVfSJUk.jpg"
+    },
+    {
+      "path": "/claim-listing",
+      "title": "Claim Your Casino Listing — Colorado Gambler Verified Directory",
+      "description": "Casino operators: claim your verified listing in Colorado's most trusted gaming guide. Enhanced profiles, promotional links, and the Colorado Gambler Verified badge.",
+      "keywords": ["Colorado casino listing", "claim casino listing", "casino directory Colorado", "Colorado Gambler verified"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/lroydGOiSvXxjvfO.png"
+    },
+    {
+      "path": "/brand-kit",
+      "title": "Colorado Gambler Brand Kit — Official Logos, Colors & Guidelines",
+      "description": "Official Colorado Gambler brand assets including logos, color palette, typography system, and usage guidelines for casino operators and media partners.",
+      "keywords": ["Colorado Gambler brand kit", "Colorado Gambler logo", "Colorado Gambler press kit"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/NcMIQpEliuGhYtno.png"
+    },
+    {
+      "path": "/about",
+      "title": "About Colorado Gambler — Patrick Sweeney, Est. 1991",
+      "description": "Colorado Gambler was founded by Patrick Sweeney in 1991 — the same year Colorado legalized casino gaming. 35 years of covering Black Hawk, Central City, and Cripple Creek.",
+      "keywords": ["Colorado Gambler history", "Patrick Sweeney", "Colorado casino history 1991", "Amendment 4 Colorado"],
+      "og_image": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/lroydGOiSvXxjvfO.png"
+    }
+  ]
+}

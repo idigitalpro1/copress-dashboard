@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="ad.size" content="width=728,height=90">
+<title>Colorado Gambler — Leaderboard 728×90</title>
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Space+Grotesk:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #080808; overflow: hidden; }
+  .cg-banner { position: relative; overflow: hidden; cursor: pointer; font-family: 'Space Grotesk', sans-serif; }
+  .cg-banner img.cg-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cg-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(8,8,8,0.75) 0%, rgba(8,8,8,0.5) 100%); }
+  .cg-content { position: relative; z-index: 2; display: flex; align-items: center; height: 100%; }
+  .cg-logo { object-fit: contain; flex-shrink: 0; }
+  .cg-headline { font-family: 'Playfair Display', serif; font-weight: 900; line-height: 1; background: linear-gradient(135deg, #C9A84C 0%, #F5D78E 50%, #C9A84C 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .cg-sub { color: #aaa; letter-spacing: 0.08em; }
+  .cg-cta { background: #CC2222; color: #fff; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer; white-space: nowrap; }
+  .cg-suits { color: #C9A84C; letter-spacing: 0.2em; }
+  .cg-neon-spade { filter: drop-shadow(0 0 6px #3B82F6); }
+  .cg-est { color: #666; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; }
+  @keyframes cg-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+  .cg-cta:hover { background: #aa1a1a; }
+
+.cg-banner { width: 728px; height: 90px; }
+.cg-content { padding: 0 16px; gap: 12px; justify-content: space-between; }
+.cg-logo { height: 56px; width: 56px; }
+.cg-headline { font-size: 1.6rem; }
+.cg-sub { font-size: 0.6rem; }
+.cg-cta { padding: 8px 18px; font-size: 0.65rem; }
+.cg-suits { font-size: 1rem; }
+.cg-mid { display: flex; flex-direction: column; gap: 2px; }
+</style>
+</head>
+<body>
+<div class="cg-banner" onclick="window.open('https://coloradogambler.com','_blank')">
+  <img class="cg-bg" src="https://files.manuscdn.com/user_upload_by_module/session_file/92654332/ZbTNdupTSJaPXUxm.png" alt="">
+  <div class="cg-overlay"></div>
+  <div class="cg-content">
+    <img class="cg-logo cg-neon-spade" src="https://files.manuscdn.com/user_upload_by_module/session_file/92654332/NcMIQpEliuGhYtno.png" alt="Colorado Gambler">
+    <div class="cg-mid">
+      <div class="cg-headline">COLORADO GAMBLER</div>
+      <div class="cg-sub">Black Hawk · Central City · Cripple Creek · Est. 1991</div>
+    </div>
+    <div class="cg-suits">♠ ♥ ♦ ♣</div>
+    <button class="cg-cta">Casino Guide →</button>
+  </div>
+</div>
+</body>
+</html>

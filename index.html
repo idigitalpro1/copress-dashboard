@@ -50,6 +50,7 @@
   --c-hermes:    #06b6d4;
   --c-admin:     #d946ef;
   --c-stationery:#f472b6;
+  --c-gambling:  #22c55e;
 }
 
 html, body {
@@ -1143,6 +1144,47 @@ body::before {
           </div>
         </div>
 
+        <!-- Colorado Gambler -->
+        <div class="module-card" data-target="directory" style="--card-color:var(--c-gambling);--card-glow:rgba(34,197,94,.06);">
+          <div class="card-dept">
+            <span class="card-dept-name">Gambling</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">♠</div>
+              <div>
+                <div class="card-title">Colorado Gambler</div>
+                <div class="card-subtitle">Campaign kit · casino directory · domain handoff</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Vertical</span>
+                <span class="stat-value ok" style="font-size:11px;">Gambling</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Repo</span>
+                <span class="stat-value" style="font-size:10px;">colorado-gambler</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Primary</span>
+                <span class="stat-value highlight" style="font-size:10px;">gambling.conews</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Forward</span>
+                <span class="stat-value" style="font-size:10px;">ColoradoGambler</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.open('/cg-campaign-kit/manifest.json','_blank')">Campaign Kit</button>
+              <button class="card-btn" onclick="event.stopPropagation(); loadCasinoDirectory()">Load Casinos</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('https://github.com/idigitalpro1/colorado-gambler','_blank')">Repo</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Marketing Hub -->
         <div class="module-card" data-target="marketing" style="--card-color:var(--c-marketing);--card-glow:rgba(26,188,156,.06);">
           <div class="card-dept">
@@ -1671,11 +1713,11 @@ body::before {
                 <div class="module-form two">
                   <div class="module-field"><label>ZIP or town</label><input id="directory-query" placeholder="80422 or Nederland"></div>
                   <div class="module-field"><label>Category</label><select id="directory-category">
-                    <option>All Categories</option><option>Restaurants</option><option>Cafes & Bakeries</option><option>Bars & Breweries</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option><option>Arts & Culture</option><option>Events & Venues</option><option>Real Estate</option><option>Contractors</option><option>Health & Wellness</option><option>Automotive</option><option>Outdoor Recreation</option><option>Nonprofits</option><option>Civic Organizations</option><option>Schools & Education</option><option>Faith Communities</option><option>Government Offices</option><option>Professional Services</option><option>Legal & Financial</option><option>Home & Garden</option><option>Tourism</option>
+                    <option>All Categories</option><option>Casinos & Gaming</option><option>Restaurants</option><option>Cafes & Bakeries</option><option>Bars & Breweries</option><option>Lodging</option><option>Retail</option><option>Services</option><option>Attractions</option><option>Arts & Culture</option><option>Events & Venues</option><option>Real Estate</option><option>Contractors</option><option>Health & Wellness</option><option>Automotive</option><option>Outdoor Recreation</option><option>Nonprofits</option><option>Civic Organizations</option><option>Schools & Education</option><option>Faith Communities</option><option>Government Offices</option><option>Professional Services</option><option>Legal & Financial</option><option>Home & Garden</option><option>Tourism</option>
                   </select></div>
                   <div class="module-field"><label>Source</label><select id="directory-source-select"><option value="demo">Demo seed data</option><option value="scan-ocr">Public wall OCR shape</option><option value="google">Google Places shape</option><option value="apify">Apify actor shape</option></select></div>
                   <div class="module-field"><label>Geography source</label><select id="directory-geo-type"><option value="town">Town</option><option value="zip">ZIP</option><option value="county">County</option><option value="region">Region</option><option value="event">Event / public wall</option></select></div>
-                  <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>Black Hawk city site</option><option>Central City site</option><option>Nederland city site</option><option>Georgetown city site</option><option>Idaho Springs city site</option><option>Weekly print directory</option><option>Newsletter feature block</option><option>Social campaign queue</option><option>Sales CRM follow-up</option><option>Build Kit queue</option><option>Send Onboarding queue</option></select></div>
+                  <div class="module-field"><label>Publish target</label><select id="directory-target"><option>registercall.com</option><option>gambling.conews.press</option><option>ColoradoGambler.com forward</option><option>Black Hawk city site</option><option>Central City site</option><option>Nederland city site</option><option>Georgetown city site</option><option>Idaho Springs city site</option><option>Weekly print directory</option><option>Newsletter feature block</option><option>Social campaign queue</option><option>Sales CRM follow-up</option><option>Build Kit queue</option><option>Send Onboarding queue</option></select></div>
                   <div class="module-field"><label>Campaign kit</label><select id="directory-campaign-kit"><option>Editorial Outreach</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Civic Partner Thank You</option><option>Sponsor Prospect</option></select></div>
                   <div class="module-field"><label>Source tag</label><input id="directory-source-tag" placeholder="shoplocal, marketing-hub, editorial-outreach, civic-scan..."></div>
                   <div class="module-field"><label>Civic source</label><input id="directory-civic-source" placeholder="Chamber, Main Street, tourism board, school booster..."></div>
@@ -1688,6 +1730,7 @@ body::before {
                 </div>
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="stageDirectoryImport()">Run Demo Import</button>
+                  <button class="module-btn" onclick="loadCasinoDirectory()">Load Casinos</button>
                   <button class="module-btn" onclick="runDirectoryOCR()">OCR / Parse Wall</button>
                   <button class="module-btn" onclick="buildDirectoryCampaignKit()">Build Kit</button>
                   <button class="module-btn" onclick="sendDirectoryOnboarding()">Send Onboarding</button>
@@ -2344,6 +2387,9 @@ function generateDailyStoryList() {
 
 function makeSeedBusinesses(query, category) {
   const town = query || 'Nederland';
+  if (String(category).toLowerCase().includes('casino') || ['Black Hawk', 'Central City'].includes(town)) {
+    return makeCasinoSeedBusinesses(town);
+  }
   return [
     { name: `${town} Mountain Market`, address: `101 Main St, ${town}, CO`, phone: '(303) 555-0101', website: 'https://mountainmarket.example', category, source: 'demo', rating: 4.7 },
     { name: `${town} Mountain Market LLC`, address: `101 Main Street, ${town}, Colorado`, phone: '303-555-0101', website: 'https://mountainmarket.example/menu', category, source: 'demo', rating: 4.6 },
@@ -2351,6 +2397,79 @@ function makeSeedBusinesses(query, category) {
     { name: `Peak & Pine ${category}`, address: `244 Miner Rd, ${town}, CO`, phone: '(720) 555-0144', website: '', category, source: 'demo', rating: 4.4 },
     { name: `${town} Visitor Center`, address: `1 Welcome Way, ${town}, CO`, phone: '(303) 555-0177', website: 'https://visit.example', category: 'Attractions', source: 'demo', rating: 4.5 },
   ];
+}
+
+function makeCasinoSeedBusinesses(town) {
+  const blackHawk = [
+    { name: 'Ameristar Casino Resort Spa Black Hawk', address: '111 Richman St, Black Hawk, CO', phone: '', website: 'https://www.ameristarblackhawk.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Monarch Casino Resort Spa Black Hawk', address: '488 Main St, Black Hawk, CO', phone: '', website: 'https://monarchblackhawk.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Horseshoe Black Hawk', address: '401 Main St, Black Hawk, CO', phone: '', website: 'https://www.caesars.com/horseshoe-black-hawk', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'The Lodge Casino', address: '240 Main St, Black Hawk, CO', phone: '', website: 'https://thelodgecasino.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Bally’s Black Hawk', address: '340 Main St, Black Hawk, CO', phone: '', website: 'https://casinos.ballys.com/black-hawk/', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Saratoga Casino Black Hawk', address: '101 Main St, Black Hawk, CO', phone: '', website: 'https://saratogacasino.com/blackhawk', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Lady Luck Casino Black Hawk', address: '340 Main St, Black Hawk, CO', phone: '', website: 'https://www.caesars.com/lady-luck-black-hawk', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Gilpin Casino', address: '111 Main St, Black Hawk, CO', phone: '', website: 'https://thegilpincasino.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Sasquatch Casino', address: 'Black Hawk, CO', phone: '', website: 'https://sasquatchcasino.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Wild Card Saloon and Casino', address: '120 Main St, Black Hawk, CO', phone: '', website: 'https://wildcardsaloon.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Z Casino', address: 'Black Hawk, CO', phone: '', website: 'https://www.maverickgaming.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+  ];
+  const centralCity = [
+    { name: 'Century Casino & Hotel Central City', address: '102 Main St, Central City, CO', phone: '', website: 'https://www.cnty.com/central-city/', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Grand Z Casino Hotel', address: '321 Gregory St, Central City, CO', phone: '', website: 'https://www.grandzcasinohotel.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Dostal Alley Brewpub & Casino', address: '116 Main St, Central City, CO', phone: '', website: 'https://www.dostalalley.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Easy Street Casino', address: '120 Main St, Central City, CO', phone: '', website: 'https://easystreetcasino.com', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Famous Bonanza Casino', address: '107 Main St, Central City, CO', phone: '', website: '', category: 'Casinos & Gaming', source: 'official-tourism' },
+    { name: 'Dragon Tiger Casino', address: '132 Lawrence St, Central City, CO', phone: '', website: '', category: 'Casinos & Gaming', source: 'official-tourism' },
+  ];
+  if (town === 'Black Hawk') return blackHawk;
+  if (town === 'Central City') return centralCity;
+  return [...blackHawk, ...centralCity];
+}
+
+function loadCasinoDirectory() {
+  navTo('directory');
+  const queryInput = document.getElementById('directory-query');
+  const categorySelect = document.getElementById('directory-category');
+  const sourceSelect = document.getElementById('directory-source-select');
+  const geoSelect = document.getElementById('directory-geo-type');
+  const targetSelect = document.getElementById('directory-target');
+  const sourceTagInput = document.getElementById('directory-source-tag');
+  const civicInput = document.getElementById('directory-civic-source');
+  if (queryInput) queryInput.value = 'Colorado casino towns';
+  if (categorySelect) categorySelect.value = 'Casinos & Gaming';
+  if (sourceSelect) sourceSelect.value = 'demo';
+  if (geoSelect) geoSelect.value = 'region';
+  if (targetSelect) targetSelect.value = 'gambling.conews.press';
+  if (sourceTagInput) sourceTagInput.value = 'colorado-gambler';
+  if (civicInput) civicInput.value = 'Colorado Gambler campaign kit + official tourism/source verification';
+  directoryScanMeta = {
+    label: 'Colorado Gambler casino directory kit',
+    civicSource: 'cg-campaign-kit.zip',
+    fileName: 'cg-campaign-kit.zip',
+    cardCount: 17,
+    ocrStatus: 'campaign-kit-loaded',
+  };
+  const batch = {
+    query: 'Colorado casino towns',
+    category: 'Casinos & Gaming',
+    source: 'campaign-kit',
+    sourceTag: 'colorado-gambler',
+    target: 'gambling.conews.press',
+    geographyType: 'region',
+    civicSource: 'Colorado Gambler campaign kit',
+    scan: directoryScanMeta,
+  };
+  directoryRecords = detectDirectoryDuplicates(makeCasinoSeedBusinesses('Colorado casino towns').map(item => normalizeBusinessRecord(item, batch)));
+  saveDirectoryBatch();
+  localStorage.setItem(DIRECTORY_SCAN_STORE, JSON.stringify(directoryScanMeta));
+  renderDirectoryScanMeta();
+  renderDirectoryBatch();
+  setText('directory-source', 'CG kit');
+  const output = document.getElementById('directory-output');
+  if (output) {
+    output.textContent = `Colorado Gambler casino directory loaded\nPrimary vertical: gambling.conews.press\nForward candidate: ColoradoGambler.com -> gambling.conews.press\nRepo: idigitalpro1/colorado-gambler\nCampaign kit: /cg-campaign-kit/manifest.json\nRecords: ${directoryRecords.length}\n\nNext publish step: approve records, build a directory campaign kit, then wire the live domain only after DNS/Plesk approval.`;
+  }
+  toast('Colorado Gambler casino listings loaded');
 }
 
 function drawDirectoryScanDemo() {

@@ -13,7 +13,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 | Route | File | Status | Description |
 |-------|------|--------|-------------|
 | `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 10 cards, live data hooks, 5 module workbenches |
-| `/network` | `network.html` | ✅ Live | Network HQ — server IP, 5 property cards, 3CX phone system |
+| `/network` | `network.html` | ✅ Live | Network HQ — server IP, 6 property cards, 3CX phone system |
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
 | `/apistore` | `apistore.html` | ✅ Live | API Vault — secure key store, MCP injection, .env export |
@@ -66,6 +66,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 | Accounting | `data-view=accounting` | Financial tools |
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
+| Colorado Gambler | `data-view=directory` | Gambling vertical and casino directory loader |
 | Staff Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
 | Hermes Orchestrator | `data-view=brains` | Local/cloud AI routing status |
@@ -205,8 +206,30 @@ Shows full infrastructure ownership:
 1. registercall.com — WordPress editorial + Vite SPA
 2. 5280.menu — Static watercolor redesign
 3. copress-dashboard.vercel.app — THE SPINE (this app)
-4. 3CX Phone System — SIP extensions, AI receptionist
-5. empire-courier.com — placeholder
+4. Colorado Gambler — gambling.conews.press vertical; ColoradoGambler.com forward candidate
+5. 3CX Phone System — SIP extensions, AI receptionist
+6. empire-courier.com — placeholder
+
+## Colorado Gambler Campaign Kit
+
+The imported `/cg-campaign-kit/` bundle comes from `/Users/Ace/Downloads/cg-campaign-kit.zip` and is served as static dashboard collateral:
+
+- `/cg-campaign-kit/manifest.json`
+- `/cg-campaign-kit/banners/banner-leaderboard-728x90.html`
+- `/cg-campaign-kit/banners/banner-medium-rect-300x250.html`
+- `/cg-campaign-kit/banners/banner-skyscraper-160x600.html`
+- `/cg-campaign-kit/banners/banner-half-page-300x600.html`
+- `/cg-campaign-kit/banners/banner-mobile-320x50.html`
+- `/cg-campaign-kit/banners/banner-social-square-1080x1080.html`
+- `/cg-campaign-kit/email/newsletter-casino-guide.html`
+- `/cg-campaign-kit/email/newsletter-sportsbook-promos.html`
+- `/cg-campaign-kit/editorial/press-release.md`
+- `/cg-campaign-kit/editorial/sponsored-post.md`
+- `/cg-campaign-kit/editorial/social-media-copy.md`
+- `/cg-campaign-kit/seo/meta.json`
+- `/cg-campaign-kit/seo/jsonld.json`
+
+Recommended domain policy: use `gambling.conews.press` as the CoPress network vertical and forward `ColoradoGambler.com` to it after explicit DNS/Plesk approval.
 
 **3CX SIP Extensions:**
 - 17410 Patrick · 17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production

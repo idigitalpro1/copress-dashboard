@@ -1,0 +1,53 @@
+{
+  "campaign": "Colorado Gambler — Casino Guide Launch 2026",
+  "brand": "Colorado Gambler",
+  "founder": "Patrick Sweeney",
+  "established": 1991,
+  "version": "1.0.0",
+  "created": "2026-02-26",
+  "colors": {
+    "gamblerGold": "#C9A84C",
+    "gamblerRed": "#CC2222",
+    "neonBlue": "#3B82F6",
+    "neonGreen": "#22C55E",
+    "deepBlack": "#080808",
+    "cardDark": "#0D0D0D",
+    "creamText": "#F0EAD6"
+  },
+  "fonts": {
+    "display": "Playfair Display",
+    "body": "Lora",
+    "ui": "Space Grotesk",
+    "mono": "Space Mono"
+  },
+  "assets": {
+    "logo": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/NcMIQpEliuGhYtno.png",
+    "badge": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/lroydGOiSvXxjvfO.png",
+    "heroNeon": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/GobgtSSRhpVfSJUk.jpg"
+  },
+  "deliverables": {
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-skyscraper-160x600.html",
+      "banners/banner-half-page-300x600.html",
+      "banners/banner-mobile-320x50.html",
+      "banners/banner-social-square-1080x1080.html"
+    ],
+    "email": [
+      "email/newsletter-casino-guide.html",
+      "email/newsletter-sportsbook-promos.html"
+    ],
+    "editorial": [
+      "editorial/press-release.md",
+      "editorial/sponsored-post.md",
+      "editorial/social-media-copy.md"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ]
+  },
+  "website": "https://coloradogambler.com",
+  "responsible_gaming": "Must be 21+. Colorado only. Gambling involves risk. Problem gambling helpline: 1-800-522-4700."
+}

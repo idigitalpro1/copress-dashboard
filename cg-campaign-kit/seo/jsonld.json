@@ -1,0 +1,117 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://coloradogambler.com/#website",
+      "url": "https://coloradogambler.com",
+      "name": "Colorado Gambler",
+      "description": "Colorado's casino authority since 1991 — covering Black Hawk, Central City, and Cripple Creek.",
+      "publisher": {
+        "@id": "https://coloradogambler.com/#organization"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://coloradogambler.com/?s={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://coloradogambler.com/#organization",
+      "name": "Colorado Gambler",
+      "url": "https://coloradogambler.com",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://files.manuscdn.com/user_upload_by_module/session_file/92654332/NcMIQpEliuGhYtno.png"
+      },
+      "foundingDate": "1991",
+      "founder": {
+        "@type": "Person",
+        "name": "Patrick Sweeney"
+      },
+      "description": "Colorado's original casino gaming publication, founded in 1991 by Patrick Sweeney. Covering Black Hawk, Central City, and Cripple Creek.",
+      "sameAs": [
+        "https://coloradogambler.com"
+      ]
+    },
+    {
+      "@type": "LocalBusiness",
+      "@id": "https://coloradogambler.com/#business",
+      "name": "Colorado Gambler",
+      "description": "Colorado casino guide and gaming publication",
+      "url": "https://coloradogambler.com",
+      "areaServed": {
+        "@type": "State",
+        "name": "Colorado"
+      },
+      "knowsAbout": [
+        "Casino Gaming",
+        "Sports Betting",
+        "Black Hawk Colorado Casinos",
+        "Central City Colorado Casinos",
+        "Cripple Creek Colorado Casinos",
+        "Colorado Gaming History"
+      ]
+    },
+    {
+      "@type": "ItemList",
+      "name": "Colorado Casino Towns",
+      "description": "The three licensed casino gaming towns in Colorado",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "City",
+            "name": "Black Hawk",
+            "description": "Colorado's largest casino gaming destination with 9 licensed casinos including Ameristar, Isle, and Monarch.",
+            "containedInPlace": {
+              "@type": "State",
+              "name": "Colorado"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "City",
+            "name": "Central City",
+            "description": "Historic Victorian gaming town with 5 licensed casinos and the Central City Opera House.",
+            "containedInPlace": {
+              "@type": "State",
+              "name": "Colorado"
+            }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "City",
+            "name": "Cripple Creek",
+            "description": "High-altitude gaming town above Pikes Peak with 8 licensed casinos.",
+            "containedInPlace": {
+              "@type": "State",
+              "name": "Colorado"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "PodcastSeries",
+      "name": "Colorado Gambler Historic Podcasts",
+      "description": "Historic Colorado gaming stories in audio — from the 1991 vote that legalized casino gaming to the first year of legal sports betting.",
+      "url": "https://coloradogambler.com/podcasts",
+      "author": {
+        "@type": "Person",
+        "name": "Patrick Sweeney"
+      },
+      "publisher": {
+        "@id": "https://coloradogambler.com/#organization"
+      }
+    }
+  ]
+}
