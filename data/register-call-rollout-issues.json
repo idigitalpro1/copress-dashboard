@@ -1,0 +1,222 @@
+[
+  {
+    "issue_key": "PROV-101",
+    "phase": "Foundation",
+    "title": "Site Architecture: Free vs Paid Tier Routing",
+    "priority": "High",
+    "labels": ["foundation", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Implement free tier high-density banners/basic directory/HS sports and paid tier ad-free carousel/rich profiles/lead forms.",
+    "deliverable": "Tier routing live with correct ad and UX state per subscription."
+  },
+  {
+    "issue_key": "PROV-102",
+    "phase": "Foundation",
+    "title": "SEO Pillar URL Mapping and Internal Linking",
+    "priority": "Medium",
+    "labels": ["foundation", "editorial", "needs-design", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Map seven editorial pillars and define automatic cross-linking rules for published content.",
+    "deliverable": "SEO pillar map live with automatic internal linking on publish."
+  },
+  {
+    "issue_key": "PROV-103",
+    "phase": "Foundation",
+    "title": "Editorial Submission Middleware Queue",
+    "priority": "High",
+    "labels": ["foundation", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Build article and letter submission endpoints, moderation workflow, and author role assignment.",
+    "deliverable": "Submission queue live with approve/reject/revision workflow."
+  },
+  {
+    "issue_key": "PROV-104",
+    "phase": "Foundation",
+    "title": "Shop Local Directory Schema and Search Index",
+    "priority": "High",
+    "labels": ["foundation", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Design business directory schema with category, geo, search, map view, rich profiles, and lead form fields.",
+    "deliverable": "Searchable Shop Local directory schema and admin CRUD ready."
+  },
+  {
+    "issue_key": "PROV-105",
+    "phase": "Foundation",
+    "title": "Community Calendar Embed and RSVP Handler",
+    "priority": "Medium",
+    "labels": ["foundation", "needs-design", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Build event CRUD, RSVP tracking, capacity limits, map pins, and sponsor-promoted event modules.",
+    "deliverable": "Calendar and RSVP lane ready for city-site launch."
+  },
+  {
+    "issue_key": "PROV-201",
+    "phase": "Editorial Workflow",
+    "title": "Author Role Assignment: Sweeney Weisneth Hill",
+    "priority": "Medium",
+    "labels": ["editorial", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Assign author roles and publish permissions for Patrick, Joathon, and Paul with byline/profile schema.",
+    "deliverable": "Author lanes wired to article schema and OpenGraph metadata."
+  },
+  {
+    "issue_key": "PROV-202",
+    "phase": "Editorial Workflow",
+    "title": "LTO Submission Form and Moderation Dashboard",
+    "priority": "Medium",
+    "labels": ["editorial", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Build Letters to the Editor form with word limit, identity fields, verification lane, and moderation queue.",
+    "deliverable": "LTO form and review queue ready for editorial use."
+  },
+  {
+    "issue_key": "PROV-203",
+    "phase": "Editorial Workflow",
+    "title": "Ad Placement Engine and Tier Logic",
+    "priority": "High",
+    "labels": ["editorial", "needs-design", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Implement tier-based ad placement zones for banners, sidebars, inline ads, carousel placements, and paid bypass.",
+    "deliverable": "Ad placement API and paid ad-free bypass working."
+  },
+  {
+    "issue_key": "PROV-204",
+    "phase": "Editorial Workflow",
+    "title": "Sponsored Carousel Component and Tracking",
+    "priority": "High",
+    "labels": ["editorial", "needs-design", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Build sponsored article carousel with native labeling, swipe interaction, rotation controls, and click/impression events.",
+    "deliverable": "Sponsored carousel visible with tracking hooks and admin rotation controls."
+  },
+  {
+    "issue_key": "PROV-205",
+    "phase": "Editorial Workflow",
+    "title": "GoFundMe Local Feed and Verification Badge",
+    "priority": "Medium",
+    "labels": ["editorial", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Create local giving feed with manual or partner-submitted campaigns, verification badges, featured campaign module, and update posts.",
+    "deliverable": "Local giving module ready with verification workflow."
+  },
+  {
+    "issue_key": "PROV-301",
+    "phase": "Launch and Optimization",
+    "title": "Schema Deployment: Article Event LocalBusiness",
+    "priority": "Medium",
+    "labels": ["launch", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Deploy JSON-LD structured data for articles, events, local businesses, and organization pages.",
+    "deliverable": "Structured data passes rich-result smoke checks."
+  },
+  {
+    "issue_key": "PROV-302",
+    "phase": "Launch and Optimization",
+    "title": "SEO Audit: Meta Alt Headings Internal Links",
+    "priority": "Medium",
+    "labels": ["launch", "needs-qa", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Audit title tags, meta descriptions, heading structure, image alt text, and internal links across published content.",
+    "deliverable": "SEO QA checklist completed before hard launch."
+  },
+  {
+    "issue_key": "PROV-303",
+    "phase": "Launch and Optimization",
+    "title": "Ad Density Optimization and Performance Tuning",
+    "priority": "Medium",
+    "labels": ["launch", "needs-design", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Tune ad density, lazy loading, page weight, and Core Web Vitals with ad modules active.",
+    "deliverable": "Ad layout tuned for UX, viewability, and performance."
+  },
+  {
+    "issue_key": "PROV-304",
+    "phase": "Launch and Optimization",
+    "title": "Analytics and Conversion Tracking",
+    "priority": "High",
+    "labels": ["launch", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Track newsletter opt-ins, sponsor leads, Shop Local inquiries, RSVP events, and campaign conversions.",
+    "deliverable": "Live conversion dashboard with funnel metrics."
+  },
+  {
+    "issue_key": "PROV-305",
+    "phase": "Launch and Optimization",
+    "title": "Soft Launch Feedback Capture Hard Launch",
+    "priority": "High",
+    "labels": ["launch", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Soft launch to pilot towns, capture feedback, patch issues, and prepare hard launch across eight city targets.",
+    "deliverable": "Pilot feedback captured and hard-launch checklist approved."
+  },
+  {
+    "issue_key": "PROV-401",
+    "phase": "Digital Weekly Delivery",
+    "title": "Subscriber Preference API",
+    "priority": "High",
+    "labels": ["digital-weekly", "subscriber", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Build POST /api/subscribe with town/topic preferences, unsubscribe token, and database persistence.",
+    "deliverable": "Subscriber capture works with town/topic preferences and compliant unsubscribe."
+  },
+  {
+    "issue_key": "PROV-402",
+    "phase": "Digital Weekly Delivery",
+    "title": "Weekly Edition Build Engine",
+    "priority": "High",
+    "labels": ["digital-weekly", "edition-builder", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Create build_edition.py to pull approved content, events, ads, and Shop Local items into town/date HTML and JSON editions.",
+    "deliverable": "GET /api/weekly/{town}/{date} returns a mobile-first edition payload."
+  },
+  {
+    "issue_key": "PROV-403",
+    "phase": "Digital Weekly Delivery",
+    "title": "Community Submission Forms",
+    "priority": "High",
+    "labels": ["digital-weekly", "editorial", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Build public submission forms for articles, LTO, event notices, photo/video upload, and moderation metadata.",
+    "deliverable": "Submissions land in moderation queue with category, town, contact, and asset metadata."
+  },
+  {
+    "issue_key": "PROV-404",
+    "phase": "Digital Weekly Delivery",
+    "title": "Shop Local Business Onboarding",
+    "priority": "Medium",
+    "labels": ["digital-weekly", "shop-local", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Build business onboarding for free/featured/rich profile tiers with category, contact, media, and ad tier fields.",
+    "deliverable": "Business intake creates review-ready Shop Local records."
+  },
+  {
+    "issue_key": "PROV-405",
+    "phase": "Digital Weekly Delivery",
+    "title": "Town Subscriber Landing Pages",
+    "priority": "Medium",
+    "labels": ["digital-weekly", "seo", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Create mobile-first landing page template per town with signup, topic choices, and welcome CTA.",
+    "deliverable": "Each pilot town has a working signup URL and SEO metadata."
+  },
+  {
+    "issue_key": "PROV-406",
+    "phase": "Digital Weekly Delivery",
+    "title": "SMTP Delivery and Schedule",
+    "priority": "High",
+    "labels": ["digital-weekly", "delivery", "priority-high"],
+    "assignee": "Codex/Claude",
+    "description": "Wire SMTP or transactional email provider and scheduled Thursday/Friday delivery lane for approved editions.",
+    "deliverable": "Scheduled delivery can send test editions and log success/failure."
+  },
+  {
+    "issue_key": "PROV-407",
+    "phase": "Digital Weekly Delivery",
+    "title": "Subscriber and Sponsor Analytics",
+    "priority": "Medium",
+    "labels": ["digital-weekly", "analytics", "priority-medium"],
+    "assignee": "Codex/Claude",
+    "description": "Track subscriber growth, opens, clicks, ad CTR, sponsor leads, and town-level conversion funnels.",
+    "deliverable": "SATCOM shows weekly edition KPIs by town and sponsor lane."
+  }
+]

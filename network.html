@@ -270,6 +270,231 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 }
 .city-dept:hover{background:rgba(200,168,75,.1);color:var(--gold);border-color:var(--gold)}
 
+/* ── SATCOM rollout ownership board ── */
+.rollout-board{
+  background:linear-gradient(135deg,rgba(13,26,45,.98),rgba(8,17,30,.96));
+  border:1px solid rgba(200,168,75,.26);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-bottom:40px;
+  box-shadow:0 18px 50px rgba(0,0,0,.32);
+}
+.rollout-top{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:start;
+  padding:22px 24px;
+  border-bottom:1px solid var(--border);
+}
+.rollout-kicker{
+  font-family:var(--mono);
+  color:var(--gold);
+  font-size:.66rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.rollout-title{
+  font-family:var(--serif);
+  font-size:1.55rem;
+  line-height:1.1;
+  margin-bottom:7px;
+}
+.rollout-copy{
+  color:var(--muted);
+  max-width:760px;
+  line-height:1.55;
+  font-size:.86rem;
+}
+.rollout-badges{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.rollout-badge{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  border-radius:999px;
+  padding:6px 10px;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.68rem;
+  white-space:nowrap;
+}
+.rollout-badge.gold{border-color:rgba(200,168,75,.38);color:var(--gold-bright)}
+.rollout-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:0;
+}
+.phase-stack{
+  padding:20px 22px;
+  border-right:1px solid var(--border);
+  display:grid;
+  gap:12px;
+}
+.phase-row{
+  display:grid;
+  grid-template-columns:72px 1fr auto;
+  gap:12px;
+  align-items:center;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+}
+.phase-num{
+  font-family:var(--mono);
+  font-size:.72rem;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.phase-name{font-weight:700;font-size:.92rem;margin-bottom:2px}
+.phase-desc{color:var(--muted);font-size:.74rem;line-height:1.35}
+.phase-count{
+  font-family:var(--mono);
+  color:var(--green);
+  font-weight:700;
+  font-size:.78rem;
+  white-space:nowrap;
+}
+.rollout-side{
+  padding:20px 22px;
+}
+.owner-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+.owner-chip{
+  border:1px solid var(--border);
+  background:var(--surface2);
+  border-radius:9px;
+  padding:10px 11px;
+}
+.owner-name{
+  font-weight:700;
+  font-size:.82rem;
+  margin-bottom:2px;
+}
+.owner-lane{
+  color:var(--muted);
+  font-size:.68rem;
+  line-height:1.35;
+}
+.rollout-links{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.rollout-link{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  text-decoration:none;
+  color:var(--text);
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:.76rem;
+  font-weight:700;
+}
+.rollout-link:hover{border-color:var(--gold);color:var(--gold)}
+.packet-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.packet-card{
+  border:1px solid rgba(244,114,182,.32);
+  background:linear-gradient(135deg,rgba(244,114,182,.12),rgba(200,168,75,.045));
+  border-radius:9px;
+  padding:11px 12px;
+}
+.packet-title{
+  color:#f9a8d4;
+  font-weight:800;
+  font-size:.78rem;
+  margin-bottom:4px;
+}
+.packet-copy{
+  color:var(--muted);
+  line-height:1.35;
+  font-size:.68rem;
+  margin-bottom:9px;
+}
+.packet-link{
+  color:#f9a8d4;
+  text-decoration:none;
+  font-family:var(--mono);
+  font-size:.64rem;
+  font-weight:700;
+}
+.packet-link:hover{color:var(--gold-bright)}
+.thumb-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  padding:0 22px 22px;
+}
+.mini-thumb{
+  position:relative;
+  height:104px;
+  border-radius:9px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--surface2);
+}
+.mini-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:top center;
+  display:block;
+}
+.mini-thumb::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,transparent 36%,rgba(8,17,30,.92));
+}
+.mini-thumb-label{
+  position:absolute;
+  left:9px;
+  right:9px;
+  bottom:8px;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  color:#fff;
+  font-size:.67rem;
+  font-weight:700;
+}
+.mini-thumb-state{
+  color:var(--gold-bright);
+  font-family:var(--mono);
+  font-size:.58rem;
+  white-space:nowrap;
+}
+@media (max-width:900px){
+  .rollout-top,.rollout-grid{grid-template-columns:1fr}
+  .rollout-badges{justify-content:flex-start}
+  .phase-stack{border-right:0;border-bottom:1px solid var(--border)}
+  .thumb-strip{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .phase-row{grid-template-columns:1fr}
+  .owner-grid,.rollout-links,.packet-row,.thumb-strip{grid-template-columns:1fr}
+}
+
 /* ── Server Panel ── */
 .server-panel{
   background:var(--surface);
@@ -347,9 +572,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <!-- ── HERO ── -->
   <div class="hero">
     <div class="hero-left">
-      <div class="hero-eyebrow">📰 Sweeney Media Group</div>
+      <div class="hero-eyebrow">SATCOM · Ownership Dashboard</div>
       <h1 class="hero-title">Network<br><em>Properties</em></h1>
-      <p class="hero-sub">Every site, domain, and server in the portfolio. Click any property to visit — or use the department buttons to route directly to Editorial, Marketing, Accounting, or Campaign Kits in the main spine.</p>
+      <p class="hero-sub">Every site, domain, rollout lane, and server in the portfolio. SATCOM owns the plan; 5280 and city brands carry the public reader experience.</p>
     </div>
     <div class="hero-stats">
       <div class="stat-card">
@@ -361,12 +586,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <div class="stat-label">Production IP</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val stat-gold">6</div>
-        <div class="stat-label">Live Properties</div>
+        <div class="stat-val stat-gold">22</div>
+        <div class="stat-label">Rollout Cards</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val">5</div>
-        <div class="stat-label">City Sites</div>
+        <div class="stat-val">8</div>
+        <div class="stat-label">City Targets</div>
       </div>
       <div class="stat-card">
         <div class="stat-val stat-blue">16 GB</div>
@@ -374,6 +599,111 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       </div>
     </div>
   </div>
+
+  <!-- ── SATCOM ROLLOUT ── -->
+  <div class="sec-label">SATCOM Rollout — Kanban News Sections + SEO</div>
+  <section class="rollout-board" aria-label="SATCOM city-site rollout ownership">
+    <div class="rollout-top">
+      <div>
+        <div class="rollout-kicker">Presentation view · Register Call / CoPress Site Rollout</div>
+        <div class="rollout-title">Kanban-driven city news, Shop Local, and campaign kits</div>
+        <p class="rollout-copy">Aileen drafts the planning packets. SATCOM owns approval and sequencing. Codex/Claude turns approved cards into repo work, public city sections, SEO metadata, and verified launch slices.</p>
+      </div>
+      <div class="rollout-badges">
+        <span class="rollout-badge gold">5ST-44</span>
+        <span class="rollout-badge">PROV Sprint 1</span>
+        <span class="rollout-badge">22 cards</span>
+        <span class="rollout-badge">Blueprint ready</span>
+      </div>
+    </div>
+    <div class="rollout-grid">
+      <div class="phase-stack">
+        <div class="phase-row">
+          <div class="phase-num">Phase 1</div>
+          <div>
+            <div class="phase-name">Foundation</div>
+            <div class="phase-desc">Tier routing, SEO pillar URLs, submissions, Shop Local schema, calendar/RSVP.</div>
+          </div>
+          <div class="phase-count">5 cards</div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num">Phase 2</div>
+          <div>
+            <div class="phase-name">Editorial Workflow</div>
+            <div class="phase-desc">Author lanes, LTO moderation, ad engine, sponsored carousel, local giving feed.</div>
+          </div>
+          <div class="phase-count">5 cards</div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num">Phase 3</div>
+          <div>
+            <div class="phase-name">Launch + Optimization</div>
+            <div class="phase-desc">Schema, SEO QA, ad performance, conversion tracking, soft launch to hard launch.</div>
+          </div>
+          <div class="phase-count">5 cards</div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num">Phase 4</div>
+          <div>
+            <div class="phase-name">Digital Weekly Delivery</div>
+            <div class="phase-desc">Subscriber preferences, edition builder, submission forms, SMTP delivery, and weekly KPIs.</div>
+          </div>
+          <div class="phase-count">7 cards</div>
+        </div>
+      </div>
+      <div class="rollout-side">
+        <div class="owner-grid">
+          <div class="owner-chip"><div class="owner-name">Patrick</div><div class="owner-lane">Government, schools, investigations, final editorial decisions.</div></div>
+          <div class="owner-chip"><div class="owner-name">Joathon</div><div class="owner-lane">Shop Local, business profiles, sponsored commerce packages.</div></div>
+          <div class="owner-chip"><div class="owner-name">Paul</div><div class="owner-lane">Sports, events, photos/video, local giving, field upload lane.</div></div>
+          <div class="owner-chip"><div class="owner-name">Codex / Claude</div><div class="owner-lane">Patches, implementation cards, deploy verification, rollback notes.</div></div>
+        </div>
+        <div class="rollout-links">
+          <a class="rollout-link" href="https://linear.app/5starserver/issue/5ST-44/roll-out-kanban-driven-news-sections-and-seo-across-city-sites" target="_blank" rel="noopener">Open Linear 5ST-44 <span>→</span></a>
+          <a class="rollout-link" href="/linear">SATCOM Linear Board <span>→</span></a>
+          <a class="rollout-link" href="/data/register-call-rollout-issues.csv" target="_blank" rel="noopener">CSV Import <span>→</span></a>
+          <a class="rollout-link" href="/data/register-call-rollout-issues.json" target="_blank" rel="noopener">JSON Export <span>→</span></a>
+          <a class="rollout-link" href="http://127.0.0.1:8096" target="_blank" rel="noopener">Local Kanban <span>→</span></a>
+          <a class="rollout-link" href="/docs">Blueprint / Docs Hub <span>→</span></a>
+        </div>
+        <div class="packet-row">
+          <div class="packet-card">
+            <div class="packet-title">Author Workpackets</div>
+            <div class="packet-copy">Patrick, Joathon, and Paul lanes for government, Shop Local, sports/events, photos/video, and local giving.</div>
+            <a class="packet-link" href="/data/02_authored_workpackets.md" target="_blank" rel="noopener">Open packet →</a>
+          </div>
+          <div class="packet-card">
+            <div class="packet-title">Sponsor / Ad Spec</div>
+            <div class="packet-copy">Free banner density, paid carousel, square modules, tracking events, and Codex/Claude acceptance criteria.</div>
+            <a class="packet-link" href="/data/03_sponsor_spec.md" target="_blank" rel="noopener">Open spec →</a>
+          </div>
+          <div class="packet-card">
+            <div class="packet-title">Digital Weekly Engine</div>
+            <div class="packet-copy">Subscriber preferences, Thursday build, Friday delivery, town editions, and launch analytics.</div>
+            <a class="packet-link" href="/data/05_digital_weekly_delivery_engine.md" target="_blank" rel="noopener">Open brief →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="thumb-strip">
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260" alt="Register Call preview" loading="lazy">
+        <div class="mini-thumb-label"><span>Register Call</span><span class="mini-thumb-state">pilot</span></div>
+      </div>
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2F5280.menu%2F?w=420&h=260" alt="5280.menu preview" loading="lazy">
+        <div class="mini-thumb-label"><span>5280.menu</span><span class="mini-thumb-state">public</span></div>
+      </div>
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fredrocks.press%2F?w=420&h=260" alt="RedRocks.Press preview" loading="lazy">
+        <div class="mini-thumb-label"><span>RedRocks.Press</span><span class="mini-thumb-state">build</span></div>
+      </div>
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fcopress-dashboard.vercel.app%2F?w=420&h=260" alt="SATCOM dashboard preview" loading="lazy">
+        <div class="mini-thumb-label"><span>SATCOM</span><span class="mini-thumb-state">spine</span></div>
+      </div>
+    </div>
+  </section>
 
   <!-- ── SERVER PANEL ── -->
   <div class="sec-label">⚙️ Infrastructure — AWS Lightsail mmtkplesk</div>
