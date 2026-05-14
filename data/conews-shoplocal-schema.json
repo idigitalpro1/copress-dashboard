@@ -1,0 +1,211 @@
+{
+  "version": "2026-05-14",
+  "status": "planning-ready",
+  "guardrails": [
+    "No fabricated reviews, hours, prices, traffic, or revenue claims.",
+    "Sponsored content must be labeled.",
+    "Every paid placement must include a tracking slug.",
+    "Do not import real customer data without explicit approval.",
+    "Use needs_verification for seeded listings until a human verifies them."
+  ],
+  "requiredFields": [
+    {
+      "key": "business_name",
+      "label": "Business Name",
+      "type": "string"
+    },
+    {
+      "key": "town",
+      "label": "Town",
+      "type": "town_slug"
+    },
+    {
+      "key": "category",
+      "label": "Category",
+      "type": "category_slug"
+    },
+    {
+      "key": "short_description",
+      "label": "Short Description",
+      "type": "string",
+      "maxLength": 180
+    },
+    {
+      "key": "address",
+      "label": "Address",
+      "type": "string"
+    },
+    {
+      "key": "phone",
+      "label": "Phone",
+      "type": "phone"
+    },
+    {
+      "key": "website",
+      "label": "Website",
+      "type": "url"
+    },
+    {
+      "key": "contact_email",
+      "label": "Contact Email",
+      "type": "email"
+    },
+    {
+      "key": "verification_status",
+      "label": "Verification Status",
+      "type": "enum",
+      "values": ["needs_verification", "claimed", "verified", "rejected"]
+    },
+    {
+      "key": "tier",
+      "label": "Listing Tier",
+      "type": "enum",
+      "values": ["free", "featured", "sponsor", "partner"]
+    }
+  ],
+  "optionalFields": [
+    "logo",
+    "hero_image",
+    "gallery",
+    "menu_url",
+    "booking_url",
+    "social_links",
+    "hours",
+    "latitude",
+    "longitude",
+    "sponsor_start",
+    "sponsor_end",
+    "tracking_slug",
+    "editorial_notes",
+    "claim_status",
+    "last_verified_at"
+  ],
+  "categories": [
+    {
+      "slug": "dining",
+      "name": "Dining",
+      "examples": ["restaurants", "coffee", "bars", "bakeries"],
+      "starterFields": ["menu_url", "hours", "reservation_link", "dietary_tags"],
+      "sponsorFit": "featured profile, weekly special"
+    },
+    {
+      "slug": "outdoor",
+      "name": "Outdoor",
+      "examples": ["outfitters", "guides", "rentals", "trail services"],
+      "starterFields": ["activity_type", "season", "booking_url", "safety_notes"],
+      "sponsorFit": "trip package, gear spotlight"
+    },
+    {
+      "slug": "lodging",
+      "name": "Lodging",
+      "examples": ["hotels", "cabins", "campgrounds", "B&Bs"],
+      "starterFields": ["amenities", "pet_policy", "booking_url", "map_pin"],
+      "sponsorFit": "weekend package"
+    },
+    {
+      "slug": "retail",
+      "name": "Retail",
+      "examples": ["boutiques", "galleries", "gift shops"],
+      "starterFields": ["product_categories", "local_maker_tags", "online_shop"],
+      "sponsorFit": "product carousel"
+    },
+    {
+      "slug": "professional",
+      "name": "Professional",
+      "examples": ["legal", "accounting", "real estate", "insurance"],
+      "starterFields": ["license_notes", "service_area", "consultation_cta"],
+      "sponsorFit": "lead form"
+    },
+    {
+      "slug": "health",
+      "name": "Health",
+      "examples": ["clinics", "wellness", "fitness", "dental"],
+      "starterFields": ["appointment_link", "accepted_insurance", "services"],
+      "sponsorFit": "sponsor card"
+    },
+    {
+      "slug": "entertainment",
+      "name": "Entertainment",
+      "examples": ["venues", "casinos", "tours", "museums"],
+      "starterFields": ["event_schedule", "tickets", "age_restrictions"],
+      "sponsorFit": "event sponsor"
+    },
+    {
+      "slug": "services",
+      "name": "Services",
+      "examples": ["contractors", "automotive", "home", "repair"],
+      "starterFields": ["emergency_hours", "service_area", "quote_cta"],
+      "sponsorFit": "directory upgrade"
+    }
+  ],
+  "tiers": [
+    {
+      "slug": "free",
+      "name": "Basic Listing",
+      "included": ["name", "category", "town", "website", "phone"],
+      "reviewRequired": true
+    },
+    {
+      "slug": "featured",
+      "name": "Shop Local Feature",
+      "included": ["logo", "hero image", "short profile", "map pin", "CTA"],
+      "reviewRequired": true
+    },
+    {
+      "slug": "sponsor",
+      "name": "Sponsor Placement",
+      "included": ["carousel card", "newsletter mention", "analytics", "category boost"],
+      "reviewRequired": true,
+      "labelRequired": true
+    },
+    {
+      "slug": "partner",
+      "name": "Rich Profile",
+      "included": ["video", "lead form", "campaign page", "priority editorial review"],
+      "reviewRequired": true,
+      "labelRequired": true
+    }
+  ],
+  "seedTargets": [
+    {
+      "town": "morrison-redrocks",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["dining", "entertainment", "outdoor", "retail"]
+    },
+    {
+      "town": "nederland",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["dining", "outdoor", "lodging", "retail"]
+    },
+    {
+      "town": "blackhawk",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["entertainment", "lodging", "dining", "services"]
+    },
+    {
+      "town": "centralcity",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["entertainment", "dining", "lodging", "retail"]
+    },
+    {
+      "town": "idahosprings",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["outdoor", "dining", "lodging", "services"]
+    },
+    {
+      "town": "georgetown",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["lodging", "retail", "dining", "entertainment"]
+    },
+    {
+      "town": "evergreen",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["professional", "health", "dining", "services"]
+    },
+    {
+      "town": "golden",
+      "minimumCandidateListings": 20,
+      "priorityCategories": ["dining", "outdoor", "professional", "entertainment"]
+    }
+  ]
+}

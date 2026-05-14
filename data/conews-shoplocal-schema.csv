@@ -1,0 +1,30 @@
+section,key,label,type,values_or_notes
+required,business_name,Business Name,string,
+required,town,Town,town_slug,
+required,category,Category,category_slug,
+required,short_description,Short Description,string,max 180 characters
+required,address,Address,string,
+required,phone,Phone,phone,
+required,website,Website,url,
+required,contact_email,Contact Email,email,
+required,verification_status,Verification Status,enum,"needs_verification|claimed|verified|rejected"
+required,tier,Listing Tier,enum,"free|featured|sponsor|partner"
+optional,logo,Logo,url,
+optional,hero_image,Hero Image,url,
+optional,gallery,Gallery,array,
+optional,menu_url,Menu URL,url,
+optional,booking_url,Booking URL,url,
+optional,social_links,Social Links,array,
+optional,hours,Hours,object,
+optional,latitude,Latitude,number,
+optional,longitude,Longitude,number,
+optional,sponsor_start,Sponsor Start,date,
+optional,sponsor_end,Sponsor End,date,
+optional,tracking_slug,Tracking Slug,string,required for paid placements
+optional,editorial_notes,Editorial Notes,string,internal only
+optional,claim_status,Claim Status,enum,"unclaimed|claim_requested|claimed"
+optional,last_verified_at,Last Verified At,date,
+tier,free,Basic Listing,package,"name|category|town|website|phone"
+tier,featured,Shop Local Feature,package,"logo|hero image|short profile|map pin|CTA"
+tier,sponsor,Sponsor Placement,package,"carousel card|newsletter mention|analytics|category boost"
+tier,partner,Rich Profile,package,"video|lead form|campaign page|priority editorial review"
