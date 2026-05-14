@@ -800,7 +800,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         </div>
         <a class="packet-link" href="/data/conews-optimized-pr-sequence.csv" target="_blank" rel="noopener">Open optimized PR sequence →</a>
       </div>
-      <div class="site-grid">
+      <div class="site-grid" id="conews-site-grid">
         <div class="site-card is-pilot">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fredrocks.press%2F?w=420&h=220" alt="RedRocks.Press preview" loading="lazy"></div>
           <div class="site-card-body">
@@ -1257,8 +1257,50 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div><!-- /page -->
 
 <script>
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[char]));
+
+async function hydrateCoNewsRollout(){
+  const grid = document.getElementById('conews-site-grid');
+  if(!grid) return;
+
+  try{
+    const response = await fetch('/data/conews-town-rollout.json', {cache:'no-store'});
+    if(!response.ok) throw new Error(`town rollout data ${response.status}`);
+    const sites = await response.json();
+    if(!Array.isArray(sites) || !sites.length) return;
+
+    grid.innerHTML = sites.map((site) => {
+      const tags = (site.ownerTags || []).map((tag) => `<span class="site-pill">${escapeHtml(tag)}</span>`).join('');
+      const meta = [site.canonicalHost, (site.pillars || []).join(', ')].filter(Boolean).join(' · ');
+      const cardClass = ['site-card', site.statusClass || ''].filter(Boolean).join(' ');
+      return `
+        <div class="${cardClass}" data-site="${escapeHtml(site.slug)}">
+          <div class="site-card-thumb"><img src="${escapeHtml(site.thumbnail)}" alt="${escapeHtml(site.alt || site.name)}" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">${escapeHtml(site.name)}</div><div class="site-card-status">${escapeHtml(site.status)}</div></div>
+            <div class="site-card-meta">${escapeHtml(meta)}</div>
+            <div class="site-card-lane">${tags}</div>
+            <div class="site-next"><span>Next</span> ${escapeHtml(site.nextAction)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    bindThumbnailRetries(grid.querySelectorAll('.site-card-thumb img'));
+  }catch(error){
+    console.warn('Using static CoNews rollout cards:', error);
+  }
+}
+
 // Auto-refresh thumbnails that fail to load with retry
-document.querySelectorAll('.prop-thumb img, .city-thumb img').forEach(img => {
+function bindThumbnailRetries(images){
+  images.forEach(img => {
   img.addEventListener('load', () => { img.style.opacity = 1; });
   img.style.opacity = 0;
   img.style.transition = 'opacity .4s';
@@ -1269,7 +1311,11 @@ document.querySelectorAll('.prop-thumb img, .city-thumb img').forEach(img => {
       img.src = originalSrc + '&t=' + Date.now();
     }, 4000);
   });
-});
+  });
+}
+
+bindThumbnailRetries(document.querySelectorAll('.prop-thumb img, .city-thumb img, .site-card-thumb img'));
+hydrateCoNewsRollout();
 </script>
 </body>
 </html>
