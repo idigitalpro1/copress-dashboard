@@ -51,7 +51,7 @@ Local commits:
 
 Production deploy:
 
-- Vercel deployment: `dpl_DrTt41C7Bwn9XvAJaG4Vx4oQTA9e`
+- Vercel deployment: see the latest deploy hook entry and `vercel inspect`; deployment IDs change on every deploy.
 - Production alias: `https://copress-dashboard.vercel.app`
 - Smoke checked: `/network` returned `200`
 - Smoke checked data files:
