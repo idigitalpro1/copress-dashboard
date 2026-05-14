@@ -1,0 +1,43 @@
+{
+  "status": "ready-for-linear-delivery",
+  "generated": "2026-05-14",
+  "targetProject": "CoNews.Press Rollout",
+  "targetCycle": "SATCOM Sprint 1",
+  "preferredIssue": "PROV-508",
+  "fallbackIssue": "5ST-44",
+  "linearBlocked": {
+    "code": "token_expired",
+    "status": 401
+  },
+  "policy": {
+    "removeStopGates": ["minimum", "low", "medium"],
+    "treatAs": "notes, warnings, or follow-up cards",
+    "hardReviewHooks": [
+      "account access changes",
+      "billing, payment, Stripe, bank, invoice, or subscription changes",
+      "Microsoft 365 account/user/license changes",
+      "3CX live SMS/voice send or phone routing changes",
+      "secrets, tokens, private keys, .env, or credential handling",
+      "customer/subscriber data or private CSVs",
+      "DNS, Plesk, SSL, firewall, or domain changes",
+      "destructive filesystem or git operations",
+      "production deploys outside the documented Vercel/dashboard static path",
+      "Sendy or PDF pipeline changes",
+      "external contact, publishing, billing, or live access changes"
+    ],
+    "allowedWithoutStopping": [
+      "static packet generation",
+      "markdown, JSON, CSV, and dashboard data artifacts",
+      "local read-only checks",
+      "local static route checks",
+      "non-secret prompt packets",
+      "SATCOM planning links",
+      "import-ready Linear JSON/CSV payloads",
+      "file-based progress updates"
+    ],
+    "accountReviewHookTemplate": {
+      "heading": "ACCOUNT REVIEW REQUIRED",
+      "fields": ["Surface", "Requested action", "Why this is gated", "Safe next step", "Files/artifacts affected"]
+    }
+  }
+}

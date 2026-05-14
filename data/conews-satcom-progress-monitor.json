@@ -10,9 +10,9 @@
     {"id": "PROV-503", "status": "deployed", "evidence": "Shop Local schema JSON/CSV"},
     {"id": "PROV-504", "status": "deployed", "evidence": "SEO pillar template JSON/CSV/MD"},
     {"id": "PROV-505", "status": "deployed", "evidence": "contributor onboarding CTA JSON/CSV/MD"},
-    {"id": "PROV-506", "status": "deployed candidate", "evidence": "advertiser campaign kit JSON/CSV/MD"},
-    {"id": "PROV-507", "status": "deployed candidate", "evidence": "weekly edition sample JSON/MD"},
-    {"id": "PROV-508", "status": "deployed candidate", "evidence": "SATCOM progress monitor packet"}
+    {"id": "PROV-506", "status": "deployed", "evidence": "advertiser campaign kit JSON/CSV/MD"},
+    {"id": "PROV-507", "status": "deployed", "evidence": "weekly edition sample JSON/MD"},
+    {"id": "PROV-508", "status": "deployed", "evidence": "SATCOM progress monitor packet"}
   ],
   "blockers": [
     "Linear connector auth is unavailable in this Codex session.",
@@ -23,7 +23,23 @@
   "restorePoints": [
     "fb975c5 Hermes kanban execution packet",
     "0b0c4f9 SEO pillar templates",
-    "e8447c7 contributor onboarding CTA"
+    "e8447c7 contributor onboarding CTA",
+    "fd3f706 final sprint artifacts"
+  ],
+  "latestDeploy": {
+    "deployment": "dpl_3dFhEA1yuScnm9vYGn9r7NJSiBJm",
+    "url": "https://copress-dashboard.vercel.app/network",
+    "smoke": [
+      "/network 200",
+      "PROV-506 files 200",
+      "PROV-507 files 200",
+      "PROV-508 files 200"
+    ]
+  },
+  "commitStatus": [
+    "local commit complete",
+    "Vercel production deploy complete",
+    "GitHub push still pending auth repair"
   ],
   "nextChoices": [
     "Refresh GitHub + Linear auth and sync the board.",
