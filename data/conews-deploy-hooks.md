@@ -32,7 +32,7 @@ Run from `/Users/Ace/Codex/apps/copress-dashboard`:
 ```bash
 git status --short
 git diff --check
-node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('data/conews-town-rollout.json','utf8')); JSON.parse(fs.readFileSync('data/conews-shoplocal-schema.json','utf8')); JSON.parse(fs.readFileSync('data/conews-next-sprint-kanban.json','utf8')); console.log('json ok')"
+node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('data/conews-town-rollout.json','utf8')); JSON.parse(fs.readFileSync('data/conews-shoplocal-schema.json','utf8')); JSON.parse(fs.readFileSync('data/conews-next-sprint-kanban.json','utf8')); JSON.parse(fs.readFileSync('data/conews-seo-pillar-templates.json','utf8')); console.log('json ok')"
 python3 -m http.server 4177 --bind 127.0.0.1
 ```
 
@@ -45,6 +45,9 @@ for f in \
   data/conews-shoplocal-schema.json \
   data/conews-shoplocal-schema.csv \
   data/conews-next-sprint-kanban.json \
+  data/conews-seo-pillar-templates.json \
+  data/conews-seo-pillar-templates.csv \
+  data/conews-seo-pillar-templates.md \
   data/conews-architecture-optimization.md \
   data/conews-satcom-handoff-summary.md; do
   curl -s -o /dev/null -w "%{http_code} $f\n" --max-time 5 "http://127.0.0.1:4177/$f"
@@ -70,6 +73,9 @@ for f in \
   data/conews-shoplocal-schema.json \
   data/conews-shoplocal-schema.csv \
   data/conews-next-sprint-kanban.json \
+  data/conews-seo-pillar-templates.json \
+  data/conews-seo-pillar-templates.csv \
+  data/conews-seo-pillar-templates.md \
   data/conews-architecture-optimization.md \
   data/conews-satcom-handoff-summary.md; do
   curl -s -o /dev/null -w "%{http_code} $f\n" --max-time 10 "https://copress-dashboard.vercel.app/$f"
@@ -96,4 +102,3 @@ Append to:
 - Deploy URL:
 - Smoke:
 ```
-

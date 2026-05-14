@@ -21,7 +21,7 @@ Codex/Claude owns implementation, commits, Vercel deploys, and production verifi
 | `PROV-501` | SATCOM ownership board | locally implemented and deployed |
 | `PROV-502` | town rollout data source | locally implemented and deployed |
 | `PROV-503` | Shop Local schema export | locally implemented and deployed |
-| `PROV-504` | SEO pillar templates | next clean slice |
+| `PROV-504` | SEO pillar templates | locally implemented and deployed candidate |
 | `PROV-505` | contributor onboarding CTA | pending reviewed link policy |
 | `PROV-506` | advertiser campaign kit page | pending Shop Local sponsor review |
 | `PROV-507` | weekly edition payload | pending Morrison/Red Rocks sample payload |

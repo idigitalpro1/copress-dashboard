@@ -1,0 +1,121 @@
+{
+  "id": "PROV-504",
+  "title": "CoNews SEO Pillar Template Pack",
+  "generated": "2026-05-14",
+  "status": "build-artifact",
+  "canonicalRule": "Each town site should feel local first, but use one shared editorial spine for URLs, metadata, schema, and internal links.",
+  "titleFormat": "{Topic} in {Town}: {Date or Season}",
+  "metaRule": "155 to 160 characters. Lead with the reader action, name the town, and avoid generic phrasing.",
+  "minimumInternalLinks": 3,
+  "pillars": [
+    {
+      "key": "government",
+      "label": "Government",
+      "urlPatterns": ["/gov", "/municipal-meetings", "/public-notices"],
+      "searchIntent": "agendas, budgets, hearings, public decisions",
+      "requiredSchema": ["Article", "GovernmentOrganization"],
+      "primaryCta": "subscribe to civic alerts",
+      "internalLinkTargets": ["schools", "features", "opinion"],
+      "sponsorRule": "none unless public notice sponsorship is reviewed"
+    },
+    {
+      "key": "schools",
+      "label": "Schools",
+      "urlPatterns": ["/schools", "/sports/high-school"],
+      "searchIntent": "board policy, safety, academics, athletics",
+      "requiredSchema": ["Article", "SportsEvent"],
+      "primaryCta": "submit score or school tip",
+      "internalLinkTargets": ["government", "events", "opinion"],
+      "sponsorRule": "school sponsor links must be marked"
+    },
+    {
+      "key": "shop-local",
+      "label": "Shop Local",
+      "urlPatterns": ["/shop", "/shop/{category}", "/business/{slug}"],
+      "searchIntent": "local business discovery, services, sponsors",
+      "requiredSchema": ["LocalBusiness", "Offer"],
+      "primaryCta": "claim or upgrade listing",
+      "internalLinkTargets": ["events", "visitor-guide", "features"],
+      "sponsorRule": "sponsored listings must be marked"
+    },
+    {
+      "key": "events",
+      "label": "Events",
+      "urlPatterns": ["/events", "/calendar", "/music"],
+      "searchIntent": "things to do, concerts, meetings, markets",
+      "requiredSchema": ["Event"],
+      "primaryCta": "submit event or RSVP",
+      "internalLinkTargets": ["shop-local", "visitor-guide", "schools"],
+      "sponsorRule": "sponsor pins must be marked"
+    },
+    {
+      "key": "visitor-guide",
+      "label": "Visitor Guide",
+      "urlPatterns": ["/visitor-guide", "/outdoors", "/weekend"],
+      "searchIntent": "travel planning, parking, dining, outdoor guide",
+      "requiredSchema": ["Article", "TouristAttraction"],
+      "primaryCta": "plan your visit",
+      "internalLinkTargets": ["shop-local", "events", "features"],
+      "sponsorRule": "sponsor links must be contextual"
+    },
+    {
+      "key": "features",
+      "label": "Features",
+      "urlPatterns": ["/features", "/investigations", "/analysis"],
+      "searchIntent": "long-form reporting and community context",
+      "requiredSchema": ["Article", "NewsArticle"],
+      "primaryCta": "support local reporting",
+      "internalLinkTargets": ["government", "schools", "local-giving"],
+      "sponsorRule": "sponsors cannot shape editorial claims"
+    },
+    {
+      "key": "local-giving",
+      "label": "Local Giving",
+      "urlPatterns": ["/community-giving", "/go-fund-me", "/help"],
+      "searchIntent": "verified fundraisers and local support",
+      "requiredSchema": ["Article", "DonateAction"],
+      "primaryCta": "submit verified campaign",
+      "internalLinkTargets": ["events", "features", "shop-local"],
+      "sponsorRule": "campaign verification required"
+    },
+    {
+      "key": "opinion",
+      "label": "Opinion / LTO",
+      "urlPatterns": ["/lto", "/opinion", "/letters"],
+      "searchIntent": "letters, corrections, community voices",
+      "requiredSchema": ["Article", "OpinionNewsArticle"],
+      "primaryCta": "submit letter",
+      "internalLinkTargets": ["government", "schools", "features"],
+      "sponsorRule": "no undisclosed paid opinion"
+    }
+  ],
+  "moduleOrder": [
+    "H1 and town kicker",
+    "Local impact summary",
+    "Verified source block",
+    "Story body or directory/event module",
+    "Related town links",
+    "Shop Local or sponsor module when relevant",
+    "Submission / subscribe CTA"
+  ],
+  "qaChecklist": [
+    "H1 contains the town or named venue",
+    "Title tag contains town plus topic",
+    "Meta description is unique",
+    "Canonical URL matches the correct host",
+    "JSON-LD schema type matches the content type",
+    "Images have descriptive alt text",
+    "Public claims include a source block",
+    "Sponsored content is visibly marked"
+  ],
+  "townStarterAngles": {
+    "morrison-red-rocks": ["Red Rocks calendar preview", "Morrison business corridor profile", "event-day visitor guide"],
+    "nederland": ["town meeting explainer", "weekend music and outdoor guide", "cafes and outfitters roundup"],
+    "black-hawk": ["casino entertainment guide", "local tax revenue explainer", "dining and lodging map"],
+    "central-city": ["historic district feature", "arts and gaming weekend guide", "local giving spotlight"],
+    "idaho-springs": ["Clear Creek rafting safety guide", "historic tourism itinerary", "outdoor services roundup"],
+    "georgetown": ["railroad and historic tourism guide", "seasonal events calendar", "lodging and dining roundup"],
+    "evergreen": ["lake and parks visitor guide", "schools and civic brief", "local services roundup"],
+    "golden": ["foothills weekend guide", "campus and city brief", "craft and dining roundup"]
+  }
+}
