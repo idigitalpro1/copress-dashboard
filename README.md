@@ -34,7 +34,8 @@ SATCOM is the command center for copress.news — a Colorado mountain newspaper 
 **Admin section**
 - Admin HQ — primary launch surface for operator tools
 - CoPress Dashboard — `https://copress-dashboard.vercel.app/`
-- Hermes Dashboard — `http://127.0.0.1:9119/sessions`
+- Aileen / Hermes WebUI — `http://127.0.0.1:8787/`
+- Hermes Agent diagnostics — `http://127.0.0.1:9119/sessions`
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
 - Client Onboarding — `https://onboarding.copress.news` (`idigitalpro1/onboarding-link`; DNS must resolve before public use)
@@ -128,19 +129,20 @@ The atmosphere layer sits below the app shell. `#spotlight` and `#gears-svg` ren
 
 ---
 
-## Hermes Agent Local Dashboard
+## Hermes / Aileen Local Surfaces
 
 Hermes Agent has two separate local surfaces:
 
 | URL | Purpose | Use for |
 |-----|---------|---------|
 | `https://copress-dashboard.vercel.app/` → Hermes Crew | CoPress operator front end | Chat, crew jobs, status, local endpoint links |
-| `http://127.0.0.1:9119/sessions` | Hermes Agent dashboard | Canonical human operator UI for sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
+| `http://127.0.0.1:8787/` | Aileen / Hermes WebUI | Canonical human operator dashboard for prompts, chat continuity, and local model routing |
+| `http://127.0.0.1:9119/sessions` | Hermes Agent diagnostics | Raw sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
 | `http://127.0.0.1:8793` | Hermes Crew bridge | Local chat, crew run/status/result API, Qwen/Ollama routing |
 | `http://127.0.0.1:8501` | Streamlit fallback | Local fallback chat and Crew Runner UI |
 | `http://127.0.0.1:8642/v1` | OpenAI-compatible gateway | Open WebUI / API clients |
 
-`http://127.0.0.1:9119/sessions` is the canonical Hermes dashboard URL returned by `hermes dashboard`. The dashboard API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean the Hermes dashboard is down.
+`http://127.0.0.1:8787/` is the canonical Aileen/Hermes operator dashboard. Individual `/session/...` URLs are chat threads inside that dashboard, not the canonical entry point. `http://127.0.0.1:9119/sessions` is diagnostics only. The diagnostics API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean Hermes is down.
 
 For Open WebUI, point the OpenAI-compatible base URL at:
 
@@ -207,7 +209,9 @@ Stores API keys in localStorage under `api_vault`. The dashboard also stores qui
 | `sendy_list_id` / `SENDY_LIST_*` | Sendy subscriber list IDs |
 | `stripe_secret` | Stripe secret key |
 
-Export formats: `.env` file, JSON. MCP injection: copies key into clipboard for paste into MCP config.
+Agent handoff rule: never bulk-hand all keys to Hermes. Hermes/Aileen may request one named service credential for one task through a guarded local bridge or operator-reviewed export. Do not paste secrets into chat prompts, commit them, or store them in model/session config.
+
+Export formats: selected `.env` values or JSON for local operator handoff only. MCP injection should be scoped to a service and reason.
 
 ---
 

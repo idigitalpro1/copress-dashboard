@@ -18,8 +18,9 @@ Run SATCOM / CoPress / Hermes as one operator stack with a clean shared handoff 
 
 ## Current Local URLs
 
-- Hermes WebUI / Aileen: `http://127.0.0.1:8787`
-- Hermes dashboard: `http://127.0.0.1:9119/sessions`
+- Aileen / Hermes WebUI canonical dashboard: `http://127.0.0.1:8787/`
+- Current Aileen session example: `http://127.0.0.1:8787/session/f99b5ca43f08`
+- Hermes Agent diagnostics only: `http://127.0.0.1:9119/sessions`
 - SATCOM dashboard live: `https://copress-dashboard.vercel.app/`
 - Kanban: `http://127.0.0.1:8096`
 - Hermes Crew bridge: `http://127.0.0.1:8793/health`
@@ -115,6 +116,18 @@ Known local models:
 - `hermes3:70b`
 - `qwen3.6:35b-a3b` raw Ollama tag
 - `qwen36-35b-a3b` safe WebUI alias
+
+## Credential Handoff Rule
+
+Do not hand the full key vault to Hermes. Keep secrets out of chat prompts, docs, Git, browser session config, and model config.
+
+Hermes/Aileen may request one named credential for one task, with a reason, through the guarded local bridge or an operator-reviewed local export. Examples:
+
+- `GEMINI_API_KEY` for newsletter draft generation.
+- `SENDY_API_KEY` for a reviewed newsletter send test.
+- `GOOGLE_PLACES_KEY` for a Shop Local import.
+
+Bulk "all keys" export is not an agent workflow. Codex/Claude keep execution and credential handling separate from Hermes planning unless the operator explicitly approves a scoped handoff.
 
 ## Useful Commands
 

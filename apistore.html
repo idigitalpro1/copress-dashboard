@@ -215,7 +215,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
     <div class="icon">🔐</div>
     <div>
       <h3>myappstore.biz — API Vault</h3>
-      <p>One secure store for every API key. Inject into any card, module, or AI tool in one click.<br>Keys live in your browser only — nothing sent to any server. MCP bridge exports to Hermes, Claude Code, and Cursor.</p>
+      <p>One local store for API credentials with service-scoped handoff.<br>Keys stay browser-local by default. Hermes, Claude Code, and Cursor should request only the named key required for the current task.</p>
     </div>
     <div class="cta">
       <button class="btn btn-gold" onclick="showMCP()">⚡ Setup MCP Bridge</button>
@@ -263,8 +263,8 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 
   <!-- MCP PANEL -->
   <div class="mcp-panel" id="mcp-panel" style="display:none;">
-    <h3>⚡ MCP Bridge — One Key to Rule Them All</h3>
-    <p>Point any AI tool at this MCP server and it can request API credentials on demand. No more .env files. No more copy-pasting keys into 10 different tools.</p>
+    <h3>⚡ MCP Bridge — Scoped Credential Handoff</h3>
+    <p>Point AI tools at a guarded local bridge so they can request approved credentials by service name. Do not dump the full vault into Hermes, chat prompts, Git, or browser session state.</p>
     <div class="mcp-code" id="mcp-code-block">
 # Add to Claude Code settings (~/.claude/settings.json):
 {
@@ -277,15 +277,16 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
   }
 }
 
-# Then in any Claude session:
-# "get me the Sendy API key" → vault serves it directly
-# "inject all keys into copress dashboard" → done in one call
+# Then in any Claude/Hermes session:
+# "request SENDY_API_KEY for newsletter send test" → operator-approved single-key handoff
+# "request GOOGLE_PLACES_KEY for Shop Local import" → one service, one task
+# Bulk "all keys" export is intentionally blocked for agent use.
     </div>
     <div class="mcp-tools">
       <div class="mcp-tool" onclick="copyMCPConfig('hermes')">
         <div class="tool-icon">🤖</div>
         <h4>Hermes (Ollama)</h4>
-        <p>Local LLM reads vault via MCP — no cloud needed</p>
+        <p>Local agent requests one approved service key at a time</p>
       </div>
       <div class="mcp-tool" onclick="copyMCPConfig('claude')">
         <div class="tool-icon">🧠</div>
@@ -305,7 +306,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
       <div class="mcp-tool" onclick="copyMCPConfig('vercel')">
         <div class="tool-icon">▲</div>
         <h4>Vercel Env Push</h4>
-        <p>Push all keys to Vercel project env vars</p>
+        <p>Push selected env vars to the Vercel project</p>
       </div>
       <div class="mcp-tool" onclick="copyMCPConfig('env')">
         <div class="tool-icon">📄</div>
@@ -641,12 +642,12 @@ function toggleInject(card, target) {
 
 // ── MCP CONFIG ────────────────────────────────────────────────────────────
 const MCP_CONFIGS = {
-  hermes: `# Hermes (Ollama) MCP config — add to ollama model system prompt or Modelfile:\n# The api-vault MCP tool is available at localhost:8082/mcp\n# Call: mcp.api_vault.get_key(service="gemini") → returns GEMINI_API_KEY`,
+  hermes: `# Hermes scoped MCP policy:\n# Do not paste secrets into Hermes prompts or session config.\n# Request one approved key per task from the guarded local vault.\n# Example: mcp.api_vault.get_key(service="gemini", reason="newsletter draft generation") -> GEMINI_API_KEY\n# Bulk export/list-all is blocked for agent use.`,
   claude: `# Claude Code ~/.claude/settings.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["/Users/Ace/Codex/apps/api-vault-mcp/index.js"]\n    }\n  }\n}`,
   cursor: `# Cursor .cursor/mcp.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["~/Codex/apps/api-vault-mcp/index.js"]\n    }\n  }\n}`,
-  n8n: `# n8n HTTP Request node:\n# GET http://localhost:8082/vault/key/SENDY_API_KEY\n# GET http://localhost:8082/vault/keys (returns all active keys as JSON)\n# POST http://localhost:8082/vault/inject?target=newsletter`,
-  vercel: `# Push all keys to Vercel:\nnpx vercel env add GEMINI_API_KEY production < vault_export.txt\n# Or use the Vault → Export → Vercel Push button`,
-  env: `# Export .env file from vault:\n# Click Export button in top nav\n# File: .env.vault-export-${new Date().toISOString().slice(0,10)}`
+  n8n: `# n8n HTTP Request node:\n# GET http://localhost:8082/vault/key/SENDY_API_KEY?reason=newsletter-send-test\n# No bulk /vault/keys endpoint for agent workflows.\n# POST http://localhost:8082/vault/inject?target=newsletter&service=sendy`,
+  vercel: `# Push selected keys to Vercel:\nnpx vercel env add GEMINI_API_KEY production < vault_export_gemini.txt\n# Add only the env vars required by the current deploy.`,
+  env: `# Export selected .env values from vault:\n# Use only for local operator handoff, never commit.\n# File: .env.vault-export-${new Date().toISOString().slice(0,10)}`
 };
 
 function copyMCPConfig(tool) {
