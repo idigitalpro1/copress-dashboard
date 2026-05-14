@@ -1,0 +1,74 @@
+[
+  {
+    "id": "PROV-501",
+    "title": "Add SATCOM CoNews ownership board cards",
+    "phase": "Foundation",
+    "priority": "High",
+    "labels": ["satcom", "presentation", "ownership"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "Board shows eight rollout sites with thumbnail, status, owner, next action, and blocker."
+  },
+  {
+    "id": "PROV-502",
+    "title": "Create town rollout data source",
+    "phase": "Foundation",
+    "priority": "High",
+    "labels": ["data", "towns", "conews"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "Town data includes canonical host, phase, editorial lead, Shop Local focus, and deploy readiness."
+  },
+  {
+    "id": "PROV-503",
+    "title": "Add Shop Local directory schema export",
+    "phase": "Foundation",
+    "priority": "High",
+    "labels": ["shoplocal", "schema", "sponsors"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "CSV/JSON schema covers required listing fields, tier, verification status, and sponsor tracking slug."
+  },
+  {
+    "id": "PROV-504",
+    "title": "Create SEO pillar template pack",
+    "phase": "Editorial",
+    "priority": "Medium",
+    "labels": ["seo", "editorial", "templates"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "Templates cover gov, schools, shop, events, features, giving, and LTO with title/meta/schema rules."
+  },
+  {
+    "id": "PROV-505",
+    "title": "Add contributor onboarding CTA pattern",
+    "phase": "Editorial",
+    "priority": "High",
+    "labels": ["contributors", "upload", "onboarding"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "Upload CTA appears at top of relevant contributor pages and routes to reviewed onboarding path."
+  },
+  {
+    "id": "PROV-506",
+    "title": "Create advertiser campaign kit page",
+    "phase": "Launch",
+    "priority": "Medium",
+    "labels": ["ads", "sponsors", "shoplocal"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "Advertiser kit explains tiers, creative specs, CTA, and reporting promise without exposing secrets."
+  },
+  {
+    "id": "PROV-507",
+    "title": "Prototype weekly edition payload",
+    "phase": "Launch",
+    "priority": "High",
+    "labels": ["weekly", "edition", "email"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "Static/sample payload can render one Morrison/Red Rocks weekly edition without sending live email."
+  },
+  {
+    "id": "PROV-508",
+    "title": "Add progress monitor card to SATCOM",
+    "phase": "Launch",
+    "priority": "Medium",
+    "labels": ["satcom", "monitoring", "hermes"],
+    "owner": "Codex/Claude",
+    "acceptance_criteria": "SATCOM links to progress log, latest packet, and blocker status."
+  }
+]

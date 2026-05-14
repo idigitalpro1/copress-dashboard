@@ -1,0 +1,10 @@
+id,title,phase,priority,labels,owner,acceptance_criteria
+PROV-501,Add SATCOM CoNews ownership board cards,Foundation,High,"satcom,presentation,ownership",Codex/Claude,"Board shows eight rollout sites with thumbnail,status,owner,next action,and blocker."
+PROV-502,Create town rollout data source,Foundation,High,"data,towns,conews",Codex/Claude,"Town data includes canonical host,phase,editorial lead,Shop Local focus,and deploy readiness."
+PROV-503,Add Shop Local directory schema export,Foundation,High,"shoplocal,schema,sponsors",Codex/Claude,"CSV/JSON schema covers required listing fields,tier,verification status,and sponsor tracking slug."
+PROV-504,Create SEO pillar template pack,Editorial,Medium,"seo,editorial,templates",Codex/Claude,"Templates cover gov,schools,shop,events,features,giving,and LTO with title/meta/schema rules."
+PROV-505,Add contributor onboarding CTA pattern,Editorial,High,"contributors,upload,onboarding",Codex/Claude,"Upload CTA appears at top of relevant contributor pages and routes to reviewed onboarding path."
+PROV-506,Create advertiser campaign kit page,Launch,Medium,"ads,sponsors,shoplocal",Codex/Claude,"Advertiser kit explains tiers,creative specs,CTA,and reporting promise without exposing secrets."
+PROV-507,Prototype weekly edition payload,Launch,High,"weekly,edition,email",Codex/Claude,"Static/sample payload can render one Morrison/Red Rocks weekly edition without sending live email."
+PROV-508,Add progress monitor card to SATCOM,Launch,Medium,"satcom,monitoring,hermes",Codex/Claude,"SATCOM links to progress log,latest packet,and blocker status."
+

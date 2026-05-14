@@ -1,0 +1,8 @@
+order,pr_title,goal,allowed_scope,blocked_scope,validation
+1,feat(satcom): add conews rollout ownership board,"Make progress visible with eight rollout cards, thumbnails, owners, blockers, packet links","SATCOM dashboard/static data only","DNS,Plesk,secrets,Sendy,PDF pipeline,customer data","local static preview, git diff --check"
+2,feat(data): add conews town and activity metadata,"Create one shared town/activity data source for public pages and SATCOM","safe JSON/TS metadata files, docs","live deploy,DNS,subscriber data","JSON parse/typecheck"
+3,feat(shoplocal): add directory schema and sponsor tier exports,"Standardize business listing and sponsor data before UI wiring","schema docs, export files, sample data","real customer import, secret links","CSV/JSON parse, sample render"
+4,feat(editorial): add SEO pillar templates,"Add reusable article/town SEO templates","templates, docs, static examples","production publishing, live email","snapshot/static preview"
+5,feat(weekly): add sample digital edition renderer,"Render one sample Friday weekly edition from static payload","sample payload, renderer, docs","SMTP/live sends, subscriber import","local render only"
+6,feat(intake): add contributor and advertiser onboarding CTAs,"Add reviewed CTA placement and non-secret onboarding copy","CTA components/static links after review","private upload URLs,secrets,PII","link audit"
+7,chore(mcp): repair guarded Ops MCP monitoring,"Restore Hermes progress monitoring through existing guarded MCP hooks","launchd/service config docs and guarded MCP services","raw shell execution, new broad permissions","~/bin/mcp-status green"
