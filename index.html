@@ -1109,7 +1109,7 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">Hermes</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
             </div>
           </div>
         </div>
@@ -1540,7 +1540,7 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew Console</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">Dashboard</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
             </div>
           </div>
         </div>
@@ -1597,13 +1597,13 @@ body::before {
           <div class="admin-launch-desc">The clean operator hub for all admin, AI, publishing, billing, upload, and service links.</div>
           <div class="admin-launch-url">copress-dashboard.vercel.app</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:9119/sessions" target="_blank" rel="noopener">
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
           <div class="admin-launch-top">
-            <div class="admin-launch-title">Hermes Dashboard</div>
+            <div class="admin-launch-title">Aileen / Hermes WebUI</div>
             <span class="admin-launch-tag">Local AI</span>
           </div>
-          <div class="admin-launch-desc">Canonical Hermes Agent session dashboard for local model routing and operator prompts.</div>
-          <div class="admin-launch-url">127.0.0.1:9119/sessions</div>
+          <div class="admin-launch-desc">Canonical human operator dashboard for prompts, chat continuity, and local model routing.</div>
+          <div class="admin-launch-url">127.0.0.1:8787</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-network);" href="http://127.0.0.1:8096" target="_blank" rel="noopener">
           <div class="admin-launch-top">
@@ -1995,13 +1995,13 @@ body::before {
             <div class="admin-launch-desc">Main operator surface for publishing, admin, tools, training, docs, network, and API storage.</div>
             <div class="admin-launch-url">https://copress-dashboard.vercel.app/</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:9119/sessions" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
             <div class="admin-launch-top">
-              <div class="admin-launch-title">Hermes Dashboard</div>
+              <div class="admin-launch-title">Aileen / Hermes WebUI</div>
               <span class="admin-launch-tag">Local AI</span>
             </div>
-            <div class="admin-launch-desc">Primary Hermes Agent dashboard. Opens the local sessions view from the `hermes dashboard` terminal command.</div>
-            <div class="admin-launch-url">http://127.0.0.1:9119/sessions</div>
+            <div class="admin-launch-desc">Primary Hermes operator dashboard. Individual sessions live inside this surface.</div>
+            <div class="admin-launch-url">http://127.0.0.1:8787/</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8793/health" target="_blank" rel="noopener">
             <div class="admin-launch-top">
@@ -2179,7 +2179,7 @@ body::before {
                 </div>
 
                 <div class="hermes-endpoint-strip">
-                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:9119/sessions','_blank')">Dashboard</button>
+                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
                   <button class="mini-btn" onclick="window.open('http://127.0.0.1:8793/health','_blank')">Health</button>
                   <button class="mini-btn" onclick="window.open('http://127.0.0.1:8501','_blank')">Chat UI</button>
                 </div>
