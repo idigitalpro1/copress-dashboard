@@ -722,6 +722,24 @@ body::before {
 }
 .town-tile h4 { color: var(--ink); margin: 0 0 8px; font-size: 13px; }
 .town-tile span { display: block; color: var(--ink-muted); font-size: 11px; line-height: 1.5; }
+.editorial-lower-grid { margin-top: 18px; }
+.town-status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.town-status-card {
+  border: 1px solid rgba(200,168,75,.12); background: var(--bg-mid);
+  border-radius: 2px; padding: 11px; min-height: 92px;
+}
+.town-status-card.ok { border-color: rgba(39,174,96,.32); background: rgba(39,174,96,.055); }
+.town-status-card.active { border-color: rgba(52,152,219,.32); background: rgba(52,152,219,.052); }
+.town-status-card.warn { border-color: rgba(243,156,18,.28); background: rgba(243,156,18,.052); }
+.town-status-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+.town-status-name { color: var(--ink); font-weight: 700; font-size: 12.5px; line-height: 1.2; }
+.town-status-badge {
+  color: var(--gold-pale); border: 1px solid rgba(200,168,75,.16);
+  background: rgba(200,168,75,.08); border-radius: 2px; padding: 3px 6px;
+  font: 700 8.5px 'DM Mono', monospace; text-transform: uppercase; white-space: nowrap;
+}
+.town-status-meta { color: var(--ink-muted); font-size: 10.5px; line-height: 1.45; }
+.idea-output { min-height: 128px; margin-top: 10px; }
 .output-box {
   min-height: 98px; border: 1px dashed rgba(200,168,75,.18); background: rgba(200,168,75,.035);
   color: var(--ink-muted); padding: 12px; font-size: 12.5px; line-height: 1.55; white-space: pre-wrap;
@@ -977,7 +995,7 @@ body::before {
     <div class="nav-item" data-view="editorial">
       <span class="nav-icon">✒</span>
       <span class="nav-label">Editorial Desk</span>
-      <span class="nav-badge count">3</span>
+      <span class="nav-badge count" id="editorial-nav-count">3</span>
     </div>
     <div class="nav-item" data-view="directory">
       <span class="nav-icon">📍</span>
@@ -1051,9 +1069,9 @@ body::before {
     <div class="sidebar-footer">
       <div class="server-pill">
         <span class="server-dot"></span>
-        <div class="server-info">
-          Production Live
-          <span class="server-ip">44.236.197.183</span>
+          <div class="server-info">
+            Production Live
+            <span class="server-ip">admin.conews.press</span>
         </div>
       </div>
     </div>
@@ -1135,7 +1153,7 @@ body::before {
               </div>
               <div class="card-stat">
                 <span class="stat-label">Towns</span>
-                <span class="stat-value">5</span>
+                <span class="stat-value" id="live-editorial-towns">8</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Published</span>
@@ -1225,7 +1243,7 @@ body::before {
               </div>
               <div class="card-stat">
                 <span class="stat-label">IP</span>
-                <span class="stat-value" style="font-size:10px;">44.236.197.183</span>
+                <span class="stat-value" style="font-size:10px;">admin.conews.press</span>
               </div>
             </div>
             <div class="card-rule"></div>
@@ -1629,6 +1647,14 @@ body::before {
           <div class="admin-launch-desc">Sign in to the MyAppStore.biz Microsoft 365 tenant for staff mailboxes, aliases, Outlook, and admin user setup.</div>
           <div class="admin-launch-url">admin.microsoft.com/users</div>
         </a>
+        <a class="admin-launch" style="--admin-color:var(--c-linear);" href="https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank" rel="noopener">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Azure AD App Registration</div>
+            <span class="admin-launch-tag">SSO</span>
+          </div>
+          <div class="admin-launch-desc">Create the M365 app, set the Azure AD callback, then place client ID, client secret, and tenant ID on the admin server.</div>
+          <div class="admin-launch-url">/console/api/auth/callback/azure-ad</div>
+        </a>
       </div>
 
       <!-- Quick Actions -->
@@ -1749,7 +1775,7 @@ body::before {
               </div>
               <div class="module-status">
                 <span class="pill">Drafts <strong id="editorial-module-drafts">3</strong></span>
-                <span class="pill">Towns <strong>5</strong></span>
+                <span class="pill">Towns <strong id="editorial-town-count">8</strong></span>
                 <span class="pill">Source <strong id="editorial-module-source">Local</strong></span>
                 <span class="pill">PDF <strong>Queued</strong></span>
               </div>
@@ -1776,7 +1802,7 @@ body::before {
                     <div class="module-field">
                       <label>Town</label>
                       <select id="editorial-town">
-                        <option>Black Hawk</option><option>Central City</option><option>Nederland</option><option>Georgetown</option><option>Idaho Springs</option>
+                        <option>Morrison / Red Rocks</option><option>Nederland</option><option>Black Hawk</option><option>Central City</option><option>Idaho Springs</option><option>Georgetown</option><option>Evergreen</option><option>Golden</option>
                       </select>
                     </div>
                     <div class="module-field">
@@ -1793,8 +1819,38 @@ body::before {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+	            <div class="module-grid-2 editorial-lower-grid">
+	              <div class="module-panel">
+	                <h3>Town Status</h3>
+	                <div class="town-status-grid" id="editorial-town-status"></div>
+	              </div>
+	              <div class="module-panel">
+	                <h3>Story Idea Generator</h3>
+	                <div class="module-form">
+	                  <div class="module-form two">
+	                    <div class="module-field">
+	                      <label>Town</label>
+	                      <select id="editorial-idea-town">
+	                        <option>Morrison / Red Rocks</option><option>Nederland</option><option>Black Hawk</option><option>Central City</option><option>Idaho Springs</option><option>Georgetown</option><option>Evergreen</option><option>Golden</option>
+	                      </select>
+	                    </div>
+	                    <div class="module-field">
+	                      <label>Angle</label>
+	                      <select id="editorial-idea-angle">
+	                        <option>Civic accountability</option><option>Shop Local profile</option><option>Events and weekend guide</option><option>Schools and families</option><option>Roads, weather, and safety</option>
+	                      </select>
+	                    </div>
+	                  </div>
+	                  <div class="module-actions">
+	                    <button class="module-btn primary" onclick="generateEditorialIdea()">Generate Idea</button>
+	                    <button class="module-btn" onclick="stageGeneratedStory()">Stage Idea</button>
+	                  </div>
+	                  <div class="output-box idea-output" id="editorial-idea-output">Select a town and angle, then generate a story seed. Staging adds it to the local editorial queue for operator review.</div>
+	      </div>
+	    </div>
+	          </div>
+	        </div>
+	      </div>
       </div>
     </div>
 
@@ -2215,7 +2271,7 @@ body::before {
     <div class="status-dot"><span class="dot" id="dot-sendy"></span> Sendy</div>
     <div class="status-dot"><span class="dot" id="dot-stripe"></span> Stripe</div>
   </div>
-  <span class="status-right">44.236.197.183 · Local storage only</span>
+  <span class="status-right">admin.conews.press · Local storage only</span>
 </div>
 
 <!-- ── Toast Container ─────────────────────────────────────────────── -->
@@ -2406,10 +2462,12 @@ async function loadSendySubscriberCount() {
   try {
     let total = 0;
     for (const listId of uniqueListIds) {
-      const url = new URL(sendyUrl + '/api/subscribers/count');
-      url.searchParams.set('api_key', apiKey);
-      url.searchParams.set('list_id', listId);
-      const res = await fetch(url.toString(), { method: 'GET' });
+      const body = new URLSearchParams({ api_key: apiKey, list_id: listId });
+      const res = await fetch(`${sendyUrl}/api/subscribers/active-subscriber-count.php`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body,
+      });
       if (!res.ok) throw new Error(`Sendy ${res.status}`);
       const raw = (await res.text()).trim();
       const count = Number(raw.replace(/,/g, ''));
@@ -2438,13 +2496,14 @@ async function loadSupabaseArticleCounts() {
   try {
     const url = new URL(supabaseUrl + '/rest/v1/public_posts');
     url.searchParams.set('site_key', 'eq.registercall');
-    url.searchParams.set('select', '*');
-    url.searchParams.set('limit', '200');
+    url.searchParams.set('select', 'id,site_key,title,headline,slug,status,town,city,location,category,tags,author,byline,source,url,public_url,permalink,published_at,created_at,updated_at');
+    url.searchParams.set('limit', '500');
     url.searchParams.set('order', 'created_at.desc');
     const res = await fetch(url.toString(), {
       headers: {
         apikey: anonKey,
         Authorization: `Bearer ${anonKey}`,
+        Prefer: 'count=exact',
       },
     });
     if (!res.ok) throw new Error(`Supabase ${res.status}`);
@@ -2484,8 +2543,43 @@ const EDITORIAL_STORE = 'copress_editorial_queue_v1';
 const DIRECTORY_STORE = 'copress_directory_batch_v1';
 const DIRECTORY_SCAN_STORE = 'copress_directory_scan_meta_v1';
 let editorialRemoteStories = [];
+let latestEditorialIdea = null;
 let directoryRecords = [];
 let directoryScanMeta = { label: 'Demo civic card wall', civicSource: '', fileName: '', cardCount: 0 };
+
+const EDITORIAL_TOWNS = [
+  'Morrison / Red Rocks',
+  'Nederland',
+  'Black Hawk',
+  'Central City',
+  'Idaho Springs',
+  'Georgetown',
+  'Evergreen',
+  'Golden',
+];
+
+const EDITORIAL_IDEA_PATTERNS = {
+  'Civic accountability': {
+    title: 'What changed at the latest public meeting?',
+    notes: 'Pull agenda, vote count, public comment, next meeting date, and one direct quote. Add document links before publish.',
+  },
+  'Shop Local profile': {
+    title: 'Local business profile and reader service note',
+    notes: 'Confirm hours, owner quote, service area, sponsor status, and one useful reader detail. Mark paid placement if sponsored.',
+  },
+  'Events and weekend guide': {
+    title: 'Weekend events, weather, and reader planning guide',
+    notes: 'Collect event times, parking, road impact, ticket links, and family-friendly notes. Keep it scannable for Friday delivery.',
+  },
+  'Schools and families': {
+    title: 'School board, family calendar, and student spotlight',
+    notes: 'Check district notices, board packets, sports schedules, photo permissions, and parent-facing deadlines.',
+  },
+  'Roads, weather, and safety': {
+    title: 'Roads, weather, fire, and public safety brief',
+    notes: 'Verify CDOT/local advisories, weather timing, emergency contacts, and any closures before publication.',
+  },
+};
 
 const MAIN_DIRECTORY_DB = [
   { name: 'Existing Mountain Market', phone: '3035550101', domain: 'mountainmarket.example', address: '101mainstnederlandco' },
@@ -2531,6 +2625,36 @@ function normalizeSupabaseStory(post) {
   };
 }
 
+function storyMatchesTown(story, town) {
+  const needles = town.toLowerCase().split(/\s*\/\s*|\s+/).filter(part => part.length > 2);
+  const haystack = [story.town, story.title, story.notes, story.category].join(' ').toLowerCase();
+  return needles.some(needle => haystack.includes(needle));
+}
+
+function renderEditorialTownStatus(stories = readEditorialStories(), hasRemote = false) {
+  const grid = document.getElementById('editorial-town-status');
+  if (!grid) return;
+  setText('editorial-town-count', EDITORIAL_TOWNS.length);
+  setText('live-editorial-towns', EDITORIAL_TOWNS.length);
+  grid.innerHTML = EDITORIAL_TOWNS.map(town => {
+    const townStories = stories.filter(story => storyMatchesTown(story, town));
+    const draftCount = townStories.filter(story => String(story.status || '').toLowerCase().includes('draft')).length;
+    const readyCount = townStories.filter(story => /ready|publish/.test(String(story.status || '').toLowerCase())).length;
+    const state = readyCount ? 'ok' : townStories.length ? 'active' : 'warn';
+    const label = readyCount ? 'ready' : townStories.length ? 'active' : 'needs';
+    const source = hasRemote ? 'Supabase' : 'Local';
+    return `
+      <div class="town-status-card ${state}">
+        <div class="town-status-top">
+          <div class="town-status-name">${escapeHTML(town)}</div>
+          <span class="town-status-badge">${label}</span>
+        </div>
+        <div class="town-status-meta">${formatNumber(townStories.length)} stories · ${formatNumber(draftCount)} drafts<br>${source} queue</div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderEditorialStories() {
   const hasRemote = editorialRemoteStories.length > 0;
   const stories = hasRemote ? editorialRemoteStories : readEditorialStories();
@@ -2546,11 +2670,19 @@ function renderEditorialStories() {
       <button class="module-btn" onclick="${hasRemote ? `openEditorialStory(${index})` : `advanceEditorialStory(${index})`}">${escapeHTML(hasRemote && story.url ? 'Open' : story.status)}</button>
     </div>
   `).join('');
-  const activeCount = hasRemote
-    ? stories.filter(s => String(s.status || '').toLowerCase().includes('draft')).length
-    : stories.filter(s => s.status !== 'Ready').length;
-  setText('editorial-module-drafts', activeCount);
-  setText('editorial-module-source', hasRemote ? 'Supabase' : 'Local');
+	  const activeCount = hasRemote
+	    ? stories.filter(s => String(s.status || '').toLowerCase().includes('draft')).length
+	    : stories.filter(s => s.status !== 'Ready').length;
+  const readyCount = stories.filter(s => /ready|publish/.test(String(s.status || '').toLowerCase())).length;
+	  setText('editorial-module-drafts', activeCount);
+	  setText('editorial-module-source', hasRemote ? 'Supabase' : 'Local');
+  setText('live-drafts', formatNumber(activeCount));
+  setText('editorial-nav-count', formatNumber(activeCount));
+  if (!hasRemote) {
+    setText('live-published', formatNumber(readyCount));
+    setText('live-this-week', formatNumber(stories.length));
+  }
+  renderEditorialTownStatus(stories, hasRemote);
 }
 
 function addEditorialStory() {
@@ -2579,9 +2711,9 @@ function advanceEditorialStory(index) {
   const stories = readEditorialStories();
   const story = stories[index];
   if (!story) return;
-  story.status = order[(order.indexOf(story.status) + 1) % order.length];
-  writeEditorialStories(stories);
-  renderEditorialStories();
+	  story.status = order[(order.indexOf(story.status) + 1) % order.length];
+	  writeEditorialStories(stories);
+	  renderEditorialStories();
 }
 
 function openEditorialStory(index) {
@@ -2594,8 +2726,7 @@ function openEditorialStory(index) {
 }
 
 function generateDailyStoryList() {
-  const towns = ['Black Hawk', 'Central City', 'Nederland', 'Georgetown', 'Idaho Springs'];
-  const stories = towns.map(town => ({
+  const stories = EDITORIAL_TOWNS.map(town => ({
     town,
     title: `${town} daily brief`,
     status: 'Draft',
@@ -2604,8 +2735,49 @@ function generateDailyStoryList() {
   editorialRemoteStories = [];
   writeEditorialStories(stories);
   renderEditorialStories();
-  setText('live-drafts', formatNumber(stories.length));
-  toast('Daily story list generated');
+	  setText('live-drafts', formatNumber(stories.length));
+	  toast('Daily story list generated');
+}
+
+function generateEditorialIdea() {
+  const town = document.getElementById('editorial-idea-town')?.value || EDITORIAL_TOWNS[0];
+  const angle = document.getElementById('editorial-idea-angle')?.value || 'Civic accountability';
+  const pattern = EDITORIAL_IDEA_PATTERNS[angle] || EDITORIAL_IDEA_PATTERNS['Civic accountability'];
+  latestEditorialIdea = {
+    town,
+    status: 'Draft',
+    title: `${town}: ${pattern.title}`,
+    notes: `${angle}. ${pattern.notes}`,
+  };
+  const output = document.getElementById('editorial-idea-output');
+  if (output) {
+    output.textContent = `Town: ${latestEditorialIdea.town}
+Status: ${latestEditorialIdea.status}
+Headline: ${latestEditorialIdea.title}
+
+Notes:
+${latestEditorialIdea.notes}
+
+Next: Stage Idea to add this to the local queue, then refresh Supabase when credentials are available.`;
+  }
+  toast('Story idea generated');
+}
+
+function stageGeneratedStory() {
+  if (!latestEditorialIdea) generateEditorialIdea();
+  if (!latestEditorialIdea) return;
+  const stories = readEditorialStories();
+  stories.unshift({ ...latestEditorialIdea });
+  writeEditorialStories(stories);
+  editorialRemoteStories = [];
+  renderEditorialStories();
+  const title = document.getElementById('editorial-title');
+  const notes = document.getElementById('editorial-notes');
+  const town = document.getElementById('editorial-town');
+  if (title) title.value = latestEditorialIdea.title;
+  if (notes) notes.value = latestEditorialIdea.notes;
+  if (town) town.value = latestEditorialIdea.town;
+  toast('Story idea staged locally');
 }
 
 function makeSeedBusinesses(query, category) {
@@ -3747,7 +3919,6 @@ renderEditorialStories();
 loadDirectoryBatch();
 refreshStationeryTemplate();
 refreshModuleStatus();
-refreshHermesCrewStatus();
 </script>
 
 <!-- ── Press Atmosphere: Gears + Spotlight ─────────────────────────── -->
