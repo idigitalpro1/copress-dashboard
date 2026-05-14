@@ -1,0 +1,92 @@
+{
+  "id": "PROV-505",
+  "title": "Contributor Onboarding CTA Pattern",
+  "generated": "2026-05-14",
+  "status": "build-artifact",
+  "canonicalIntakeUrl": "https://onboarding.copress.news",
+  "primaryCta": {
+    "label": "Upload Photos, Video, or Story",
+    "url": "https://onboarding.copress.news",
+    "supportText": "Send photos, video, captions, event notes, or story tips to Colorado News Press for editorial review.",
+    "placement": ["top", "bottom"],
+    "firstScreenRequired": true
+  },
+  "secondaryCtas": [
+    {
+      "key": "news_tip",
+      "label": "Submit a News Tip",
+      "use": "civic, schools, public safety, local business tips",
+      "url": "https://onboarding.copress.news"
+    },
+    {
+      "key": "event_photos",
+      "label": "Upload Event Photos",
+      "use": "sports, concerts, festivals, community events",
+      "url": "https://onboarding.copress.news"
+    },
+    {
+      "key": "apple_photos",
+      "label": "Send Apple Photos / Video",
+      "use": "iPhone photo/video handoff",
+      "url": "https://onboarding.copress.news"
+    },
+    {
+      "key": "submit_event",
+      "label": "Submit an Event",
+      "use": "calendar and RSVP candidates",
+      "url": "https://onboarding.copress.news"
+    },
+    {
+      "key": "letter",
+      "label": "Send a Letter",
+      "use": "LTO and opinion queue",
+      "url": "https://onboarding.copress.news"
+    }
+  ],
+  "requiredFields": [
+    "name",
+    "email",
+    "phone",
+    "town",
+    "date",
+    "location",
+    "captionNotes",
+    "creditLine",
+    "topic",
+    "rightsNote"
+  ],
+  "fileGuidance": {
+    "photos": ["jpg", "png", "heic"],
+    "video": ["mp4", "mov"],
+    "documents": ["docx", "pdf", "txt", "pasted text"],
+    "applePhotos": "Export originals when possible before uploading."
+  },
+  "moderationStates": [
+    "received",
+    "needs caption/source review",
+    "approved for editorial use",
+    "scheduled or published",
+    "rejected/archived"
+  ],
+  "safetyRules": [
+    "Do not expose local file paths.",
+    "Do not expose private upload tokens.",
+    "Do not use personal phone numbers as public upload links.",
+    "Do not promise publication.",
+    "Do not mark delivery confirmed unless the provider or editor confirms receipt."
+  ],
+  "townMetadata": [
+    "town",
+    "canonicalHost",
+    "editorialLead",
+    "primaryPillars",
+    "defaultAssignmentQueue"
+  ],
+  "acceptanceCriteria": [
+    "CTA path is visible in the first screen of contributor surfaces.",
+    "CTA uses the reviewed public onboarding route.",
+    "Upload guidance mentions Apple Photos export originals.",
+    "Photo/video/editorial/LTO/event lanes are separated.",
+    "No secrets, private local links, or unreviewed phone/SMS paths are published."
+  ]
+}

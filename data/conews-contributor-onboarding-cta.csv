@@ -1,0 +1,7 @@
+key,label,use,route,placement,notes
+primary,Upload Photos Video or Story,"photos, video, captions, event notes, story tips",https://onboarding.copress.news,top-and-bottom,"first-screen CTA on contributor surfaces"
+news_tip,Submit a News Tip,"civic, schools, public safety, local business tips",https://onboarding.copress.news,top,"routes to editorial review"
+event_photos,Upload Event Photos,"sports, concerts, festivals, community events",https://onboarding.copress.news,top,"include date, location, captions, credit"
+apple_photos,Send Apple Photos / Video,"iPhone photo/video handoff",https://onboarding.copress.news,top,"export originals when possible before uploading"
+submit_event,Submit an Event,"calendar and RSVP candidates",https://onboarding.copress.news,contextual,"include organizer, time, location, sponsor flag"
+letter,Send a Letter,"LTO and opinion queue",https://onboarding.copress.news,contextual,"requires moderation before publication"

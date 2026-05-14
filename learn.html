@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>copress.news — Staff Academy</title>
+<title>copress.news — SATCO Academy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -664,7 +664,7 @@ body {
 
 <!-- Top Nav -->
 <nav id="topnav">
-  <div class="nav-logo">copress <span>Staff Academy</span></div>
+  <div class="nav-logo">copress <span>SATCO Academy</span></div>
   <div class="nav-stats">
     <div class="nav-stat" id="nav-streak">
       <span class="label">🔥</span>
@@ -689,7 +689,7 @@ body {
   <!-- ── HOME VIEW ──────────────────────────────────────────────── -->
   <div class="view active" id="view-home">
     <div class="hero">
-      <div class="hero-eyebrow">📰 copress.news · Staff Academy</div>
+      <div class="hero-eyebrow">NationalIntelligence.com · SATCO Academy for staff</div>
       <h1 class="hero-title">Learn the Press.<br>Earn Your Byline.</h1>
       <p class="hero-sub">Flash cards built from the actual .md docs powering this platform. Master editorial, tech, and workflow — one card at a time.</p>
     </div>
@@ -707,7 +707,7 @@ body {
     <div class="daily-banner" onclick="startDaily()">
       <div class="daily-icon">⚡</div>
       <div class="daily-info">
-        <h2>Daily Challenge</h2>
+        <h2>SATCO Daily Quick</h2>
         <p>10 random cards · All decks · Bonus XP · Resets at midnight</p>
       </div>
       <button class="daily-cta">Play Now</button>
@@ -795,7 +795,7 @@ body {
     </div>
     <div class="complete-actions">
       <button class="btn-secondary" onclick="showView('home')">← All Decks</button>
-      <button class="btn-primary" onclick="startDaily()">⚡ Daily Challenge</button>
+      <button class="btn-primary" onclick="startDaily()">⚡ SATCO Daily Quick</button>
     </div>
   </div>
 
@@ -940,7 +940,7 @@ const DECKS = [
       { q: "What are the 4 Twilio/3CX SIP extensions for call routing?", a: "17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production" },
       { q: "What Google service is used for business directory data import?", a: "Google Places API — key stored as GOOGLE_PLACES_API_KEY in API Vault" },
       { q: "What's the MCP SSE heartbeat interval?", a: "Every 15 seconds — proxy read timeout must be >= 60s" },
-      { q: "What's the canonical Hermes dashboard URL?", a: "http://127.0.0.1:9119/sessions — the local sessions view opened by `hermes dashboard`." },
+      { q: "What's the canonical Hermes operator URL?", a: "http://127.0.0.1:8787/ — the Aileen / Hermes WebUI dashboard. Individual /session URLs are chat threads inside it; 9119/sessions is diagnostics only." },
     ]
   },
 ];
@@ -1171,7 +1171,7 @@ function startDaily() {
   // 10 random cards from all decks
   const pool = DECKS.flatMap(d => d.cards.map(c => ({ ...c, deckId: d.id, deckName: d.name, deckColor: d.color, source: d.source, sourceUrl: d.sourceUrl })));
   const cards = shuffle(pool).slice(0, 10);
-  const fakeDeck = { id: 'daily', name: '⚡ Daily Challenge', color: '#f5c842', source: 'All Decks', sourceUrl: '#' };
+  const fakeDeck = { id: 'daily', name: '⚡ SATCO Daily Quick', color: '#f5c842', source: 'All Decks', sourceUrl: '#' };
   beginSession(fakeDeck, cards, true);
 }
 
@@ -1334,7 +1334,7 @@ function endSession() {
   document.getElementById('complete-title').textContent =
     accuracy >= 90 ? 'Outstanding!' : accuracy >= 70 ? 'Great Work!' : accuracy >= 50 ? 'Good Effort!' : 'Keep Practicing!';
   document.getElementById('complete-sub').textContent =
-    `${accuracy}% accuracy · ${session.isDaily ? '⚡ Daily Challenge complete (+50 bonus XP)' : session.deck.name}`;
+    `${accuracy}% accuracy · ${session.isDaily ? '⚡ SATCO Daily Quick complete (+50 bonus XP)' : session.deck.name}`;
   document.getElementById('cs-correct').textContent = session.correct;
   document.getElementById('cs-wrong').textContent = session.wrong;
   document.getElementById('cs-xp').textContent = '+' + session.xpEarned;

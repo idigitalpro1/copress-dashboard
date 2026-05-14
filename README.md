@@ -4,7 +4,14 @@
 **Stack:** Static HTML/CSS/JS · Vercel · GitHub auto-deploy  
 **Repo:** `idigitalpro1/copress-dashboard`
 
-The command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
+SATCOM is the command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
+
+## SATCOM / SATCO Brand Lane
+
+- **SATCOM:** main dashboard title and operator command surface.
+- **SATCO Academy:** staff learning lane, including the Daily Quick training prompt.
+- **NationalIntelligence.com:** brand domain for the aerospace-intelligence staff academy concept.
+- **Asset rule:** use original aerospace/SATCOM styling only; do not reuse official government seals as brand marks.
 
 ---
 
@@ -17,7 +24,7 @@ The command center for copress.news — a Colorado mountain newspaper network co
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
 | `/apistore` | `apistore.html` | ✅ Live | API Vault — secure key store, MCP injection, .env export |
-| `/learn` | `learn.html` | ✅ Live | Staff Academy — 72 flash cards, XP system, 9 levels, 18 badges |
+| `/learn` | `learn.html` | ✅ Live | SATCO Academy — 72 flash cards, XP system, 9 levels, 18 badges |
 | `/linear` | `linear.html` | ✅ Live | Linear integration — live issues, cycles, projects, quick-create |
 
 ---
@@ -27,10 +34,12 @@ The command center for copress.news — a Colorado mountain newspaper network co
 **Admin section**
 - Admin HQ — primary launch surface for operator tools
 - CoPress Dashboard — `https://copress-dashboard.vercel.app/`
-- Hermes Dashboard — `http://127.0.0.1:9119/sessions`
+- Aileen / Hermes WebUI — `http://127.0.0.1:8787/`
+- Hermes Agent diagnostics — `http://127.0.0.1:9119/sessions`
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
 - Client Onboarding — `https://onboarding.copress.news` (`idigitalpro1/onboarding-link`; DNS must resolve before public use)
+- Microsoft 365 Login — `https://admin.microsoft.com/Adminportal/Home#/users` for MyAppStore.biz tenant staff mailboxes and aliases
 
 Old DashTail/Register-Call/Billing admin panels are intentionally not linked from the dashboard. Keep them available only as backend fallback surfaces until their workflows are fully absorbed here.
 
@@ -52,7 +61,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 - Newsletter Studio → `/newsletter`
 - API Vault → `/apistore`
 - Linear → `/linear`
-- Staff Academy → `/learn`
+- SATCO Academy → `/learn`
 
 ---
 
@@ -69,7 +78,7 @@ Old DashTail/Register-Call/Billing admin panels are intentionally not linked fro
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
 | Colorado Gambler | `data-view=directory` | Gambling vertical and casino directory loader |
-| Staff Academy | `/learn` | Onboarding flash cards |
+| SATCO Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
 | Hermes Orchestrator | `data-view=brains` | Local Qwen chat, Crew runner, jobs, and routing status |
 | (implicit) API Vault | `/apistore` | Key management |
@@ -120,19 +129,20 @@ The atmosphere layer sits below the app shell. `#spotlight` and `#gears-svg` ren
 
 ---
 
-## Hermes Agent Local Dashboard
+## Hermes / Aileen Local Surfaces
 
 Hermes Agent has two separate local surfaces:
 
 | URL | Purpose | Use for |
 |-----|---------|---------|
 | `https://copress-dashboard.vercel.app/` → Hermes Crew | CoPress operator front end | Chat, crew jobs, status, local endpoint links |
-| `http://127.0.0.1:9119/sessions` | Hermes Agent dashboard | Canonical human operator UI for sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
+| `http://127.0.0.1:8787/` | Aileen / Hermes WebUI | Canonical human operator dashboard for prompts, chat continuity, and local model routing |
+| `http://127.0.0.1:9119/sessions` | Hermes Agent diagnostics | Raw sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
 | `http://127.0.0.1:8793` | Hermes Crew bridge | Local chat, crew run/status/result API, Qwen/Ollama routing |
 | `http://127.0.0.1:8501` | Streamlit fallback | Local fallback chat and Crew Runner UI |
 | `http://127.0.0.1:8642/v1` | OpenAI-compatible gateway | Open WebUI / API clients |
 
-`http://127.0.0.1:9119/sessions` is the canonical Hermes dashboard URL returned by `hermes dashboard`. The dashboard API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean the Hermes dashboard is down.
+`http://127.0.0.1:8787/` is the canonical Aileen/Hermes operator dashboard. Individual `/session/...` URLs are chat threads inside that dashboard, not the canonical entry point. `http://127.0.0.1:9119/sessions` is diagnostics only. The diagnostics API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean Hermes is down.
 
 For Open WebUI, point the OpenAI-compatible base URL at:
 
@@ -144,7 +154,7 @@ The current gateway model id verified locally is `ollama-qwen`.
 
 ---
 
-## Staff Academy (`/learn`)
+## SATCO Academy (`/learn`)
 
 72 flash cards across 6 decks:
 
@@ -199,7 +209,9 @@ Stores API keys in localStorage under `api_vault`. The dashboard also stores qui
 | `sendy_list_id` / `SENDY_LIST_*` | Sendy subscriber list IDs |
 | `stripe_secret` | Stripe secret key |
 
-Export formats: `.env` file, JSON. MCP injection: copies key into clipboard for paste into MCP config.
+Agent handoff rule: never bulk-hand all keys to Hermes. Hermes/Aileen may request one named service credential for one task through a guarded local bridge or operator-reviewed export. Do not paste secrets into chat prompts, commit them, or store them in model/session config.
+
+Export formats: selected `.env` values or JSON for local operator handoff only. MCP injection should be scoped to a service and reason.
 
 ---
 

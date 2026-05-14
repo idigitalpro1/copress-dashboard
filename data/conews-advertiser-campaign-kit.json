@@ -1,0 +1,68 @@
+{
+  "id": "PROV-506",
+  "title": "CoNews Advertiser Campaign Kit",
+  "generated": "2026-05-14",
+  "status": "build-artifact",
+  "publicOffer": {
+    "headline": "Reach your town before the weekend.",
+    "subhead": "Sponsor local news, events, visitor guides, and Shop Local discovery across Colorado News Press town sites.",
+    "primaryCta": "Request Campaign Kit",
+    "ctaUrl": "https://onboarding.copress.news"
+  },
+  "tiers": [
+    {
+      "name": "Basic Listing",
+      "use": "local directory presence",
+      "publicModules": ["name", "category", "town", "website", "phone"],
+      "internalReview": "verify business identity"
+    },
+    {
+      "name": "Featured Profile",
+      "use": "editorial-style business card",
+      "publicModules": ["logo", "hero image", "profile", "map pin", "CTA"],
+      "internalReview": "mark sponsored if paid"
+    },
+    {
+      "name": "Weekly Sponsor",
+      "use": "digital weekly package",
+      "publicModules": ["newsletter block", "sponsor strip", "category card"],
+      "internalReview": "approve creative and dates"
+    },
+    {
+      "name": "Town Partner",
+      "use": "launch or seasonal package",
+      "publicModules": ["carousel", "event pin", "Shop Local feature"],
+      "internalReview": "review category exclusivity"
+    }
+  ],
+  "creativeSpecs": {
+    "logo": "PNG or SVG preferred",
+    "heroImage": "1600x900 or larger",
+    "squareAd": "1080x1080",
+    "mediumRectangle": "300x250",
+    "leaderboard": "728x90",
+    "mobileBanner": "320x50",
+    "copy": "80 to 140 character headline, one short body paragraph, one CTA"
+  },
+  "reportingMetrics": [
+    "impressions",
+    "clicks",
+    "CTA clicks",
+    "Shop Local inquiries",
+    "event RSVP clicks",
+    "newsletter sponsor clicks"
+  ],
+  "safetyRules": [
+    "Sponsored modules must be labeled.",
+    "No private rates in public kit.",
+    "No customer data in static files.",
+    "No unreviewed claims about reach or audience size.",
+    "No regulated category claims without category review."
+  ],
+  "acceptanceCriteria": [
+    "Advertiser kit explains tiers, creative specs, CTA, and reporting promise.",
+    "Kit routes to reviewed onboarding path.",
+    "Sponsored label rule is explicit.",
+    "No secrets, private pricing, or customer data are published."
+  ]
+}

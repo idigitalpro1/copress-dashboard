@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>copress.news — Command Center</title>
+<title>copress.news — SATCOM</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -733,7 +733,7 @@ body::before {
 .hermes-console-grid.lower { grid-template-columns: minmax(320px, .85fr) minmax(0, 1.15fr); margin-top: 18px; }
 .hermes-chat-panel { min-height: 560px; display: flex; flex-direction: column; }
 .hermes-chat-log {
-  min-height: 250px; max-height: 350px; overflow: auto;
+  flex: 1; min-height: 300px; max-height: 420px; overflow: auto;
   border: 1px solid rgba(200,168,75,.12); background: rgba(7,12,20,.56);
   border-radius: 2px; padding: 12px; display: flex; flex-direction: column; gap: 10px;
   margin-bottom: 12px;
@@ -750,6 +750,9 @@ body::before {
   align-self: flex-start; max-width: 92%;
   background: rgba(6,182,212,.07); color: var(--ink); border-color: rgba(6,182,212,.16);
 }
+.hermes-msg.pending {
+  opacity: .78;
+}
 .hermes-msg.error {
   align-self: stretch; color: #ffb3a8; background: rgba(192,57,43,.08); border-color: rgba(192,57,43,.28);
 }
@@ -760,6 +763,44 @@ body::before {
   width: 100%; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
   color: var(--ink); border-radius: 2px; padding: 8px 10px; outline: none;
   font: 11px 'DM Mono', monospace; text-transform: uppercase;
+}
+.hermes-activity {
+  border: 1px solid rgba(244,114,182,.22);
+  background: linear-gradient(135deg, rgba(244,114,182,.08), rgba(7,12,20,.56));
+  border-radius: 2px;
+  padding: 10px;
+  margin-top: 12px;
+}
+.hermes-activity-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-bottom: 8px;
+}
+.hermes-activity-title {
+  color: #f9a8d4; font: 700 10px 'DM Mono', monospace; letter-spacing: .12em; text-transform: uppercase;
+}
+.hermes-activity-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.hermes-activity-log {
+  display: grid; gap: 7px; max-height: 178px; overflow: auto;
+}
+.hermes-activity-item {
+  border: 1px solid rgba(200,168,75,.12);
+  background: rgba(7,12,20,.5);
+  border-radius: 2px;
+  padding: 8px 9px;
+}
+.hermes-activity-meta {
+  display: flex; justify-content: space-between; gap: 10px;
+  color: var(--ink-muted); font: 9px 'DM Mono', monospace; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.hermes-activity-status { color: var(--gold-bright); white-space: nowrap; }
+.hermes-activity-status.done { color: #27ae60; }
+.hermes-activity-status.error { color: #ffb3a8; }
+.hermes-activity-text {
+  color: var(--ink); font-size: 11.5px; line-height: 1.45;
+}
+.hermes-activity-preview {
+  color: var(--ink-muted); font-size: 10.5px; line-height: 1.4; margin-top: 4px;
 }
 .hermes-checks {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;
@@ -903,7 +944,7 @@ body::before {
   <div class="topbar-masthead">
     <span class="t-name">copress</span><span class="t-tld">.news</span>
     <span class="t-pipe">|</span>
-    <span class="t-section">Command Center</span>
+    <span class="t-section">SATCOM</span>
   </div>
   <div class="topbar-center" id="live-date"></div>
   <div class="topbar-right">
@@ -1002,7 +1043,7 @@ body::before {
     </div>
     <div class="nav-item" onclick="window.location.href='/learn'">
       <span class="nav-icon">🎓</span>
-      <span class="nav-label">Staff Academy</span>
+      <span class="nav-label">SATCO Academy</span>
       <span class="nav-badge new">NEW</span>
     </div>
 
@@ -1027,7 +1068,7 @@ body::before {
 
       <div class="page-header">
         <div class="page-eyebrow">copress.news · Publishing Operations · Colorado</div>
-        <h1 class="page-title">Command Center</h1>
+        <h1 class="page-title">SATCOM</h1>
         <p class="page-subtitle">This Vercel dashboard is the admin home. Open legacy consoles only from here.</p>
       </div>
 
@@ -1068,7 +1109,7 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">Hermes</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
             </div>
           </div>
         </div>
@@ -1366,7 +1407,7 @@ body::before {
           </div>
         </div>
 
-        <!-- Staff Academy -->
+        <!-- SATCO Academy -->
         <div class="module-card" onclick="window.location.href='/learn'" style="cursor:pointer;--card-color:var(--c-academy);--card-glow:rgba(243,156,18,.05);">
           <div class="card-dept">
             <span class="card-dept-name">Academy</span>
@@ -1376,7 +1417,7 @@ body::before {
             <div class="card-icon-row">
               <div class="card-icon">🎓</div>
               <div>
-                <div class="card-title">Staff Academy</div>
+                <div class="card-title">SATCO Academy</div>
                 <div class="card-subtitle">Flash cards · XP · Linked to docs</div>
               </div>
             </div>
@@ -1499,7 +1540,7 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew Console</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">Dashboard</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
             </div>
           </div>
         </div>
@@ -1556,13 +1597,13 @@ body::before {
           <div class="admin-launch-desc">The clean operator hub for all admin, AI, publishing, billing, upload, and service links.</div>
           <div class="admin-launch-url">copress-dashboard.vercel.app</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:9119/sessions" target="_blank" rel="noopener">
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
           <div class="admin-launch-top">
-            <div class="admin-launch-title">Hermes Dashboard</div>
+            <div class="admin-launch-title">Aileen / Hermes WebUI</div>
             <span class="admin-launch-tag">Local AI</span>
           </div>
-          <div class="admin-launch-desc">Canonical Hermes Agent session dashboard for local model routing and operator prompts.</div>
-          <div class="admin-launch-url">127.0.0.1:9119/sessions</div>
+          <div class="admin-launch-desc">Canonical human operator dashboard for prompts, chat continuity, and local model routing.</div>
+          <div class="admin-launch-url">127.0.0.1:8787</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-network);" href="http://127.0.0.1:8096" target="_blank" rel="noopener">
           <div class="admin-launch-top">
@@ -1579,6 +1620,14 @@ body::before {
           </div>
           <div class="admin-launch-desc">Canonical upload and onboarding app from idigitalpro1/onboarding-link. Use once DNS is live.</div>
           <div class="admin-launch-url">onboarding.copress.news</div>
+        </a>
+        <a class="admin-launch" style="--admin-color:var(--c-accounting);" href="https://admin.microsoft.com/Adminportal/Home#/users" target="_blank" rel="noopener">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Microsoft 365 Login</div>
+            <span class="admin-launch-tag">Mail</span>
+          </div>
+          <div class="admin-launch-desc">Sign in to the MyAppStore.biz Microsoft 365 tenant for staff mailboxes, aliases, Outlook, and admin user setup.</div>
+          <div class="admin-launch-url">admin.microsoft.com/users</div>
         </a>
       </div>
 
@@ -1599,7 +1648,7 @@ body::before {
           <div class="quick-pill" onclick="toast('Exporting weekly PDF…')">📄 Weekly PDF <span class="pill-kbd">⌘6</span></div>
           <div class="quick-pill" onclick="window.location.href='/docs'">📚 Docs Hub <span class="pill-kbd">⌘7</span></div>
           <div class="quick-pill" onclick="window.location.href='/apistore'">🔑 API Vault <span class="pill-kbd">⌘8</span></div>
-          <div class="quick-pill" onclick="window.location.href='/learn'">🎓 Staff Academy <span class="pill-kbd">⌘9</span></div>
+          <div class="quick-pill" onclick="window.location.href='/learn'">🎓 SATCO Academy <span class="pill-kbd">⌘9</span></div>
         </div>
       </div>
 
@@ -1946,13 +1995,13 @@ body::before {
             <div class="admin-launch-desc">Main operator surface for publishing, admin, tools, training, docs, network, and API storage.</div>
             <div class="admin-launch-url">https://copress-dashboard.vercel.app/</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:9119/sessions" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
             <div class="admin-launch-top">
-              <div class="admin-launch-title">Hermes Dashboard</div>
+              <div class="admin-launch-title">Aileen / Hermes WebUI</div>
               <span class="admin-launch-tag">Local AI</span>
             </div>
-            <div class="admin-launch-desc">Primary Hermes Agent dashboard. Opens the local sessions view from the `hermes dashboard` terminal command.</div>
-            <div class="admin-launch-url">http://127.0.0.1:9119/sessions</div>
+            <div class="admin-launch-desc">Primary Hermes operator dashboard. Individual sessions live inside this surface.</div>
+            <div class="admin-launch-url">http://127.0.0.1:8787/</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8793/health" target="_blank" rel="noopener">
             <div class="admin-launch-top">
@@ -1977,6 +2026,14 @@ body::before {
             </div>
             <div class="admin-launch-desc">Publisher intake, file upload, and client onboarding app. Source repo: idigitalpro1/onboarding-link.</div>
             <div class="admin-launch-url">https://onboarding.copress.news</div>
+          </a>
+          <a class="admin-launch" style="--admin-color:var(--c-accounting);" href="https://admin.microsoft.com/Adminportal/Home#/users" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Microsoft 365 Login</div>
+              <span class="admin-launch-tag">Mail</span>
+            </div>
+            <div class="admin-launch-desc">Tenant admin entry for Outlook, Exchange mailboxes, new staff accounts, and aliases like registercall.com/conews.press.</div>
+            <div class="admin-launch-url">https://admin.microsoft.com/Adminportal/Home#/users</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-marketing);" href="/newsletter">
             <div class="admin-launch-top">
@@ -2081,6 +2138,21 @@ body::before {
                   <button class="module-btn primary" onclick="sendHermesChat()">Send</button>
                   <button class="module-btn" onclick="clearHermesChat()">Clear</button>
                 </div>
+                <div class="hermes-activity" aria-label="Hermes activity recovery log">
+                  <div class="hermes-activity-head">
+                    <div class="hermes-activity-title">Activity Recovery</div>
+                    <div class="hermes-activity-actions">
+                      <button class="mini-btn" onclick="copyHermesRecoveryPrompt()">Copy Recovery Prompt</button>
+                      <button class="mini-btn" onclick="clearHermesActivity()">Clear Log</button>
+                    </div>
+                  </div>
+                  <div class="hermes-activity-log" id="hermes-activity-log">
+                    <div class="hermes-activity-item">
+                      <div class="hermes-activity-meta"><span>Waiting</span><span class="hermes-activity-status">Ready</span></div>
+                      <div class="hermes-activity-text">Submit a prompt to pin the activity here before compaction.</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="module-panel">
@@ -2107,7 +2179,7 @@ body::before {
                 </div>
 
                 <div class="hermes-endpoint-strip">
-                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:9119/sessions','_blank')">Dashboard</button>
+                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
                   <button class="mini-btn" onclick="window.open('http://127.0.0.1:8793/health','_blank')">Health</button>
                   <button class="mini-btn" onclick="window.open('http://127.0.0.1:8501','_blank')">Chat UI</button>
                 </div>
@@ -2196,8 +2268,11 @@ function navTo(section) {
     });
   }
   if (section === 'brains') {
+    renderHermesChat();
+    renderHermesActivity();
     refreshHermesCrewStatus();
     loadHermesJobs();
+    setTimeout(() => document.getElementById('hermes-chat-prompt')?.focus(), 80);
   }
 }
 
@@ -3253,6 +3328,10 @@ function refreshModuleStatus() {
 
 // ── Hermes Crew Console ───────────────────────────────────────────
 const HERMES_CREW_BASE = 'http://127.0.0.1:8793';
+const HERMES_CHAT_KEY = 'copress_hermes_chat_messages_v1';
+const HERMES_ACTIVITY_KEY = 'copress_hermes_activity_v1';
+let hermesChatMessages = [];
+let hermesActivity = [];
 
 function escapeHtml(value) {
   return String(value || '').replace(/[&<>"']/g, ch => ({
@@ -3260,21 +3339,161 @@ function escapeHtml(value) {
   }[ch]));
 }
 
-function appendHermesMessage(role, text) {
+function defaultHermesMessages() {
+  return [{
+    role: 'assistant',
+    content: 'Hermes Crew is ready when the local bridge is running. Ask for strategy, drafting, routing, or a safe execution plan.',
+  }];
+}
+
+function loadHermesChatMessages() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(HERMES_CHAT_KEY) || '[]');
+    hermesChatMessages = Array.isArray(parsed) && parsed.length ? parsed : defaultHermesMessages();
+  } catch {
+    hermesChatMessages = defaultHermesMessages();
+  }
+}
+
+function saveHermesChatMessages() {
+  localStorage.setItem(HERMES_CHAT_KEY, JSON.stringify(hermesChatMessages.slice(-80)));
+}
+
+function summarizeHermesText(text, max = 150) {
+  const clean = String(text || '').replace(/\s+/g, ' ').trim();
+  return clean.length > max ? `${clean.slice(0, max - 1)}…` : clean;
+}
+
+function loadHermesActivity() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(HERMES_ACTIVITY_KEY) || '[]');
+    hermesActivity = Array.isArray(parsed) ? parsed : [];
+  } catch {
+    hermesActivity = [];
+  }
+}
+
+function saveHermesActivity() {
+  localStorage.setItem(HERMES_ACTIVITY_KEY, JSON.stringify(hermesActivity.slice(-40)));
+}
+
+function renderHermesActivity() {
+  const log = document.getElementById('hermes-activity-log');
+  if (!log) return;
+  if (!hermesActivity.length) {
+    log.innerHTML = `
+      <div class="hermes-activity-item">
+        <div class="hermes-activity-meta"><span>Waiting</span><span class="hermes-activity-status">Ready</span></div>
+        <div class="hermes-activity-text">Submit a prompt to pin the activity here before compaction.</div>
+      </div>`;
+    return;
+  }
+  log.innerHTML = hermesActivity.slice(-8).reverse().map(item => `
+    <div class="hermes-activity-item">
+      <div class="hermes-activity-meta">
+        <span>${escapeHtml(item.time || '')} · ${escapeHtml(item.tier || 'local')}</span>
+        <span class="hermes-activity-status ${escapeHtml(item.status || '')}">${escapeHtml(item.status || 'queued')}</span>
+      </div>
+      <div class="hermes-activity-text">${escapeHtml(item.prompt || '')}</div>
+      ${item.preview ? `<div class="hermes-activity-preview">${escapeHtml(item.preview)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function addHermesActivity(prompt, tier) {
+  const item = {
+    id: `act-${Date.now()}`,
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    tier,
+    status: 'queued',
+    prompt: summarizeHermesText(prompt, 180),
+    preview: 'Queued for Hermes Crew.',
+  };
+  hermesActivity.push(item);
+  saveHermesActivity();
+  renderHermesActivity();
+  return item;
+}
+
+function updateHermesActivity(item, status, preview = '') {
+  if (!item) return;
+  item.status = status;
+  if (preview) item.preview = summarizeHermesText(preview, 220);
+  saveHermesActivity();
+  renderHermesActivity();
+}
+
+function clearHermesActivity() {
+  hermesActivity = [];
+  localStorage.removeItem(HERMES_ACTIVITY_KEY);
+  renderHermesActivity();
+  toast('Hermes activity log cleared');
+}
+
+async function copyHermesRecoveryPrompt() {
+  const latest = hermesActivity[hermesActivity.length - 1];
+  const text = latest
+    ? `Continue from Hermes activity log.
+
+Latest prompt:
+${latest.prompt}
+
+Latest route/tier:
+${latest.tier || 'local'}
+
+Latest status:
+${latest.status || 'unknown'}
+
+Latest result preview:
+${latest.preview || 'No preview saved.'}
+
+Next action:
+Recover the work from this state. Do not restart unless the status is error or blocked.`
+    : `Continue from Hermes activity log.
+
+No activity is saved yet. Ask the operator for the last prompt and intended next action.`;
+  await navigator.clipboard.writeText(text);
+  toast('Recovery prompt copied');
+}
+
+function scrollHermesChatToBottom() {
+  const log = document.getElementById('hermes-chat-log');
+  if (!log) return;
+  requestAnimationFrame(() => { log.scrollTop = log.scrollHeight; });
+}
+
+function appendHermesMessage(role, text, opts = {}) {
   const log = document.getElementById('hermes-chat-log');
   if (!log) return null;
+  const message = { role, content: text };
+  hermesChatMessages.push(message);
+  saveHermesChatMessages();
   const el = document.createElement('div');
   el.className = `hermes-msg ${role}`;
   el.textContent = text;
   log.appendChild(el);
-  log.scrollTop = log.scrollHeight;
-  return el;
+  scrollHermesChatToBottom();
+  return { el, message };
+}
+
+function renderHermesChat() {
+  const log = document.getElementById('hermes-chat-log');
+  if (!log) return;
+  if (!hermesChatMessages.length) loadHermesChatMessages();
+  log.innerHTML = '';
+  hermesChatMessages.forEach(msg => {
+    const el = document.createElement('div');
+    el.className = `hermes-msg ${msg.role || 'assistant'}`;
+    el.textContent = msg.content || '';
+    log.appendChild(el);
+  });
+  scrollHermesChatToBottom();
 }
 
 function clearHermesChat() {
-  const log = document.getElementById('hermes-chat-log');
-  if (!log) return;
-  log.innerHTML = '';
+  hermesChatMessages = [];
+  localStorage.removeItem(HERMES_CHAT_KEY);
+  renderHermesChat();
   appendHermesMessage('assistant', 'Hermes Crew chat cleared. Qwen 35B local remains the default lane.');
 }
 
@@ -3305,11 +3524,14 @@ async function sendHermesChat() {
     toast('Add a Hermes prompt first');
     return;
   }
+  const activity = addHermesActivity(prompt, tier);
   appendHermesMessage('user', prompt);
   if (input) input.value = '';
   const assistant = appendHermesMessage('assistant', 'Thinking locally...');
+  if (assistant?.el) assistant.el.classList.add('pending');
   let buffer = '';
   try {
+    updateHermesActivity(activity, 'streaming', 'Waiting for local model response...');
     const res = await fetch(`${HERMES_CREW_BASE}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -3320,9 +3542,17 @@ async function sendHermesChat() {
       }),
     });
     if (!res.ok || !res.body) throw new Error(`Hermes chat HTTP ${res.status}`);
+    updateHermesActivity(activity, 'streaming', 'Response stream opened.');
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let pending = '';
+    let lastActivityPreviewAt = 0;
+    const updateStreamingPreview = (force = false) => {
+      const now = Date.now();
+      if (!force && now - lastActivityPreviewAt < 750) return;
+      lastActivityPreviewAt = now;
+      updateHermesActivity(activity, 'streaming', buffer);
+    };
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
@@ -3339,22 +3569,44 @@ async function sendHermesChat() {
           if (data.error) throw new Error(data.error);
           if (data.delta) {
             buffer += data.delta;
-            if (assistant) assistant.textContent = buffer;
+            if (assistant?.el) {
+              assistant.el.textContent = buffer;
+              assistant.el.classList.remove('pending');
+            }
+            if (assistant?.message) assistant.message.content = buffer;
+            updateStreamingPreview();
+            scrollHermesChatToBottom();
           }
         } catch (err) {
-          if (assistant) {
-            assistant.className = 'hermes-msg error';
-            assistant.textContent = `Hermes chat error: ${err.message}`;
+          if (assistant?.el) {
+            assistant.el.className = 'hermes-msg error';
+            assistant.el.textContent = `Hermes chat error: ${err.message}`;
           }
+          if (assistant?.message) assistant.message.content = `Hermes chat error: ${err.message}`;
+          saveHermesChatMessages();
+          updateHermesActivity(activity, 'error', err.message);
         }
       });
     }
-    if (assistant && !buffer.trim()) assistant.textContent = 'No response returned. Try Hermes 8B fast local or check the bridge log.';
-  } catch (err) {
-    if (assistant) {
-      assistant.className = 'hermes-msg error';
-      assistant.textContent = `Hermes chat unavailable: ${err.message}`;
+    if (assistant?.el) assistant.el.classList.remove('pending');
+    if (assistant?.el && !buffer.trim()) {
+      assistant.el.textContent = 'No response returned. Try Hermes 8B fast local or check the bridge log.';
+      if (assistant.message) assistant.message.content = assistant.el.textContent;
+      saveHermesChatMessages();
+      updateHermesActivity(activity, 'error', assistant.el.textContent);
+    } else {
+      saveHermesChatMessages();
+      updateStreamingPreview(true);
+      updateHermesActivity(activity, 'done', buffer);
     }
+  } catch (err) {
+    if (assistant?.el) {
+      assistant.el.className = 'hermes-msg error';
+      assistant.el.textContent = `Hermes chat unavailable: ${err.message}`;
+    }
+    if (assistant?.message) assistant.message.content = `Hermes chat unavailable: ${err.message}`;
+    saveHermesChatMessages();
+    updateHermesActivity(activity, 'error', err.message);
   }
 }
 
@@ -3476,7 +3728,18 @@ document.addEventListener('keydown', e => {
   }
 });
 
+document.getElementById('hermes-chat-prompt')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    sendHermesChat();
+  }
+});
+
 // ── Init ───────────────────────────────────────────────────────────
+loadHermesChatMessages();
+loadHermesActivity();
+renderHermesChat();
+renderHermesActivity();
 loadKeys();
 updateStatusDots();
 loadLiveDashboardData();

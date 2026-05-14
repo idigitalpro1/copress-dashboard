@@ -270,6 +270,340 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 }
 .city-dept:hover{background:rgba(200,168,75,.1);color:var(--gold);border-color:var(--gold)}
 
+/* ── SATCOM rollout ownership board ── */
+.rollout-board{
+  background:linear-gradient(135deg,rgba(13,26,45,.98),rgba(8,17,30,.96));
+  border:1px solid rgba(200,168,75,.26);
+  border-radius:var(--r);
+  overflow:hidden;
+  margin-bottom:40px;
+  box-shadow:0 18px 50px rgba(0,0,0,.32);
+}
+.rollout-top{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:18px;
+  align-items:start;
+  padding:22px 24px;
+  border-bottom:1px solid var(--border);
+}
+.rollout-kicker{
+  font-family:var(--mono);
+  color:var(--gold);
+  font-size:.66rem;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
+.rollout-title{
+  font-family:var(--serif);
+  font-size:1.55rem;
+  line-height:1.1;
+  margin-bottom:7px;
+}
+.rollout-copy{
+  color:var(--muted);
+  max-width:760px;
+  line-height:1.55;
+  font-size:.86rem;
+}
+.rollout-badges{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+.rollout-badge{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  border-radius:999px;
+  padding:6px 10px;
+  color:var(--text);
+  font-family:var(--mono);
+  font-size:.68rem;
+  white-space:nowrap;
+}
+.rollout-badge.gold{border-color:rgba(200,168,75,.38);color:var(--gold-bright)}
+.rollout-grid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:0;
+}
+.phase-stack{
+  padding:20px 22px;
+  border-right:1px solid var(--border);
+  display:grid;
+  gap:12px;
+}
+.phase-row{
+  display:grid;
+  grid-template-columns:72px 1fr auto;
+  gap:12px;
+  align-items:center;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+}
+.phase-num{
+  font-family:var(--mono);
+  font-size:.72rem;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.phase-name{font-weight:700;font-size:.92rem;margin-bottom:2px}
+.phase-desc{color:var(--muted);font-size:.74rem;line-height:1.35}
+.phase-count{
+  font-family:var(--mono);
+  color:var(--green);
+  font-weight:700;
+  font-size:.78rem;
+  white-space:nowrap;
+}
+.rollout-side{
+  padding:20px 22px;
+}
+.owner-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:16px;
+}
+.owner-chip{
+  border:1px solid var(--border);
+  background:var(--surface2);
+  border-radius:9px;
+  padding:10px 11px;
+}
+.owner-name{
+  font-weight:700;
+  font-size:.82rem;
+  margin-bottom:2px;
+}
+.owner-lane{
+  color:var(--muted);
+  font-size:.68rem;
+  line-height:1.35;
+}
+.rollout-links{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.rollout-link{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  text-decoration:none;
+  color:var(--text);
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:.76rem;
+  font-weight:700;
+}
+.rollout-link:hover{border-color:var(--gold);color:var(--gold)}
+.packet-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:12px;
+}
+.packet-card{
+  border:1px solid rgba(244,114,182,.32);
+  background:linear-gradient(135deg,rgba(244,114,182,.12),rgba(200,168,75,.045));
+  border-radius:9px;
+  padding:11px 12px;
+}
+.packet-title{
+  color:#f9a8d4;
+  font-weight:800;
+  font-size:.78rem;
+  margin-bottom:4px;
+}
+.packet-copy{
+  color:var(--muted);
+  line-height:1.35;
+  font-size:.68rem;
+  margin-bottom:9px;
+}
+.packet-link{
+  color:#f9a8d4;
+  text-decoration:none;
+  font-family:var(--mono);
+  font-size:.64rem;
+  font-weight:700;
+}
+.packet-link:hover{color:var(--gold-bright)}
+.packet-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.thumb-strip{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  padding:0 22px 22px;
+}
+.mini-thumb{
+  position:relative;
+  height:104px;
+  border-radius:9px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:var(--surface2);
+}
+.mini-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:top center;
+  display:block;
+}
+.mini-thumb::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,transparent 36%,rgba(8,17,30,.92));
+}
+.mini-thumb-label{
+  position:absolute;
+  left:9px;
+  right:9px;
+  bottom:8px;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  color:#fff;
+  font-size:.67rem;
+  font-weight:700;
+}
+.mini-thumb-state{
+  color:var(--gold-bright);
+  font-family:var(--mono);
+  font-size:.58rem;
+  white-space:nowrap;
+}
+.site-rollout{
+  padding:0 22px 22px;
+}
+.site-rollout-head{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:12px;
+}
+.site-rollout-title{
+  font-weight:800;
+  font-size:.92rem;
+}
+.site-rollout-note{
+  color:var(--muted);
+  font-size:.72rem;
+  line-height:1.4;
+  max-width:560px;
+}
+.site-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+.site-card{
+  min-height:184px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:rgba(255,255,255,.035);
+  overflow:hidden;
+  position:relative;
+}
+.site-card.is-pilot{border-color:rgba(200,168,75,.42)}
+.site-card.is-revenue{border-color:rgba(34,211,160,.34)}
+.site-card.is-scale{border-color:rgba(77,142,240,.34)}
+.site-card-thumb{
+  height:78px;
+  background:var(--surface2);
+  overflow:hidden;
+  position:relative;
+}
+.site-card-thumb img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:top center;
+  display:block;
+  opacity:.86;
+  transition:transform .45s ease,opacity .2s ease;
+}
+.site-card:hover .site-card-thumb img{transform:scale(1.05);opacity:1}
+.site-card-body{padding:10px 11px 11px}
+.site-card-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:4px;
+}
+.site-card-name{
+  font-weight:800;
+  font-size:.78rem;
+  line-height:1.2;
+}
+.site-card-status{
+  font-family:var(--mono);
+  font-size:.55rem;
+  color:var(--gold-bright);
+  border:1px solid rgba(200,168,75,.28);
+  border-radius:999px;
+  padding:2px 6px;
+  white-space:nowrap;
+}
+.site-card-meta{
+  color:var(--muted);
+  font-size:.65rem;
+  line-height:1.35;
+  margin-bottom:8px;
+}
+.site-card-lane{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-bottom:8px;
+}
+.site-pill{
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  border-radius:5px;
+  padding:2px 6px;
+  font-size:.58rem;
+  font-weight:700;
+}
+.site-next{
+  color:var(--text);
+  font-size:.65rem;
+  line-height:1.35;
+}
+.site-next span{color:var(--green);font-family:var(--mono);font-size:.58rem;text-transform:uppercase}
+@media (max-width:900px){
+  .rollout-top,.rollout-grid{grid-template-columns:1fr}
+  .rollout-badges{justify-content:flex-start}
+  .phase-stack{border-right:0;border-bottom:1px solid var(--border)}
+  .thumb-strip,.site-grid{grid-template-columns:1fr 1fr}
+  .site-rollout-head{align-items:flex-start;flex-direction:column}
+}
+@media (max-width:560px){
+  .phase-row{grid-template-columns:1fr}
+  .owner-grid,.rollout-links,.packet-row,.thumb-strip,.site-grid{grid-template-columns:1fr}
+}
+
 /* ── Server Panel ── */
 .server-panel{
   background:var(--surface);
@@ -347,9 +681,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <!-- ── HERO ── -->
   <div class="hero">
     <div class="hero-left">
-      <div class="hero-eyebrow">📰 Sweeney Media Group</div>
+      <div class="hero-eyebrow">SATCOM · Ownership Dashboard</div>
       <h1 class="hero-title">Network<br><em>Properties</em></h1>
-      <p class="hero-sub">Every site, domain, and server in the portfolio. Click any property to visit — or use the department buttons to route directly to Editorial, Marketing, Accounting, or Campaign Kits in the main spine.</p>
+      <p class="hero-sub">Every site, domain, rollout lane, and server in the portfolio. SATCOM owns the plan; 5280 and city brands carry the public reader experience.</p>
     </div>
     <div class="hero-stats">
       <div class="stat-card">
@@ -361,12 +695,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <div class="stat-label">Production IP</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val stat-gold">6</div>
-        <div class="stat-label">Live Properties</div>
+        <div class="stat-val stat-gold">22</div>
+        <div class="stat-label">Rollout Cards</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val">5</div>
-        <div class="stat-label">City Sites</div>
+        <div class="stat-val">8</div>
+        <div class="stat-label">City Targets</div>
       </div>
       <div class="stat-card">
         <div class="stat-val stat-blue">16 GB</div>
@@ -374,6 +708,223 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
       </div>
     </div>
   </div>
+
+  <!-- ── SATCOM ROLLOUT ── -->
+  <div class="sec-label">SATCOM Rollout — Kanban News Sections + SEO</div>
+  <section class="rollout-board" aria-label="SATCOM city-site rollout ownership">
+    <div class="rollout-top">
+      <div>
+        <div class="rollout-kicker">Presentation view · Register Call / CoPress Site Rollout</div>
+        <div class="rollout-title">Kanban-driven city news, Shop Local, and campaign kits</div>
+        <p class="rollout-copy">Aileen drafts the planning packets. SATCOM owns approval and sequencing. Codex/Claude turns approved cards into repo work, public city sections, SEO metadata, and verified launch slices.</p>
+      </div>
+      <div class="rollout-badges">
+        <span class="rollout-badge gold">5ST-44</span>
+        <span class="rollout-badge">PROV Sprint 1</span>
+        <span class="rollout-badge">8 next cards</span>
+        <span class="rollout-badge">Architecture optimized</span>
+      </div>
+    </div>
+    <div class="rollout-grid">
+      <div class="phase-stack">
+        <div class="phase-row">
+          <div class="phase-num">Phase 1</div>
+          <div>
+            <div class="phase-name">Foundation</div>
+            <div class="phase-desc">Tier routing, SEO pillar URLs, submissions, Shop Local schema, calendar/RSVP.</div>
+          </div>
+          <div class="phase-count">5 cards</div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num">Phase 2</div>
+          <div>
+            <div class="phase-name">Editorial Workflow</div>
+            <div class="phase-desc">Author lanes, LTO moderation, ad engine, sponsored carousel, local giving feed.</div>
+          </div>
+          <div class="phase-count">5 cards</div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num">Phase 3</div>
+          <div>
+            <div class="phase-name">Launch + Optimization</div>
+            <div class="phase-desc">Schema, SEO QA, ad performance, conversion tracking, soft launch to hard launch.</div>
+          </div>
+          <div class="phase-count">5 cards</div>
+        </div>
+        <div class="phase-row">
+          <div class="phase-num">Phase 4</div>
+          <div>
+            <div class="phase-name">Digital Weekly Delivery</div>
+            <div class="phase-desc">Subscriber preferences, edition builder, submission forms, SMTP delivery, and weekly KPIs.</div>
+          </div>
+          <div class="phase-count">7 cards</div>
+        </div>
+      </div>
+      <div class="rollout-side">
+        <div class="owner-grid">
+          <div class="owner-chip"><div class="owner-name">Patrick</div><div class="owner-lane">Government, schools, investigations, final editorial decisions.</div></div>
+          <div class="owner-chip"><div class="owner-name">Joathon</div><div class="owner-lane">Shop Local, business profiles, sponsored commerce packages.</div></div>
+          <div class="owner-chip"><div class="owner-name">Paul</div><div class="owner-lane">Sports, events, photos/video, local giving, field upload lane.</div></div>
+          <div class="owner-chip"><div class="owner-name">Codex / Claude</div><div class="owner-lane">Patches, implementation cards, deploy verification, rollback notes.</div></div>
+        </div>
+        <div class="rollout-links">
+          <a class="rollout-link" href="https://linear.app/5starserver/issue/5ST-44/roll-out-kanban-driven-news-sections-and-seo-across-city-sites" target="_blank" rel="noopener">Open Linear 5ST-44 <span>→</span></a>
+          <a class="rollout-link" href="/linear">SATCOM Linear Board <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-next-sprint-kanban.csv" target="_blank" rel="noopener">Next Sprint CSV <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-next-sprint-kanban.json" target="_blank" rel="noopener">Next Sprint JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-architecture-optimization.md" target="_blank" rel="noopener">Architecture Packet <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-satcom-handoff-summary.md" target="_blank" rel="noopener">SATCOM Handoff <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-seo-pillar-templates.json" target="_blank" rel="noopener">SEO Pillar JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-seo-pillar-templates.csv" target="_blank" rel="noopener">SEO Pillar CSV <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-contributor-onboarding-cta.json" target="_blank" rel="noopener">Contributor CTA JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-contributor-onboarding-cta.csv" target="_blank" rel="noopener">Contributor CTA CSV <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-advertiser-campaign-kit.json" target="_blank" rel="noopener">Advertiser Kit JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-weekly-edition-sample.json" target="_blank" rel="noopener">Weekly Edition JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-satcom-progress-monitor.json" target="_blank" rel="noopener">Progress Monitor JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-hermes-execution-policy.json" target="_blank" rel="noopener">Hermes Policy JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-hermes-policy-ack.md" target="_blank" rel="noopener">Hermes Policy Ack <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-shoplocal-schema.json" target="_blank" rel="noopener">Shop Local Schema <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-town-rollout.json" target="_blank" rel="noopener">Town Data Source <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-hermes-command-packet.md" target="_blank" rel="noopener">Hermes 50-Agent Packet <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-hermes-claude-handoff.md" target="_blank" rel="noopener">Hermes/Claude Handoff <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-hermes-kanban-run.md" target="_blank" rel="noopener">Hermes Kanban Run <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-hermes-50-agent-allocation.md" target="_blank" rel="noopener">50-Agent Allocation <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-deploy-hooks.md" target="_blank" rel="noopener">Deploy Hooks <span>→</span></a>
+        </div>
+        <div class="packet-row">
+          <div class="packet-card">
+            <div class="packet-title">City Rollout Matrix</div>
+            <div class="packet-copy">Eight-site order: Morrison/Red Rocks and Nederland first, then revenue, outdoor, and scale pairs.</div>
+            <a class="packet-link" href="/data/conews-city-rollout-matrix.md" target="_blank" rel="noopener">Open matrix →</a>
+          </div>
+          <div class="packet-card">
+            <div class="packet-title">Shop Local Packet</div>
+            <div class="packet-copy">Directory schema, sponsor tiers, verification status, and tracking fields for each town.</div>
+            <a class="packet-link" href="/data/conews-shoplocal-rollout-packet.md" target="_blank" rel="noopener">Open packet →</a>
+          </div>
+          <div class="packet-card">
+            <div class="packet-title">Campaign Kits</div>
+            <div class="packet-copy">Contributor, advertiser, photographer, and town partner packets with reviewed upload CTA rules.</div>
+            <a class="packet-link" href="/data/conews-campaign-kits-packet.md" target="_blank" rel="noopener">Open kits →</a>
+            <a class="packet-link" href="/data/conews-contributor-onboarding-cta.md" target="_blank" rel="noopener">Open contributor CTA →</a>
+            <a class="packet-link" href="/data/conews-advertiser-campaign-kit.md" target="_blank" rel="noopener">Open advertiser kit →</a>
+          </div>
+          <div class="packet-card">
+            <div class="packet-title">News + SEO Sections</div>
+            <div class="packet-copy">Pillar URLs, article templates, internal link rules, schema, and first story packages by town.</div>
+            <a class="packet-link" href="/data/conews-news-sections-seo-packet.md" target="_blank" rel="noopener">Open SEO packet →</a>
+            <a class="packet-link" href="/data/conews-seo-pillar-templates.md" target="_blank" rel="noopener">Open template pack →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="site-rollout">
+      <div class="site-rollout-head">
+        <div>
+          <div class="site-rollout-title">First 8 rollout sites</div>
+          <div class="site-rollout-note">SATCOM tracks public readiness here; Hermes/Aileen keeps planning packets current while Codex/Claude owns reviewed implementation and verification.</div>
+        </div>
+        <div class="packet-actions">
+          <a class="packet-link" href="/data/conews-optimized-pr-sequence.csv" target="_blank" rel="noopener">Open optimized PR sequence →</a>
+          <a class="packet-link" href="/data/conews-weekly-edition-sample.md" target="_blank" rel="noopener">Open weekly sample →</a>
+          <a class="packet-link" href="/data/conews-satcom-progress-monitor.md" target="_blank" rel="noopener">Open progress monitor →</a>
+          <a class="packet-link" href="/data/conews-hermes-execution-policy.md" target="_blank" rel="noopener">Open Hermes policy →</a>
+        </div>
+      </div>
+      <div class="site-grid" id="conews-site-grid">
+        <div class="site-card is-pilot">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fredrocks.press%2F?w=420&h=220" alt="RedRocks.Press preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Morrison / Red Rocks</div><div class="site-card-status">pilot</div></div>
+            <div class="site-card-meta">redrocks.press · events, music, visitor guide, Shop Local</div>
+            <div class="site-card-lane"><span class="site-pill">Paul</span><span class="site-pill">Joathon</span><span class="site-pill">Codex</span></div>
+            <div class="site-next"><span>Next</span> first weekly edition sample + Morrison business seed list.</div>
+          </div>
+        </div>
+        <div class="site-card is-pilot">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fnederland.conews.press%2F?w=420&h=220" alt="Nederland preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Nederland</div><div class="site-card-status">pilot</div></div>
+            <div class="site-card-meta">nederland.conews.press · gov, events, sports, Shop Local</div>
+            <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Paul</span><span class="site-pill">Aileen</span></div>
+            <div class="site-next"><span>Next</span> meeting schedule research + music/outdoor guide.</div>
+          </div>
+        </div>
+        <div class="site-card is-revenue">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fblackhawk.conews.press%2F?w=420&h=220" alt="Black Hawk preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Black Hawk</div><div class="site-card-status">revenue</div></div>
+            <div class="site-card-meta">blackhawk.conews.press · casinos, lodging, dining, entertainment</div>
+            <div class="site-card-lane"><span class="site-pill">Joathon</span><span class="site-pill">Patrick</span><span class="site-pill">Ads</span></div>
+            <div class="site-next"><span>Next</span> casino listings + sponsor compliance notes.</div>
+          </div>
+        </div>
+        <div class="site-card is-revenue">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fcentralcity.conews.press%2F?w=420&h=220" alt="Central City preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Central City</div><div class="site-card-status">revenue</div></div>
+            <div class="site-card-meta">centralcity.conews.press · history, casinos, events, dining</div>
+            <div class="site-card-lane"><span class="site-pill">Joathon</span><span class="site-pill">Patrick</span><span class="site-pill">SEO</span></div>
+            <div class="site-next"><span>Next</span> historic district sources + event calendar.</div>
+          </div>
+        </div>
+        <div class="site-card">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fidahosprings.conews.press%2F?w=420&h=220" alt="Idaho Springs preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Idaho Springs</div><div class="site-card-status">outdoor</div></div>
+            <div class="site-card-meta">idahosprings.conews.press · rafting, restaurants, outdoor services</div>
+            <div class="site-card-lane"><span class="site-pill">Paul</span><span class="site-pill">Joathon</span><span class="site-pill">Shop Local</span></div>
+            <div class="site-next"><span>Next</span> rafting outfitters + Clear Creek safety sources.</div>
+          </div>
+        </div>
+        <div class="site-card">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fgeorgetown.conews.press%2F?w=420&h=220" alt="Georgetown preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Georgetown</div><div class="site-card-status">outdoor</div></div>
+            <div class="site-card-meta">georgetown.conews.press · tourism, rail, retail, lodging</div>
+            <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Paul</span><span class="site-pill">Visitor</span></div>
+            <div class="site-next"><span>Next</span> visitor center data + municipal notices.</div>
+          </div>
+        </div>
+        <div class="site-card is-scale">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fevergreen.conews.press%2F?w=420&h=220" alt="Evergreen preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Evergreen</div><div class="site-card-status">scale</div></div>
+            <div class="site-card-meta">evergreen.conews.press · schools, services, dining, outdoor</div>
+            <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Joathon</span><span class="site-pill">Schools</span></div>
+            <div class="site-next"><span>Next</span> school board map + business association sources.</div>
+          </div>
+        </div>
+        <div class="site-card is-scale">
+          <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fgolden.conews.press%2F?w=420&h=220" alt="Golden preview" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">Golden</div><div class="site-card-status">scale</div></div>
+            <div class="site-card-meta">golden.conews.press · gov, events, sports, visitor guide</div>
+            <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Paul</span><span class="site-pill">Sports</span></div>
+            <div class="site-next"><span>Next</span> city agendas + high school sports source list.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="thumb-strip">
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260" alt="Register Call preview" loading="lazy">
+        <div class="mini-thumb-label"><span>Register Call</span><span class="mini-thumb-state">pilot</span></div>
+      </div>
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2F5280.menu%2F?w=420&h=260" alt="5280.menu preview" loading="lazy">
+        <div class="mini-thumb-label"><span>5280.menu</span><span class="mini-thumb-state">public</span></div>
+      </div>
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fredrocks.press%2F?w=420&h=260" alt="RedRocks.Press preview" loading="lazy">
+        <div class="mini-thumb-label"><span>RedRocks.Press</span><span class="mini-thumb-state">build</span></div>
+      </div>
+      <div class="mini-thumb">
+        <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fcopress-dashboard.vercel.app%2F?w=420&h=260" alt="SATCOM dashboard preview" loading="lazy">
+        <div class="mini-thumb-label"><span>SATCOM</span><span class="mini-thumb-state">spine</span></div>
+      </div>
+    </div>
+  </section>
 
   <!-- ── SERVER PANEL ── -->
   <div class="sec-label">⚙️ Infrastructure — AWS Lightsail mmtkplesk</div>
@@ -737,8 +1288,50 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 </div><!-- /page -->
 
 <script>
+const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}[char]));
+
+async function hydrateCoNewsRollout(){
+  const grid = document.getElementById('conews-site-grid');
+  if(!grid) return;
+
+  try{
+    const response = await fetch('/data/conews-town-rollout.json', {cache:'no-store'});
+    if(!response.ok) throw new Error(`town rollout data ${response.status}`);
+    const sites = await response.json();
+    if(!Array.isArray(sites) || !sites.length) return;
+
+    grid.innerHTML = sites.map((site) => {
+      const tags = (site.ownerTags || []).map((tag) => `<span class="site-pill">${escapeHtml(tag)}</span>`).join('');
+      const meta = [site.canonicalHost, (site.pillars || []).join(', ')].filter(Boolean).join(' · ');
+      const cardClass = ['site-card', escapeHtml(site.statusClass || '')].filter(Boolean).join(' ');
+      return `
+        <div class="${cardClass}" data-site="${escapeHtml(site.slug)}">
+          <div class="site-card-thumb"><img src="${escapeHtml(site.thumbnail)}" alt="${escapeHtml(site.alt || site.name)}" loading="lazy"></div>
+          <div class="site-card-body">
+            <div class="site-card-top"><div class="site-card-name">${escapeHtml(site.name)}</div><div class="site-card-status">${escapeHtml(site.status)}</div></div>
+            <div class="site-card-meta">${escapeHtml(meta)}</div>
+            <div class="site-card-lane">${tags}</div>
+            <div class="site-next"><span>Next</span> ${escapeHtml(site.nextAction)}</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    bindThumbnailRetries(grid.querySelectorAll('.site-card-thumb img'));
+  }catch(error){
+    console.warn('Using static CoNews rollout cards:', error);
+  }
+}
+
 // Auto-refresh thumbnails that fail to load with retry
-document.querySelectorAll('.prop-thumb img, .city-thumb img').forEach(img => {
+function bindThumbnailRetries(images){
+  images.forEach(img => {
   img.addEventListener('load', () => { img.style.opacity = 1; });
   img.style.opacity = 0;
   img.style.transition = 'opacity .4s';
@@ -749,7 +1342,11 @@ document.querySelectorAll('.prop-thumb img, .city-thumb img').forEach(img => {
       img.src = originalSrc + '&t=' + Date.now();
     }, 4000);
   });
-});
+  });
+}
+
+bindThumbnailRetries(document.querySelectorAll('.prop-thumb img, .city-thumb img, .site-card-thumb img'));
+hydrateCoNewsRollout();
 </script>
 </body>
 </html>

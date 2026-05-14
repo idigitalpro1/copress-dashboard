@@ -1,0 +1,9 @@
+pillar,url_patterns,search_intent,required_schema,primary_cta,min_internal_links,sponsor_rule
+Government,"/gov|/municipal-meetings|/public-notices","agendas, budgets, hearings, public decisions","Article|GovernmentOrganization","subscribe to civic alerts",3,"none unless public notice sponsorship is reviewed"
+Schools,"/schools|/sports/high-school","board policy, safety, academics, athletics","Article|SportsEvent","submit score or school tip",3,"school sponsor links must be marked"
+Shop Local,"/shop|/shop/{category}|/business/{slug}","local business discovery, services, sponsors","LocalBusiness|Offer","claim or upgrade listing",3,"sponsored listings must be marked"
+Events,"/events|/calendar|/music","things to do, concerts, meetings, markets","Event","submit event or RSVP",3,"sponsor pins must be marked"
+Visitor Guide,"/visitor-guide|/outdoors|/weekend","travel planning, parking, dining, outdoor guide","Article|TouristAttraction","plan your visit",4,"sponsor links must be contextual"
+Features,"/features|/investigations|/analysis","long-form reporting and community context","Article|NewsArticle","support local reporting",5,"sponsors cannot shape editorial claims"
+Local Giving,"/community-giving|/go-fund-me|/help","verified fundraisers and local support","Article|DonateAction","submit verified campaign",3,"campaign verification required"
+Opinion / LTO,"/lto|/opinion|/letters","letters, corrections, community voices","Article|OpinionNewsArticle","submit letter",3,"no undisclosed paid opinion"
