@@ -1,0 +1,33 @@
+{
+  "id": "PROV-508",
+  "title": "SATCOM Progress Monitor",
+  "generated": "2026-05-14",
+  "status": "build-artifact",
+  "dashboard": "https://copress-dashboard.vercel.app/network",
+  "issues": [
+    {"id": "PROV-501", "status": "deployed", "evidence": "SATCOM ownership board cards"},
+    {"id": "PROV-502", "status": "deployed", "evidence": "town rollout JSON"},
+    {"id": "PROV-503", "status": "deployed", "evidence": "Shop Local schema JSON/CSV"},
+    {"id": "PROV-504", "status": "deployed", "evidence": "SEO pillar template JSON/CSV/MD"},
+    {"id": "PROV-505", "status": "deployed", "evidence": "contributor onboarding CTA JSON/CSV/MD"},
+    {"id": "PROV-506", "status": "deployed candidate", "evidence": "advertiser campaign kit JSON/CSV/MD"},
+    {"id": "PROV-507", "status": "deployed candidate", "evidence": "weekly edition sample JSON/MD"},
+    {"id": "PROV-508", "status": "deployed candidate", "evidence": "SATCOM progress monitor packet"}
+  ],
+  "blockers": [
+    "Linear connector auth is unavailable in this Codex session.",
+    "GitHub push auth has been blocked by invalid credentials.",
+    "3CX runtime config is missing.",
+    "MCP hooks need repair; file-based progress remains the fallback lane."
+  ],
+  "restorePoints": [
+    "fb975c5 Hermes kanban execution packet",
+    "0b0c4f9 SEO pillar templates",
+    "e8447c7 contributor onboarding CTA"
+  ],
+  "nextChoices": [
+    "Refresh GitHub + Linear auth and sync the board.",
+    "Configure 3CX runtime in .env only.",
+    "Start public town page implementation from these static artifacts."
+  ]
+}

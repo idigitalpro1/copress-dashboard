@@ -23,9 +23,9 @@ Codex/Claude owns implementation, commits, Vercel deploys, and production verifi
 | `PROV-503` | Shop Local schema export | locally implemented and deployed |
 | `PROV-504` | SEO pillar templates | locally implemented and deployed candidate |
 | `PROV-505` | contributor onboarding CTA | locally implemented and deployed candidate |
-| `PROV-506` | advertiser campaign kit page | pending Shop Local sponsor review |
-| `PROV-507` | weekly edition payload | pending Morrison/Red Rocks sample payload |
-| `PROV-508` | SATCOM progress monitor | pending MCP/Linear auth repair or file hook display |
+| `PROV-506` | advertiser campaign kit page | locally implemented and deployed candidate |
+| `PROV-507` | weekly edition payload | locally implemented and deployed candidate |
+| `PROV-508` | SATCOM progress monitor | locally implemented and deployed candidate |
 
 ## 50-Agent Allocation
 

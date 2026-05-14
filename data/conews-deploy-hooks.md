@@ -32,7 +32,7 @@ Run from `/Users/Ace/Codex/apps/copress-dashboard`:
 ```bash
 git status --short
 git diff --check
-node -e "const fs=require('fs'); JSON.parse(fs.readFileSync('data/conews-town-rollout.json','utf8')); JSON.parse(fs.readFileSync('data/conews-shoplocal-schema.json','utf8')); JSON.parse(fs.readFileSync('data/conews-next-sprint-kanban.json','utf8')); JSON.parse(fs.readFileSync('data/conews-seo-pillar-templates.json','utf8')); JSON.parse(fs.readFileSync('data/conews-contributor-onboarding-cta.json','utf8')); console.log('json ok')"
+node -e "const fs=require('fs'); for (const f of ['data/conews-town-rollout.json','data/conews-shoplocal-schema.json','data/conews-next-sprint-kanban.json','data/conews-seo-pillar-templates.json','data/conews-contributor-onboarding-cta.json','data/conews-advertiser-campaign-kit.json','data/conews-weekly-edition-sample.json','data/conews-satcom-progress-monitor.json']) JSON.parse(fs.readFileSync(f,'utf8')); console.log('json ok')"
 python3 -m http.server 4177 --bind 127.0.0.1
 ```
 
@@ -51,6 +51,13 @@ for f in \
   data/conews-contributor-onboarding-cta.json \
   data/conews-contributor-onboarding-cta.csv \
   data/conews-contributor-onboarding-cta.md \
+  data/conews-advertiser-campaign-kit.json \
+  data/conews-advertiser-campaign-kit.csv \
+  data/conews-advertiser-campaign-kit.md \
+  data/conews-weekly-edition-sample.json \
+  data/conews-weekly-edition-sample.md \
+  data/conews-satcom-progress-monitor.json \
+  data/conews-satcom-progress-monitor.md \
   data/conews-architecture-optimization.md \
   data/conews-satcom-handoff-summary.md; do
   curl -s -o /dev/null -w "%{http_code} $f\n" --max-time 5 "http://127.0.0.1:4177/$f"
@@ -82,6 +89,13 @@ for f in \
   data/conews-contributor-onboarding-cta.json \
   data/conews-contributor-onboarding-cta.csv \
   data/conews-contributor-onboarding-cta.md \
+  data/conews-advertiser-campaign-kit.json \
+  data/conews-advertiser-campaign-kit.csv \
+  data/conews-advertiser-campaign-kit.md \
+  data/conews-weekly-edition-sample.json \
+  data/conews-weekly-edition-sample.md \
+  data/conews-satcom-progress-monitor.json \
+  data/conews-satcom-progress-monitor.md \
   data/conews-architecture-optimization.md \
   data/conews-satcom-handoff-summary.md; do
   curl -s -o /dev/null -w "%{http_code} $f\n" --max-time 10 "https://copress-dashboard.vercel.app/$f"

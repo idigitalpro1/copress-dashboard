@@ -1,0 +1,44 @@
+{
+  "id": "PROV-507",
+  "title": "Morrison / Red Rocks Weekly Edition Sample",
+  "generated": "2026-05-14",
+  "status": "build-artifact",
+  "town": "Morrison / Red Rocks",
+  "canonicalHost": "redrocks.press",
+  "deliveryFrame": {
+    "build": "Thursday evening",
+    "readerTarget": "Friday morning",
+    "liveSend": false
+  },
+  "frontPage": {
+    "lead": "Red Rocks Weekend Preview: Music, Traffic, Trails, and Where to Eat",
+    "followUps": [
+      "Morrison Business Corridor: What Visitors Miss Before the Show",
+      "Trail Timing Guide: Bear Creek, Dakota Ridge, and Event-Day Parking",
+      "Shop Local Spotlight: Pre-show Dining and Late-Night Stops"
+    ]
+  },
+  "sections": [
+    {"key": "news", "slot": "lead story", "cta": "subscribe"},
+    {"key": "events", "slot": "weekend calendar", "cta": "submit event"},
+    {"key": "shop-local", "slot": "sponsor/profile card", "cta": "claim listing"},
+    {"key": "sports-community", "slot": "field notes", "cta": "upload photos"},
+    {"key": "local-giving", "slot": "verified campaign slot", "cta": "submit campaign"},
+    {"key": "opinion-lto", "slot": "one community voice slot", "cta": "send letter"}
+  ],
+  "sponsorStrip": {
+    "label": "Sponsored",
+    "placement": "below front-page deck, above secondary cards",
+    "metrics": ["impression", "click", "CTA click"]
+  },
+  "links": {
+    "contributorIntake": "https://onboarding.copress.news",
+    "advertiserIntake": "https://onboarding.copress.news"
+  },
+  "acceptanceCriteria": [
+    "Static/sample payload can render one Morrison / Red Rocks weekly edition.",
+    "No live email, SMS, or publication action happens.",
+    "Sponsor content is labeled.",
+    "Upload and contributor CTAs route through reviewed onboarding path."
+  ]
+}

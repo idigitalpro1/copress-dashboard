@@ -437,6 +437,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   font-weight:700;
 }
 .packet-link:hover{color:var(--gold-bright)}
+.packet-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:10px;
+  flex-wrap:wrap;
+}
 .thumb-strip{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -771,6 +778,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
           <a class="rollout-link" href="/data/conews-seo-pillar-templates.csv" target="_blank" rel="noopener">SEO Pillar CSV <span>→</span></a>
           <a class="rollout-link" href="/data/conews-contributor-onboarding-cta.json" target="_blank" rel="noopener">Contributor CTA JSON <span>→</span></a>
           <a class="rollout-link" href="/data/conews-contributor-onboarding-cta.csv" target="_blank" rel="noopener">Contributor CTA CSV <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-advertiser-campaign-kit.json" target="_blank" rel="noopener">Advertiser Kit JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-weekly-edition-sample.json" target="_blank" rel="noopener">Weekly Edition JSON <span>→</span></a>
+          <a class="rollout-link" href="/data/conews-satcom-progress-monitor.json" target="_blank" rel="noopener">Progress Monitor JSON <span>→</span></a>
           <a class="rollout-link" href="/data/conews-shoplocal-schema.json" target="_blank" rel="noopener">Shop Local Schema <span>→</span></a>
           <a class="rollout-link" href="/data/conews-town-rollout.json" target="_blank" rel="noopener">Town Data Source <span>→</span></a>
           <a class="rollout-link" href="/data/conews-hermes-command-packet.md" target="_blank" rel="noopener">Hermes 50-Agent Packet <span>→</span></a>
@@ -795,6 +805,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="packet-copy">Contributor, advertiser, photographer, and town partner packets with reviewed upload CTA rules.</div>
             <a class="packet-link" href="/data/conews-campaign-kits-packet.md" target="_blank" rel="noopener">Open kits →</a>
             <a class="packet-link" href="/data/conews-contributor-onboarding-cta.md" target="_blank" rel="noopener">Open contributor CTA →</a>
+            <a class="packet-link" href="/data/conews-advertiser-campaign-kit.md" target="_blank" rel="noopener">Open advertiser kit →</a>
           </div>
           <div class="packet-card">
             <div class="packet-title">News + SEO Sections</div>
@@ -811,7 +822,11 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
           <div class="site-rollout-title">First 8 rollout sites</div>
           <div class="site-rollout-note">SATCOM tracks public readiness here; Hermes/Aileen keeps planning packets current while Codex/Claude owns reviewed implementation and verification.</div>
         </div>
-        <a class="packet-link" href="/data/conews-optimized-pr-sequence.csv" target="_blank" rel="noopener">Open optimized PR sequence →</a>
+        <div class="packet-actions">
+          <a class="packet-link" href="/data/conews-optimized-pr-sequence.csv" target="_blank" rel="noopener">Open optimized PR sequence →</a>
+          <a class="packet-link" href="/data/conews-weekly-edition-sample.md" target="_blank" rel="noopener">Open weekly sample →</a>
+          <a class="packet-link" href="/data/conews-satcom-progress-monitor.md" target="_blank" rel="noopener">Open progress monitor →</a>
+        </div>
       </div>
       <div class="site-grid" id="conews-site-grid">
         <div class="site-card is-pilot">
