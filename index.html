@@ -3546,6 +3546,13 @@ async function sendHermesChat() {
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
     let pending = '';
+    let lastActivityPreviewAt = 0;
+    const updateStreamingPreview = (force = false) => {
+      const now = Date.now();
+      if (!force && now - lastActivityPreviewAt < 750) return;
+      lastActivityPreviewAt = now;
+      updateHermesActivity(activity, 'streaming', buffer);
+    };
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
@@ -3567,8 +3574,7 @@ async function sendHermesChat() {
               assistant.el.classList.remove('pending');
             }
             if (assistant?.message) assistant.message.content = buffer;
-            saveHermesChatMessages();
-            updateHermesActivity(activity, 'streaming', buffer);
+            updateStreamingPreview();
             scrollHermesChatToBottom();
           }
         } catch (err) {
@@ -3589,6 +3595,8 @@ async function sendHermesChat() {
       saveHermesChatMessages();
       updateHermesActivity(activity, 'error', assistant.el.textContent);
     } else {
+      saveHermesChatMessages();
+      updateStreamingPreview(true);
       updateHermesActivity(activity, 'done', buffer);
     }
   } catch (err) {

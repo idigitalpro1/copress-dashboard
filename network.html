@@ -1309,7 +1309,7 @@ async function hydrateCoNewsRollout(){
     grid.innerHTML = sites.map((site) => {
       const tags = (site.ownerTags || []).map((tag) => `<span class="site-pill">${escapeHtml(tag)}</span>`).join('');
       const meta = [site.canonicalHost, (site.pillars || []).join(', ')].filter(Boolean).join(' · ');
-      const cardClass = ['site-card', site.statusClass || ''].filter(Boolean).join(' ');
+      const cardClass = ['site-card', escapeHtml(site.statusClass || '')].filter(Boolean).join(' ');
       return `
         <div class="${cardClass}" data-site="${escapeHtml(site.slug)}">
           <div class="site-card-thumb"><img src="${escapeHtml(site.thumbnail)}" alt="${escapeHtml(site.alt || site.name)}" loading="lazy"></div>
