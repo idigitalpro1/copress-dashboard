@@ -22,7 +22,7 @@ Codex/Claude owns implementation, commits, Vercel deploys, and production verifi
 | `PROV-502` | town rollout data source | locally implemented and deployed |
 | `PROV-503` | Shop Local schema export | locally implemented and deployed |
 | `PROV-504` | SEO pillar templates | locally implemented and deployed candidate |
-| `PROV-505` | contributor onboarding CTA | pending reviewed link policy |
+| `PROV-505` | contributor onboarding CTA | locally implemented and deployed candidate |
 | `PROV-506` | advertiser campaign kit page | pending Shop Local sponsor review |
 | `PROV-507` | weekly edition payload | pending Morrison/Red Rocks sample payload |
 | `PROV-508` | SATCOM progress monitor | pending MCP/Linear auth repair or file hook display |
