@@ -53,7 +53,7 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. SATCOM on
 
 **Revenue section**
 - Marketing Hub 🚧 — campaign builder, Sendy integration
-- Accounting 🚧 — Stripe, QuickBooks, invoices
+- Accounting — bridge to upgraded invoice manager, Stripe, QuickBooks, invoices, and billing assistant
 
 **Tools section**
 - Network HQ → `/network`
@@ -76,7 +76,7 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. SATCOM on
 | Marketing Hub | `data-view=marketing` | Campaign tools |
 | Shop Local | `data-view=directory` | Business directory |
 | City Sites | `/network` | Network ownership screen |
-| Accounting | `data-view=accounting` | Financial tools |
+| Accounting | `data-view=accounting`, `https://invoicemanager.weeklyregistercall.com` | Invoice-manager bridge and local handoff |
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
 | Colorado Gambler | `data-view=directory` | Gambling vertical and casino directory loader |
@@ -303,13 +303,14 @@ These views are in `index.html` as `<div id="view-...">` sections. The JS view-s
 <div id="view-directory">   <!-- Directory import staging and review lanes -->
 <div id="view-cities">      <!-- Five-town readiness board -->
 <div id="view-marketing">   <!-- Campaign brief to copy kit generator -->
-<div id="view-accounting">  <!-- Invoice staging and billing handoff -->
+<div id="view-accounting">  <!-- Invoice-manager launch bridge and local billing handoff -->
 ```
 
 Current behavior is intentionally browser-local:
 - Editorial queue stores local drafts in `localStorage.copress_editorial_queue_v1` when Supabase credentials are missing.
 - When `SUPABASE_URL` and `SUPABASE_ANON_KEY` are available, Editorial shows the 12 most recent `public_posts` rows and keeps the local queue as fallback.
 - Directory import and invoice staging create operator handoff text in-page.
+- Accounting launches the upgraded invoice manager at `https://invoicemanager.weeklyregistercall.com` for final billing work. The bridge exposes the recent invoice-manager upgrades: sequential invoice numbering, custom/non-priced display ad size, restored edit/duplicate/detail controls, run dates, Publisher's Affidavit copy and attachments, PDF/email sending, QuickBooks sync status, recurring invoices, payments, batch invoicing, and the Billing Assistant route.
 - Marketing campaign generation stores the latest kit in `localStorage.copress_campaign_handoff` and exposes a `Send to Newsletter Studio` link to `/newsletter?campaign=latest`; Newsletter Studio auto-loads that copy into the marketing template and shows a handoff banner.
 - Marketing campaign kits follow the showcase pattern from `showcase.registercall.com/billsmobile`: branding first, industry pattern, invoice-manager item mapping, send options, follow-up/drip sequence, and newsletter/digital/print subscriber-list options.
 - Campaign generation is local-first by default: free local Hermes/Ollama models generate copy and structure. Premium artwork is escalated only when the operator selects premium artwork, with Nano Banana 2 / Claude design / Google AI Studio noted as the art lane.

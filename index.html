@@ -725,6 +725,24 @@ body::before {
 .module-row-title { color: var(--ink); font-size: 13px; font-weight: 600; }
 .module-row-meta { color: var(--ink-muted); font-size: 11px; margin-top: 2px; }
 .module-row-state { color: var(--ink-muted); font: 700 10px 'DM Mono', monospace; text-transform: uppercase; }
+.invoice-upgrade-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px; margin-top: 10px;
+}
+.invoice-upgrade {
+  border: 1px solid rgba(200,168,75,.12); background: var(--bg-mid);
+  border-radius: 2px; padding: 10px; min-height: 86px;
+}
+.invoice-upgrade strong {
+  display: block; color: var(--ink); font-size: 12px; line-height: 1.25; margin-bottom: 5px;
+}
+.invoice-upgrade span {
+  display: block; color: var(--ink-muted); font-size: 10.5px; line-height: 1.45;
+}
+.invoice-launch-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; margin-top: 12px;
+}
 .review-table { display: grid; gap: 8px; max-height: 410px; overflow: auto; padding-right: 4px; }
 .review-card {
   display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start;
@@ -900,6 +918,7 @@ body::before {
 
 @media (max-width: 1100px) {
   .module-grid-2, .module-grid-3, .town-grid { grid-template-columns: 1fr; }
+  .invoice-launch-grid, .invoice-upgrade-grid { grid-template-columns: 1fr; }
   .module-heading { align-items: flex-start; flex-direction: column; }
   .module-status { justify-content: flex-start; }
 }
@@ -1384,32 +1403,32 @@ body::before {
               <div class="card-icon">📒</div>
               <div>
                 <div class="card-title">Accounting</div>
-                <div class="card-subtitle">Billing · Invoices · Stripe</div>
+                <div class="card-subtitle">Invoice Manager · QuickBooks · Stripe</div>
               </div>
             </div>
             <div class="card-stats">
               <div class="card-stat">
-                <span class="stat-label">Unpaid</span>
-                <span class="stat-value ok">0</span>
+                <span class="stat-label">Invoice App</span>
+                <span class="stat-value ok" style="font-size:11px;">Live</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">This Month</span>
-                <span class="stat-value">—</span>
+                <span class="stat-label">Assistant</span>
+                <span class="stat-value ok" style="font-size:11px;">Ready</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Stripe</span>
-                <span class="stat-value" id="stripe-status" style="font-size:11px;">—</span>
+                <span class="stat-label">Custom Size</span>
+                <span class="stat-value ok" style="font-size:11px;">Manual</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Invoices</span>
-                <span class="stat-value">0</span>
+                <span class="stat-label">QBO</span>
+                <span class="stat-value" id="invoice-manager-status" style="font-size:11px;">Sync</span>
               </div>
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('accounting')">New Invoice</button>
-              <button class="card-btn" onclick="event.stopPropagation(); toast('Running weekly billing…')">Run Billing</button>
-              <button class="card-btn" onclick="event.stopPropagation(); toast('Loading reports…')">Reports</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); openInvoiceManager('/invoices/new')">New Invoice</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('accounting')">Accounting</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openInvoiceManager('/assistant')">Assistant</button>
             </div>
           </div>
         </div>
@@ -1715,7 +1734,7 @@ body::before {
           <div class="quick-pill" onclick="toast('Generating editorial list…')">✒ Generate Editorial <span class="pill-kbd">⌘2</span></div>
           <div class="quick-pill" onclick="toast('Opening campaign builder…')">📣 New Campaign <span class="pill-kbd">⌘3</span></div>
           <div class="quick-pill" onclick="window.location.href='/newsletter'">📧 Email Blast <span class="pill-kbd">⌘4</span></div>
-          <div class="quick-pill" onclick="toast('Creating invoice…')">📒 Create Invoice <span class="pill-kbd">⌘5</span></div>
+          <div class="quick-pill" onclick="openInvoiceManager('/invoices/new')">📒 Create Invoice <span class="pill-kbd">⌘5</span></div>
           <div class="quick-pill" onclick="toast('Exporting weekly PDF…')">📄 Weekly PDF <span class="pill-kbd">⌘6</span></div>
           <div class="quick-pill" onclick="window.location.href='/docs'">📚 Docs Hub <span class="pill-kbd">⌘7</span></div>
           <div class="quick-pill" onclick="window.location.href='/apistore'">🔑 API Vault <span class="pill-kbd">⌘8</span></div>
@@ -2052,14 +2071,42 @@ body::before {
             <div class="module-heading">
               <div>
                 <div class="module-kicker">Sprint 2 · Accounting</div>
-                <h2>Billing operations queue.</h2>
-                <p>Prepare invoices, flag weekly billing runs, and hand work to the Register-Call invoice manager.</p>
+                <h2>Invoice manager bridge.</h2>
+                <p>Launch the upgraded Weekly Register-Call billing app for sequential invoice numbers, custom ad sizes, Publisher's Affidavits, QuickBooks sync, and the billing assistant.</p>
               </div>
-              <div class="module-status"><span class="pill">Stripe <strong id="accounting-module-stripe">Check</strong></span><span class="pill">Unpaid <strong>0</strong></span></div>
+              <div class="module-status">
+                <span class="pill">App <strong>Live</strong></span>
+                <span class="pill">Custom <strong>Manual</strong></span>
+                <span class="pill">QBO <strong>Status</strong></span>
+                <span class="pill">Stripe <strong id="accounting-module-stripe">Check</strong></span>
+              </div>
             </div>
             <div class="module-grid-2">
               <div class="module-panel">
-                <h3>New Invoice Draft</h3>
+                <h3>Invoice Manager Launches</h3>
+                <p>Use the dedicated app for final invoice creation and mutations. SATCOM only stages handoff text and opens the upgraded routes.</p>
+                <div class="invoice-launch-grid">
+                  <button class="module-btn primary" onclick="openInvoiceManager('/invoices/new')">New Invoice</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/')">Dashboard</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/assistant')">Assistant</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/sync-status')">Sync Status</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/recurring')">Recurring</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/payments')">Payments</button>
+                </div>
+              </div>
+              <div class="module-panel">
+                <h3>Recent Upgrades Included</h3>
+                <div class="invoice-upgrade-grid">
+                  <div class="invoice-upgrade"><strong>Sequential numbers</strong><span>Generator path preserved for current-year invoice sequences and duplicate checks.</span></div>
+                  <div class="invoice-upgrade"><strong>Custom ad size</strong><span>Manual/non-priced display ad size path with manual amount handling.</span></div>
+                  <div class="invoice-upgrade"><strong>Editor controls</strong><span>Edit, duplicate, run dates, PDF/email, and invoice detail actions restored.</span></div>
+                  <div class="invoice-upgrade"><strong>Affidavits and sync</strong><span>Publisher's Affidavit copy, attachments, QuickBooks status, and billing assistant route.</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="module-grid-2" style="margin-top:18px;">
+              <div class="module-panel">
+                <h3>Local Handoff Draft</h3>
                 <div class="module-form two">
                   <div class="module-field"><label>Customer</label><input id="invoice-customer" placeholder="Business or subscriber"></div>
                   <div class="module-field"><label>Amount</label><input id="invoice-amount" placeholder="250.00"></div>
@@ -2067,12 +2114,13 @@ body::before {
                 <div class="module-field"><label>Line item</label><input id="invoice-line" placeholder="Display ad, subscription, legal notice..."></div>
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="stageInvoice()">Stage Invoice</button>
-                  <button class="module-btn" onclick="toast('Weekly billing run queued')">Run Billing</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/invoices/batch')">Batch</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/stripe-create-invoice')">Stripe Invoice</button>
                 </div>
               </div>
               <div class="module-panel">
                 <h3>Accounting Handoff</h3>
-                <div class="output-box" id="invoice-output">No invoice staged. Stripe keys stay in localStorage; invoicemanager-wrc remains the source for final billing.</div>
+                <div class="output-box" id="invoice-output">No invoice staged. Stripe keys stay in localStorage; invoicemanager.weeklyregistercall.com remains the source for final billing.</div>
               </div>
             </div>
           </div>
@@ -2411,9 +2459,15 @@ const M365_ACCOUNT_SWITCH_URL =
   encodeURIComponent(M365_ADMIN_USERS_URL);
 const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
+const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
 
 function openExternal(url) {
   window.open(url, '_blank', 'noopener');
+}
+
+function openInvoiceManager(path = '/') {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  openExternal(`${INVOICE_MANAGER_BASE_URL}${cleanPath}`);
 }
 
 function openM365Admin() {
@@ -2484,9 +2538,8 @@ function updateStatusDots() {
     const dot = document.getElementById(dotId);
     if (dot) dot.classList.toggle('live', !!localStorage.getItem(key));
   });
-  // Stripe status card
-  const stripeEl = document.getElementById('stripe-status');
-  if (stripeEl) stripeEl.textContent = localStorage.getItem(KEY_PREFIX + 'stripe_secret') ? 'Connected' : '—';
+  const invoiceManagerEl = document.getElementById('invoice-manager-status');
+  if (invoiceManagerEl) invoiceManagerEl.textContent = 'Live';
 }
 
 function readVaultValue(...names) {
@@ -3471,7 +3524,7 @@ function stageInvoice() {
   const amount = document.getElementById('invoice-amount').value.trim() || '0.00';
   const line = document.getElementById('invoice-line').value.trim() || 'Manual line item';
   document.getElementById('invoice-output').textContent =
-    `Invoice staged\nCustomer: ${customer}\nAmount: $${amount}\nLine item: ${line}\n\nNext: create final invoice in invoicemanager-wrc or Stripe.`;
+    `Invoice staged\nCustomer: ${customer}\nAmount: $${amount}\nLine item: ${line}\n\nNext: open ${INVOICE_MANAGER_BASE_URL}/invoices/new for final invoice creation, custom ad sizes, PDF/email, and QuickBooks sync.`;
   toast('Invoice staged');
 }
 
