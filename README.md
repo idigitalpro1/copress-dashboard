@@ -76,6 +76,8 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. SATCOM on
 | Marketing Hub | `data-view=marketing` | Campaign tools |
 | Shop Local | `data-view=directory` | Business directory |
 | City Sites | `/network` | Network ownership screen |
+| Newsletter Studio | `/newsletter` | Email designer, Sendy lane, and campaign handoff |
+| API Vault | `/apistore` | Local key store, scoped MCP injection, and .env export |
 | Accounting | `data-view=accounting`, `https://invoicemanager.weeklyregistercall.com` | Invoice-manager bridge and local handoff |
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
@@ -83,7 +85,6 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. SATCOM on
 | SATCO Academy | `/learn` | Onboarding flash cards |
 | Linear | `/linear` | Issue tracking |
 | Hermes Orchestrator | `data-view=brains` | Local Qwen chat, Crew runner, jobs, and routing status |
-| (implicit) API Vault | `/apistore` | Key management |
 
 ---
 

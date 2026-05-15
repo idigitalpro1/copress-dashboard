@@ -51,6 +51,8 @@
   --c-admin:     #d946ef;
   --c-stationery:#f472b6;
   --c-gambling:  #22c55e;
+  --c-newsletter:#2c7be5;
+  --c-vault:     #f59e0b;
 }
 
 html, body {
@@ -1388,6 +1390,88 @@ body::before {
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('marketing')">New Campaign</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/newsletter'">Email Blast</button>
               <button class="card-btn" onclick="event.stopPropagation(); toast('Launching flyer generator…')">Flyer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Newsletter Studio -->
+        <div class="module-card" onclick="window.location.href='/newsletter'" style="cursor:pointer;--card-color:var(--c-newsletter);--card-glow:rgba(44,123,229,.06);">
+          <div class="card-dept">
+            <span class="card-dept-name">Newsletter</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">📧</div>
+              <div>
+                <div class="card-title">Newsletter Studio</div>
+                <div class="card-subtitle">Designer · Sendy · Campaign handoff</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Templates</span>
+                <span class="stat-value highlight">3</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Lists</span>
+                <span class="stat-value">4</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Handoff</span>
+                <span class="stat-value ok" style="font-size:11px;">Ready</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Sendy</span>
+                <span class="stat-value" style="font-size:11px;">Vault</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/newsletter'">Open Studio</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/newsletter?campaign=latest'">Load Handoff</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('marketing')">Campaigns</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Vault -->
+        <div class="module-card" onclick="window.location.href='/apistore'" style="cursor:pointer;--card-color:var(--c-vault);--card-glow:rgba(245,158,11,.06);">
+          <div class="card-dept">
+            <span class="card-dept-name">Secrets</span>
+            <span class="card-led active"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">🔑</div>
+              <div>
+                <div class="card-title">API Vault</div>
+                <div class="card-subtitle">Local keys · MCP injection · .env export</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Services</span>
+                <span class="stat-value highlight">12</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Storage</span>
+                <span class="stat-value ok" style="font-size:11px;">Local</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">MCP</span>
+                <span class="stat-value" style="font-size:11px;">Scoped</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Export</span>
+                <span class="stat-value" style="font-size:11px;">.env</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/apistore'">Open Vault</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#inject'">Inject</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#export'">Export</button>
             </div>
           </div>
         </div>

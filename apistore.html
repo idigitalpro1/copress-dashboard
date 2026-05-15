@@ -635,6 +635,27 @@ function showInjectPanel() {
   if (panel.style.display !== 'none') panel.scrollIntoView({ behavior:'smooth', block:'start' });
 }
 
+function openHashPanel() {
+  const hash = window.location.hash.replace('#', '').toLowerCase();
+  const mcp = document.getElementById('mcp-panel');
+  const inject = document.getElementById('inject-panel');
+  if (hash === 'inject') {
+    inject.style.display = 'block';
+    mcp.style.display = 'none';
+    inject.scrollIntoView({ behavior:'smooth', block:'start' });
+    showToast('💉 Injection panel opened', 'gold');
+  }
+  if (hash === 'mcp') {
+    mcp.style.display = 'block';
+    inject.style.display = 'none';
+    mcp.scrollIntoView({ behavior:'smooth', block:'start' });
+    showToast('🔌 MCP bridge panel opened', 'gold');
+  }
+  if (hash === 'export') {
+    setTimeout(exportVault, 300);
+  }
+}
+
 function toggleInject(card, target) {
   card.classList.toggle('injected');
   showToast(card.classList.contains('injected') ? `💉 Keys wired to ${target}` : `✕ ${target} removed`, 'gold');
@@ -688,6 +709,8 @@ document.addEventListener('DOMContentLoaded', () => {
   loadVault();
   renderGrid('all');
   updateStats();
+  openHashPanel();
+  window.addEventListener('hashchange', openHashPanel);
   setTimeout(() => showToast('🔐 API Vault loaded — ' + apis.length + ' services registered', 'gold'), 500);
 });
 </script>
