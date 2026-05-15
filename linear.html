@@ -124,6 +124,8 @@
     padding: 3px 10px; border-radius: 20px; font-family: 'DM Mono', monospace;
     letter-spacing: .5px;
   }
+  .linear-badge.warn { background: #f39c12; color: #0a1628; }
+  .linear-badge.error { background: #c0392b; }
   .page-subtitle { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
   .page-actions { display: flex; gap: 10px; align-items: center; }
   .btn {
@@ -163,6 +165,64 @@
   .setup-input:focus { border-color: var(--linear); }
   .setup-link { display: block; margin-top: 12px; font-size: 12px; color: rgba(255,255,255,.35); }
   .setup-link a { color: var(--linear-lt); text-decoration: none; }
+
+  /* -- Ops bridge -- */
+  .ops-bridge {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.2fr) repeat(2, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .bridge-card {
+    background: var(--card-bg);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 154px;
+  }
+  .bridge-card.primary {
+    border-color: rgba(94,106,210,.35);
+    background: linear-gradient(135deg, rgba(94,106,210,.12), var(--card-bg) 58%);
+  }
+  .bridge-kicker {
+    color: var(--ink-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+  }
+  .bridge-title {
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .bridge-copy {
+    color: var(--ink-muted);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .bridge-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: auto;
+  }
+  .bridge-chip {
+    display: inline-flex;
+    align-items: center;
+    width: max-content;
+    border: 1px solid rgba(94,106,210,.24);
+    border-radius: 999px;
+    color: var(--linear);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    background: rgba(94,106,210,.08);
+  }
 
   /* ── Stats row ── */
   .stats-row {
@@ -385,6 +445,10 @@
   .form-textarea { resize: vertical; min-height: 80px; }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .modal-footer { padding: 16px 24px; border-top: 1px solid var(--rule); display: flex; gap: 10px; justify-content: flex-end; }
+
+  @media (max-width: 1100px) {
+    .ops-bridge { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -442,7 +506,7 @@
             <circle cx="14" cy="19.5" r="1.5" fill="white"/>
           </svg>
           Linear
-          <span class="linear-badge">CONNECTED</span>
+          <span class="linear-badge warn" id="linear-badge">API KEY NEEDED</span>
         </div>
         <div class="page-subtitle">Issue tracking · Cycles · Projects — copress.news workspace</div>
       </div>
@@ -462,6 +526,37 @@
         <button class="btn btn-primary" onclick="saveApiKey()">Connect</button>
       </div>
       <span class="setup-link">Get your key at <a href="https://linear.app/settings/api" target="_blank">linear.app/settings/api</a> → Personal API keys</span>
+    </div>
+
+    <!-- SATCOM ops bridge -->
+    <div class="ops-bridge">
+      <div class="bridge-card primary">
+        <div class="bridge-kicker">SATCOM Ops Bridge</div>
+        <div class="bridge-title">Linear stays the issue source; Kanban stays the fallback board.</div>
+        <div class="bridge-copy">Use Linear for tracked work, cycles, ownership, and create flow. Use Kanban when the admin shell needs local board state without Flask.</div>
+        <div class="bridge-actions">
+          <button class="btn btn-primary" onclick="openLinearWorkspace()">Open Linear</button>
+          <button class="btn btn-outline" onclick="focusQuickCreate()">Quick Create</button>
+        </div>
+      </div>
+      <div class="bridge-card">
+        <div class="bridge-kicker">Local Fallback</div>
+        <div class="bridge-title">Kanban board for deploy, editorial, sales, and recovery cards.</div>
+        <div class="bridge-copy">Launch the local browser board when Linear is not the right shape for live operations or handoff cards.</div>
+        <div class="bridge-actions">
+          <button class="btn btn-outline" onclick="openKanbanFallback('local')">Local Kanban</button>
+          <button class="btn btn-ghost" onclick="openKanbanFallback('admin')">Admin API</button>
+        </div>
+      </div>
+      <div class="bridge-card">
+        <div class="bridge-kicker">Create Lane</div>
+        <div class="bridge-title">One-click path from SATCOM to a tracked Linear issue.</div>
+        <div class="bridge-copy">The quick-create bar below keeps title, team, and priority in the same operator surface.</div>
+        <span class="bridge-chip">/linear#create</span>
+        <div class="bridge-actions">
+          <button class="btn btn-outline" onclick="focusQuickCreate()">Focus Bar</button>
+        </div>
+      </div>
     </div>
 
     <!-- Stats Row -->
@@ -532,7 +627,7 @@
                 <option value="3">🟡 Medium</option>
                 <option value="4">⚪ Low</option>
               </select>
-              <select id="qc-team" class="qc-select" id="qc-team">
+              <select id="qc-team" class="qc-select">
                 <option value="">Select team…</option>
               </select>
               <span id="qc-status" style="font-size:11px;color:var(--ink-muted);margin-left:auto;"></span>
@@ -689,6 +784,9 @@ const STATUS_TYPES = {
   'completed': { cls:'status-done',      label:'Done' },
   'cancelled': { cls:'status-cancelled', label:'Cancelled' },
 };
+const LINEAR_WORKSPACE_URL = 'https://linear.app';
+const LOCAL_KANBAN_URL = 'http://127.0.0.1:8096';
+const ADMIN_KANBAN_API_URL = 'https://admin.conews.press/console/api/kanban';
 
 // ── Linear GraphQL ─────────────────────────────────────────────────────
 async function gql(query, variables = {}) {
@@ -764,6 +862,7 @@ async function init() {
   }
   updateClock();
   setInterval(updateClock, 30000);
+  wireHashActions();
 
   if (!STATE.apiKey) {
     showSetup();
@@ -775,11 +874,13 @@ async function init() {
 function showSetup() {
   document.getElementById('setup-banner').style.display = 'block';
   document.getElementById('stats-row').style.opacity = '.4';
+  setLinearBadge('API KEY NEEDED', 'warn');
   setSBStatus('grey', 'Not connected — enter API key');
 }
 
 async function loadAll() {
   try {
+    setLinearBadge('CONNECTING', 'warn');
     setSBStatus('yellow', 'Connecting to Linear…');
     document.getElementById('setup-banner').style.display = 'none';
     document.getElementById('stats-row').style.opacity = '1';
@@ -798,8 +899,10 @@ async function loadAll() {
       const tid = STATE.teams[0].id;
       await Promise.all([loadCycle(tid), loadProjects(), loadMembers(tid)]);
     }
+    setLinearBadge('CONNECTED');
     setSBStatus('green', `Connected · ${STATE.issues.length} issues`);
   } catch (e) {
+    setLinearBadge('CHECK KEY', 'error');
     setSBStatus('grey', `Error: ${e.message}`);
     toast(`⚠️ ${e.message}`, 4000);
     if (e.message.includes('Unauthorized') || e.message.includes('API key')) {
@@ -1091,6 +1194,32 @@ function openIssue(id, identifier) {
   }
 }
 
+function openExternal(url) {
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
+function openLinearWorkspace() {
+  openExternal(LINEAR_WORKSPACE_URL);
+}
+
+function openKanbanFallback(target) {
+  openExternal(target === 'admin' ? ADMIN_KANBAN_API_URL : LOCAL_KANBAN_URL);
+}
+
+function focusQuickCreate() {
+  const el = document.getElementById('qc-title');
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setTimeout(() => el.focus(), 220);
+  if (!STATE.apiKey) toast('Connect Linear before creating issues', 3500);
+}
+
+function wireHashActions() {
+  if (window.location.hash === '#create') {
+    setTimeout(focusQuickCreate, 250);
+  }
+}
+
 // ── Tab + Filter ───────────────────────────────────────────────────────
 function switchTab(el, tab) {
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -1139,6 +1268,13 @@ async function refreshAll() {
 function setSBStatus(color, label) {
   document.getElementById('sb-dot').className = `sb-dot ${color}`;
   document.getElementById('sb-label').textContent = label;
+}
+
+function setLinearBadge(label, tone = '') {
+  const el = document.getElementById('linear-badge');
+  if (!el) return;
+  el.textContent = label;
+  el.className = `linear-badge ${tone}`.trim();
 }
 
 function updateClock() {

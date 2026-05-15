@@ -190,6 +190,8 @@ Connects to Linear's GraphQL API (`https://api.linear.app/graphql`):
 - Projects panel: icon, name, state, % complete
 - Team members: avatar, email, issue count
 - Click any issue → opens in Linear at correct team/issue URL
+- SATCOM Ops Bridge: `/linear#create` focuses quick-create, the dashboard Linear card opens the same lane, and the local Kanban fallback stays available at `http://127.0.0.1:8096`
+- Admin Kanban fallback reference: `https://admin.conews.press/console/api/kanban` for JSON board state when checking the codex-admin fallback path
 
 **Setup:** Enter Personal API key from `linear.app/settings/api` in the setup banner or Connection panel. Stored in `localStorage.linear_api_key` only — never transmitted externally.
 

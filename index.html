@@ -1450,32 +1450,32 @@ body::before {
               </div>
               <div>
                 <div class="card-title">Linear</div>
-                <div class="card-subtitle">Issues · Cycles · Projects</div>
+                <div class="card-subtitle">Issues · Cycles · Kanban handoff</div>
               </div>
             </div>
             <div class="card-stats">
               <div class="card-stat">
-                <span class="stat-label">Open Issues</span>
-                <span class="stat-value highlight">—</span>
+                <span class="stat-label">Linear API</span>
+                <span class="stat-value highlight" style="font-size:11px;">Local</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">In Progress</span>
-                <span class="stat-value">—</span>
+                <span class="stat-label">Kanban</span>
+                <span class="stat-value" style="font-size:11px;">Fallback</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Cycle</span>
                 <span class="stat-value" style="font-size:11px;">Active</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Done</span>
-                <span class="stat-value">—</span>
+                <span class="stat-label">Create</span>
+                <span class="stat-value" style="font-size:11px;">Ready</span>
               </div>
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/linear'">Open Board</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/linear'">My Issues</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/linear'">+ New</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/linear'">Open Linear</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/linear#create'">Quick Create</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8096','_blank','noopener,noreferrer')">Kanban</button>
             </div>
           </div>
         </div>
@@ -1739,6 +1739,7 @@ body::before {
           <div class="quick-pill" onclick="window.location.href='/docs'">📚 Docs Hub <span class="pill-kbd">⌘7</span></div>
           <div class="quick-pill" onclick="window.location.href='/apistore'">🔑 API Vault <span class="pill-kbd">⌘8</span></div>
           <div class="quick-pill" onclick="window.location.href='/learn'">🎓 SATCO Academy <span class="pill-kbd">⌘9</span></div>
+          <div class="quick-pill" onclick="window.location.href='/linear#create'">📐 Linear Issue <span class="pill-kbd">⌘L</span></div>
         </div>
       </div>
 
