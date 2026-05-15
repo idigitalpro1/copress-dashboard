@@ -39,9 +39,11 @@ SATCOM is the command center for copress.news — a Colorado mountain newspaper 
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
 - Client Onboarding — `https://onboarding.copress.news` (`idigitalpro1/onboarding-link`; DNS must resolve before public use)
-- Microsoft 365 Login — `https://admin.microsoft.com/Adminportal/Home#/users` for MyAppStore.biz tenant staff mailboxes and aliases
+- Microsoft 365 Access — admin center launch, account switcher, Azure app registration, and callback copy for MyAppStore.biz tenant staff mailboxes and aliases
 
 Old DashTail/Register-Call/Billing admin panels are intentionally not linked from the dashboard. Keep them available only as backend fallback surfaces until their workflows are fully absorbed here.
+
+Microsoft 365/Azure credentials stay server-side in the admin backend. SATCOM only exposes operator launch helpers and the redirect callback string: `https://admin.conews.press/console/api/auth/callback/azure-ad`.
 
 **Publishing section**
 - Dashboard (main view)

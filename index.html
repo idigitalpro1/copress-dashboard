@@ -457,6 +457,41 @@ body::before {
   margin-top: auto; font-family: 'DM Mono', monospace;
   font-size: 9.5px; color: var(--ink-muted); word-break: break-all;
 }
+.admin-launch-panel { cursor: default; }
+.admin-launch-status {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px; margin-top: 2px;
+}
+.admin-launch-status span {
+  font-family: 'DM Mono', monospace; font-size: 8.5px;
+  color: var(--ink-muted); border: 1px solid var(--rule);
+  background: rgba(255,255,255,.025); padding: 5px 6px;
+  text-transform: uppercase; letter-spacing: .8px;
+}
+.admin-launch-status span.ok { color: #27ae60; }
+.admin-launch-status span.warn { color: var(--gold); }
+.admin-launch-actions {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto;
+}
+.admin-launch-action {
+  border: 1px solid var(--border); background: transparent;
+  color: var(--ink-muted); cursor: pointer; text-decoration: none;
+  font-family: 'DM Sans', sans-serif; font-size: 10.5px;
+  padding: 5px 8px; line-height: 1.2; transition: var(--transition);
+}
+.admin-launch-action:hover {
+  border-color: var(--admin-color, var(--c-admin));
+  color: var(--admin-color, var(--c-admin));
+}
+.admin-launch-action.primary {
+  background: var(--admin-color, var(--c-admin));
+  border-color: transparent; color: #080c14; font-weight: 700;
+}
+@media (max-width: 720px) {
+  .admin-launch-status { grid-template-columns: 1fr; }
+  .admin-launch-actions { display: grid; grid-template-columns: 1fr; }
+  .admin-launch-action { width: 100%; text-align: left; }
+}
 
 /* ── Quick Actions Bar ───────────────────────────────────────────── */
 .quick-bar {
@@ -1128,6 +1163,7 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openM365Admin()">M365</button>
             </div>
           </div>
         </div>
@@ -1639,14 +1675,23 @@ body::before {
           <div class="admin-launch-desc">Canonical upload and onboarding app from idigitalpro1/onboarding-link. Use once DNS is live.</div>
           <div class="admin-launch-url">onboarding.copress.news</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-accounting);" href="https://admin.microsoft.com/Adminportal/Home#/users" target="_blank" rel="noopener">
+        <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-accounting);">
           <div class="admin-launch-top">
-            <div class="admin-launch-title">Microsoft 365 Login</div>
-            <span class="admin-launch-tag">Mail</span>
+            <div class="admin-launch-title">Microsoft 365 Access</div>
+            <span class="admin-launch-tag">Selector</span>
           </div>
-          <div class="admin-launch-desc">Sign in to the MyAppStore.biz Microsoft 365 tenant for staff mailboxes, aliases, Outlook, and admin user setup.</div>
-          <div class="admin-launch-url">admin.microsoft.com/users</div>
-        </a>
+          <div class="admin-launch-desc">Open tenant admin, force a fresh account choice, or grab the Azure callback without turning SATCOM into an auth shell.</div>
+          <div class="admin-launch-status">
+            <span class="ok">SATCOM primary</span>
+            <span class="warn">Secrets server-side</span>
+          </div>
+          <div class="admin-launch-actions">
+            <button class="admin-launch-action primary" type="button" onclick="openM365Admin()">Admin</button>
+            <button class="admin-launch-action" type="button" onclick="openM365AccountSwitch()">Switch Account</button>
+            <button class="admin-launch-action" type="button" onclick="openAzureAppRegistration()">Azure App</button>
+            <button class="admin-launch-action" type="button" onclick="copyM365Callback()">Copy Callback</button>
+          </div>
+        </div>
         <a class="admin-launch" style="--admin-color:var(--c-linear);" href="https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade" target="_blank" rel="noopener">
           <div class="admin-launch-top">
             <div class="admin-launch-title">Azure AD App Registration</div>
@@ -2083,14 +2128,25 @@ body::before {
             <div class="admin-launch-desc">Publisher intake, file upload, and client onboarding app. Source repo: idigitalpro1/onboarding-link.</div>
             <div class="admin-launch-url">https://onboarding.copress.news</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-accounting);" href="https://admin.microsoft.com/Adminportal/Home#/users" target="_blank" rel="noopener">
+          <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-accounting);">
             <div class="admin-launch-top">
-              <div class="admin-launch-title">Microsoft 365 Login</div>
-              <span class="admin-launch-tag">Mail</span>
+              <div class="admin-launch-title">Microsoft 365 Access</div>
+              <span class="admin-launch-tag">Selector</span>
             </div>
-            <div class="admin-launch-desc">Tenant admin entry for Outlook, Exchange mailboxes, new staff accounts, and aliases like registercall.com/conews.press.</div>
-            <div class="admin-launch-url">https://admin.microsoft.com/Adminportal/Home#/users</div>
-          </a>
+            <div class="admin-launch-desc">Tenant admin entry plus a clean account-switch path when Microsoft reuses the wrong cached session.</div>
+            <div class="admin-launch-status">
+              <span class="ok">Admin center</span>
+              <span class="warn">Callback locked</span>
+              <span>admin.conews.press</span>
+              <span>/console/api/auth</span>
+            </div>
+            <div class="admin-launch-actions">
+              <button class="admin-launch-action primary" type="button" onclick="openM365Admin()">Admin</button>
+              <button class="admin-launch-action" type="button" onclick="openM365AccountSwitch()">Switch Account</button>
+              <button class="admin-launch-action" type="button" onclick="openAzureAppRegistration()">Azure App</button>
+              <button class="admin-launch-action" type="button" onclick="copyM365Callback()">Copy Callback</button>
+            </div>
+          </div>
           <a class="admin-launch" style="--admin-color:var(--c-marketing);" href="/newsletter">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Newsletter Studio</div>
@@ -2347,6 +2403,38 @@ function toast(msg) {
   el.className = 'toast'; el.textContent = msg;
   container.appendChild(el);
   setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 220); }, 2800);
+}
+
+const M365_ADMIN_USERS_URL = 'https://admin.microsoft.com/Adminportal/Home#/users';
+const M365_ACCOUNT_SWITCH_URL =
+  'https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=' +
+  encodeURIComponent(M365_ADMIN_USERS_URL);
+const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
+const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
+
+function openExternal(url) {
+  window.open(url, '_blank', 'noopener');
+}
+
+function openM365Admin() {
+  openExternal(M365_ADMIN_USERS_URL);
+}
+
+function openM365AccountSwitch() {
+  openExternal(M365_ACCOUNT_SWITCH_URL);
+}
+
+function openAzureAppRegistration() {
+  openExternal(AZURE_APP_REGISTRATION_URL);
+}
+
+async function copyM365Callback() {
+  try {
+    await navigator.clipboard.writeText(M365_AZURE_CALLBACK_URL);
+    toast('Azure callback copied');
+  } catch {
+    window.prompt('Copy Azure callback URL', M365_AZURE_CALLBACK_URL);
+  }
 }
 
 // ── API Panel ──────────────────────────────────────────────────────
