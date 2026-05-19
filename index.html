@@ -2594,6 +2594,9 @@ body::before {
                 <div class="hermes-command-label">Plugin bus</div>
                 <div class="hermes-command-value" id="hermes-command-plugins">Core stack</div>
                 <div class="hermes-command-note">MCP, docs, browser, media, and publishing tools.</div>
+                <div class="hermes-panel-actions">
+                  <button class="mini-btn ok" onclick="jumpToHermesPlugins()">Open Plugins</button>
+                </div>
               </div>
               <div class="hermes-command-card">
                 <div class="hermes-command-label">File context</div>
@@ -2665,7 +2668,7 @@ body::before {
                   <div class="hermes-agent-grid" id="hermes-agent-grid"></div>
                 </div>
 
-                <div class="module-panel">
+                <div class="module-panel" id="hermes-plugin-panel">
                   <h3>Plugin Center</h3>
                   <div class="hermes-plugin-grid" id="hermes-plugin-grid"></div>
                   <div class="hermes-panel-actions">
@@ -2831,6 +2834,32 @@ function navTo(section) {
   }
 }
 
+function jumpToHermesPlugins() {
+  navTo('brains');
+  setTimeout(() => {
+    const panel = document.getElementById('hermes-plugin-panel');
+    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.replaceState(null, '', '#plugins');
+  }, 120);
+}
+
+function routeFromHash() {
+  const target = (window.location.hash || '').replace('#', '').trim().toLowerCase();
+  if (!target) return;
+  if (target === 'plugins' || target === 'plugin-center') {
+    navTo('brains');
+    setTimeout(() => document.getElementById('hermes-plugin-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+    return;
+  }
+  const aliases = {
+    hermes: 'brains',
+    aileen: 'brains',
+    crew: 'brains',
+    adminhq: 'admin',
+  };
+  navTo(aliases[target] || target);
+}
+
 document.querySelectorAll('.nav-item[data-view]').forEach(item => {
   item.addEventListener('click', () => { if(item.dataset.view) navTo(item.dataset.view); });
 });
@@ -2838,6 +2867,8 @@ document.querySelectorAll('.nav-item[data-view]').forEach(item => {
 document.querySelectorAll('.module-card[data-target]').forEach(card => {
   card.addEventListener('click', () => { if(card.dataset.target) navTo(card.dataset.target); });
 });
+
+window.addEventListener('hashchange', routeFromHash);
 
 // ── Toast ──────────────────────────────────────────────────────────
 function toast(msg) {
@@ -5167,6 +5198,7 @@ renderEditorialStories();
 loadDirectoryBatch();
 refreshStationeryTemplate();
 refreshModuleStatus();
+routeFromHash();
 </script>
 
 <!-- ── Press Atmosphere: Gears + Spotlight ─────────────────────────── -->
