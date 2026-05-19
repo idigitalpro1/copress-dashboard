@@ -1,0 +1,54 @@
+{
+  "@context": "https://schema.org",
+  "@type": [
+    "NightClub",
+    "Restaurant"
+  ],
+  "name": "Rick's Cabaret & Steakhouse Central City",
+  "url": "https://www.rickscentral.com/",
+  "telephone": "+1-720-669-9470",
+  "image": [
+    "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg",
+    "https://www.rickscentral.com/wp-content/uploads/2024/01/ricks-central-city-steakhouse.jpg",
+    "https://www.rickscentral.com/wp-content/uploads/2023/10/Ricks-Cabaret-Central-Steakhouse-and-Lounge.jpg"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "130 Main St",
+    "addressLocality": "Central City",
+    "addressRegion": "CO",
+    "postalCode": "80427",
+    "addressCountry": "US"
+  },
+  "areaServed": [
+    "Central City",
+    "Black Hawk",
+    "Idaho Springs",
+    "Golden",
+    "Denver"
+  ],
+  "servesCuisine": "Steakhouse",
+  "priceRange": "$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "opens": "18:00",
+      "closes": "04:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.instagram.com/rickscentralcity/",
+    "https://x.com/rickscentral"
+  ],
+  "potentialAction": {
+    "@type": "ReserveAction",
+    "target": "https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/",
+    "name": "Reserve steakhouse seating"
+  }
+}

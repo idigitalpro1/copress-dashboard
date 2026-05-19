@@ -253,6 +253,64 @@ The imported `/cg-campaign-kit/` bundle comes from `/Users/Ace/Downloads/cg-camp
 
 Recommended domain policy: use `gambling.conews.press` as the CoPress network vertical and forward `ColoradoGambler.com` to it after explicit DNS/Plesk approval.
 
+## Rick's Cabaret Campaign Kit
+
+The `/ricks-cabaret-campaign-kit/` bundle is a Monarch-showcase-style static campaign for Rick's Cabaret & Steakhouse Central City, aimed at the Central City / Black Hawk nightlife corridor.
+
+- `/ricks-cabaret-campaign-kit/index.html`
+- `/ricks-cabaret-campaign-kit/manifest.json`
+- `/ricks-cabaret-campaign-kit/banners/banner-leaderboard-728x90.html`
+- `/ricks-cabaret-campaign-kit/banners/banner-medium-rect-300x250.html`
+- `/ricks-cabaret-campaign-kit/banners/banner-skyscraper-160x600.html`
+- `/ricks-cabaret-campaign-kit/banners/banner-half-page-300x600.html`
+- `/ricks-cabaret-campaign-kit/banners/banner-mobile-320x50.html`
+- `/ricks-cabaret-campaign-kit/banners/banner-social-square-1080x1080.html`
+- `/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html`
+- `/ricks-cabaret-campaign-kit/editorial/campaign-copy.md`
+- `/ricks-cabaret-campaign-kit/editorial/social-media-copy.md`
+- `/ricks-cabaret-campaign-kit/seo/meta.json`
+- `/ricks-cabaret-campaign-kit/seo/jsonld.json`
+
+Official venue facts are sourced from `https://www.rickscentral.com/`: Rick's Cabaret & Steakhouse Central City is at 130 Main St, Central City, CO 80427, phone `(720) 669-9470`, with public hours shown as Thursday through Sunday, 6 PM to 4 AM. Campaign copy should say "near Black Hawk" or "Central City / Black Hawk corridor" rather than labeling the venue address as Black Hawk.
+
+## Stan's Auto Sales Campaign Kit
+
+The `/stans-auto-sales-campaign-kit/` bundle is a CoNewsPress advertiser showcase for Stan's Auto Sales, LLC in Westminster, aimed at used-car shoppers across Westminster and the north Denver metro.
+
+- `/stans-auto-sales-campaign-kit/index.html`
+- `/stans-auto-sales-campaign-kit/manifest.json`
+- `/stans-auto-sales-campaign-kit/banners/banner-leaderboard-728x90.html`
+- `/stans-auto-sales-campaign-kit/banners/banner-medium-rect-300x250.html`
+- `/stans-auto-sales-campaign-kit/banners/banner-skyscraper-160x600.html`
+- `/stans-auto-sales-campaign-kit/banners/banner-half-page-300x600.html`
+- `/stans-auto-sales-campaign-kit/banners/banner-mobile-320x50.html`
+- `/stans-auto-sales-campaign-kit/banners/banner-social-square-1080x1080.html`
+- `/stans-auto-sales-campaign-kit/email/newsletter-family-car-finder.html`
+- `/stans-auto-sales-campaign-kit/editorial/campaign-copy.md`
+- `/stans-auto-sales-campaign-kit/editorial/social-media-copy.md`
+- `/stans-auto-sales-campaign-kit/seo/meta.json`
+- `/stans-auto-sales-campaign-kit/seo/jsonld.json`
+
+Public dealership facts are sourced from `https://www.stansautosalesllc.com/`: Stan's Auto Sales, LLC is at 7192 Newton St, Westminster, CO 80030, phone `(303) 650-1011`, email `stansautosales@yahoo.com`, with public hours shown as Monday through Friday 9 AM to 6 PM and Saturday 9 AM to 5 PM. The operator-supplied vCard adds Scott Swan, Stans Auto, `(720) 371-5021` as the direct campaign contact. Keep Scott's contact labeled as campaign/contact-card supplied unless the operator approves replacing the main public dealership CTA.
+
+## 240 Deer Road Real Estate Campaign Kit
+
+The `/240-deer-road-campaign-kit/` bundle is a CoNewsPress real estate showcase for the active Compass listing at 240 Deer Rd, Evergreen, CO 80439, following the Bills Mobile showcase rhythm: branded hero, asset navigation, marketing-kit cards, distribution network, contact CTA, and drip handoff.
+
+- `/240-deer-road-campaign-kit/index.html`
+- `/240-deer-road-campaign-kit/manifest.json`
+- `/240-deer-road-campaign-kit/banners/banner-leaderboard-728x90.html`
+- `/240-deer-road-campaign-kit/banners/banner-medium-rect-300x250.html`
+- `/240-deer-road-campaign-kit/banners/banner-mobile-320x50.html`
+- `/240-deer-road-campaign-kit/banners/banner-social-square-1080x1080.html`
+- `/240-deer-road-campaign-kit/email/newsletter-evergreen-a-frame.html`
+- `/240-deer-road-campaign-kit/editorial/campaign-copy.md`
+- `/240-deer-road-campaign-kit/editorial/social-media-copy.md`
+- `/240-deer-road-campaign-kit/seo/meta.json`
+- `/240-deer-road-campaign-kit/seo/jsonld.json`
+
+Live listing facts are sourced from `https://www.compass.com/homedetails/240-Deer-Rd-Evergreen-CO-80439/12SMVX_pid/`: active, `$525,000`, 3 beds, 1 bath, 1,270 sq ft, 1.00 acre, MLS `#7681620`, year built 1976, Brook Forest Estates, Clear Creek County. Contact is Bailey Orcutt, Compass, `720-388-5994`, `bailey.orcutt@compass.com`. Re-verify price, status, buyer compensation, schools, taxes, measurements, showing availability, and all terms from Compass/MLS before publication. The source listing notes that photos have been cleaned up using AI.
+
 **3CX SIP Extensions:**
 - 17410 Patrick · 17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production
 - AI Receptionist: Twilio +18773578499 → claude-opus-4-5 → SIP route
@@ -316,6 +374,7 @@ Current behavior is intentionally browser-local:
 - Accounting launches the upgraded invoice manager at `https://invoicemanager.weeklyregistercall.com` for final billing work. The bridge exposes the recent invoice-manager upgrades: sequential invoice numbering, custom/non-priced display ad size, restored edit/duplicate/detail controls, run dates, Publisher's Affidavit copy and attachments, PDF/email sending, QuickBooks sync status, recurring invoices, payments, batch invoicing, and the Billing Assistant route.
 - Marketing campaign generation stores the latest kit in `localStorage.copress_campaign_handoff` and exposes a `Send to Newsletter Studio` link to `/newsletter?campaign=latest`; Newsletter Studio auto-loads that copy into the marketing template and shows a handoff banner.
 - Marketing campaign kits follow the showcase pattern from `showcase.registercall.com/billsmobile`: branding first, industry pattern, invoice-manager item mapping, send options, follow-up/drip sequence, and newsletter/digital/print subscriber-list options.
+- Marketing Hub includes a `Nightlife / Steakhouse` pattern for Rick's-style corridor campaigns: premium late-night hospitality, VIP groups, reservation CTAs, Black Hawk / Central City audience targeting, and a three-touch launch/feature/weekend reminder drip.
 - Campaign generation is local-first by default: free local Hermes/Ollama models generate copy and structure. Premium artwork is escalated only when the operator selects premium artwork, with Nano Banana 2 / Claude design / Google AI Studio noted as the art lane.
 - Directory has a duplicable demo importer: source adapter → normalized business record → duplicate detection → review actions → JSON export. Demo state lives in `localStorage.copress_directory_batch_v1`.
 - Directory intake includes visual evidence: a generated demo business-card wall plus an upload field for a photo of a card wall or scanned page from a local approved civic organization. Scan metadata lives in `localStorage.copress_directory_scan_meta_v1` and exports with the batch JSON.

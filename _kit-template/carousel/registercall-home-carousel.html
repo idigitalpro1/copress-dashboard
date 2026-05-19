@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>registercall.com — home (carousel placement demo)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@600&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#100f0c;color:#eceae4;font-family:"DM Sans",system-ui,sans-serif}
+  .demo-note{background:#c9a84c;color:#15130d;font-size:12px;font-weight:600;text-align:center;padding:8px;letter-spacing:.04em}
+  .rc-mast{border-bottom:1px solid #2a2722;padding:22px 20px;text-align:center}
+  .rc-mast .name{font-family:"Playfair Display",Georgia,serif;font-size:30px;letter-spacing:.02em}
+  .rc-mast .tag{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8e8a82;margin-top:6px}
+  .rc-body{max-width:1100px;margin:0 auto;padding:40px 20px 10px}
+  .rc-body h3{font-family:"Playfair Display",serif;font-size:20px;border-bottom:1px solid #2a2722;padding-bottom:8px;margin-bottom:16px;color:#cfcabf}
+  .rows{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:34px}
+  @media(max-width:760px){.rows{grid-template-columns:1fr}}
+  .row{background:#16140f;border:1px solid #2a2722;border-radius:6px;height:118px;padding:14px;color:#7d7a72;font-size:13px}
+  .row b{display:block;color:#b7b2a6;font-family:"Playfair Display",serif;font-size:16px;margin-bottom:6px}
+  .scrolltip{text-align:center;color:#8e8a82;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:6px 0 26px}
+  .carwrap{border-top:1px solid #2a2722}
+  iframe{width:100%;height:620px;border:0;display:block;background:#0a0a07}
+  .rc-foot{padding:30px 20px 60px;text-align:center;color:#6f6c64;font-size:12px;border-top:1px solid #2a2722}
+</style>
+</head>
+<body>
+  <div class="demo-note">DEMO · This mocks the registercall.com home page so you can see the HipCribs carousel placement at the very bottom (above the footer).</div>
+
+  <div class="rc-mast">
+    <div class="name">The Weekly Register-Call</div>
+    <div class="tag">registercall.com · Gilpin County, Colorado</div>
+  </div>
+
+  <div class="rc-body">
+    <h3>Top Stories</h3>
+    <div class="rows">
+      <div class="row"><b>County Commission Notes</b>Placeholder news block — represents existing registercall.com home content.</div>
+      <div class="row"><b>Black Hawk Gaming Update</b>Placeholder news block.</div>
+      <div class="row"><b>Central City Calendar</b>Placeholder news block.</div>
+    </div>
+    <h3>More From the Register-Call</h3>
+    <div class="rows">
+      <div class="row"><b>Op-Ed Desk</b>Placeholder.</div>
+      <div class="row"><b>Sports</b>Placeholder.</div>
+      <div class="row"><b>Community</b>Placeholder.</div>
+    </div>
+    <div class="scrolltip">↓ Bottom of home page — HipCribs real-estate carousel ↓</div>
+  </div>
+
+  <div class="carwrap">
+    <!-- In production this is the embed-snippet pasted directly into the SPA;
+         here it is iframed so the demo stays a single source of truth. -->
+    <iframe src="./embed-snippet.html" title="HipCribs real-estate carousel" scrolling="no"></iframe>
+  </div>
+
+  <div class="rc-foot">© The Weekly Register-Call · footer placeholder (carousel sits directly above this)</div>
+</body>
+</html>

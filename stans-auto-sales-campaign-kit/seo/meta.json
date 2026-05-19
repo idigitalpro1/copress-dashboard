@@ -1,0 +1,25 @@
+{
+  "title": "Stan's Auto Sales - Westminster Family Car Finder",
+  "description": "A CoNewsPress campaign showcase for Stan's Auto Sales, LLC in Westminster, Colorado, built around practical pre-owned vehicles, local calls, inventory browsing, and test-drive visits.",
+  "canonical": "https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/",
+  "keywords": [
+    "Stan's Auto Sales Westminster",
+    "used cars Westminster CO",
+    "pre-owned cars north Denver",
+    "Westminster used auto dealer",
+    "affordable used cars Colorado",
+    "Front Range car shopping"
+  ],
+  "openGraph": {
+    "type": "website",
+    "title": "Stan's Auto Sales - Family Car Finder",
+    "description": "A local campaign kit for practical used-car shoppers in Westminster and north Denver.",
+    "image": "https://cdn.dealrimages.com/QO/4W/DF/UWXRDLEWBZKELN.jpg"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Stan's Auto Sales - Family Car Finder",
+    "description": "Browse practical pre-owned cars, SUVs, vans, trucks, and wagons in Westminster.",
+    "image": "https://cdn.dealrimages.com/QO/4W/DF/UWXRDLEWBZKELN.jpg"
+  }
+}

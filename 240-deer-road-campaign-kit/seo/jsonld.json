@@ -1,0 +1,44 @@
+{
+  "@context": "https://schema.org",
+  "@type": "RealEstateListing",
+  "name": "240 Deer Road, Evergreen, CO 80439",
+  "url": "https://www.compass.com/homedetails/240-Deer-Rd-Evergreen-CO-80439/12SMVX_pid/?origin=listing_page&origin_type=copy_url&agent_id=650394a38dfdac000184c482",
+  "image": [
+    "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_0_27108/origin.jpg",
+    "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_1_7841b/origin.jpg",
+    "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_2_8b3a9/origin.jpg"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "240 Deer Rd",
+    "addressLocality": "Evergreen",
+    "addressRegion": "CO",
+    "postalCode": "80439",
+    "addressCountry": "US"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "525000",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "floorSize": {
+    "@type": "QuantitativeValue",
+    "value": 1270,
+    "unitText": "SQFT"
+  },
+  "numberOfRooms": 8,
+  "numberOfBedrooms": 3,
+  "numberOfBathroomsTotal": 1,
+  "broker": {
+    "@type": "RealEstateAgent",
+    "name": "Bailey Orcutt",
+    "telephone": "+1-720-388-5994",
+    "email": "bailey.orcutt@compass.com",
+    "url": "https://www.compass.com/agents/bailey-orcutt/",
+    "worksFor": {
+      "@type": "RealEstateAgent",
+      "name": "Compass"
+    }
+  }
+}

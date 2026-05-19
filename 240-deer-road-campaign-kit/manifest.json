@@ -1,0 +1,99 @@
+{
+  "campaign": "240 Deer Road - Evergreen A-Frame Retreat",
+  "brand": "240 Deer Rd, Evergreen, CO 80439",
+  "version": "1.1.0",
+  "created": "2026-05-18",
+  "sourcePattern": "Bill's Mobile showcase pattern adapted for a real estate listing: two-link handoff, campaign kit asset buildout, customer home-buying kit link, newsletter, social, print, and drip sequence.",
+  "sourceUrl": "https://www.compass.com/homedetails/240-Deer-Rd-Evergreen-CO-80439/12SMVX_pid/?origin=listing_page&origin_type=copy_url&agent_id=650394a38dfdac000184c482",
+  "audience": [
+    "Denver and Front Range buyers seeking a mountain home within about an hour of the city",
+    "Evergreen buyers looking for a cozy cabin with room to expand",
+    "Remote workers and creatives who value a studio, guest space, or home office option",
+    "Buyers drawn to Evergreen Lake, trails, I-70 access, and mountain views",
+    "Agents and buyer lists that respond to updated systems and manageable square footage"
+  ],
+  "positioning": "An Evergreen A-frame cabin on one acre with mountain character, updated kitchen finishes, deck living, a negotiable tiny house, and expansion potential.",
+  "colors": {
+    "pine": "#123026",
+    "moss": "#6f7f49",
+    "stone": "#d8d0c1",
+    "snow": "#f8f4ec",
+    "copper": "#b56b3c",
+    "ink": "#1c2421",
+    "sky": "#dce8ea"
+  },
+  "fonts": {
+    "display": "Fraunces",
+    "body": "Work Sans"
+  },
+  "assets": {
+    "hero": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_0_27108/origin.jpg",
+    "photo2": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_1_7841b/origin.jpg",
+    "photo3": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_2_8b3a9/origin.jpg",
+    "photo4": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_3_eaedb/origin.jpg",
+    "photo5": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_4_a5efe/origin.jpg",
+    "agent": "https://www.compass.com/m/14/80325d25-ac35-4021-b487-c72fb2094ce0/origin.jpg"
+  },
+  "deliverables": {
+    "showcase": "index.html",
+    "publicLinks": {
+      "campaignKit": "https://copress-dashboard.vercel.app/240-deer-road-campaign-kit/#kit",
+      "customerHomeBuyingKit": "https://copress-dashboard.vercel.app/240-deer-road-campaign-kit/#customer-home-buying-kit"
+    },
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-mobile-320x50.html",
+      "banners/banner-social-square-1080x1080.html"
+    ],
+    "email": [
+      "email/newsletter-evergreen-a-frame.html"
+    ],
+    "editorial": [
+      "editorial/campaign-copy.md",
+      "editorial/social-media-copy.md"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ],
+    "handoff": [
+      "handoff/two-link-handoff.md"
+    ]
+  },
+  "customerHomeBuyingKit": {
+    "anchor": "#customer-home-buying-kit",
+    "styleDirection": "Fleurish-magazine inspired high-end housing graphics with quiet luxury, editorial typography, large Compass listing photography, and a clear buyer next step.",
+    "rule": "Do not create a separate web page unless the operator explicitly asks. The campaign kit contains the customer-facing home-buying kit link."
+  },
+  "listingFacts": {
+    "status": "Active",
+    "price": "$525,000",
+    "beds": 3,
+    "baths": 1,
+    "sqft": 1270,
+    "pricePerSqft": "$413",
+    "lotSize": "1.00 AC / 43,560 SF",
+    "yearBuilt": 1976,
+    "mls": "7681620",
+    "taxes": "$2,061 / year",
+    "county": "Clear Creek County",
+    "subdivision": "Brook Forest Estates",
+    "propertyType": "Single Family",
+    "listingUpdated": "2026-05-18 12:00 PM"
+  },
+  "contact": {
+    "name": "Bailey Orcutt",
+    "title": "Broker Associate",
+    "brokerage": "Compass",
+    "phone": "720-388-5994",
+    "email": "bailey.orcutt@compass.com",
+    "profileUrl": "https://www.compass.com/agents/bailey-orcutt/"
+  },
+  "compliance": {
+    "photoDisclosure": "Compass listing notes that all photos have been cleaned up using AI.",
+    "verification": "Price, status, availability, buyer compensation, taxes, schools, measurements, and listing terms must be re-verified from the live MLS/Compass listing before publication."
+  },
+  "modelPolicy": "free-local-models",
+  "artRoute": "Official public Compass listing assets referenced by URL; premium generated artwork not required."
+}

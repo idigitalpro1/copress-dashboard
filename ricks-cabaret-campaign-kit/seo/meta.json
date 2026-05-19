@@ -1,0 +1,26 @@
+{
+  "title": "Rick's Cabaret Central City - Black Hawk Nightlife Escape",
+  "description": "A Monarch-style campaign showcase for Rick's Cabaret & Steakhouse Central City, serving Black Hawk and Central City nightlife guests with late-night dining, VIP party packages, and cabaret entertainment.",
+  "canonical": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/",
+  "keywords": [
+    "Rick's Cabaret Central City",
+    "Black Hawk nightlife",
+    "Central City steakhouse",
+    "late night dining Central City",
+    "Black Hawk cabaret",
+    "Central City party packages",
+    "Colorado casino corridor nightlife"
+  ],
+  "openGraph": {
+    "type": "website",
+    "title": "Rick's Cabaret Central City - Nightlife Escape",
+    "description": "Upscale steakhouse, late-night lounge, and cabaret campaign for the Central City / Black Hawk corridor.",
+    "image": "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "Rick's Cabaret Central City - Nightlife Escape",
+    "description": "A complete campaign kit for late-night dining and nightlife near Black Hawk.",
+    "image": "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg"
+  }
+}

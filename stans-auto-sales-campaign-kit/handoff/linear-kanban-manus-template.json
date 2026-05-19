@@ -1,0 +1,32 @@
+{
+  "template": "stans-auto-industry-kit",
+  "linearIssue": {
+    "title": "Place advertiser content for [Business Name]",
+    "labels": ["campaign-kit", "sponsored-content", "comsat", "5280-menu"],
+    "fields": [
+      "business",
+      "prospect_id",
+      "industry",
+      "placement_type",
+      "pricing_route",
+      "kit_url",
+      "asset_folder",
+      "claim_check_owner",
+      "publish_lane"
+    ],
+    "acceptanceCriteria": [
+      "Email onboarding link exists",
+      "SMS onboarding link exists",
+      "Web preview link exists",
+      "Asset files are attached or linked",
+      "Pricing route is selected",
+      "SATCOM claim check complete",
+      "Publish or schedule action recorded"
+    ]
+  },
+  "kanbanColumns": ["Ready", "Design", "Copy", "Review", "Place", "Track"],
+  "pricingRoutes": [
+    {"name": "Unlimited Queue", "price": 50, "cadence": "monthly", "includedPosts": 10},
+    {"name": "Immediate Menu", "price": "per placement", "cadence": "one-time"}
+  ]
+}

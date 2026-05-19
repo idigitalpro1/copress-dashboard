@@ -1,0 +1,29 @@
+{
+  "campaign": "Stan's Auto Sales - Westminster Family Car Finder",
+  "kitUrl": "https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/",
+  "visibility": "internal-operator-only",
+  "formatPolicy": "Each prospect has three onboarding formats: email, SMS, and web review link.",
+  "requiredIntake": ["business name", "website", "logo", "phone", "best offer", "photos", "service area", "approval contact"],
+  "prospects": [
+    {"id":"auto-01","title":"Independent used auto dealer","fit":"Inventory, call-ahead, and local trust campaign"},
+    {"id":"auto-02","title":"Family auto lot","fit":"Daily-driver and family-safe category campaign"},
+    {"id":"auto-03","title":"Auto repair shop","fit":"Diagnostics, service bays, and appointment requests"},
+    {"id":"auto-04","title":"Tire and alignment shop","fit":"Seasonal tire, safety, and appointment campaigns"},
+    {"id":"auto-05","title":"Detailing studio","fit":"Before-and-after visuals and gift-card pushes"},
+    {"id":"auto-06","title":"Body shop","fit":"Estimate requests and damage-photo intake"},
+    {"id":"auto-07","title":"Towing company","fit":"Phone-first emergency visibility"},
+    {"id":"auto-08","title":"Car wash","fit":"Membership, weekend wash, and fleet wash campaigns"},
+    {"id":"auto-09","title":"RV and trailer sales","fit":"Seasonal adventure inventory"},
+    {"id":"auto-10","title":"Powersports dealer","fit":"Motorcycle, ATV, and seasonal gear campaigns"},
+    {"id":"auto-11","title":"Fleet service company","fit":"B2B maintenance and scheduled service outreach"},
+    {"id":"auto-12","title":"Auto glass shop","fit":"Repair and replacement request flow"},
+    {"id":"auto-13","title":"Quick lube shop","fit":"Reminder-driven oil-change campaigns"},
+    {"id":"auto-14","title":"Transmission shop","fit":"Diagnosis requests and trust-building proof"},
+    {"id":"auto-15","title":"Mobile mechanic","fit":"Service-area and appointment-ready campaign"},
+    {"id":"auto-16","title":"Auto parts store","fit":"DIY driver and seasonal readiness campaign"},
+    {"id":"auto-17","title":"Window tint and wrap shop","fit":"Before-and-after visual creative"},
+    {"id":"auto-18","title":"Auto insurance agency","fit":"Referral-safe visibility with no rate promises"},
+    {"id":"auto-19","title":"Credit union auto loan desk","fit":"Education and appointment handoff only"},
+    {"id":"auto-20","title":"Local fleet buyer program","fit":"Work truck, van, and fleet replacement outreach"}
+  ]
+}

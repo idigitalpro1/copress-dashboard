@@ -517,6 +517,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   gap:10px;
 }
 .site-card{
+  display:block;
+  color:inherit;
+  text-decoration:none;
   min-height:184px;
   border:1px solid var(--border);
   border-radius:10px;
@@ -666,13 +669,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
 
 <nav id="topnav">
   <div class="nav-logo">copress <span>Network HQ</span></div>
+  <a href="https://satcom.5280.menu/#admin" class="nav-pill">⌘ Admin HQ</a>
   <a href="/" class="nav-pill">⬛ Dashboard</a>
   <a href="/network" class="nav-pill active">🌐 Properties</a>
   <a href="/newsletter" class="nav-pill">📧 Newsletter</a>
   <a href="/docs" class="nav-pill">📚 Docs</a>
   <div class="nav-right">
     <div class="ip-badge" title="Production server — AWS Lightsail us-west-2a">44.236.197.183</div>
-    <a href="/" class="nav-pill">← Spine</a>
+    <a href="https://satcom.5280.menu/#admin" class="nav-pill">← Admin HQ</a>
   </div>
 </nav>
 
@@ -832,7 +836,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         </div>
       </div>
       <div class="site-grid" id="conews-site-grid">
-        <div class="site-card is-pilot">
+        <a class="site-card is-pilot" href="https://redrocks.press/" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fredrocks.press%2F?w=420&h=220" alt="RedRocks.Press preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Morrison / Red Rocks</div><div class="site-card-status">pilot</div></div>
@@ -840,8 +844,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Paul</span><span class="site-pill">Joathon</span><span class="site-pill">Codex</span></div>
             <div class="site-next"><span>Next</span> first weekly edition sample + Morrison business seed list.</div>
           </div>
-        </div>
-        <div class="site-card is-pilot">
+        </a>
+        <a class="site-card is-pilot" href="https://nederland.conews.press/" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fnederland.conews.press%2F?w=420&h=220" alt="Nederland preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Nederland</div><div class="site-card-status">pilot</div></div>
@@ -849,8 +853,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Paul</span><span class="site-pill">Aileen</span></div>
             <div class="site-next"><span>Next</span> meeting schedule research + music/outdoor guide.</div>
           </div>
-        </div>
-        <div class="site-card is-revenue">
+        </a>
+        <a class="site-card is-revenue" href="https://blackhawk.conews.press/" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fblackhawk.conews.press%2F?w=420&h=220" alt="Black Hawk preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Black Hawk</div><div class="site-card-status">revenue</div></div>
@@ -858,8 +862,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Joathon</span><span class="site-pill">Patrick</span><span class="site-pill">Ads</span></div>
             <div class="site-next"><span>Next</span> casino listings + sponsor compliance notes.</div>
           </div>
-        </div>
-        <div class="site-card is-revenue">
+        </a>
+        <a class="site-card is-revenue" href="https://centralcity.conews.press/" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fcentralcity.conews.press%2F?w=420&h=220" alt="Central City preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Central City</div><div class="site-card-status">revenue</div></div>
@@ -867,8 +871,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Joathon</span><span class="site-pill">Patrick</span><span class="site-pill">SEO</span></div>
             <div class="site-next"><span>Next</span> historic district sources + event calendar.</div>
           </div>
-        </div>
-        <div class="site-card">
+        </a>
+        <a class="site-card" href="https://idahosprings.conews.press/" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fidahosprings.conews.press%2F?w=420&h=220" alt="Idaho Springs preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Idaho Springs</div><div class="site-card-status">outdoor</div></div>
@@ -876,8 +880,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Paul</span><span class="site-pill">Joathon</span><span class="site-pill">Shop Local</span></div>
             <div class="site-next"><span>Next</span> rafting outfitters + Clear Creek safety sources.</div>
           </div>
-        </div>
-        <div class="site-card">
+        </a>
+        <a class="site-card" href="https://georgetown.conews.press/" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fgeorgetown.conews.press%2F?w=420&h=220" alt="Georgetown preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Georgetown</div><div class="site-card-status">outdoor</div></div>
@@ -885,8 +889,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Paul</span><span class="site-pill">Visitor</span></div>
             <div class="site-next"><span>Next</span> visitor center data + municipal notices.</div>
           </div>
-        </div>
-        <div class="site-card is-scale">
+        </a>
+        <a class="site-card is-scale" href="https://registercall.com/?s=Evergreen" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fevergreen.conews.press%2F?w=420&h=220" alt="Evergreen preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Evergreen</div><div class="site-card-status">scale</div></div>
@@ -894,8 +898,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Joathon</span><span class="site-pill">Schools</span></div>
             <div class="site-next"><span>Next</span> school board map + business association sources.</div>
           </div>
-        </div>
-        <div class="site-card is-scale">
+        </a>
+        <a class="site-card is-scale" href="https://registercall.com/?s=Golden" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fgolden.conews.press%2F?w=420&h=220" alt="Golden preview" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">Golden</div><div class="site-card-status">scale</div></div>
@@ -903,7 +907,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
             <div class="site-card-lane"><span class="site-pill">Patrick</span><span class="site-pill">Paul</span><span class="site-pill">Sports</span></div>
             <div class="site-next"><span>Next</span> city agendas + high school sports source list.</div>
           </div>
-        </div>
+        </a>
       </div>
     </div>
     <div class="thumb-strip">
@@ -1183,7 +1187,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
   <div class="sec-label">🏔️ Mountain City Sites — Colorado Coverage Network</div>
   <div class="cities-grid">
 
-    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:0ms">
+    <a class="city-card" href="https://blackhawk.conews.press/" target="_blank" rel="noopener" style="animation-delay:0ms">
       <div class="city-thumb">
         <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
              alt="Black Hawk" loading="lazy"
@@ -1196,14 +1200,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <span class="city-status status-live">● Live via WRC</span>
       </div>
       <div class="city-depts">
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
-        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+        <span class="city-dept">✒ Editorial</span>
+        <span class="city-dept">📧 Marketing</span>
+        <span class="city-dept">📒 Billing</span>
+        <span class="city-dept">🎯 Campaigns</span>
       </div>
     </a>
 
-    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:60ms">
+    <a class="city-card" href="https://centralcity.conews.press/" target="_blank" rel="noopener" style="animation-delay:60ms">
       <div class="city-thumb">
         <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
              alt="Central City" loading="lazy"
@@ -1216,14 +1220,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <span class="city-status status-live">● Live via WRC</span>
       </div>
       <div class="city-depts">
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
-        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+        <span class="city-dept">✒ Editorial</span>
+        <span class="city-dept">📧 Marketing</span>
+        <span class="city-dept">📒 Billing</span>
+        <span class="city-dept">🎯 Campaigns</span>
       </div>
     </a>
 
-    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:120ms">
+    <a class="city-card" href="https://nederland.conews.press/" target="_blank" rel="noopener" style="animation-delay:120ms">
       <div class="city-thumb">
         <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
              alt="Nederland" loading="lazy"
@@ -1236,14 +1240,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <span class="city-status status-dev">⚡ Site Planned</span>
       </div>
       <div class="city-depts">
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
-        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+        <span class="city-dept">✒ Editorial</span>
+        <span class="city-dept">📧 Marketing</span>
+        <span class="city-dept">📒 Billing</span>
+        <span class="city-dept">🎯 Campaigns</span>
       </div>
     </a>
 
-    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:180ms">
+    <a class="city-card" href="https://georgetown.conews.press/" target="_blank" rel="noopener" style="animation-delay:180ms">
       <div class="city-thumb">
         <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
              alt="Georgetown" loading="lazy"
@@ -1256,14 +1260,14 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <span class="city-status status-live">● Live via WRC</span>
       </div>
       <div class="city-depts">
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
-        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+        <span class="city-dept">✒ Editorial</span>
+        <span class="city-dept">📧 Marketing</span>
+        <span class="city-dept">📒 Billing</span>
+        <span class="city-dept">🎯 Campaigns</span>
       </div>
     </a>
 
-    <a class="city-card" href="https://registercall.com" target="_blank" style="animation-delay:240ms">
+    <a class="city-card" href="https://idahosprings.conews.press/" target="_blank" rel="noopener" style="animation-delay:240ms">
       <div class="city-thumb">
         <img src="https://s0.wordpress.com/mshots/v1/https%3A%2F%2Fregistercall.com%2F?w=420&h=260"
              alt="Idaho Springs" loading="lazy"
@@ -1276,10 +1280,10 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:1
         <span class="city-status status-dev">⚡ Site Planned</span>
       </div>
       <div class="city-depts">
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">✒ Editorial</a>
-        <a class="city-dept" href="/newsletter" onclick="event.stopPropagation()">📧 Marketing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">📒 Billing</a>
-        <a class="city-dept" href="/" onclick="event.stopPropagation()">🎯 Campaigns</a>
+        <span class="city-dept">✒ Editorial</span>
+        <span class="city-dept">📧 Marketing</span>
+        <span class="city-dept">📒 Billing</span>
+        <span class="city-dept">🎯 Campaigns</span>
       </div>
     </a>
 
@@ -1311,7 +1315,7 @@ async function hydrateCoNewsRollout(){
       const meta = [site.canonicalHost, (site.pillars || []).join(', ')].filter(Boolean).join(' · ');
       const cardClass = ['site-card', escapeHtml(site.statusClass || '')].filter(Boolean).join(' ');
       return `
-        <div class="${cardClass}" data-site="${escapeHtml(site.slug)}">
+        <a class="${cardClass}" data-site="${escapeHtml(site.slug)}" href="${escapeHtml(site.url || `https://${site.canonicalHost || site.propertyHost || 'registercall.com'}/`)}" target="_blank" rel="noopener">
           <div class="site-card-thumb"><img src="${escapeHtml(site.thumbnail)}" alt="${escapeHtml(site.alt || site.name)}" loading="lazy"></div>
           <div class="site-card-body">
             <div class="site-card-top"><div class="site-card-name">${escapeHtml(site.name)}</div><div class="site-card-status">${escapeHtml(site.status)}</div></div>
@@ -1319,7 +1323,7 @@ async function hydrateCoNewsRollout(){
             <div class="site-card-lane">${tags}</div>
             <div class="site-next"><span>Next</span> ${escapeHtml(site.nextAction)}</div>
           </div>
-        </div>
+        </a>
       `;
     }).join('');
 

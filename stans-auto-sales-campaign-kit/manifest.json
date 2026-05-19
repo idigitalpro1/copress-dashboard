@@ -1,0 +1,142 @@
+{
+  "campaign": "Stan's Auto Sales - Westminster Family Car Finder",
+  "brand": "Stan's Auto Sales, LLC",
+  "version": "1.3.0",
+  "created": "2026-05-18",
+  "sourcePattern": "CoNewsPress advertiser showcase spine with landing page, newsletter block, banner set, social copy, print/direct mail/audio handoff, production kanban, owner SMS, drip sequence, and invoice mapping.",
+  "sourceUrl": "https://maps.apple/p/dqJ1wsBsLBnR7g",
+  "audience": [
+    "Westminster and north Denver used-car shoppers",
+    "Families replacing a daily driver",
+    "First-time buyers comparing practical pre-owned options",
+    "Commuters looking for cars, SUVs, vans, trucks, and wagons",
+    "Local shoppers who want to call before visiting the lot"
+  ],
+  "positioning": "A local Westminster used-auto dealer campaign that turns inventory browsing into a simple call, visit, and test-drive path for practical Front Range vehicle shoppers.",
+  "colors": {
+    "asphalt": "#15191c",
+    "steel": "#34444d",
+    "signal": "#2f8d66",
+    "paper": "#f6f1e8",
+    "gold": "#d49b38",
+    "red": "#d83f31",
+    "ink": "#1d2428"
+  },
+  "fonts": {
+    "display": "Saira Condensed",
+    "body": "Archivo"
+  },
+  "assets": {
+    "hero": "https://cdn.dealrimages.com/QO/4W/DF/UWXRDLEWBZKELN.jpg",
+    "inventoryA": "https://cdn.dealrimages.com/TA/OT/D5/ENH6JVAOFWZPUO.jpg",
+    "inventoryB": "https://cdn.dealrimages.com/3L/RG/6W/H0WV9ZPJSND1YN.jpg",
+    "inventoryC": "https://cdn.dealrimages.com/EN/EC/P3/HTTSPHUIP9EBFK.jpg"
+  },
+  "deliverables": {
+    "showcase": "index.html",
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-skyscraper-160x600.html",
+      "banners/banner-half-page-300x600.html",
+      "banners/banner-mobile-320x50.html",
+      "banners/banner-social-square-1080x1080.html"
+    ],
+    "email": [
+      "email/newsletter-family-car-finder.html"
+    ],
+    "editorial": [
+      "editorial/campaign-copy.md",
+      "editorial/sponsored-editorial-sample.md",
+      "editorial/social-media-copy.md"
+    ],
+    "social": [
+      "social/social-card-local-search.html",
+      "social/social-card-weekend-reminder.html"
+    ],
+    "landingPages": [
+      "landing-pages/stansauto-5280-menu.html"
+    ],
+    "pricing": [
+      "pricing/menu-pricing.md"
+    ],
+    "print": [
+      "print/lot-card.md",
+      "print/direct-mail-postcard.md"
+    ],
+    "audio": [
+      "audio/radio-spot.md"
+    ],
+    "crm": [
+      "crm/drip-sequence.md"
+    ],
+    "data": [
+      "data/stans-inventory-snapshot.json",
+      "data/stans-inventory-snapshot.csv",
+      "data/stans-inventory-snapshot.md"
+    ],
+    "handoff": [
+      "handoff/owner-sms.txt",
+      "handoff/owner-email.md",
+      "handoff/production-kanban.json",
+      "handoff/linear-kanban-manus-template.md",
+      "handoff/linear-kanban-manus-template.json",
+      "handoff/internal-prospect-onboarding-command.md",
+      "handoff/stans-inventory-scrape-command.md"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ]
+  },
+  "internalOnly": {
+    "note": "Top 20 prospect onboarding is an operator prompt command only. Do not link these files from client, advertiser, or owner-facing campaign pages.",
+    "prospectOnboarding": [
+      "prospects/top-20-prospects.html",
+      "prospects/top-20-prospects.json",
+      "prospects/top-20-prospects.csv",
+      "prospects/industry-kit-buildout.md"
+    ],
+    "inventoryScrape": [
+      "data/stans-inventory-snapshot.json",
+      "data/stans-inventory-snapshot.csv",
+      "data/stans-inventory-snapshot.md"
+    ]
+  },
+  "lastInventoryScrape": {
+    "sourceUrl": "https://www.stansautosalesllc.com/inventory",
+    "scrapeTool": "firecrawl-scrape skill",
+    "scrapeId": "019e3cb2-1912-74ec-805e-f640ae1a0ecf",
+    "scrapedAt": "2026-05-18T20:07:12.573241+00:00",
+    "vehicleCount": 37,
+    "availableCount": 34,
+    "soldCount": 3,
+    "claimGuidance": "Inventory, mileage, price, availability, financing, warranty, and vehicle-specific claims must be rechecked with Stan's Auto Sales before publication."
+  },
+  "officialFacts": {
+    "website": "https://www.stansautosalesllc.com/",
+    "inventory": "https://www.stansautosalesllc.com/inventory",
+    "financing": "https://www.stansautosalesllc.com/get-financed",
+    "phone": "(303) 650-1011",
+    "email": "stansasllc@gmail.com",
+    "address": "7192 Newton St, Westminster, CO 80030",
+    "hours": "Monday through Saturday 9:00 AM to 6:00 PM; Sunday closed.",
+    "proofPoints": [
+      "Served the Westminster and surrounding Denver area since 1998",
+      "Two Time State Quality Dealer 2010 and 2018",
+      "Colorado Independent Automobile Dealers Association reference",
+      "Repeat and referral customer positioning on official site"
+    ],
+    "inventoryTypes": ["cars", "SUVs", "vans", "trucks", "wagons"],
+    "claimGuidance": "Verify vehicle availability, mileage, price, and financing terms before publishing any specific unit claim."
+  },
+  "operatorSuppliedContact": {
+    "name": "Scott Swan",
+    "organization": "Stans Auto",
+    "phone": "+1-720-371-5021",
+    "source": "Scott Swan.vcf supplied by operator on 2026-05-18",
+    "usage": "Campaign contact / direct sales follow-up contact. Keep separate from verified dealership main phone unless the operator approves replacing the public CTA."
+  },
+  "modelPolicy": "free-local-models",
+  "artRoute": "Official public web inventory assets referenced by URL; premium generated artwork not required."
+}

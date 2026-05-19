@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Top 20 Auto Prospect Onboarding Links</title>
+  <style>
+    :root { --blacktop:#0b1114; --cream:#fffaf1; --signal:#f2b84b; --red:#d83f31; --muted:#9fb2b7; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--blacktop); color:var(--cream); font-family:Arial,sans-serif; }
+    main { width:min(1180px,100%); margin:auto; padding:34px 18px; }
+    h1 { margin:0 0 10px; font-size:clamp(36px,7vw,72px); line-height:.95; text-transform:uppercase; }
+    p { color:var(--muted); line-height:1.55; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-top:24px; }
+    article { display:grid; gap:12px; min-height:214px; padding:16px; border:1px solid rgba(255,255,255,.14); border-radius:8px; background:rgba(255,255,255,.065); }
+    b { color:var(--signal); font-size:11px; text-transform:uppercase; }
+    h2 { margin:0; font-size:22px; line-height:1; text-transform:uppercase; }
+    .actions { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:auto; }
+    a { display:inline-flex; align-items:center; justify-content:center; min-height:34px; border:1px solid rgba(255,255,255,.16); border-radius:6px; color:var(--cream); text-decoration:none; font-size:11px; font-weight:800; text-transform:uppercase; }
+    a:hover { color:var(--blacktop); background:var(--signal); }
+    .toplinks { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; }
+    .toplinks a { padding:10px 12px; }
+    @media (max-width:900px){ .grid{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:560px){ .grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Top 20 Prospect Onboarding</h1>
+  <p><strong>Internal operator artifact only.</strong> Do not publish or link this from the client, advertiser, or owner-facing campaign kit page.</p>
+  <p>Each card has the three send formats needed for an industry kit: email onboarding, SMS onboarding, and web preview. Replace the recipient before sending when the prospect contact is known.</p>
+  <div class="toplinks">
+    <a href="../index.html#assets">Back to asset kit</a>
+    <a href="./top-20-prospects.json">JSON</a>
+    <a href="./top-20-prospects.csv">CSV</a>
+    <a href="./industry-kit-buildout.md">Kit checklist</a>
+  </div>
+  <section class="grid" id="cards"></section>
+</main>
+<script>
+const prospects = [
+  ['auto-01','Independent used auto dealer','Inventory, call-ahead, and local trust campaign'],
+  ['auto-02','Family auto lot','Daily-driver and family-safe category campaign'],
+  ['auto-03','Auto repair shop','Diagnostics, service bays, and appointment requests'],
+  ['auto-04','Tire and alignment shop','Seasonal tire, safety, and appointment campaigns'],
+  ['auto-05','Detailing studio','Before-and-after visuals and gift-card pushes'],
+  ['auto-06','Body shop','Estimate requests and damage-photo intake'],
+  ['auto-07','Towing company','Phone-first emergency visibility'],
+  ['auto-08','Car wash','Membership, weekend wash, and fleet wash campaigns'],
+  ['auto-09','RV and trailer sales','Seasonal adventure inventory'],
+  ['auto-10','Powersports dealer','Motorcycle, ATV, and seasonal gear campaigns'],
+  ['auto-11','Fleet service company','B2B maintenance and scheduled service outreach'],
+  ['auto-12','Auto glass shop','Repair and replacement request flow'],
+  ['auto-13','Quick lube shop','Reminder-driven oil-change campaigns'],
+  ['auto-14','Transmission shop','Diagnosis requests and trust-building proof'],
+  ['auto-15','Mobile mechanic','Service-area and appointment-ready campaign'],
+  ['auto-16','Auto parts store','DIY driver and seasonal readiness campaign'],
+  ['auto-17','Window tint and wrap shop','Before-and-after visual creative'],
+  ['auto-18','Auto insurance agency','Referral-safe visibility with no rate promises'],
+  ['auto-19','Credit union auto loan desk','Education and appointment handoff only'],
+  ['auto-20','Local fleet buyer program','Work truck, van, and fleet replacement outreach']
+];
+const kit = 'https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/';
+document.getElementById('cards').innerHTML = prospects.map(([id,title,fit], index) => {
+  const web = `${kit}?prospect=${id}`;
+  const email = `mailto:?subject=${encodeURIComponent(title + ' campaign kit')}&body=${encodeURIComponent("Here is a Stan's-style industry kit preview: " + web + ' Reply with business name, website, logo, phone, photos, best offer, and approval contact to build your version.')}`;
+  const sms = `sms:?&body=${encodeURIComponent('Industry kit preview: ' + web + ' Reply with website, logo, photos, offer, and approval contact to build your version.')}`;
+  return `<article><b>Prospect ${String(index + 1).padStart(2,'0')}</b><h2>${title}</h2><p>${fit}</p><div class="actions"><a href="${email}">Email</a><a href="${sms}">SMS</a><a href="${web}">Web</a></div></article>`;
+}).join('');
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "title": "240 Deer Road - Evergreen A-Frame Retreat",
+  "description": "A real estate showcase campaign site for 240 Deer Rd in Evergreen, Colorado: an active $525,000 A-frame cabin with 3 beds, 1 bath, 1,270 square feet, one acre, mountain views, updated kitchen finishes, deck living, and room to grow.",
+  "canonical": "https://copress-dashboard.vercel.app/240-deer-road-campaign-kit/",
+  "keywords": [
+    "240 Deer Rd Evergreen CO",
+    "Evergreen A-frame cabin",
+    "Evergreen Colorado real estate",
+    "Brook Forest Estates home",
+    "Clear Creek County homes",
+    "Evergreen mountain cabin"
+  ],
+  "openGraph": {
+    "type": "website",
+    "title": "240 Deer Road - Evergreen A-Frame Retreat",
+    "description": "A one-acre Evergreen A-frame with mountain character, updated finishes, deck living, and expansion potential.",
+    "image": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_0_27108/origin.jpg"
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "240 Deer Road - Evergreen A-Frame Retreat",
+    "description": "3 beds, 1 bath, 1,270 square feet, one acre, active at $525,000.",
+    "image": "https://www.compass.com/m/42114221f1182f5f95b13f86f66987120ed0aa86_img_0_27108/origin.jpg"
+  }
+}

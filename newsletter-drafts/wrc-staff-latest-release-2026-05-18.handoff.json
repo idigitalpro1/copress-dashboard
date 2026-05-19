@@ -1,0 +1,45 @@
+{
+  "id": "wrc-staff-latest-release-2026-05-18",
+  "type": "staff_newsletter",
+  "publication": "WRC",
+  "publication_name": "Weekly Register-Call",
+  "audience": "internal_staff",
+  "status": "draft",
+  "source_kind": "latest_verified_local_release",
+  "source_issue": "WRC 5-7-26",
+  "source_path": "/Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC 5-7-26/",
+  "stationery_path": "/Users/Ace/Codex/Brand_Assets/Stationary - WRC/",
+  "newsletter_studio_path": "/Users/Ace/Codex/apps/copress-dashboard/newsletter.html",
+  "subject": "WRC Staff Brief: May 7 release packet, web pushes, and production priorities",
+  "preview": "Mighty Argo opening, Black Hawk's patriotic summer, a drone-assisted backcountry rescue, Steve Cole's sendoff, Central City events, Floyd Hill closures, library updates, sports, legals, and active ad checks.",
+  "send_guardrail": "Internal staff draft only. Confirm public issue URL before using as subscriber newsletter.",
+  "lead_order": [
+    "Mighty Argo opening",
+    "Drone-assisted injured skier rescue",
+    "Black Hawk patriotic summer and Founders' Day",
+    "I-70 Floyd Hill overnight closures"
+  ],
+  "action_items": [
+    "Production confirms final May 7 page proof.",
+    "Editorial chooses four web leads.",
+    "Photo desk pulls Argo, Black Hawk banner, and Steve Cole retirement selects.",
+    "Newsletter queues WRC issue-release email after public URL confirmation.",
+    "Sales/admin reconciles Mediabids, legal notices, and billing notes."
+  ],
+  "clickable_links": {
+    "may_7_packet": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/",
+    "page_proof_1_7": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%201-7.pdf",
+    "page_proof_8_9": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%208-9.pdf",
+    "page_proof_10_16": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%2010-16.pdf",
+    "argo_opening_photos": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/Argo%20opening/",
+    "black_hawk_patriotic_photos": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/Black%20Hawk%20Patriotic%20summer/",
+    "steve_cole_retirement_photos": "file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/Steve%20Cole%20Retirement/",
+    "newsletter_studio": "file:///Users/Ace/Codex/apps/copress-dashboard/newsletter.html",
+    "stationery_hub": "file:///Users/Ace/Codex/frontend/admin-spa/public/stationery-hub.html",
+    "public_issue_archive": "https://weeklyregistercall.com/issues/"
+  },
+  "artifacts": {
+    "html": "/Users/Ace/Codex/apps/copress-dashboard/newsletter-drafts/wrc-staff-latest-release-2026-05-18.html",
+    "markdown": "/Users/Ace/Codex/apps/copress-dashboard/newsletter-drafts/wrc-staff-latest-release-2026-05-18.md"
+  }
+}

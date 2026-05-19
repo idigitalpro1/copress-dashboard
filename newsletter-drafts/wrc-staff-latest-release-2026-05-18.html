@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230d1f0d'/%3E%3Ctext x='32' y='39' text-anchor='middle' font-family='Georgia,serif' font-size='20' fill='%23b7985a'%3EWRC%3C/text%3E%3C/svg%3E">
+  <title>WRC Staff Brief - May 7 Release Packet</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --wrc-ink: #3a2713;
+      --wrc-gold: #b7985a;
+      --wrc-paper: #f9f4e8;
+      --wrc-green: #0d1f0d;
+      --wrc-rule: #d9c9a7;
+      --wrc-red: #8b1e1e;
+      --wrc-muted: #665a4c;
+      --wrc-soft: #fffaf0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--wrc-paper);
+      color: var(--wrc-ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    a {
+      color: var(--wrc-red);
+      text-decoration: none;
+      font-weight: 700;
+    }
+
+    .page {
+      width: 100%;
+      padding: 28px 14px;
+      box-sizing: border-box;
+    }
+
+    .sheet {
+      max-width: 760px;
+      margin: 0 auto;
+      background: #fffdf7;
+      border: 1px solid var(--wrc-rule);
+      box-shadow: 0 20px 70px rgba(58, 39, 19, 0.14);
+    }
+
+    .stationery-top {
+      background:
+        linear-gradient(135deg, rgba(183, 152, 90, 0.18), transparent 38%),
+        radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.18), transparent 30%),
+        var(--wrc-green);
+      color: #fffaf0;
+      padding: 26px 34px 24px;
+      text-align: center;
+      border-bottom: 5px solid var(--wrc-gold);
+    }
+
+    .flagline {
+      margin: 0 0 8px;
+      color: #eadbb8;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .masthead {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 38px;
+      line-height: 1.02;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+    }
+
+    .stationery-meta {
+      margin: 11px 0 0;
+      color: #e6d6aa;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .issue-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 34px;
+      background: #fbf2df;
+      border-bottom: 1px solid var(--wrc-rule);
+      color: var(--wrc-muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .body {
+      padding: 30px 34px 34px;
+    }
+
+    .kicker {
+      display: inline-block;
+      margin-bottom: 12px;
+      color: var(--wrc-red);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--wrc-ink);
+      line-height: 1.18;
+    }
+
+    h1 {
+      font-size: 31px;
+      max-width: 640px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+
+    h3 {
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0 0 15px;
+    }
+
+    .intro {
+      margin-top: 16px;
+      max-width: 680px;
+      color: #49372a;
+      font-size: 16px;
+    }
+
+    .callout {
+      margin: 24px 0;
+      padding: 16px 18px;
+      background: var(--wrc-soft);
+      border: 1px solid var(--wrc-rule);
+      border-left: 5px solid var(--wrc-gold);
+    }
+
+    .callout strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--wrc-red);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 20px 0 28px;
+    }
+
+    .quick-links a {
+      display: flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 12px;
+      background: var(--wrc-green);
+      color: #fffaf0;
+      border: 1px solid rgba(183, 152, 90, 0.58);
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.25;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .quick-links a.secondary {
+      background: #fffaf0;
+      color: var(--wrc-ink);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 18px 0 26px;
+    }
+
+    .story-card {
+      min-height: 142px;
+      padding: 16px 16px 15px;
+      background: #ffffff;
+      border: 1px solid #eadfca;
+      box-sizing: border-box;
+    }
+
+    .story-card .tag {
+      margin-bottom: 8px;
+      color: var(--wrc-red);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .story-card p {
+      margin: 0;
+      color: #5b5145;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .actions {
+      margin: 18px 0 26px;
+      padding: 0;
+      list-style: none;
+      counter-reset: action;
+    }
+
+    .actions li {
+      counter-increment: action;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 12px;
+      padding: 13px 0;
+      border-top: 1px solid #eadfca;
+    }
+
+    .actions li::before {
+      content: counter(action, decimal-leading-zero);
+      display: inline-flex;
+      width: 36px;
+      height: 36px;
+      align-items: center;
+      justify-content: center;
+      background: var(--wrc-green);
+      color: var(--wrc-gold);
+      font-size: 12px;
+      font-weight: 800;
+      border-radius: 50%;
+    }
+
+    .actions strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--wrc-ink);
+      font-size: 14px;
+    }
+
+    .actions span {
+      display: block;
+      color: #5f5549;
+      font-size: 13px;
+    }
+
+    .link-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 26px;
+      font-size: 13px;
+    }
+
+    .link-table th,
+    .link-table td {
+      padding: 11px 10px;
+      border-top: 1px solid #eadfca;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .link-table th {
+      width: 27%;
+      color: var(--wrc-red);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .path {
+      display: block;
+      margin-top: 3px;
+      color: #6d6257;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .footer {
+      padding: 18px 34px 22px;
+      background: #f5ecda;
+      border-top: 1px solid var(--wrc-rule);
+      color: #6b5d4d;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .footer strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--wrc-ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 16px;
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        padding: 0;
+      }
+
+      .stationery-top,
+      .body,
+      .footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .masthead {
+        font-size: 30px;
+      }
+
+      .issue-bar {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-links {
+        grid-template-columns: 1fr;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <article class="sheet">
+      <header class="stationery-top">
+        <p class="flagline">Newspaper since 1862</p>
+        <h1 class="masthead">Weekly Register-Call</h1>
+        <p class="stationery-meta">111 Eureka St - Central City, Colorado - 303-830-1800</p>
+      </header>
+
+      <div class="issue-bar">
+        <span>Draft Staff Brief</span>
+        <span>Latest verified local release: WRC 5-7-26</span>
+      </div>
+
+      <section class="body">
+        <span class="kicker">Subject line</span>
+        <h1>WRC Staff Brief: May 7 release packet, web pushes, and production priorities</h1>
+        <p class="intro">
+          Staff note: the May 7 Weekly Register-Call packet is ready for final review and release support. This draft uses the WRC stationery lane and is intended for staff only: production, editorial, sales, and web should use it to close the page proof, select web/social leads, and queue the next newsletter.
+        </p>
+
+        <div class="callout">
+          <strong>Preview text</strong>
+          Mighty Argo opening, Black Hawk's patriotic summer, a drone-assisted backcountry rescue, Steve Cole's sendoff, Central City events, Floyd Hill closures, library updates, sports, legals, and active ad checks.
+        </div>
+
+        <nav class="quick-links" aria-label="Staff newsletter quick links">
+          <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/">Open May 7 Packet</a>
+          <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%201-7.pdf">Page Proof 1-7</a>
+          <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%2010-16.pdf">Page Proof 10-16</a>
+          <a class="secondary" href="file:///Users/Ace/Codex/apps/copress-dashboard/newsletter.html">Newsletter Studio</a>
+          <a class="secondary" href="https://weeklyregistercall.com/issues/" target="_blank" rel="noopener">Public Issue Archive</a>
+          <a class="secondary" href="file:///Users/Ace/Codex/frontend/admin-spa/public/stationery-hub.html">WRC Stationery Hub</a>
+        </nav>
+
+        <h2>Release Highlights</h2>
+        <div class="grid">
+          <section class="story-card">
+            <div class="tag">Lead package</div>
+            <h3>Mighty Argo rises on May Day</h3>
+            <p>Use the Argo opening story and image folders as the visual lead. Strong fit for homepage, newsletter hero, and one high-impact social card.</p>
+          </section>
+          <section class="story-card">
+            <div class="tag">Public safety</div>
+            <h3>Drone assists injured skier rescue</h3>
+            <p>Good web and social performer: Gilpin Sheriff's drone support, multi-agency rescue, and clear local utility of the department's drone program.</p>
+          </section>
+          <section class="story-card">
+            <div class="tag">Black Hawk</div>
+            <h3>Patriotic summer and Founders' Day</h3>
+            <p>Pair the story with banner images and Founders' Day timing. Good for civic calendar, Facebook preview, and advertiser adjacency.</p>
+          </section>
+          <section class="story-card">
+            <div class="tag">People</div>
+            <h3>Steve Cole retirement sendoff</h3>
+            <p>Community-recognition story with a full photo set. Use as the staff-friendly people piece and a strong Black Hawk web feature.</p>
+          </section>
+          <section class="story-card">
+            <div class="tag">Traffic</div>
+            <h3>I-70 Floyd Hill overnight closures</h3>
+            <p>Time-sensitive service item. Keep it clean, prominent, and shareable because closures begin the week after this issue.</p>
+          </section>
+          <section class="story-card">
+            <div class="tag">Community desk</div>
+            <h3>Calendar, library, sports, briefs</h3>
+            <p>Round out the release with Central City summer dates, Gilpin Library May events, graduation/sports notes, news briefs, and legal notices.</p>
+          </section>
+        </div>
+
+        <h2>Staff Action Items</h2>
+        <ul class="actions">
+          <li>
+            <div>
+              <strong>Production: confirm the final proof.</strong>
+              <span>Check page PDFs against originals, then mark the May 7 proof as the final page source for internal reference.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Editorial: choose four web leads.</strong>
+              <span>Recommended order: Mighty Argo opening, drone rescue, Black Hawk Founders' Day, CDOT Floyd Hill closures.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Photo desk: pull image selects.</strong>
+              <span>Use Argo opening, Black Hawk banner, and Steve Cole retirement folders first; keep captions tied to the source file names.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Newsletter: queue WRC issue-release email.</strong>
+              <span>Use the WRC issue template with the subject above; keep the staff draft separate from the public subscriber email.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Sales/admin: reconcile ads and legals.</strong>
+              <span>Verify Mediabids placements, legal notice package, and any public-notice billing notes before public archive handoff.</span>
+            </div>
+          </li>
+        </ul>
+
+        <h2>Production Links</h2>
+        <table class="link-table">
+          <tr>
+            <th>Issue packet</th>
+            <td>
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/">Open latest verified local release packet</a>.
+              <span class="path">/Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC 5-7-26/</span>
+            </td>
+          </tr>
+          <tr>
+            <th>Page proofs</th>
+            <td>
+              Final PDF candidates:
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%201-7.pdf">open pages 1-7</a>,
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%208-9.pdf">open pages 8-9</a>,
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/%20_Pages_%20WRC050726-A1/WRC%205-7-26%20pg%2010-16.pdf">open pages 10-16</a>.
+              <span class="path">/Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC 5-7-26/ _Pages_ WRC050726-A1/</span>
+            </td>
+          </tr>
+          <tr>
+            <th>Photo folders</th>
+            <td>
+              Select visuals from
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/Argo%20opening/">Argo opening</a>,
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/Black%20Hawk%20Patriotic%20summer/">Black Hawk patriotic summer</a>,
+              and
+              <a href="file:///Users/Ace/Codex/05_PDF_Workflow/00_Drop/WRC%205-7-26/Steve%20Cole%20Retirement/">Steve Cole retirement</a>.
+            </td>
+          </tr>
+          <tr>
+            <th>Stationery</th>
+            <td>
+              WRC stationery source and current
+              <a href="file:///Users/Ace/Codex/frontend/admin-spa/public/stationery-hub.html">SATCOM stationery hub</a>.
+              <span class="path">/Users/Ace/Codex/Brand_Assets/Stationary - WRC/</span>
+              <span class="path">/Users/Ace/Codex/frontend/admin-spa/public/stationery-hub.html</span>
+            </td>
+          </tr>
+          <tr>
+            <th>Newsletter Studio</th>
+            <td>
+              <a href="file:///Users/Ace/Codex/apps/copress-dashboard/newsletter.html">Open SATCOM Newsletter Studio</a> for subscriber version and HTML export.
+              <span class="path">/Users/Ace/Codex/apps/copress-dashboard/newsletter.html</span>
+            </td>
+          </tr>
+          <tr>
+            <th>Public archive</th>
+            <td>
+              <a href="https://weeklyregistercall.com/issues/" target="_blank" rel="noopener">Open Weekly Register-Call issue archive</a>.
+              Confirm the May 7 public URL before sending a subscriber-facing issue email.
+            </td>
+          </tr>
+        </table>
+
+        <div class="callout">
+          <strong>Draft note</strong>
+          Public search currently surfaces the April 30 WRC PDF more reliably than the May 7 packet, so this staff draft is anchored to the freshest verified local source in the production folder. Do not send as a public subscriber email until the public issue URL is confirmed.
+        </div>
+      </section>
+
+      <footer class="footer">
+        <strong>Weekly Register-Call</strong>
+        Central City and Black Hawk, Colorado<br>
+        News Desk: news@weeklyregistercall.com - Publisher: patrick@weeklyregistercall.com - RegisterCall.com
+      </footer>
+    </article>
+  </main>
+</body>
+</html>

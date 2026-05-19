@@ -1,0 +1,50 @@
+{
+  "campaign": "Stan's Auto Sales - Westminster Family Car Finder",
+  "columns": [
+    {
+      "name": "Ready",
+      "cards": [
+        "Owner review link and one-paragraph SMS",
+        "Verified public facts: address, phone, hours, email, since-1998 proof, dealer awards",
+        "Creative guardrails: no specific vehicle claims without same-day inventory verification"
+      ]
+    },
+    {
+      "name": "Design",
+      "cards": [
+        "Owner-ready landing page with premium road graphics and inventory photos",
+        "Display set: leaderboard, medium rectangle, mobile, social square, skyscraper, half-page",
+        "Newsletter block for Sendy/manual placement"
+      ]
+    },
+    {
+      "name": "Copy",
+      "cards": [
+        "Campaign copy pack",
+        "Social post pack",
+        "Owner email handoff",
+        "Print card, direct mail, radio spot, and CRM drip"
+      ]
+    },
+    {
+      "name": "Send",
+      "cards": [
+        "Newsletter Studio marketing sponsor block",
+        "Shop Local directory profile",
+        "CoMSAT intake card",
+        "StansAuto.5280.menu sample landing placement",
+        "Print strip and direct mail postcard",
+        "Radio, podcast, or phone-hold read"
+      ]
+    },
+    {
+      "name": "Track",
+      "cards": [
+        "Route responses to Scott Swan while preserving the main lot phone",
+        "Confirm inventory before every send or post",
+        "Select $50/month ten-post plan or immediate menu placement",
+        "Map billing to IM-210 through IM-715"
+      ]
+    }
+  ]
+}

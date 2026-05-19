@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title data-bind="title">ShopLocal Campaign Kit</title>
+<meta name="description" data-bind="description" content="" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link id="gfonts" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Work+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#123026; --panel:#173a2d; --line:rgba(216,208,193,.18);
+    --accent:#b56b3c; --accent2:#6f7f49; --text:#f8f4ec; --mute:#cdbfa6;
+    --font-display:"Fraunces",serif; --font-body:"Work Sans",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font-body);line-height:1.6}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .serif{font-family:var(--font-display)}
+  a{color:inherit}
+  .shell{display:grid;grid-template-columns:1fr 340px;gap:0;min-height:100vh}
+  @media(max-width:1024px){.shell{grid-template-columns:1fr}}
+  .main{min-width:0}
+  .wrap{max-width:880px;margin:0 auto;padding:0 26px}
+  nav.top{display:flex;justify-content:space-between;align-items:center;padding:20px 26px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:30}
+  nav.top .b{font-family:var(--font-display);font-size:18px;font-weight:800}
+  nav.top a{font-size:13px;letter-spacing:.04em;margin-left:18px;color:var(--mute);text-decoration:none}
+  nav.top a:hover{color:var(--text)}
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  .eyebrow{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  h1{font-family:var(--font-display);font-size:clamp(38px,6vw,68px);line-height:1.04;font-weight:800}
+  h2{font-family:var(--font-display);font-size:clamp(26px,4vw,40px);font-weight:800;margin-bottom:22px}
+  .lede{font-size:18px;color:var(--mute);max-width:620px;margin-top:18px}
+  .hero{padding:90px 0 70px;background:radial-gradient(800px 360px at 80% -10%,color-mix(in oklab,var(--accent) 26%,transparent),transparent 60%)}
+  .hero img{width:100%;border-radius:10px;margin-top:34px;border:1px solid var(--line);display:block}
+  .links2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:680px){.links2{grid-template-columns:1fr}}
+  .lk{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column;gap:10px}
+  .lk .n{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)}
+  .lk h3{font-family:var(--font-display);font-size:21px}
+  .lk .u{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:5px;padding:9px 11px;word-break:break-all}
+  .btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;letter-spacing:.04em;padding:11px 18px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;text-decoration:none}
+  .btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn:hover{filter:brightness(1.08)}
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media(max-width:680px){.gallery{grid-template-columns:1fr 1fr}}
+  .gallery img{width:100%;height:150px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+  /* Expandable kanban / SEO kit */
+  .kit-toolbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+  .acc{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .acc + .acc{margin-top:12px}
+  .acc > summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;background:var(--panel);font-weight:700}
+  .acc > summary::-webkit-details-marker{display:none}
+  .acc > summary .c{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--mute)}
+  .acc[open] > summary{border-bottom:1px solid var(--line)}
+  .acc .pad{padding:18px 20px}
+  .kan{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  @media(max-width:780px){.kan{grid-template-columns:1fr 1fr}}
+  .col{background:rgba(0,0,0,.2);border:1px solid var(--line);border-radius:8px;padding:10px;min-height:90px}
+  .col h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+  .ticket{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:12px;margin-bottom:7px}
+  ul.seo{list-style:none;display:grid;gap:8px}
+  ul.seo li{display:flex;justify-content:space-between;font-size:13px;border-bottom:1px dashed var(--line);padding:7px 0}
+  ul.seo li span:last-child{font-family:"JetBrains Mono",monospace;color:var(--accent2)}
+  /* Sidebar cart */
+  aside.cart{border-left:1px solid var(--line);background:var(--panel);position:sticky;top:0;align-self:start;height:100vh;display:flex;flex-direction:column}
+  @media(max-width:1024px){aside.cart{position:static;height:auto;border-left:0;border-top:1px solid var(--line)}}
+  .cart .h{padding:20px;border-bottom:1px solid var(--line)}
+  .cart .h .t{font-family:var(--font-display);font-size:20px;font-weight:800}
+  .cart .h .s{font-size:12px;color:var(--mute);margin-top:4px}
+  .cart .menu{padding:16px 18px;overflow:auto;flex:1}
+  .pi{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+  .pi .nm{font-size:14px}.pi .pr{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent)}
+  .pi button{font-size:12px;font-weight:700;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:5px;padding:6px 10px;cursor:pointer}
+  .pi button:hover{border-color:var(--accent)}
+  .cartlist{padding:14px 18px;border-top:1px solid var(--line);background:rgba(0,0,0,.18)}
+  .ci{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--mute)}
+  .cart .foot{padding:18px;border-top:1px solid var(--line)}
+  .cart .tot{display:flex;justify-content:space-between;font-weight:800;margin-bottom:6px}
+  .cart .trial{font-size:12px;color:var(--accent2);margin-bottom:12px}
+  .cart .foot .btn.solid{width:100%;justify-content:center}
+  /* Checkout modal */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;z-index:90;padding:20px}
+  .ov.open{display:flex}
+  .modal{background:var(--bg);border:1px solid var(--line);border-radius:12px;max-width:440px;width:100%;padding:26px}
+  .modal h3{font-family:var(--font-display);font-size:24px;margin-bottom:6px}
+  .modal p.sub{color:var(--mute);font-size:13px;margin-bottom:18px}
+  .modal label{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:12px 0 5px}
+  .modal input{width:100%;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:6px;color:var(--text);padding:11px;font-size:14px}
+  .modal .req{font-size:12px;color:var(--accent);margin:14px 0}
+  .modal .row{display:flex;gap:10px;margin-top:18px}
+  .ok{display:none;text-align:center;padding:10px 0}
+  .ok.show{display:block}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <nav class="top">
+      <div class="b" data-bind="brand">Brand</div>
+      <div><a href="#two-links">Campaign Kit</a><a href="#customer">Customer Link</a><a href="#kit">Kanban / SEO</a></div>
+    </nav>
+
+    <div class="hero"><div class="wrap">
+      <div class="eyebrow" data-bind="ecosystem">ShopLocal Campaign Kit</div>
+      <h1 data-bind="tagline">Tagline</h1>
+      <p class="lede" data-bind="positioning">Positioning</p>
+      <img data-bind-src="heroImage" alt="" />
+    </div></div>
+
+    <section id="two-links"><div class="wrap">
+      <div class="eyebrow">Two links only</div>
+      <h2>One kit. Two links.</h2>
+      <div class="links2">
+        <div class="lk">
+          <div class="n">Link 1 · Campaign Kit</div>
+          <h3>Operator landing</h3>
+          <div class="u" data-bind="linkCampaign">#kit</div>
+          <a class="btn" href="#kit">Jump to kit ↓</a>
+        </div>
+        <div class="lk">
+          <div class="n">Link 2 · Customer Link</div>
+          <h3 data-bind="customerKitName">Customer kit</h3>
+          <div class="u" data-bind="linkCustomer">#customer</div>
+          <a class="btn solid" data-bind-href="linkCustomer" target="_blank" rel="noopener">Open customer link ↗</a>
+        </div>
+      </div>
+    </div></section>
+
+    <section id="customer" class="buyer"><div class="wrap">
+      <div class="eyebrow">Customer-facing</div>
+      <h2 data-bind="customerKitName">Customer kit</h2>
+      <p class="lede" data-bind="customerBlurb">Customer blurb.</p>
+    </div></section>
+
+    <section id="overview"><div class="wrap">
+      <div class="eyebrow">Listing / business</div>
+      <h2>Overview</h2>
+      <p class="lede" data-bind="positioning"></p>
+      <ul class="seo" id="facts" style="margin-top:20px;max-width:560px"></ul>
+    </div></section>
+
+    <section id="gallery"><div class="wrap">
+      <div class="eyebrow">Showcase</div>
+      <h2>Gallery</h2>
+      <div class="gallery" id="gallery"></div>
+    </div></section>
+
+    <section id="kit" class="band"><div class="wrap">
+      <div class="eyebrow">Production</div>
+      <div class="kit-toolbar">
+        <h2 style="margin:0">Kanban &amp; SEO kit</h2>
+        <button class="btn" id="expandAll">Expand all sections</button>
+      </div>
+      <div id="accordions"></div>
+    </div></section>
+
+    <section><div class="wrap">
+      <div class="eyebrow">Handoff</div>
+      <h2>Repeatable template</h2>
+      <p class="lede">This page renders from a single <span class="mono">#kit-config</span> JSON block. Generate a new lead kit with <span class="mono">gen-kit.py &lt;manifest.json&gt;</span>; bulk per-lead runs route to Hermes.</p>
+    </div></section>
+  </div>
+
+  <aside class="cart">
+    <div class="h">
+      <div class="t">Placement Cart</div>
+      <div class="s" data-bind="cartNote">7-day free trial — checkout still required.</div>
+    </div>
+    <div class="menu" id="menu"></div>
+    <div class="cartlist" id="cartlist"><div class="ci"><span>Cart empty</span><span></span></div></div>
+    <div class="foot">
+      <div class="ci"><span>Subtotal</span><span id="subtotal" class="mono">$0</span></div>
+      <div class="ci"><span>Due today (7-day free trial)</span><span id="dueToday" class="mono">$0.00</span></div>
+      <div class="tot"><span id="billLabel">Billed after trial</span><span id="total" class="mono">$0</span></div>
+      <div class="trial" id="trialLine">First 7 days free · billed after trial</div>
+      <button class="btn solid" id="checkout">Checkout</button>
+    </div>
+  </aside>
+</div>
+
+<div class="ov" id="ov">
+  <div class="modal">
+    <div id="coForm">
+      <h3>Start your 7 days free</h3>
+      <p class="sub">No charge for 7 days. Checkout is still required — payment method captured now, first charge after the trial.</p>
+      <div id="coSummary" class="mono" style="font-size:13px;color:var(--mute)"></div>
+      <label>Name</label><input id="cName" placeholder="Full name" />
+      <label>Email</label><input id="cEmail" placeholder="you@example.com" />
+      <label>Card (required to start free trial)</label><input id="cCard" placeholder="4242 4242 4242 4242" />
+      <div class="req">A valid payment method is required to start the free trial. You will not be charged until day 8.</div>
+      <div class="row">
+        <button class="btn" id="coCancel">Cancel</button>
+        <button class="btn solid" id="coConfirm" style="flex:1;justify-content:center">Start free trial &amp; check out</button>
+      </div>
+    </div>
+    <div class="ok" id="coOk">
+      <h3>Trial started ✓</h3>
+      <p class="sub">7-day free trial active. Order recorded — first invoice after the trial.</p>
+      <button class="btn solid" id="coClose" style="justify-content:center;width:100%">Done</button>
+    </div>
+  </div>
+</div>
+
+<script id="kit-config" type="application/json">
+{
+  "title": "ShopLocal Campaign Kit — Template",
+  "description": "Reusable manifest-driven campaign kit template.",
+  "brand": "Example Brand",
+  "ecosystem": "ShopLocal Campaign Kit",
+  "tagline": "Your headline goes here.",
+  "positioning": "One-line positioning describing the listing or local business.",
+  "customerKitName": "Customer home-buying kit",
+  "customerBlurb": "High-end customer presentation with the embedded interactive tool.",
+  "cartNote": "Free Unlimited tier · 7 days free — checkout still required.",
+  "freeDays": 7,
+  "colors": { "bg":"#123026","panel":"#173a2d","accent":"#b56b3c","accent2":"#6f7f49","text":"#f8f4ec","mute":"#cdbfa6" },
+  "fonts": { "google":"family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Work+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700", "display":"\"Fraunces\",serif", "body":"\"Work Sans\",system-ui,sans-serif" },
+  "heroImage": "",
+  "gallery": [],
+  "links": { "campaignKit":"#kit", "customer":"#customer" },
+  "facts": [ ["Type","—"], ["Market","—"], ["Status","Template"] ],
+  "pricing": [
+    { "id":"unlimited", "name":"Free Unlimited — all placements (7 days free)", "price":0 },
+    { "id":"landing", "name":"5280.menu landing + host", "price":75 },
+    { "id":"newsletter", "name":"Newsletter feature block", "price":20 },
+    { "id":"social", "name":"Social card set (2)", "price":18 },
+    { "id":"banners", "name":"Banner set (3 sizes)", "price":23 },
+    { "id":"editorial", "name":"Sponsored editorial", "price":30 },
+    { "id":"carousel", "name":"registercall.com carousel slot", "price":28 }
+  ],
+  "kanban": {
+    "Backlog": ["Intake received","Pricing route selected"],
+    "Design": ["Landing","Banner set","Social card"],
+    "Copy": ["Editorial","SMS / Email","Drip"],
+    "Review": ["Claim check","Owner approval"]
+  },
+  "sections": [
+    { "name":"SEO", "items":[["meta.json","title + OG + canonical"],["jsonld.json","RealEstateListing / LocalBusiness"]] },
+    { "name":"Editorial", "items":[["campaign-copy.md","headlines + blurbs"],["social-media-copy.md","FB/IG/X/LinkedIn"]] },
+    { "name":"Banners", "items":[["leaderboard 728x90",""],["medium 300x250",""],["mobile 320x50",""]] },
+    { "name":"Email", "items":[["newsletter.html","feature block"]] },
+    { "name":"Handoff", "items":[["owner-sms.txt",""],["owner-email.md",""],["production-kanban.json",""]] }
+  ]
+}
+</script>
+
+<script>
+(function(){
+  var cfg=JSON.parse(document.getElementById('kit-config').textContent);
+  var r=document.documentElement.style;
+  var c=cfg.colors||{};
+  if(c.bg)r.setProperty('--bg',c.bg); if(c.panel)r.setProperty('--panel',c.panel);
+  if(c.accent)r.setProperty('--accent',c.accent); if(c.accent2)r.setProperty('--accent2',c.accent2);
+  if(c.text)r.setProperty('--text',c.text); if(c.mute)r.setProperty('--mute',c.mute);
+  if(cfg.fonts){ if(cfg.fonts.display)r.setProperty('--font-display',cfg.fonts.display);
+    if(cfg.fonts.body)r.setProperty('--font-body',cfg.fonts.body);
+    if(cfg.fonts.google)document.getElementById('gfonts').href='https://fonts.googleapis.com/css2?'+cfg.fonts.google+'&display=swap'; }
+
+  function bindText(k,v){document.querySelectorAll('[data-bind="'+k+'"]').forEach(function(e){e.textContent=v;});}
+  bindText('title',cfg.title); document.title=cfg.title;
+  ['brand','ecosystem','tagline','positioning','customerKitName','customerBlurb','cartNote'].forEach(function(k){bindText(k,cfg[k]||'');});
+  var d=document.querySelector('[data-bind="description"]'); if(d)d.setAttribute('content',cfg.description||'');
+  var hi=document.querySelector('[data-bind-src="heroImage"]'); if(hi){ if(cfg.heroImage)hi.src=cfg.heroImage; else hi.style.display='none'; }
+  document.querySelectorAll('[data-bind="linkCampaign"]').forEach(function(e){e.textContent=(cfg.links||{}).campaignKit||'#kit';});
+  document.querySelectorAll('[data-bind="linkCustomer"]').forEach(function(e){e.textContent=(cfg.links||{}).customer||'#customer';});
+  document.querySelectorAll('[data-bind-href="linkCustomer"]').forEach(function(e){e.href=(cfg.links||{}).customer||'#customer';});
+
+  var facts=document.getElementById('facts');
+  (cfg.facts||[]).forEach(function(f){var li=document.createElement('li');li.innerHTML='<span>'+f[0]+'</span><span>'+f[1]+'</span>';facts.appendChild(li);});
+  var g=document.getElementById('gallery');
+  (cfg.gallery||[]).forEach(function(u){var im=document.createElement('img');im.src=u;im.alt='';g.appendChild(im);});
+  if(!(cfg.gallery||[]).length){document.getElementById('gallery').closest('section').style.display='none';}
+
+  // Accordions: kanban + each section, with Expand all
+  var acc=document.getElementById('accordions');
+  var kd=document.createElement('details'); kd.className='acc';
+  var kcols=Object.keys(cfg.kanban||{});
+  var kh='<summary>Production Kanban<span class="c">'+kcols.length+' columns</span></summary><div class="pad"><div class="kan">';
+  kcols.forEach(function(col){ kh+='<div class="col"><h4>'+col+'</h4>'+(cfg.kanban[col]||[]).map(function(t){return '<div class="ticket">'+t+'</div>';}).join('')+'</div>'; });
+  kh+='</div></div>'; kd.innerHTML=kh; acc.appendChild(kd);
+  (cfg.sections||[]).forEach(function(s){
+    var dt=document.createElement('details'); dt.className='acc';
+    var h='<summary>'+s.name+'<span class="c">'+s.items.length+' items</span></summary><div class="pad"><ul class="seo">';
+    s.items.forEach(function(it){h+='<li><span>'+it[0]+'</span><span>'+(it[1]||'')+'</span></li>';});
+    h+='</ul></div>'; dt.innerHTML=h; acc.appendChild(dt);
+  });
+  var allOpen=false;
+  document.getElementById('expandAll').addEventListener('click',function(){
+    allOpen=!allOpen;
+    acc.querySelectorAll('details').forEach(function(x){x.open=allOpen;});
+    this.textContent=allOpen?'Collapse all sections':'Expand all sections';
+  });
+
+  // Cart — live side-panel calculator
+  var cart={}, freeDays=cfg.freeDays||7;
+  document.getElementById('trialLine').textContent='First '+freeDays+' days free · checkout still required';
+  var menu=document.getElementById('menu'), money=function(n){return '$'+n.toFixed(2);};
+  function isUnlimited(p){return p.id==='unlimited'||p.price===0;}
+
+  (cfg.pricing||[]).forEach(function(p){
+    var row=document.createElement('div'); row.className='pi';
+    row.innerHTML='<span class="nm">'+p.name+'</span><span class="pr">'+(p.price?'$'+p.price:'FREE')+'</span>';
+    var b=document.createElement('button'); b.textContent='Add';
+    b.addEventListener('click',function(){
+      if(isUnlimited(p)){ cart={u:{p:p,q:1}}; }      // unlimited replaces the cart
+      else{ if(cart.u) delete cart.u;                 // a paid item clears unlimited
+            cart[p.id]=cart[p.id]||{p:p,q:0}; cart[p.id].q++; }
+      render();
+    });
+    row.appendChild(b); menu.appendChild(row);
+  });
+
+  function calc(){
+    var unlimited=!!cart.u, subtotal=0;
+    Object.keys(cart).forEach(function(k){ if(k!=='u') subtotal+=cart[k].p.price*cart[k].q; });
+    return { unlimited:unlimited, subtotal:subtotal,
+             dueToday:0,                               // 7-day free trial → always $0 today
+             billed: unlimited?0:subtotal };
+  }
+  function line(name,qty,amt,key){
+    return '<div class="ci"><span>'+name+(qty?' ×'+qty:'')+'</span>'+
+           '<span class="mono">'+(amt===0?'included':money(amt))+
+           ' <button data-rm="'+key+'" style="background:none;border:0;color:var(--mute);cursor:pointer;font-size:13px">✕</button></span></div>';
+  }
+  function render(){
+    var cl=document.getElementById('cartlist'), keys=Object.keys(cart), s=calc();
+    if(!keys.length){ cl.innerHTML='<div class="ci"><span>Cart empty</span><span></span></div>'; }
+    else if(s.unlimited){
+      cl.innerHTML='<div class="ci"><span><b>Free Unlimited</b> — all placements included</span>'+
+        '<span class="mono">$0 <button data-rm="u" style="background:none;border:0;color:var(--mute);cursor:pointer;font-size:13px">✕</button></span></div>';
+    } else {
+      cl.innerHTML=keys.map(function(k){return line(cart[k].p.name,cart[k].q,cart[k].p.price*cart[k].q,k);}).join('');
+    }
+    cl.querySelectorAll('[data-rm]').forEach(function(x){
+      x.addEventListener('click',function(){ delete cart[this.getAttribute('data-rm')]; render(); });
+    });
+    document.getElementById('subtotal').textContent = s.unlimited?'—':money(s.subtotal);
+    document.getElementById('dueToday').textContent = money(s.dueToday);
+    document.getElementById('billLabel').textContent = s.unlimited?'After trial (Unlimited)':'Billed after trial';
+    document.getElementById('total').textContent = s.unlimited?'$0.00':money(s.billed);
+  }
+
+  var ov=document.getElementById('ov');
+  document.getElementById('checkout').addEventListener('click',function(){
+    if(!Object.keys(cart).length){alert('Add at least one placement to check out.');return;}
+    var s=calc();
+    document.getElementById('coSummary').textContent =
+      (s.unlimited?'Free Unlimited — all placements':'Subtotal '+money(s.subtotal))+
+      ' · due today '+money(s.dueToday)+' · '+freeDays+' days free, then '+money(s.billed);
+    document.getElementById('coForm').style.display='block';
+    document.getElementById('coOk').classList.remove('show');
+    ov.classList.add('open');
+  });
+  document.getElementById('coCancel').addEventListener('click',function(){ov.classList.remove('open');});
+  document.getElementById('coConfirm').addEventListener('click',function(){
+    var n=document.getElementById('cName').value.trim(),e=document.getElementById('cEmail').value.trim(),cc=document.getElementById('cCard').value.trim();
+    if(!n||!e||!cc){alert('Name, email, and a payment method are required to start the free trial.');return;}
+    document.getElementById('coForm').style.display='none';
+    document.getElementById('coOk').classList.add('show');
+  });
+  document.getElementById('coClose').addEventListener('click',function(){ov.classList.remove('open');cart={};render();});
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rick's Cabaret Central City - Black Hawk Corridor Nightlife Escape</title>
+  <meta name="description" content="A Monarch-style campaign showcase for Rick's Cabaret & Steakhouse Central City, serving Black Hawk and Central City nightlife guests with late-night dining, VIP party packages, and cabaret entertainment.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rick's Cabaret Central City - Nightlife Escape">
+  <meta property="og:description" content="Late-night steakhouse, lounge, and cabaret campaign for the Central City / Black Hawk corridor.">
+  <meta property="og:image" content="https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rick's Cabaret Central City - Nightlife Escape">
+  <meta name="twitter:description" content="A complete campaign kit for late-night dining and nightlife near Black Hawk.">
+  <meta name="twitter:image" content="https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["NightClub", "Restaurant"],
+    "name": "Rick's Cabaret & Steakhouse Central City",
+    "url": "https://www.rickscentral.com/",
+    "telephone": "+1-720-669-9470",
+    "image": "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "130 Main St",
+      "addressLocality": "Central City",
+      "addressRegion": "CO",
+      "postalCode": "80427",
+      "addressCountry": "US"
+    },
+    "areaServed": ["Central City", "Black Hawk", "Idaho Springs", "Golden", "Denver"],
+    "servesCuisine": "Steakhouse",
+    "openingHours": "Th-Su 18:00-04:00"
+  }
+  </script>
+  <style>
+    :root {
+      --midnight: #08080a;
+      --charcoal: #121216;
+      --velvet: #3f1118;
+      --ruby: #b51f2c;
+      --champagne: #d8b46a;
+      --ivory: #f4eee2;
+      --muted: #9d9487;
+      --line: rgba(216, 180, 106, .26);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--midnight);
+      color: var(--ivory);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--midnight);
+      color: var(--ivory);
+    }
+
+    a { color: inherit; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-height: 72px;
+      padding: 14px 28px;
+      background: rgba(8, 8, 10, .92);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+    }
+
+    .brand-mark {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      min-width: 0;
+    }
+
+    .brand-mark img {
+      width: 74px;
+      height: 40px;
+      object-fit: contain;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 6px;
+      padding: 4px;
+    }
+
+    .brand-text {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .brand-text strong {
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 20px;
+      line-height: 1;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-text span {
+      font-size: 12px;
+      color: var(--champagne);
+    }
+
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 10px;
+      border-radius: 6px;
+    }
+
+    .nav-links a:hover {
+      color: var(--champagne);
+      background: rgba(216, 180, 106, .08);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 88vh;
+      display: grid;
+      align-items: end;
+      padding: 90px 28px 58px;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(8,8,10,.95) 0%, rgba(8,8,10,.64) 42%, rgba(8,8,10,.18) 100%),
+        linear-gradient(0deg, var(--midnight) 0%, rgba(8,8,10,.08) 42%),
+        url("https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg") center / cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-inner {
+      position: relative;
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      color: var(--champagne);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 2px;
+      background: var(--champagne);
+    }
+
+    h1, h2, h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      color: #fff;
+      margin: 0;
+      line-height: 1.04;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-size: 68px;
+    }
+
+    .hero-sub {
+      max-width: 660px;
+      margin: 22px 0 0;
+      color: #ddd3c4;
+      font-size: 20px;
+      line-height: 1.55;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 12px 18px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      border: 1px solid var(--line);
+    }
+
+    .button.primary {
+      background: var(--champagne);
+      color: var(--midnight);
+      border-color: var(--champagne);
+    }
+
+    .button.secondary {
+      background: rgba(8,8,10,.62);
+      color: var(--ivory);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .stat {
+      padding: 22px 24px;
+      background: #0d0d10;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--champagne);
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    section {
+      padding: 72px 28px;
+    }
+
+    .wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin-bottom: 32px;
+    }
+
+    .section-head h2 {
+      font-size: 42px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.65;
+      margin: 14px 0 0;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .feature {
+      min-height: 360px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--charcoal);
+    }
+
+    .feature img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .feature-body {
+      padding: 20px;
+    }
+
+    .feature h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: #cfc5b8;
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .showcase-band {
+      background:
+        linear-gradient(90deg, rgba(63,17,24,.92), rgba(8,8,10,.94)),
+        url("https://www.rickscentral.com/wp-content/uploads/2023/10/ricks-central-city-champ.jpg") center / cover no-repeat;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .asset {
+      display: grid;
+      gap: 10px;
+      min-height: 160px;
+      padding: 20px;
+      color: var(--ivory);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .asset strong {
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .asset span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .asset em {
+      align-self: end;
+      color: var(--champagne);
+      font-style: normal;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .copy-panel {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .copy-box {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--charcoal);
+      padding: 24px;
+    }
+
+    .copy-box h3 {
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
+    .copy-box p, .copy-box li {
+      color: #cfc5b8;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .copy-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      border-left: 3px solid var(--champagne);
+      padding: 12px 0 12px 16px;
+      background: rgba(216,180,106,.05);
+    }
+
+    .step strong {
+      display: block;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .distribution {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .distribution span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 9px 13px;
+      color: #d6cabc;
+      background: rgba(255,255,255,.04);
+      font-size: 13px;
+    }
+
+    .footer {
+      padding: 34px 28px;
+      border-top: 1px solid var(--line);
+      background: #050506;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .footer .wrap {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      .nav { align-items: flex-start; flex-direction: column; }
+      .nav-links { margin-left: 0; justify-content: flex-start; }
+      h1 { font-size: 42px; }
+      .hero-sub { font-size: 17px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .feature-grid, .asset-grid, .copy-panel { grid-template-columns: 1fr; }
+      section { padding: 52px 20px; }
+      .hero { padding: 74px 20px 46px; }
+    }
+
+    @media (max-width: 520px) {
+      .brand-text strong { font-size: 17px; }
+      h1 { font-size: 34px; }
+      .section-head h2 { font-size: 31px; }
+      .stats { grid-template-columns: 1fr; }
+      .hero-actions .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="Campaign sections">
+    <a class="brand-mark" href="#top">
+      <img src="https://www.rickscentral.com/wp-content/uploads/2025/08/ricks-cabaret-central-city-strip-club-136x75.png" alt="Rick's Cabaret Central City logo">
+      <span class="brand-text">
+        <strong>Rick's Cabaret Central City</strong>
+        <span>Black Hawk corridor campaign kit</span>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a href="#experience">Experience</a>
+      <a href="#assets">Assets</a>
+      <a href="#copy">Copy</a>
+      <a href="#distribution">Distribution</a>
+      <a href="https://www.rickscentral.com/contact/">Contact</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <div class="eyebrow">Campaign Showcase</div>
+      <h1>Rick's Cabaret Central City</h1>
+      <p class="hero-sub">A Monarch-style nightlife campaign for the Central City / Black Hawk corridor: late-night steakhouse reservations, lounge energy, VIP group plans, and cabaret entertainment at 130 Main St.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/">Reserve Steakhouse Seating</a>
+        <a class="button secondary" href="tel:+17206699470">Call (720) 669-9470</a>
+        <a class="button secondary" href="#assets">View Campaign Assets</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="stats" aria-label="Campaign facts">
+    <div class="stat"><strong>130 Main</strong><span>Central City address</span></div>
+    <div class="stat"><strong>6 PM-4 AM</strong><span>Thu-Sun campaign hours</span></div>
+    <div class="stat"><strong>3-story</strong><span>Steakhouse, lounge, cabaret</span></div>
+    <div class="stat"><strong>21+</strong><span>Nightlife compliance gate</span></div>
+  </div>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>The night has a destination.</h2>
+        <p>Rick's becomes the planned finish to a Black Hawk casino weekend: dinner upstairs, full bar service and music downstairs, and enough late-night energy that guests do not have to improvise after the tables close.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature">
+          <img src="https://www.rickscentral.com/wp-content/uploads/2024/01/ricks-central-city-steakhouse.jpg" alt="Rick's Central City steakhouse">
+          <div class="feature-body">
+            <h3>Steakhouse Upstairs</h3>
+            <p>Premium cuts, booth seating, wines, champagne, and a reservation-first path for guests who want the night to start with dinner.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="https://www.rickscentral.com/wp-content/uploads/2023/10/ricks-central-city-champ.jpg" alt="Fine wine and champagne at Rick's">
+          <div class="feature-body">
+            <h3>VIP Group Energy</h3>
+            <p>Bachelor parties, birthday groups, casino crews, and weekend travelers get one destination that works after normal dinner hours.</p>
+          </div>
+        </article>
+        <article class="feature">
+          <img src="https://www.rickscentral.com/wp-content/uploads/2023/10/Ricks-Cabaret-Central-Steakhouse-and-Lounge.jpg" alt="Rick's entertainment lounge">
+          <div class="feature-body">
+            <h3>Cabaret + Lounge</h3>
+            <p>Two floors of nightlife, music, sports on screen, full bar service, and cabaret entertainment in historic Central City.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="showcase-band" id="assets">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Campaign assets.</h2>
+        <p>The kit mirrors the Monarch showcase structure: landing-page story, IAB banner sizes, social creative, newsletter HTML, editorial copy, SEO metadata, and an operator handoff manifest.</p>
+      </div>
+      <div class="asset-grid">
+        <a class="asset" href="./manifest.json"><strong>Manifest</strong><span>Brand colors, audience, deliverable map, official facts, and art route.</span><em>Open JSON</em></a>
+        <a class="asset" href="./banners/banner-leaderboard-728x90.html"><strong>Leaderboard</strong><span>728x90 display ad for local news, directory, and campaign inventory.</span><em>Preview</em></a>
+        <a class="asset" href="./banners/banner-medium-rect-300x250.html"><strong>Medium Rectangle</strong><span>300x250 display ad with corridor-nightlife positioning.</span><em>Preview</em></a>
+        <a class="asset" href="./banners/banner-half-page-300x600.html"><strong>Half Page</strong><span>300x600 reservation-focused creative for premium placements.</span><em>Preview</em></a>
+        <a class="asset" href="./banners/banner-mobile-320x50.html"><strong>Mobile</strong><span>320x50 compact call-to-action for mobile news traffic.</span><em>Preview</em></a>
+        <a class="asset" href="./banners/banner-social-square-1080x1080.html"><strong>Social Square</strong><span>1080x1080 creative copy for Instagram and Facebook handoff.</span><em>Preview</em></a>
+        <a class="asset" href="./email/newsletter-nightlife-escape.html"><strong>Newsletter HTML</strong><span>Subscriber-ready email creative with reservation CTA.</span><em>Open</em></a>
+        <a class="asset" href="./editorial/campaign-copy.md"><strong>Campaign Copy</strong><span>Landing copy, banner lines, print strip, audio spot, and drip sequence.</span><em>Open MD</em></a>
+        <a class="asset" href="./seo/meta.json"><strong>SEO Meta</strong><span>Title, description, keywords, Open Graph, and Twitter card data.</span><em>Open JSON</em></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="copy">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Message spine.</h2>
+        <p>Keep the campaign premium, direct, and corridor-aware. Use "Central City / Black Hawk corridor" or "near Black Hawk" so the campaign reaches Black Hawk guests without mislabeling the venue address.</p>
+      </div>
+      <div class="copy-panel">
+        <div class="copy-box">
+          <h3>Hero Copy</h3>
+          <p>After the tables, slots, and mountain drive, make the night feel planned. Rick's pairs third-floor steakhouse service with a high-energy cabaret lounge in historic Central City, minutes from Black Hawk.</p>
+          <p><strong style="color:#d8b46a;">CTA:</strong> Reserve Steakhouse Seating</p>
+        </div>
+        <div class="copy-box">
+          <h3>Drip Sequence</h3>
+          <div class="timeline">
+            <div class="step"><strong>Day 0 - Launch invitation</strong><span>Dinner, lounge, and cabaret near Black Hawk. Reserve Rick's Central City for the weekend.</span></div>
+            <div class="step"><strong>Day 3 - Steakhouse feature</strong><span>Third-floor seating, wines, champagne, and late-night service. Book before the drive up.</span></div>
+            <div class="step"><strong>Day 7 - Weekend reminder</strong><span>Open Thursday through Sunday, 6 PM to 4 AM. Make Rick's the planned finish.</span></div>
+          </div>
+        </div>
+        <div class="copy-box">
+          <h3>Invoice Mapping</h3>
+          <ul>
+            <li>IM-215 Nightlife showcase landing page</li>
+            <li>IM-315 Newsletter sponsor block</li>
+            <li>IM-415 Display banner set</li>
+            <li>IM-515 Social caption pack</li>
+            <li>IM-615 Print strip and audio script</li>
+            <li>IM-715 Drip follow-up sequence</li>
+          </ul>
+        </div>
+        <div class="copy-box">
+          <h3>Compliance Notes</h3>
+          <ul>
+            <li>21+ only on all placements.</li>
+            <li>Use official address: 130 Main St, Central City, CO 80427.</li>
+            <li>Use official phone: (720) 669-9470.</li>
+            <li>Keep creative premium and tasteful; no explicit imagery or language.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="distribution">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Distribution network.</h2>
+        <p>This campaign is ready for newsletter, display, print strip, social queue, advertiser follow-up, and a sales handoff to the invoice manager.</p>
+      </div>
+      <div class="distribution" aria-label="Distribution channels">
+        <span>Weekly Register-Call</span>
+        <span>Colorado Gambler</span>
+        <span>Black Hawk / Central City lists</span>
+        <span>Tourism audience</span>
+        <span>Newsletter feature block</span>
+        <span>Digital display</span>
+        <span>Print strip</span>
+        <span>Social campaign queue</span>
+        <span>Sales follow-up</span>
+        <span>Steakhouse reservations</span>
+      </div>
+      <div class="hero-actions" style="margin-top:30px;">
+        <a class="button primary" href="https://www.rickscentral.com/">Open Official Site</a>
+        <a class="button secondary" href="./editorial/social-media-copy.md">Open Social Copy</a>
+        <a class="button secondary" href="./seo/jsonld.json">Open JSON-LD</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap">
+      <span>Rick's Cabaret Central City campaign kit - built for CoPress dashboard static hosting.</span>
+      <span>Official facts checked against rickscentral.com on 2026-05-16.</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,66 @@
+{
+  "campaign": "Rick's Cabaret Central City - Black Hawk Corridor Nightlife Escape",
+  "brand": "Rick's Cabaret & Steakhouse Central City",
+  "version": "1.0.0",
+  "created": "2026-05-16",
+  "sourcePattern": "showcase.registercall.com Monarch Casino Weekend Luxury Escape",
+  "audience": [
+    "Black Hawk and Central City casino visitors",
+    "Denver weekend getaway travelers",
+    "Late-night dining and nightlife guests",
+    "Steakhouse reservation prospects",
+    "VIP party and bachelor-party planners"
+  ],
+  "positioning": "A premium late-night destination in the Central City / Black Hawk gaming corridor, pairing upscale steakhouse service with nightlife and cabaret energy.",
+  "colors": {
+    "midnight": "#08080a",
+    "velvet": "#3f1118",
+    "ruby": "#b51f2c",
+    "champagne": "#d8b46a",
+    "ivory": "#f4eee2",
+    "smoke": "#7f7a72"
+  },
+  "fonts": {
+    "display": "Playfair Display",
+    "body": "Inter"
+  },
+  "assets": {
+    "hero": "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg",
+    "steakhouse": "https://www.rickscentral.com/wp-content/uploads/2024/01/ricks-central-city-steakhouse.jpg",
+    "champagne": "https://www.rickscentral.com/wp-content/uploads/2023/10/ricks-central-city-champ.jpg",
+    "entertainment": "https://www.rickscentral.com/wp-content/uploads/2023/10/Ricks-Cabaret-Central-Steakhouse-and-Lounge.jpg",
+    "logo": "https://www.rickscentral.com/wp-content/uploads/2025/08/ricks-cabaret-central-city-strip-club.png"
+  },
+  "deliverables": {
+    "showcase": "index.html",
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-skyscraper-160x600.html",
+      "banners/banner-half-page-300x600.html",
+      "banners/banner-mobile-320x50.html",
+      "banners/banner-social-square-1080x1080.html"
+    ],
+    "email": [
+      "email/newsletter-nightlife-escape.html"
+    ],
+    "editorial": [
+      "editorial/campaign-copy.md",
+      "editorial/social-media-copy.md"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ]
+  },
+  "officialFacts": {
+    "website": "https://www.rickscentral.com/",
+    "reservations": "https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/",
+    "phone": "(720) 669-9470",
+    "address": "130 Main St, Central City, CO 80427",
+    "hours": "Sunday, Thursday, Friday, and Saturday from 6:00 PM to 4:00 AM; closed Monday through Wednesday.",
+    "ageGate": "21+ nightlife and dining campaign; keep creative tasteful and compliant."
+  },
+  "modelPolicy": "free-local-models",
+  "artRoute": "Official public web assets referenced by URL; premium generated artwork not required."
+}
