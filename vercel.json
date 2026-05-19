@@ -1,5 +1,11 @@
 {
   "version": 2,
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/console/api/hermes/:path*",
+      "destination": "https://codex.conews.press/console/api/hermes/:path*"
+    }
+  ]
 }

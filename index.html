@@ -393,6 +393,30 @@ body::before {
 .stat-value.warn      { color: var(--red); }
 .stat-value.ok        { color: #27ae60; }
 
+/* Rollout tracker */
+.stage-timeline { display: flex; align-items: stretch; gap: 0; margin: 0; padding: 0; }
+.stage-step { display: flex; flex-direction: column; align-items: center; flex: 1; position: relative; min-width: 0; }
+.stage-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); background: var(--surface); position: relative; z-index: 2; margin-bottom: 6px; transition: all .3s; flex-shrink: 0; }
+.stage-dot.done { border-color: #27ae60; background: #27ae60; box-shadow: 0 0 8px rgba(39,174,96,.4); }
+.stage-dot.active { border-color: #3498db; background: #3498db; box-shadow: 0 0 8px rgba(52,152,219,.4); animation: led-pulse 1.5s ease-in-out infinite; }
+.stage-dot.future { border-color: var(--ink-muted); background: transparent; opacity: .35; }
+.stage-track { position: absolute; top: 7px; left: 50%; width: 100%; height: 2px; background: var(--border); z-index: 1; }
+.stage-step:first-child .stage-track { left: 50%; width: 50%; }
+.stage-step:last-child .stage-track { width: 50%; }
+.stage-track.filled { background: #27ae60; }
+.stage-label { font-family: 'DM Mono', monospace; font-size: 8.5px; text-transform: uppercase; letter-spacing: 1px; text-align: center; color: var(--ink-muted); opacity: .5; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stage-label.done { color: #27ae60; opacity: 1; }
+.stage-label.active { color: #3498db; opacity: 1; }
+.stage-badge { font-family: 'DM Mono', monospace; font-size: 8px; padding: 2px 6px; border-radius: 2px; background: var(--ink-muted); color: var(--surface); text-transform: uppercase; letter-spacing: .5px; white-space: nowrap; }
+.stage-badge.done { background: #27ae60; }
+.stage-badge.active { background: #3498db; }
+.stage-badge.future { background: transparent; color: var(--ink-muted); opacity: .35; }
+.stage-date { font-size: 8px; color: var(--ink-muted); opacity: .4; margin-top: 1px; text-align: center; }
+.progress-bar-wrap { margin: 10px 0 4px; }
+.progress-bar-bg { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.progress-bar { height: 100%; background: linear-gradient(90deg, var(--card-color, var(--gold)), var(--c-gold)); border-radius: 2px; transition: width .5s ease; }
+.progress-text { font-size: 10px; color: var(--ink-muted); text-align: right; margin-top: 2px; }
+
 .card-rule { height: 1px; background: var(--rule); margin: 12px 0 10px; }
 
 /* Card actions */
@@ -884,9 +908,140 @@ body::before {
   background: rgba(7,12,20,.48); padding: 8px; border-radius: 2px; cursor: pointer;
 }
 .hermes-endpoint-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.hermes-side-stack { display: grid; gap: 18px; align-content: start; }
+.hermes-command-strip {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px; margin: 0 0 18px;
+}
+.hermes-command-card {
+  border: 1px solid rgba(200,168,75,.12);
+  background: rgba(7,12,20,.5);
+  border-radius: 2px; padding: 11px;
+}
+.hermes-command-label {
+  color: var(--ink-muted); font: 700 8.5px 'DM Mono', monospace;
+  letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 5px;
+}
+.hermes-command-value { color: var(--ink); font-size: 13px; font-weight: 700; line-height: 1.25; }
+.hermes-command-note { color: var(--ink-muted); font-size: 10.5px; line-height: 1.4; margin-top: 4px; }
+.hermes-agent-active {
+  border: 1px solid rgba(6,182,212,.2);
+  background: linear-gradient(135deg, rgba(6,182,212,.08), rgba(7,12,20,.55));
+  border-radius: 2px; padding: 10px 11px; margin-bottom: 12px;
+}
+.hermes-agent-active strong { display: block; color: var(--ink); font-size: 13px; margin-bottom: 4px; }
+.hermes-agent-active span { display: block; color: var(--ink-muted); font-size: 11px; line-height: 1.45; }
+.hermes-agent-grid,
+.hermes-plugin-grid,
+.hermes-file-list,
+.hermes-history-list {
+  display: grid; gap: 8px;
+}
+.hermes-agent-grid { max-height: 320px; overflow: auto; padding-right: 3px; }
+.hermes-agent-card,
+.hermes-plugin-card,
+.hermes-file-row,
+.hermes-history-item {
+  border: 1px solid rgba(200,168,75,.12);
+  background: rgba(7,12,20,.5);
+  border-radius: 2px; padding: 10px;
+}
+.hermes-agent-card.is-active {
+  border-color: rgba(6,182,212,.45);
+  box-shadow: 0 0 0 1px rgba(6,182,212,.08);
+}
+.hermes-agent-top,
+.hermes-plugin-top,
+.hermes-file-top,
+.hermes-history-top {
+  display: flex; align-items: start; justify-content: space-between; gap: 10px;
+}
+.hermes-agent-title,
+.hermes-plugin-title,
+.hermes-file-title,
+.hermes-history-title {
+  color: var(--ink); font-size: 12.5px; font-weight: 700; line-height: 1.25;
+}
+.hermes-agent-meta,
+.hermes-plugin-meta,
+.hermes-file-meta,
+.hermes-history-meta {
+  color: var(--ink-muted); font: 9px 'DM Mono', monospace;
+  text-transform: uppercase; letter-spacing: .8px; line-height: 1.45; margin-top: 3px;
+}
+.hermes-agent-desc,
+.hermes-plugin-desc,
+.hermes-history-preview {
+  color: var(--ink-muted); font-size: 11px; line-height: 1.45; margin-top: 7px;
+}
+.hermes-agent-actions,
+.hermes-plugin-actions,
+.hermes-file-actions,
+.hermes-history-actions,
+.hermes-panel-actions {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px;
+}
+.hermes-plugin-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.hermes-plugin-card { cursor: pointer; min-height: 92px; }
+.hermes-plugin-card.is-on {
+  border-color: rgba(39,174,96,.35);
+  background: rgba(39,174,96,.055);
+}
+.hermes-plugin-state {
+  color: var(--ink-muted); border: 1px solid rgba(200,168,75,.12);
+  border-radius: 2px; padding: 3px 6px; font: 700 8px 'DM Mono', monospace;
+  text-transform: uppercase; white-space: nowrap;
+}
+.hermes-plugin-card.is-on .hermes-plugin-state { color: #8de0a8; border-color: rgba(39,174,96,.35); }
+.hermes-file-drop {
+  border: 1px dashed rgba(200,168,75,.2);
+  background: rgba(200,168,75,.04);
+  border-radius: 2px; padding: 12px; color: var(--ink-muted);
+  font-size: 11.5px; line-height: 1.55;
+}
+.hermes-file-list { max-height: 220px; overflow: auto; margin-top: 10px; padding-right: 3px; }
+.hermes-file-row { padding: 9px; }
+.hermes-file-kind {
+  color: var(--gold-pale); border: 1px solid rgba(200,168,75,.14);
+  border-radius: 2px; padding: 3px 6px; font: 700 8px 'DM Mono', monospace;
+  text-transform: uppercase; white-space: nowrap;
+}
+.hermes-context-chip {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  border: 1px solid rgba(200,168,75,.12); background: rgba(7,12,20,.48);
+  border-radius: 2px; padding: 7px 8px; margin-top: 8px;
+  color: var(--ink-muted); font-size: 11px;
+}
+.hermes-quick-actions {
+  display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0 0;
+}
+.hermes-history-tools {
+  display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; margin-bottom: 10px;
+}
+.hermes-history-tools input {
+  width: 100%; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
+  color: var(--ink); border-radius: 2px; padding: 8px 10px; outline: none;
+  font: 11px 'DM Mono', monospace;
+}
+.hermes-history-list { max-height: 360px; overflow: auto; padding-right: 3px; }
+.hermes-pref-grid {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px; margin-top: 10px;
+}
+.hermes-pref-grid label {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid rgba(200,168,75,.12); background: rgba(7,12,20,.48);
+  border-radius: 2px; padding: 8px; color: var(--ink-muted);
+  font: 10px 'DM Mono', monospace; text-transform: uppercase; cursor: pointer;
+}
 @media (max-width: 1100px) {
   .hermes-console-grid, .hermes-console-grid.lower { grid-template-columns: 1fr; }
+  .hermes-command-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hermes-control-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .hermes-command-strip, .hermes-plugin-grid, .hermes-pref-grid { grid-template-columns: 1fr; }
+  .hermes-history-tools { grid-template-columns: 1fr; }
 }
 .scan-preview {
   margin-top: 12px; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
@@ -1183,7 +1338,7 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Aileen</button>
               <button class="card-btn" onclick="event.stopPropagation(); openM365Admin()">M365</button>
             </div>
           </div>
@@ -1349,6 +1504,66 @@ body::before {
               <button class="card-btn primary" onclick="event.stopPropagation(); window.open('/cg-campaign-kit/manifest.json','_blank')">Campaign Kit</button>
               <button class="card-btn" onclick="event.stopPropagation(); loadCasinoDirectory()">Load Casinos</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('https://github.com/idigitalpro1/colorado-gambler','_blank')">Repo</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rollout Tracker -->
+        <div class="module-card" data-target="rollout" style="--card-color:var(--c-purple);--card-glow:rgba(155,89,182,.06);">
+          <div class="card-dept">
+            <span class="card-dept-name">Deployment</span>
+            <span class="card-led active" id="rollout-led"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">🚀</div>
+              <div>
+                <div class="card-title">Rollout Tracker</div>
+                <div class="card-subtitle">Site launch stages · City Networks</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat" style="grid-column:1/-1;">
+                <div class="progress-bar-wrap">
+                  <div class="progress-bar-bg"><div class="progress-bar" id="rollout-progress" style="width:75%;"></div></div>
+                  <div class="progress-text" id="rollout-text">3 of 4 stages deployed</div>
+                </div>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="stage-timeline" id="rollout-timeline">
+              <div class="stage-step">
+                <div class="stage-track filled"></div>
+                <div class="stage-dot done"></div>
+                <div class="stage-label done">Draft</div>
+                <div class="stage-badge done">OK</div>
+                <div class="stage-date">2026-01-15</div>
+              </div>
+              <div class="stage-step">
+                <div class="stage-track filled"></div>
+                <div class="stage-dot done"></div>
+                <div class="stage-label done">Internal</div>
+                <div class="stage-badge done">OK</div>
+                <div class="stage-date">2026-02-01</div>
+              </div>
+              <div class="stage-step">
+                <div class="stage-track filled"></div>
+                <div class="stage-dot active"></div>
+                <div class="stage-label active">Pilot</div>
+                <div class="stage-badge active">Live</div>
+                <div class="stage-date" id="rollout-pilot-date">2026-03-10</div>
+              </div>
+              <div class="stage-step">
+                <div class="stage-track"></div>
+                <div class="stage-dot future"></div>
+                <div class="stage-label">Prod</div>
+                <div class="stage-badge future">TODO</div>
+                <div class="stage-date" id="rollout-prod-date">TBD</div>
+              </div>
+            </div>
+            <div style="margin-top:12px;">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/rollout/update'">Update Stage</button>
+              <button class="card-btn" onclick="event.stopPropagation(); refreshRolloutTrackers()">Refresh</button>
             </div>
           </div>
         </div>
@@ -1559,7 +1774,7 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/linear'">Open Linear</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/linear#create'">Quick Create</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8096','_blank','noopener,noreferrer')">Kanban</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('https://admin.conews.press/console/kanban','_blank','noopener,noreferrer')">Kanban</button>
             </div>
           </div>
         </div>
@@ -1695,9 +1910,9 @@ body::before {
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
+              <button class="card-btn primary" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">⚡ Hermes</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew Console</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Aileen</button>
             </div>
           </div>
         </div>
@@ -1752,31 +1967,31 @@ body::before {
             <span class="admin-launch-tag">Start Here</span>
           </div>
           <div class="admin-launch-desc">The clean operator hub for all admin, AI, publishing, billing, upload, and service links.</div>
-          <div class="admin-launch-url">copress-dashboard.vercel.app</div>
+          <div class="admin-launch-url">satcom.5280.menu</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
           <div class="admin-launch-top">
             <div class="admin-launch-title">Aileen / Hermes WebUI</div>
             <span class="admin-launch-tag">Local AI</span>
           </div>
-          <div class="admin-launch-desc">Canonical human operator dashboard for prompts, chat continuity, and local model routing.</div>
-          <div class="admin-launch-url">127.0.0.1:8787</div>
+          <div class="admin-launch-desc">SATCOM Hermes console for prompts, chat continuity, model routing, and crew jobs.</div>
+          <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-network);" href="http://127.0.0.1:8096" target="_blank" rel="noopener">
+        <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
           <div class="admin-launch-top">
             <div class="admin-launch-title">Kanban Ops</div>
             <span class="admin-launch-tag">Board</span>
           </div>
-          <div class="admin-launch-desc">Local Kanban board for campaign, editorial, deploy, and troubleshooting handoffs.</div>
-          <div class="admin-launch-url">localhost:8096</div>
+          <div class="admin-launch-desc">Public Kanban board for campaign, editorial, deploy, and troubleshooting handoffs.</div>
+          <div class="admin-launch-url">admin.conews.press/console/kanban</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-stationery);" href="https://onboarding.copress.news" target="_blank" rel="noopener">
+        <a class="admin-launch" style="--admin-color:var(--c-stationery);" href="#stationery" onclick="event.preventDefault(); navTo('stationery')">
           <div class="admin-launch-top">
             <div class="admin-launch-title">Client Onboarding</div>
             <span class="admin-launch-tag">Upload</span>
           </div>
-          <div class="admin-launch-desc">Canonical upload and onboarding app from idigitalpro1/onboarding-link. Use once DNS is live.</div>
-          <div class="admin-launch-url">onboarding.copress.news</div>
+          <div class="admin-launch-desc">Client intake, upload notes, stationery, and onboarding handoff lane inside SATCOM.</div>
+          <div class="admin-launch-url">SATCOM / Stationery</div>
         </a>
         <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-accounting);">
           <div class="admin-launch-top">
@@ -2112,7 +2327,7 @@ body::before {
                 <div class="module-form">
                   <div class="module-field"><label>Business / offer</label><input id="campaign-title" placeholder="Mother's Day brunch at..."></div>
                   <div class="module-form two">
-                    <div class="module-field"><label>Industry pattern</label><select id="campaign-industry"><option>Service Industry</option><option>Casino / Resort</option><option>Politician / Civic</option><option>Restaurant / Hospitality</option><option>Health & Wellness</option><option>Retail / Shop Local</option></select></div>
+                    <div class="module-field"><label>Industry pattern</label><select id="campaign-industry"><option>Service Industry</option><option>Casino / Resort</option><option>Nightlife / Steakhouse</option><option>Politician / Civic</option><option>Restaurant / Hospitality</option><option>Health & Wellness</option><option>Retail / Shop Local</option></select></div>
                     <div class="module-field"><label>Artwork route</label><select id="campaign-art-route"><option value="local">Free local models only</option><option value="premium">Premium artwork requested</option><option value="none">Copy kit only</option></select></div>
                   </div>
                   <div class="module-field"><label>Brief</label><textarea id="campaign-brief" placeholder="Audience, offer, deadline, town, contact, call to action..."></textarea></div>
@@ -2120,6 +2335,8 @@ body::before {
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="generateCampaignKit()">Generate Kit</button>
                   <button class="module-btn" onclick="window.location.href='/newsletter'">Open Newsletter</button>
+                  <button class="module-btn" onclick="window.location.href='/ricks-cabaret-campaign-kit/'">Open Rick's Kit</button>
+                  <button class="module-btn" onclick="window.location.href='/240-deer-road-campaign-kit/'">Open Deer Rd Kit</button>
                 </div>
               </div>
               <div class="module-panel">
@@ -2221,45 +2438,45 @@ body::before {
         <p class="page-subtitle">This is the single operator dashboard. Old admin panels are intentionally not linked from here.</p>
 
         <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
-          <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://copress-dashboard.vercel.app/" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://satcom.5280.menu/" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">CoPress Dashboard</div>
               <span class="admin-launch-tag">Primary</span>
             </div>
             <div class="admin-launch-desc">Main operator surface for publishing, admin, tools, training, docs, network, and API storage.</div>
-            <div class="admin-launch-url">https://copress-dashboard.vercel.app/</div>
+            <div class="admin-launch-url">https://satcom.5280.menu/</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Aileen / Hermes WebUI</div>
               <span class="admin-launch-tag">Local AI</span>
             </div>
-            <div class="admin-launch-desc">Primary Hermes operator dashboard. Individual sessions live inside this surface.</div>
-            <div class="admin-launch-url">http://127.0.0.1:8787/</div>
+            <div class="admin-launch-desc">Primary SATCOM Hermes console. Chat and crew jobs run through the public bridge proxy.</div>
+            <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8793/health" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/console/api/hermes/health" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Hermes Crew Bridge</div>
               <span class="admin-launch-tag">Runtime</span>
             </div>
-            <div class="admin-launch-desc">CrewAI bridge health check. Chat and crew jobs run behind this local service.</div>
-            <div class="admin-launch-url">http://127.0.0.1:8793/health</div>
+            <div class="admin-launch-desc">CrewAI bridge health check. Chat and crew jobs run through the production proxy.</div>
+            <div class="admin-launch-url">/console/api/hermes/health</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-network);" href="http://127.0.0.1:8096" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Kanban Ops</div>
               <span class="admin-launch-tag">Board</span>
             </div>
-            <div class="admin-launch-desc">Local Kanban board for deploy, editorial, sales, campaign, and troubleshooting cards.</div>
-            <div class="admin-launch-url">http://127.0.0.1:8096</div>
+            <div class="admin-launch-desc">Public Kanban board for deploy, editorial, sales, campaign, and troubleshooting cards.</div>
+            <div class="admin-launch-url">admin.conews.press/console/kanban</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-stationery);" href="https://onboarding.copress.news" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-stationery);" href="#stationery" onclick="event.preventDefault(); navTo('stationery')">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Client Onboarding</div>
               <span class="admin-launch-tag">Upload</span>
             </div>
-            <div class="admin-launch-desc">Publisher intake, file upload, and client onboarding app. Source repo: idigitalpro1/onboarding-link.</div>
-            <div class="admin-launch-url">https://onboarding.copress.news</div>
+            <div class="admin-launch-desc">Publisher intake, file upload notes, and client onboarding handoff lane inside SATCOM.</div>
+            <div class="admin-launch-url">SATCOM / Stationery</div>
           </a>
           <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-accounting);">
             <div class="admin-launch-top">
@@ -2354,24 +2571,66 @@ body::before {
               <div>
                 <div class="module-kicker">Hermes · Local Workforce</div>
                 <h2>Agentic front end for Qwen, Crew, and OpenClaw.</h2>
-                <p>Use this panel as the local operator surface. It talks to Hermes Crew on <code>127.0.0.1:8793</code>, keeps writes off by default, and leaves cloud models as explicit fallback.</p>
+                <p>Use this panel as the SATCOM operator surface. Public mode talks through <code>/console/api/hermes</code>; local previews still use the 8793 bridge.</p>
               </div>
               <div class="module-status">
                 <span class="pill">Crew <strong id="hermes-crew-status">Check</strong></span>
                 <span class="pill">Model <strong id="hermes-crew-model">Qwen</strong></span>
                 <span class="pill">Writes <strong id="hermes-crew-writes">Off</strong></span>
+                <span class="pill">Agent <strong id="hermes-agent-status">SATCOM</strong></span>
+                <span class="pill">Plugins <strong id="hermes-plugin-count">0</strong></span>
+                <span class="pill">Files <strong id="hermes-file-count">0</strong></span>
+                <span class="pill">History <strong id="hermes-history-count">0</strong></span>
+              </div>
+            </div>
+
+            <div class="hermes-command-strip">
+              <div class="hermes-command-card">
+                <div class="hermes-command-label">Current lane</div>
+                <div class="hermes-command-value" id="hermes-command-agent">SATCOM Operator</div>
+                <div class="hermes-command-note">Agent preset wraps every chat and crew handoff.</div>
+              </div>
+              <div class="hermes-command-card">
+                <div class="hermes-command-label">Plugin bus</div>
+                <div class="hermes-command-value" id="hermes-command-plugins">Core stack</div>
+                <div class="hermes-command-note">MCP, docs, browser, media, and publishing tools.</div>
+              </div>
+              <div class="hermes-command-card">
+                <div class="hermes-command-label">File context</div>
+                <div class="hermes-command-value" id="hermes-command-files">No files</div>
+                <div class="hermes-command-note">Local queue injects file text into the next prompt.</div>
+              </div>
+              <div class="hermes-command-card">
+                <div class="hermes-command-label">Run memory</div>
+                <div class="hermes-command-value" id="hermes-command-history">0 entries</div>
+                <div class="hermes-command-note">Searchable history survives refreshes.</div>
               </div>
             </div>
 
             <div class="hermes-console-grid">
               <div class="module-panel hermes-chat-panel">
                 <h3>Chat</h3>
+                <div class="hermes-agent-active" id="hermes-active-agent-box">
+                  <strong>SATCOM Operator</strong>
+                  <span>Local Qwen lane with Ops MCP, docs, and browser context enabled.</span>
+                </div>
                 <div class="hermes-chat-log" id="hermes-chat-log">
                   <div class="hermes-msg assistant">Hermes Crew is ready when the local bridge is running. Ask for strategy, drafting, routing, or a safe execution plan.</div>
                 </div>
                 <div class="module-field">
                   <label>Prompt</label>
                   <textarea id="hermes-chat-prompt" placeholder="Ask Hermes Crew anything. Example: Draft a client onboarding handoff for Paul Hill."></textarea>
+                </div>
+                <div class="hermes-quick-actions">
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('doctor')">Doctor</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('mcp')">Repair MCP</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('publish')">Publish Check</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('seo')">SEO Kanban</button>
+                  <button class="mini-btn" onclick="copyHermesPreparedPrompt()">Copy Full Prompt</button>
+                </div>
+                <div class="hermes-context-chip" id="hermes-prompt-context">
+                  <span>No file context attached.</span>
+                  <button class="mini-btn" onclick="document.getElementById('hermes-file-input')?.click()">Add Files</button>
                 </div>
                 <div class="hermes-control-row">
                   <select id="hermes-chat-tier" title="Routing tier">
@@ -2400,6 +2659,46 @@ body::before {
                 </div>
               </div>
 
+              <div class="hermes-side-stack">
+                <div class="module-panel">
+                  <h3>Agent Presets</h3>
+                  <div class="hermes-agent-grid" id="hermes-agent-grid"></div>
+                </div>
+
+                <div class="module-panel">
+                  <h3>Plugin Center</h3>
+                  <div class="hermes-plugin-grid" id="hermes-plugin-grid"></div>
+                  <div class="hermes-panel-actions">
+                    <button class="mini-btn" onclick="applyHermesPluginPreset('operator')">Operator Stack</button>
+                    <button class="mini-btn" onclick="applyHermesPluginPreset('media')">Media Stack</button>
+                    <button class="mini-btn" onclick="copyHermesPluginPrompt()">Copy Plugin Prompt</button>
+                    <button class="mini-btn warn" onclick="resetHermesPlugins()">Reset</button>
+                  </div>
+                </div>
+
+                <div class="module-panel">
+                  <h3>File Context</h3>
+                  <input id="hermes-file-input" type="file" multiple hidden onchange="handleHermesFiles(event)" accept=".txt,.md,.html,.json,.csv,.rtf,.pdf,.doc,.docx,.js,.ts,.tsx,.jsx,.css,.yaml,.yml,image/*,video/*">
+                  <div class="hermes-file-drop">
+                    Add files here when the bridge cannot accept a true server upload. Text-like files are read locally and injected into the next Hermes prompt; images, PDFs, docs, and video are carried as a manifest.
+                  </div>
+                  <div class="hermes-panel-actions">
+                    <button class="module-btn primary" onclick="document.getElementById('hermes-file-input')?.click()">Add Files</button>
+                    <button class="module-btn" onclick="copyHermesFileManifest()">Copy Manifest</button>
+                    <button class="module-btn" onclick="clearHermesFiles()">Clear Files</button>
+                  </div>
+                  <div class="hermes-file-list" id="hermes-file-list"></div>
+                  <div class="hermes-pref-grid">
+                    <label><input type="checkbox" id="hermes-pref-include-files" onchange="saveHermesPreferencesFromUi()" checked> Attach in chat</label>
+                    <label><input type="checkbox" id="hermes-pref-history" onchange="saveHermesPreferencesFromUi()" checked> Save history</label>
+                    <label><input type="checkbox" id="hermes-pref-confirm-writes" onchange="saveHermesPreferencesFromUi()" checked> Confirm writes</label>
+                    <label><input type="checkbox" id="hermes-pref-compact" onchange="saveHermesPreferencesFromUi()" checked> Compact prompts</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hermes-console-grid lower">
               <div class="module-panel">
                 <h3>Crew Runner</h3>
                 <div class="module-form">
@@ -2419,15 +2718,20 @@ body::before {
                   <div class="module-actions">
                     <button class="module-btn primary" onclick="runHermesCrew()">Run Crew</button>
                     <button class="module-btn" onclick="loadHermesJobs()">Refresh Jobs</button>
-                    <button class="module-btn" onclick="window.open('http://127.0.0.1:8501','_blank')">Streamlit Fallback</button>
+                    <button class="module-btn" onclick="window.open('/console/api/hermes/health','_blank')">Bridge Health</button>
                   </div>
                 </div>
 
                 <div class="hermes-endpoint-strip">
-                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
-                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8793/health','_blank')">Health</button>
-                  <button class="mini-btn" onclick="window.open('http://127.0.0.1:8501','_blank')">Chat UI</button>
+                  <button class="mini-btn" onclick="navTo('brains')">Aileen</button>
+                  <button class="mini-btn" onclick="window.open('/console/api/hermes/health','_blank')">Health</button>
+                  <button class="mini-btn" onclick="window.open('https://admin.conews.press/console/kanban','_blank')">Kanban</button>
+                  <button class="mini-btn" onclick="window.open('/console/api/hermes/models','_blank')">Models</button>
                 </div>
+              </div>
+              <div class="module-panel">
+                <h3>Output</h3>
+                <div class="output-box" id="hermes-output-box">Crew output and logs will appear here. This panel does not grant write access by itself.</div>
               </div>
             </div>
 
@@ -2439,8 +2743,13 @@ body::before {
                 </div>
               </div>
               <div class="module-panel">
-                <h3>Output</h3>
-                <div class="output-box" id="hermes-output-box">Crew output and logs will appear here. This panel does not grant write access by itself.</div>
+                <h3>History</h3>
+                <div class="hermes-history-tools">
+                  <input id="hermes-history-search" placeholder="Search history..." oninput="renderHermesHistory()">
+                  <button class="mini-btn" onclick="exportHermesHistory()">Export</button>
+                  <button class="mini-btn warn" onclick="clearHermesHistory()">Clear</button>
+                </div>
+                <div class="hermes-history-list" id="hermes-history-list"></div>
               </div>
             </div>
           </div>
@@ -2453,7 +2762,7 @@ body::before {
 
 <!-- ── Status Bar ──────────────────────────────────────────────────── -->
 <div id="statusbar">
-  <span class="status-left">● LIVE — copress-dashboard.vercel.app · unified admin home</span>
+  <span class="status-left">● LIVE — satcom.5280.menu · unified admin home</span>
   <div class="status-center">
     <div class="status-dot"><span class="dot" id="dot-gemini"></span> Gemini</div>
     <div class="status-dot"><span class="dot" id="dot-supabase"></span> Supabase</div>
@@ -2513,6 +2822,7 @@ function navTo(section) {
     });
   }
   if (section === 'brains') {
+    renderHermesOperatorState();
     renderHermesChat();
     renderHermesActivity();
     refreshHermesCrewStatus();
@@ -3532,6 +3842,12 @@ function getCampaignPattern(industry) {
       sendOptions: ['Casino/resort list', 'Paid subscribers', 'Tourism audience', ...commonSend],
       drip: ['Day 0: launch invitation', 'Day 3: amenity feature', 'Day 7: final weekend reminder'],
     },
+    'Nightlife / Steakhouse': {
+      tone: 'premium late-night hospitality, VIP groups, reservation-ready nightlife',
+      invoiceItems: ['IM-215 Nightlife showcase landing page', 'IM-315 Newsletter sponsor block', 'IM-415 Display banner set', 'IM-515 Social caption pack', 'IM-715 Drip follow-up sequence'],
+      sendOptions: ['Black Hawk / Central City list', 'Tourism audience', 'Dining list', 'Nightlife segment', ...commonSend],
+      drip: ['Day 0: launch invitation', 'Day 3: steakhouse feature', 'Day 7: weekend reminder'],
+    },
     'Politician / Civic': {
       tone: 'public trust, civic invitation, issue-based opinion request',
       invoiceItems: ['IM-120 Civic outreach kit', 'IM-220 Voter/resident email', 'IM-320 Opinion survey insert', 'IM-420 Print announcement'],
@@ -3620,7 +3936,7 @@ function stationeryFallbackTemplate() {
 
 Recipient:
 Project / article:
-Upload link: https://onboarding.copress.news
+Upload lane: SATCOM Stationery / Client Intake
 Deadline:
 
 Please upload photos and videos here. Include captions, names, location, date, and credit line. If files are from Apple Photos, export originals when possible before uploading.
@@ -3725,11 +4041,138 @@ function refreshModuleStatus() {
 }
 
 // ── Hermes Crew Console ───────────────────────────────────────────
-const HERMES_CREW_BASE = 'http://127.0.0.1:8793';
+const HERMES_CREW_BASE = (() => {
+  const localHosts = new Set(['127.0.0.1', 'localhost', '']);
+  if (localHosts.has(window.location.hostname) || window.location.protocol === 'file:') {
+    return 'http://127.0.0.1:8793';
+  }
+  return '/console/api/hermes';
+})();
 const HERMES_CHAT_KEY = 'copress_hermes_chat_messages_v1';
 const HERMES_ACTIVITY_KEY = 'copress_hermes_activity_v1';
+const HERMES_AGENT_KEY = 'copress_hermes_active_agent_v1';
+const HERMES_PLUGIN_KEY = 'copress_hermes_plugins_v1';
+const HERMES_FILE_KEY = 'copress_hermes_files_v1';
+const HERMES_HISTORY_KEY = 'copress_hermes_run_history_v1';
+const HERMES_PREF_KEY = 'copress_hermes_preferences_v1';
+const HERMES_AGENT_PRESETS = [
+  {
+    id: 'satcom-operator',
+    name: 'SATCOM Operator',
+    tier: 'local',
+    role: 'Console quarterback',
+    outputs: ['web', 'newsletter', 'seo'],
+    crewTopic: 'SATCOM production handoff',
+    desc: 'Keeps the qwen36-35b-a3b-satcom lane focused on production triage, plugin routing, MCP health, and visible next actions.',
+    prompt: 'Act as the SATCOM operator. Diagnose the current request, use the enabled plugin lanes as context, preserve production safety, and return the exact next action with commands or handoff text when useful.',
+  },
+  {
+    id: 'editorial-desk',
+    name: 'Editorial Desk',
+    tier: 'local',
+    role: 'Publishing editor',
+    outputs: ['web', 'newsletter', 'social', 'seo'],
+    crewTopic: 'Editorial package buildout',
+    desc: 'Turns rough notes, photos, and source text into clean web, newsletter, social, and SEO deliverables.',
+    prompt: 'Act as the editorial desk for Villager Media Group. Shape the attached notes into publishable copy, headline options, SEO fields, newsletter copy, and social posts. Preserve names, dates, places, and attribution.',
+  },
+  {
+    id: 'shop-local-scout',
+    name: 'Shop Local Scout',
+    tier: 'local',
+    role: 'Town commerce scout',
+    outputs: ['web', 'newsletter', 'seo'],
+    crewTopic: 'Shop Local town site update',
+    desc: 'Builds city-site merchant, restaurant, activity, and directory updates from local notes.',
+    prompt: 'Act as the Shop Local scout. Build a practical town-site update from the notes: business list, short descriptions, local angle, calls to action, and any gaps that need verification.',
+  },
+  {
+    id: 'seo-syndication',
+    name: 'SEO + Syndication',
+    tier: 'local',
+    role: 'Distribution planner',
+    outputs: ['web', 'newsletter', 'seo'],
+    crewTopic: 'SEO syndication run',
+    desc: 'Creates page titles, descriptions, internal links, canonical notes, and cross-network republishing angles.',
+    prompt: 'Act as SEO and syndication lead. Produce title tags, meta descriptions, slug ideas, schema notes, internal links, social summaries, and a safe republishing checklist for the attached content.',
+  },
+  {
+    id: 'design-video',
+    name: 'Design / Video Producer',
+    tier: 'local_heavy',
+    role: 'Creative producer',
+    outputs: ['web', 'social'],
+    crewTopic: 'Video header and asset direction',
+    desc: 'Turns artwork, video, and brand notes into header direction, image prompts, crop notes, and production checklists.',
+    prompt: 'Act as design and video producer. Review the attached media manifest and produce a high-impact hero/header plan with crop notes, overlay text, asset order, and production instructions.',
+  },
+  {
+    id: 'ops-mcp-engineer',
+    name: 'Ops / MCP Engineer',
+    tier: 'local',
+    role: 'Bridge repair',
+    outputs: ['web'],
+    crewTopic: 'Hermes MCP repair run',
+    desc: 'Focuses on Hermes bridge health, local endpoints, MCP tools, deployment checks, and non-destructive repair steps.',
+    prompt: 'Act as Ops/MCP engineer. Diagnose the Hermes/SATCOM bridge from the supplied logs and endpoint state. Separate UI, bridge, model-route, MCP, and deployment issues, then give the safest repair path.',
+  },
+  {
+    id: 'publisher',
+    name: 'Publisher',
+    tier: 'local',
+    role: 'Executive editor',
+    outputs: ['web', 'newsletter', 'social', 'seo'],
+    crewTopic: 'Publisher package',
+    desc: 'Packages a story or campaign for public release with headline hierarchy, publisher note, CTA, and risk check.',
+    prompt: 'Act as Patrick Henry Sweeney publisher desk. Package this for public release with authority, restraint, headline options, publisher note, CTA, SEO, and any factual risk flags.',
+  },
+  {
+    id: 'openclaw-executor',
+    name: 'OpenClaw Executor',
+    tier: 'openclaw',
+    role: 'Agent worker lane',
+    outputs: ['web'],
+    crewTopic: 'OpenClaw execution handoff',
+    desc: 'Routes a bounded execution prompt toward the OpenClaw operator lane when the bridge supports it.',
+    prompt: 'Act as OpenClaw execution planner. Convert the operator request into a bounded task with files, checks, rollback notes, and a short completion report. Do not broaden scope.',
+  },
+];
+const HERMES_PLUGIN_REGISTRY = [
+  { id: 'ops_mcp', name: 'Ops MCP', source: 'HTTP MCP', defaultOn: true, desc: 'Git status, health, Docker, smoke tests, deploy handoffs.' },
+  { id: 'docs_mcp', name: 'Docs MCP', source: 'HTTP MCP', defaultOn: true, desc: 'Local runbooks, source-of-truth docs, recovery maps.' },
+  { id: 'outlook_local', name: 'Outlook Local', source: 'Desktop MCP', defaultOn: false, desc: 'Local Outlook drafts, signatures, and account switching.' },
+  { id: 'outlook_graph', name: 'Outlook Graph', source: 'Cloud MCP', defaultOn: false, desc: 'Mailbox folders, messages, drafts, and send flow.' },
+  { id: 'file_context', name: 'File Context', source: 'Browser', defaultOn: true, desc: 'Local file snippets and attachment manifests injected into prompts.' },
+  { id: 'browser_check', name: 'Browser Check', source: 'SATCOM', defaultOn: true, desc: 'Use browser-visible evidence and live endpoint status.' },
+  { id: 'kanban', name: 'Kanban Ops', source: 'Admin HQ', defaultOn: true, desc: 'Editorial, deploy, and repair work as board-ready cards.' },
+  { id: 'newsletter', name: 'Newsletter', source: 'SATCOM', defaultOn: true, desc: 'Email copy, subject lines, CTAs, and handoff links.' },
+  { id: 'api_vault', name: 'API Vault', source: 'SATCOM', defaultOn: false, desc: 'Reference stored API lane names without exposing secrets.' },
+  { id: 'image_gen', name: 'Image Gen', source: 'Hermes plugins', defaultOn: false, desc: 'Artwork prompts and image-generation handoffs.' },
+  { id: 'video_gen', name: 'Video Gen', source: 'Hermes plugins', defaultOn: false, desc: 'Video header prompts, shot order, and motion instructions.' },
+  { id: 'openclaw', name: 'OpenClaw', source: 'Agent lane', defaultOn: false, desc: 'Bounded worker execution through the OpenClaw route.' },
+];
+const HERMES_PLUGIN_PRESETS = {
+  operator: ['ops_mcp', 'docs_mcp', 'file_context', 'browser_check', 'kanban', 'newsletter'],
+  media: ['docs_mcp', 'file_context', 'browser_check', 'newsletter', 'image_gen', 'video_gen'],
+};
+const HERMES_QUICK_PROMPTS = {
+  doctor: 'Run a SATCOM Hermes doctor pass. Check bridge health, model lane, MCP tool availability, history state, file context state, and identify the next concrete repair.',
+  mcp: 'Repair Hermes connection to MCP. Use the current endpoint facts and logs, separate bridge health from MCP registration, and give the exact non-destructive fix path.',
+  publish: 'Run a publish readiness check. Confirm content, links, images/video header, SEO fields, live route, deployment status, and any blocker before production.',
+  seo: 'Create a Kanban-ready SEO and editorial run. Include page title, meta description, internal links, syndication targets, missing facts, and next actions.',
+};
 let hermesChatMessages = [];
 let hermesActivity = [];
+let hermesActiveAgent = 'satcom-operator';
+let hermesPluginState = {};
+let hermesFiles = [];
+let hermesHistory = [];
+let hermesPreferences = {
+  includeFiles: true,
+  history: true,
+  confirmWrites: true,
+  compact: true,
+};
 
 function escapeHtml(value) {
   return String(value || '').replace(/[&<>"']/g, ch => ({
@@ -3760,6 +4203,494 @@ function saveHermesChatMessages() {
 function summarizeHermesText(text, max = 150) {
   const clean = String(text || '').replace(/\s+/g, ' ').trim();
   return clean.length > max ? `${clean.slice(0, max - 1)}…` : clean;
+}
+
+function readHermesJson(key, fallback) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(key) || 'null');
+    return parsed === null ? fallback : parsed;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeHermesJson(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getActiveHermesAgent() {
+  return HERMES_AGENT_PRESETS.find(agent => agent.id === hermesActiveAgent) || HERMES_AGENT_PRESETS[0];
+}
+
+function getActiveHermesPlugins() {
+  return HERMES_PLUGIN_REGISTRY.filter(plugin => !!hermesPluginState[plugin.id]);
+}
+
+function loadHermesOperatorState() {
+  hermesActiveAgent = localStorage.getItem(HERMES_AGENT_KEY) || 'satcom-operator';
+  const savedPlugins = readHermesJson(HERMES_PLUGIN_KEY, null);
+  hermesPluginState = {};
+  HERMES_PLUGIN_REGISTRY.forEach(plugin => {
+    hermesPluginState[plugin.id] = savedPlugins && Object.prototype.hasOwnProperty.call(savedPlugins, plugin.id)
+      ? !!savedPlugins[plugin.id]
+      : !!plugin.defaultOn;
+  });
+  hermesFiles = readHermesJson(HERMES_FILE_KEY, []);
+  if (!Array.isArray(hermesFiles)) hermesFiles = [];
+  hermesHistory = readHermesJson(HERMES_HISTORY_KEY, []);
+  if (!Array.isArray(hermesHistory)) hermesHistory = [];
+  hermesPreferences = {
+    ...hermesPreferences,
+    ...readHermesJson(HERMES_PREF_KEY, {}),
+  };
+}
+
+function renderHermesOperatorState() {
+  renderHermesAgents();
+  renderHermesPlugins();
+  renderHermesFiles();
+  renderHermesHistory();
+  renderHermesPreferences();
+  updateHermesOperatorBadges();
+}
+
+function updateHermesOperatorBadges() {
+  const agent = getActiveHermesAgent();
+  const activePlugins = getActiveHermesPlugins();
+  setText('hermes-agent-status', agent.name.replace(/\s+/g, ' ').split(' ')[0] || 'SATCOM');
+  setText('hermes-plugin-count', String(activePlugins.length));
+  setText('hermes-file-count', String(hermesFiles.length));
+  setText('hermes-history-count', String(hermesHistory.length));
+  setText('hermes-command-agent', agent.name);
+  setText('hermes-command-plugins', activePlugins.length ? `${activePlugins.length} active` : 'None active');
+  setText('hermes-command-files', hermesFiles.length ? `${hermesFiles.length} queued` : 'No files');
+  setText('hermes-command-history', `${hermesHistory.length} entr${hermesHistory.length === 1 ? 'y' : 'ies'}`);
+  const activeBox = document.getElementById('hermes-active-agent-box');
+  if (activeBox) {
+    activeBox.innerHTML = `<strong>${escapeHtml(agent.name)}</strong><span>${escapeHtml(agent.desc)}</span>`;
+  }
+  const contextChip = document.getElementById('hermes-prompt-context');
+  if (contextChip) {
+    const fileText = hermesFiles.length
+      ? `${hermesFiles.length} file${hermesFiles.length === 1 ? '' : 's'} queued for prompt context.`
+      : 'No file context attached.';
+    contextChip.innerHTML = `<span>${escapeHtml(fileText)}</span><button class="mini-btn" onclick="document.getElementById('hermes-file-input')?.click()">Add Files</button>`;
+  }
+}
+
+function renderHermesAgents() {
+  const grid = document.getElementById('hermes-agent-grid');
+  if (!grid) return;
+  grid.innerHTML = HERMES_AGENT_PRESETS.map(agent => {
+    const active = agent.id === hermesActiveAgent;
+    return `
+      <div class="hermes-agent-card ${active ? 'is-active' : ''}">
+        <div class="hermes-agent-top">
+          <div>
+            <div class="hermes-agent-title">${escapeHtml(agent.name)}</div>
+            <div class="hermes-agent-meta">${escapeHtml(agent.role)} · ${escapeHtml(agent.tier)}</div>
+          </div>
+          <span class="hermes-plugin-state">${active ? 'Active' : 'Ready'}</span>
+        </div>
+        <div class="hermes-agent-desc">${escapeHtml(agent.desc)}</div>
+        <div class="hermes-agent-actions">
+          <button class="mini-btn ${active ? 'ok' : ''}" onclick="activateHermesAgent('${agent.id}')">Activate</button>
+          <button class="mini-btn" onclick="prefillHermesAgentPrompt('${agent.id}')">Prompt</button>
+          <button class="mini-btn" onclick="sendHermesAgentPrompt('${agent.id}')">Send</button>
+          <button class="mini-btn" onclick="queueHermesAgentCrew('${agent.id}')">Queue Crew</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function setHermesOutputs(outputs = []) {
+  const want = new Set(outputs);
+  const web = document.getElementById('hermes-output-web');
+  const newsletter = document.getElementById('hermes-output-newsletter');
+  const social = document.getElementById('hermes-output-social');
+  const seo = document.getElementById('hermes-output-seo');
+  if (web) web.checked = want.has('web');
+  if (newsletter) newsletter.checked = want.has('newsletter');
+  if (social) social.checked = want.has('social');
+  if (seo) seo.checked = want.has('seo');
+}
+
+function activateHermesAgent(id, quiet = false) {
+  const agent = HERMES_AGENT_PRESETS.find(item => item.id === id);
+  if (!agent) return;
+  hermesActiveAgent = id;
+  localStorage.setItem(HERMES_AGENT_KEY, id);
+  const tier = document.getElementById('hermes-chat-tier');
+  if (tier) tier.value = agent.tier;
+  setHermesOutputs(agent.outputs);
+  renderHermesOperatorState();
+  if (!quiet) {
+    addHermesHistory('agent', `Activated ${agent.name}`, agent.desc, { agent: agent.id });
+    toast(`${agent.name} active`);
+  }
+}
+
+function prefillHermesAgentPrompt(id) {
+  const agent = HERMES_AGENT_PRESETS.find(item => item.id === id);
+  if (!agent) return;
+  activateHermesAgent(id, true);
+  const input = document.getElementById('hermes-chat-prompt');
+  if (input) {
+    input.value = agent.prompt;
+    input.focus();
+  }
+  addHermesHistory('agent', `Loaded ${agent.name} prompt`, agent.prompt, { prompt: agent.prompt, agent: agent.id });
+  toast(`${agent.name} prompt loaded`);
+}
+
+function sendHermesAgentPrompt(id) {
+  prefillHermesAgentPrompt(id);
+  sendHermesChat();
+}
+
+function queueHermesAgentCrew(id) {
+  const agent = HERMES_AGENT_PRESETS.find(item => item.id === id);
+  if (!agent) return;
+  activateHermesAgent(id, true);
+  const topic = document.getElementById('hermes-crew-topic');
+  const pub = document.getElementById('hermes-crew-publication');
+  if (topic && !topic.value.trim()) topic.value = agent.crewTopic;
+  if (pub && !pub.value.trim()) pub.value = 'SATCOM';
+  addHermesHistory('crew', `Queued ${agent.name} crew lane`, topic?.value || agent.crewTopic, { agent: agent.id });
+  runHermesCrew();
+}
+
+function renderHermesPlugins() {
+  const grid = document.getElementById('hermes-plugin-grid');
+  if (!grid) return;
+  grid.innerHTML = HERMES_PLUGIN_REGISTRY.map(plugin => {
+    const active = !!hermesPluginState[plugin.id];
+    return `
+      <div class="hermes-plugin-card ${active ? 'is-on' : ''}" onclick="toggleHermesPlugin('${plugin.id}')">
+        <div class="hermes-plugin-top">
+          <div>
+            <div class="hermes-plugin-title">${escapeHtml(plugin.name)}</div>
+            <div class="hermes-plugin-meta">${escapeHtml(plugin.source)}</div>
+          </div>
+          <span class="hermes-plugin-state">${active ? 'On' : 'Off'}</span>
+        </div>
+        <div class="hermes-plugin-desc">${escapeHtml(plugin.desc)}</div>
+      </div>`;
+  }).join('');
+}
+
+function toggleHermesPlugin(id) {
+  hermesPluginState[id] = !hermesPluginState[id];
+  writeHermesJson(HERMES_PLUGIN_KEY, hermesPluginState);
+  renderHermesOperatorState();
+  const plugin = HERMES_PLUGIN_REGISTRY.find(item => item.id === id);
+  addHermesHistory('plugin', `${plugin?.name || id} ${hermesPluginState[id] ? 'enabled' : 'disabled'}`, plugin?.desc || '', { plugin: id, enabled: hermesPluginState[id] });
+}
+
+function applyHermesPluginPreset(name) {
+  const preset = HERMES_PLUGIN_PRESETS[name] || HERMES_PLUGIN_PRESETS.operator;
+  HERMES_PLUGIN_REGISTRY.forEach(plugin => {
+    hermesPluginState[plugin.id] = preset.includes(plugin.id);
+  });
+  writeHermesJson(HERMES_PLUGIN_KEY, hermesPluginState);
+  renderHermesOperatorState();
+  addHermesHistory('plugin', `Applied ${name} plugin stack`, getActiveHermesPlugins().map(p => p.name).join(', '), { preset: name });
+  toast(`${name} plugin stack active`);
+}
+
+function resetHermesPlugins() {
+  localStorage.removeItem(HERMES_PLUGIN_KEY);
+  loadHermesOperatorState();
+  renderHermesOperatorState();
+  addHermesHistory('plugin', 'Plugin stack reset', 'Restored default SATCOM plugin set.');
+  toast('Plugin stack reset');
+}
+
+async function copyHermesPluginPrompt() {
+  const lines = getActiveHermesPlugins().map(plugin => `- ${plugin.name} (${plugin.source}): ${plugin.desc}`);
+  const text = `Enabled SATCOM plugin lanes:\n${lines.length ? lines.join('\n') : '- None active'}\n\nUse these lanes as available capabilities. If a lane is not directly callable, produce the exact operator handoff for it.`;
+  await navigator.clipboard.writeText(text);
+  toast('Plugin prompt copied');
+}
+
+function formatHermesBytes(bytes) {
+  const n = Number(bytes || 0);
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function isHermesTextFile(file) {
+  const name = file.name.toLowerCase();
+  return file.type.startsWith('text/')
+    || /\.(txt|md|markdown|html|css|js|jsx|ts|tsx|json|csv|xml|yaml|yml|rtf|log)$/i.test(name);
+}
+
+async function handleHermesFiles(event) {
+  const files = Array.from(event.target?.files || []);
+  if (!files.length) return;
+  for (const file of files) {
+    const textish = isHermesTextFile(file);
+    let text = '';
+    let note = 'manifest only';
+    if (textish) {
+      try {
+        text = (await file.text()).slice(0, 12000);
+        note = text.length >= 12000 ? 'text clipped to 12k chars' : 'text captured';
+      } catch (err) {
+        note = `text read failed: ${err.message}`;
+      }
+    }
+    hermesFiles.push({
+      id: `file-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      name: file.name,
+      type: file.type || 'unknown',
+      size: file.size,
+      text,
+      note,
+      added: new Date().toISOString(),
+    });
+  }
+  hermesFiles = hermesFiles.slice(-16);
+  writeHermesJson(HERMES_FILE_KEY, hermesFiles);
+  renderHermesOperatorState();
+  addHermesHistory('file', `Added ${files.length} file${files.length === 1 ? '' : 's'}`, files.map(f => f.name).join(', '), { files: files.map(f => f.name) });
+  toast(`${files.length} file${files.length === 1 ? '' : 's'} added to Hermes context`);
+  if (event.target) event.target.value = '';
+}
+
+function renderHermesFiles() {
+  const list = document.getElementById('hermes-file-list');
+  if (!list) return;
+  if (!hermesFiles.length) {
+    list.innerHTML = '<div class="hermes-file-row"><div class="hermes-file-title">No files queued</div><div class="hermes-file-meta">Use Add Files to attach local context to the next prompt.</div></div>';
+    return;
+  }
+  list.innerHTML = hermesFiles.slice().reverse().map(file => `
+    <div class="hermes-file-row">
+      <div class="hermes-file-top">
+        <div>
+          <div class="hermes-file-title">${escapeHtml(file.name)}</div>
+          <div class="hermes-file-meta">${escapeHtml(file.type || 'unknown')} · ${formatHermesBytes(file.size)} · ${escapeHtml(file.note || 'queued')}</div>
+        </div>
+        <span class="hermes-file-kind">${file.text ? 'Text' : 'File'}</span>
+      </div>
+      <div class="hermes-file-actions">
+        <button class="mini-btn" onclick="copyHermesFileSnippet('${escapeHtml(file.id)}')">Copy</button>
+        <button class="mini-btn warn" onclick="removeHermesFile('${escapeHtml(file.id)}')">Remove</button>
+      </div>
+    </div>`).join('');
+}
+
+function removeHermesFile(id) {
+  hermesFiles = hermesFiles.filter(file => file.id !== id);
+  writeHermesJson(HERMES_FILE_KEY, hermesFiles);
+  renderHermesOperatorState();
+  toast('File removed');
+}
+
+function clearHermesFiles() {
+  hermesFiles = [];
+  localStorage.removeItem(HERMES_FILE_KEY);
+  renderHermesOperatorState();
+  addHermesHistory('file', 'Cleared file context', 'Attachment queue emptied.');
+  toast('Hermes file context cleared');
+}
+
+function hermesFileManifest() {
+  return hermesFiles.map(file => ({
+    name: file.name,
+    type: file.type,
+    size: file.size,
+    note: file.note,
+    has_text: !!file.text,
+  }));
+}
+
+async function copyHermesFileManifest() {
+  const text = JSON.stringify(hermesFileManifest(), null, 2);
+  await navigator.clipboard.writeText(text);
+  toast('File manifest copied');
+}
+
+async function copyHermesFileSnippet(id) {
+  const file = hermesFiles.find(item => item.id === id);
+  if (!file) return;
+  const text = file.text || JSON.stringify({ name: file.name, type: file.type, size: file.size, note: file.note }, null, 2);
+  await navigator.clipboard.writeText(text);
+  toast('File context copied');
+}
+
+function renderHermesPreferences() {
+  const map = {
+    'hermes-pref-include-files': 'includeFiles',
+    'hermes-pref-history': 'history',
+    'hermes-pref-confirm-writes': 'confirmWrites',
+    'hermes-pref-compact': 'compact',
+  };
+  Object.entries(map).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = !!hermesPreferences[key];
+  });
+}
+
+function saveHermesPreferencesFromUi() {
+  hermesPreferences = {
+    includeFiles: !!document.getElementById('hermes-pref-include-files')?.checked,
+    history: !!document.getElementById('hermes-pref-history')?.checked,
+    confirmWrites: !!document.getElementById('hermes-pref-confirm-writes')?.checked,
+    compact: !!document.getElementById('hermes-pref-compact')?.checked,
+  };
+  writeHermesJson(HERMES_PREF_KEY, hermesPreferences);
+  updateHermesOperatorBadges();
+  toast('Hermes preferences saved');
+}
+
+function addHermesHistory(kind, title, preview = '', data = {}) {
+  if (!hermesPreferences.history && kind !== 'system') return;
+  const item = {
+    id: `hist-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    kind,
+    title,
+    preview: summarizeHermesText(preview, 280),
+    data,
+    agent: getActiveHermesAgent().name,
+    plugins: getActiveHermesPlugins().map(plugin => plugin.name),
+    time: new Date().toISOString(),
+  };
+  hermesHistory.unshift(item);
+  hermesHistory = hermesHistory.slice(0, 80);
+  writeHermesJson(HERMES_HISTORY_KEY, hermesHistory);
+  renderHermesHistory();
+  updateHermesOperatorBadges();
+  return item;
+}
+
+function renderHermesHistory() {
+  const list = document.getElementById('hermes-history-list');
+  if (!list) return;
+  const q = (document.getElementById('hermes-history-search')?.value || '').toLowerCase().trim();
+  const items = hermesHistory.filter(item => {
+    if (!q) return true;
+    return [item.kind, item.title, item.preview, item.agent, ...(item.plugins || [])].join(' ').toLowerCase().includes(q);
+  });
+  if (!items.length) {
+    list.innerHTML = '<div class="hermes-history-item"><div class="hermes-history-title">No matching history</div><div class="hermes-history-meta">Chats, crew jobs, plugins, and file actions will appear here.</div></div>';
+    updateHermesOperatorBadges();
+    return;
+  }
+  list.innerHTML = items.slice(0, 30).map(item => {
+    const when = item.time ? new Date(item.time).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+    return `
+      <div class="hermes-history-item">
+        <div class="hermes-history-top">
+          <div>
+            <div class="hermes-history-title">${escapeHtml(item.title)}</div>
+            <div class="hermes-history-meta">${escapeHtml(item.kind)} · ${escapeHtml(item.agent || 'SATCOM')} · ${escapeHtml(when)}</div>
+          </div>
+          <span class="hermes-plugin-state">${escapeHtml((item.plugins || []).length)} tools</span>
+        </div>
+        <div class="hermes-history-preview">${escapeHtml(item.preview || '')}</div>
+        <div class="hermes-history-actions">
+          <button class="mini-btn" onclick="restoreHermesHistoryPrompt('${escapeHtml(item.id)}')">Restore</button>
+          <button class="mini-btn" onclick="copyHermesHistoryHandoff('${escapeHtml(item.id)}')">Copy</button>
+        </div>
+      </div>`;
+  }).join('');
+  updateHermesOperatorBadges();
+}
+
+function restoreHermesHistoryPrompt(id) {
+  const item = hermesHistory.find(entry => entry.id === id);
+  if (!item) return;
+  const prompt = item.data?.prompt || item.data?.preparedPrompt || item.preview || item.title;
+  const input = document.getElementById('hermes-chat-prompt');
+  if (input) {
+    input.value = prompt;
+    input.focus();
+  }
+  toast('History prompt restored');
+}
+
+async function copyHermesHistoryHandoff(id) {
+  const item = hermesHistory.find(entry => entry.id === id);
+  if (!item) return;
+  const text = `SATCOM Hermes history item
+Type: ${item.kind}
+Title: ${item.title}
+Agent: ${item.agent}
+Plugins: ${(item.plugins || []).join(', ') || 'None'}
+Time: ${item.time}
+
+Preview:
+${item.preview}
+
+Data:
+${JSON.stringify(item.data || {}, null, 2)}`;
+  await navigator.clipboard.writeText(text);
+  toast('History handoff copied');
+}
+
+function exportHermesHistory() {
+  const blob = new Blob([JSON.stringify(hermesHistory, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `satcom-hermes-history-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function clearHermesHistory() {
+  hermesHistory = [];
+  localStorage.removeItem(HERMES_HISTORY_KEY);
+  renderHermesHistory();
+  updateHermesOperatorBadges();
+  toast('Hermes history cleared');
+}
+
+function buildHermesPrompt(prompt) {
+  const agent = getActiveHermesAgent();
+  const plugins = getActiveHermesPlugins();
+  const parts = [
+    `Active SATCOM agent: ${agent.name}\nRole: ${agent.role}\nRouting tier: ${agent.tier}\nAgent instruction: ${agent.prompt}`,
+  ];
+  if (plugins.length) {
+    parts.push(`Enabled plugin lanes:\n${plugins.map(plugin => `- ${plugin.name} (${plugin.source}): ${plugin.desc}`).join('\n')}`);
+  }
+  if (hermesPreferences.confirmWrites) {
+    parts.push('Write guard: confirm or clearly label any production, DNS, Plesk, firewall, email-send, or destructive file action before executing. For normal content/UI work, give concrete output.');
+  }
+  if (hermesPreferences.includeFiles && hermesFiles.length) {
+    const fileBlocks = hermesFiles.map(file => {
+      const manifest = `${file.name} (${file.type || 'unknown'}, ${formatHermesBytes(file.size)}, ${file.note || 'queued'})`;
+      if (!file.text) return `- ${manifest}`;
+      const limit = hermesPreferences.compact ? 2500 : 6000;
+      return `- ${manifest}\n${file.text.slice(0, limit)}`;
+    }).join('\n\n');
+    parts.push(`Attached local file context:\n${fileBlocks}`);
+  }
+  parts.push(`Operator request:\n${prompt}`);
+  return parts.join('\n\n---\n\n');
+}
+
+function useHermesQuickPrompt(key) {
+  const input = document.getElementById('hermes-chat-prompt');
+  const prompt = HERMES_QUICK_PROMPTS[key] || HERMES_QUICK_PROMPTS.doctor;
+  if (input) {
+    input.value = prompt;
+    input.focus();
+  }
+  addHermesHistory('prompt', `Loaded ${key} quick prompt`, prompt, { prompt });
+  toast('Hermes quick prompt loaded');
+}
+
+async function copyHermesPreparedPrompt() {
+  const prompt = document.getElementById('hermes-chat-prompt')?.value.trim() || 'Continue the SATCOM Hermes operator task from the current page state.';
+  await navigator.clipboard.writeText(buildHermesPrompt(prompt));
+  toast('Full Hermes prompt copied');
 }
 
 function loadHermesActivity() {
@@ -3909,7 +4840,7 @@ async function refreshHermesCrewStatus() {
     setText('hermes-crew-model', 'Local');
     setText('hermes-crew-writes', 'Off');
     const box = document.getElementById('hermes-output-box');
-    if (box) box.textContent = `Hermes Crew bridge not reachable at ${HERMES_CREW_BASE}.\n\nStart/check it from /Users/Ace/Codex/apps/hermes-crew, then refresh this panel.\n\n${err.message}`;
+    if (box) box.textContent = `Hermes Crew bridge not reachable at ${HERMES_CREW_BASE}.\n\nLocal preview uses /Users/Ace/Codex/apps/hermes-crew on port 8793. Public SATCOM uses the production bridge proxy.\n\n${err.message}`;
     return null;
   }
 }
@@ -3922,7 +4853,18 @@ async function sendHermesChat() {
     toast('Add a Hermes prompt first');
     return;
   }
+  const preparedPrompt = buildHermesPrompt(prompt);
+  const agent = getActiveHermesAgent();
+  const plugins = getActiveHermesPlugins();
   const activity = addHermesActivity(prompt, tier);
+  addHermesHistory('chat', `Chat sent through ${agent.name}`, prompt, {
+    prompt,
+    preparedPrompt,
+    tier,
+    agent: agent.id,
+    plugins: plugins.map(plugin => plugin.id),
+    files: hermesFileManifest(),
+  });
   appendHermesMessage('user', prompt);
   if (input) input.value = '';
   const assistant = appendHermesMessage('assistant', 'Thinking locally...');
@@ -3936,7 +4878,7 @@ async function sendHermesChat() {
       body: JSON.stringify({
         tier,
         temperature: 0.45,
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{ role: 'user', content: preparedPrompt }],
       }),
     });
     if (!res.ok || !res.body) throw new Error(`Hermes chat HTTP ${res.status}`);
@@ -3996,6 +4938,11 @@ async function sendHermesChat() {
       saveHermesChatMessages();
       updateStreamingPreview(true);
       updateHermesActivity(activity, 'done', buffer);
+      addHermesHistory('response', `Response from ${agent.name}`, buffer, {
+        prompt,
+        tier,
+        agent: agent.id,
+      });
     }
   } catch (err) {
     if (assistant?.el) {
@@ -4033,8 +4980,15 @@ async function runHermesCrew() {
     outputs: selectedHermesOutputs(),
     generate_images: !!document.getElementById('hermes-generate-images')?.checked,
   };
+  const agent = getActiveHermesAgent();
+  addHermesHistory('crew', `Crew run requested: ${topic}`, `${agent.name} · ${payload.outputs.join(', ')}`, {
+    payload,
+    agent: agent.id,
+    plugins: getActiveHermesPlugins().map(plugin => plugin.id),
+    files: hermesFileManifest(),
+  });
   const box = document.getElementById('hermes-output-box');
-  if (box) box.textContent = `Queueing Hermes Crew job...\n${JSON.stringify(payload, null, 2)}`;
+  if (box) box.textContent = `Queueing Hermes Crew job as ${agent.name}...\n${JSON.stringify(payload, null, 2)}`;
   try {
     const res = await fetch(`${HERMES_CREW_BASE}/crew/run`, {
       method: 'POST',
@@ -4084,6 +5038,7 @@ async function showHermesJob(jobId) {
     if (status.state === 'done') {
       const result = await fetch(`${HERMES_CREW_BASE}/crew/result/${jobId}`).then(r => r.json());
       if (box) box.textContent = result.output || JSON.stringify(result.result || result, null, 2);
+      addHermesHistory('job', `Opened completed job ${jobId}`, result.output || JSON.stringify(result.result || result, null, 2), { jobId });
     } else if (box) {
       box.textContent = `Job ${jobId}: ${status.state}\n\n${status.log_tail || status.error || 'No log yet.'}`;
     }
@@ -4096,9 +5051,12 @@ function pollHermesJob(jobId, remaining = 80) {
   if (!remaining) return;
   setTimeout(async () => {
     await loadHermesJobs(jobId);
+    let status = null;
+    try {
+      status = await fetch(`${HERMES_CREW_BASE}/crew/status/${jobId}`).then(r => r.json());
+    } catch {}
     await showHermesJob(jobId);
-    const text = document.getElementById('hermes-output-box')?.textContent || '';
-    if (!/^Job .*: (done|error)/.test(text)) pollHermesJob(jobId, remaining - 1);
+    if (status && !['done', 'error'].includes(status.state)) pollHermesJob(jobId, remaining - 1);
   }, 3500);
 }
 
@@ -4133,13 +5091,77 @@ document.getElementById('hermes-chat-prompt')?.addEventListener('keydown', e => 
   }
 });
 
+// ── Rollout Tracker ───────────────────────────────────────────
+const ROLLOUT_STAGES = [
+  {id:'draft',       label:'Draft',       dateId:'rollout-draft-date'},
+  {id:'internal',    label:'Internal',    dateId:'rollout-internal-date'},
+  {id:'pilot',       label:'Pilot',       dateId:'rollout-pilot-date'},
+  {id:'production',  label:'Production',  dateId:'rollout-prod-date'},
+];
+
+function refreshRolloutTrackers() {
+  const timeline = document.getElementById('rollout-timeline');
+  const progress = document.getElementById('rollout-progress');
+  const text     = document.getElementById('rollout-text');
+  const led      = document.getElementById('rollout-led');
+  if (!timeline) return;
+
+  (async () => {
+    let stages = [];
+    try {
+      const res = await fetch('/data/conews-satcom-progress-monitor.json', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data?.stages)) stages = data.stages;
+      }
+    } catch {}
+
+    const now = new Date().toISOString().slice(0,10);
+    let activeIdx = 0;
+    let steps = ROLLOUT_STAGES.map((s, i) => {
+      const deployed = stages.find(st => st.id === s.id) && stages.find(st => st.id === s.id).status === 'deployed';
+      const current  = stages.find(st => st.id === s.id && st.current);
+      if (current) activeIdx = i;
+      const isPast     = i < activeIdx;
+      const isCurrent  = i === activeIdx;
+      const cls = isPast ? 'done' : (isCurrent ? 'active' : 'future');
+      const trackCls = isPast ? 'filled' : '';
+      const icon = deployed ? '&#x2713;' : '&mdash;';
+      const dateVal = deployed ? stages.find(st => st.id === s.id).deployed_at?.slice(0,10) : (isCurrent ? 'LIVE' : 'TBD');
+      return `<div class="stage-step">
+        <div class="stage-track ${trackCls}"></div>
+        <div class="stage-dot ${cls}"></div>
+        <div class="stage-label ${cls}">${s.label}</div>
+        <div class="stage-badge ${cls}">${deployed ? '&#x2713; OK' : (isCurrent ? '&#x27aa; LIVE' : '&#x2014; TODO')}</div>
+        <div class="stage-date" id="${s.dateId}">${dateVal}</div>
+      </div>`;
+    });
+    timeline.innerHTML = steps.join('');
+
+    const pct = (activeIdx / (ROLLOUT_STAGES.length - 1)) * 100;
+    progress.style.width = pct + '%';
+    const done = stages.filter(st => st.status === 'deployed').length;
+    text.textContent = `${done} of ${ROLLOUT_STAGES.length} stages deployed`;
+
+    if (led) {
+      led.className = 'card-led active';
+      const last = stages[stages.length - 1];
+      if (last && last.status === 'deployed') led.className = 'card-led ok';
+    }
+  })();
+}
+
 // ── Init ───────────────────────────────────────────────────────────
+loadHermesOperatorState();
 loadHermesChatMessages();
 loadHermesActivity();
+renderHermesOperatorState();
 renderHermesChat();
 renderHermesActivity();
 loadKeys();
 updateStatusDots();
+refreshRolloutTrackers();
+
 loadLiveDashboardData();
 renderEditorialStories();
 loadDirectoryBatch();
