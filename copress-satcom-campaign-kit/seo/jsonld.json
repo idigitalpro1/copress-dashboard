@@ -1,0 +1,27 @@
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CoPress SATCOM Command Center",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "A local publishing operations dashboard for campaign kits, newsletter handoff, billing launch, city-site intake, editorial queues, and SATCOM/Hermes operator workflows.",
+  "url": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/",
+  "publisher": {
+    "@type": "Organization",
+    "name": "CoPress Dashboard"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "7-day free operator trial; checkout still required."
+  },
+  "featureList": [
+    "Campaign kit generation",
+    "Newsletter Studio handoff",
+    "Invoice-manager launch",
+    "City-site directory intake",
+    "Editorial queue",
+    "SATCOM/Hermes operator support"
+  ]
+}

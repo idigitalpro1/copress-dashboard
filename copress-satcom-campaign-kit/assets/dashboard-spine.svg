@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Dashboard module spine</title>
+  <desc id="desc">Grid of CoPress dashboard modules linked by a central operations spine.</desc>
+  <rect width="1200" height="720" fill="#07101b"/>
+  <line x1="600" y1="100" x2="600" y2="620" stroke="#d7a84f" stroke-width="6" stroke-linecap="round"/>
+  <g font-family="Arial, sans-serif" font-weight="800">
+    <g transform="translate(110 90)">
+      <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#56b6c8"/>
+      <text x="28" y="48" fill="#56b6c8" font-size="23">EDITORIAL QUEUE</text>
+      <text x="28" y="82" fill="#a9bacd" font-size="18">Stories, assignments, daily list</text>
+    </g>
+    <g transform="translate(730 90)">
+      <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#d7a84f"/>
+      <text x="28" y="48" fill="#d7a84f" font-size="23">MARKETING HUB</text>
+      <text x="28" y="82" fill="#a9bacd" font-size="18">Campaign briefs and kits</text>
+    </g>
+    <g transform="translate(110 300)">
+      <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#c94c4c"/>
+      <text x="28" y="48" fill="#c94c4c" font-size="23">INVOICE MANAGER</text>
+      <text x="28" y="82" fill="#a9bacd" font-size="18">Billing launch and print mail</text>
+    </g>
+    <g transform="translate(730 300)">
+      <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#56b6c8"/>
+      <text x="28" y="48" fill="#56b6c8" font-size="23">NEWSLETTER STUDIO</text>
+      <text x="28" y="82" fill="#a9bacd" font-size="18">Sendy copy and handoff</text>
+    </g>
+    <g transform="translate(110 510)">
+      <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#d7a84f"/>
+      <text x="28" y="48" fill="#d7a84f" font-size="23">CITY SITES</text>
+      <text x="28" y="82" fill="#a9bacd" font-size="18">Directory and sponsor routes</text>
+    </g>
+    <g transform="translate(730 510)">
+      <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#c94c4c"/>
+      <text x="28" y="48" fill="#c94c4c" font-size="23">SATCOM / HERMES</text>
+      <text x="28" y="82" fill="#a9bacd" font-size="18">Operator support lane</text>
+    </g>
+  </g>
+  <g stroke="#56b6c8" stroke-width="3" stroke-opacity="0.45">
+    <path d="M470 149h130M600 149h130M470 359h130M600 359h130M470 569h130M600 569h130"/>
+  </g>
+  <circle cx="600" cy="360" r="70" fill="#111d2e" stroke="#d7a84f" stroke-width="5"/>
+  <text x="600" y="348" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-weight="700" fill="#f7f1e3">ONE</text>
+  <text x="600" y="387" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="#d7a84f">SPINE</text>
+</svg>

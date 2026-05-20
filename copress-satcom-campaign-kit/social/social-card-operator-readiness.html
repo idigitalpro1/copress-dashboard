@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Social Card - Operator Readiness</title>
+<style>
+  *{box-sizing:border-box} body{margin:0;background:#111;display:grid;place-items:center;min-height:100vh;font-family:Inter,Arial,sans-serif}
+  .card{width:1080px;height:1080px;max-width:92vw;aspect-ratio:1;background:#f7f1e3;color:#08111f;position:relative;overflow:hidden;padding:90px}
+  .card:before{content:"";position:absolute;inset:60px;border:5px solid #08111f;border-radius:42px}
+  .band{position:absolute;left:0;right:0;bottom:0;height:290px;background:#08111f}
+  .content{position:relative;z-index:1}
+  b{font-size:28px;letter-spacing:.24em;text-transform:uppercase;color:#c94c4c}
+  h1{font-family:Georgia,serif;font-size:98px;line-height:1;margin:44px 0 26px}
+  p{font-size:34px;line-height:1.32;max-width:760px;font-weight:700;color:#25364a}
+  .links{position:absolute;z-index:2;left:90px;right:90px;bottom:90px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+  .links div{background:#111d2e;color:#f7f1e3;border:3px solid #d7a84f;border-radius:22px;padding:30px;font-size:28px;font-weight:900}
+  .links span{display:block;font-size:18px;letter-spacing:.12em;text-transform:uppercase;color:#56b6c8;margin-bottom:10px}
+</style>
+</head>
+<body>
+  <div class="card" role="img" aria-label="Operator readiness social card">
+    <div class="content">
+      <b>Operator Readiness</b>
+      <h1>Two links. One spine.</h1>
+      <p>The Bill's Mobile showcase pattern, rebuilt for CoPress SATCOM workflows.</p>
+    </div>
+    <div class="band"></div>
+    <div class="links">
+      <div><span>Link 1</span>Campaign Kit</div>
+      <div><span>Link 2</span>Customer Kit</div>
+    </div>
+  </div>
+</body>
+</html>

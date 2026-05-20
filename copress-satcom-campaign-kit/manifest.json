@@ -1,0 +1,306 @@
+{
+  "campaign": "CoPress SATCOM Command Center - Publishing Spine",
+  "brand": "CoPress Dashboard",
+  "version": "1.0.0",
+  "created": "2026-05-19",
+  "ecosystem": "CoPress / SATCOM Campaign Kit",
+  "tagline": "One command center for local publishing, billing, campaigns, and reader growth.",
+  "sourcePattern": "Bill's Mobile showcase pattern adapted for the CoPress dashboard: two-link handoff, campaign kit asset buildout, customer operator kit link, newsletter, social, print, CRM, audio, and drip sequence.",
+  "sourceUrl": "file:///Users/Ace/Codex/apps/copress-dashboard/index.html",
+  "audience": [
+    "Local publishers modernizing editorial, advertising, billing, and newsletters",
+    "Colorado city-site operators who need one intake-to-publish dashboard",
+    "Sales reps packaging advertiser campaigns without rebuilding assets",
+    "Production teams that need visible kanban, handoff, and launch lanes",
+    "Owners who want SATCOM/Hermes support without losing local control"
+  ],
+  "positioning": "CoPress Dashboard is the operating spine for local media: campaign kits, newsletter handoff, directory intake, invoice-manager launch, city-site routing, and SATCOM/Hermes operator workflows in one browser-local command center.",
+  "customerKitName": "Operator readiness kit",
+  "customerBlurb": "A customer-facing operator brief that explains the dashboard in plain language: what it controls, what gets published, how billing hands off, and where SATCOM/Hermes support fits the workflow.",
+  "cartNote": "7-day free operator trial - checkout still required.",
+  "freeDays": 7,
+  "colors": {
+    "bg": "#08111f",
+    "panel": "#111d2e",
+    "accent": "#d7a84f",
+    "accent2": "#56b6c8",
+    "text": "#f7f1e3",
+    "mute": "#a9bacd",
+    "signal": "#c94c4c",
+    "ink": "#07101b"
+  },
+  "fonts": {
+    "display": "Playfair Display",
+    "body": "Inter",
+    "google": "family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700"
+  },
+  "assets": {
+    "hero": "./assets/command-center-hero.svg",
+    "ogImage": "./assets/social-card-command-center.svg",
+    "newsletter": "./assets/newsletter-panel.svg",
+    "dashboard": "./assets/dashboard-spine.svg",
+    "handoff": "./assets/operator-handoff.svg"
+  },
+  "links": {
+    "campaignKitLanding": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit",
+    "customerLink": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer"
+  },
+  "deliverables": {
+    "showcase": "index.html",
+    "publicLinks": {
+      "campaignKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit",
+      "customerLink": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer"
+    },
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-mobile-320x50.html",
+      "banners/banner-social-square-1080x1080.html"
+    ],
+    "email": [
+      "email/newsletter-command-spine.html"
+    ],
+    "editorial": [
+      "editorial/campaign-copy.md",
+      "editorial/press-release.md",
+      "editorial/social-media-copy.md"
+    ],
+    "social": [
+      "social/social-card-command-center.html",
+      "social/social-card-operator-readiness.html"
+    ],
+    "print": [
+      "print/direct-mail-postcard.md",
+      "print/operator-one-sheet.md"
+    ],
+    "audio": [
+      "audio/radio-spot.md"
+    ],
+    "crm": [
+      "crm/drip-sequence.md"
+    ],
+    "pricing": [
+      "pricing/menu-pricing.md"
+    ],
+    "handoff": [
+      "handoff/two-link-handoff.md",
+      "handoff/owner-sms.txt",
+      "handoff/owner-email.md",
+      "handoff/production-kanban.json"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ],
+    "data": [
+      "data/offer-matrix.json",
+      "data/offer-matrix.md"
+    ]
+  },
+  "officialFacts": {
+    "subjectProperty": "CoPress Dashboard local operator surface",
+    "propertyType": "Publishing operations platform",
+    "market": "Colorado local media, city sites, newsletters, advertiser campaigns, invoice-manager handoff",
+    "recommendedList": "Publishers, advertisers, city-site operators, newsroom owners, production managers",
+    "status": "Browser-local dashboard with static campaign-kit deployment path",
+    "address": "Local file source: /Users/Ace/Codex/apps/copress-dashboard/index.html",
+    "verification": "External writes, billing, DNS, and production deploys remain gated through the dedicated backend tools and operator approval."
+  },
+  "facts": [
+    [
+      "Core surface",
+      "CoPress Dashboard"
+    ],
+    [
+      "Pattern",
+      "Bill's Mobile two-link showcase"
+    ],
+    [
+      "Primary offer",
+      "Publishing spine + campaign kit engine"
+    ],
+    [
+      "Customer link",
+      "Operator readiness kit"
+    ],
+    [
+      "Launch path",
+      "Static Vercel-ready asset pack"
+    ]
+  ],
+  "pricing": [
+    {
+      "id": "unlimited",
+      "name": "Free Unlimited operator trial - all placements",
+      "price": 0
+    },
+    {
+      "id": "landing",
+      "name": "Dashboard showcase landing + host",
+      "price": 75
+    },
+    {
+      "id": "newsletter",
+      "name": "Newsletter command-spine feature block",
+      "price": 20
+    },
+    {
+      "id": "social",
+      "name": "Social card set",
+      "price": 18
+    },
+    {
+      "id": "banners",
+      "name": "Banner set - leaderboard, rectangle, mobile, square",
+      "price": 23
+    },
+    {
+      "id": "editorial",
+      "name": "Sponsored editorial / launch article",
+      "price": 30
+    },
+    {
+      "id": "print",
+      "name": "Operator one-sheet + direct mail copy",
+      "price": 20
+    },
+    {
+      "id": "audio",
+      "name": "Radio/podcast operator spot",
+      "price": 15
+    },
+    {
+      "id": "crm",
+      "name": "Four-touch owner drip sequence",
+      "price": 25
+    }
+  ],
+  "kanban": {
+    "Intake": [
+      "Confirm operator audience and launch lane",
+      "Choose two links: campaign kit + customer operator kit",
+      "Map dashboard modules to advertiser-ready language"
+    ],
+    "Design": [
+      "Command-center hero asset",
+      "Four banner formats",
+      "Social cards and newsletter panel"
+    ],
+    "Publish": [
+      "Static kit route under copress-dashboard",
+      "Newsletter Studio handoff copy",
+      "Marketing Hub README registration"
+    ],
+    "Follow-up": [
+      "Owner SMS and email",
+      "CRM drip sequence",
+      "Invoice-manager placement map"
+    ]
+  },
+  "sections": [
+    {
+      "name": "SEO",
+      "items": [
+        [
+          "seo/meta.json",
+          "title, description, OG, canonical"
+        ],
+        [
+          "seo/jsonld.json",
+          "SoftwareApplication + Service schema"
+        ]
+      ]
+    },
+    {
+      "name": "Editorial",
+      "items": [
+        [
+          "editorial/campaign-copy.md",
+          "headlines, positioning, ad copy"
+        ],
+        [
+          "editorial/press-release.md",
+          "launch announcement"
+        ],
+        [
+          "editorial/social-media-copy.md",
+          "platform-ready captions"
+        ]
+      ]
+    },
+    {
+      "name": "Banners",
+      "items": [
+        [
+          "banner-leaderboard-728x90.html",
+          "web top slot"
+        ],
+        [
+          "banner-medium-rect-300x250.html",
+          "article/sidebar slot"
+        ],
+        [
+          "banner-mobile-320x50.html",
+          "mobile slot"
+        ],
+        [
+          "banner-social-square-1080x1080.html",
+          "feed creative"
+        ]
+      ]
+    },
+    {
+      "name": "Email",
+      "items": [
+        [
+          "email/newsletter-command-spine.html",
+          "Sendy/manual newsletter feature block"
+        ]
+      ]
+    },
+    {
+      "name": "Print / Audio / CRM",
+      "items": [
+        [
+          "print/operator-one-sheet.md",
+          "one-page sales handout"
+        ],
+        [
+          "print/direct-mail-postcard.md",
+          "direct mail copy"
+        ],
+        [
+          "audio/radio-spot.md",
+          "15s and 30s read"
+        ],
+        [
+          "crm/drip-sequence.md",
+          "four-touch follow-up"
+        ]
+      ]
+    },
+    {
+      "name": "Handoff",
+      "items": [
+        [
+          "handoff/two-link-handoff.md",
+          "Bill's Mobile style two-link send"
+        ],
+        [
+          "handoff/owner-sms.txt",
+          "short owner text"
+        ],
+        [
+          "handoff/owner-email.md",
+          "owner-ready email"
+        ],
+        [
+          "handoff/production-kanban.json",
+          "production queue"
+        ]
+      ]
+    }
+  ],
+  "modelPolicy": "free-local-models",
+  "artRoute": "Static SVG/HTML assets generated locally from the dashboard spine; premium artwork not required."
+}

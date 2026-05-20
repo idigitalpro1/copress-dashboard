@@ -1,0 +1,40 @@
+{
+  "campaign": "CoPress SATCOM Command Center - Publishing Spine",
+  "pattern": "Bill's Mobile two-link showcase",
+  "columns": [
+    {
+      "name": "Ready",
+      "cards": [
+        "Manifest and landing page generated",
+        "Two-link handoff defined",
+        "Campaign positioning drafted"
+      ]
+    },
+    {
+      "name": "Design",
+      "cards": [
+        "Command-center hero SVG",
+        "Banner set",
+        "Social cards",
+        "Newsletter panel"
+      ]
+    },
+    {
+      "name": "Copy",
+      "cards": [
+        "Campaign copy",
+        "Press release",
+        "Social captions",
+        "Print, audio, and CRM sequence"
+      ]
+    },
+    {
+      "name": "Ship",
+      "cards": [
+        "README registration",
+        "Local static verification",
+        "Vercel deploy after operator approval"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">CoPress newsletter panel</title>
+  <desc id="desc">Newsletter feature panel promoting the CoPress publishing command center.</desc>
+  <rect width="1200" height="630" fill="#08111f"/>
+  <rect x="58" y="58" width="1084" height="514" rx="28" fill="#111d2e" stroke="#d7a84f" stroke-width="4"/>
+  <text x="100" y="142" font-family="Arial, sans-serif" font-size="23" font-weight="800" fill="#56b6c8" letter-spacing="5">NEWSLETTER FEATURE BLOCK</text>
+  <text x="100" y="230" font-family="Georgia, serif" font-size="68" font-weight="700" fill="#f7f1e3">Build the spine once.</text>
+  <text x="100" y="300" font-family="Georgia, serif" font-size="68" font-weight="700" fill="#d7a84f">Publish everywhere.</text>
+  <text x="100" y="368" font-family="Arial, sans-serif" font-size="28" fill="#a9bacd">Campaign kits, city-site intake, Sendy copy, invoice-manager handoff, and SATCOM operator lanes.</text>
+  <g transform="translate(100 440)" font-family="Arial, sans-serif" font-size="23" font-weight="700">
+    <rect width="250" height="64" rx="10" fill="#d7a84f"/>
+    <text x="125" y="41" text-anchor="middle" fill="#07101b">Open Kit</text>
+    <rect x="276" width="310" height="64" rx="10" fill="none" stroke="#56b6c8" stroke-width="2"/>
+    <text x="431" y="41" text-anchor="middle" fill="#f7f1e3">Operator Readiness</text>
+  </g>
+  <g transform="translate(855 115)" stroke="#56b6c8" fill="none" stroke-width="4" opacity="0.72">
+    <circle cx="120" cy="150" r="112"/>
+    <circle cx="120" cy="150" r="62" stroke="#d7a84f"/>
+    <path d="M8 150h224M120 38v224M42 72c70 42 116 42 156 0M42 228c70-42 116-42 156 0"/>
+  </g>
+</svg>

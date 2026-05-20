@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">Operator handoff card</title>
+  <desc id="desc">Two-link handoff card for the campaign kit and customer operator readiness kit.</desc>
+  <rect width="1200" height="720" fill="#f7f1e3"/>
+  <rect x="70" y="70" width="1060" height="580" rx="32" fill="#08111f"/>
+  <text x="600" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="62" font-weight="700" fill="#f7f1e3">Two Links Only</text>
+  <text x="600" y="210" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#a9bacd">Bill's Mobile showcase rhythm for the CoPress publishing spine</text>
+  <g transform="translate(150 290)" font-family="Arial, sans-serif">
+    <rect width="410" height="230" rx="26" fill="#111d2e" stroke="#d7a84f" stroke-width="4"/>
+    <text x="40" y="70" font-size="24" font-weight="800" fill="#d7a84f">LINK 1</text>
+    <text x="40" y="122" font-size="42" font-weight="800" fill="#f7f1e3">Campaign Kit</text>
+    <text x="40" y="168" font-size="20" fill="#a9bacd">Assets, pricing, kanban, SEO, handoff</text>
+  </g>
+  <g transform="translate(640 290)" font-family="Arial, sans-serif">
+    <rect width="410" height="230" rx="26" fill="#111d2e" stroke="#56b6c8" stroke-width="4"/>
+    <text x="40" y="70" font-size="24" font-weight="800" fill="#56b6c8">LINK 2</text>
+    <text x="40" y="122" font-size="42" font-weight="800" fill="#f7f1e3">Operator Kit</text>
+    <text x="40" y="168" font-size="20" fill="#a9bacd">Plain-English customer readiness brief</text>
+  </g>
+</svg>

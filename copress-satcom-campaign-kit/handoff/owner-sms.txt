@@ -1,0 +1,1 @@
+CoPress SATCOM kit is ready: https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/ It follows the Bill's Mobile showcase pattern with two links only: campaign kit plus customer operator readiness kit. It includes banners, newsletter HTML, social cards, print/audio copy, CRM drip, pricing, SEO, and production handoff.

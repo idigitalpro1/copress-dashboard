@@ -1,0 +1,125 @@
+<!-- ============================================================= -->
+<!-- HipCribs · ShopLocal real-estate carousel                      -->
+<!-- Drop-in for the BOTTOM of the registercall.com home page.      -->
+<!-- Functionally equivalent to the listing estimator site: each    -->
+<!-- card opens the customer link (hipcribs.5280.menu).             -->
+<!--                                                                -->
+<!-- Usage: paste this whole block near the end of the home page,   -->
+<!-- above the footer. Set data-feed to the deployed listings.json. -->
+<!-- Styles are scoped under .hc-recar so they won't touch the SPA. -->
+<!-- ============================================================= -->
+<section class="hc-recar" data-feed="./listings.json" aria-label="HipCribs real estate listings">
+  <div class="hc-recar__head">
+    <span class="hc-recar__eyebrow">ShopLocal · Real Estate</span>
+    <h2 class="hc-recar__title">Homes in the High Country</h2>
+    <span class="hc-recar__by">Powered by HipCribs · hipcribs.5280.menu</span>
+  </div>
+  <div class="hc-recar__viewport">
+    <button class="hc-recar__nav hc-recar__nav--prev" aria-label="Previous">‹</button>
+    <ul class="hc-recar__track" role="list"></ul>
+    <button class="hc-recar__nav hc-recar__nav--next" aria-label="Next">›</button>
+  </div>
+  <div class="hc-recar__dots" role="tablist" aria-label="Listing pages"></div>
+</section>
+
+<style>
+  .hc-recar{--bg:#0a0a07;--card:#14120c;--line:#34322d;--gold:#c9a84c;--gold-hi:#d4b86a;--cream:#f5f0e8;--mute:#9b9588;
+    background:var(--bg);color:var(--cream);padding:54px 20px 64px;border-top:1px solid var(--line);font-family:"DM Sans",system-ui,sans-serif}
+  .hc-recar *{box-sizing:border-box}
+  .hc-recar__head{max-width:1100px;margin:0 auto 26px;text-align:center}
+  .hc-recar__eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
+  .hc-recar__title{font-family:"Cormorant","Playfair Display",Georgia,serif;font-weight:600;font-size:clamp(26px,4vw,40px);margin:10px 0 6px}
+  .hc-recar__by{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+  .hc-recar__viewport{position:relative;max-width:1100px;margin:0 auto;overflow:hidden}
+  .hc-recar__track{display:flex;gap:18px;list-style:none;margin:0;padding:4px;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+  .hc-recar__card{flex:0 0 calc((100% - 36px)/3);background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+  .hc-recar__card:hover{border-color:var(--gold);transform:translateY(-3px)}
+  .hc-recar__img{height:172px;background:linear-gradient(135deg,#1a1610,#0f0e0b);background-size:cover;background-position:center;position:relative}
+  .hc-recar__tag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;background:rgba(10,10,7,.78);color:var(--gold-hi);border:1px solid var(--line);padding:6px 10px;border-radius:3px}
+  .hc-recar__body{padding:18px 18px 20px;flex:1;display:flex;flex-direction:column;gap:6px}
+  .hc-recar__addr{font-family:"Cormorant","Playfair Display",serif;font-size:23px;font-weight:600;line-height:1.15}
+  .hc-recar__area{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+  .hc-recar__meta{font-size:13px;color:#cdc7ba;margin-top:4px}
+  .hc-recar__price{font-family:"Cormorant","Playfair Display",serif;font-size:26px;color:var(--gold-hi);margin-top:auto;padding-top:10px}
+  .hc-recar__pnote{font-size:11px;color:var(--mute)}
+  .hc-recar__cta{margin-top:12px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+  .hc-recar__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(10,10,7,.85);color:var(--cream);font-size:20px;cursor:pointer;display:grid;place-items:center}
+  .hc-recar__nav:hover{border-color:var(--gold);color:var(--gold-hi)}
+  .hc-recar__nav--prev{left:6px}.hc-recar__nav--next{right:6px}
+  .hc-recar__dots{display:flex;justify-content:center;gap:8px;margin-top:22px}
+  .hc-recar__dot{width:8px;height:8px;border-radius:50%;border:0;background:var(--line);cursor:pointer;padding:0}
+  .hc-recar__dot[aria-selected="true"]{background:var(--gold)}
+  @media(max-width:900px){.hc-recar__card{flex:0 0 calc((100% - 18px)/2)}}
+  @media(max-width:600px){.hc-recar__card{flex:0 0 100%}}
+</style>
+
+<script>
+(function(){
+  var root=document.currentScript.previousElementSibling;
+  while(root && !(root.classList&&root.classList.contains('hc-recar'))) root=root.previousElementSibling;
+  if(!root) return;
+  var track=root.querySelector('.hc-recar__track'),
+      dotsWrap=root.querySelector('.hc-recar__dots'),
+      vp=root.querySelector('.hc-recar__viewport'),
+      feed=root.getAttribute('data-feed')||'./listings.json',
+      page=0, perView=3, pages=1, timer=null;
+
+  function perViewFor(){ return window.innerWidth<=600?1:window.innerWidth<=900?2:3; }
+
+  fetch(feed).then(function(r){return r.json();}).then(function(d){
+    (d.listings||[]).forEach(function(L){
+      var a=document.createElement('a');
+      a.className='hc-recar__card'; a.href=L.href||'#';
+      a.setAttribute('role','listitem');
+      var img='<div class="hc-recar__img"'+(L.image?(' style="background-image:url(\''+L.image+'\')"'):'')+'>'+
+              (L.tag?'<span class="hc-recar__tag">'+L.tag+'</span>':'')+'</div>';
+      a.innerHTML=img+
+        '<div class="hc-recar__body">'+
+          '<div class="hc-recar__addr">'+L.address+'</div>'+
+          '<div class="hc-recar__area">'+L.area+'</div>'+
+          '<div class="hc-recar__meta">'+L.beds+' bd · '+L.baths+' ba · '+(L.sqft||'—')+' sqft</div>'+
+          '<div class="hc-recar__price">'+L.price+'</div>'+
+          '<div class="hc-recar__pnote">'+(L.priceNote||'')+'</div>'+
+          '<div class="hc-recar__cta">View listing →</div>'+
+        '</div>';
+      track.appendChild(a);
+    });
+    layout(); window.addEventListener('resize',layout);
+    root.querySelector('.hc-recar__nav--next').addEventListener('click',function(){go(page+1);});
+    root.querySelector('.hc-recar__nav--prev').addEventListener('click',function(){go(page-1);});
+    start();
+    vp.addEventListener('mouseenter',stop); vp.addEventListener('mouseleave',start);
+  }).catch(function(){ root.style.display='none'; });
+
+  function layout(){
+    perView=perViewFor();
+    var cards=track.children.length;
+    pages=Math.max(1,Math.ceil(cards/perView));
+    if(page>=pages) page=0;
+    dotsWrap.innerHTML='';
+    for(var i=0;i<pages;i++){
+      var b=document.createElement('button');
+      b.className='hc-recar__dot'; b.setAttribute('role','tab');
+      b.setAttribute('aria-selected', i===page?'true':'false');
+      (function(idx){b.addEventListener('click',function(){go(idx);});})(i);
+      dotsWrap.appendChild(b);
+    }
+    move();
+  }
+  function go(p){ page=(p+pages)%pages; move(); syncDots(); restart(); }
+  function move(){
+    var first=track.children[0]; if(!first) return;
+    var step=first.getBoundingClientRect().width+18;
+    track.style.transform='translateX(-'+(page*perView*step)+'px)';
+  }
+  function syncDots(){
+    Array.prototype.forEach.call(dotsWrap.children,function(d,i){
+      d.setAttribute('aria-selected', i===page?'true':'false');
+    });
+  }
+  function start(){ stop(); timer=setInterval(function(){go(page+1);},5200); }
+  function stop(){ if(timer){clearInterval(timer);timer=null;} }
+  function restart(){ start(); }
+})();
+</script>
+<!-- ===================== end HipCribs carousel ===================== -->

@@ -311,6 +311,40 @@ The `/240-deer-road-campaign-kit/` bundle is a CoNewsPress real estate showcase 
 
 Live listing facts are sourced from `https://www.compass.com/homedetails/240-Deer-Rd-Evergreen-CO-80439/12SMVX_pid/`: active, `$525,000`, 3 beds, 1 bath, 1,270 sq ft, 1.00 acre, MLS `#7681620`, year built 1976, Brook Forest Estates, Clear Creek County. Contact is Bailey Orcutt, Compass, `720-388-5994`, `bailey.orcutt@compass.com`. Re-verify price, status, buyer compensation, schools, taxes, measurements, showing availability, and all terms from Compass/MLS before publication. The source listing notes that photos have been cleaned up using AI.
 
+## CoPress SATCOM Campaign Kit
+
+The `/copress-satcom-campaign-kit/` bundle packages this dashboard itself as a Bill's Mobile style showcase campaign: two links only, one campaign-kit link and one customer/operator readiness link, plus the full asset buildout for launch, owner review, newsletter placement, display, social, print, audio, CRM, SEO, and invoice mapping.
+
+- `/copress-satcom-campaign-kit/index.html`
+- `/copress-satcom-campaign-kit/manifest.json`
+- `/copress-satcom-campaign-kit/assets/command-center-hero.svg`
+- `/copress-satcom-campaign-kit/assets/social-card-command-center.svg`
+- `/copress-satcom-campaign-kit/banners/banner-leaderboard-728x90.html`
+- `/copress-satcom-campaign-kit/banners/banner-medium-rect-300x250.html`
+- `/copress-satcom-campaign-kit/banners/banner-mobile-320x50.html`
+- `/copress-satcom-campaign-kit/banners/banner-social-square-1080x1080.html`
+- `/copress-satcom-campaign-kit/email/newsletter-command-spine.html`
+- `/copress-satcom-campaign-kit/editorial/campaign-copy.md`
+- `/copress-satcom-campaign-kit/editorial/press-release.md`
+- `/copress-satcom-campaign-kit/editorial/social-media-copy.md`
+- `/copress-satcom-campaign-kit/social/social-card-command-center.html`
+- `/copress-satcom-campaign-kit/social/social-card-operator-readiness.html`
+- `/copress-satcom-campaign-kit/print/operator-one-sheet.md`
+- `/copress-satcom-campaign-kit/print/direct-mail-postcard.md`
+- `/copress-satcom-campaign-kit/audio/radio-spot.md`
+- `/copress-satcom-campaign-kit/crm/drip-sequence.md`
+- `/copress-satcom-campaign-kit/pricing/menu-pricing.md`
+- `/copress-satcom-campaign-kit/handoff/two-link-handoff.md`
+- `/copress-satcom-campaign-kit/handoff/owner-sms.txt`
+- `/copress-satcom-campaign-kit/handoff/owner-email.md`
+- `/copress-satcom-campaign-kit/handoff/production-kanban.json`
+- `/copress-satcom-campaign-kit/seo/meta.json`
+- `/copress-satcom-campaign-kit/seo/jsonld.json`
+- `/copress-satcom-campaign-kit/data/offer-matrix.json`
+- `/copress-satcom-campaign-kit/data/offer-matrix.md`
+
+Campaign guardrail: the static kit explains and packages the dashboard workflow. External writes, billing actions, DNS, and production deploys remain gated through the dedicated backend tools and operator approval.
+
 **3CX SIP Extensions:**
 - 17410 Patrick · 17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production
 - AI Receptionist: Twilio +18773578499 → claude-opus-4-5 → SIP route
