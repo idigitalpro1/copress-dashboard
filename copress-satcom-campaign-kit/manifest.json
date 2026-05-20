@@ -1,7 +1,7 @@
 {
   "campaign": "CoPress SATCOM Command Center - Publishing Spine",
   "brand": "CoPress Dashboard",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "created": "2026-05-19",
   "ecosystem": "CoPress / SATCOM Campaign Kit",
   "tagline": "One command center for local publishing, billing, campaigns, and reader growth.",
@@ -54,8 +54,12 @@
     "banners": [
       "banners/banner-leaderboard-728x90.html",
       "banners/banner-medium-rect-300x250.html",
+      "banners/content-banner-native.html",
       "banners/banner-mobile-320x50.html",
       "banners/banner-social-square-1080x1080.html"
+    ],
+    "content": [
+      "content/sponsored-post.html"
     ],
     "email": [
       "email/newsletter-command-spine.html"
@@ -63,6 +67,7 @@
     "editorial": [
       "editorial/campaign-copy.md",
       "editorial/press-release.md",
+      "editorial/sponsored-post.md",
       "editorial/social-media-copy.md"
     ],
     "social": [
@@ -223,6 +228,10 @@
           "launch announcement"
         ],
         [
+          "editorial/sponsored-post.md",
+          "CMS-ready sponsored article"
+        ],
+        [
           "editorial/social-media-copy.md",
           "platform-ready captions"
         ]
@@ -240,12 +249,29 @@
           "article/sidebar slot"
         ],
         [
+          "content-banner-native.html",
+          "native sponsored content module"
+        ],
+        [
           "banner-mobile-320x50.html",
           "mobile slot"
         ],
         [
           "banner-social-square-1080x1080.html",
           "feed creative"
+        ]
+      ]
+    },
+    {
+      "name": "Sponsored Content",
+      "items": [
+        [
+          "content/sponsored-post.html",
+          "finished article page"
+        ],
+        [
+          "editorial/sponsored-post.md",
+          "CMS-ready markdown source"
         ]
       ]
     },

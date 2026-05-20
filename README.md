@@ -321,11 +321,14 @@ The `/copress-satcom-campaign-kit/` bundle packages this dashboard itself as a B
 - `/copress-satcom-campaign-kit/assets/social-card-command-center.svg`
 - `/copress-satcom-campaign-kit/banners/banner-leaderboard-728x90.html`
 - `/copress-satcom-campaign-kit/banners/banner-medium-rect-300x250.html`
+- `/copress-satcom-campaign-kit/banners/content-banner-native.html`
 - `/copress-satcom-campaign-kit/banners/banner-mobile-320x50.html`
 - `/copress-satcom-campaign-kit/banners/banner-social-square-1080x1080.html`
+- `/copress-satcom-campaign-kit/content/sponsored-post.html`
 - `/copress-satcom-campaign-kit/email/newsletter-command-spine.html`
 - `/copress-satcom-campaign-kit/editorial/campaign-copy.md`
 - `/copress-satcom-campaign-kit/editorial/press-release.md`
+- `/copress-satcom-campaign-kit/editorial/sponsored-post.md`
 - `/copress-satcom-campaign-kit/editorial/social-media-copy.md`
 - `/copress-satcom-campaign-kit/social/social-card-command-center.html`
 - `/copress-satcom-campaign-kit/social/social-card-operator-readiness.html`
