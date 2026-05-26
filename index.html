@@ -53,6 +53,7 @@
   --c-gambling:  #22c55e;
   --c-newsletter:#2c7be5;
   --c-vault:     #f59e0b;
+  --c-csv:       #14b8a6;
 }
 
 html, body {
@@ -1266,6 +1267,10 @@ body::before {
       <span class="nav-icon">🔑</span>
       <span class="nav-label">API Vault</span>
     </div>
+    <div class="nav-item" onclick="window.location.href='/csv-manager'">
+      <span class="nav-icon">C</span>
+      <span class="nav-label">CSV Manager</span>
+    </div>
     <div class="nav-item" onclick="window.location.href='/linear'">
       <span class="nav-icon">📐</span>
       <span class="nav-label">Linear</span>
@@ -1687,6 +1692,47 @@ body::before {
               <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/apistore'">Open Vault</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#inject'">Inject</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#export'">Export</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CSV Manager -->
+        <div class="module-card" onclick="window.location.href='/csv-manager'" style="cursor:pointer;--card-color:var(--c-csv);--card-glow:rgba(20,184,166,.06);">
+          <div class="card-dept">
+            <span class="card-dept-name">Data Intake</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">CSV</div>
+              <div>
+                <div class="card-title">CSV Manager</div>
+                <div class="card-subtitle">Preview · clean · export data packets</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Bundled</span>
+                <span class="stat-value highlight">7</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Upload</span>
+                <span class="stat-value ok" style="font-size:11px;">Local</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Export</span>
+                <span class="stat-value" style="font-size:11px;">CSV/JSON</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Writes</span>
+                <span class="stat-value" style="font-size:11px;">Browser</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/csv-manager'">Open Manager</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/csv-manager#upload'">Upload CSV</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('directory')">Directory</button>
             </div>
           </div>
         </div>
