@@ -1925,21 +1925,21 @@ body::before {
             <div class="brain-stack">
               <div class="brain-row">
                 <span class="brain-led ok"></span>
-                <span class="brain-model">Hermes 70B</span>
+                <span class="brain-model">Qwen36 35B A3B</span>
                 <span class="brain-role">Primary Orch.</span>
+                <span class="brain-tier local">OLLAMA</span>
+              </div>
+              <div class="brain-row">
+                <span class="brain-led ok"></span>
+                <span class="brain-model">Qwen36 SATCOM</span>
+                <span class="brain-role">SATCOM Lane</span>
                 <span class="brain-tier local">LOCAL</span>
               </div>
               <div class="brain-row">
                 <span class="brain-led ok"></span>
-                <span class="brain-model">Qwen 35B</span>
-                <span class="brain-role">Code / Reason</span>
-                <span class="brain-tier local">LM Studio</span>
-              </div>
-              <div class="brain-row">
-                <span class="brain-led warn"></span>
-                <span class="brain-model">OpenClaw</span>
-                <span class="brain-role">Swarm Agent</span>
-                <span class="brain-tier local">16GB Prod</span>
+                <span class="brain-model">Hermes Gateway</span>
+                <span class="brain-role">api_server :8642</span>
+                <span class="brain-tier local">KEYED</span>
               </div>
               <div class="brain-row">
                 <span class="brain-led ok"></span>
@@ -1954,10 +1954,17 @@ body::before {
                 <span class="brain-tier ref">REF ONLY</span>
               </div>
             </div>
+            <div class="card-stat" style="margin-top:6px;">
+              <span class="stat-label">Gateway</span>
+              <span class="stat-value ok" style="font-size:11px;">Connected · API key auth · 2026-06-04</span>
+            </div>
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">⚡ Hermes</button>
-              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew Console</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786','_blank')">WebUI · Chat</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119','_blank')">Agent Dashboard</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">History</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew / Swarm</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Aileen</button>
             </div>
           </div>
