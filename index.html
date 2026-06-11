@@ -52,6 +52,7 @@
   --c-stationery:#f472b6;
   --c-gambling:  #22c55e;
   --c-newsletter:#2c7be5;
+  --c-postcards: #e8794a;
   --c-vault:     #f59e0b;
   --c-csv:       #14b8a6;
 }
@@ -1112,6 +1113,24 @@ body::before {
   color: rgba(255,255,255,.2);
 }
 
+@media (max-width: 760px) {
+  #topbar { padding: 0 14px; }
+  .topbar-center,
+  .topbar-masthead .t-pipe,
+  .topbar-masthead .t-section,
+  .status-center,
+  .status-right { display: none; }
+  #sidebar { display: none; }
+  #main { width: 100%; min-width: 0; margin-left: 0; }
+  .page-header { padding: 24px 20px 20px; }
+  .page-header::after { left: 20px; }
+  .admin-launch-grid,
+  .quick-bar,
+  .api-panel { margin-left: 20px; margin-right: 20px; }
+  #statusbar { padding: 0 14px; }
+  .status-left { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+}
+
 /* ── Toast ──────────────────────────────────────────────────────── */
 #toast-container {
   position: fixed; bottom: 46px; right: 24px; z-index: 200;
@@ -1262,6 +1281,10 @@ body::before {
     <div class="nav-item" onclick="window.location.href='/newsletter'">
       <span class="nav-icon">📧</span>
       <span class="nav-label">Newsletter Studio</span>
+    </div>
+    <div class="nav-item" onclick="openPostcardStudio()">
+      <span class="nav-icon">▤</span>
+      <span class="nav-label">Postcard Studio</span>
     </div>
     <div class="nav-item" onclick="window.location.href='/apistore'">
       <span class="nav-icon">🔑</span>
@@ -1651,6 +1674,47 @@ body::before {
               <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/newsletter'">Open Studio</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/newsletter?campaign=latest'">Load Handoff</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('marketing')">Campaigns</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Postcard Studio -->
+        <div class="module-card" onclick="openPostcardStudio()" style="cursor:pointer;--card-color:var(--c-postcards);--card-glow:rgba(232,121,74,.07);">
+          <div class="card-dept">
+            <span class="card-dept-name">Direct Mail</span>
+            <span class="card-led warn"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">▤</div>
+              <div>
+                <div class="card-title">Postcard Studio</div>
+                <div class="card-subtitle">Renewal concepts · live proof · print-run merge</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Concepts</span>
+                <span class="stat-value highlight">6</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Proof</span>
+                <span class="stat-value" style="font-size:11px;">6 × 4.25</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Print Run</span>
+                <span class="stat-value ok" style="font-size:11px;">Trust gated</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Access</span>
+                <span class="stat-value" style="font-size:11px;">Login required</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); openPostcardStudio()">Open Studio</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openPostcardStudio()">Build Proof</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openPostcardStudio()">Print Run</button>
             </div>
           </div>
         </div>
@@ -2086,6 +2150,7 @@ body::before {
           <div class="quick-pill" onclick="toast('Generating editorial list…')">✒ Generate Editorial <span class="pill-kbd">⌘2</span></div>
           <div class="quick-pill" onclick="toast('Opening campaign builder…')">📣 New Campaign <span class="pill-kbd">⌘3</span></div>
           <div class="quick-pill" onclick="window.location.href='/newsletter'">📧 Email Blast <span class="pill-kbd">⌘4</span></div>
+          <div class="quick-pill" onclick="openPostcardStudio()">▤ Postcard Studio</div>
           <div class="quick-pill" onclick="openInvoiceManager('/invoices/new')">📒 Create Invoice <span class="pill-kbd">⌘5</span></div>
           <div class="quick-pill" onclick="toast('Exporting weekly PDF…')">📄 Weekly PDF <span class="pill-kbd">⌘6</span></div>
           <div class="quick-pill" onclick="window.location.href='/docs'">📚 Docs Hub <span class="pill-kbd">⌘7</span></div>
@@ -2940,6 +3005,7 @@ const M365_ACCOUNT_SWITCH_URL =
 const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
+const POSTCARD_STUDIO_URL = 'https://5280.menu/admin/postcards';
 
 function openExternal(url) {
   window.open(url, '_blank', 'noopener');
@@ -2948,6 +3014,10 @@ function openExternal(url) {
 function openInvoiceManager(path = '/') {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   openExternal(`${INVOICE_MANAGER_BASE_URL}${cleanPath}`);
+}
+
+function openPostcardStudio() {
+  openExternal(POSTCARD_STUDIO_URL);
 }
 
 function openM365Admin() {
