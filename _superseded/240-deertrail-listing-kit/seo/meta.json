@@ -1,0 +1,31 @@
+{
+  "title": "240 Deer Rd · Gilpin County 3-Bedroom Home Price Estimator",
+  "description": "Interactive 3-bedroom home price estimator for Gilpin County, CO — Q1 2026 market data, comparable sales, and an adjustable price calculator for the 240 Deer Rd listing from HipCribs.",
+  "canonical": "https://hipcribs.5280.menu/",
+  "keywords": [
+    "240 Deer Rd",
+    "Gilpin County homes for sale",
+    "3 bedroom home Gilpin County CO",
+    "Black Hawk real estate",
+    "Central City CO homes",
+    "Rollinsville homes",
+    "HipCribs Gilpin County",
+    "Gilpin County home price estimator"
+  ],
+  "openGraph": {
+    "type": "website",
+    "url": "https://hipcribs.5280.menu/",
+    "title": "240 Deer Rd · Gilpin County 3-Bedroom Home",
+    "description": "Instant price estimate, comparable sales, and Q1 2026 market data for the 240 Deer Rd listing.",
+    "image": "https://files.manuscdn.com/webdev_screenshots/2026/03/30/LDdeELbZNBHyWqsYPrNFEv.png?x-oss-process=image/resize,w_1200/crop,h_630,x_0,y_0",
+    "imageWidth": 1200,
+    "imageHeight": 630
+  },
+  "twitter": {
+    "card": "summary_large_image",
+    "title": "240 Deer Rd · Gilpin County 3-Bedroom Home",
+    "description": "Instant price estimate and comparable-sales analysis for the 240 Deer Rd listing.",
+    "image": "https://files.manuscdn.com/webdev_screenshots/2026/03/30/LDdeELbZNBHyWqsYPrNFEv.png?x-oss-process=image/resize,w_1200/crop,h_630,x_0,y_0"
+  },
+  "robots": "index,follow"
+}

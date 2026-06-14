@@ -1,8 +1,8 @@
 # Press Release
 
-## CoPress Launches SATCOM Command Center Campaign Kit for Local Publishing Operators
+## CoPress Launches The Nest Campaign Kit for Local Publishing Operators
 
-Colorado, May 19, 2026 - CoPress Dashboard has released a Bill's Mobile style campaign kit for its SATCOM Command Center, giving local publishing operators a single showcase package for editorial, advertising, newsletter, billing, city-site, and operator handoff workflows.
+Colorado, May 19, 2026 - CoPress Dashboard has released a Bill's Mobile style campaign kit for its The Nest, giving local publishing operators a single showcase package for editorial, advertising, newsletter, billing, city-site, and operator handoff workflows.
 
 The new kit packages the dashboard as a working publishing spine. It includes a two-link landing experience, display banners, newsletter HTML, social graphics, print copy, CRM follow-up, SEO metadata, pricing language, and owner handoff files.
 

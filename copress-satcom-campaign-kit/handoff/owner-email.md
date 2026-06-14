@@ -1,10 +1,10 @@
 # Owner Email
 
-Subject: CoPress SATCOM campaign kit is ready
+Subject: CoPress Nest campaign kit is ready
 
 Hi,
 
-The CoPress SATCOM Command Center campaign kit is ready for review:
+The CoPress Nest campaign kit is ready for review:
 
 https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/
 

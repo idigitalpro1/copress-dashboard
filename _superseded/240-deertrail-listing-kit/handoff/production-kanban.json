@@ -1,0 +1,38 @@
+{
+  "board": "240 Deer Rd Listing Kit — Production",
+  "brand": "HipCribs",
+  "created": "2026-05-18",
+  "columns": [
+    {
+      "name": "Done",
+      "cards": [
+        { "title": "Mirror 3bedroom.manus.space SPA offline", "type": "integration" },
+        { "title": "Rebrand customer-facing estimator (Austin → Gilpin/240 Deer Rd)", "type": "integration" },
+        { "title": "Build listing-agent CMA dashboard", "type": "build" },
+        { "title": "Adopt HipCribs high-end housing graphics (fleurish-derived: warm-black/gold, Cormorant/Marcellus)", "type": "brand" },
+        { "title": "Campaign-kit manifest.json + showcase + landing page", "type": "build" },
+        { "title": "SEO meta + JSON-LD", "type": "seo" }
+      ]
+    },
+    {
+      "name": "Review",
+      "cards": [
+        { "title": "Confirm recommended list price vs actual property", "type": "approval", "owner": "listing agent" },
+        { "title": "Verify comp medians against current MLS", "type": "approval", "owner": "listing agent" }
+      ]
+    },
+    {
+      "name": "Blocked",
+      "cards": [
+        { "title": "Provision hipcribs.5280.menu (Plesk self-hosted DNS)", "type": "infra", "blockedBy": "operator approval" }
+      ]
+    },
+    {
+      "name": "Backlog",
+      "cards": [
+        { "title": "Wire estimator contact capture → listing-agent lead pipeline", "type": "build" },
+        { "title": "Deploy kit to public host after DNS", "type": "deploy" }
+      ]
+    }
+  ]
+}

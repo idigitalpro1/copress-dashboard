@@ -6,7 +6,7 @@
   <text x="100" y="142" font-family="Arial, sans-serif" font-size="23" font-weight="800" fill="#56b6c8" letter-spacing="5">NEWSLETTER FEATURE BLOCK</text>
   <text x="100" y="230" font-family="Georgia, serif" font-size="68" font-weight="700" fill="#f7f1e3">Build the spine once.</text>
   <text x="100" y="300" font-family="Georgia, serif" font-size="68" font-weight="700" fill="#d7a84f">Publish everywhere.</text>
-  <text x="100" y="368" font-family="Arial, sans-serif" font-size="28" fill="#a9bacd">Campaign kits, city-site intake, Sendy copy, invoice-manager handoff, and SATCOM operator lanes.</text>
+  <text x="100" y="368" font-family="Arial, sans-serif" font-size="28" fill="#a9bacd">Campaign kits, city-site intake, Sendy copy, invoice-manager handoff, and Nest operator lanes.</text>
   <g transform="translate(100 440)" font-family="Arial, sans-serif" font-size="23" font-weight="700">
     <rect width="250" height="64" rx="10" fill="#d7a84f"/>
     <text x="125" y="41" text-anchor="middle" fill="#07101b">Open Kit</text>

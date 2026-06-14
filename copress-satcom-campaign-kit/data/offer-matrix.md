@@ -12,7 +12,7 @@
 | CRM drip sequence | Sales follow-up | $25 |
 
 Primary link:
-`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit`
+`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit`
 
 Customer link:
-`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer`
+`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#operator-kit`

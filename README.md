@@ -4,14 +4,14 @@
 **Stack:** Static HTML/CSS/JS · Vercel · GitHub auto-deploy  
 **Repo:** `idigitalpro1/copress-dashboard`
 
-SATCOM is the command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
+Nest is the command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
 
-## SATCOM / SATCO Brand Lane
+## Nest / SATCO Brand Lane
 
-- **SATCOM:** main dashboard title and operator command surface.
+- **Nest:** main dashboard title and operator command surface.
 - **SATCO Academy:** staff learning lane, including the Daily Quick training prompt.
 - **NationalIntelligence.com:** brand domain for the aerospace-intelligence staff academy concept.
-- **Asset rule:** use original aerospace/SATCOM styling only; do not reuse official government seals as brand marks.
+- **Asset rule:** use original aerospace/Nest styling only; do not reuse official government seals as brand marks.
 
 ---
 
@@ -43,7 +43,7 @@ SATCOM is the command center for copress.news — a Colorado mountain newspaper 
 
 Old DashTail/Register-Call/Billing admin panels are intentionally not linked from the dashboard. Keep them available only as backend fallback surfaces until their workflows are fully absorbed here.
 
-Microsoft 365/Azure credentials stay server-side in the admin backend. SATCOM only exposes operator launch helpers and the redirect callback string: `https://admin.conews.press/console/api/auth/callback/azure-ad`.
+Microsoft 365/Azure credentials stay server-side in the admin backend. Nest only exposes operator launch helpers and the redirect callback string: `https://admin.conews.press/console/api/auth/callback/azure-ad`.
 
 **Publishing section**
 - Dashboard (main view)
@@ -191,7 +191,7 @@ Connects to Linear's GraphQL API (`https://api.linear.app/graphql`):
 - Projects panel: icon, name, state, % complete
 - Team members: avatar, email, issue count
 - Click any issue → opens in Linear at correct team/issue URL
-- SATCOM Ops Bridge: `/linear#create` focuses quick-create, the dashboard Linear card opens the same lane, and the local Kanban fallback stays available at `http://127.0.0.1:8096`
+- Nest Ops Bridge: `/linear#create` focuses quick-create, the dashboard Linear card opens the same lane, and the local Kanban fallback stays available at `http://127.0.0.1:8096`
 - Admin Kanban fallback reference: `https://admin.conews.press/console/api/kanban` for JSON board state when checking the codex-admin fallback path
 
 **Setup:** Enter Personal API key from `linear.app/settings/api` in the setup banner or Connection panel. Stored in `localStorage.linear_api_key` only — never transmitted externally.
@@ -311,7 +311,7 @@ The `/240-deer-road-campaign-kit/` bundle is a CoNewsPress real estate showcase 
 
 Live listing facts are sourced from `https://www.compass.com/homedetails/240-Deer-Rd-Evergreen-CO-80439/12SMVX_pid/`: active, `$525,000`, 3 beds, 1 bath, 1,270 sq ft, 1.00 acre, MLS `#7681620`, year built 1976, Brook Forest Estates, Clear Creek County. Contact is Bailey Orcutt, Compass, `720-388-5994`, `bailey.orcutt@compass.com`. Re-verify price, status, buyer compensation, schools, taxes, measurements, showing availability, and all terms from Compass/MLS before publication. The source listing notes that photos have been cleaned up using AI.
 
-## CoPress SATCOM Campaign Kit
+## CoPress Nest Campaign Kit
 
 The `/copress-satcom-campaign-kit/` bundle packages this dashboard itself as a Bill's Mobile style showcase campaign: two links only, one campaign-kit link and one customer/operator readiness link, plus the full asset buildout for launch, owner review, newsletter placement, display, social, print, audio, CRM, SEO, and invoice mapping.
 

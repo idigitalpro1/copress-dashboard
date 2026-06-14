@@ -6,7 +6,7 @@ By CoPress Campaign Desk | Sponsored Feature
 
 The working publisher does not lose time because they lack ideas. They lose time when every good idea becomes five disconnected handoffs: a story note, an ad request, a newsletter block, a billing question, and a follow-up reminder.
 
-That is exactly the gap CoPress SATCOM Command Center is designed to close. It does not pretend the work is simple. It makes the work visible.
+That is exactly the gap CoPress Nest is designed to close. It does not pretend the work is simple. It makes the work visible.
 
 ## From One Brief To A Complete Campaign Package
 

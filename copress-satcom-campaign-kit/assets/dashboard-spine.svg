@@ -31,7 +31,7 @@
     </g>
     <g transform="translate(730 510)">
       <rect width="360" height="118" rx="18" fill="#111d2e" stroke="#c94c4c"/>
-      <text x="28" y="48" fill="#c94c4c" font-size="23">SATCOM / HERMES</text>
+      <text x="28" y="48" fill="#c94c4c" font-size="23">Nest / HERMES</text>
       <text x="28" y="82" fill="#a9bacd" font-size="18">Operator support lane</text>
     </g>
   </g>

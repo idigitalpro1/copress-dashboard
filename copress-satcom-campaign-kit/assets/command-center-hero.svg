@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
-  <title id="title">CoPress SATCOM command center hero</title>
-  <desc id="desc">A dark editorial command center with publishing, billing, newsletter, and SATCOM lanes.</desc>
+  <title id="title">CoPress Nest command center hero</title>
+  <desc id="desc">A dark editorial command center with publishing, billing, newsletter, and Nest lanes.</desc>
   <defs>
     <radialGradient id="glow" cx="50%" cy="45%" r="58%">
       <stop offset="0%" stop-color="#56b6c8" stop-opacity="0.85"/>
@@ -25,7 +25,7 @@
   <path d="M630 470c-50-120 65-230 170-230 105 0 220 110 170 230-95-52-245-52-340 0Z" fill="#101f32" stroke="url(#gold)" stroke-width="5"/>
   <g fill="#f7f1e3" opacity="0.92">
     <text x="800" y="394" font-family="Georgia, serif" font-size="74" font-weight="700" text-anchor="middle" letter-spacing="4">COPRESS</text>
-    <text x="800" y="454" font-family="Arial, sans-serif" font-size="33" font-weight="700" text-anchor="middle" letter-spacing="8">SATCOM COMMAND CENTER</text>
+    <text x="800" y="454" font-family="Arial, sans-serif" font-size="33" font-weight="700" text-anchor="middle" letter-spacing="8">THE NEST</text>
   </g>
   <g font-family="Arial, sans-serif" font-weight="700" font-size="20" fill="#f7f1e3">
     <g transform="translate(165 160)">

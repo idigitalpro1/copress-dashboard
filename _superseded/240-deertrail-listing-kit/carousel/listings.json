@@ -1,0 +1,78 @@
+{
+  "feed": "HipCribs · Gilpin County real-estate listings",
+  "updated": "2026-05-18",
+  "primary": "240-deer-rd",
+  "customerHostProd": "https://hipcribs.5280.menu/",
+  "listings": [
+    {
+      "id": "240-deer-rd",
+      "address": "240 Deer Rd",
+      "area": "Gilpin County, CO",
+      "beds": 3,
+      "baths": 2,
+      "sqft": 1800,
+      "price": "$565,000",
+      "priceNote": "Est. range $540K–$590K · model-derived, agent-verified",
+      "tag": "Featured · Private Price Study",
+      "image": "https://files.manuscdn.com/webdev_screenshots/2026/03/30/LDdeELbZNBHyWqsYPrNFEv.png?x-oss-process=image/resize,w_900",
+      "href": "../customer-facing/index.html",
+      "hrefProd": "https://hipcribs.5280.menu/"
+    },
+    {
+      "id": "black-hawk-ridge",
+      "address": "Black Hawk Ridge",
+      "area": "Black Hawk · 80422",
+      "beds": 3,
+      "baths": 2,
+      "sqft": 2050,
+      "price": "$730,000",
+      "priceNote": "Premium gaming-hub corridor",
+      "tag": "Gilpin Sub-Market",
+      "image": "",
+      "href": "../customer-facing/index.html",
+      "hrefProd": "https://hipcribs.5280.menu/"
+    },
+    {
+      "id": "rollinsville-commuter",
+      "address": "Rollinsville Commuter Parcel",
+      "area": "Rollinsville · 80474",
+      "beds": 3,
+      "baths": 2,
+      "sqft": 1900,
+      "price": "$648,000",
+      "priceNote": "Appreciating +4.2%",
+      "tag": "Gilpin Sub-Market",
+      "image": "",
+      "href": "../customer-facing/index.html",
+      "hrefProd": "https://hipcribs.5280.menu/"
+    },
+    {
+      "id": "central-city-historic",
+      "address": "Central City Historic District",
+      "area": "Central City · 80427",
+      "beds": 2,
+      "baths": 1,
+      "sqft": 1400,
+      "price": "$425,000",
+      "priceNote": "Entry-level historic stock",
+      "tag": "Gilpin Sub-Market",
+      "image": "",
+      "href": "../customer-facing/index.html",
+      "hrefProd": "https://hipcribs.5280.menu/"
+    },
+    {
+      "id": "russell-gulch-rural",
+      "address": "Russell Gulch Rural Acreage",
+      "area": "Russell Gulch · 80422",
+      "beds": 3,
+      "baths": 1,
+      "sqft": 1600,
+      "price": "$380,000",
+      "priceNote": "Off-grid rural · −3.5%",
+      "tag": "Gilpin Sub-Market",
+      "image": "",
+      "href": "../customer-facing/index.html",
+      "hrefProd": "https://hipcribs.5280.menu/"
+    }
+  ]
+}

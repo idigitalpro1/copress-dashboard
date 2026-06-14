@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>240 Deer Rd — Campaign Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0c0b08;--panel:#15130d;--line:#34322d;--gold:#c9a84c;--gold-hi:#d4b86a;--cream:#f5f0e8;--mute:#9b9588}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--cream);font-family:"DM Sans",system-ui,sans-serif;line-height:1.6}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 26px}
+  .mono{font-family:"JetBrains Mono",monospace}
+  a{color:inherit}
+  header{padding:30px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  header .t{font-family:"Cormorant",serif;font-size:26px;font-weight:600}
+  header .tag{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute)}
+  .lead{padding:46px 0 30px}
+  .lead h1{font-family:"Cormorant",serif;font-size:clamp(34px,5vw,52px);font-weight:600;line-height:1.1}
+  .lead p{color:var(--mute);max-width:620px;margin-top:14px}
+
+  .links{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:30px 0 48px}
+  @media(max-width:760px){.links{grid-template-columns:1fr}}
+  .lk{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:24px;display:flex;flex-direction:column;gap:12px}
+  .lk .n{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+  .lk h2{font-family:"Cormorant",serif;font-size:24px;font-weight:600}
+  .lk p{font-size:14px;color:var(--mute);flex:1}
+  .lk .url{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--gold-hi);background:#0c0b08;border:1px solid var(--line);border-radius:5px;padding:10px 12px;word-break:break-all}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{font-family:"DM Sans",sans-serif;font-size:13px;font-weight:600;letter-spacing:.04em;padding:11px 18px;border-radius:5px;border:1px solid var(--line);background:transparent;color:var(--cream);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+  .btn.gold{background:linear-gradient(135deg,var(--gold-hi),var(--gold));color:#15130d;border-color:transparent}
+  .btn:hover{border-color:var(--gold)}
+
+  .builder{border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:60px}
+  .builder .head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;background:var(--panel)}
+  .builder .head b{font-family:"Cormorant",serif;font-size:20px;font-weight:600}
+  .builder .head span{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+  .grid{display:grid;grid-template-columns:340px 1fr;min-height:560px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+  .form{padding:22px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:16px;background:#100e09}
+  .form label{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+  .form input{width:100%;background:#0c0b08;border:1px solid var(--line);border-radius:5px;color:var(--cream);padding:10px 12px;font-family:"DM Sans",sans-serif;font-size:14px}
+  .form input:focus{outline:none;border-color:var(--gold)}
+  .preview{position:relative;background:#000}
+  .preview iframe{width:100%;height:100%;min-height:560px;border:0;display:block}
+  .note{font-size:12px;color:var(--mute);padding:14px 22px;border-top:1px solid var(--line);background:var(--panel)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--gold);color:#15130d;font-weight:600;font-size:13px;padding:11px 22px;border-radius:6px;opacity:0;transition:.3s;pointer-events:none}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="t">240 Deer Rd · Campaign Kit</div>
+    <div class="tag">ShopLocal Campaign Kit · HipCribs · CoNewsPress</div>
+  </header>
+
+  <div class="lead">
+    <h1>One kit. Two links.</h1>
+    <p>A HipCribs real-estate kit inside the <b>ShopLocal campaign-kit ecosystem</b>. Two links ship: the campaign-kit landing (with the customer-facing landing-page builder below) and the single customer link at <span class="mono">hipcribs.5280.menu</span>. The customer link also feeds the sliding real-estate carousel at the bottom of the registercall.com home page.</p>
+  </div>
+
+  <div class="links">
+    <div class="lk">
+      <div class="n">Link 1 · Campaign Kit Landing</div>
+      <h2>This page</h2>
+      <p>Operator entry point. Includes the customer-facing landing-page builder (below) and the customer link. Internal — not buyer-facing.</p>
+      <div class="url" id="kitUrl">…/240-deer-rd-listing-kit/index.html</div>
+      <div class="row"><button class="btn" data-copy="kitUrl">Copy kit link</button></div>
+    </div>
+    <div class="lk">
+      <div class="n">Link 2 · Customer Link</div>
+      <h2>The home-buying kit</h2>
+      <p>Buyer-facing. HipCribs high-end housing presentation with the embedded private price study. This is the only link a customer ever receives.</p>
+      <div class="url" id="custUrl">…/240-deer-rd-listing-kit/customer-facing/index.html</div>
+      <div class="row">
+        <a class="btn gold" id="openCust" href="./customer-facing/index.html" target="_blank" rel="noopener">Open customer link ↗</a>
+        <button class="btn" data-copy="custUrl">Copy customer link</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="lk" style="margin-bottom:48px">
+    <div class="n">Placement · Not a third link</div>
+    <h2>registercall.com home-page carousel</h2>
+    <p>The customer link also feeds a sliding real-estate carousel embedded at the bottom of the registercall.com home page — functionally the same listing experience, presented as a bottom-of-page carousel. Drop-in snippet: <span class="mono">carousel/embed-snippet.html</span>.</p>
+    <div class="row">
+      <a class="btn" href="./carousel/registercall-home-carousel.html" target="_blank" rel="noopener">Preview carousel placement ↗</a>
+    </div>
+  </div>
+
+  <div class="builder">
+    <div class="head"><b>Customer-Facing Landing-Page Builder</b><span>Live preview · edits apply instantly</span></div>
+    <div class="grid">
+      <div class="form">
+        <div><label>Headline — line 1</label><input id="f_h1" value="Two Forty"></div>
+        <div><label>Headline — line 2 (accent)</label><input id="f_h2" value="Deer Road"></div>
+        <div><label>Sub-line</label><input id="f_sub" value="A three-bedroom home set among the historic mountain communities of Gilpin County — offered with a private price study."></div>
+        <div><label>Address line</label><input id="f_addr" value="240 Deer Rd · Gilpin County, CO"></div>
+        <div><label>Median price</label><input id="f_v1" value="$542K"></div>
+        <div><label>Per square foot</label><input id="f_v2" value="$308"></div>
+        <div><label>Days on market</label><input id="f_v3" value="110"></div>
+        <div class="row"><button class="btn gold" id="apply">Apply to preview</button><button class="btn" id="reset">Reset</button></div>
+      </div>
+      <div class="preview"><iframe id="pv" src="./customer-facing/index.html" title="Customer landing preview"></iframe></div>
+    </div>
+    <div class="note">The builder edits the customer landing in place for preview. Fields map to the hero headline, sub-line, address, and the three market figures. Use “Copy customer link” above to hand off — buyers only ever get Link 2.</div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script>
+  // Resolve absolute URLs for the two links
+  var base=location.href.replace(/index\.html?(\?.*)?$/,'');
+  document.getElementById('kitUrl').textContent=base+'index.html';
+  document.getElementById('custUrl').textContent=base+'customer-facing/index.html';
+
+  // Copy buttons
+  var toast=document.getElementById('toast');
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=document.getElementById(b.getAttribute('data-copy')).textContent;
+      navigator.clipboard.writeText(t).then(function(){
+        toast.classList.add('show');setTimeout(function(){toast.classList.remove('show');},1400);
+      });
+    });
+  });
+
+  // Builder → live-edit the preview iframe's customer page
+  var pv=document.getElementById('pv');
+  function apply(){
+    var d=pv.contentDocument; if(!d) return;
+    var h1=d.querySelector('.hero h1');
+    if(h1){h1.innerHTML=esc(val('f_h1'))+'<br><span class="it">'+esc(val('f_h2'))+'</span>';}
+    set(d,'.hero .sub',val('f_sub'));
+    set(d,'.hero .addr',val('f_addr'));
+    var f=d.querySelectorAll('.figs .f .v');
+    if(f.length===3){f[0].textContent=val('f_v1');f[1].textContent=val('f_v2');f[2].textContent=val('f_v3');}
+  }
+  function val(id){return document.getElementById(id).value;}
+  function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function set(d,sel,txt){var el=d.querySelector(sel); if(el) el.textContent=txt;}
+  document.getElementById('apply').addEventListener('click',apply);
+  document.getElementById('reset').addEventListener('click',function(){pv.src=pv.src;});
+</script>
+</body>
+</html>

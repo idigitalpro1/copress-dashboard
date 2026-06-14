@@ -1,13 +1,14 @@
 {
-  "campaign": "CoPress SATCOM Command Center",
+  "campaign": "CoPress Nest",
   "primaryOffer": "Publishing spine campaign kit",
   "links": {
-    "campaignKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit",
-    "customerOperatorKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer"
+    "campaignKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit",
+    "customerOperatorKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#operator-kit"
   },
   "placements": [
     { "name": "Dashboard showcase landing", "price": 75, "route": "static campaign kit" },
     { "name": "Newsletter feature block", "price": 20, "route": "newsletter studio / Sendy" },
+    { "name": "Content banner pack", "price": 25, "route": "native sponsor module / carousel / embed" },
     { "name": "Banner set", "price": 23, "route": "display inventory" },
     { "name": "Social card set", "price": 18, "route": "social queue" },
     { "name": "Sponsored editorial", "price": 30, "route": "editorial queue" },

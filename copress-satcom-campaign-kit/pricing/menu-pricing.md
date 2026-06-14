@@ -25,7 +25,7 @@ Free Unlimited operator trial: $0 for the first 7 days. Checkout still required.
 - IM-515 Social caption pack
 - IM-620 Print one-sheet and direct mail copy
 - IM-715 CRM drip follow-up sequence
-- IM-815 SATCOM operator readiness handoff
+- IM-815 Nest operator readiness handoff
 
 ## Guardrail
 

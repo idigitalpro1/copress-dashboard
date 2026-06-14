@@ -1,0 +1,36 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "RealEstateListing",
+      "name": "240 Deer Rd · Gilpin County 3-Bedroom Home",
+      "url": "https://hipcribs.5280.menu/",
+      "description": "A 3-bedroom single-family home in historic Gilpin County, CO, with an interactive price estimator and Q1 2026 comparable-sales analysis.",
+      "datePosted": "2026-05-18",
+      "image": "https://files.manuscdn.com/webdev_screenshots/2026/03/30/LDdeELbZNBHyWqsYPrNFEv.png",
+      "broker": {
+        "@type": "RealEstateAgent",
+        "name": "HipCribs"
+      },
+      "about": {
+        "@type": "SingleFamilyResidence",
+        "name": "240 Deer Rd",
+        "numberOfRooms": 3,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Gilpin County",
+          "addressRegion": "CO",
+          "addressCountry": "US"
+        }
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "name": "240 Deer Rd Price Estimator",
+      "applicationCategory": "RealEstateApplication",
+      "operatingSystem": "Web",
+      "url": "https://hipcribs.5280.menu/",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    }
+  ]
+}

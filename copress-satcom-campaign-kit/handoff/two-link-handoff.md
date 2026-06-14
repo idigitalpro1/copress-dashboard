@@ -6,7 +6,7 @@ Pattern: Bill's Mobile showcase rhythm.
 
 Use this with the operator, sales desk, production desk, or advertiser services team.
 
-`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit`
+`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit`
 
 Contains:
 - campaign assets
@@ -23,7 +23,7 @@ Contains:
 
 Use this when someone needs the plain-English explanation of what CoPress Dashboard does.
 
-`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer`
+`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#operator-kit`
 
 Contains:
 - dashboard positioning

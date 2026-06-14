@@ -1,96 +1,97 @@
 <!-- ============================================================= -->
-<!-- HipCribs · ShopLocal real-estate carousel                      -->
-<!-- Drop-in for the BOTTOM of the registercall.com home page.      -->
-<!-- Functionally equivalent to the listing estimator site: each    -->
-<!-- card opens the customer link (hipcribs.5280.menu).             -->
-<!--                                                                -->
-<!-- Usage: paste this whole block near the end of the home page,   -->
-<!-- above the footer. Set data-feed to the deployed listings.json. -->
-<!-- Styles are scoped under .hc-recar so they won't touch the SPA. -->
+<!-- CoPress Nest content banner carousel                          -->
+<!-- Drop-in for a home page, newsletter landing page, or sponsor   -->
+<!-- article rail. Styles are scoped under .cp-nest-carousel.       -->
 <!-- ============================================================= -->
-<section class="hc-recar" data-feed="./listings.json" aria-label="HipCribs real estate listings">
-  <div class="hc-recar__head">
-    <span class="hc-recar__eyebrow">ShopLocal · Real Estate</span>
-    <h2 class="hc-recar__title">Homes in the High Country</h2>
-    <span class="hc-recar__by">Powered by HipCribs · hipcribs.5280.menu</span>
+<section class="cp-nest-carousel" data-feed="./content-cards.json" aria-label="CoPress Nest content banner carousel">
+  <div class="cp-nest-carousel__head">
+    <span class="cp-nest-carousel__eyebrow">CoPress Nest · Content Banners</span>
+    <h2 class="cp-nest-carousel__title">One brief becomes a full campaign kit.</h2>
+    <span class="cp-nest-carousel__by">Editorial, newsletter, city sites, billing, and operator handoff</span>
   </div>
-  <div class="hc-recar__viewport">
-    <button class="hc-recar__nav hc-recar__nav--prev" aria-label="Previous">‹</button>
-    <ul class="hc-recar__track" role="list"></ul>
-    <button class="hc-recar__nav hc-recar__nav--next" aria-label="Next">›</button>
+  <div class="cp-nest-carousel__viewport">
+    <button class="cp-nest-carousel__nav cp-nest-carousel__nav--prev" aria-label="Previous">‹</button>
+    <ul class="cp-nest-carousel__track" role="list"></ul>
+    <button class="cp-nest-carousel__nav cp-nest-carousel__nav--next" aria-label="Next">›</button>
   </div>
-  <div class="hc-recar__dots" role="tablist" aria-label="Listing pages"></div>
+  <div class="cp-nest-carousel__dots" role="tablist" aria-label="Content banner pages"></div>
 </section>
 
 <style>
-  .hc-recar{--bg:#0a0a07;--card:#14120c;--line:#34322d;--gold:#c9a84c;--gold-hi:#d4b86a;--cream:#f5f0e8;--mute:#9b9588;
+  .cp-nest-carousel{--bg:#070c14;--card:#0d1520;--line:rgba(200,168,75,.22);--gold:#c8a84b;--cream:#e2ddd5;--mute:#8a8480;--blue:#56b6c8;--red:#c94c4c;
     background:var(--bg);color:var(--cream);padding:54px 20px 64px;border-top:1px solid var(--line);font-family:"DM Sans",system-ui,sans-serif}
-  .hc-recar *{box-sizing:border-box}
-  .hc-recar__head{max-width:1100px;margin:0 auto 26px;text-align:center}
-  .hc-recar__eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold)}
-  .hc-recar__title{font-family:"Cormorant","Playfair Display",Georgia,serif;font-weight:600;font-size:clamp(26px,4vw,40px);margin:10px 0 6px}
-  .hc-recar__by{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
-  .hc-recar__viewport{position:relative;max-width:1100px;margin:0 auto;overflow:hidden}
-  .hc-recar__track{display:flex;gap:18px;list-style:none;margin:0;padding:4px;transition:transform .55s cubic-bezier(.4,0,.2,1)}
-  .hc-recar__card{flex:0 0 calc((100% - 36px)/3);background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
-  .hc-recar__card:hover{border-color:var(--gold);transform:translateY(-3px)}
-  .hc-recar__img{height:172px;background:linear-gradient(135deg,#1a1610,#0f0e0b);background-size:cover;background-position:center;position:relative}
-  .hc-recar__tag{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;background:rgba(10,10,7,.78);color:var(--gold-hi);border:1px solid var(--line);padding:6px 10px;border-radius:3px}
-  .hc-recar__body{padding:18px 18px 20px;flex:1;display:flex;flex-direction:column;gap:6px}
-  .hc-recar__addr{font-family:"Cormorant","Playfair Display",serif;font-size:23px;font-weight:600;line-height:1.15}
-  .hc-recar__area{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
-  .hc-recar__meta{font-size:13px;color:#cdc7ba;margin-top:4px}
-  .hc-recar__price{font-family:"Cormorant","Playfair Display",serif;font-size:26px;color:var(--gold-hi);margin-top:auto;padding-top:10px}
-  .hc-recar__pnote{font-size:11px;color:var(--mute)}
-  .hc-recar__cta{margin-top:12px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
-  .hc-recar__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(10,10,7,.85);color:var(--cream);font-size:20px;cursor:pointer;display:grid;place-items:center}
-  .hc-recar__nav:hover{border-color:var(--gold);color:var(--gold-hi)}
-  .hc-recar__nav--prev{left:6px}.hc-recar__nav--next{right:6px}
-  .hc-recar__dots{display:flex;justify-content:center;gap:8px;margin-top:22px}
-  .hc-recar__dot{width:8px;height:8px;border-radius:50%;border:0;background:var(--line);cursor:pointer;padding:0}
-  .hc-recar__dot[aria-selected="true"]{background:var(--gold)}
-  @media(max-width:900px){.hc-recar__card{flex:0 0 calc((100% - 18px)/2)}}
-  @media(max-width:600px){.hc-recar__card{flex:0 0 100%}}
+  .cp-nest-carousel *{box-sizing:border-box}
+  .cp-nest-carousel__head{max-width:1120px;margin:0 auto 26px;text-align:center}
+  .cp-nest-carousel__eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:800}
+  .cp-nest-carousel__title{font-family:"Playfair Display",Georgia,serif;font-weight:800;font-size:clamp(28px,4vw,46px);line-height:1;margin:12px 0 8px}
+  .cp-nest-carousel__by{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+  .cp-nest-carousel__viewport{position:relative;max-width:1120px;margin:0 auto;overflow:hidden}
+  .cp-nest-carousel__track{display:flex;gap:18px;list-style:none;margin:0;padding:4px;transition:transform .55s cubic-bezier(.4,0,.2,1)}
+  .cp-nest-carousel__card{flex:0 0 calc((100% - 36px)/3);background:linear-gradient(145deg,#0d1520,#111d2e);border:1px solid var(--line);min-height:300px;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:border-color .2s,transform .2s;position:relative;overflow:hidden}
+  .cp-nest-carousel__card:before{content:"";position:absolute;right:-54px;bottom:-54px;width:168px;height:168px;border-radius:50%;border:22px solid rgba(86,182,200,.16)}
+  .cp-nest-carousel__card:hover{border-color:var(--gold);transform:translateY(-3px)}
+  .cp-nest-carousel__art{height:92px;background:linear-gradient(135deg,rgba(200,168,75,.18),rgba(86,182,200,.16));border-bottom:1px solid var(--line);display:flex;align-items:center;padding:18px}
+  .cp-nest-carousel__seal{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--gold);color:var(--gold);font-family:Georgia,serif;font-size:24px;font-weight:800;background:#060a10}
+  .cp-nest-carousel__body{padding:22px 22px 24px;position:relative;z-index:1;flex:1;display:flex;flex-direction:column}
+  .cp-nest-carousel__tag{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);font-weight:900;margin-bottom:12px}
+  .cp-nest-carousel__headline{font-family:"Playfair Display",Georgia,serif;font-size:27px;font-weight:800;line-height:1.05;margin:0 0 12px}
+  .cp-nest-carousel__summary{font-size:14px;color:#bac7d4;line-height:1.45;margin:0}
+  .cp-nest-carousel__cta{margin-top:auto;padding-top:18px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);font-weight:900}
+  .cp-nest-carousel__nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:rgba(7,12,20,.88);color:var(--cream);font-size:20px;cursor:pointer;display:grid;place-items:center}
+  .cp-nest-carousel__nav:hover{border-color:var(--gold);color:var(--gold)}
+  .cp-nest-carousel__nav--prev{left:6px}.cp-nest-carousel__nav--next{right:6px}
+  .cp-nest-carousel__dots{display:flex;justify-content:center;gap:8px;margin-top:22px}
+  .cp-nest-carousel__dot{width:8px;height:8px;border-radius:50%;border:0;background:rgba(255,255,255,.18);cursor:pointer;padding:0}
+  .cp-nest-carousel__dot[aria-selected="true"]{background:var(--gold)}
+  @media(max-width:900px){.cp-nest-carousel__card{flex:0 0 calc((100% - 18px)/2)}}
+  @media(max-width:600px){.cp-nest-carousel__card{flex:0 0 100%}}
 </style>
 
 <script>
 (function(){
   var root=document.currentScript.previousElementSibling;
-  while(root && !(root.classList&&root.classList.contains('hc-recar'))) root=root.previousElementSibling;
+  while(root && !(root.classList&&root.classList.contains('cp-nest-carousel'))) root=root.previousElementSibling;
   if(!root) return;
-  var track=root.querySelector('.hc-recar__track'),
-      dotsWrap=root.querySelector('.hc-recar__dots'),
-      vp=root.querySelector('.hc-recar__viewport'),
-      feed=root.getAttribute('data-feed')||'./listings.json',
+  var track=root.querySelector('.cp-nest-carousel__track'),
+      dotsWrap=root.querySelector('.cp-nest-carousel__dots'),
+      vp=root.querySelector('.cp-nest-carousel__viewport'),
+      feed=root.getAttribute('data-feed')||'./content-cards.json',
       page=0, perView=3, pages=1, timer=null;
 
-  function perViewFor(){ return window.innerWidth<=600?1:window.innerWidth<=900?2:3; }
+  var fallback=[
+    {tag:'Content banner',title:'Native sponsor module',summary:'Article-style sponsored block for web, newsletter, and city-site placements.',href:'../banners/content-banner-native.html',cta:'Open native banner'},
+    {tag:'Sponsored post',title:'Build the spine once. Publish everywhere.',summary:'Finished advertorial copy with the CoPress Nest operator story.',href:'../content/sponsored-post.html',cta:'Open article'},
+    {tag:'Newsletter',title:'Feature unit for reader send',summary:'Email-ready block with subject, preheader, CTA, and dashboard positioning.',href:'../email/newsletter-command-spine.html',cta:'Open newsletter'},
+    {tag:'Operator handoff',title:'Two links, no messy folder',summary:'Campaign kit plus operator readiness kit for a clean owner send.',href:'../handoff/two-link-handoff.md',cta:'Open handoff'}
+  ];
 
-  fetch(feed).then(function(r){return r.json();}).then(function(d){
-    (d.listings||[]).forEach(function(L){
+  function perViewFor(){ return window.innerWidth<=600?1:window.innerWidth<=900?2:3; }
+  function load(){
+    fetch(feed).then(function(r){return r.ok?r.json():Promise.reject();}).then(function(d){
+      render(d.cards||fallback);
+    }).catch(function(){ render(fallback); });
+  }
+  function render(cards){
+    track.innerHTML='';
+    cards.forEach(function(C){
       var a=document.createElement('a');
-      a.className='hc-recar__card'; a.href=L.href||'#';
-      a.setAttribute('role','listitem');
-      var img='<div class="hc-recar__img"'+(L.image?(' style="background-image:url(\''+L.image+'\')"'):'')+'>'+
-              (L.tag?'<span class="hc-recar__tag">'+L.tag+'</span>':'')+'</div>';
-      a.innerHTML=img+
-        '<div class="hc-recar__body">'+
-          '<div class="hc-recar__addr">'+L.address+'</div>'+
-          '<div class="hc-recar__area">'+L.area+'</div>'+
-          '<div class="hc-recar__meta">'+L.beds+' bd · '+L.baths+' ba · '+(L.sqft||'—')+' sqft</div>'+
-          '<div class="hc-recar__price">'+L.price+'</div>'+
-          '<div class="hc-recar__pnote">'+(L.priceNote||'')+'</div>'+
-          '<div class="hc-recar__cta">View listing →</div>'+
+      a.className='cp-nest-carousel__card'; a.href=C.href||'#'; a.setAttribute('role','listitem');
+      a.innerHTML=
+        '<div class="cp-nest-carousel__art"><div class="cp-nest-carousel__seal">N</div></div>'+
+        '<div class="cp-nest-carousel__body">'+
+          '<div class="cp-nest-carousel__tag">'+(C.tag||'Content')+'</div>'+
+          '<h3 class="cp-nest-carousel__headline">'+(C.title||'CoPress Nest content unit')+'</h3>'+
+          '<p class="cp-nest-carousel__summary">'+(C.summary||'Ready-to-place campaign content.')+'</p>'+
+          '<div class="cp-nest-carousel__cta">'+(C.cta||'Open asset')+'</div>'+
         '</div>';
       track.appendChild(a);
     });
     layout(); window.addEventListener('resize',layout);
-    root.querySelector('.hc-recar__nav--next').addEventListener('click',function(){go(page+1);});
-    root.querySelector('.hc-recar__nav--prev').addEventListener('click',function(){go(page-1);});
+    root.querySelector('.cp-nest-carousel__nav--next').addEventListener('click',function(){go(page+1);});
+    root.querySelector('.cp-nest-carousel__nav--prev').addEventListener('click',function(){go(page-1);});
     start();
     vp.addEventListener('mouseenter',stop); vp.addEventListener('mouseleave',start);
-  }).catch(function(){ root.style.display='none'; });
-
+  }
   function layout(){
     perView=perViewFor();
     var cards=track.children.length;
@@ -99,7 +100,7 @@
     dotsWrap.innerHTML='';
     for(var i=0;i<pages;i++){
       var b=document.createElement('button');
-      b.className='hc-recar__dot'; b.setAttribute('role','tab');
+      b.className='cp-nest-carousel__dot'; b.setAttribute('role','tab');
       b.setAttribute('aria-selected', i===page?'true':'false');
       (function(idx){b.addEventListener('click',function(){go(idx);});})(i);
       dotsWrap.appendChild(b);
@@ -120,6 +121,7 @@
   function start(){ stop(); timer=setInterval(function(){go(page+1);},5200); }
   function stop(){ if(timer){clearInterval(timer);timer=null;} }
   function restart(){ start(); }
+  load();
 })();
 </script>
-<!-- ===================== end HipCribs carousel ===================== -->
+<!-- ===================== end CoPress Nest content carousel ===================== -->

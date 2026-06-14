@@ -1,9 +1,9 @@
 {
-  "campaign": "CoPress SATCOM Command Center - Publishing Spine",
+  "campaign": "CoPress Nest - Publishing Spine",
   "brand": "CoPress Dashboard",
   "version": "1.1.0",
   "created": "2026-05-19",
-  "ecosystem": "CoPress / SATCOM Campaign Kit",
+  "ecosystem": "CoPress / Nest Campaign Kit",
   "tagline": "One command center for local publishing, billing, campaigns, and reader growth.",
   "sourcePattern": "Bill's Mobile showcase pattern adapted for the CoPress dashboard: two-link handoff, campaign kit asset buildout, customer operator kit link, newsletter, social, print, CRM, audio, and drip sequence.",
   "sourceUrl": "file:///Users/Ace/Codex/apps/copress-dashboard/index.html",
@@ -12,11 +12,11 @@
     "Colorado city-site operators who need one intake-to-publish dashboard",
     "Sales reps packaging advertiser campaigns without rebuilding assets",
     "Production teams that need visible kanban, handoff, and launch lanes",
-    "Owners who want SATCOM/Hermes support without losing local control"
+    "Owners who want Nest/Hermes support without losing local control"
   ],
-  "positioning": "CoPress Dashboard is the operating spine for local media: campaign kits, newsletter handoff, directory intake, invoice-manager launch, city-site routing, and SATCOM/Hermes operator workflows in one browser-local command center.",
+  "positioning": "CoPress Dashboard is the operating spine for local media: campaign kits, newsletter handoff, directory intake, invoice-manager launch, city-site routing, and Nest/Hermes operator workflows in one browser-local command center.",
   "customerKitName": "Operator readiness kit",
-  "customerBlurb": "A customer-facing operator brief that explains the dashboard in plain language: what it controls, what gets published, how billing hands off, and where SATCOM/Hermes support fits the workflow.",
+  "customerBlurb": "A customer-facing operator brief that explains the dashboard in plain language: what it controls, what gets published, how billing hands off, and where Nest/Hermes support fits the workflow.",
   "cartNote": "7-day free operator trial - checkout still required.",
   "freeDays": 7,
   "colors": {
@@ -35,6 +35,7 @@
     "google": "family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700"
   },
   "assets": {
+    "siteBrand": "./assets/copress-site-brand.svg",
     "hero": "./assets/command-center-hero.svg",
     "ogImage": "./assets/social-card-command-center.svg",
     "newsletter": "./assets/newsletter-panel.svg",
@@ -42,14 +43,14 @@
     "handoff": "./assets/operator-handoff.svg"
   },
   "links": {
-    "campaignKitLanding": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit",
-    "customerLink": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer"
+    "campaignKitLanding": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit",
+    "customerLink": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#operator-kit"
   },
   "deliverables": {
     "showcase": "index.html",
     "publicLinks": {
-      "campaignKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit",
-      "customerLink": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer"
+      "campaignKit": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit",
+      "customerLink": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#operator-kit"
     },
     "banners": [
       "banners/banner-leaderboard-728x90.html",
@@ -59,7 +60,12 @@
       "banners/banner-social-square-1080x1080.html"
     ],
     "content": [
-      "content/sponsored-post.html"
+      "banners/content-banner-native.html",
+      "content/sponsored-post.html",
+      "editorial/sponsored-post.md",
+      "email/newsletter-command-spine.html",
+      "carousel/registercall-home-carousel.html",
+      "carousel/embed-snippet.html"
     ],
     "email": [
       "email/newsletter-command-spine.html"
@@ -259,6 +265,31 @@
         [
           "banner-social-square-1080x1080.html",
           "feed creative"
+        ]
+      ]
+    },
+    {
+      "name": "Content Banner Pack",
+      "items": [
+        [
+          "banners/content-banner-native.html",
+          "native sponsored content module"
+        ],
+        [
+          "content/sponsored-post.html",
+          "finished article page"
+        ],
+        [
+          "email/newsletter-command-spine.html",
+          "newsletter feature banner"
+        ],
+        [
+          "carousel/registercall-home-carousel.html",
+          "home page carousel placement demo"
+        ],
+        [
+          "carousel/embed-snippet.html",
+          "drop-in content unit"
         ]
       ]
     },

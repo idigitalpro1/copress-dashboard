@@ -1,0 +1,144 @@
+{
+  "campaign": "240 Deer Rd - Gilpin County 3-Bedroom Listing Kit",
+  "brand": "HipCribs",
+  "ecosystem": "ShopLocal Campaign Kit",
+  "ecosystemNote": "This listing kit lands into the ShopLocal campaign-kit ecosystem (same industry-kit pattern as Stan's Auto). The customer link is hosted at hipcribs.5280.menu and feeds the sliding real-estate carousel at the bottom of the registercall.com home page.",
+  "version": "1.1.0",
+  "created": "2026-05-18",
+  "sourcePattern": "CoNewsPress ShopLocal industry-kit spine adapted for a real-estate listing: customer-facing interactive price estimator, campaign-kit landing with landing-page builder, registercall.com home-page carousel feed, newsletter block, banner set, social copy, print/direct mail/audio handoff, production kanban, owner SMS, drip sequence, and SEO mapping.",
+  "sourceUrl": "https://3bedroom.manus.space",
+  "integration": {
+    "origin": "https://3bedroom.manus.space",
+    "type": "Manus-built React SPA, mirrored offline and rebranded",
+    "adoptedFeatures": [
+      "Interactive 3-bedroom price calculator",
+      "Comparable-sales (CMA) analysis by sub-market",
+      "Q1 2026 market data panel",
+      "Adjustable price-factor sliders (sqft, baths, year, condition, amenities)"
+    ],
+    "adoptedBrandGraphics": "Customer-facing pages rebranded to a HipCribs high-end housing aesthetic derived from the fleurish.mag brand: warm near-black surfaces, gold accents, Cormorant / Marcellus / Crimson Pro / DM Sans type system. The embedded estimator is a compiled bundle and retains the source calculator UI inside its frame."
+  },
+  "audience": [
+    "Gilpin County and Front Range 3-bedroom home shoppers",
+    "Buyers comparing historic mountain-community pricing",
+    "Sellers and FSBO owners benchmarking list price",
+    "Relocation and second-home buyers researching Black Hawk / Central City / Rollinsville",
+    "Local shoppers who want a price estimate before contacting an agent"
+  ],
+  "positioning": "A HipCribs real-estate listing inside the ShopLocal campaign-kit ecosystem: a self-serve price estimate at hipcribs.5280.menu that also surfaces in the sliding real-estate carousel at the bottom of the registercall.com home page, turning browsers into qualified agent conversations.",
+  "colors": {
+    "bg": "#0a0a07",
+    "bg2": "#0f0e0b",
+    "card": "#14120c",
+    "warm": "#1a1610",
+    "line": "#34322d",
+    "gold": "#c9a84c",
+    "goldLo": "#b8973a",
+    "goldHi": "#d4b86a",
+    "cream": "#f5f0e8",
+    "muted": "#9b9588"
+  },
+  "fonts": {
+    "display": "Cormorant",
+    "heading": "Marcellus",
+    "body": "Crimson Pro",
+    "ui": "DM Sans"
+  },
+  "assets": {
+    "ogImage": "https://files.manuscdn.com/webdev_screenshots/2026/03/30/LDdeELbZNBHyWqsYPrNFEv.png"
+  },
+  "links": {
+    "campaignKitLanding": "index.html",
+    "customerLink": "customer-facing/index.html",
+    "note": "Only two links ship. The campaign-kit landing contains the customer-facing landing-page builder + the customer link. Buyers receive customerLink only."
+  },
+  "registercallCarousel": {
+    "purpose": "Sliding real-estate carousel embedded at the bottom of the registercall.com home page. Functionally equivalent to the listing estimator site, presented as a bottom-of-page carousel that links each card to the customer link (hipcribs.5280.menu).",
+    "demo": "carousel/registercall-home-carousel.html",
+    "embed": "carousel/embed-snippet.html",
+    "feed": "carousel/listings.json",
+    "registercallComponent": "wrc-frontend already has RealEstateBanner.tsx + carousel components; this is a drop-in, not a modification of the live repo unless approved."
+  },
+  "deliverables": {
+    "campaignKitLanding": "index.html",
+    "customerLink": [
+      "customer-facing/index.html",
+      "customer-facing/estimator/index.html",
+      "customer-facing/estimator/assets/index-BOb0pJWF.js",
+      "customer-facing/estimator/assets/index-DrMSj0gQ.css"
+    ],
+    "registercallCarousel": [
+      "carousel/registercall-home-carousel.html",
+      "carousel/embed-snippet.html",
+      "carousel/listings.json"
+    ],
+    "retired": [
+      "unused/listing-agent/index.html",
+      "unused/landing-pages/hipcribs-5280-menu.html"
+    ],
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-mobile-320x50.html"
+    ],
+    "email": [
+      "email/newsletter-gilpin-home-finder.html"
+    ],
+    "editorial": [
+      "editorial/campaign-copy.md",
+      "editorial/sponsored-editorial-sample.md",
+      "editorial/social-media-copy.md"
+    ],
+        "pricing": [
+      "pricing/listing-pricing.md"
+    ],
+    "print": [
+      "print/listing-flyer.md",
+      "print/direct-mail-postcard.md"
+    ],
+    "audio": [
+      "audio/radio-spot.md"
+    ],
+    "crm": [
+      "crm/drip-sequence.md"
+    ],
+    "handoff": [
+      "handoff/owner-sms.txt",
+      "handoff/owner-email.md",
+      "handoff/production-kanban.json",
+      "handoff/linear-kanban-manus-template.md"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ]
+  },
+  "officialFacts": {
+    "subjectProperty": "240 Deer Rd, Gilpin County, CO",
+    "propertyType": "3-bedroom single-family home",
+    "market": "Gilpin County RE-1 / Historic Mountain Communities",
+    "marketData": {
+      "medianPrice": "$542K",
+      "pricePerSqFt": "$308",
+      "daysOnMarket": 110,
+      "edition": "Q1 2026"
+    },
+    "comparables": [
+      { "subMarket": "Black Hawk", "zip": "80422", "median": "$730K", "trend": "stable" },
+      { "subMarket": "Central City", "zip": "80427", "median": "$425K", "trend": "stable" },
+      { "subMarket": "Rollinsville", "zip": "80474", "median": "$648K", "trend": "+4.2%" },
+      { "subMarket": "Russell Gulch", "zip": "80422", "median": "$380K", "trend": "-3.5%" },
+      { "subMarket": "Gilpin County Rural (subject band)", "zip": "80403", "median": "$575K", "trend": "stable" }
+    ],
+    "recommendedList": "$565,000",
+    "recommendedRange": "$540,000 - $590,000",
+    "claimGuidance": "Recommended list price is derived from the estimator's own model. Verify against the actual property condition, square footage, and amenities before publishing any list price."
+  },
+  "publicTargetHost": "hipcribs.5280.menu",
+  "dnsStatus": "not-provisioned (5280.menu = Plesk self-hosted DNS; do NOT use GoDaddy/Cloudflare)",
+  "internalOnly": {
+    "note": "Listing-agent dashboard is internal. Do not link it from buyer-facing pages."
+  },
+  "modelPolicy": "free-local-models",
+  "artRoute": "Source estimator OG screenshot referenced by URL; premium generated artwork not required."
+}

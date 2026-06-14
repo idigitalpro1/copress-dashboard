@@ -3,42 +3,45 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CoPress SATCOM Command Center | Campaign Showcase</title>
-<meta name="description" content="A Bill's Mobile style campaign showcase for the CoPress SATCOM publishing command center, with finished banners, sponsored content, newsletter, social, print, CRM, and handoff assets.">
+<title>CoPress Nest | Campaign Showcase</title>
+<meta name="description" content="A Bill's Mobile style campaign showcase for the CoPress Nest publishing command center, with finished banners, sponsored content, newsletter, social, print, CRM, and handoff assets.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="CoPress SATCOM Campaign Showcase">
+<meta property="og:title" content="CoPress Nest Campaign Showcase">
 <meta property="og:description" content="Finished campaign kit for the CoPress publishing spine: content banners, sponsored post, newsletter block, social graphics, print, audio, CRM, and two-link handoff.">
 <meta property="og:image" content="./assets/social-card-command-center.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --ink:#07101b;
-    --navy:#08111f;
+    --navy:#070c14;
     --panel:#111d2e;
     --blue:#56b6c8;
-    --gold:#d7a84f;
+    --gold:#c8a84b;
     --red:#c94c4c;
-    --paper:#f7f1e3;
-    --muted:#a9bacd;
-    --line:rgba(215,168,79,.32);
+    --paper:#e2ddd5;
+    --muted:#8a8480;
+    --line:rgba(200,168,75,.32);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;background:var(--navy);color:var(--paper);font-family:Inter,Arial,sans-serif;line-height:1.55}
+  body{margin:0;background:var(--navy);color:var(--paper);font-family:"DM Sans",Arial,sans-serif;line-height:1.55}
+  body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");opacity:.55}
+  body>*{position:relative;z-index:1}
   a{color:inherit}
   img{max-width:100%;display:block}
-  .topbar{position:sticky;top:0;z-index:30;background:rgba(8,17,31,.9);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.08)}
+  .topbar{position:sticky;top:0;z-index:30;background:rgba(4,8,16,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(200,168,75,.1)}
+  .topbar:before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent 0%,var(--gold) 20%,var(--gold) 80%,transparent 100%)}
   .topbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:22px;padding:16px 22px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
   .seal{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--gold);color:var(--gold);font-weight:900;font-size:12px;letter-spacing:0}
   .brand strong{font-family:"Playfair Display",Georgia,serif;font-size:22px;line-height:1}
-  .brand span{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.18em;margin-top:3px}
+  .brand span{display:block;color:var(--muted);font-family:"DM Mono",monospace;font-size:10px;text-transform:uppercase;letter-spacing:.18em;margin-top:3px}
   .nav{display:flex;flex-wrap:wrap;gap:14px}
   .nav a{text-decoration:none;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.12em}
   .nav a:hover{color:var(--gold)}
-  .hero{position:relative;min-height:92vh;display:grid;align-items:end;overflow:hidden;background:#08111f}
+  .hero{position:relative;min-height:92vh;display:grid;align-items:end;overflow:hidden;background:#070c14}
   .hero:before{content:"";position:absolute;inset:0;background:url("./assets/command-center-hero.svg") center/cover no-repeat;opacity:.78}
   .hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,17,31,.96),rgba(8,17,31,.7) 44%,rgba(8,17,31,.16)),linear-gradient(0deg,#08111f 0%,rgba(8,17,31,.1) 38%)}
   .hero-inner{position:relative;z-index:1;max-width:1180px;margin:0 auto;width:100%;padding:120px 22px 76px}
@@ -46,6 +49,7 @@
   h1,h2,h3{font-family:"Playfair Display",Georgia,serif;letter-spacing:0}
   h1{max-width:760px;margin:18px 0 18px;font-size:84px;line-height:.95}
   .hero-copy{max-width:690px;color:#d3dfeb;font-size:20px;line-height:1.55;margin:0}
+  .brand-art{width:min(620px,100%);margin:0 0 24px;border:1px solid rgba(200,168,75,.38);box-shadow:0 24px 80px rgba(0,0,0,.34)}
   .hero-actions{display:flex;flex-wrap:wrap;gap:13px;margin-top:30px}
   .btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:0 20px;border-radius:5px;border:1px solid var(--line);background:transparent;color:var(--paper);font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;text-decoration:none}
   .btn.primary{background:var(--gold);border-color:var(--gold);color:#07101b}
@@ -69,10 +73,23 @@
   .link-card{text-decoration:none;min-height:230px;position:relative;overflow:hidden}
   .link-card:after{content:"";position:absolute;right:-60px;bottom:-60px;width:180px;height:180px;border-radius:50%;border:22px solid rgba(86,182,200,.18)}
   .link-card span{display:inline-flex;margin-top:22px;color:var(--gold);font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:12px}
+  .asset-preview{margin-top:18px;background:#f3f4f6;border:1px solid var(--line);padding:18px;display:grid;grid-template-columns:minmax(0,728px) 300px;gap:14px;align-items:start;overflow:auto}
+  .asset-preview iframe{background:#fff;border:0;display:block}
+  .asset-preview .preview-leader{width:728px;height:90px}
+  .asset-preview .preview-native{width:640px;height:320px}
+  .asset-preview .preview-rect{width:300px;height:250px}
+  .preview-stack{display:grid;gap:14px}
   .materials{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
   .asset{display:block;text-decoration:none;background:#0e1a2c;border:1px solid rgba(86,182,200,.25);padding:22px;min-height:178px}
   .asset:hover{border-color:var(--gold);transform:translateY(-2px)}
   .asset small{display:block;color:var(--blue);font-weight:800;margin-top:16px}
+  .content-pack{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .content-card{display:block;text-decoration:none;background:#0d1520;border:1px solid rgba(200,168,75,.2);padding:18px;min-height:142px}
+  .content-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+  .content-card b{display:block;color:var(--blue);font-size:11px;text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px}
+  .content-card strong{display:block;font-family:"Playfair Display",Georgia,serif;font-size:24px;line-height:1.05;color:var(--paper)}
+  .content-card span{display:block;color:#bac7d4;font-size:14px;margin-top:8px}
+  .content-card small{display:block;color:var(--gold);font-weight:900;margin-top:14px}
   .banner-stage{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:start}
   .preview-wall{background:#f3f4f6;padding:22px;border:1px solid var(--line);display:grid;gap:18px;overflow:auto}
   iframe{border:0;background:white;display:block;max-width:100%}
@@ -84,6 +101,7 @@
   .copy-line{background:#0e1a2c;border:1px solid rgba(255,255,255,.08);padding:18px}
   .copy-line strong{color:#f7f1e3}
   .copy-line span{display:block;color:var(--muted);font-size:14px;margin-top:6px}
+  .copy-line a{display:inline-flex;margin-top:10px;color:var(--gold);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;text-decoration:none}
   .post-shell{display:grid;grid-template-columns:.82fr 1.18fr;gap:18px}
   .post-cover{background:#f7f1e3;color:#08111f;padding:34px;min-height:460px;display:flex;flex-direction:column;justify-content:space-between}
   .post-cover .kicker{color:#c94c4c}
@@ -102,23 +120,23 @@
   .route{background:#0e1a2c;border:1px solid rgba(255,255,255,.08);padding:22px;min-height:170px}
   .kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
   .col{background:#0e1a2c;border:1px solid rgba(255,255,255,.08);padding:16px}
-  .col h3{font-family:Inter,Arial,sans-serif;color:var(--gold);font-size:13px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 12px}
+  .col h3{font-family:"DM Sans",Arial,sans-serif;color:var(--gold);font-size:13px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 12px}
   .ticket{background:#111d2e;border:1px solid rgba(86,182,200,.22);padding:12px;margin-bottom:10px;color:#d7e3ed;font-size:14px}
   .footer{padding:28px 22px;color:var(--muted);font-size:13px}
   .footer-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
   @media(max-width:960px){
-    .facts,.materials,.routes,.kanban{grid-template-columns:1fr 1fr}
-    .section-head,.showcase-grid,.banner-stage,.post-shell,.newsletter{grid-template-columns:1fr}
+    .facts,.materials,.routes,.kanban,.content-pack{grid-template-columns:1fr 1fr}
+    .section-head,.showcase-grid,.banner-stage,.post-shell,.newsletter,.asset-preview{grid-template-columns:1fr}
     .hero{min-height:780px}
     h1{font-size:64px}
     .section-head h2{font-size:42px}
   }
   @media(max-width:640px){
-    .facts,.materials,.routes,.kanban,.link-suite{grid-template-columns:1fr}
+    .facts,.materials,.routes,.kanban,.link-suite,.content-pack{grid-template-columns:1fr}
     .nav{display:none}
     .hero-inner{padding-top:90px}
     .preview-wall{padding:12px}
-    .leader,.native{width:100%}
+    .leader,.native,.asset-preview .preview-leader,.asset-preview .preview-native{width:100%}
     h1{font-size:44px}
     .section-head h2{font-size:34px}
   }
@@ -128,11 +146,11 @@
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="#top">
-        <span class="seal">SAT</span>
-        <div><strong>CoPress SATCOM</strong><span>Campaign Showcase</span></div>
+        <span class="seal">N</span>
+        <div><strong>CoPress Nest</strong><span>Campaign Showcase</span></div>
       </a>
       <nav class="nav" aria-label="Campaign sections">
-        <a href="#links">Two Links</a>
+        <a href="#two-links">Two Links</a>
         <a href="#materials">Materials</a>
         <a href="#banners">Banners</a>
         <a href="#sponsored">Sponsored Post</a>
@@ -145,6 +163,7 @@
   <main id="top">
     <section class="hero">
       <div class="hero-inner">
+        <img class="brand-art" src="./assets/copress-site-brand.svg" alt="CoPress site brand artwork for The Nest">
         <div class="kicker">Bill's Mobile style showcase pattern</div>
         <h1>One campaign spine for the local media operator.</h1>
         <p class="hero-copy">A finished campaign package for CoPress Dashboard: content banners, sponsored post, newsletter block, social graphics, print/audio/CRM copy, SEO, pricing, and the two-link handoff that keeps the operator from drowning in tabs.</p>
@@ -163,7 +182,7 @@
       <div class="fact"><b>Handoff</b><span>Campaign kit + operator kit</span></div>
     </div>
 
-    <section id="links">
+    <section id="two-links">
       <div class="wrap">
         <div class="section-head">
           <div>
@@ -185,6 +204,13 @@
             <p>Plain-English customer link explaining what the dashboard controls, what gets handed off, and what still needs approval.</p>
             <span>Open operator kit</span>
           </a>
+        </div>
+        <div class="asset-preview" aria-label="Visible campaign asset previews">
+          <div class="preview-stack">
+            <iframe class="preview-leader" src="./banners/banner-leaderboard-728x90.html" title="CoPress Nest leaderboard preview"></iframe>
+            <iframe class="preview-native" src="./banners/content-banner-native.html" title="CoPress Nest native sponsored content preview"></iframe>
+          </div>
+          <iframe class="preview-rect" src="./banners/banner-medium-rect-300x250.html" title="CoPress Nest medium rectangle preview"></iframe>
         </div>
       </div>
     </section>
@@ -208,6 +234,14 @@
           <a class="asset" href="./social/social-card-command-center.html"><b>Social</b><h3>Command card</h3><p>Square feed creative.</p><small>Open social</small></a>
           <a class="asset" href="./handoff/two-link-handoff.md"><b>Handoff</b><h3>Two-link send</h3><p>Owner-ready link instructions.</p><small>Open handoff</small></a>
         </div>
+        <div class="content-pack" aria-label="Direct content banner asset links">
+          <a class="content-card" href="./banners/content-banner-native.html"><b>Content banner</b><strong>Native sponsor module</strong><span>The actual article-style content banner block.</span><small>Open native banner</small></a>
+          <a class="content-card" href="./content/sponsored-post.html"><b>Article HTML</b><strong>Launch sponsored post</strong><span>Finished advertorial page for publishing review.</span><small>Open article</small></a>
+          <a class="content-card" href="./editorial/sponsored-post.md"><b>CMS copy</b><strong>Sponsored post markdown</strong><span>Copy source for CMS paste-in and editing.</span><small>Open markdown</small></a>
+          <a class="content-card" href="./email/newsletter-command-spine.html"><b>Newsletter</b><strong>Feature banner block</strong><span>Email-ready content banner for newsletter placement.</span><small>Open email banner</small></a>
+          <a class="content-card" href="./carousel/registercall-home-carousel.html"><b>Carousel demo</b><strong>Home-page placement</strong><span>Reviewable content carousel placement demo.</span><small>Open carousel</small></a>
+          <a class="content-card" href="./carousel/embed-snippet.html"><b>Embed snippet</b><strong>Drop-in content unit</strong><span>Scoped HTML/CSS/JS block for site placement.</span><small>Open embed</small></a>
+        </div>
       </div>
     </section>
 
@@ -228,10 +262,11 @@
             <iframe class="mobile" src="./banners/banner-mobile-320x50.html" title="Mobile banner"></iframe>
           </div>
           <div class="ad-copy">
-            <div class="copy-line"><strong>Leaderboard:</strong><span>One spine for local publishing. Campaigns, newsletters, billing, city sites, and operator handoff.</span></div>
-            <div class="copy-line"><strong>Native sponsor module:</strong><span>How one brief becomes banners, newsletter copy, a sponsored post, a print handoff, and a billing route.</span></div>
-            <div class="copy-line"><strong>Mobile:</strong><span>CoPress command spine: campaigns + billing + newsletter.</span></div>
-            <div class="copy-line"><strong>Social:</strong><span>Local media needs a spine. Editorial, ads, newsletters, city sites, billing, and operator handoff in one dashboard.</span></div>
+            <div class="copy-line"><strong>Leaderboard:</strong><span>One spine for local publishing. Campaigns, newsletters, billing, city sites, and operator handoff.</span><a href="./banners/banner-leaderboard-728x90.html">Open leaderboard</a></div>
+            <div class="copy-line"><strong>Native sponsor module:</strong><span>How one brief becomes banners, newsletter copy, a sponsored post, a print handoff, and a billing route.</span><a href="./banners/content-banner-native.html">Open content banner</a></div>
+            <div class="copy-line"><strong>Carousel content unit:</strong><span>A home-page content rail with its own embed snippet and demo page.</span><a href="./carousel/registercall-home-carousel.html">Open carousel demo</a></div>
+            <div class="copy-line"><strong>Mobile:</strong><span>CoPress command spine: campaigns + billing + newsletter.</span><a href="./banners/banner-mobile-320x50.html">Open mobile banner</a></div>
+            <div class="copy-line"><strong>Social:</strong><span>Local media needs a spine. Editorial, ads, newsletters, city sites, billing, and operator handoff in one dashboard.</span><a href="./banners/banner-social-square-1080x1080.html">Open social banner</a></div>
           </div>
         </div>
       </div>
@@ -256,11 +291,11 @@
             <a class="btn primary" href="./content/sponsored-post.html">Open Full Post</a>
           </aside>
           <article class="post-body">
-            <div class="byline">Sponsored content | CoPress SATCOM Command Center</div>
+            <div class="byline">Sponsored content | CoPress Nest</div>
             <h3>The local media stack does not need another disconnected tab.</h3>
             <p>The working publisher does not lose time because they lack ideas. They lose time when every good idea becomes five separate handoffs: a story note, an ad request, a newsletter block, a billing question, and a follow-up reminder.</p>
             <p>CoPress Dashboard turns that chaos into a visible command spine. One campaign brief can become a display set, sponsored article, social queue, newsletter unit, print/audio copy, CRM drip, and invoice-manager route.</p>
-            <p>The SATCOM layer gives the operator a clearer instruction surface: not vague automation, but production lanes that can be reviewed, approved, and shipped.</p>
+            <p>The Nest layer gives the operator a clearer instruction surface: not vague automation, but production lanes that can be reviewed, approved, and shipped.</p>
             <p><strong>CTA:</strong> Open the campaign kit, inspect the assets, then use the operator readiness link for the customer-facing explanation.</p>
           </article>
         </div>
@@ -300,7 +335,7 @@
         <div class="showcase-grid">
           <div class="card gold">
             <b>What the dashboard controls</b>
-            <h3>Editorial, campaign, newsletter, directory, billing handoff, and SATCOM lanes.</h3>
+            <h3>Editorial, campaign, newsletter, directory, billing handoff, and Nest lanes.</h3>
             <p>CoPress Dashboard is the place where the work gets shaped into publishable pieces. It does not replace approval; it makes approval easier because the assets and handoffs are visible.</p>
           </div>
           <div class="card">
@@ -333,7 +368,7 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <span>CoPress SATCOM Command Center | Campaign showcase</span>
+      <span>CoPress Nest | Campaign showcase</span>
       <span>Bill's Mobile pattern: assets first, content visible, two-link handoff</span>
     </div>
   </footer>

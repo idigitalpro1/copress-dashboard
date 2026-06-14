@@ -1,6 +1,6 @@
 # Operator One-Sheet
 
-## CoPress SATCOM Command Center
+## CoPress Nest
 
 One command center for local publishing, advertiser campaigns, newsletters, billing handoff, city-site routing, and operator support.
 
@@ -11,15 +11,15 @@ One command center for local publishing, advertiser campaigns, newsletters, bill
 - Routes billing work to invoice manager.
 - Stages city-site and directory intake.
 - Keeps editorial queues, publish targets, and production handoff visible.
-- Gives SATCOM/Hermes a clear operator lane instead of a scattered chat.
+- Gives Nest/Hermes a clear operator lane instead of a scattered chat.
 
 ### Two Links Only
 
 Campaign kit:
-`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#kit`
+`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit`
 
 Customer operator readiness kit:
-`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#customer`
+`https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/#operator-kit`
 
 ### Best Use
 

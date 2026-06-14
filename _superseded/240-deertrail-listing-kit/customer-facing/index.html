@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>240 Deer Rd — A Home in Gilpin County</title>
+<meta name="description" content="240 Deer Rd, Gilpin County, Colorado. A considered three-bedroom mountain home, with a private price study and comparable-sales review." />
+<meta property="og:title" content="240 Deer Rd — A Home in Gilpin County" />
+<meta property="og:description" content="A considered three-bedroom mountain home in historic Gilpin County, Colorado." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&family=Marcellus&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0a07; --bg2:#0f0e0b; --card:#14120c; --warm:#1a1610;
+    --line:rgba(212,184,106,.18); --line-2:#34322d;
+    --gold:#c9a84c; --gold-lo:#b8973a; --gold-hi:#d4b86a;
+    --cream:#f5f0e8; --ivory:#f8f8f7; --mute:#9b9588;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--cream);font-family:"Crimson Pro",Georgia,serif;line-height:1.7;-webkit-font-smoothing:antialiased}
+  .serif{font-family:"Cormorant",serif}
+  .mar{font-family:"Marcellus",serif}
+  .sans{font-family:"DM Sans",sans-serif}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+  a{color:inherit;text-decoration:none}
+  .gold{color:var(--gold)}
+  .rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;margin:0 auto}
+
+  /* Masthead */
+  .mast{display:flex;justify-content:space-between;align-items:center;padding:26px 0;border-bottom:1px solid var(--line)}
+  .mast .brand{font-family:"Marcellus",serif;font-size:15px;letter-spacing:.42em;text-transform:uppercase;color:var(--cream)}
+  .mast .loc{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mute)}
+
+  /* Hero */
+  .hero{padding:120px 0 96px;text-align:center;position:relative;background:
+    radial-gradient(720px 360px at 50% -10%, rgba(201,168,76,.10), transparent 60%)}
+  .hero .kicker{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);margin-bottom:30px}
+  .hero h1{font-family:"Cormorant",serif;font-weight:500;font-size:clamp(54px,10vw,116px);line-height:.98;letter-spacing:-.01em}
+  .hero h1 .it{font-style:italic;color:var(--gold-hi)}
+  .hero .sub{font-size:clamp(17px,2.2vw,21px);color:var(--mute);max-width:540px;margin:28px auto 0;font-weight:300}
+  .hero .addr{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--mute);margin-top:44px}
+
+  /* Figures */
+  .figs{display:grid;grid-template-columns:repeat(3,1fr);max-width:840px;margin:0 auto;padding:64px 0}
+  .figs .f{text-align:center;padding:0 18px;border-right:1px solid var(--line-2)}
+  .figs .f:last-child{border-right:0}
+  .figs .v{font-family:"Cormorant",serif;font-size:46px;font-weight:500;color:var(--gold-hi)}
+  .figs .l{font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--mute);margin-top:8px}
+  @media(max-width:680px){.figs{grid-template-columns:1fr;gap:34px}.figs .f{border-right:0;border-bottom:1px solid var(--line-2);padding-bottom:28px}.figs .f:last-child{border-bottom:0}}
+
+  /* Narrative */
+  .narr{max-width:680px;margin:0 auto;padding:96px 0;text-align:center}
+  .narr h2{font-family:"Cormorant",serif;font-style:italic;font-weight:500;font-size:clamp(30px,5vw,46px);line-height:1.2;color:var(--cream)}
+  .narr p{margin-top:26px;font-size:18px;color:#cdc7ba;font-weight:300}
+
+  /* Comps */
+  .study{padding:80px 0}
+  .study .eyebrow{text-align:center;font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .study h3{text-align:center;font-family:"Cormorant",serif;font-weight:500;font-size:clamp(28px,5vw,42px);margin-bottom:48px}
+  table{width:100%;border-collapse:collapse;font-family:"DM Sans",sans-serif;font-size:14px}
+  th,td{text-align:left;padding:18px 14px;border-bottom:1px solid var(--line-2)}
+  th{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);font-weight:500}
+  td{color:#d8d2c5}
+  td.n{text-align:right;font-family:"Cormorant",serif;font-size:22px;color:var(--gold-hi)}
+  tr.subj td{color:var(--cream)}
+  tr.subj td:first-child{position:relative;padding-left:22px}
+  tr.subj td:first-child::before{content:"";position:absolute;left:0;top:50%;width:7px;height:7px;background:var(--gold);border-radius:50%;transform:translateY(-50%)}
+
+  /* Estimator */
+  .est{padding:96px 0 30px;text-align:center}
+  .est .eyebrow{font-family:"DM Sans",sans-serif;font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+  .est h3{font-family:"Cormorant",serif;font-weight:500;font-size:clamp(30px,5vw,48px)}
+  .est p{color:var(--mute);max-width:520px;margin:18px auto 40px;font-weight:300}
+  .btn{display:inline-block;font-family:"DM Sans",sans-serif;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--bg);background:linear-gradient(135deg,var(--gold-hi),var(--gold-lo));padding:18px 44px;border-radius:2px;font-weight:600;transition:.2s}
+  .btn:hover{filter:brightness(1.08)}
+  .frame{margin-top:54px;border:1px solid var(--line);border-radius:4px;overflow:hidden;background:var(--bg2);display:none}
+  .frame.open{display:block}
+  .frame .bar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line-2);font-family:"DM Sans",sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mute)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--gold);opacity:.5}
+  iframe{width:100%;height:1180px;border:0;display:block;background:#000}
+
+  footer{padding:80px 0 90px;text-align:center;border-top:1px solid var(--line);margin-top:70px}
+  footer .b{font-family:"Marcellus",serif;letter-spacing:.4em;text-transform:uppercase;font-size:13px}
+  footer .d{font-family:"DM Sans",sans-serif;font-size:11px;color:var(--mute);margin-top:16px;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.9}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="mast">
+    <div class="brand">HipCribs</div>
+    <div class="loc">Gilpin County · Colorado</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="kicker">A Considered Residence</div>
+    <h1 class="serif">Two&nbsp;Forty<br><span class="it">Deer Road</span></h1>
+    <p class="sub">A three-bedroom home set among the historic mountain communities of Gilpin County — offered with a private price study.</p>
+    <div class="addr">240 Deer Rd · Gilpin County, CO</div>
+  </div>
+</div>
+
+<div class="rule" style="max-width:120px"></div>
+
+<div class="wrap">
+  <div class="figs">
+    <div class="f"><div class="v">$542K</div><div class="l">Median · 3 Bedroom</div></div>
+    <div class="f"><div class="v">$308</div><div class="l">Per Square Foot</div></div>
+    <div class="f"><div class="v">110</div><div class="l">Days on Market</div></div>
+  </div>
+</div>
+
+<div class="rule" style="max-width:120px"></div>
+
+<div class="wrap">
+  <div class="narr">
+    <h2>Gilpin County is not one market, but several.</h2>
+    <p>Black Hawk carries a premium. The rural acreage bands trade with quiet restraint. A home is best understood against its true peers — so this listing begins not with a number, but with a study.</p>
+  </div>
+
+  <div class="study">
+    <div class="eyebrow">Comparable Sales · Q1 2026</div>
+    <h3 class="serif">Where Two Forty Deer Road Sits</h3>
+    <table>
+      <thead><tr><th>Sub-Market</th><th>ZIP</th><th style="text-align:right">Median</th><th>Trend</th></tr></thead>
+      <tbody>
+        <tr><td>Black Hawk</td><td>80422</td><td class="n">$730K</td><td>Stable</td></tr>
+        <tr><td>Central City</td><td>80427</td><td class="n">$425K</td><td>Stable</td></tr>
+        <tr><td>Rollinsville</td><td>80474</td><td class="n">$648K</td><td>+4.2%</td></tr>
+        <tr><td>Russell Gulch</td><td>80422</td><td class="n">$380K</td><td>−3.5%</td></tr>
+        <tr class="subj"><td>Gilpin County Rural — the subject band</td><td>80403</td><td class="n">$575K</td><td>Stable</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="est">
+    <div class="eyebrow">A Private Study</div>
+    <h3 class="serif">Compose your own estimate</h3>
+    <p>Adjust square footage, condition, and amenities. The figure responds — drawn from Q1 2026 Gilpin County intelligence.</p>
+    <a class="btn sans" id="open" href="#study">Open the Price Study</a>
+    <div class="frame" id="frame">
+      <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span>&nbsp;&nbsp;240 Deer Rd · Price Study</div>
+      <iframe id="if" title="240 Deer Rd Price Study" loading="lazy" src=""></iframe>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="b">HipCribs</div>
+    <div class="d">240 Deer Rd · Gilpin County, Colorado · Figures reflect Q1 2026 Gilpin County data and are indicative; a residence is finally valued in person, with an agent. This study is offered as a courtesy, without obligation.</div>
+  </div>
+</footer>
+
+<script>
+  var o=document.getElementById('open'),fr=document.getElementById('frame'),f=document.getElementById('if');
+  o.addEventListener('click',function(e){e.preventDefault();
+    if(!f.src){f.src='./estimator/index.html';}
+    fr.classList.add('open');
+    o.style.display='none';
+    fr.scrollIntoView({behavior:'smooth'});
+  });
+</script>
+</body>
+</html>

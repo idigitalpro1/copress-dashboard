@@ -1,16 +1,16 @@
 {
-  "title": "CoPress SATCOM Command Center Campaign Kit",
+  "title": "CoPress Nest Campaign Kit",
   "description": "A Bill's Mobile style campaign kit for the CoPress Dashboard publishing spine: campaign assets, newsletter handoff, billing route, city-site intake, social, print, CRM, and operator readiness links.",
   "canonical": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/",
   "og": {
     "type": "website",
-    "title": "CoPress SATCOM Command Center",
+    "title": "CoPress Nest",
     "description": "One command center for local publishing, billing, campaigns, newsletters, city sites, and operator handoff.",
     "image": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/assets/social-card-command-center.svg"
   },
   "twitter": {
     "card": "summary_large_image",
-    "title": "CoPress SATCOM Command Center",
+    "title": "CoPress Nest",
     "description": "Build the spine once. Publish everywhere.",
     "image": "https://copress-dashboard.vercel.app/copress-satcom-campaign-kit/assets/social-card-command-center.svg"
   }

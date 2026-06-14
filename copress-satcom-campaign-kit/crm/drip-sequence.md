@@ -2,7 +2,7 @@
 
 ## Touch 1 - Launch
 
-Subject: CoPress SATCOM command center kit is ready
+Subject: CoPress Nest command center kit is ready
 
 The campaign kit is live for review. It follows the Bill's Mobile showcase pattern: two links only, one for the campaign kit and one for the operator readiness kit.
 
@@ -20,7 +20,7 @@ CTA: Review the asset bundle.
 
 Subject: The customer-facing operator link
 
-The second link explains the dashboard in plain language for an owner or operator: what it controls, what still needs approval, and how SATCOM/Hermes fits into the workflow.
+The second link explains the dashboard in plain language for an owner or operator: what it controls, what still needs approval, and how Nest/Hermes fits into the workflow.
 
 CTA: Open the operator readiness kit.
 

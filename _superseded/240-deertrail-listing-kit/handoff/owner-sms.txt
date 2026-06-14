@@ -1,0 +1,9 @@
+Hi — this is HipCribs. We built an interactive
+price estimator for the 240 Deer Rd Gilpin County listing. Buyers can run their
+own estimate, see Q1 2026 comps, and reach you when they're ready.
+
+Preview (local): customer estimator + listing page are built and ready to review.
+Public host hipcribs.5280.menu is reserved but DNS is not live yet — say the
+word and we'll provision it.
+
+Reply YES to go live, or call to walk through it.
