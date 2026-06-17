@@ -948,6 +948,223 @@
       min-height: 240px;
     }
 
+    .quote-panel {
+      grid-column: 1 / -1;
+    }
+
+    .quote-builder {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .quote-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .quote-field label {
+      color: var(--brown);
+      font: 800 10px "DM Mono", monospace;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .quote-field input,
+    .quote-field select {
+      min-height: 40px;
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 9px 11px;
+      background: rgba(255,255,255,.44);
+      color: var(--ink);
+      font: 14px "DM Sans", Arial, sans-serif;
+      outline: none;
+    }
+
+    .quote-field input:focus,
+    .quote-field select:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(196,154,90,.16);
+    }
+
+    .quote-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .quote-data {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .quote-data-row {
+      display: grid;
+      gap: 5px;
+      min-height: 66px;
+      padding: 10px;
+      border: 1px solid rgba(32,53,43,.14);
+      border-radius: 6px;
+      background: rgba(255,255,255,.32);
+    }
+
+    .quote-data-row span {
+      color: var(--brown);
+      font: 800 10px "DM Mono", monospace;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .quote-data-row code {
+      color: var(--ink);
+      font: 700 11px "DM Mono", monospace;
+      line-height: 1.45;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .portfolio-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr);
+      gap: 12px;
+      align-items: start;
+    }
+
+    .portfolio-box {
+      display: grid;
+      gap: 10px;
+      border: 1px solid rgba(32,53,43,.14);
+      border-radius: 8px;
+      background: rgba(255,255,255,.28);
+      padding: 12px;
+    }
+
+    .portfolio-box h3 {
+      margin: 0;
+      color: var(--brown);
+      font: 900 12px "DM Mono", monospace;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+    }
+
+    .drop-zone {
+      min-height: 118px;
+      display: grid;
+      gap: 7px;
+      align-content: center;
+      border: 1px dashed rgba(32,53,43,.32);
+      border-radius: 8px;
+      background: rgba(255,255,255,.34);
+      padding: 11px;
+      color: var(--ink-soft);
+    }
+
+    .drop-zone.is-over {
+      border-color: var(--red);
+      background: rgba(167,51,51,.08);
+      box-shadow: 0 0 0 3px rgba(167,51,51,.12);
+    }
+
+    .drop-zone span,
+    .portfolio-card span {
+      color: var(--brown);
+      font: 900 10px "DM Mono", monospace;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .drop-zone strong,
+    .portfolio-card strong {
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.2;
+    }
+
+    .drop-zone code,
+    .portfolio-card code {
+      color: var(--ink-soft);
+      font: 700 10px "DM Mono", monospace;
+      line-height: 1.4;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .portfolio-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      max-height: 440px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .portfolio-card {
+      display: grid;
+      gap: 6px;
+      min-height: 120px;
+      border: 1px solid rgba(32,53,43,.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,.44);
+      padding: 10px;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .portfolio-card:active {
+      cursor: grabbing;
+    }
+
+    .portfolio-card.is-selected {
+      border-color: var(--red);
+      box-shadow: inset 0 0 0 1px var(--red);
+    }
+
+    .portfolio-card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 2px;
+    }
+
+    .portfolio-card-actions .btn {
+      min-height: 30px;
+      padding: 6px 8px;
+      font-size: 9px;
+    }
+
+    .portfolio-add {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+    }
+
+    .portfolio-add .wide {
+      grid-column: 1 / -1;
+    }
+
+    .quote-summary {
+      border: 1px solid rgba(32,53,43,.14);
+      border-radius: 6px;
+      background: rgba(255,255,255,.32);
+      padding: 11px;
+      color: var(--ink);
+      font: 12px "DM Mono", monospace;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
     textarea:focus {
       border-color: var(--gold);
       box-shadow: 0 0 0 3px rgba(196,154,90,.16);
@@ -1028,6 +1245,11 @@
       .front,
       .back { grid-template-columns: 1fr; }
       .proof-art { grid-template-columns: 1fr; }
+      .quote-grid,
+      .quote-data,
+      .portfolio-layout,
+      .portfolio-list,
+      .portfolio-add { grid-template-columns: 1fr; }
       .front-right,
       .back-left { border-left: 0; border-right: 0; border-top: 2px solid rgba(32,53,43,.34); }
       .front-left,
@@ -1270,6 +1492,169 @@
         </form>
       </article>
 
+      <article class="panel quote-panel">
+        <div class="panel-head">
+          <div class="panel-title">Mailing Quote Builder</div>
+          <div class="panel-note">Select mailing / front / back</div>
+        </div>
+        <div class="quote-builder">
+          <div class="quote-grid">
+            <div class="quote-field">
+              <label for="mailing-source">Mailing source</label>
+              <select id="mailing-source">
+                <option value="2026 Subscriber Sheet">2026 Subscriber Sheet</option>
+                <option value="Live Subscriber Admin">Live Subscriber Admin</option>
+                <option value="Printer-managed List">Printer-managed List</option>
+              </select>
+            </div>
+            <div class="quote-field">
+              <label for="mailing-quantity">Quantity</label>
+              <input id="mailing-quantity" type="number" min="1" step="1" value="1000">
+            </div>
+            <div class="quote-field">
+              <label for="mailing-service">Postage / mailing path</label>
+              <select id="mailing-service">
+                <option value="Printer presort, indicia, and mail-drop">Printer presort, indicia, and mail-drop</option>
+                <option value="Stamps.com postage/account option">Stamps.com postage/account option</option>
+                <option value="Compare printer mail-drop vs Stamps.com">Compare printer mail-drop vs Stamps.com</option>
+              </select>
+            </div>
+            <div class="quote-field">
+              <label for="front-selection">Front proof</label>
+              <select id="front-selection">
+                <option value="regular">Regular Renewal front - Basic Renewal art</option>
+                <option value="final">Final Renewal front - Clean Renewal Draft</option>
+                <option value="v123">Version 123 front - Freedom 250 art</option>
+              </select>
+            </div>
+            <div class="quote-field">
+              <label for="back-selection">Back proof</label>
+              <select id="back-selection">
+                <option value="regular">Regular Renewal back - renewal/contact/QR</option>
+                <option value="final">Final Renewal back - final notice/contact/QR</option>
+                <option value="v123">Version 123 back - July 15/contact/QR</option>
+              </select>
+            </div>
+            <div class="quote-field">
+              <label for="mail-date">Target mail date</label>
+              <input id="mail-date" type="text" value="Before July 15">
+            </div>
+            <div class="quote-field">
+              <label for="printer-email">Printer email</label>
+              <input id="printer-email" type="email" placeholder="printer@example.com">
+            </div>
+          </div>
+          <div class="portfolio-layout" aria-label="Drag and drop postcard portfolio">
+            <div class="portfolio-box">
+              <h3>Selected Mailing</h3>
+              <div class="drop-zone" id="front-drop-zone" data-drop-side="front" tabindex="0">
+                <span>Front side</span>
+                <strong>Drop a front card here</strong>
+                <code>Nothing selected yet.</code>
+              </div>
+              <div class="drop-zone" id="back-drop-zone" data-drop-side="back" tabindex="0">
+                <span>Back side</span>
+                <strong>Drop a back card here</strong>
+                <code>Nothing selected yet.</code>
+              </div>
+              <div class="proof-actions">
+                <button class="btn primary" type="button" id="save-mailing-selection">Save Mailing Selection</button>
+                <button class="btn" type="button" id="reset-portfolio">Reset Portfolio</button>
+              </div>
+              <div class="quote-summary" id="save-status">Saved locally when you click Save Mailing Selection.</div>
+            </div>
+            <div class="portfolio-box">
+              <h3>Complete Card Portfolio</h3>
+              <div class="portfolio-list" id="portfolio-list" aria-label="Draggable postcard front and back cards"></div>
+              <form class="portfolio-add" id="portfolio-add-form">
+                <div class="quote-field">
+                  <label for="card-title">Card title</label>
+                  <input id="card-title" type="text" placeholder="Example: July renewal front">
+                </div>
+                <div class="quote-field">
+                  <label for="card-side">Side</label>
+                  <select id="card-side">
+                    <option value="front">Front</option>
+                    <option value="back">Back</option>
+                  </select>
+                </div>
+                <div class="quote-field">
+                  <label for="card-version">Proof version</label>
+                  <select id="card-version">
+                    <option value="regular">Regular Renewal</option>
+                    <option value="final">Final Renewal</option>
+                    <option value="v123">Version 123</option>
+                  </select>
+                </div>
+                <div class="quote-field">
+                  <label for="card-asset">Asset / note</label>
+                  <input id="card-asset" type="text" placeholder="/assets/card-front.png or printer note">
+                </div>
+                <div class="quote-field wide">
+                  <label for="card-notes">Description</label>
+                  <input id="card-notes" type="text" placeholder="What this card side is for">
+                </div>
+                <button class="btn primary wide" type="submit">Add Card To Portfolio</button>
+              </form>
+            </div>
+          </div>
+          <div class="quote-data" aria-label="Inline mailing quote data">
+            <div class="quote-data-row">
+              <span>Mailing data URL</span>
+              <code id="mailing-data-inline">https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Stamps.com URL</span>
+              <code id="stamps-inline">https://www.stamps.com/</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Proof URL</span>
+              <code id="quote-proof-inline">https://subscribe.thevillager.today/villager-postcard-proofing/?version=regular</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Subscribe / QR URL</span>
+              <code id="quote-subscribe-inline">https://www.thevillager.today/subscribe</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Subscriber DB URL</span>
+              <code id="quote-db-inline">https://www.thevillager.today/admin/master-subscribers</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Mail/check address</span>
+              <code id="quote-address-inline">The Villager, 22095 E Chestnut Place, Aurora, CO 80016</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Quantity / mail date</span>
+              <code id="quote-quantity-inline">1,000 pieces / Before July 15</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Postage path</span>
+              <code id="quote-postage-inline">Printer presort, indicia, and mail-drop</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Selected front</span>
+              <code id="quote-front-inline">Regular Renewal front - Basic renewal primary</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Selected back</span>
+              <code id="quote-back-inline">Regular Renewal back - renewal/contact/QR</code>
+            </div>
+            <div class="quote-data-row">
+              <span>Printer email</span>
+              <code id="quote-email-inline">Not set</code>
+            </div>
+          </div>
+          <div class="quote-links">
+            <a class="btn" id="mailing-sheet-link" href="https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070" target="_blank" rel="noopener noreferrer">Open 2026 Sheet</a>
+            <a class="btn" id="stamps-link" href="https://www.stamps.com/" target="_blank" rel="noopener noreferrer">Open Stamps.com</a>
+            <button class="btn primary" type="button" id="generate-quote">Generate Quote</button>
+            <button class="btn" type="button" id="copy-generated-quote">Copy Quote</button>
+            <button class="btn" type="button" id="email-generated-quote">Email Quote</button>
+          </div>
+          <div class="quote-summary" id="quote-summary">Selected mailing: 2026 Subscriber Sheet / 1,000 pieces / Regular front + Regular back.</div>
+        </div>
+      </article>
+
       <article class="panel">
         <div class="panel-head">
           <div class="panel-title">Proof Packet</div>
@@ -1348,6 +1733,9 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const canonicalProofUrl = 'https://subscribe.thevillager.today/villager-postcard-proofing/';
     const subscribeUrl = 'https://www.thevillager.today/subscribe';
     const subscriberDbUrl = 'https://www.thevillager.today/admin/master-subscribers';
+    const mailingSheetUrl = 'https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070';
+    const stampsComUrl = 'https://www.stamps.com/';
+    const mailCheckAddress = 'The Villager, 22095 E Chestnut Place, Aurora, CO 80016';
     const defaultArtSrc = '/villager-postcard-proofing/assets/basic-renewal-primary.png';
     const artAssets = {
       regular: {
@@ -1403,6 +1791,62 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
         notes: 'Version 123'
       }
     };
+    const defaultPortfolioCards = [
+      {
+        id: 'regular-front',
+        side: 'front',
+        version: 'regular',
+        title: 'Regular Renewal Front',
+        asset: artAssets.regular.src,
+        notes: 'Basic renewal primary artwork.'
+      },
+      {
+        id: 'regular-back',
+        side: 'back',
+        version: 'regular',
+        title: 'Regular Renewal Back',
+        asset: 'Live comp back: renewal/contact/QR panel.',
+        notes: 'Renew online, support email, phone, mail/drop check, QR.'
+      },
+      {
+        id: 'final-front',
+        side: 'front',
+        version: 'final',
+        title: 'Final Renewal Front',
+        asset: artAssets.final.src,
+        notes: 'Clean renewal draft artwork.'
+      },
+      {
+        id: 'final-back',
+        side: 'back',
+        version: 'final',
+        title: 'Final Renewal Back',
+        asset: 'Live comp back: final renewal/contact/QR panel.',
+        notes: 'Final notice back with renewal and mailing data.'
+      },
+      {
+        id: 'v123-front',
+        side: 'front',
+        version: 'v123',
+        title: 'Version 123 Front',
+        asset: artAssets.v123.src,
+        notes: 'Freedom 250 / Colorado 150 artwork.'
+      },
+      {
+        id: 'v123-back',
+        side: 'back',
+        version: 'v123',
+        title: 'Version 123 Back',
+        asset: 'Live comp back: July 15/contact/QR panel.',
+        notes: 'Version 123 back with July 15 callout.'
+      }
+    ];
+    const portfolioStorageKey = 'villager-postcard-mailing-portfolio-v1';
+    let portfolioCards = defaultPortfolioCards.map((card) => ({ ...card }));
+    let selectedCardIds = {
+      front: 'regular-front',
+      back: 'regular-back'
+    };
 
     const versionButtons = Array.from(document.querySelectorAll('[data-version]'));
     const front = document.querySelector('.front');
@@ -1429,6 +1873,35 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const checklist = document.getElementById('checklist');
     const newCheckItem = document.getElementById('new-check-item');
     const printerPrompt = document.getElementById('printer-prompt');
+    const mailingSource = document.getElementById('mailing-source');
+    const mailingQuantity = document.getElementById('mailing-quantity');
+    const mailingService = document.getElementById('mailing-service');
+    const frontSelection = document.getElementById('front-selection');
+    const backSelection = document.getElementById('back-selection');
+    const mailDate = document.getElementById('mail-date');
+    const printerEmail = document.getElementById('printer-email');
+    const quoteSummary = document.getElementById('quote-summary');
+    const mailingDataInline = document.getElementById('mailing-data-inline');
+    const stampsInline = document.getElementById('stamps-inline');
+    const quoteProofInline = document.getElementById('quote-proof-inline');
+    const quoteSubscribeInline = document.getElementById('quote-subscribe-inline');
+    const quoteDbInline = document.getElementById('quote-db-inline');
+    const quoteAddressInline = document.getElementById('quote-address-inline');
+    const quoteQuantityInline = document.getElementById('quote-quantity-inline');
+    const quotePostageInline = document.getElementById('quote-postage-inline');
+    const quoteFrontInline = document.getElementById('quote-front-inline');
+    const quoteBackInline = document.getElementById('quote-back-inline');
+    const quoteEmailInline = document.getElementById('quote-email-inline');
+    const portfolioList = document.getElementById('portfolio-list');
+    const frontDropZone = document.getElementById('front-drop-zone');
+    const backDropZone = document.getElementById('back-drop-zone');
+    const portfolioAddForm = document.getElementById('portfolio-add-form');
+    const cardTitleInput = document.getElementById('card-title');
+    const cardSideInput = document.getElementById('card-side');
+    const cardVersionInput = document.getElementById('card-version');
+    const cardAssetInput = document.getElementById('card-asset');
+    const cardNotesInput = document.getElementById('card-notes');
+    const saveStatus = document.getElementById('save-status');
     let uploadedArtUrl = '';
 
     function activeProofUrl() {
@@ -1464,7 +1937,7 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
 - Primary art: ${currentArtLabel}
 - Subscribe URL: ${subscribeUrl}
 - QR code: generated for subscribe URL
-- Mail/check address: The Villager, 22095 E Chestnut Place, Aurora, CO 80016
+- Mail/check address: ${mailCheckAddress}
 - Price: $78 one-year print renewal
 
 Requested changes:`;
@@ -1472,6 +1945,248 @@ Requested changes:`;
 
     function refreshCurrentNotes() {
       updateNotes(currentVersionLabel.textContent.trim() || 'Regular Renewal');
+    }
+
+    function formatQuantity(value) {
+      const count = Number(value || 0);
+      if (!Number.isFinite(count) || count <= 0) return 'TBD';
+      return count.toLocaleString('en-US');
+    }
+
+    function quoteVersionLabel(versionKey) {
+      return versions[versionKey]?.label || versions.regular.label;
+    }
+
+    function quoteArtLabel(versionKey) {
+      return versions[versionKey]?.art?.label || artAssets.regular.label;
+    }
+
+    function quoteArtSrc(versionKey) {
+      return versions[versionKey]?.art?.src || artAssets.regular.src;
+    }
+
+    function proofUrlFor(versionKey) {
+      return `${activeProofUrl()}?version=${encodeURIComponent(versionKey)}`;
+    }
+
+    function selectLabel(selectEl) {
+      return selectEl.options[selectEl.selectedIndex]?.textContent?.trim() || selectEl.value;
+    }
+
+    function selectedMailingUrl() {
+      if (mailingSource.value === '2026 Subscriber Sheet') return mailingSheetUrl;
+      if (mailingSource.value === 'Live Subscriber Admin') return subscriberDbUrl;
+      return 'Printer-managed mailing list; confirm CSV/upload requirements.';
+    }
+
+    function cardById(id) {
+      return portfolioCards.find((card) => card.id === id);
+    }
+
+    function selectedCard(side) {
+      return cardById(selectedCardIds[side]) || portfolioCards.find((card) => card.side === side);
+    }
+
+    function defaultCardId(versionKey, side) {
+      return `${versionKey}-${side}`;
+    }
+
+    function cardSummary(card) {
+      if (!card) return 'No card selected.';
+      return `${card.title} | ${quoteVersionLabel(card.version)} | ${card.asset || 'No asset/note set'}`;
+    }
+
+    function savePortfolioState() {
+      const payload = {
+        savedAt: new Date().toISOString(),
+        cards: portfolioCards,
+        selectedCardIds,
+        form: {
+          mailingSource: mailingSource.value,
+          mailingQuantity: mailingQuantity.value,
+          mailingService: mailingService.value,
+          frontSelection: frontSelection.value,
+          backSelection: backSelection.value,
+          mailDate: mailDate.value,
+          printerEmail: printerEmail.value
+        }
+      };
+      localStorage.setItem(portfolioStorageKey, JSON.stringify(payload));
+      saveStatus.textContent = `Saved locally ${new Date().toLocaleString()}: ${cardSummary(selectedCard('front'))} + ${cardSummary(selectedCard('back'))}`;
+      showToast('mailing selection saved');
+    }
+
+    function loadPortfolioState() {
+      try {
+        const raw = localStorage.getItem(portfolioStorageKey);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (Array.isArray(saved.cards) && saved.cards.length) {
+          portfolioCards = saved.cards;
+        }
+        if (saved.selectedCardIds?.front) selectedCardIds.front = saved.selectedCardIds.front;
+        if (saved.selectedCardIds?.back) selectedCardIds.back = saved.selectedCardIds.back;
+        if (saved.form) {
+          if (saved.form.mailingSource) mailingSource.value = saved.form.mailingSource;
+          if (saved.form.mailingQuantity) mailingQuantity.value = saved.form.mailingQuantity;
+          if (saved.form.mailingService) mailingService.value = saved.form.mailingService;
+          if (saved.form.frontSelection) frontSelection.value = saved.form.frontSelection;
+          if (saved.form.backSelection) backSelection.value = saved.form.backSelection;
+          if (saved.form.mailDate) mailDate.value = saved.form.mailDate;
+          if (saved.form.printerEmail) printerEmail.value = saved.form.printerEmail;
+        }
+        saveStatus.textContent = `Loaded saved mailing selection from ${saved.savedAt ? new Date(saved.savedAt).toLocaleString() : 'local storage'}.`;
+      } catch {
+        saveStatus.textContent = 'Saved mailing selection could not be loaded; using defaults.';
+      }
+    }
+
+    function renderDropZone(side) {
+      const zone = side === 'front' ? frontDropZone : backDropZone;
+      const card = selectedCard(side);
+      zone.innerHTML = `
+        <span>${side === 'front' ? 'Front side' : 'Back side'}</span>
+        <strong>${card ? card.title : `Drop a ${side} card here`}</strong>
+        <code>${card ? `${quoteVersionLabel(card.version)} | ${card.asset || card.notes || 'No asset/note set'}` : 'Nothing selected yet.'}</code>
+      `;
+    }
+
+    function renderDropZones() {
+      renderDropZone('front');
+      renderDropZone('back');
+    }
+
+    function createPortfolioCard(card) {
+      const el = document.createElement('article');
+      el.className = 'portfolio-card';
+      el.draggable = true;
+      el.dataset.cardId = card.id;
+      el.dataset.side = card.side;
+      el.classList.toggle('is-selected', selectedCardIds[card.side] === card.id);
+      el.innerHTML = `
+        <span>${card.side} / ${quoteVersionLabel(card.version)}</span>
+        <strong>${card.title}</strong>
+        <code>${card.asset || card.notes || 'No asset/note set'}</code>
+        <div class="portfolio-card-actions">
+          <button class="btn primary" type="button" data-use-card="${card.id}">Use ${card.side}</button>
+          <button class="btn red" type="button" data-delete-card="${card.id}">Delete</button>
+        </div>
+      `;
+      el.addEventListener('dragstart', (event) => {
+        event.dataTransfer.setData('text/plain', card.id);
+        event.dataTransfer.effectAllowed = 'move';
+      });
+      return el;
+    }
+
+    function renderPortfolio() {
+      portfolioList.innerHTML = '';
+      portfolioCards.forEach((card) => portfolioList.appendChild(createPortfolioCard(card)));
+      renderDropZones();
+      updateQuoteSummary();
+    }
+
+    function usePortfolioCard(cardId, sideOverride = '') {
+      const card = cardById(cardId);
+      if (!card) return;
+      const side = sideOverride || card.side;
+      if (card.side !== side) {
+        showToast(`drop a ${side} card here`);
+        return;
+      }
+      selectedCardIds[side] = card.id;
+      if (side === 'front') {
+        frontSelection.value = card.version;
+        selectVersion(card.version);
+      } else {
+        backSelection.value = card.version;
+      }
+      renderPortfolio();
+      generateQuote({ silent: true });
+    }
+
+    function deletePortfolioCard(cardId) {
+      const card = cardById(cardId);
+      if (!card) return;
+      portfolioCards = portfolioCards.filter((item) => item.id !== cardId);
+      if (!portfolioCards.some((item) => item.side === card.side)) {
+        const fallback = defaultPortfolioCards.find((item) => item.side === card.side);
+        if (fallback) portfolioCards.push({ ...fallback });
+      }
+      if (selectedCardIds[card.side] === cardId) {
+        selectedCardIds[card.side] = portfolioCards.find((item) => item.side === card.side)?.id || defaultCardId('regular', card.side);
+      }
+      renderPortfolio();
+      generateQuote({ silent: true });
+      showToast('portfolio card deleted');
+    }
+
+    function updateQuoteSummary() {
+      const frontCard = selectedCard('front');
+      const backCard = selectedCard('back');
+      quoteSummary.textContent = `Selected mailing: ${mailingSource.value} / ${formatQuantity(mailingQuantity.value)} pieces / ${frontCard?.title || quoteVersionLabel(frontSelection.value)} front + ${backCard?.title || quoteVersionLabel(backSelection.value)} back / ${mailingService.value}.`;
+      mailingDataInline.textContent = selectedMailingUrl();
+      stampsInline.textContent = stampsComUrl;
+      quoteProofInline.textContent = proofUrlFor(frontSelection.value);
+      quoteSubscribeInline.textContent = subscribeUrl;
+      quoteDbInline.textContent = subscriberDbUrl;
+      quoteAddressInline.textContent = mailCheckAddress;
+      quoteQuantityInline.textContent = `${formatQuantity(mailingQuantity.value)} pieces / ${mailDate.value || 'TBD'}`;
+      quotePostageInline.textContent = mailingService.value;
+      quoteFrontInline.textContent = frontCard ? cardSummary(frontCard) : `${selectLabel(frontSelection)} | artwork: ${quoteArtLabel(frontSelection.value)} | file: ${quoteArtSrc(frontSelection.value)}`;
+      quoteBackInline.textContent = backCard ? cardSummary(backCard) : selectLabel(backSelection);
+      quoteEmailInline.textContent = printerEmail.value.trim() || 'Not set';
+    }
+
+    function buildQuotePrompt() {
+      const frontKey = frontSelection.value;
+      const backKey = backSelection.value;
+      const frontCard = selectedCard('front');
+      const backCard = selectedCard('back');
+      return `Printer quote request:
+Please quote The Villager subscription renewal postcard mailing.
+
+Selected mailing:
+- Mailing source: ${mailingSource.value}
+- Mailing data link: ${selectedMailingUrl()}
+- Quantity to quote: ${formatQuantity(mailingQuantity.value)} pieces
+- Target mail date: ${mailDate.value || 'TBD'}
+- Postage / mailing path: ${mailingService.value}
+- Stamps.com option/link: ${stampsComUrl}
+
+Selected proof:
+- Selected front portfolio card: ${frontCard ? cardSummary(frontCard) : 'No front card selected'}
+- Selected back portfolio card: ${backCard ? cardSummary(backCard) : 'No back card selected'}
+- Front proof: ${quoteVersionLabel(frontKey)}
+- Front artwork: ${quoteArtLabel(frontKey)} (${quoteArtSrc(frontKey)})
+- Back proof: ${quoteVersionLabel(backKey)} (${selectLabel(backSelection)})
+- Proof link: ${proofUrlFor(frontKey)}
+- Live renewal link / QR target: ${subscribeUrl}
+- Subscriber database read-only link: ${subscriberDbUrl}
+- Mail/check address: ${mailCheckAddress}
+
+Quote requested:
+- USPS-compliant finished size recommendation for this design
+- Quote standard First-Class postcard-size option if practical: 5" to 6" long, 3.5" to 4.25" high, 0.007" to 0.016" thick
+- Quote commercial presort / automation card option if recommending larger stock: up to 9" long x 6" high, 0.009" to 0.016" thick when over 6" long or 4.25" high
+- Confirm aspect ratio stays between 1.3 and 2.5 with the delivery address parallel to the long edge
+- If recommending 5" x 7" or 6" x 9", identify the exact mail class/rate category and expected postage difference
+- Full color front and back
+- Quantity breaks: 500 / 1,000 / 2,500 / 5,000 plus selected quantity above
+- Paper stock options suitable for direct mail
+- Variable address merge / inkjet addressing from selected mailing source
+- Presort, postage, indicia, Stamps.com compatibility, and mail-drop services
+- Turnaround time after final proof approval
+- PDF/export requirements, bleed, trim, safe-area specs, address block, barcode clear zone, and indicia placement
+- QR-code scan legibility check before print
+
+Please include setup fees, postage estimate, proof timing, ship/mail date, and whether the printer recommends printer permit/presort or Stamps.com for this mailing.`;
+    }
+
+    function generateQuote(options = {}) {
+      updateQuoteSummary();
+      printerPrompt.value = buildQuotePrompt();
+      if (!options.silent) showToast('quote prompt generated');
     }
 
     function syncProofArt(src, label, fileName = '') {
@@ -1530,6 +2245,10 @@ Requested changes:`;
       if (data.art) {
         setPrimaryArt(data.art.src, data.art.label);
       }
+      if (frontSelection.value !== versionKey) {
+        frontSelection.value = versions[versionKey] ? versionKey : 'regular';
+      }
+      updateQuoteSummary();
       updateNotes(data.notes);
       const url = new URL(location.href);
       url.searchParams.set('version', versionKey);
@@ -1554,13 +2273,138 @@ Requested changes:`;
     });
 
     document.getElementById('copy-printer-prompt').addEventListener('click', () => {
+      generateQuote({ silent: true });
       copyText(printerPrompt.value, 'printer quote prompt');
     });
 
     document.getElementById('email-printer-prompt').addEventListener('click', () => {
+      generateQuote({ silent: true });
       const subject = encodeURIComponent('The Villager postcard print quote');
       const body = encodeURIComponent(printerPrompt.value);
-      location.href = `mailto:?subject=${subject}&body=${body}`;
+      const recipient = encodeURIComponent(printerEmail.value.trim());
+      location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    });
+
+    document.getElementById('generate-quote').addEventListener('click', () => {
+      generateQuote();
+    });
+
+    document.getElementById('copy-generated-quote').addEventListener('click', () => {
+      generateQuote({ silent: true });
+      copyText(printerPrompt.value, 'quote');
+    });
+
+    document.getElementById('email-generated-quote').addEventListener('click', () => {
+      generateQuote({ silent: true });
+      const subject = encodeURIComponent('The Villager postcard mailing quote');
+      const body = encodeURIComponent(printerPrompt.value);
+      const recipient = encodeURIComponent(printerEmail.value.trim());
+      location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    });
+
+    [mailingSource, mailingQuantity, mailingService, backSelection, mailDate, printerEmail].forEach((input) => {
+      input.addEventListener('input', updateQuoteSummary);
+      input.addEventListener('change', updateQuoteSummary);
+    });
+
+    backSelection.addEventListener('change', () => {
+      const nextId = defaultCardId(backSelection.value, 'back');
+      if (cardById(nextId)) selectedCardIds.back = nextId;
+      renderPortfolio();
+      generateQuote({ silent: true });
+    });
+
+    frontSelection.addEventListener('change', () => {
+      const nextId = defaultCardId(frontSelection.value, 'front');
+      if (cardById(nextId)) selectedCardIds.front = nextId;
+      selectVersion(frontSelection.value);
+      renderPortfolio();
+      updateQuoteSummary();
+    });
+
+    portfolioList.addEventListener('click', (event) => {
+      const useButton = event.target.closest('[data-use-card]');
+      const deleteButton = event.target.closest('[data-delete-card]');
+      if (useButton) {
+        usePortfolioCard(useButton.dataset.useCard);
+      }
+      if (deleteButton) {
+        deletePortfolioCard(deleteButton.dataset.deleteCard);
+      }
+    });
+
+    [frontDropZone, backDropZone].forEach((zone) => {
+      zone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+        zone.classList.add('is-over');
+        event.dataTransfer.dropEffect = 'move';
+      });
+      zone.addEventListener('dragleave', () => {
+        zone.classList.remove('is-over');
+      });
+      zone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        zone.classList.remove('is-over');
+        const cardId = event.dataTransfer.getData('text/plain');
+        usePortfolioCard(cardId, zone.dataset.dropSide);
+      });
+    });
+
+    portfolioAddForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const title = cardTitleInput.value.trim();
+      if (!title) {
+        cardTitleInput.focus();
+        return;
+      }
+      const side = cardSideInput.value;
+      const version = cardVersionInput.value;
+      const fallbackAsset = side === 'front'
+        ? quoteArtSrc(version)
+        : `${quoteVersionLabel(version)} generated back proof / QR / mailing data`;
+      const card = {
+        id: `custom-${Date.now()}`,
+        side,
+        version,
+        title,
+        asset: cardAssetInput.value.trim() || fallbackAsset,
+        notes: cardNotesInput.value.trim() || 'Custom portfolio card.'
+      };
+      portfolioCards.push(card);
+      selectedCardIds[side] = card.id;
+      if (side === 'front') {
+        frontSelection.value = version;
+        selectVersion(version);
+      } else {
+        backSelection.value = version;
+      }
+      portfolioAddForm.reset();
+      renderPortfolio();
+      generateQuote({ silent: true });
+      showToast('card added to portfolio');
+    });
+
+    document.getElementById('save-mailing-selection').addEventListener('click', () => {
+      generateQuote({ silent: true });
+      savePortfolioState();
+    });
+
+    document.getElementById('reset-portfolio').addEventListener('click', () => {
+      portfolioCards = defaultPortfolioCards.map((card) => ({ ...card }));
+      selectedCardIds = { front: 'regular-front', back: 'regular-back' };
+      mailingSource.value = '2026 Subscriber Sheet';
+      mailingQuantity.value = '1000';
+      mailingService.value = 'Printer presort, indicia, and mail-drop';
+      frontSelection.value = 'regular';
+      backSelection.value = 'regular';
+      mailDate.value = 'Before July 15';
+      printerEmail.value = '';
+      localStorage.removeItem(portfolioStorageKey);
+      selectVersion('regular');
+      renderPortfolio();
+      generateQuote({ silent: true });
+      saveStatus.textContent = 'Portfolio reset to defaults. Click Save Mailing Selection when done.';
+      showToast('portfolio reset');
     });
 
     document.getElementById('email-changes').addEventListener('click', () => {
@@ -1644,8 +2488,19 @@ Requested changes:`;
 
     proofLinkEl.textContent = activeProofUrl();
     proofLinkEl.href = activeProofUrl();
-    const initialVersion = new URLSearchParams(location.search).get('version') || 'regular';
+    loadPortfolioState();
+    const requestedVersion = new URLSearchParams(location.search).get('version');
+    const initialVersion = versions[requestedVersion] ? requestedVersion : (versions[frontSelection.value] ? frontSelection.value : 'regular');
+    if (requestedVersion && versions[requestedVersion]) {
+      selectedCardIds.front = defaultCardId(requestedVersion, 'front');
+      frontSelection.value = requestedVersion;
+    }
+    if (!cardById(selectedCardIds.front)) selectedCardIds.front = defaultCardId(initialVersion, 'front');
+    if (!cardById(selectedCardIds.back)) selectedCardIds.back = defaultCardId(backSelection.value || 'regular', 'back');
+    if (!versions[backSelection.value]) backSelection.value = 'regular';
     selectVersion(initialVersion);
+    renderPortfolio();
+    generateQuote({ silent: true });
   </script>
 </body>
 </html>
