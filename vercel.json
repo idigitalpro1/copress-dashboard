@@ -14,6 +14,16 @@
       "destination": "/subscribe-villager"
     },
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "ricks.conews.press"
+        }
+      ],
+      "destination": "/ricks-conews-press"
+    },
+    {
       "source": "/console/api/hermes/:path*",
       "destination": "https://codex.conews.press/console/api/hermes/:path*"
     }
