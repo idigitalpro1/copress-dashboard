@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rick's Cabaret Central City — Asset Hub</title>
+  <meta name="description" content="Asset hub for Rick's Cabaret &amp; Steakhouse Central City: full-screen video, client dashboard, publisher dashboard, public site, and the complete original art library.">
+  <meta property="og:title" content="Rick's Cabaret Central City — Asset Hub">
+  <meta property="og:image" content="/ricks-conews-press/assets/brand/hero-ricks-cabaret-central-city.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --midnight:#08080a; --charcoal:#121216; --velvet:#3f1118; --ruby:#b51f2c;
+      --champagne:#d8b46a; --ivory:#f4eee2; --muted:#9d9487; --line:rgba(216,180,106,.26);
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--midnight); color:var(--ivory); font-family:Inter,Arial,sans-serif; line-height:1.55; }
+    a { color:inherit; text-decoration:none; }
+    h1,h2,h3 { font-family:"Playfair Display",Georgia,serif; color:#fff; margin:0; line-height:1.05; }
+    .wrap { width:min(1180px,100%); margin:0 auto; padding:0 22px; }
+
+    /* Full-screen video hero */
+    .stage { position:relative; height:100vh; min-height:560px; overflow:hidden; display:grid; align-items:end; border-bottom:1px solid var(--line); }
+    .stage .video { position:absolute; inset:0; z-index:0; }
+    .stage .video iframe { width:100%; height:100%; border:0; }
+    .stage::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(0deg, var(--midnight) 2%, rgba(8,8,10,.35) 40%, rgba(8,8,10,.55) 100%),
+                linear-gradient(90deg, rgba(8,8,10,.7), rgba(8,8,10,.15) 60%); }
+    .stage .inner { position:relative; z-index:2; padding:0 22px 56px; width:min(1180px,100%); margin:0 auto; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; color:var(--champagne); font-size:13px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .eyebrow::before { content:""; width:34px; height:2px; background:var(--champagne); }
+    .stage h1 { margin:14px 0 12px; font-size:clamp(40px,7vw,76px); }
+    .stage p { max-width:640px; margin:0; color:#ddd3c4; font-size:18px; }
+    .cta { display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+    .btn { display:inline-flex; align-items:center; min-height:44px; padding:11px 18px; border:1px solid var(--line); border-radius:7px; color:var(--ivory); background:rgba(8,8,10,.55); font-weight:800; font-size:14px; }
+    .btn.primary { background:var(--champagne); color:var(--midnight); border-color:var(--champagne); }
+    .btn:hover { border-color:var(--champagne); }
+
+    section { padding:54px 0; }
+    .section-head h2 { font-size:clamp(28px,4vw,42px); }
+    .section-head p { margin:10px 0 0; color:var(--muted); max-width:680px; }
+
+    /* Workspaces */
+    .ws-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-top:26px; }
+    .ws { display:flex; flex-direction:column; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--charcoal); transition:.15s ease; }
+    .ws:hover { transform:translateY(-3px); border-color:var(--champagne); }
+    .ws .cover { aspect-ratio:16/10; background:#050507; position:relative; }
+    .ws .cover img { width:100%; height:100%; object-fit:cover; display:block; }
+    .ws .cover .tag { position:absolute; top:10px; left:10px; padding:3px 9px; border:1px solid rgba(216,180,106,.55); border-radius:999px; background:rgba(8,8,10,.6); color:var(--champagne); font-size:10px; font-weight:900; letter-spacing:.1em; text-transform:uppercase; }
+    .ws .body { padding:16px; display:grid; gap:6px; flex:1; }
+    .ws .body h3 { font-size:20px; }
+    .ws .body p { margin:0; color:var(--muted); font-size:13px; }
+    .ws .body em { align-self:start; margin-top:6px; color:var(--champagne); font-style:normal; font-weight:800; font-size:13px; }
+
+    /* Art gallery */
+    .cat { margin-top:34px; }
+    .cat h3 { color:var(--champagne); font-size:13px; font-weight:900; letter-spacing:.14em; text-transform:uppercase; margin-bottom:12px; }
+    .gal { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
+    .art { position:relative; display:block; aspect-ratio:4/3; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#0d0d10; }
+    .art img { width:100%; height:100%; object-fit:cover; display:block; transition:.2s ease; }
+    .art:hover img { transform:scale(1.05); opacity:.92; }
+    .art .name { position:absolute; left:0; right:0; bottom:0; padding:9px 10px; font-size:11px; font-weight:800; color:var(--ivory);
+      background:linear-gradient(0deg, rgba(8,8,10,.92), transparent); }
+    .art.svg { background:linear-gradient(150deg,#45121a,#08080a); }
+    .art.svg img { object-fit:contain; padding:14px; }
+    footer { padding:30px 0 50px; border-top:1px solid var(--line); color:var(--muted); font-size:13px; }
+    @media (max-width:980px){ .ws-grid{grid-template-columns:repeat(2,1fr);} .gal{grid-template-columns:repeat(3,1fr);} }
+    @media (max-width:620px){ .ws-grid,.gal{grid-template-columns:repeat(2,1fr);} }
+  </style>
+</head>
+<body>
+  <header class="stage">
+    <div class="video">
+      <iframe src="https://muse.ai/embed/SaMEAww?autoplay=1&loop=1&muted=1&controls=0&logo=0&search=0&links=0&style=no-controls&cover_play=0" title="Rick's Cabaret Central City video" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </div>
+    <div class="inner">
+      <span class="eyebrow">Asset Hub · ricks.conews.press</span>
+      <h1>Rick's Cabaret Central City</h1>
+      <p>Every workspace and every original asset for the Black Hawk corridor campaign — full-screen video, the client and publisher dashboards, the public site, and the complete art library, in one place.</p>
+      <div class="cta">
+        <a class="btn primary" href="#workspaces">Open Workspaces</a>
+        <a class="btn" href="#art">Art Library</a>
+        <a class="btn" href="/ricks-conews-press/manifest.json">Manifest</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="workspaces">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Workspaces.</h2>
+        <p>The four surfaces of the Rick's campaign. Each opens its live build.</p>
+      </div>
+      <div class="ws-grid">
+        <a class="ws" href="https://muse.ai/v/SaMEAww">
+          <div class="cover"><span class="tag">Video</span><img src="/ricks-conews-press/assets/brand/hero-ricks-cabaret-central-city.jpg" alt="Full-screen video"></div>
+          <div class="body"><h3>Full-Screen Video</h3><p>The autoplay hero loop (muse.ai), used across the hub and campaign kit.</p><em>Open Video &rarr;</em></div>
+        </a>
+        <a class="ws" href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/">
+          <div class="cover"><span class="tag">Client</span><img src="/ricks-conews-press/assets/brand/steakhouse.jpg" alt="Client dashboard"></div>
+          <div class="body"><h3>Client Dashboard</h3><p>The public campaign kit: showcase, events, VIP packages, banners, assets.</p><em>Open Kit &rarr;</em></div>
+        </a>
+        <a class="ws" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/">
+          <div class="cover"><span class="tag">Publisher</span><img src="/ricks-conews-press/assets/editorial/series-hero-1600x600.svg" alt="Publisher dashboard"></div>
+          <div class="body"><h3>Publisher Dashboard</h3><p>SATCOM operator board: handoff, editorial review, artwork, email.</p><em>Open Dashboard &rarr;</em></div>
+        </a>
+        <a class="ws" href="https://www.rickscentral.com/">
+          <div class="cover"><span class="tag">Public</span><img src="/ricks-conews-press/assets/brand/entertainment-lounge.jpg" alt="Public site"></div>
+          <div class="body"><h3>Public Site</h3><p>The live rickscentral.com — official reservations, events, and source art.</p><em>Open Site &rarr;</em></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="art" style="background:linear-gradient(90deg,rgba(63,17,24,.55),rgba(8,8,10,.55)); border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Art library.</h2>
+        <p>All 22 original assets, gathered from the campaign kit, publisher dashboard, and public site. Click any tile to open the full file.</p>
+      </div>
+
+      <div class="cat">
+        <h3>Brand &amp; venue</h3>
+        <div class="gal">
+          <a class="art" href="/ricks-conews-press/assets/brand/hero-ricks-cabaret-central-city.jpg"><img src="/ricks-conews-press/assets/brand/hero-ricks-cabaret-central-city.jpg" alt="Hero"><span class="name">Hero</span></a>
+          <a class="art" href="/ricks-conews-press/assets/brand/steakhouse.jpg"><img src="/ricks-conews-press/assets/brand/steakhouse.jpg" alt="Steakhouse"><span class="name">Steakhouse</span></a>
+          <a class="art" href="/ricks-conews-press/assets/brand/champagne.jpg"><img src="/ricks-conews-press/assets/brand/champagne.jpg" alt="Champagne"><span class="name">Champagne</span></a>
+          <a class="art" href="/ricks-conews-press/assets/brand/entertainment-lounge.jpg"><img src="/ricks-conews-press/assets/brand/entertainment-lounge.jpg" alt="Lounge"><span class="name">Entertainment lounge</span></a>
+          <a class="art svg" href="/ricks-conews-press/assets/brand/logo.png"><img src="/ricks-conews-press/assets/brand/logo.png" alt="Logo"><span class="name">Logo</span></a>
+          <a class="art svg" href="/ricks-conews-press/assets/brand/logo-136x75.png"><img src="/ricks-conews-press/assets/brand/logo-136x75.png" alt="Logo small"><span class="name">Logo (nav)</span></a>
+        </div>
+      </div>
+
+      <div class="cat">
+        <h3>Event flyers</h3>
+        <div class="gal">
+          <a class="art" href="/ricks-conews-press/assets/events/lou-bunch-anniversary.jpg"><img src="/ricks-conews-press/assets/events/lou-bunch-anniversary.jpg" alt="Lou Bunch Day"><span class="name">Lou Bunch / Anniversary</span></a>
+          <a class="art" href="/ricks-conews-press/assets/events/fathers-day.jpg"><img src="/ricks-conews-press/assets/events/fathers-day.jpg" alt="Father's Day"><span class="name">Father's Day</span></a>
+          <a class="art" href="/ricks-conews-press/assets/events/ladies-night.jpg"><img src="/ricks-conews-press/assets/events/ladies-night.jpg" alt="Ladies Night"><span class="name">Ladies Night</span></a>
+          <a class="art" href="/ricks-conews-press/assets/events/stills-in-the-hills.jpg"><img src="/ricks-conews-press/assets/events/stills-in-the-hills.jpg" alt="Stills in the Hills"><span class="name">Stills in the Hills</span></a>
+          <a class="art" href="/ricks-conews-press/assets/events/red-white-blue.jpg"><img src="/ricks-conews-press/assets/events/red-white-blue.jpg" alt="Red White Blue"><span class="name">Red, White &amp; Blue</span></a>
+          <a class="art" href="/ricks-conews-press/assets/events/miami-vice-week.jpg"><img src="/ricks-conews-press/assets/events/miami-vice-week.jpg" alt="Miami Vice Week"><span class="name">Miami Vice Week</span></a>
+        </div>
+      </div>
+
+      <div class="cat">
+        <h3>VIP packages</h3>
+        <div class="gal">
+          <a class="art" href="/ricks-conews-press/assets/packages/double-trouble.jpg"><img src="/ricks-conews-press/assets/packages/double-trouble.jpg" alt="Double Trouble"><span class="name">The Double Trouble</span></a>
+          <a class="art" href="/ricks-conews-press/assets/packages/gilpin-party.jpg"><img src="/ricks-conews-press/assets/packages/gilpin-party.jpg" alt="Gilpin Party"><span class="name">The Gilpin Party</span></a>
+          <a class="art" href="/ricks-conews-press/assets/packages/squad-goals.jpg"><img src="/ricks-conews-press/assets/packages/squad-goals.jpg" alt="Squad Goals"><span class="name">The Squad Goals</span></a>
+        </div>
+      </div>
+
+      <div class="cat">
+        <h3>Editorial series art</h3>
+        <div class="gal">
+          <a class="art svg" href="/ricks-conews-press/assets/editorial/series-hero-1600x600.svg"><img src="/ricks-conews-press/assets/editorial/series-hero-1600x600.svg" alt="Series hero"><span class="name">Series hero (SVG)</span></a>
+          <a class="art svg" href="/ricks-conews-press/assets/editorial/series-social-1080.svg"><img src="/ricks-conews-press/assets/editorial/series-social-1080.svg" alt="Series social"><span class="name">Series social (SVG)</span></a>
+        </div>
+      </div>
+
+      <div class="cat">
+        <h3>Public-site masters</h3>
+        <div class="gal">
+          <a class="art" href="/ricks-conews-press/assets/public/club-floor.jpg"><img src="/ricks-conews-press/assets/public/club-floor.jpg" alt="Club floor"><span class="name">Club floor</span></a>
+          <a class="art" href="/ricks-conews-press/assets/public/ladies-night-banner.jpg"><img src="/ricks-conews-press/assets/public/ladies-night-banner.jpg" alt="Ladies Night banner"><span class="name">Ladies Night banner</span></a>
+          <a class="art" href="/ricks-conews-press/assets/public/steakhouse-master.jpg"><img src="/ricks-conews-press/assets/public/steakhouse-master.jpg" alt="Steakhouse master"><span class="name">Steakhouse (master)</span></a>
+          <a class="art" href="/ricks-conews-press/assets/public/champagne-master.jpg"><img src="/ricks-conews-press/assets/public/champagne-master.jpg" alt="Champagne master"><span class="name">Champagne (master)</span></a>
+          <a class="art" href="/ricks-conews-press/assets/public/lounge-master.jpg"><img src="/ricks-conews-press/assets/public/lounge-master.jpg" alt="Lounge master"><span class="name">Lounge (master)</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      Rick's Cabaret &amp; Steakhouse Central City — 130 Main St, Central City, CO 80427 · 21+. Asset hub gathering the full-screen video, client dashboard, publisher dashboard, public site, and 22 original art assets. Staged for ricks.conews.press.
+    </div>
+  </footer>
+</body>
+</html>

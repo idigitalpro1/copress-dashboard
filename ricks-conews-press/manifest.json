@@ -1,0 +1,51 @@
+{
+  "collection": "Rick's Cabaret Central City — Asset Hub",
+  "domain": "ricks.conews.press",
+  "updated": "2026-06-17",
+  "workspaces": {
+    "fullVideo": { "label": "Full-screen video", "source": "muse.ai", "videoId": "SaMEAww", "embed": "https://muse.ai/embed/SaMEAww" },
+    "clientDashboard": { "label": "Client dashboard (campaign kit)", "url": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/" },
+    "publisherDashboard": { "label": "Publisher dashboard (SATCOM operator)", "url": "https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/" },
+    "publicSite": { "label": "Public site", "url": "https://www.rickscentral.com/" }
+  },
+  "art": {
+    "brand": [
+      "assets/brand/hero-ricks-cabaret-central-city.jpg",
+      "assets/brand/steakhouse.jpg",
+      "assets/brand/champagne.jpg",
+      "assets/brand/entertainment-lounge.jpg",
+      "assets/brand/logo.png",
+      "assets/brand/logo-136x75.png"
+    ],
+    "events": [
+      "assets/events/lou-bunch-anniversary.jpg",
+      "assets/events/fathers-day.jpg",
+      "assets/events/ladies-night.jpg",
+      "assets/events/stills-in-the-hills.jpg",
+      "assets/events/red-white-blue.jpg",
+      "assets/events/miami-vice-week.jpg"
+    ],
+    "packages": [
+      "assets/packages/double-trouble.jpg",
+      "assets/packages/gilpin-party.jpg",
+      "assets/packages/squad-goals.jpg"
+    ],
+    "editorial": [
+      "assets/editorial/series-hero-1600x600.svg",
+      "assets/editorial/series-social-1080.svg"
+    ],
+    "public": [
+      "assets/public/club-floor.jpg",
+      "assets/public/ladies-night-banner.jpg",
+      "assets/public/steakhouse-master.jpg",
+      "assets/public/champagne-master.jpg",
+      "assets/public/lounge-master.jpg"
+    ]
+  },
+  "sources": {
+    "brandAndPublic": "rickscentral.com (RCI Hospitality) — official photography",
+    "events": "rcihospitality.com event flyer art",
+    "packages": "rickscentral.com store package thumbnails",
+    "editorial": "SATCOM operator dashboard — Rick's editorial series art"
+  }
+}

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080" role="img" aria-label="The New York Case — social square">
+  <defs>
+    <linearGradient id="bg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b0b10"/><stop offset="1" stop-color="#241018"/></linearGradient>
+    <linearGradient id="gold2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#caa24a"/><stop offset="0.5" stop-color="#f3d27a"/><stop offset="1" stop-color="#b8862f"/></linearGradient>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg2)"/>
+  <rect x="60" y="60" width="960" height="960" fill="none" stroke="url(#gold2)" stroke-width="2"/>
+  <text x="540" y="300" text-anchor="middle" font-family="Georgia, serif" font-size="30" letter-spacing="6" fill="#f3d27a">OPINION SERIES</text>
+  <text x="540" y="470" text-anchor="middle" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#f7f3ea">The</text>
+  <text x="540" y="600" text-anchor="middle" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#f7f3ea">New York</text>
+  <text x="540" y="720" text-anchor="middle" font-family="Georgia, serif" font-size="120" font-weight="700" fill="#f3d27a">Case</text>
+  <line x1="360" y1="790" x2="720" y2="790" stroke="url(#gold2)" stroke-width="3"/>
+  <text x="540" y="860" text-anchor="middle" font-family="Georgia, serif" font-size="34" font-style="italic" fill="#cfc7b8">Presumption &#183; Process &#183; Proportion</text>
+  <text x="540" y="960" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="#a89e8c">10 parts &#183; Central City, Colorado</text>
+</svg>
