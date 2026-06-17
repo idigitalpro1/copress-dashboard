@@ -465,6 +465,28 @@
       font-weight: 800;
     }
 
+    /* Visual showcase covers (asset library + distribution) */
+    .asset { padding: 0; gap: 0; grid-template-rows: auto 1fr; overflow: hidden; }
+    .thumb {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 78% 22%, rgba(216,180,106,.28), transparent 62%),
+        linear-gradient(150deg, #45121a 0%, #1a0a0e 56%, #08080a 100%);
+    }
+    .thumb > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .55; }
+    .thumb .glyph { position: relative; z-index: 1; font-family: "Playfair Display", Georgia, serif; font-style: normal; font-size: 42px; line-height: 1; color: #fff; opacity: .92; }
+    .thumb .fmt { position: absolute; top: 10px; left: 10px; z-index: 1; padding: 3px 9px; border: 1px solid rgba(216,180,106,.55); border-radius: 999px; background: rgba(8,8,10,.6); color: var(--champagne); font-style: normal; font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .thumb.embed { background: #0b0b0f; }
+    .thumb.embed iframe { border: 0; width: 728px; height: 90px; transform: scale(.5); transform-origin: center; pointer-events: none; }
+    .acard-body { display: grid; gap: 8px; padding: 16px; align-content: start; }
+    .distribution a { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+    .distribution a .acard-body { flex: 1; }
+
     .editorial-band {
       background:
         linear-gradient(180deg, rgba(8,8,10,.98), rgba(63,17,24,.72)),
@@ -828,6 +850,7 @@
       <a href="#assets">Campaign Assets</a>
       <a href="#editorial-assets">Editorial Assets</a>
       <a href="#distribution">Distribution</a>
+      <a href="#visit">Visit</a>
       <a href="https://www.rickscentral.com/contact/">Contact</a>
     </div>
   </nav>
@@ -1072,12 +1095,30 @@
         <p>The kit mirrors the strongest showcase structure: landing-page story, rendered banner feed, social creative, newsletter HTML, editorial copy, SEO metadata, and operator handoff links.</p>
       </div>
       <div class="asset-grid">
-        <a class="asset" href="/ricks-cabaret-campaign-kit/manifest.json"><strong>Manifest</strong><span>Brand colors, audience, deliverable map, official facts, and art route.</span><em>Open JSON</em></a>
-        <a class="asset" href="/ricks-cabaret-campaign-kit/banner-ads/"><strong>Banner Ads Feed</strong><span>Rendered leaderboard, medium rectangle, skyscraper, half page, mobile, and social creative in one review page.</span><em>Open Feed</em></a>
-        <a class="asset" href="/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html"><strong>Newsletter HTML</strong><span>Subscriber-ready email creative with reservation CTA.</span><em>Open</em></a>
-        <a class="asset" href="/ricks-cabaret-campaign-kit/editorial/campaign-copy.md"><strong>Campaign Copy</strong><span>Landing copy, banner lines, print strip, audio spot, and drip sequence.</span><em>Open MD</em></a>
-        <a class="asset" href="#editorial-assets"><strong>Official U.S. Press Kit</strong><span>Inline document list, reader, source Markdown, and edit-request form.</span><em>Review Inline</em></a>
-        <a class="asset" href="/ricks-cabaret-campaign-kit/seo/meta.json"><strong>SEO Meta</strong><span>Title, description, keywords, Open Graph, and Twitter card data.</span><em>Open JSON</em></a>
+        <a class="asset" href="/ricks-cabaret-campaign-kit/manifest.json">
+          <span class="thumb"><i class="fmt">JSON</i><i class="glyph">{ }</i></span>
+          <span class="acard-body"><strong>Manifest</strong><span>Brand colors, audience, deliverable map, official facts, and art route.</span><em>Open JSON &rarr;</em></span>
+        </a>
+        <a class="asset" href="/ricks-cabaret-campaign-kit/banner-ads/">
+          <span class="thumb embed"><i class="fmt">Feed</i><iframe src="/ricks-cabaret-campaign-kit/banners/banner-leaderboard-728x90.html" title="Banner preview" loading="lazy" scrolling="no"></iframe></span>
+          <span class="acard-body"><strong>Banner Ads Feed</strong><span>Leaderboard, medium rectangle, skyscraper, half page, mobile, and social creative in one rendered page.</span><em>Open Feed &rarr;</em></span>
+        </a>
+        <a class="asset" href="/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html">
+          <span class="thumb"><i class="fmt">HTML</i><i class="glyph">&#9993;</i></span>
+          <span class="acard-body"><strong>Newsletter HTML</strong><span>Subscriber-ready email creative with reservation CTA.</span><em>Open HTML &rarr;</em></span>
+        </a>
+        <a class="asset" href="/ricks-cabaret-campaign-kit/editorial/campaign-copy.md">
+          <span class="thumb"><i class="fmt">Markdown</i><i class="glyph">&para;</i></span>
+          <span class="acard-body"><strong>Campaign Copy</strong><span>Landing copy, banner lines, print strip, audio spot, and drip sequence.</span><em>Open MD &rarr;</em></span>
+        </a>
+        <a class="asset" href="#editorial-assets">
+          <span class="thumb"><i class="fmt">Reader</i><img src="/ricks-cabaret-dashboard/art/series-hero-1600x600.svg" alt="Editorial series art"></span>
+          <span class="acard-body"><strong>Official U.S. Press Kit</strong><span>Inline document list, reader, source Markdown, and edit-request form.</span><em>Review Inline &rarr;</em></span>
+        </a>
+        <a class="asset" href="/ricks-cabaret-campaign-kit/seo/meta.json">
+          <span class="thumb"><i class="fmt">JSON</i><i class="glyph">&#9733;</i></span>
+          <span class="acard-body"><strong>SEO Meta</strong><span>Title, description, keywords, Open Graph, and Twitter card data.</span><em>Open JSON &rarr;</em></span>
+        </a>
       </div>
     </div>
   </section>
@@ -1137,19 +1178,57 @@
         <p>Live review and placement links for the campaign network. Every card opens a real surface instead of a dead label.</p>
       </div>
       <div class="distribution" aria-label="Distribution channels">
-        <a href="#banner-ads"><strong>Digital Display</strong><span>Rendered leaderboard, rectangle, skyscraper, half-page, mobile, and social ad feed inline.</span><em>Review Inline</em></a>
-        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html"><strong>Newsletter Feature</strong><span>Subscriber-ready email block for campaign review and placement.</span><em>Open HTML</em></a>
-        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/editorial/social-media-copy.md"><strong>Social Queue</strong><span>Caption pack, hashtags, and post copy for social distribution.</span><em>Open Copy</em></a>
-        <a href="#events"><strong>Upcoming Events</strong><span>Official Rick's event cards for calendar, newsletter, and social placements.</span><em>Open Cards</em></a>
-        <a href="#editorial-assets"><strong>Official U.S. Press Kit</strong><span>Inline document reader, source Markdown, art, and edit-request form.</span><em>Review Inline</em></a>
-        <a href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/"><strong>Reservations</strong><span>Official Rick's steakhouse reservation path for campaign CTAs.</span><em>Open Rick's</em></a>
-        <a href="https://www.rickscentral.com/specials/"><strong>Official Events</strong><span>Rick's live events and specials page for source checks.</span><em>Open Events</em></a>
-        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/seo/jsonld.json"><strong>SEO / JSON-LD</strong><span>Structured-data proof for the campaign landing page.</span><em>Open JSON</em></a>
+        <a href="#banner-ads">
+          <span class="thumb"><i class="fmt">Display</i><i class="glyph">&#9638;</i></span>
+          <span class="acard-body"><strong>Digital Display</strong><span>Rendered leaderboard, rectangle, skyscraper, half-page, mobile, and social ad feed inline.</span><em>Review Inline &rarr;</em></span>
+        </a>
+        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html">
+          <span class="thumb"><i class="fmt">HTML</i><i class="glyph">&#9993;</i></span>
+          <span class="acard-body"><strong>Newsletter Feature</strong><span>Subscriber-ready email block for campaign review and placement.</span><em>Open HTML &rarr;</em></span>
+        </a>
+        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/editorial/social-media-copy.md">
+          <span class="thumb"><i class="fmt">Copy</i><i class="glyph">&#35;</i></span>
+          <span class="acard-body"><strong>Social Queue</strong><span>Caption pack, hashtags, and post copy for social distribution.</span><em>Open Copy &rarr;</em></span>
+        </a>
+        <a href="#events">
+          <span class="thumb"><i class="fmt">Events</i><img src="/ricks-cabaret-campaign-kit/assets/events/miami-vice-week.jpg" alt="Rick's events"></span>
+          <span class="acard-body"><strong>Upcoming Events</strong><span>Official Rick's event cards for calendar, newsletter, and social placements.</span><em>Open Cards &rarr;</em></span>
+        </a>
+        <a href="#editorial-assets">
+          <span class="thumb"><i class="fmt">Reader</i><i class="glyph">&sect;</i></span>
+          <span class="acard-body"><strong>Official U.S. Press Kit</strong><span>Inline document reader, source Markdown, art, and edit-request form.</span><em>Review Inline &rarr;</em></span>
+        </a>
+        <a href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/">
+          <span class="thumb"><i class="fmt">Book</i><i class="glyph">&#10070;</i></span>
+          <span class="acard-body"><strong>Reservations</strong><span>Official Rick's steakhouse reservation path for campaign CTAs.</span><em>Open Rick's &rarr;</em></span>
+        </a>
+        <a href="https://www.rickscentral.com/specials/">
+          <span class="thumb"><i class="fmt">Live</i><i class="glyph">&#9670;</i></span>
+          <span class="acard-body"><strong>Official Events</strong><span>Rick's live events and specials page for source checks.</span><em>Open Events &rarr;</em></span>
+        </a>
+        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/seo/jsonld.json">
+          <span class="thumb"><i class="fmt">JSON</i><i class="glyph">{ }</i></span>
+          <span class="acard-body"><strong>SEO / JSON-LD</strong><span>Structured-data proof for the campaign landing page.</span><em>Open JSON &rarr;</em></span>
+        </a>
       </div>
       <div class="hero-actions" style="margin-top:30px;">
         <a class="button primary" href="https://www.rickscentral.com/">Open Official Site</a>
         <a class="button secondary" href="/ricks-cabaret-campaign-kit/editorial/social-media-copy.md">Open Social Copy</a>
         <a class="button secondary" href="/ricks-cabaret-campaign-kit/seo/jsonld.json">Open JSON-LD</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="showcase-band" id="visit">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Plan the night.</h2>
+        <p>Rick's Cabaret &amp; Steakhouse &mdash; 130 Main St, Central City, CO 80427. Open Thursday through Sunday, 6 PM&ndash;4 AM. 21+ nightlife and dining.</p>
+      </div>
+      <div class="hero-actions">
+        <a class="button primary" href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/">Reserve a Table</a>
+        <a class="button secondary" href="https://www.google.com/maps/search/?api=1&amp;query=Rick%27s%20Cabaret%20%26%20Steakhouse%20130%20Main%20St%20Central%20City%20CO%2080427">Get Directions</a>
+        <a class="button secondary" href="tel:+17206699470">Call (720) 669-9470</a>
       </div>
     </div>
   </section>
