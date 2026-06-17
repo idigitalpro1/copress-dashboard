@@ -13,11 +13,12 @@
       "dashboardPath": "/ricks-cabaret-dashboard/",
       "manifestPath": "/ricks-cabaret-campaign-kit/manifest.json",
       "emailPath": "/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=ricks-cabaret-central-city",
       "fit": "Premium 21+ nightlife, steakhouse, late-night dining, VIP parties, and Central City casino corridor travelers.",
-      "nextAction": "Send Rick's owner/operator dashboard, confirm onboarding target, and keep NY case editorial in legal review.",
-      "sms": "Rick's SATCOM kit is ready: {{url}}. Use the dashboard to review the live campaign kit, email creative, artwork, and onboarding next step.",
+      "nextAction": "Send Rick's owner/operator dashboard and onboarding link by SMS, then review the NY case editorial reader.",
+      "sms": "Rick's onboarding link: https://myappstore.biz/onboarding?client=ricks-cabaret-central-city Review SATCOM dashboard: {{url}}",
       "emailSubject": "Rick's Cabaret Central City SATCOM campaign kit",
-      "emailBody": "Rick's SATCOM kit is ready for review: {{url}}\n\nIt includes the live campaign kit, newsletter creative, artwork, and the Claude operator kit. Editorial/legal-review material is clearly marked draft and should not publish until cleared."
+      "emailBody": "Rick's SATCOM kit is ready for review: {{url}}\n\nOnboarding link: https://myappstore.biz/onboarding?client=ricks-cabaret-central-city\n\nIt includes the live campaign kit, newsletter creative, artwork, Claude operator kit, and NY case editorial reader. Editorial material is clearly marked draft/legal-review and should not publish until cleared."
     },
     {
       "id": "stans-auto",
