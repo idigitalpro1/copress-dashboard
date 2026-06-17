@@ -463,11 +463,10 @@
     }
 
     .event-card {
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      gap: 12px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       min-height: 210px;
-      padding: 20px;
       color: var(--ivory);
       text-decoration: none;
       border: 1px solid var(--line);
@@ -475,6 +474,27 @@
       background:
         linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025)),
         radial-gradient(circle at top right, rgba(216,180,106,.12), transparent 18rem);
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .event-card:hover { transform: translateY(-2px); border-color: var(--champagne); }
+
+    .ev-media {
+      display: block;
+      aspect-ratio: 16 / 10;
+      background: #050507;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .ev-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .ev-body {
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 10px;
+      padding: 18px;
+      flex: 1;
     }
 
     .event-card b {
@@ -652,40 +672,58 @@
       </div>
       <div class="event-grid">
         <a class="event-card" href="https://www.rickscentral.com/event/LouBunchDayOneYearAnniversaryParty_23175/">
-          <b>Official event card</b>
-          <h3>Lou Bunch Day / One Year Anniversary Party</h3>
-          <p>Anniversary party tie-in for the Central City calendar and local-history audience.</p>
-          <em>Open Card</em>
+          <span class="ev-media"><img src="assets/events/lou-bunch-anniversary.jpg" alt="Lou Bunch Day and one year anniversary party at Rick's Cabaret Central City"></span>
+          <span class="ev-body">
+            <b>Official event card</b>
+            <h3>Lou Bunch Day / One Year Anniversary Party</h3>
+            <p>Madam Lou Bunch Bed Race, then Rick's one-year anniversary party. Doors open 11am.</p>
+            <em>Open Card &rarr;</em>
+          </span>
         </a>
         <a class="event-card" href="https://www.rickscentral.com/event/FathersDay_22550/">
-          <b>Official event card</b>
-          <h3>Fathers Day</h3>
-          <p>Steakhouse-forward promotion for dinner reservations and weekend groups.</p>
-          <em>Open Card</em>
+          <span class="ev-media"><img src="assets/events/fathers-day.jpg" alt="Father's Day steak and lobster special at Rick's Central City"></span>
+          <span class="ev-body">
+            <b>Official event card</b>
+            <h3>Fathers Day</h3>
+            <p>$60 Steak &amp; Lobster with complimentary champagne to celebrate Dad.</p>
+            <em>Open Card &rarr;</em>
+          </span>
         </a>
         <a class="event-card" href="https://www.rickscentral.com/event/LadiesNight_23192/">
-          <b>Official event card</b>
-          <h3>Ladies Night</h3>
-          <p>Monthly event creative for newsletter, social, and cabaret-audience promotion.</p>
-          <em>Open Card</em>
+          <span class="ev-media"><img src="assets/events/ladies-night.jpg" alt="Ladies Night at Rick's Cabaret Central City"></span>
+          <span class="ev-body">
+            <b>Official event card</b>
+            <h3>Ladies Night</h3>
+            <p>3rd ever Ladies Night, June 24 &mdash; ladies free, $5 drink specials all night.</p>
+            <em>Open Card &rarr;</em>
+          </span>
         </a>
         <a class="event-card" href="https://www.rickscentral.com/event/StillsinTheHills_23176/">
-          <b>Official event card</b>
-          <h3>Stills in The Hills</h3>
-          <p>Central City festival traffic, streetside food and beverage, and local weekend discovery.</p>
-          <em>Open Card</em>
+          <span class="ev-media"><img src="assets/events/stills-in-the-hills.jpg" alt="Stills in the Hills event at Rick's Central City"></span>
+          <span class="ev-body">
+            <b>Official event card</b>
+            <h3>Stills in The Hills</h3>
+            <p>Central City festival traffic, streetside food and beverage, and local weekend discovery.</p>
+            <em>Open Card &rarr;</em>
+          </span>
         </a>
         <a class="event-card" href="https://www.rickscentral.com/event/RedWhiteandBlueParty_23177/">
-          <b>Official event card</b>
-          <h3>Red, White, and Blue Party</h3>
-          <p>Fourth of July creative lane for red-white-blue nightlife, BBQ specials, and free-cover copy.</p>
-          <em>Open Card</em>
+          <span class="ev-media"><img src="assets/events/red-white-blue.jpg" alt="Red, White, and Blue Party at Rick's Central City"></span>
+          <span class="ev-body">
+            <b>Official event card</b>
+            <h3>Red, White, and Blue Party</h3>
+            <p>Fourth of July creative lane for red-white-blue nightlife, BBQ specials, and free-cover copy.</p>
+            <em>Open Card &rarr;</em>
+          </span>
         </a>
         <a class="event-card" href="https://www.rickscentral.com/event/MiamiViceWeek_23179/">
-          <b>Official event card</b>
-          <h3>Miami Vice Week</h3>
-          <p>Neon summer-party creative for late-night display, social, and newsletter placements.</p>
-          <em>Open Card</em>
+          <span class="ev-media"><img src="assets/events/miami-vice-week.jpg" alt="Miami Vice Week neon summer party at Rick's Central City"></span>
+          <span class="ev-body">
+            <b>Official event card</b>
+            <h3>Miami Vice Week</h3>
+            <p>Neon summer-party creative for late-night display, social, and newsletter placements.</p>
+            <em>Open Card &rarr;</em>
+          </span>
         </a>
       </div>
     </div>
