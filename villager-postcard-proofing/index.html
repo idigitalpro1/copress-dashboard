@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>The Villager Renewal Postcard Proofing</title>
   <meta name="description" content="Proofing workspace for The Villager subscription renewal postcards, including regular renewal, final renewal, and Version 123 production proof.">
-  <link rel="canonical" href="https://copress-dashboard.vercel.app/villager-postcard-proofing/">
+  <link rel="canonical" href="https://subscribe.thevillager.today/villager-postcard-proofing/">
   <meta property="og:title" content="The Villager Renewal Postcard Proofing">
   <meta property="og:description" content="Review the regular renewal, final renewal, and Version 123 postcard proof packet.">
-  <meta property="og:image" content="https://copress-dashboard.vercel.app/villager-postcard-proofing/assets/basic-renewal-primary.png">
+  <meta property="og:image" content="https://subscribe.thevillager.today/villager-postcard-proofing/assets/basic-renewal-primary.png">
   <script>
     if (location.protocol === 'file:' && !location.search.includes('local=1')) {
-      location.replace('https://copress-dashboard.vercel.app/villager-postcard-proofing/');
+      location.replace('https://subscribe.thevillager.today/villager-postcard-proofing/');
     }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -363,6 +363,59 @@
 
     .proof-shell {
       padding: 14px;
+    }
+
+    .proof-art {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 220px;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 14px;
+      padding: 12px;
+      border: 1px solid rgba(32,53,43,.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,.36);
+    }
+
+    .proof-art img {
+      display: block;
+      width: 100%;
+      max-height: 620px;
+      object-fit: contain;
+      border: 1px solid rgba(32,53,43,.18);
+      border-radius: 6px;
+      background: #fffaf0;
+      box-shadow: 0 16px 42px rgba(68,43,24,.16);
+    }
+
+    .proof-art-copy {
+      display: grid;
+      gap: 9px;
+      align-content: start;
+    }
+
+    .proof-art-copy h3 {
+      margin: 0;
+      color: var(--brown);
+      font: 900 13px "DM Mono", monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .proof-art-copy p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .proof-art-copy code {
+      display: block;
+      color: var(--ink);
+      font: 700 11px "DM Mono", monospace;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+      white-space: normal;
     }
 
     .proof-pair {
@@ -974,6 +1027,7 @@
       .art-options { grid-template-columns: 1fr; }
       .front,
       .back { grid-template-columns: 1fr; }
+      .proof-art { grid-template-columns: 1fr; }
       .front-right,
       .back-left { border-left: 0; border-right: 0; border-top: 2px solid rgba(32,53,43,.34); }
       .front-left,
@@ -1010,6 +1064,7 @@
       .panel { border: 0; box-shadow: none; }
       .panel-head { display: none; }
       .proof-shell { padding: 0; }
+      .proof-art { break-inside: avoid; margin: 0 0 .25in; box-shadow: none; }
       .postcard { break-inside: avoid; margin: 0 0 .25in; box-shadow: none; }
     }
   </style>
@@ -1107,6 +1162,18 @@
           <div class="panel-note" id="proof-status">Regular renewal active</div>
         </div>
         <div class="proof-shell">
+          <section class="proof-art" aria-label="Selected postcard artwork proof">
+            <img id="proof-art" src="/villager-postcard-proofing/assets/basic-renewal-primary.png" alt="Selected postcard artwork proof.">
+            <div class="proof-art-copy">
+              <h3>Artwork Proof</h3>
+              <p id="proof-art-label">Basic renewal primary artwork is included in this proof packet.</p>
+              <code id="proof-art-path">/villager-postcard-proofing/assets/basic-renewal-primary.png</code>
+              <div class="proof-actions">
+                <a class="btn primary" id="proof-art-open" href="/villager-postcard-proofing/assets/basic-renewal-primary.png">Open Artwork</a>
+                <a class="btn" id="proof-art-download" href="/villager-postcard-proofing/assets/basic-renewal-primary.png" download>Download Artwork</a>
+              </div>
+            </div>
+          </section>
           <div class="proof-pair" id="proof-pair">
             <section class="postcard front is-regular" aria-label="Postcard front proof">
               <div class="front-left">
@@ -1171,7 +1238,7 @@
           </div>
           <div class="proof-actions">
             <button class="btn primary" type="button" onclick="window.print()">Print Proof</button>
-            <a class="btn" href="/villager-postcard-proofing/assets/basic-renewal-primary.png" download>Download Original Art</a>
+            <a class="btn" id="download-original-art" href="/villager-postcard-proofing/assets/basic-renewal-primary.png" download>Download Original Art</a>
             <a class="btn" href="/villager-postcard-proofing/assets/subscribe-qr.png" download>Download QR</a>
             <a class="btn" href="https://www.thevillager.today/admin/master-subscribers" target="_blank" rel="noopener noreferrer">Subscriber DB Read-Only</a>
             <button class="btn red" type="button" id="copy-sms">Copy SMS To Susan</button>
@@ -1224,7 +1291,7 @@ Requested changes:</textarea>
           <textarea id="printer-prompt" spellcheck="true">Printer quote request:
 Please quote The Villager subscription renewal postcard packet.
 
-Proof link: https://copress-dashboard.vercel.app/villager-postcard-proofing/
+Proof link: https://subscribe.thevillager.today/villager-postcard-proofing/
 Live renewal link / QR target: https://www.thevillager.today/subscribe
 Subscriber database read-only link: https://www.thevillager.today/admin/master-subscribers
 
@@ -1248,7 +1315,7 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
         <div class="links">
           <div class="link-row">
             <strong>Proof link</strong>
-            <code><a id="proof-link" href="https://copress-dashboard.vercel.app/villager-postcard-proofing/">https://copress-dashboard.vercel.app/villager-postcard-proofing/</a></code>
+            <code><a id="proof-link" href="https://subscribe.thevillager.today/villager-postcard-proofing/">https://subscribe.thevillager.today/villager-postcard-proofing/</a></code>
             <button class="btn" type="button" data-copy="#proof-link">Copy</button>
           </div>
           <div class="link-row">
@@ -1272,16 +1339,31 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
   </main>
 
   <script>
-    const canonicalProofUrl = 'https://copress-dashboard.vercel.app/villager-postcard-proofing/';
+    const canonicalProofUrl = 'https://subscribe.thevillager.today/villager-postcard-proofing/';
     const subscribeUrl = 'https://www.thevillager.today/subscribe';
     const subscriberDbUrl = 'https://www.thevillager.today/admin/master-subscribers';
     const defaultArtSrc = '/villager-postcard-proofing/assets/basic-renewal-primary.png';
+    const artAssets = {
+      regular: {
+        src: '/villager-postcard-proofing/assets/basic-renewal-primary.png',
+        label: 'Basic renewal primary'
+      },
+      final: {
+        src: '/villager-postcard-proofing/assets/clean-renewal-draft.png',
+        label: 'Clean renewal draft'
+      },
+      v123: {
+        src: '/villager-postcard-proofing/assets/freedom-250-postcard.png',
+        label: 'Freedom 250 postcard'
+      }
+    };
     let selectedArtSrc = defaultArtSrc;
     let currentArtLabel = 'Basic renewal primary';
     const versions = {
       regular: {
         label: 'Regular Renewal',
         status: 'Regular renewal active',
+        art: artAssets.regular,
         frontTitle: 'You Subscribe.<br>It has Impact.',
         frontMessage: 'Please continue your support of local journalism and community news.',
         lockup: 'Subscription<br>Renewal',
@@ -1293,6 +1375,7 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
       final: {
         label: 'Final Renewal',
         status: 'Final renewal active',
+        art: artAssets.final,
         frontTitle: 'Final Renewal<br>Notice',
         frontMessage: 'Your Villager renewal is due. Please renew by July 15 so delivery continues without interruption.',
         lockup: 'Final<br>Renewal',
@@ -1304,6 +1387,7 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
       v123: {
         label: 'Version 123',
         status: 'Version 123 production proof active',
+        art: artAssets.v123,
         frontTitle: 'You Subscribe.<br>It has Impact.',
         frontMessage: 'Please continue your support of local journalism and community news. Version 123 production proof.',
         lockup: 'Version<br>123',
@@ -1328,6 +1412,12 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const proofLinkEl = document.getElementById('proof-link');
     const primaryArt = document.getElementById('primary-art');
     const primaryArtStatus = document.getElementById('primary-art-status');
+    const proofArt = document.getElementById('proof-art');
+    const proofArtLabel = document.getElementById('proof-art-label');
+    const proofArtPath = document.getElementById('proof-art-path');
+    const proofArtOpen = document.getElementById('proof-art-open');
+    const proofArtDownload = document.getElementById('proof-art-download');
+    const downloadOriginalArt = document.getElementById('download-original-art');
     const artUpload = document.getElementById('art-upload');
     const artOptions = Array.from(document.querySelectorAll('.art-option'));
     const checklist = document.getElementById('checklist');
@@ -1377,6 +1467,25 @@ Requested changes:`;
       updateNotes(currentVersionLabel.textContent.trim() || 'Regular Renewal');
     }
 
+    function syncProofArt(src, label, fileName = '') {
+      proofArt.src = src;
+      proofArt.alt = `${label} postcard artwork proof.`;
+      proofArtLabel.textContent = `${label} artwork is included in this proof packet.`;
+      proofArtPath.textContent = src;
+      proofArtOpen.href = src;
+      proofArtDownload.href = src;
+      downloadOriginalArt.href = src;
+      if (fileName) {
+        proofArtDownload.download = fileName;
+        downloadOriginalArt.download = fileName;
+      } else {
+        proofArtDownload.removeAttribute('download');
+        proofArtDownload.setAttribute('download', '');
+        downloadOriginalArt.removeAttribute('download');
+        downloadOriginalArt.setAttribute('download', '');
+      }
+    }
+
     function setPrimaryArt(src, label, persistSelection = true) {
       if (uploadedArtUrl) {
         URL.revokeObjectURL(uploadedArtUrl);
@@ -1392,6 +1501,7 @@ Requested changes:`;
       currentArtLabel = label;
       primaryArt.src = src;
       primaryArtStatus.textContent = label;
+      syncProofArt(src, label);
       refreshCurrentNotes();
     }
 
@@ -1410,6 +1520,9 @@ Requested changes:`;
       proofStatus.textContent = data.status;
       currentVersionLabel.textContent = data.label;
       redSquareCheck.checked = versionKey === 'final' || versionKey === 'v123';
+      if (data.art) {
+        setPrimaryArt(data.art.src, data.art.label);
+      }
       updateNotes(data.notes);
       const url = new URL(location.href);
       url.searchParams.set('version', versionKey);
@@ -1467,6 +1580,7 @@ Requested changes:`;
       primaryArt.src = uploadedArtUrl;
       currentArtLabel = `Uploaded preview: ${file.name}`;
       primaryArtStatus.textContent = currentArtLabel;
+      syncProofArt(uploadedArtUrl, currentArtLabel, file.name);
       artOptions.forEach((button) => button.classList.remove('is-active'));
       refreshCurrentNotes();
       showToast('art uploaded for preview');
@@ -1480,6 +1594,7 @@ Requested changes:`;
       currentArtLabel = selectedButton?.dataset.artLabel || 'Basic renewal primary';
       primaryArt.src = selectedArtSrc;
       primaryArtStatus.textContent = currentArtLabel;
+      syncProofArt(selectedArtSrc, currentArtLabel);
       artOptions.forEach((button) => {
         button.classList.toggle('is-active', button.dataset.artSrc === selectedArtSrc);
       });
