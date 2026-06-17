@@ -13,17 +13,6 @@
       ],
       "destination": "/subscribe-villager/",
       "permanent": false
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "ricks.conews.press"
-        }
-      ],
-      "destination": "/ricks-conews-press/",
-      "permanent": false
     }
   ],
   "rewrites": [
