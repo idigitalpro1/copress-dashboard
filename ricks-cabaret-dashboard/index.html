@@ -58,8 +58,33 @@
     .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 7px; color: var(--paper); background: rgba(255,255,255,.045); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .5px; }
     .btn.primary { color: #15100a; background: var(--gold); border-color: var(--gold); }
     footer { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
-    @media (max-width: 940px) { .shell { grid-template-columns: 1fr; } .side { position: static; height: auto; } .hero-card { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 620px) { .main { padding: 22px 14px 42px; } .top { display: block; } .status { margin-top: 12px; white-space: normal; } .grid { grid-template-columns: 1fr; } }
+    .sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 26px 0 4px; }
+    .sec-head .eyebrow { margin: 0; }
+    .sec-head .hint { color: var(--muted); font-size: 12px; }
+    /* Social-ready media cards (showcase pattern) */
+    .media-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 12px 0; }
+    .mcard { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); overflow: hidden; transition: .15s ease; }
+    .mcard:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .mcard .media { aspect-ratio: 16 / 10; background: #050507; border-bottom: 1px solid var(--line); }
+    .mcard .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .mcard .body { display: flex; flex-direction: column; gap: 8px; padding: 14px; flex: 1; }
+    .mcard .t { margin: 0; font-family: Georgia, serif; font-size: 20px; line-height: 1.08; }
+    .mcard .d { margin: 0; color: var(--muted); font-size: 13px; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { display: inline-flex; align-items: center; min-height: 22px; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .8px; text-transform: uppercase; }
+    .tag.event { color: #ffe3b0; border-color: rgba(226,191,103,.5); background: rgba(226,191,103,.12); }
+    .tag.soon { color: #c9f3d6; border-color: rgba(117,198,148,.5); background: rgba(117,198,148,.12); }
+    .social { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-top: auto; }
+    .social .btn { width: 100%; min-height: 34px; font-size: 11px; padding-inline: 8px; }
+    .social .btn.copied { color: #15100a; background: var(--ok); border-color: var(--ok); }
+    /* Highlighted editorial feature */
+    .feature { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: 16px; margin: 12px 0 6px; border: 1px solid rgba(169,45,66,.45); border-radius: 10px; overflow: hidden; background: linear-gradient(180deg, rgba(169,45,66,.14), rgba(255,255,255,.025)); }
+    .feature .fart { background: #050507; display: block; }
+    .feature .fart img { width: 100%; height: 100%; min-height: 210px; object-fit: cover; display: block; }
+    .feature .fbody { padding: 20px; }
+    .feature .fbody h3 { margin: 6px 0 8px; font-family: Georgia, serif; font-size: 26px; line-height: 1.05; }
+    @media (max-width: 940px) { .shell { grid-template-columns: 1fr; } .side { position: static; height: auto; } .hero-card { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .feature { grid-template-columns: 1fr; } }
+    @media (max-width: 620px) { .main { padding: 22px 14px 42px; } .top { display: block; } .status { margin-top: 12px; white-space: normal; } .grid { grid-template-columns: 1fr; } .media-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -69,9 +94,10 @@
     <div class="sub">SATCOM operator dashboard</div>
     <nav>
       <a href="#overview">Overview</a>
+      <a href="#events">Upcoming events</a>
+      <a href="#editorial">Editorial</a>
       <a href="#campaign">Campaign kit</a>
       <a href="#claude">Claude output</a>
-      <a href="#editorial">Editorial</a>
       <a href="#artwork">Artwork</a>
       <a href="#email">Email</a>
       <a href="/showcase-prospects/">Prospect board</a>
@@ -121,6 +147,82 @@
       <div class="tile"><b>10</b><span>Editorial drafts</span></div>
     </section>
 
+    <div class="sec-head" id="events">
+      <div class="eyebrow">Upcoming Events — Social Ready</div>
+      <div class="hint">Pulled live from rickscentral.com. Copy a caption or share to X / Facebook.</div>
+    </div>
+    <section class="media-grid">
+      <article class="mcard"
+        data-caption="🏆 Lou Bunch Day + our ONE YEAR ANNIVERSARY PARTY at Rick's Cabaret Central City! Madam Lou Bunch Bed Race, then the party — doors open 11am. 130 Main St, Central City, CO. 21+. Reserve your place: https://www.rickscentral.com/event-page-layout"
+        data-url="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/">
+        <div class="media"><img src="/ricks-cabaret-dashboard/assets/events/lou-bunch-anniversary.jpg" alt="Lou Bunch Day and one year anniversary party at Rick's Cabaret Central City"></div>
+        <div class="body">
+          <div class="badge-row"><span class="tag event">Signature event</span><span class="tag soon">Upcoming</span></div>
+          <h3 class="t">Lou Bunch Day / Anniversary</h3>
+          <p class="d">Madam Lou Bunch Bed Race, then Rick's ONE YEAR ANNIVERSARY PARTY. Doors 11am.</p>
+          <div class="social">
+            <button class="btn primary" type="button" onclick="copyCaption(this)">Copy caption</button>
+            <a class="btn" href="https://www.rickscentral.com/event-page-layout">Reserve</a>
+            <a class="btn share-x" href="#" onclick="return shareX(this)">Share X</a>
+            <a class="btn share-fb" href="#" onclick="return shareFb(this)">Share FB</a>
+          </div>
+        </div>
+      </article>
+      <article class="mcard"
+        data-caption="🥩 Father's Day at Rick's Cabaret Central City — $60 Steak &amp; Lobster with complimentary champagne. Treat Dad to the Black Hawk corridor's best late-night steakhouse. 130 Main St, Central City, CO. 21+. Reserve: https://www.rickscentral.com/event-page-layout"
+        data-url="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/">
+        <div class="media"><img src="/ricks-cabaret-dashboard/assets/events/fathers-day.jpg" alt="Father's Day steak and lobster special at Rick's Central City"></div>
+        <div class="body">
+          <div class="badge-row"><span class="tag event">Dining special</span><span class="tag soon">Upcoming</span></div>
+          <h3 class="t">Father's Day</h3>
+          <p class="d">$60 Steak &amp; Lobster with complimentary champagne to celebrate Dad.</p>
+          <div class="social">
+            <button class="btn primary" type="button" onclick="copyCaption(this)">Copy caption</button>
+            <a class="btn" href="https://www.rickscentral.com/event-page-layout">Reserve</a>
+            <a class="btn share-x" href="#" onclick="return shareX(this)">Share X</a>
+            <a class="btn share-fb" href="#" onclick="return shareFb(this)">Share FB</a>
+          </div>
+        </div>
+      </article>
+      <article class="mcard"
+        data-caption="💃 Ladies Night is back — our 3rd ever, June 24th! Ladies get in FREE + $5 drink specials all night. All are welcome. Rick's Cabaret Central City, 130 Main St. 21+. Reserve: https://www.rickscentral.com/event-page-layout"
+        data-url="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/">
+        <div class="media"><img src="/ricks-cabaret-dashboard/assets/events/ladies-night.jpg" alt="Ladies Night at Rick's Cabaret Central City June 24"></div>
+        <div class="body">
+          <div class="badge-row"><span class="tag event">Ladies Night</span><span class="tag soon">June 24</span></div>
+          <h3 class="t">Ladies Night</h3>
+          <p class="d">3rd ever Ladies Night, June 24. Ladies free, $5 drink specials all night.</p>
+          <div class="social">
+            <button class="btn primary" type="button" onclick="copyCaption(this)">Copy caption</button>
+            <a class="btn" href="https://www.rickscentral.com/event-page-layout">Reserve</a>
+            <a class="btn share-x" href="#" onclick="return shareX(this)">Share X</a>
+            <a class="btn share-fb" href="#" onclick="return shareFb(this)">Share FB</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <div class="sec-head" id="editorial">
+      <div class="eyebrow">Editorial — Featured</div>
+      <div class="hint">Draft / legal-review only — review before any publication.</div>
+    </div>
+    <section class="feature">
+      <a class="fart" href="/ricks-cabaret-dashboard/editorial/ny-case-series/" aria-label="Open editorial reader">
+        <img src="/ricks-cabaret-dashboard/art/series-hero-1600x600.svg" alt="Rick's editorial series hero artwork">
+      </a>
+      <div class="fbody">
+        <span class="pill draft">Legal review</span>
+        <h3>Official U.S. Press Kit — NY Case Series</h3>
+        <p>Publisher notes, the 10-part editorial series, and the edit-request form, held for legal clearance. Highlighted here for review — not cleared for public posting.</p>
+        <div class="actions">
+          <a class="btn primary" href="/ricks-cabaret-dashboard/editorial/ny-case-series/">Open editorial reader</a>
+          <a class="btn" href="/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=00-SERIES-EDITOR-NOTES.md">Editor notes</a>
+          <a class="btn" href="/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=01-presumed-innocent.md">Part 01 · Presumed Innocent</a>
+          <a class="btn" href="/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=07-record-fairly-stated.md">Part 07 · The Record</a>
+        </div>
+      </div>
+    </section>
+
     <h2 class="eyebrow" id="campaign">Campaign Kit</h2>
     <section class="grid">
       <a class="card" href="/ricks-cabaret-campaign-kit/"><div class="k">Landing</div><div class="t">Live SATCOM Kit</div><div class="d">Showcase, positioning, audience, assets, and compliance notes.</div><span class="pill live">Live</span></a>
@@ -133,13 +235,6 @@
       <a class="card" href="/ricks-cabaret-dashboard/campaign-kit-video-header.html"><div class="k">Copied from Claude</div><div class="t">Video Header Block</div><div class="d">Drop-in header asset from the local Claude Rick's kit output.</div><span class="pill">Operator</span></a>
       <a class="card" href="/ricks-cabaret-dashboard/art/series-social-1080.svg"><div class="k">Copied from Claude</div><div class="t">Social Artwork</div><div class="d">Series square art for internal review and creative direction.</div><span class="pill">Operator</span></a>
       <a class="card" href="/ricks-cabaret-dashboard/editorial/ny-case-series/"><div class="k">Editorial review</div><div class="t">Official U.S. Press Kit</div><div class="d">Open publisher notes, edit requests, and legal-review materials inside this dashboard.</div><span class="pill draft">Drafts linked</span></a>
-    </section>
-
-    <h2 class="eyebrow" id="editorial">Editorial</h2>
-    <section class="grid">
-      <a class="card" href="/ricks-cabaret-dashboard/editorial/ny-case-series/"><div class="k">Press kit</div><div class="t">Official U.S. Press Kit</div><div class="d">Browse publisher notes, legal-review drafts, and the edit-request form.</div><span class="pill draft">Legal review</span></a>
-      <a class="card" href="/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=01-presumed-innocent.md"><div class="k">Part 01</div><div class="t">Presumed Innocent</div><div class="d">Central City should let the court do its job.</div><span class="pill draft">Draft</span></a>
-      <a class="card" href="/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=07-record-fairly-stated.md"><div class="k">Part 07</div><div class="t">The Record, Fairly Stated</div><div class="d">The allegations and RCI's answer, held in review.</div><span class="pill draft">Draft</span></a>
     </section>
 
     <h2 class="eyebrow" id="email">Email</h2>
@@ -158,5 +253,31 @@
     </footer>
   </main>
 </div>
+<script>
+  function cardData(el) {
+    const card = el.closest('.mcard');
+    return { caption: card?.dataset.caption || '', url: card?.dataset.url || '' };
+  }
+  function copyCaption(btn) {
+    const { caption, url } = cardData(btn);
+    const text = caption + (url ? '\n' + url : '');
+    const done = () => { const o = btn.textContent; btn.textContent = 'Copied ✓'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = o; btn.classList.remove('copied'); }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => window.prompt('Copy caption:', text));
+    } else {
+      window.prompt('Copy caption:', text);
+    }
+  }
+  function shareX(a) {
+    const { caption, url } = cardData(a);
+    window.open('https://x.com/intent/post?text=' + encodeURIComponent(caption) + (url ? '&url=' + encodeURIComponent(url) : ''), '_blank', 'noopener');
+    return false;
+  }
+  function shareFb(a) {
+    const { url } = cardData(a);
+    window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url || location.href), '_blank', 'noopener');
+    return false;
+  }
+</script>
 </body>
 </html>
