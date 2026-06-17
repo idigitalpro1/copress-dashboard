@@ -120,8 +120,8 @@
     </div>
     <div class="actions">
       <a class="btn primary" href="/">Dashboard</a>
-      <a class="btn" href="./showcase-leads.json">JSON</a>
-      <a class="btn" href="./showcase-leads.csv">CSV</a>
+      <a class="btn" href="/showcase-prospects/showcase-leads.json">JSON</a>
+      <a class="btn" href="/showcase-prospects/showcase-leads.csv">CSV</a>
       <a class="btn" href="/stans-auto-sales-campaign-kit/prospects/top-20-prospects.html">Stan's Top 20</a>
     </div>
   </section>
@@ -150,7 +150,7 @@ const link = (label, href, primary = false) => href ? `<a class="btn ${primary ?
 const template = (value, url) => (value || '').replace('{{url}}', url);
 
 async function loadLeads() {
-  const res = await fetch('./showcase-leads.json', { cache: 'no-store' });
+  const res = await fetch('/showcase-prospects/showcase-leads.json', { cache: 'no-store' });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
@@ -199,7 +199,7 @@ function render(data) {
 loadLeads()
   .then(render)
   .catch((error) => {
-    document.getElementById('cards').innerHTML = `<article><h2>Prospect data did not load</h2><p>${error.message}</p><p>Open <a href="./showcase-leads.json">showcase-leads.json</a> directly to inspect the data.</p></article>`;
+    document.getElementById('cards').innerHTML = `<article><h2>Prospect data did not load</h2><p>${error.message}</p><p>Open <a href="/showcase-prospects/showcase-leads.json">showcase-leads.json</a> directly to inspect the data.</p></article>`;
   });
 </script>
 </body>
