@@ -8,11 +8,17 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Rick's Cabaret Central City - Nightlife Escape">
   <meta property="og:description" content="Late-night steakhouse, lounge, and cabaret campaign for the Central City / Black Hawk corridor.">
-  <meta property="og:image" content="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg">
+  <meta property="og:image" content="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg">
+  <link rel="canonical" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit">
+  <script>
+    if ((location.protocol === 'file:' || location.hostname === '127.0.0.1' || location.hostname === 'localhost') && !location.search.includes('local=1')) {
+      location.replace('https://satcom.5280.menu/ricks-cabaret-campaign-kit/');
+    }
+  </script>
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Rick's Cabaret Central City - Nightlife Escape">
   <meta name="twitter:description" content="A complete campaign kit for late-night dining and nightlife near Black Hawk.">
-  <meta name="twitter:image" content="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg">
+  <meta name="twitter:image" content="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
@@ -23,7 +29,7 @@
     "name": "Rick's Cabaret & Steakhouse Central City",
     "url": "https://www.rickscentral.com/",
     "telephone": "+1-720-669-9470",
-    "image": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg",
+    "image": "https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "130 Main St",
@@ -159,7 +165,7 @@
       background:
         linear-gradient(90deg, rgba(8,8,10,.95) 0%, rgba(8,8,10,.64) 42%, rgba(8,8,10,.18) 100%),
         linear-gradient(0deg, var(--midnight) 0%, rgba(8,8,10,.08) 42%),
-        url("https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg") center / cover no-repeat;
+        url("https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg") center / cover no-repeat;
       transform: scale(1.02);
     }
 
@@ -328,7 +334,7 @@
     .showcase-band {
       background:
         linear-gradient(90deg, rgba(63,17,24,.92), rgba(8,8,10,.94)),
-        url("https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/champagne.jpg") center / cover no-repeat;
+        url("https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/champagne.jpg") center / cover no-repeat;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
@@ -368,6 +374,134 @@
       font-style: normal;
       font-size: 13px;
       font-weight: 800;
+    }
+
+    .dashboard-links {
+      display: grid;
+      grid-template-columns: 1.08fr .96fr .96fr;
+      gap: 16px;
+      margin-top: 28px;
+    }
+
+    .dashboard-card {
+      position: relative;
+      min-height: 230px;
+      display: grid;
+      align-content: end;
+      gap: 12px;
+      overflow: hidden;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+      text-decoration: none;
+      isolation: isolate;
+    }
+
+    .dashboard-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: .22;
+      background:
+        linear-gradient(90deg, rgba(216,180,106,.28) 1px, transparent 1px) 0 0 / 42px 42px,
+        linear-gradient(0deg, rgba(216,180,106,.18) 1px, transparent 1px) 0 0 / 42px 42px;
+    }
+
+    .dashboard-card.editorial-feature {
+      min-height: 310px;
+      background:
+        linear-gradient(0deg, rgba(8,8,10,.92), rgba(63,17,24,.54)),
+        url("https://satcom.5280.menu/ricks-cabaret-dashboard/art/series-hero-1600x600.svg") center / cover no-repeat;
+    }
+
+    .dashboard-card b {
+      color: var(--champagne);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .dashboard-card h3 {
+      max-width: 14ch;
+      font-size: clamp(32px, 4vw, 54px);
+    }
+
+    .dashboard-card p {
+      max-width: 560px;
+      margin: 0;
+      color: #d9cebf;
+      line-height: 1.55;
+    }
+
+    .editorial-band {
+      background:
+        linear-gradient(180deg, rgba(8,8,10,.98), rgba(63,17,24,.72)),
+        radial-gradient(circle at 18% 0%, rgba(216,180,106,.18), transparent 32rem);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .editorial-note {
+      margin-bottom: 18px;
+      padding: 14px 16px;
+      color: #ead7b2;
+      border: 1px solid rgba(216,180,106,.36);
+      border-radius: 8px;
+      background: rgba(216,180,106,.08);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .event-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .event-card {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      min-height: 210px;
+      padding: 20px;
+      color: var(--ivory);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025)),
+        radial-gradient(circle at top right, rgba(216,180,106,.12), transparent 18rem);
+    }
+
+    .event-card b {
+      color: var(--champagne);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .event-card h3 {
+      max-width: 15ch;
+      font-size: 26px;
+    }
+
+    .event-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .event-card em {
+      color: var(--champagne);
+      font-style: normal;
+      font-size: 13px;
+      font-weight: 900;
     }
 
     .copy-panel {
@@ -453,7 +587,7 @@
       h1 { font-size: 42px; }
       .hero-sub { font-size: 17px; }
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .feature-grid, .asset-grid, .copy-panel { grid-template-columns: 1fr; }
+      .feature-grid, .asset-grid, .copy-panel, .dashboard-links, .event-grid { grid-template-columns: 1fr; }
       section { padding: 52px 20px; }
       .hero { padding: 74px 20px 46px; }
     }
@@ -470,16 +604,18 @@
 <body>
   <nav class="nav" aria-label="Campaign sections">
     <a class="brand-mark" href="#top">
-      <img src="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/logo-136x75.png" alt="Rick's Cabaret Central City logo">
+      <img src="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/logo-136x75.png" alt="Rick's Cabaret Central City logo">
       <span class="brand-text">
         <strong>Rick's Cabaret Central City</strong>
         <span>Black Hawk corridor campaign kit</span>
       </span>
     </a>
     <div class="nav-links">
-      <a href="#experience">Experience</a>
-      <a href="#assets">Assets</a>
-      <a href="#copy">Copy</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#assets">Campaign Assets</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#banner-ads">Banner Ads</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/">Editorial Campaigns</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#landing-pages">Landing Pages</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#events">Events</a>
       <a href="#distribution">Distribution</a>
       <a href="https://www.rickscentral.com/contact/">Contact</a>
     </div>
@@ -491,9 +627,10 @@
       <h1>Rick's Cabaret Central City</h1>
       <p class="hero-sub">A Monarch-style nightlife campaign for the Central City / Black Hawk corridor: late-night steakhouse reservations, lounge energy, VIP group plans, and cabaret entertainment at 130 Main St.</p>
       <div class="hero-actions">
-        <a class="button primary" href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/">Reserve Steakhouse Seating</a>
-        <a class="button secondary" href="tel:+17206699470">Call (720) 669-9470</a>
-        <a class="button secondary" href="#assets">View Campaign Assets</a>
+        <a class="button primary" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#assets">Campaign Assets</a>
+        <a class="button secondary" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#banner-ads">Banner Ads</a>
+        <a class="button secondary" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/">Editorial Campaigns</a>
+        <a class="button secondary" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#landing-pages">Landing Pages</a>
       </div>
     </div>
   </header>
@@ -501,9 +638,82 @@
   <div class="stats" aria-label="Campaign facts">
     <div class="stat"><strong>130 Main</strong><span>Central City address</span></div>
     <div class="stat"><strong>6 PM-4 AM</strong><span>Thu-Sun campaign hours</span></div>
-    <div class="stat"><strong>3-story</strong><span>Steakhouse, lounge, cabaret</span></div>
+    <div class="stat"><strong>10-part</strong><span>Editorial review series</span></div>
     <div class="stat"><strong>21+</strong><span>Nightlife compliance gate</span></div>
   </div>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Campaign assets.</h2>
+        <p>A client-facing showcase should move from the offer to the proof: reservations, editorial context, creative files, and clear review paths.</p>
+      </div>
+      <div class="dashboard-links">
+        <a class="dashboard-card editorial-feature" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/">
+          <b>Featured editorial</b>
+          <h3>Rick's / RCI NY Case Series</h3>
+          <p>Open the legal-review reader for editor notes and the 10-part opinion/explainer series.</p>
+        </a>
+        <a class="dashboard-card" href="#assets">
+          <b>Creative proofs</b>
+          <h3>Assets ready for review</h3>
+          <p>Open display banners, newsletter HTML, campaign copy, SEO metadata, and the social creative that supports the Rick's showcase.</p>
+        </a>
+        <a class="dashboard-card" id="landing-pages" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/">
+          <b>Landing pages</b>
+          <h3>Live SATCOM landing page</h3>
+          <p>Open the client-facing campaign page with Rick's positioning, official links, event cards, and review-ready creative lanes.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="events">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Upcoming events.</h2>
+        <p>Official Rick's event-card links for campaign placement, social follow-up, newsletter blocks, and sales calls.</p>
+      </div>
+      <div class="event-grid">
+        <a class="event-card" href="https://www.rickscentral.com/event/LouBunchDayOneYearAnniversaryParty_23175/">
+          <b>Official event card</b>
+          <h3>Lou Bunch Day / One Year Anniversary Party</h3>
+          <p>Anniversary party tie-in for the Central City calendar and local-history audience.</p>
+          <em>Open Card</em>
+        </a>
+        <a class="event-card" href="https://www.rickscentral.com/event/FathersDay_22550/">
+          <b>Official event card</b>
+          <h3>Fathers Day</h3>
+          <p>Steakhouse-forward promotion for dinner reservations and weekend groups.</p>
+          <em>Open Card</em>
+        </a>
+        <a class="event-card" href="https://www.rickscentral.com/event/LadiesNight_23192/">
+          <b>Official event card</b>
+          <h3>Ladies Night</h3>
+          <p>Monthly event creative for newsletter, social, and cabaret-audience promotion.</p>
+          <em>Open Card</em>
+        </a>
+        <a class="event-card" href="https://www.rickscentral.com/event/StillsinTheHills_23176/">
+          <b>Official event card</b>
+          <h3>Stills in The Hills</h3>
+          <p>Central City festival traffic, streetside food and beverage, and local weekend discovery.</p>
+          <em>Open Card</em>
+        </a>
+        <a class="event-card" href="https://www.rickscentral.com/event/RedWhiteandBlueParty_23177/">
+          <b>Official event card</b>
+          <h3>Red, White, and Blue Party</h3>
+          <p>Fourth of July creative lane for red-white-blue nightlife, BBQ specials, and free-cover copy.</p>
+          <em>Open Card</em>
+        </a>
+        <a class="event-card" href="https://www.rickscentral.com/event/MiamiViceWeek_23179/">
+          <b>Official event card</b>
+          <h3>Miami Vice Week</h3>
+          <p>Neon summer-party creative for late-night display, social, and newsletter placements.</p>
+          <em>Open Card</em>
+        </a>
+      </div>
+    </div>
+  </section>
 
   <section id="experience">
     <div class="wrap">
@@ -513,21 +723,21 @@
       </div>
       <div class="feature-grid">
         <article class="feature">
-          <img src="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/steakhouse.jpg" alt="Rick's Central City steakhouse">
+          <img src="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/steakhouse.jpg" alt="Rick's Central City steakhouse">
           <div class="feature-body">
             <h3>Steakhouse Upstairs</h3>
             <p>Premium cuts, booth seating, wines, champagne, and a reservation-first path for guests who want the night to start with dinner.</p>
           </div>
         </article>
         <article class="feature">
-          <img src="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/champagne.jpg" alt="Fine wine and champagne at Rick's">
+          <img src="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/champagne.jpg" alt="Fine wine and champagne at Rick's">
           <div class="feature-body">
             <h3>VIP Group Energy</h3>
             <p>Bachelor parties, birthday groups, casino crews, and weekend travelers get one destination that works after normal dinner hours.</p>
           </div>
         </article>
         <article class="feature">
-          <img src="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/entertainment-lounge.jpg" alt="Rick's entertainment lounge">
+          <img src="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/entertainment-lounge.jpg" alt="Rick's entertainment lounge">
           <div class="feature-body">
             <h3>Cabaret + Lounge</h3>
             <p>Two floors of nightlife, music, sports on screen, full bar service, and cabaret entertainment in historic Central City.</p>
@@ -540,10 +750,10 @@
   <section class="showcase-band" id="assets">
     <div class="wrap">
       <div class="section-head">
-        <h2>Campaign assets.</h2>
-        <p>The kit mirrors the Monarch showcase structure: landing-page story, IAB banner sizes, social creative, newsletter HTML, editorial copy, SEO metadata, and an operator handoff manifest.</p>
+        <h2>Asset library.</h2>
+        <p>The kit mirrors the strongest showcase structure: landing-page story, IAB banner sizes, social creative, newsletter HTML, editorial copy, SEO metadata, and operator handoff links.</p>
       </div>
-      <div class="asset-grid">
+      <div class="asset-grid" id="banner-ads">
         <a class="asset" href="./manifest.json"><strong>Manifest</strong><span>Brand colors, audience, deliverable map, official facts, and art route.</span><em>Open JSON</em></a>
         <a class="asset" href="./banners/banner-leaderboard-728x90.html"><strong>Leaderboard</strong><span>728x90 display ad for local news, directory, and campaign inventory.</span><em>Preview</em></a>
         <a class="asset" href="./banners/banner-medium-rect-300x250.html"><strong>Medium Rectangle</strong><span>300x250 display ad with corridor-nightlife positioning.</span><em>Preview</em></a>
@@ -552,7 +762,28 @@
         <a class="asset" href="./banners/banner-social-square-1080x1080.html"><strong>Social Square</strong><span>1080x1080 creative copy for Instagram and Facebook handoff.</span><em>Preview</em></a>
         <a class="asset" href="./email/newsletter-nightlife-escape.html"><strong>Newsletter HTML</strong><span>Subscriber-ready email creative with reservation CTA.</span><em>Open</em></a>
         <a class="asset" href="./editorial/campaign-copy.md"><strong>Campaign Copy</strong><span>Landing copy, banner lines, print strip, audio spot, and drip sequence.</span><em>Open MD</em></a>
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/"><strong>NY Case Editorial</strong><span>Editor notes plus the 10-part opinion/explainer series in legal-review status.</span><em>Open Reader</em></a>
         <a class="asset" href="./seo/meta.json"><strong>SEO Meta</strong><span>Title, description, keywords, Open Graph, and Twitter card data.</span><em>Open JSON</em></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="editorial-band" id="editorial">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Editorial feature.</h2>
+        <p>The Rick's showcase now carries the editorial lane up front: not as a loose file dump, but as a reviewable series with notes, part selection, and legal-review status visible.</p>
+      </div>
+      <div class="editorial-note">
+        Draft/legal-review only. Charges described in this series must remain attributed as allegations; defendants are presumed innocent unless and until proven guilty.
+      </div>
+      <div class="asset-grid">
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/"><strong>Series Reader</strong><span>Open editor notes and all 10 draft parts in the Rick's dashboard reader.</span><em>Open</em></a>
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=01-presumed-innocent.md"><strong>Part 01</strong><span>Presumed Innocent: Central City Should Let the Court Do Its Job.</span><em>Review</em></a>
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=03-lou-bunch-mirror.md"><strong>Part 03</strong><span>The Lou Bunch Mirror: local history and the double-standard frame.</span><em>Review</em></a>
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=07-record-fairly-stated.md"><strong>Part 07</strong><span>The Record, Fairly Stated: allegations and RCI's answer held together.</span><em>Review</em></a>
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/art/series-hero-1600x600.svg"><strong>Series Hero Art</strong><span>Editorial hero art from the Rick's operator dashboard.</span><em>Open SVG</em></a>
+        <a class="asset" href="https://satcom.5280.menu/ricks-cabaret-dashboard/art/series-social-1080.svg"><strong>Social Editorial Art</strong><span>Square social artwork for review and proofing.</span><em>Open SVG</em></a>
       </div>
     </div>
   </section>
@@ -560,7 +791,7 @@
   <section id="copy">
     <div class="wrap">
       <div class="section-head">
-        <h2>Message spine.</h2>
+        <h2>Campaign copy assets.</h2>
         <p>Keep the campaign premium, direct, and corridor-aware. Use "Central City / Black Hawk corridor" or "near Black Hawk" so the campaign reaches Black Hawk guests without mislabeling the venue address.</p>
       </div>
       <div class="copy-panel">
@@ -629,8 +860,8 @@
 
   <footer class="footer">
     <div class="wrap">
-      <span>Rick's Cabaret Central City campaign kit - built for CoPress dashboard static hosting.</span>
-      <span>Official facts checked against rickscentral.com on 2026-05-16.</span>
+      <span>Rick's Cabaret Central City showcase kit - reservations, creative assets, and editorial review.</span>
+      <span>Official venue facts checked against rickscentral.com on 2026-05-16; editorial drafts require legal review before publication.</span>
     </div>
   </footer>
 </body>
