@@ -11,6 +11,7 @@
       "priority": "Hot",
       "kitPath": "/ricks-cabaret-campaign-kit/",
       "dashboardPath": "/ricks-cabaret-dashboard/",
+      "satcomPath": "/",
       "editorialPath": "/ricks-cabaret-dashboard/editorial/ny-case-series/",
       "manifestPath": "/ricks-cabaret-campaign-kit/manifest.json",
       "emailPath": "/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html",

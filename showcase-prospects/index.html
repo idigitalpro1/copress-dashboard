@@ -185,10 +185,11 @@ function render(data) {
     const emailUrl = absoluteUrl(lead.emailPath);
     const onboardingUrl = absoluteUrl(lead.onboardingUrl);
     const editorialUrl = absoluteUrl(lead.editorialPath);
+    const satcomUrl = absoluteUrl(lead.satcomPath);
     const smsHref = `sms:?&body=${encodeURIComponent(template(lead.sms, mainUrl))}`;
     const mailHref = `mailto:?subject=${encodeURIComponent(lead.emailSubject || lead.campaign)}&body=${encodeURIComponent(template(lead.emailBody, mainUrl))}`;
     const priorityClass = (lead.priority || '').toLowerCase();
-    const flow = ['Prospect', lead.onboardingUrl ? 'Onboard' : '', 'SMS', lead.dashboardPath ? 'Dashboard' : '', lead.editorialPath ? 'Editorial' : '', lead.kitPath ? 'Kit' : ''].filter(Boolean);
+    const flow = ['Prospect', lead.onboardingUrl ? 'Onboard' : '', 'SMS', lead.dashboardPath ? 'Dashboard' : '', lead.satcomPath ? 'SATCOM' : '', lead.editorialPath ? 'Editorial' : '', lead.kitPath ? 'Kit' : ''].filter(Boolean);
 
     return `
       <article>
@@ -206,6 +207,7 @@ function render(data) {
         <div class="next">${lead.nextAction}</div>
         <div class="card-actions">
           ${link('Open', mainUrl, true)}
+          ${link('SATCOM', satcomUrl)}
           ${link('Onboard', onboardingUrl)}
           ${link('Kit', kitUrl)}
           ${link('Ed', editorialUrl)}
