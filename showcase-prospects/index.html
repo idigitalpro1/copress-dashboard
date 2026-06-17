@@ -102,6 +102,21 @@
     .industry { color: var(--gold); font-size: 12px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
     .status { color: var(--paper); font-size: 13px; font-weight: 800; }
     .next { padding: 11px; border-left: 3px solid var(--gold); background: rgba(216,170,76,.08); color: #d6dfeb; font-size: 13px; }
+    .flow { display: flex; flex-wrap: wrap; gap: 6px; }
+    .flow span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 4px 7px;
+      border: 1px solid rgba(216,170,76,.25);
+      border-radius: 999px;
+      color: #d8cda9;
+      background: rgba(216,170,76,.07);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
     .card-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: auto; }
     .card-actions .btn { width: 100%; min-height: 36px; font-size: 11px; padding-inline: 8px; }
     .notice { margin: 18px 0; padding: 14px 16px; border: 1px solid rgba(216,170,76,.34); border-radius: 8px; background: rgba(216,170,76,.08); color: #d8cda9; font-size: 13px; }
@@ -127,14 +142,14 @@
   </section>
 
   <div class="notice">
-    Rick's Claude output is attached as an operator dashboard at <code>/ricks-cabaret-dashboard/</code>. NY case editorial material remains draft/legal-review only.
+    Logic flows from here: pick the prospect, send onboarding/SMS, open the operator dashboard, then review editorial, creative, manifest, and kit proof links. Rick's editorial remains draft/legal-review only.
   </div>
 
   <section class="stats" aria-label="Showcase prospect counts">
     <div class="stat"><b id="count-all">0</b><span>Total cards</span></div>
     <div class="stat"><b id="count-hot">0</b><span>Hot leads</span></div>
     <div class="stat"><b id="count-active">0</b><span>Active kits</span></div>
-    <div class="stat"><b id="count-assets">0</b><span>Proof paths</span></div>
+    <div class="stat"><b id="count-onboard">0</b><span>Onboarding links</span></div>
   </section>
 
   <section class="grid" id="cards" aria-live="polite"></section>
@@ -160,16 +175,19 @@ function render(data) {
   document.getElementById('count-all').textContent = leads.length;
   document.getElementById('count-hot').textContent = leads.filter((lead) => lead.priority === 'Hot').length;
   document.getElementById('count-active').textContent = leads.filter((lead) => /active|hot|house/i.test(lead.priority)).length;
-  document.getElementById('count-assets').textContent = leads.filter((lead) => lead.manifestPath || lead.emailPath).length;
+  document.getElementById('count-onboard').textContent = leads.filter((lead) => lead.onboardingUrl).length;
 
   document.getElementById('cards').innerHTML = leads.map((lead) => {
     const mainUrl = absoluteUrl(lead.dashboardPath || lead.kitPath);
     const kitUrl = absoluteUrl(lead.kitPath);
     const manifestUrl = absoluteUrl(lead.manifestPath);
     const emailUrl = absoluteUrl(lead.emailPath);
+    const onboardingUrl = absoluteUrl(lead.onboardingUrl);
+    const editorialUrl = absoluteUrl(lead.editorialPath);
     const smsHref = `sms:?&body=${encodeURIComponent(template(lead.sms, mainUrl))}`;
     const mailHref = `mailto:?subject=${encodeURIComponent(lead.emailSubject || lead.campaign)}&body=${encodeURIComponent(template(lead.emailBody, mainUrl))}`;
     const priorityClass = (lead.priority || '').toLowerCase();
+    const flow = ['Prospect', lead.onboardingUrl ? 'Onboard' : '', 'SMS', lead.dashboardPath ? 'Dashboard' : '', lead.editorialPath ? 'Editorial' : '', lead.kitPath ? 'Kit' : ''].filter(Boolean);
 
     return `
       <article>
@@ -183,10 +201,13 @@ function render(data) {
         </div>
         <div class="status">${lead.status}</div>
         <p>${lead.fit}</p>
+        <div class="flow">${flow.map((step) => `<span>${step}</span>`).join('')}</div>
         <div class="next">${lead.nextAction}</div>
         <div class="card-actions">
           ${link('Open', mainUrl, true)}
+          ${link('Onboard', onboardingUrl)}
           ${link('Kit', kitUrl)}
+          ${link('Ed', editorialUrl)}
           ${link('Email', mailHref)}
           ${link('SMS', smsHref)}
           ${link('Manifest', manifestUrl)}
