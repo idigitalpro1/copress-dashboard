@@ -2,6 +2,19 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "ricks.conews.press"
+        }
+      ],
+      "destination": "/ricks-conews-press/",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/",
@@ -13,17 +26,6 @@
         }
       ],
       "destination": "/subscribe-villager"
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "header",
-          "key": "host",
-          "value": "ricks.conews.press"
-        }
-      ],
-      "destination": "/ricks-conews-press"
     },
     {
       "source": "/console/api/hermes/:path*",
