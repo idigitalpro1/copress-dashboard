@@ -23,17 +23,14 @@
       overflow: hidden;
       background: #0b0b10 url("https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg") center / cover no-repeat;
     }
-    .muse-video {
+    .video-layer {
       position: absolute;
       inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       opacity: .78;
       background: url("https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg") center / cover no-repeat;
-    }
-    .muse-video iframe,
-    .muse-video video,
-    .muse-video > div {
-      width: 100% !important;
-      height: 100% !important;
     }
     .shade {
       position: absolute;
@@ -107,7 +104,9 @@
 </head>
 <body>
   <section class="video-header" id="video-header">
-    <div class="muse-video" id="museHeroVideo" aria-hidden="true"></div>
+    <video class="video-layer" autoplay muted loop playsinline preload="metadata" poster="https://satcom.5280.menu/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg" aria-hidden="true">
+      <source src="https://cdn.skiv.com/u/qHgGJJG/f5f091f7fca3a9bbbe736ef9aa50566d8995c4ff3123e5dbe5673b35347e54fd/data" type="video/mp4">
+    </video>
     <div class="shade"></div>
     <div class="copy">
       <div class="eyebrow">Rick's Cabaret Central City</div>
@@ -119,34 +118,6 @@
       </div>
     </div>
   </section>
-  <div class="note">Video source: Muse.ai id <strong>SaMEAww</strong>, matching the current Rick's official homepage embed.</div>
-  <script src="https://muse.ai/static/js/embed-player.min.js" defer></script>
-  <script>
-    function initRicksVideoHeader() {
-      const target = document.getElementById('museHeroVideo');
-      if (!window.MusePlayer || !target || target.dataset.videoReady) return;
-      target.dataset.videoReady = '1';
-      window.MusePlayer({
-        container: '#museHeroVideo',
-        video: 'SaMEAww',
-        width: '100%',
-        autoplay: true,
-        loop: true,
-        title: false,
-        search: false,
-        sizing: 'fill',
-        logo: false,
-        style: 'no-controls',
-        volume: 0
-      });
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initRicksVideoHeader);
-    } else {
-      initRicksVideoHeader();
-    }
-    window.addEventListener('load', initRicksVideoHeader, { once: true });
-  </script>
+  <div class="note">Video source: Muse.ai / Skiv id <strong>SaMEAww</strong>, rendered through the public CDN video file so the header paints immediately.</div>
 </body>
 </html>

@@ -163,16 +163,12 @@
       position: absolute;
       inset: 0;
       z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       opacity: .72;
       pointer-events: none;
       background: url("https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg") center / cover no-repeat;
-    }
-
-    .hero-video iframe,
-    .hero-video video,
-    .hero-video > div {
-      width: 100% !important;
-      height: 100% !important;
     }
 
     .hero::before {
@@ -286,6 +282,82 @@
       font-size: 13px;
     }
 
+    .inline-banner-showcase {
+      padding-top: 52px;
+      background:
+        radial-gradient(circle at 88% 0%, rgba(216,180,106,.18), transparent 28rem),
+        linear-gradient(180deg, #0a0a0d, #13070b 64%, #08080a);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .inline-banner-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .inline-banner-head .section-head {
+      margin-bottom: 0;
+    }
+
+    .banner-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .banner-proof-card {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .banner-proof-card.featured {
+      grid-column: span 2;
+    }
+
+    .banner-proof-card b {
+      color: var(--champagne);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .banner-proof-card span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .inline-ad-stage {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 6px;
+      background:
+        linear-gradient(45deg, rgba(255,255,255,.035) 25%, transparent 25%) 0 0 / 18px 18px,
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,.035) 75%) 0 0 / 18px 18px,
+        #0b0b0d;
+    }
+
+    .inline-ad-stage iframe {
+      display: block;
+      width: var(--ad-w);
+      height: var(--ad-h);
+      border: 0;
+      transform: scale(var(--ad-scale, 1));
+      transform-origin: top left;
+      background: var(--midnight);
+    }
+
     section {
       padding: 72px 28px;
     }
@@ -393,68 +465,6 @@
       font-weight: 800;
     }
 
-    .dashboard-links {
-      display: grid;
-      grid-template-columns: 1.08fr .96fr .96fr;
-      gap: 16px;
-      margin-top: 28px;
-    }
-
-    .dashboard-card {
-      position: relative;
-      min-height: 230px;
-      display: grid;
-      align-content: end;
-      gap: 12px;
-      overflow: hidden;
-      padding: 24px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,.045);
-      text-decoration: none;
-      isolation: isolate;
-    }
-
-    .dashboard-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      opacity: .22;
-      background:
-        linear-gradient(90deg, rgba(216,180,106,.28) 1px, transparent 1px) 0 0 / 42px 42px,
-        linear-gradient(0deg, rgba(216,180,106,.18) 1px, transparent 1px) 0 0 / 42px 42px;
-    }
-
-    .dashboard-card.editorial-feature {
-      min-height: 310px;
-      border-color: rgba(169,45,66,.5);
-      background:
-        radial-gradient(circle at 78% 18%, rgba(181,31,44,.42), transparent 60%),
-        linear-gradient(155deg, #2a0c12 0%, #14060a 58%, #08080a 100%);
-    }
-    .dashboard-card.editorial-feature::before { opacity: .12; }
-
-    .dashboard-card b {
-      color: var(--champagne);
-      font-size: 12px;
-      font-weight: 900;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-
-    .dashboard-card h3 {
-      max-width: 14ch;
-      font-size: clamp(32px, 4vw, 54px);
-    }
-
-    .dashboard-card p {
-      max-width: 560px;
-      margin: 0;
-      color: #d9cebf;
-      line-height: 1.55;
-    }
-
     .editorial-band {
       background:
         linear-gradient(180deg, rgba(8,8,10,.98), rgba(63,17,24,.72)),
@@ -472,6 +482,155 @@
       background: rgba(216,180,106,.08);
       font-size: 14px;
       line-height: 1.55;
+    }
+
+    .editorial-layout {
+      display: grid;
+      grid-template-columns: 300px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .editorial-list,
+    .editorial-reader {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.045);
+    }
+
+    .editorial-list {
+      display: grid;
+      gap: 7px;
+      padding: 12px;
+      position: sticky;
+      top: 92px;
+    }
+
+    .doc-link {
+      display: block;
+      width: 100%;
+      padding: 10px 11px;
+      color: var(--ivory);
+      border: 1px solid rgba(216,180,106,.2);
+      border-radius: 7px;
+      background: rgba(8,8,10,.35);
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .doc-link:hover,
+    .doc-link.active {
+      border-color: var(--champagne);
+      background: rgba(216,180,106,.12);
+    }
+
+    .doc-link b {
+      display: block;
+      color: var(--champagne);
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .doc-link span {
+      display: block;
+      margin-top: 3px;
+      color: #dfd6ca;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .editorial-reader {
+      min-height: 650px;
+      padding: 22px;
+    }
+
+    .editorial-reader article {
+      max-width: 790px;
+    }
+
+    .editorial-reader h1,
+    .editorial-reader h2,
+    .editorial-reader h3 {
+      font-family: "Playfair Display", Georgia, serif;
+      color: #fff;
+      line-height: 1.08;
+    }
+
+    .editorial-reader h1 { font-size: clamp(34px, 5vw, 54px); }
+    .editorial-reader h2 { margin-top: 28px; color: var(--champagne); font-size: 28px; }
+    .editorial-reader h3 { margin-top: 22px; font-size: 22px; }
+    .editorial-reader p,
+    .editorial-reader li {
+      color: #d9d1c4;
+      line-height: 1.65;
+    }
+    .editorial-reader blockquote {
+      margin: 18px 0;
+      padding: 12px 16px;
+      color: #ead7b2;
+      border-left: 3px solid var(--champagne);
+      background: rgba(216,180,106,.07);
+    }
+    .editorial-reader code { color: var(--champagne); }
+
+    .editorial-tools,
+    .request-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .request-card {
+      margin-top: 18px;
+      padding: 18px;
+      border: 1px solid rgba(216,180,106,.35);
+      border-radius: 8px;
+      background: rgba(216,180,106,.07);
+    }
+
+    .request-card h3 {
+      margin-bottom: 8px;
+      color: var(--champagne);
+      font-size: 28px;
+    }
+
+    .request-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .request-card label {
+      display: grid;
+      gap: 6px;
+      color: var(--champagne);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .request-card input,
+    .request-card textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px;
+      color: var(--ivory);
+      background: rgba(8,8,10,.72);
+      font: inherit;
+    }
+
+    .request-card textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .request-card .wide {
+      grid-column: 1 / -1;
     }
 
     .event-grid {
@@ -543,6 +702,39 @@
       font-weight: 900;
     }
 
+    .event-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .event-actions a,
+    .event-actions button {
+      display: inline-flex;
+      min-height: 34px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 10px;
+      color: var(--ivory);
+      border: 1px solid rgba(216,180,106,.34);
+      border-radius: 6px;
+      background: rgba(8,8,10,.48);
+      font: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .event-actions .primary-action {
+      color: var(--midnight);
+      background: var(--champagne);
+      border-color: var(--champagne);
+    }
+
     .distribution {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -602,7 +794,10 @@
       h1 { font-size: 42px; }
       .hero-sub { font-size: 17px; }
       .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .feature-grid, .asset-grid, .dashboard-links, .event-grid, .distribution { grid-template-columns: 1fr; }
+      .feature-grid, .asset-grid, .event-grid, .distribution, .banner-proof-grid, .editorial-layout { grid-template-columns: 1fr; }
+      .banner-proof-card.featured { grid-column: auto; }
+      .inline-banner-head { align-items: flex-start; flex-direction: column; }
+      .editorial-list { position: static; }
       section { padding: 52px 20px; }
       .hero { padding: 74px 20px 46px; }
     }
@@ -613,6 +808,7 @@
       .section-head h2 { font-size: 31px; }
       .stats { grid-template-columns: 1fr; }
       .hero-actions .button { width: 100%; }
+      .request-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -626,29 +822,75 @@
       </span>
     </a>
     <div class="nav-links">
+      <a href="#banner-ads">Banner Ads</a>
+      <a href="#events">Upcoming Events</a>
       <a href="#assets">Campaign Assets</a>
-      <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/banner-ads/">Banner Ads</a>
-      <a href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/">Editorial Campaigns</a>
-      <a href="#events">Events</a>
+      <a href="#editorial-assets">Editorial Assets</a>
       <a href="#distribution">Distribution</a>
       <a href="https://www.rickscentral.com/contact/">Contact</a>
     </div>
   </nav>
 
   <header class="hero" id="top">
-    <div class="hero-video" id="ricksHeroVideo" aria-hidden="true"></div>
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg" aria-hidden="true">
+      <source src="https://cdn.skiv.com/u/qHgGJJG/f5f091f7fca3a9bbbe736ef9aa50566d8995c4ff3123e5dbe5673b35347e54fd/data" type="video/mp4">
+    </video>
     <div class="hero-inner">
       <div class="eyebrow">Campaign Showcase</div>
       <h1>Rick's Cabaret Central City</h1>
       <p class="hero-sub">A Monarch-style nightlife campaign for the Central City / Black Hawk corridor: late-night steakhouse reservations, lounge energy, VIP group plans, and cabaret entertainment at 130 Main St.</p>
       <div class="hero-actions">
-        <a class="button primary" href="#assets">Campaign Assets</a>
-        <a class="button secondary" href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/banner-ads/">Banner Ads</a>
-        <a class="button secondary" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/">Editorial Campaigns</a>
-        <a class="button secondary" href="#events">Events</a>
+        <a class="button primary" href="#banner-ads">Banner Ads</a>
+        <a class="button secondary" href="#events">Upcoming Events</a>
+        <a class="button secondary" href="#assets">Campaign Assets</a>
+        <a class="button secondary" href="#editorial-assets">Editorial Assets</a>
       </div>
     </div>
   </header>
+
+  <section class="inline-banner-showcase" id="banner-ads">
+    <div class="wrap">
+      <div class="inline-banner-head">
+        <div class="section-head">
+          <h2>Banner ads.</h2>
+          <p>Rendered display units sit directly below the video header for fast client review: leaderboard, article rectangle, rail units, mobile, and social square.</p>
+        </div>
+        <a class="button secondary" href="./banner-ads/">Open full banner feed</a>
+      </div>
+      <div class="banner-proof-grid" aria-label="Inline Rick's banner ad proofs">
+        <article class="banner-proof-card featured">
+          <b>Leaderboard</b>
+          <div class="inline-ad-stage" data-w="728" data-h="90"><iframe src="./banners/banner-leaderboard-728x90.html" title="Rick's leaderboard banner"></iframe></div>
+          <span>728 x 90 top-of-page display</span>
+        </article>
+        <article class="banner-proof-card">
+          <b>Medium rectangle</b>
+          <div class="inline-ad-stage" data-w="300" data-h="250"><iframe src="./banners/banner-medium-rect-300x250.html" title="Rick's medium rectangle banner"></iframe></div>
+          <span>300 x 250 article placement</span>
+        </article>
+        <article class="banner-proof-card">
+          <b>Skyscraper</b>
+          <div class="inline-ad-stage" data-w="160" data-h="600"><iframe src="./banners/banner-skyscraper-160x600.html" title="Rick's skyscraper banner"></iframe></div>
+          <span>160 x 600 desktop rail</span>
+        </article>
+        <article class="banner-proof-card">
+          <b>Half page</b>
+          <div class="inline-ad-stage" data-w="300" data-h="600"><iframe src="./banners/banner-half-page-300x600.html" title="Rick's half-page banner"></iframe></div>
+          <span>300 x 600 premium display</span>
+        </article>
+        <article class="banner-proof-card">
+          <b>Mobile</b>
+          <div class="inline-ad-stage" data-w="320" data-h="50"><iframe src="./banners/banner-mobile-320x50.html" title="Rick's mobile banner"></iframe></div>
+          <span>320 x 50 phone placement</span>
+        </article>
+        <article class="banner-proof-card featured">
+          <b>Social square</b>
+          <div class="inline-ad-stage" data-w="1080" data-h="1080"><iframe src="./banners/banner-social-square-1080x1080.html" title="Rick's social square banner"></iframe></div>
+          <span>1080 x 1080 paid and organic social proof</span>
+        </article>
+      </div>
+    </div>
+  </section>
 
   <div class="stats" aria-label="Campaign facts">
     <div class="stat"><strong>130 Main</strong><span>Central City address</span></div>
@@ -657,88 +899,97 @@
     <div class="stat"><strong>21+</strong><span>Nightlife compliance gate</span></div>
   </div>
 
-  <section>
-    <div class="wrap">
-      <div class="section-head">
-        <h2>Campaign assets.</h2>
-        <p>A client-facing showcase should move from the offer to the proof: reservations, editorial context, creative files, and clear review paths.</p>
-      </div>
-      <div class="dashboard-links">
-        <a class="dashboard-card editorial-feature" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/">
-          <b>Featured editorial</b>
-          <h3>Rick's Official U.S. Press Kit</h3>
-          <p>Open the legal-review reader for publisher notes, edit requests, and the official press-kit editorial materials.</p>
-        </a>
-        <a class="dashboard-card" href="#assets">
-          <b>Creative proofs</b>
-          <h3>Assets ready for review</h3>
-          <p>Open display banners, newsletter HTML, campaign copy, SEO metadata, and the social creative that supports the Rick's showcase.</p>
-        </a>
-      </div>
-    </div>
-  </section>
-
   <section id="events">
     <div class="wrap">
       <div class="section-head">
         <h2>Upcoming events.</h2>
-        <p>Official Rick's event-card links for campaign placement, social follow-up, newsletter blocks, and sales calls.</p>
+        <p>Official Rick's event cards with social-ready posting links for campaign placement, newsletter follow-up, and sales calls.</p>
       </div>
       <div class="event-grid">
-        <a class="event-card" href="https://www.rickscentral.com/event/LouBunchDayOneYearAnniversaryParty_23175/">
+        <article class="event-card" data-url="https://www.rickscentral.com/event/LouBunchDayOneYearAnniversaryParty_23175/" data-caption="Lou Bunch Day plus Rick's Cabaret Central City One Year Anniversary Party. Madam Lou Bunch Bed Race, then the party at 130 Main St. Central City. Doors open 11am. 21+.">
           <span class="ev-media"><img src="/ricks-cabaret-campaign-kit/assets/events/lou-bunch-anniversary.jpg" alt="Lou Bunch Day and one year anniversary party at Rick's Cabaret Central City"></span>
-          <span class="ev-body">
+          <div class="ev-body">
             <b>Official event card</b>
             <h3>Lou Bunch Day / One Year Anniversary Party</h3>
             <p>Madam Lou Bunch Bed Race, then Rick's one-year anniversary party. Doors open 11am.</p>
-            <em>Open Card &rarr;</em>
-          </span>
-        </a>
-        <a class="event-card" href="https://www.rickscentral.com/event/FathersDay_22550/">
+            <div class="event-actions">
+              <button class="primary-action" type="button" onclick="copyEventCaption(this)">Copy caption</button>
+              <a href="https://www.rickscentral.com/event/LouBunchDayOneYearAnniversaryParty_23175/">Open card</a>
+              <a href="#" onclick="return shareEventX(this)">Post X</a>
+              <a href="#" onclick="return shareEventFb(this)">Share FB</a>
+            </div>
+          </div>
+        </article>
+        <article class="event-card" data-url="https://www.rickscentral.com/event/FathersDay_22550/" data-caption="Father's Day at Rick's Cabaret Central City: $60 Steak and Lobster with complimentary champagne. Treat Dad to late-night steakhouse energy near Black Hawk. 130 Main St. 21+.">
           <span class="ev-media"><img src="/ricks-cabaret-campaign-kit/assets/events/fathers-day.jpg" alt="Father's Day steak and lobster special at Rick's Central City"></span>
-          <span class="ev-body">
+          <div class="ev-body">
             <b>Official event card</b>
             <h3>Fathers Day</h3>
             <p>$60 Steak &amp; Lobster with complimentary champagne to celebrate Dad.</p>
-            <em>Open Card &rarr;</em>
-          </span>
-        </a>
-        <a class="event-card" href="https://www.rickscentral.com/event/LadiesNight_23192/">
+            <div class="event-actions">
+              <button class="primary-action" type="button" onclick="copyEventCaption(this)">Copy caption</button>
+              <a href="https://www.rickscentral.com/event/FathersDay_22550/">Open card</a>
+              <a href="#" onclick="return shareEventX(this)">Post X</a>
+              <a href="#" onclick="return shareEventFb(this)">Share FB</a>
+            </div>
+          </div>
+        </article>
+        <article class="event-card" data-url="https://www.rickscentral.com/event/LadiesNight_23192/" data-caption="Ladies Night is back at Rick's Cabaret Central City on June 24. Ladies get in free plus $5 drink specials all night. 130 Main St. Central City. 21+.">
           <span class="ev-media"><img src="/ricks-cabaret-campaign-kit/assets/events/ladies-night.jpg" alt="Ladies Night at Rick's Cabaret Central City"></span>
-          <span class="ev-body">
+          <div class="ev-body">
             <b>Official event card</b>
             <h3>Ladies Night</h3>
             <p>3rd ever Ladies Night, June 24 &mdash; ladies free, $5 drink specials all night.</p>
-            <em>Open Card &rarr;</em>
-          </span>
-        </a>
-        <a class="event-card" href="https://www.rickscentral.com/event/StillsinTheHills_23176/">
+            <div class="event-actions">
+              <button class="primary-action" type="button" onclick="copyEventCaption(this)">Copy caption</button>
+              <a href="https://www.rickscentral.com/event/LadiesNight_23192/">Open card</a>
+              <a href="#" onclick="return shareEventX(this)">Post X</a>
+              <a href="#" onclick="return shareEventFb(this)">Share FB</a>
+            </div>
+          </div>
+        </article>
+        <article class="event-card" data-url="https://www.rickscentral.com/event/StillsinTheHills_23176/" data-caption="Stills in The Hills weekend in Central City: make Rick's Cabaret Central City the late-night stop for food, drinks, and cabaret energy near Black Hawk. 21+.">
           <span class="ev-media"><img src="/ricks-cabaret-campaign-kit/assets/events/stills-in-the-hills.jpg" alt="Stills in the Hills event at Rick's Central City"></span>
-          <span class="ev-body">
+          <div class="ev-body">
             <b>Official event card</b>
             <h3>Stills in The Hills</h3>
             <p>Central City festival traffic, streetside food and beverage, and local weekend discovery.</p>
-            <em>Open Card &rarr;</em>
-          </span>
-        </a>
-        <a class="event-card" href="https://www.rickscentral.com/event/RedWhiteandBlueParty_23177/">
+            <div class="event-actions">
+              <button class="primary-action" type="button" onclick="copyEventCaption(this)">Copy caption</button>
+              <a href="https://www.rickscentral.com/event/StillsinTheHills_23176/">Open card</a>
+              <a href="#" onclick="return shareEventX(this)">Post X</a>
+              <a href="#" onclick="return shareEventFb(this)">Share FB</a>
+            </div>
+          </div>
+        </article>
+        <article class="event-card" data-url="https://www.rickscentral.com/event/RedWhiteandBlueParty_23177/" data-caption="Red, White, and Blue Party at Rick's Cabaret Central City: Fourth of July nightlife, BBQ specials, and free-cover creative for the Black Hawk corridor. 21+.">
           <span class="ev-media"><img src="/ricks-cabaret-campaign-kit/assets/events/red-white-blue.jpg" alt="Red, White, and Blue Party at Rick's Central City"></span>
-          <span class="ev-body">
+          <div class="ev-body">
             <b>Official event card</b>
             <h3>Red, White, and Blue Party</h3>
             <p>Fourth of July creative lane for red-white-blue nightlife, BBQ specials, and free-cover copy.</p>
-            <em>Open Card &rarr;</em>
-          </span>
-        </a>
-        <a class="event-card" href="https://www.rickscentral.com/event/MiamiViceWeek_23179/">
+            <div class="event-actions">
+              <button class="primary-action" type="button" onclick="copyEventCaption(this)">Copy caption</button>
+              <a href="https://www.rickscentral.com/event/RedWhiteandBlueParty_23177/">Open card</a>
+              <a href="#" onclick="return shareEventX(this)">Post X</a>
+              <a href="#" onclick="return shareEventFb(this)">Share FB</a>
+            </div>
+          </div>
+        </article>
+        <article class="event-card" data-url="https://www.rickscentral.com/event/MiamiViceWeek_23179/" data-caption="Miami Vice Week at Rick's Cabaret Central City: neon summer-party energy for late-night display, social, and newsletter placements near Black Hawk. 21+.">
           <span class="ev-media"><img src="/ricks-cabaret-campaign-kit/assets/events/miami-vice-week.jpg" alt="Miami Vice Week neon summer party at Rick's Central City"></span>
-          <span class="ev-body">
+          <div class="ev-body">
             <b>Official event card</b>
             <h3>Miami Vice Week</h3>
             <p>Neon summer-party creative for late-night display, social, and newsletter placements.</p>
-            <em>Open Card &rarr;</em>
-          </span>
-        </a>
+            <div class="event-actions">
+              <button class="primary-action" type="button" onclick="copyEventCaption(this)">Copy caption</button>
+              <a href="https://www.rickscentral.com/event/MiamiViceWeek_23179/">Open card</a>
+              <a href="#" onclick="return shareEventX(this)">Post X</a>
+              <a href="#" onclick="return shareEventFb(this)">Share FB</a>
+            </div>
+          </div>
+        </article>
       </div>
     </div>
   </section>
@@ -783,31 +1034,59 @@
       </div>
       <div class="asset-grid">
         <a class="asset" href="./manifest.json"><strong>Manifest</strong><span>Brand colors, audience, deliverable map, official facts, and art route.</span><em>Open JSON</em></a>
-        <a class="asset" id="banner-ads" href="./banner-ads/"><strong>Banner Ads Feed</strong><span>Rendered leaderboard, medium rectangle, skyscraper, half page, mobile, and social creative in one review page.</span><em>Open Feed</em></a>
+        <a class="asset" href="./banner-ads/"><strong>Banner Ads Feed</strong><span>Rendered leaderboard, medium rectangle, skyscraper, half page, mobile, and social creative in one review page.</span><em>Open Feed</em></a>
         <a class="asset" href="./email/newsletter-nightlife-escape.html"><strong>Newsletter HTML</strong><span>Subscriber-ready email creative with reservation CTA.</span><em>Open</em></a>
         <a class="asset" href="./editorial/campaign-copy.md"><strong>Campaign Copy</strong><span>Landing copy, banner lines, print strip, audio spot, and drip sequence.</span><em>Open MD</em></a>
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/"><strong>Official U.S. Press Kit</strong><span>Publisher notes, edit-request form, and legal-review editorial materials.</span><em>Open Reader</em></a>
+        <a class="asset" href="#editorial-assets"><strong>Official U.S. Press Kit</strong><span>Inline document list, reader, source Markdown, and edit-request form.</span><em>Review Inline</em></a>
         <a class="asset" href="./seo/meta.json"><strong>SEO Meta</strong><span>Title, description, keywords, Open Graph, and Twitter card data.</span><em>Open JSON</em></a>
       </div>
     </div>
   </section>
 
-  <section class="editorial-band" id="editorial">
+  <section class="editorial-band" id="editorial-assets">
     <div class="wrap">
       <div class="section-head">
-        <h2>Editorial feature.</h2>
-        <p>The Rick's showcase now carries the editorial lane up front: not as a loose file dump, but as a reviewable series with notes, part selection, and legal-review status visible.</p>
+        <h2>Editorial assets.</h2>
+        <p>The press-kit reader is inline here: choose a document, read the draft, open the source Markdown, or send Patrick H. Sweeney a change request.</p>
       </div>
       <div class="editorial-note">
         Draft/legal-review only. Charges described in this series must remain attributed as allegations; defendants are presumed innocent unless and until proven guilty.
       </div>
-      <div class="asset-grid">
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/"><strong>Press Kit Reader</strong><span>Open publisher notes and all legal-review editorial materials in the Rick's dashboard reader.</span><em>Open</em></a>
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=01-presumed-innocent.md"><strong>Part 01</strong><span>Presumed Innocent: Central City Should Let the Court Do Its Job.</span><em>Review</em></a>
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=03-lou-bunch-mirror.md"><strong>Part 03</strong><span>The Lou Bunch Mirror: local history and the double-standard frame.</span><em>Review</em></a>
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/?doc=07-record-fairly-stated.md"><strong>Part 07</strong><span>The Record, Fairly Stated: allegations and RCI's answer held together.</span><em>Review</em></a>
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/art/series-hero-1600x600.svg"><strong>Series Hero Art</strong><span>Editorial hero art from the Rick's operator dashboard.</span><em>Open SVG</em></a>
-        <a class="asset" href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/art/series-social-1080.svg"><strong>Social Editorial Art</strong><span>Square social artwork for review and proofing.</span><em>Open SVG</em></a>
+      <div class="editorial-layout">
+        <aside class="editorial-list" id="inline-editorial-list" aria-label="Editorial draft list"></aside>
+        <section class="editorial-reader" aria-label="Inline editorial reader">
+          <article id="inline-editorial-reader">
+            <h1>Rick's Official U.S. Press Kit</h1>
+            <p>Loading editorial draft...</p>
+          </article>
+          <div class="editorial-tools">
+            <a class="button secondary" id="inline-editorial-source" href="/ricks-cabaret-dashboard/editorial/ny-case-series/00-SERIES-EDITOR-NOTES.md">Open source Markdown</a>
+            <a class="button secondary" href="/ricks-cabaret-dashboard/editorial/ny-case-series/">Open standalone reader</a>
+            <a class="button secondary" href="/ricks-cabaret-dashboard/art/series-hero-1600x600.svg">Series hero art</a>
+            <a class="button secondary" href="/ricks-cabaret-dashboard/art/series-social-1080.svg">Social art</a>
+          </div>
+          <form class="request-card" id="inline-edit-request-form">
+            <h3>Request editorial changes.</h3>
+            <p>Send Patrick H. Sweeney a prefilled edit request for the draft currently open in the reader.</p>
+            <div class="request-grid">
+              <label>Your name
+                <input id="inline-request-name" name="name" autocomplete="name" placeholder="Name">
+              </label>
+              <label>Your email
+                <input id="inline-request-email" name="email" autocomplete="email" placeholder="email@example.com">
+              </label>
+              <label class="wide">Document
+                <input id="inline-request-doc" name="document" readonly>
+              </label>
+              <label class="wide">Requested edits
+                <textarea id="inline-request-edits" name="edits" placeholder="Describe the requested edits, corrections, or legal-review notes."></textarea>
+              </label>
+            </div>
+            <div class="request-actions">
+              <button class="button primary" type="submit">Email Patrick H. Sweeney</button>
+            </div>
+          </form>
+        </section>
       </div>
     </div>
   </section>
@@ -819,11 +1098,11 @@
         <p>Live review and placement links for the campaign network. Every card opens a real surface instead of a dead label.</p>
       </div>
       <div class="distribution" aria-label="Distribution channels">
-        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/banner-ads/"><strong>Digital Display</strong><span>Rendered leaderboard, rectangle, skyscraper, half-page, mobile, and social ad feed.</span><em>Open Feed</em></a>
+        <a href="#banner-ads"><strong>Digital Display</strong><span>Rendered leaderboard, rectangle, skyscraper, half-page, mobile, and social ad feed inline.</span><em>Review Inline</em></a>
         <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html"><strong>Newsletter Feature</strong><span>Subscriber-ready email block for campaign review and placement.</span><em>Open HTML</em></a>
         <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/editorial/social-media-copy.md"><strong>Social Queue</strong><span>Caption pack, hashtags, and post copy for social distribution.</span><em>Open Copy</em></a>
         <a href="#events"><strong>Upcoming Events</strong><span>Official Rick's event cards for calendar, newsletter, and social placements.</span><em>Open Cards</em></a>
-        <a href="https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/editorial/ny-case-series/"><strong>Official U.S. Press Kit</strong><span>Publisher notes, edit-request form, and legal-review editorial materials.</span><em>Open Kit</em></a>
+        <a href="#editorial-assets"><strong>Official U.S. Press Kit</strong><span>Inline document reader, source Markdown, art, and edit-request form.</span><em>Review Inline</em></a>
         <a href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/"><strong>Reservations</strong><span>Official Rick's steakhouse reservation path for campaign CTAs.</span><em>Open Rick's</em></a>
         <a href="https://www.rickscentral.com/specials/"><strong>Official Events</strong><span>Rick's live events and specials page for source checks.</span><em>Open Events</em></a>
         <a href="https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/seo/jsonld.json"><strong>SEO / JSON-LD</strong><span>Structured-data proof for the campaign landing page.</span><em>Open JSON</em></a>
@@ -842,33 +1121,163 @@
       <span>Official venue facts checked against rickscentral.com on 2026-05-16; editorial drafts require legal review before publication.</span>
     </div>
   </footer>
-  <script src="https://muse.ai/static/js/embed-player.min.js" defer></script>
   <script>
-    function initRicksHeroVideo() {
-      const target = document.getElementById('ricksHeroVideo');
-      if (!window.MusePlayer || !target || target.dataset.videoReady) return;
-      target.dataset.videoReady = '1';
-      window.MusePlayer({
-        container: '#ricksHeroVideo',
-        video: 'SaMEAww',
-        width: '100%',
-        autoplay: true,
-        loop: true,
-        title: false,
-        search: false,
-        sizing: 'fill',
-        logo: false,
-        style: 'no-controls',
-        volume: 0
+    function scaleInlineAds() {
+      document.querySelectorAll('.inline-ad-stage').forEach((stage) => {
+        const width = Number(stage.dataset.w);
+        const height = Number(stage.dataset.h);
+        const available = stage.clientWidth;
+        const scale = Math.min(1, available / width);
+        stage.style.setProperty('--ad-w', `${width}px`);
+        stage.style.setProperty('--ad-h', `${height}px`);
+        stage.style.setProperty('--ad-scale', scale.toFixed(4));
+        stage.style.height = `${Math.ceil(height * scale)}px`;
       });
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initRicksHeroVideo);
-    } else {
-      initRicksHeroVideo();
+    function eventData(target) {
+      const card = target.closest('.event-card');
+      return {
+        caption: card?.dataset.caption || '',
+        url: card?.dataset.url || ''
+      };
     }
-    window.addEventListener('load', initRicksHeroVideo, { once: true });
+
+    function copyEventCaption(button) {
+      const { caption, url } = eventData(button);
+      const text = `${caption}${url ? `\n${url}` : ''}`;
+      const original = button.textContent;
+      const done = () => {
+        button.textContent = 'Copied';
+        setTimeout(() => { button.textContent = original; }, 1600);
+      };
+      if (navigator.clipboard?.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(() => window.prompt('Copy caption:', text));
+      } else {
+        window.prompt('Copy caption:', text);
+      }
+    }
+
+    function shareEventX(link) {
+      const { caption, url } = eventData(link);
+      window.open(`https://x.com/intent/post?text=${encodeURIComponent(caption)}${url ? `&url=${encodeURIComponent(url)}` : ''}`, '_blank', 'noopener');
+      return false;
+    }
+
+    function shareEventFb(link) {
+      const { url } = eventData(link);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url || location.href)}`, '_blank', 'noopener');
+      return false;
+    }
+
+    const editorialDocs = [
+      ['00-SERIES-EDITOR-NOTES.md', 'Notes', 'Editor working notes'],
+      ['01-presumed-innocent.md', 'Part 01', 'Presumed Innocent'],
+      ['02-allegation-not-verdict.md', 'Part 02', 'Allegation, Not Verdict'],
+      ['03-lou-bunch-mirror.md', 'Part 03', 'The Lou Bunch Mirror'],
+      ['04-proportion-and-priorities.md', 'Part 04', 'Proportion and Priorities'],
+      ['05-trial-by-press-release.md', 'Part 05', 'Trial by Press Release'],
+      ['06-local-stakes.md', 'Part 06', 'Local Stakes'],
+      ['07-record-fairly-stated.md', 'Part 07', 'The Record, Fairly Stated'],
+      ['08-due-process-over-mob-justice.md', 'Part 08', 'Due Process Over Mob Justice'],
+      ['09-selective-morality.md', 'Part 09', 'Selective Morality'],
+      ['10-what-comes-next.md', 'Part 10', 'What Comes Next']
+    ];
+    const editorialBase = '/ricks-cabaret-dashboard/editorial/ny-case-series/';
+    const escapeHtml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    const inlineMarkdown = (value) => escapeHtml(value)
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    function renderMarkdown(markdown) {
+      const body = markdown.replace(/^---[\s\S]*?---\s*/, '').trim();
+      return body.split(/\n{2,}/).map((block) => {
+        const value = block.trim();
+        if (!value) return '';
+        if (value.startsWith('### ')) return `<h3>${inlineMarkdown(value.slice(4))}</h3>`;
+        if (value.startsWith('## ')) return `<h2>${inlineMarkdown(value.slice(3))}</h2>`;
+        if (value.startsWith('# ')) return `<h1>${inlineMarkdown(value.slice(2))}</h1>`;
+        if (value.startsWith('> ')) return `<blockquote>${inlineMarkdown(value.replace(/^> /gm, ''))}</blockquote>`;
+        if (/^\d+\. /m.test(value)) {
+          const items = value.split('\n').map((line) => line.replace(/^\d+\. /, '').trim()).filter(Boolean);
+          return `<ol>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join('')}</ol>`;
+        }
+        if (/^- /m.test(value)) {
+          const items = value.split('\n').map((line) => line.replace(/^- /, '').trim()).filter(Boolean);
+          return `<ul>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join('')}</ul>`;
+        }
+        return `<p>${inlineMarkdown(value).replace(/\n/g, '<br>')}</p>`;
+      }).join('\n');
+    }
+
+    function activeEditorialFile() {
+      const requested = new URLSearchParams(location.search).get('doc');
+      return editorialDocs.some(([file]) => file === requested) ? requested : editorialDocs[0][0];
+    }
+
+    function renderEditorialList(current) {
+      document.getElementById('inline-editorial-list').innerHTML = editorialDocs.map(([file, label, title]) => `
+        <button class="doc-link ${file === current ? 'active' : ''}" type="button" data-doc="${file}">
+          <b>${label}</b><span>${title}</span>
+        </button>
+      `).join('');
+    }
+
+    async function loadEditorialDoc(file, updateUrl = false) {
+      renderEditorialList(file);
+      const url = `${editorialBase}${file}`;
+      document.getElementById('inline-editorial-source').href = url;
+      document.getElementById('inline-request-doc').value = file;
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      document.getElementById('inline-editorial-reader').innerHTML = renderMarkdown(await response.text());
+      if (updateUrl) {
+        const next = new URL(location.href);
+        next.searchParams.set('doc', file);
+        next.hash = 'editorial-assets';
+        history.replaceState(null, '', next);
+      }
+    }
+
+    document.getElementById('inline-editorial-list').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-doc]');
+      if (!button) return;
+      loadEditorialDoc(button.dataset.doc, true).catch((error) => {
+        document.getElementById('inline-editorial-reader').innerHTML = `<p>${error.message}</p>`;
+      });
+    });
+
+    document.getElementById('inline-edit-request-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const doc = document.getElementById('inline-request-doc').value || activeEditorialFile();
+      const name = document.getElementById('inline-request-name').value.trim();
+      const email = document.getElementById('inline-request-email').value.trim();
+      const edits = document.getElementById('inline-request-edits').value.trim();
+      const subject = `Rick's Official U.S. Press Kit edit request: ${doc}`;
+      const body = [
+        'Patrick H. Sweeney,',
+        '',
+        `Please review these requested editorial changes for ${doc}.`,
+        '',
+        `Requested by: ${name || '[name]'}`,
+        `Reply email: ${email || '[email]'}`,
+        '',
+        'Requested edits:',
+        edits || '[describe requested edits]',
+        '',
+        `Source: ${location.href}`
+      ].join('\n');
+      location.href = `mailto:patrick@villagerpublishing.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+
+    addEventListener('resize', scaleInlineAds);
+    addEventListener('load', scaleInlineAds);
+    scaleInlineAds();
+    loadEditorialDoc(activeEditorialFile()).catch((error) => {
+      renderEditorialList(activeEditorialFile());
+      document.getElementById('inline-editorial-reader').innerHTML = `<p>${error.message}</p>`;
+    });
   </script>
 </body>
 </html>
