@@ -18,7 +18,8 @@
       "source": "/",
       "has": [
         {
-          "type": "host",
+          "type": "header",
+          "key": "host",
           "value": "ricks.conews.press"
         }
       ],
