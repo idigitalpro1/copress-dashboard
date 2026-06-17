@@ -8,9 +8,9 @@
   "url": "https://www.rickscentral.com/",
   "telephone": "+1-720-669-9470",
   "image": [
-    "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg",
-    "https://www.rickscentral.com/wp-content/uploads/2024/01/ricks-central-city-steakhouse.jpg",
-    "https://www.rickscentral.com/wp-content/uploads/2023/10/Ricks-Cabaret-Central-Steakhouse-and-Lounge.jpg"
+    "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg",
+    "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/steakhouse.jpg",
+    "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/entertainment-lounge.jpg"
   ],
   "address": {
     "@type": "PostalAddress",

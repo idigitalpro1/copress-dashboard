@@ -25,11 +25,11 @@
     "body": "Inter"
   },
   "assets": {
-    "hero": "https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg",
-    "steakhouse": "https://www.rickscentral.com/wp-content/uploads/2024/01/ricks-central-city-steakhouse.jpg",
-    "champagne": "https://www.rickscentral.com/wp-content/uploads/2023/10/ricks-central-city-champ.jpg",
-    "entertainment": "https://www.rickscentral.com/wp-content/uploads/2023/10/Ricks-Cabaret-Central-Steakhouse-and-Lounge.jpg",
-    "logo": "https://www.rickscentral.com/wp-content/uploads/2025/08/ricks-cabaret-central-city-strip-club.png"
+    "hero": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/hero-ricks-cabaret-central-city.jpg",
+    "steakhouse": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/steakhouse.jpg",
+    "champagne": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/champagne.jpg",
+    "entertainment": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/entertainment-lounge.jpg",
+    "logo": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/assets/logo.png"
   },
   "deliverables": {
     "showcase": "index.html",
