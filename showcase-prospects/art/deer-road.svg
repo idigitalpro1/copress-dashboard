@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="240 Deer Road prospect artwork">
+  <rect width="1280" height="720" fill="#123026"/>
+  <circle cx="1030" cy="130" r="90" fill="#d8d0c1" opacity=".9"/>
+  <path d="M0 500 C180 420 300 465 470 390 C620 322 780 360 930 295 C1050 245 1160 250 1280 220 V720 H0Z" fill="#6f7f49"/>
+  <path d="M370 480 L590 255 L810 480 Z" fill="#b56b3c"/>
+  <path d="M432 480 L590 318 L748 480 Z" fill="#f8f4ec"/>
+  <rect x="545" y="402" width="90" height="78" fill="#1c2421"/>
+  <text x="82" y="135" fill="#d8d0c1" font-family="Georgia,serif" font-size="34" letter-spacing="6">EVERGREEN SHOWCASE</text>
+  <text x="82" y="220" fill="#f8f4ec" font-family="Georgia,serif" font-size="76" font-weight="700">240 Deer Road</text>
+  <text x="86" y="276" fill="#d8d0c1" font-family="Arial,sans-serif" font-size="24" letter-spacing="3">REAL ESTATE KIT - BUYER HANDOFF</text>
+</svg>

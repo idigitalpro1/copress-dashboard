@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Real estate template prospect artwork">
+  <rect width="1280" height="720" fill="#17263b"/>
+  <rect x="72" y="72" width="1136" height="576" rx="18" fill="none" stroke="#d8aa4c" stroke-width="4" stroke-dasharray="18 16"/>
+  <path d="M300 520 L530 280 L760 520 Z" fill="#d8aa4c" opacity=".86"/>
+  <path d="M398 520 L530 382 L662 520 Z" fill="#f6efe2"/>
+  <rect x="805" y="250" width="260" height="270" rx="10" fill="#0b111b" stroke="#95a6b8" stroke-width="3"/>
+  <line x1="845" y1="318" x2="1028" y2="318" stroke="#d8aa4c" stroke-width="10"/>
+  <line x1="845" y1="374" x2="1010" y2="374" stroke="#95a6b8" stroke-width="8"/>
+  <line x1="845" y1="430" x2="990" y2="430" stroke="#95a6b8" stroke-width="8"/>
+  <text x="110" y="155" fill="#d8aa4c" font-family="Arial,sans-serif" font-size="30" font-weight="900" letter-spacing="5">TEMPLATE DEMO</text>
+  <text x="110" y="232" fill="#f6efe2" font-family="Georgia,serif" font-size="72" font-weight="700">Real Estate Flow</text>
+  <text x="114" y="288" fill="#95a6b8" font-family="Arial,sans-serif" font-size="24" letter-spacing="3">CLONE - REPLACE - SEND</text>
+</svg>

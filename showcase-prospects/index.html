@@ -3,7 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="canonical" href="https://satcom.5280.menu/showcase-prospects">
+  <link rel="canonical" href="https://copress-dashboard.vercel.app/showcase-prospects">
+  <script>
+    if (location.protocol === 'file:' && !location.search.includes('local=1')) {
+      location.replace('https://copress-dashboard.vercel.app/');
+    }
+  </script>
   <title>SATCOM Showcase Prospects</title>
   <style>
     :root {
@@ -80,6 +85,27 @@
       border: 1px solid var(--line);
       border-radius: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,.075), rgba(255,255,255,.04));
+      overflow: hidden;
+    }
+    .media {
+      display: block;
+      aspect-ratio: 16 / 9;
+      margin: -18px -18px 2px;
+      background: var(--panel-2);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+    .media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .media-placeholder {
+      display: grid;
+      place-items: center;
+      height: 100%;
+      color: var(--gold);
+      background: linear-gradient(135deg, rgba(216,170,76,.16), rgba(95,179,217,.08));
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
     }
     .topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .badge {
@@ -135,10 +161,10 @@
       <p>Current campaign-kit leads and proof links for fast owner handoff. Use this board for SATCOM operator work only; client-ready public links are inside each card.</p>
     </div>
     <div class="actions">
-      <a class="btn primary" href="/">Dashboard</a>
-      <a class="btn" href="/showcase-prospects/showcase-leads.json">JSON</a>
-      <a class="btn" href="/showcase-prospects/showcase-leads.csv">CSV</a>
-      <a class="btn" href="/stans-auto-sales-campaign-kit/prospects/top-20-prospects.html">Stan's Top 20</a>
+      <a class="btn primary" data-live-href="/" href="https://copress-dashboard.vercel.app/">Dashboard</a>
+      <a class="btn" data-live-href="/showcase-prospects/showcase-leads.json" href="https://copress-dashboard.vercel.app/showcase-prospects/showcase-leads.json">JSON</a>
+      <a class="btn" data-live-href="/showcase-prospects/showcase-leads.csv" href="https://copress-dashboard.vercel.app/showcase-prospects/showcase-leads.csv">CSV</a>
+      <a class="btn" data-live-href="/stans-auto-sales-campaign-kit/prospects/top-20-prospects.html" href="https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/prospects/top-20-prospects.html">Stan's Top 20</a>
     </div>
   </section>
 
@@ -157,7 +183,8 @@
 </main>
 
 <script>
-const rootUrl = 'https://satcom.5280.menu';
+const rootUrl = 'https://copress-dashboard.vercel.app';
+const isFilePreview = location.protocol === 'file:';
 const absoluteUrl = (path) => {
   if (!path) return '';
   return path.startsWith('http') ? path : `${rootUrl}${path}`;
@@ -166,9 +193,20 @@ const link = (label, href, primary = false) => href ? `<a class="btn ${primary ?
 const template = (value, url) => (value || '').replace('{{url}}', url);
 
 async function loadLeads() {
-  const res = await fetch('/showcase-prospects/showcase-leads.json', { cache: 'no-store' });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+  const sources = isFilePreview
+    ? ['./showcase-leads.json', `${rootUrl}/showcase-prospects/showcase-leads.json`]
+    : [`${rootUrl}/showcase-prospects/showcase-leads.json`];
+  let lastError;
+  for (const source of sources) {
+    try {
+      const res = await fetch(source, { cache: 'no-store' });
+      if (!res.ok) throw new Error(`${source} returned HTTP ${res.status}`);
+      return res.json();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('No prospect data source available');
 }
 
 function render(data) {
@@ -186,6 +224,7 @@ function render(data) {
     const onboardingUrl = absoluteUrl(lead.onboardingUrl);
     const editorialUrl = absoluteUrl(lead.editorialPath);
     const satcomUrl = absoluteUrl(lead.satcomPath);
+    const imageUrl = absoluteUrl(lead.imagePath);
     const smsHref = `sms:?&body=${encodeURIComponent(template(lead.sms, mainUrl))}`;
     const mailHref = `mailto:?subject=${encodeURIComponent(lead.emailSubject || lead.campaign)}&body=${encodeURIComponent(template(lead.emailBody, mainUrl))}`;
     const priorityClass = (lead.priority || '').toLowerCase();
@@ -193,6 +232,9 @@ function render(data) {
 
     return `
       <article>
+        <a class="media" href="${mainUrl}">
+          ${imageUrl ? `<img src="${imageUrl}" alt="${lead.imageAlt || lead.brand}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=&quot;media-placeholder&quot;>Art pending</div>'">` : '<div class="media-placeholder">Art pending</div>'}
+        </a>
         <div class="topline">
           <span class="industry">${lead.industry}</span>
           <span class="badge ${priorityClass}">${lead.priority}</span>
@@ -223,8 +265,12 @@ function render(data) {
 loadLeads()
   .then(render)
   .catch((error) => {
-    document.getElementById('cards').innerHTML = `<article><h2>Prospect data did not load</h2><p>${error.message}</p><p>Open <a href="/showcase-prospects/showcase-leads.json">showcase-leads.json</a> directly to inspect the data.</p></article>`;
+    document.getElementById('cards').innerHTML = `<article><h2>Prospect data did not load</h2><p>${error.message}</p><p>Open <a href="https://copress-dashboard.vercel.app/showcase-prospects/showcase-leads.json">showcase-leads.json</a> directly to inspect the data.</p></article>`;
   });
+
+document.querySelectorAll('[data-live-href]').forEach((linkEl) => {
+  linkEl.href = absoluteUrl(linkEl.dataset.liveHref);
+});
 </script>
 </body>
 </html>

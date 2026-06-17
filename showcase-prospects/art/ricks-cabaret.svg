@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-label="Rick's Cabaret Central City prospect artwork">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#08080a"/>
+      <stop offset="0.48" stop-color="#3f1118"/>
+      <stop offset="1" stop-color="#08080a"/>
+    </linearGradient>
+    <radialGradient id="spot" cx="72%" cy="28%" r="42%">
+      <stop offset="0" stop-color="#d8b46a" stop-opacity=".6"/>
+      <stop offset=".55" stop-color="#b51f2c" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#bg)"/>
+  <rect width="1280" height="720" fill="url(#spot)"/>
+  <path d="M0 560 C210 500 360 625 570 560 S920 460 1280 535 L1280 720 L0 720Z" fill="#11131b" opacity=".85"/>
+  <text x="80" y="150" fill="#e2bf67" font-family="Georgia,serif" font-size="34" letter-spacing="8">CENTRAL CITY</text>
+  <text x="80" y="285" fill="#f7f1e7" font-family="Georgia,serif" font-size="104" font-weight="700">Rick's</text>
+  <text x="84" y="358" fill="#f7f1e7" font-family="Georgia,serif" font-size="54">Cabaret &amp; Steakhouse</text>
+  <text x="86" y="430" fill="#c8bfae" font-family="Arial,sans-serif" font-size="25" letter-spacing="4">ONBOARDING - SMS - EDITORIAL</text>
+  <rect x="82" y="478" width="350" height="54" rx="6" fill="#e2bf67"/>
+  <text x="112" y="514" fill="#15100a" font-family="Arial,sans-serif" font-size="22" font-weight="800">HOT PROSPECT FLOW</text>
+</svg>
