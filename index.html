@@ -1729,33 +1729,33 @@ body::before {
             <div class="card-icon-row">
               <div class="card-icon">▤</div>
               <div>
-                <div class="card-title">Postcard Studio</div>
-                <div class="card-subtitle">Renewal concepts · live proof · print-run merge</div>
+                <div class="card-title">Villager Proofing</div>
+                <div class="card-subtitle">Regular renewal · final renewal · Version 123</div>
               </div>
             </div>
             <div class="card-stats">
               <div class="card-stat">
-                <span class="stat-label">Concepts</span>
-                <span class="stat-value highlight">6</span>
+                <span class="stat-label">Versions</span>
+                <span class="stat-value highlight">3</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">QR</span>
+                <span class="stat-value ok" style="font-size:11px;">Ready</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Primary</span>
+                <span class="stat-value ok" style="font-size:11px;">Saved</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Proof</span>
-                <span class="stat-value" style="font-size:11px;">6 × 4.25</span>
-              </div>
-              <div class="card-stat">
-                <span class="stat-label">Print Run</span>
-                <span class="stat-value ok" style="font-size:11px;">Trust gated</span>
-              </div>
-              <div class="card-stat">
-                <span class="stat-label">Access</span>
-                <span class="stat-value" style="font-size:11px;">Login required</span>
+                <span class="stat-value" style="font-size:11px;">Live link</span>
               </div>
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); openPostcardStudio()">Open Studio</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openPostcardStudio()">Build Proof</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openPostcardStudio()">Print Run</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); openPostcardStudio()">Open Proof</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openPostcardStudio('?version=final')">Final</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openPostcardStudio('?version=v123')">Version 123</button>
             </div>
           </div>
         </div>
@@ -3048,7 +3048,7 @@ const M365_ACCOUNT_SWITCH_URL =
 const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
-const POSTCARD_STUDIO_URL = 'https://5280.menu/admin/postcards';
+const POSTCARD_STUDIO_URL = '/villager-postcard-proofing/';
 
 function openExternal(url) {
   window.open(url, '_blank', 'noopener');
@@ -3059,8 +3059,8 @@ function openInvoiceManager(path = '/') {
   openExternal(`${INVOICE_MANAGER_BASE_URL}${cleanPath}`);
 }
 
-function openPostcardStudio() {
-  openExternal(POSTCARD_STUDIO_URL);
+function openPostcardStudio(query = '') {
+  window.location.href = `${POSTCARD_STUDIO_URL}${query}`;
 }
 
 function openM365Admin() {
