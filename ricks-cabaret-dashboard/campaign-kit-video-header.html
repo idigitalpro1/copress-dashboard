@@ -1,0 +1,40 @@
+<!-- =================================================================
+     RICK'S CAMPAIGN KIT — VIDEO HEADER SECTION
+     Paste this block at the very top of the kit landing page,
+     immediately INSIDE <body> (before the existing logo/nav row).
+
+     STEP 1 — set the video source:
+       Option A (self-hosted MP4, best for autoplay background):
+         put your file at  /video/ricks-header.mp4  on the server
+         and keep the <source> line below.
+       Option B (YouTube/Vimeo): delete the <video> block and
+         uncomment the <iframe> block, pasting your embed URL.
+     STEP 2 — set the poster image (shown before video loads / on mobile).
+     NOTE: background video MUST be muted to autoplay (browser rule).
+================================================================== -->
+<section id="video-header" style="position:relative;width:100%;height:62vh;min-height:380px;max-height:680px;overflow:hidden;background:#0b0b10;">
+  <!-- OPTION A: self-hosted background video -->
+  <video autoplay muted loop playsinline preload="metadata"
+         poster="https://www.rickscentral.com/wp-content/uploads/2025/05/Ricks-cabaret-central-city.jpg"
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">
+    <source src="video/ricks-header.mp4" type="video/mp4">
+    <!-- PASTE the real video URL above. e.g. https://www.rickscentral.com/wp-content/uploads/.../header.mp4 -->
+  </video>
+
+  <!-- OPTION B: YouTube/Vimeo embed (uncomment, delete <video> above)
+  <iframe src="https://player.vimeo.com/video/REPLACE?background=1&autoplay=1&loop=1&muted=1"
+          allow="autoplay; fullscreen" frameborder="0"
+          style="position:absolute;inset:0;width:100%;height:100%;"></iframe>
+  -->
+
+  <!-- gradient + headline overlay -->
+  <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,16,.35),rgba(11,11,16,.78));"></div>
+  <div style="position:absolute;left:0;right:0;bottom:0;padding:36px 6vw 30px;font-family:Georgia,serif;color:#f7f3ea;">
+    <div style="letter-spacing:7px;font-size:13px;color:#f3d27a;text-transform:uppercase;">Rick&rsquo;s Cabaret Central City</div>
+    <h1 style="margin:8px 0 6px;font-size:clamp(30px,5vw,60px);line-height:1.05;">The night has a destination.</h1>
+    <p style="margin:0 0 16px;font-style:italic;color:#cfc7b8;font-size:clamp(15px,2vw,22px);">Steakhouse &middot; Lounge &middot; Cabaret &mdash; near Black Hawk &middot; 21+</p>
+    <a href="https://www.rickscentral.com/steakhouse-reservations-central-city-colorado/"
+       style="display:inline-block;background:linear-gradient(90deg,#caa24a,#f3d27a);color:#14141b;font-family:Arial,sans-serif;font-weight:700;font-size:15px;text-decoration:none;padding:13px 26px;border-radius:4px;">Reserve Steakhouse Seating &rarr;</a>
+  </div>
+</section>
+<!-- ================= END VIDEO HEADER ================= -->

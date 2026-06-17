@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rick's Cabaret Central City - SATCOM Operator Dashboard</title>
+  <style>
+    :root {
+      --bg: #09090f;
+      --panel: #14141f;
+      --panel-2: #1b1621;
+      --line: #2c2b37;
+      --gold: #e2bf67;
+      --ruby: #a92d42;
+      --paper: #f7f1e7;
+      --muted: #a79d8d;
+      --ok: #75c694;
+      --warn: #e0a64e;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+    a { color: inherit; text-decoration: none; }
+    .shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+    .side { position: sticky; top: 0; height: 100vh; padding: 24px 18px; border-right: 1px solid var(--line); background: linear-gradient(180deg, #0c0b12, #160d14); }
+    .brand { font-family: Georgia, serif; font-size: 24px; line-height: 1.05; }
+    .brand b { color: var(--gold); }
+    .sub { margin-top: 6px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; }
+    nav { display: flex; flex-direction: column; gap: 6px; margin-top: 28px; }
+    nav a { padding: 10px 12px; border-radius: 7px; color: var(--muted); font-size: 14px; }
+    nav a:hover { background: rgba(255,255,255,.06); color: var(--paper); }
+    .main { width: min(1120px, 100%); padding: 30px 30px 56px; }
+    .top { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+    .eyebrow { color: var(--gold); font-size: 12px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+    h1 { margin: 8px 0 8px; font-family: Georgia, serif; font-size: clamp(34px, 5vw, 56px); line-height: 1; }
+    p { margin: 0; color: var(--muted); }
+    .status { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px rgba(117,198,148,.13); }
+    .notice { margin: 18px 0; padding: 15px 16px; border: 1px solid rgba(224,166,78,.45); border-radius: 8px; background: rgba(224,166,78,.08); color: #ead7b2; font-size: 14px; }
+    .hero-card { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); gap: 18px; margin: 20px 0; align-items: stretch; }
+    .panel { border: 1px solid var(--line); border-radius: 8px; background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.03)); padding: 18px; }
+    .panel h2 { margin: 0 0 10px; color: var(--gold); font-size: 13px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+    .hero-art { display: grid; align-items: center; overflow: hidden; padding: 0; background: #050507; }
+    .hero-art img { display: block; width: 100%; min-height: 100%; object-fit: cover; }
+    .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 18px 0; }
+    .tile { padding: 15px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+    .tile b { display: block; color: var(--gold); font-family: Georgia, serif; font-size: 32px; line-height: 1; }
+    .tile span { color: var(--muted); font-size: 11px; font-weight: 850; letter-spacing: 1px; text-transform: uppercase; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .card { display: block; min-height: 172px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); transition: .15s ease; }
+    .card:hover { transform: translateY(-2px); border-color: var(--gold); }
+    .card .k { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
+    .card .t { margin: 7px 0 7px; font-family: Georgia, serif; font-size: 21px; line-height: 1.05; }
+    .card .d { color: var(--muted); font-size: 13px; }
+    .pill { display: inline-flex; margin-top: 12px; min-height: 25px; align-items: center; padding: 3px 8px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+    .pill.live { color: #c9f3d6; border-color: rgba(117,198,148,.5); background: rgba(117,198,148,.1); }
+    .pill.draft { color: #ffd8d2; border-color: rgba(169,45,66,.55); background: rgba(169,45,66,.16); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 7px; color: var(--paper); background: rgba(255,255,255,.045); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .5px; }
+    .btn.primary { color: #15100a; background: var(--gold); border-color: var(--gold); }
+    footer { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    @media (max-width: 940px) { .shell { grid-template-columns: 1fr; } .side { position: static; height: auto; } .hero-card { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 620px) { .main { padding: 22px 14px 42px; } .top { display: block; } .status { margin-top: 12px; white-space: normal; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand"><b>Rick's</b> Cabaret<br>Central City</div>
+    <div class="sub">SATCOM operator dashboard</div>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#campaign">Campaign kit</a>
+      <a href="#claude">Claude output</a>
+      <a href="#artwork">Artwork</a>
+      <a href="#email">Email</a>
+      <a href="/showcase-prospects/">Prospect board</a>
+    </nav>
+    <div class="actions">
+      <a class="btn primary" href="/ricks-cabaret-campaign-kit/">Live kit</a>
+      <a class="btn" href="/">SATCOM</a>
+    </div>
+  </aside>
+
+  <main class="main" id="overview">
+    <div class="top">
+      <div>
+        <div class="eyebrow">Rick's Cabaret Central City</div>
+        <h1>Campaign Kit Control Room</h1>
+        <p>Operator handoff for the live Rick's showcase, Claude kit assets, newsletter creative, artwork, and draft review gates.</p>
+      </div>
+      <div class="status"><span class="dot"></span> Live campaign kit attached</div>
+    </div>
+
+    <div class="notice">
+      Claude's README marked the NY case series as draft and not for publication until legal review. This dashboard links usable operator assets and keeps editorial review status explicit.
+    </div>
+
+    <section class="hero-card">
+      <div class="panel">
+        <h2>Fast handoff</h2>
+        <p>Send the live kit first. Use the Claude dashboard assets for onboarding and design review. Confirm the final onboarding URL before promising account activation.</p>
+        <div class="actions">
+          <a class="btn primary" href="/ricks-cabaret-campaign-kit/">Open live campaign kit</a>
+          <a class="btn" href="/ricks-cabaret-campaign-kit/manifest.json">Manifest</a>
+          <a class="btn" href="/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html">Newsletter</a>
+          <a class="btn" href="campaign-kit-video-header.html">Video header</a>
+        </div>
+      </div>
+      <a class="panel hero-art" href="art/series-hero-1600x600.svg" id="artwork">
+        <img src="art/series-hero-1600x600.svg" alt="Rick's editorial series hero artwork">
+      </a>
+    </section>
+
+    <section class="tiles">
+      <div class="tile"><b>1</b><span>Live kit</span></div>
+      <div class="tile"><b>6</b><span>IAB assets</span></div>
+      <div class="tile"><b>1</b><span>Email proof</span></div>
+      <div class="tile"><b>10</b><span>Draft articles gated</span></div>
+    </section>
+
+    <h2 class="eyebrow" id="campaign">Campaign Kit</h2>
+    <section class="grid">
+      <a class="card" href="/ricks-cabaret-campaign-kit/"><div class="k">Landing</div><div class="t">Live SATCOM Kit</div><div class="d">Showcase, positioning, audience, assets, and compliance notes.</div><span class="pill live">Live</span></a>
+      <a class="card" href="/ricks-cabaret-campaign-kit/banners/banner-leaderboard-728x90.html"><div class="k">Display</div><div class="t">Banner Set</div><div class="d">Open the leaderboard proof, then browse the rest of the banner directory as needed.</div><span class="pill live">Live</span></a>
+      <a class="card" href="/ricks-cabaret-campaign-kit/seo/meta.json"><div class="k">SEO</div><div class="t">Metadata</div><div class="d">Title, description, OG, and structured-data proof files.</div><span class="pill live">Live</span></a>
+    </section>
+
+    <h2 class="eyebrow" id="claude">Claude Output</h2>
+    <section class="grid">
+      <a class="card" href="campaign-kit-video-header.html"><div class="k">Copied from Claude</div><div class="t">Video Header Block</div><div class="d">Drop-in header asset from the local Claude Rick's kit output.</div><span class="pill">Operator</span></a>
+      <a class="card" href="art/series-social-1080.svg"><div class="k">Copied from Claude</div><div class="t">Social Artwork</div><div class="d">Series square art for internal review and creative direction.</div><span class="pill">Operator</span></a>
+      <a class="card" href="#legal"><div class="k">Editorial review</div><div class="t">NY Case Series Gate</div><div class="d">Drafts exist in the Claude output but are not published here as live articles.</div><span class="pill draft">Legal review</span></a>
+    </section>
+
+    <h2 class="eyebrow" id="email">Email</h2>
+    <section class="grid">
+      <a class="card" href="/ricks-cabaret-campaign-kit/email/newsletter-nightlife-escape.html"><div class="k">Live creative</div><div class="t">Nightlife Escape Newsletter</div><div class="d">SATCOM email proof already in the campaign kit.</div><span class="pill live">Live</span></a>
+      <a class="card" href="email/welcome-lou-bunch-day.html"><div class="k">Copied from Claude</div><div class="t">Welcome Email Draft</div><div class="d">Photo slot and caption must be verified before any send.</div><span class="pill draft">Draft</span></a>
+      <a class="card" href="/newsletter?campaign=latest"><div class="k">Studio</div><div class="t">Newsletter Studio</div><div class="d">Use SATCOM's campaign-handoff lane if the operator loads this into a send workflow.</div><span class="pill">Preview</span></a>
+    </section>
+
+    <div class="notice" id="legal">
+      Legal note: this dashboard is an internal operator artifact. Active prosecution/editorial claims require media or defamation review before publication. No criminal allegation copy from Claude's drafts is published from this route.
+    </div>
+
+    <footer>
+      Rick's Cabaret Central City - 130 Main St, Central City, CO 80427 - 21+ nightlife and dining campaign. Source dashboard built from the local Claude output plus the existing SATCOM Rick's campaign kit.
+    </footer>
+  </main>
+</div>
+</body>
+</html>
