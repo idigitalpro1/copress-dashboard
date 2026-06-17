@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Rick's / RCI NY Case Editorial Review</title>
+  <title>Rick's Official U.S. Press Kit</title>
   <style>
     :root {
       --bg: #09090f;
@@ -45,7 +45,24 @@
     .reader blockquote { margin: 18px 0; padding: 12px 16px; border-left: 3px solid var(--gold); background: rgba(226,191,103,.07); color: #ead7b2; }
     .reader code { color: var(--gold); }
     .source-link { margin-top: 16px; }
+    .request-card { margin-top: 16px; padding: 18px; border: 1px solid rgba(226,191,103,.35); border-radius: 8px; background: rgba(226,191,103,.07); }
+    .request-card h2 { margin: 0 0 8px; color: var(--gold); font-family: Georgia, serif; font-size: 28px; line-height: 1.05; }
+    .request-card p { margin-bottom: 14px; }
+    .request-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .request-card label { display: grid; gap: 6px; color: var(--gold); font-size: 11px; font-weight: 900; letter-spacing: 1.2px; text-transform: uppercase; }
+    .request-card input, .request-card textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px;
+      color: var(--paper);
+      background: rgba(9,9,15,.72);
+      font: inherit;
+    }
+    .request-card textarea { min-height: 132px; resize: vertical; }
+    .request-card .wide { grid-column: 1 / -1; }
     @media (max-width: 880px) { .hero { grid-template-columns: 1fr; } .layout { grid-template-columns: 1fr; } .list { position: static; } }
+    @media (max-width: 620px) { .request-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -53,13 +70,12 @@
   <section class="hero">
     <div>
       <div class="eyebrow">Internal editorial review</div>
-      <h1>Rick's / RCI NY Case Series</h1>
-      <p>Opinion/editorial drafts from Claude's Rick's kit. These are review copies, not cleared publication pages.</p>
+      <h1>Rick's Official U.S. Press Kit</h1>
+      <p>Publisher-review materials and legal-review editorial drafts. These are review copies, not cleared publication pages.</p>
     </div>
     <div class="actions">
       <a class="btn primary" href="/ricks-cabaret-dashboard/">Rick's dashboard</a>
       <a class="btn" href="/ricks-cabaret-dashboard/editorial/ny-case-series/00-SERIES-EDITOR-NOTES.md">Editor notes MD</a>
-      <a class="btn" href="/showcase-prospects/">Prospects</a>
     </div>
   </section>
 
@@ -74,6 +90,27 @@
       <div class="source-link actions">
         <a class="btn" id="source-link" href="#">Open source Markdown</a>
       </div>
+      <form class="request-card" id="edit-request-form">
+        <h2>Request editorial changes.</h2>
+        <p>Send a change request to Patrick H. Sweeney for the document currently open in the reader. This opens your default email app with the request prefilled.</p>
+        <div class="request-grid">
+          <label>Your name
+            <input id="request-name" name="name" autocomplete="name" placeholder="Name">
+          </label>
+          <label>Your email
+            <input id="request-email" name="email" autocomplete="email" placeholder="email@example.com">
+          </label>
+          <label class="wide">Document
+            <input id="request-doc" name="document" readonly>
+          </label>
+          <label class="wide">Requested edits
+            <textarea id="request-edits" name="edits" placeholder="Describe the requested edits, corrections, or legal-review notes."></textarea>
+          </label>
+        </div>
+        <div class="actions" style="margin-top:12px;">
+          <button class="btn primary" type="submit">Email Patrick H. Sweeney</button>
+        </div>
+      </form>
     </section>
   </section>
 </main>
@@ -138,6 +175,7 @@ async function loadDoc(file) {
   renderList(file);
   const url = `${base}${file}`;
   document.getElementById('source-link').href = url;
+  document.getElementById('request-doc').value = file;
   const res = await fetch(url, { cache: 'no-store' });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   document.getElementById('reader').innerHTML = renderMarkdown(await res.text());
@@ -153,6 +191,29 @@ document.getElementById('doc-list').addEventListener('click', (event) => {
 
 loadDoc(activeFile()).catch((error) => {
   document.getElementById('reader').innerHTML = `<p>${error.message}</p>`;
+});
+
+document.getElementById('edit-request-form').addEventListener('submit', (event) => {
+  event.preventDefault();
+  const doc = document.getElementById('request-doc').value || activeFile();
+  const name = document.getElementById('request-name').value.trim();
+  const email = document.getElementById('request-email').value.trim();
+  const edits = document.getElementById('request-edits').value.trim();
+  const subject = `Rick's Official U.S. Press Kit edit request: ${doc}`;
+  const body = [
+    'Patrick H. Sweeney,',
+    '',
+    `Please review these requested editorial changes for ${doc}.`,
+    '',
+    `Requested by: ${name || '[name]'}`,
+    `Reply email: ${email || '[email]'}`,
+    '',
+    'Requested edits:',
+    edits || '[describe requested edits]',
+    '',
+    `Source: ${location.href}`
+  ].join('\n');
+  location.href = `mailto:patrick@villagerpublishing.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 });
 </script>
 </body>

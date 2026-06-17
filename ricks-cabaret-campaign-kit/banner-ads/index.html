@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rick's Cabaret Banner Ads Feed</title>
+  <meta name="description" content="Rendered banner ad feed for Rick's Cabaret Central City campaign proofs.">
+  <link rel="canonical" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/banner-ads/">
+  <script>
+    if ((location.protocol === 'file:' || location.hostname === '127.0.0.1' || location.hostname === 'localhost') && !location.search.includes('local=1')) {
+      location.replace('https://satcom.5280.menu/ricks-cabaret-campaign-kit/banner-ads/');
+    }
+  </script>
+  <style>
+    :root {
+      --ink: #f4eee2;
+      --muted: #a99d8f;
+      --gold: #d8b46a;
+      --line: rgba(216, 180, 106, .28);
+      --panel: #121216;
+      --red: #3f1118;
+      --black: #08080a;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background: var(--black);
+      color: var(--ink);
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(216,180,106,.16), transparent 28rem),
+        linear-gradient(180deg, #08080a, #13090b 54%, #08080a);
+    }
+
+    a { color: inherit; }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 28px;
+      background: rgba(8,8,10,.9);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+      text-decoration: none;
+    }
+
+    .brand strong {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .brand span {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .topbar nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .topbar nav a,
+    .button {
+      display: inline-flex;
+      min-height: 38px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255,255,255,.045);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .button.primary {
+      color: #08080a;
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+
+    .hero {
+      padding: 70px 28px 38px;
+    }
+
+    .wrap {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .kicker {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      font-family: Georgia, serif;
+      line-height: .98;
+    }
+
+    h1 {
+      max-width: 880px;
+      margin-top: 12px;
+      font-size: clamp(42px, 7vw, 82px);
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: 18px 0 0;
+      color: #d9cebf;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .feed {
+      display: grid;
+      gap: 22px;
+      padding: 22px 28px 72px;
+    }
+
+    .ad-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(18,18,22,.78);
+      box-shadow: 0 24px 70px rgba(0,0,0,.26);
+    }
+
+    .ad-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(216,180,106,.18);
+    }
+
+    .ad-head div {
+      display: grid;
+      gap: 5px;
+    }
+
+    .ad-head b {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .ad-head h2 {
+      font-size: clamp(24px, 3vw, 34px);
+    }
+
+    .ad-head span {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .ad-stage {
+      position: relative;
+      margin: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 6px;
+      background:
+        linear-gradient(45deg, rgba(255,255,255,.035) 25%, transparent 25%) 0 0 / 18px 18px,
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,.035) 75%) 0 0 / 18px 18px,
+        #0b0b0d;
+    }
+
+    .ad-stage iframe {
+      display: block;
+      width: var(--ad-w);
+      height: var(--ad-h);
+      border: 0;
+      transform: scale(var(--ad-scale, 1));
+      transform-origin: top left;
+      background: #08080a;
+    }
+
+    .ad-copy {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 0 18px 18px;
+    }
+
+    .ad-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    @media (max-width: 760px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .topbar nav { justify-content: flex-start; }
+      .hero { padding: 52px 20px 30px; }
+      .feed { padding: 16px 20px 56px; }
+      .ad-copy { grid-template-columns: 1fr; }
+      .ad-head { align-items: flex-start; flex-direction: column; }
+      .ad-head span { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/">
+      <strong>Rick's Cabaret Central City</strong>
+      <span>Banner Ads Feed</span>
+    </a>
+    <nav aria-label="Rick's campaign links">
+      <a href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/">Campaign Kit</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#events">Events</a>
+      <a href="https://satcom.5280.menu/ricks-cabaret-dashboard/editorial/ny-case-series/">Press Kit</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="kicker">Rendered Ad Inventory</div>
+        <h1>Rick's banner ads, all on one proof page.</h1>
+        <p>The campaign feed renders every live banner unit directly: leaderboard, medium rectangle, skyscraper, half page, mobile, and social square.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#assets">Campaign Assets</a>
+          <a class="button" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/#events">Upcoming Events</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="feed wrap" aria-label="Rendered Rick's banner ad feed">
+      <article class="ad-card">
+        <div class="ad-head"><div><b>Leaderboard</b><h2>Top-of-page display</h2></div><span>728 x 90</span></div>
+        <div class="ad-stage" data-w="728" data-h="90"><iframe src="../banners/banner-leaderboard-728x90.html" title="Rick's leaderboard banner"></iframe></div>
+        <div class="ad-copy"><p>Wide news-site placement for homepage, article, and newsletter sponsorship inventory.</p></div>
+      </article>
+
+      <article class="ad-card">
+        <div class="ad-head"><div><b>Medium Rectangle</b><h2>Article and sidebar display</h2></div><span>300 x 250</span></div>
+        <div class="ad-stage" data-w="300" data-h="250"><iframe src="../banners/banner-medium-rect-300x250.html" title="Rick's medium rectangle banner"></iframe></div>
+        <div class="ad-copy"><p>Standard sidebar or inline article unit with the Black Hawk corridor nightlife hook.</p></div>
+      </article>
+
+      <article class="ad-card">
+        <div class="ad-head"><div><b>Skyscraper</b><h2>Long-form rail placement</h2></div><span>160 x 600</span></div>
+        <div class="ad-stage" data-w="160" data-h="600"><iframe src="../banners/banner-skyscraper-160x600.html" title="Rick's skyscraper banner"></iframe></div>
+        <div class="ad-copy"><p>Vertical unit for desktop side rails and premium directory placements.</p></div>
+      </article>
+
+      <article class="ad-card">
+        <div class="ad-head"><div><b>Half Page</b><h2>Premium reservation creative</h2></div><span>300 x 600</span></div>
+        <div class="ad-stage" data-w="300" data-h="600"><iframe src="../banners/banner-half-page-300x600.html" title="Rick's half-page banner"></iframe></div>
+        <div class="ad-copy"><p>Large-format reservation unit for campaign pushes, late-night planning, and travel audiences.</p></div>
+      </article>
+
+      <article class="ad-card">
+        <div class="ad-head"><div><b>Mobile</b><h2>Compact phone placement</h2></div><span>320 x 50</span></div>
+        <div class="ad-stage" data-w="320" data-h="50"><iframe src="../banners/banner-mobile-320x50.html" title="Rick's mobile banner"></iframe></div>
+        <div class="ad-copy"><p>Small mobile banner for local news traffic and quick reservation calls.</p></div>
+      </article>
+
+      <article class="ad-card">
+        <div class="ad-head"><div><b>Social Square</b><h2>Feed creative</h2></div><span>1080 x 1080</span></div>
+        <div class="ad-stage" data-w="1080" data-h="1080"><iframe src="../banners/banner-social-square-1080x1080.html" title="Rick's social square banner"></iframe></div>
+        <div class="ad-copy"><p>Square social proof for campaign review, paid social, and organic feed handoff.</p></div>
+      </article>
+    </section>
+  </main>
+
+  <script>
+    function scaleAds() {
+      document.querySelectorAll('.ad-stage').forEach((stage) => {
+        const w = Number(stage.dataset.w);
+        const h = Number(stage.dataset.h);
+        const available = stage.clientWidth;
+        const scale = Math.min(1, available / w);
+        stage.style.setProperty('--ad-w', `${w}px`);
+        stage.style.setProperty('--ad-h', `${h}px`);
+        stage.style.setProperty('--ad-scale', scale.toFixed(4));
+        stage.style.height = `${Math.ceil(h * scale)}px`;
+      });
+    }
+
+    addEventListener('resize', scaleAds);
+    addEventListener('load', scaleAds);
+    scaleAds();
+  </script>
+</body>
+</html>
