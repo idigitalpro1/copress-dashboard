@@ -2025,11 +2025,12 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">⚡ Hermes</button>
+              <button class="card-btn" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786','_blank')">WebUI · Chat</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119','_blank')">Agent Dashboard</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">History</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew / Swarm</button>
-              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
             </div>
           </div>
         </div>
