@@ -4,6 +4,16 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "subscribe.thevillager.today"
+        }
+      ],
+      "destination": "/subscribe-villager"
+    },
+    {
       "source": "/console/api/hermes/:path*",
       "destination": "https://codex.conews.press/console/api/hermes/:path*"
     }

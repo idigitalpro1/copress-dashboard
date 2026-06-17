@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Villager Subscribe Art Collection</title>
+  <meta name="description" content="Public collection of The Villager subscription and renewal postcard art, QR assets, and proof links.">
+  <link rel="canonical" href="https://subscribe.thevillager.today/">
+  <meta property="og:title" content="The Villager Subscribe Art Collection">
+  <meta property="og:description" content="Subscription renewal art, Freedom 250 art, QR asset, proofing workspace, and read-only subscriber admin link.">
+  <meta property="og:image" content="https://subscribe.thevillager.today/villager-postcard-proofing/assets/basic-renewal-primary.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=DM+Sans:wght@400;600;700;800;900&family=DM+Mono:wght@400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f5eddd;
+      --paper-deep: #e4d1b3;
+      --ink: #183226;
+      --navy: #1e3159;
+      --red: #a73333;
+      --gold: #bd965d;
+      --muted: #687764;
+      --line: rgba(24, 50, 38, .16);
+      --shadow: 0 18px 54px rgba(68, 43, 24, .16);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      min-height: 100%;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        linear-gradient(90deg, rgba(24,50,38,.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(24,50,38,.035) 1px, transparent 1px),
+        radial-gradient(circle at 12% 0%, rgba(255,255,255,.75), transparent 34rem),
+        linear-gradient(135deg, #fff8ec 0%, #f1dfc0 64%, #d7bd95 100%);
+      background-size: 34px 34px, 34px 34px, auto, auto;
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(1380px, 100%);
+      margin: 0 auto;
+      padding: 24px 18px 48px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 22px;
+      align-items: end;
+      padding: 28px 0 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .mark {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .stamp {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.42);
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 31px;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 6px rgba(189,150,93,.12);
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(38px, 6vw, 86px);
+      line-height: .9;
+      letter-spacing: 0;
+    }
+
+    .subhead {
+      margin: 10px 0 0;
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .btn {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 9px 13px;
+      background: rgba(255,255,255,.42);
+      color: var(--ink);
+      text-decoration: none;
+      font: 900 11px "DM Mono", monospace;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
+
+    .btn.primary {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: #fff8e9;
+    }
+
+    .btn.red {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff8e9;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .stat {
+      min-height: 74px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.35);
+      box-shadow: 0 10px 28px rgba(68,43,24,.08);
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font: 900 10px "DM Mono", monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.22;
+      overflow-wrap: anywhere;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 28px 0 12px;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(26px, 4vw, 46px);
+      line-height: .98;
+    }
+
+    .note {
+      color: var(--muted);
+      font: 800 10px "DM Mono", monospace;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      display: grid;
+      gap: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.35);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .media {
+      display: block;
+      margin: 0;
+      padding: 12px;
+      background: rgba(255,255,255,.18);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .media img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1.4 / 1;
+      object-fit: contain;
+      border-radius: 6px;
+      background: #fffaf0;
+      border: 1px solid rgba(24,50,38,.12);
+    }
+
+    .body {
+      display: grid;
+      gap: 8px;
+      padding: 0 14px 14px;
+    }
+
+    .body h3 {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 24px;
+      line-height: 1.02;
+    }
+
+    .body p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 4px;
+    }
+
+    .qr-panel {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.36);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .qr-panel img {
+      width: 220px;
+      max-width: 100%;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .qr-panel h3 {
+      margin: 0 0 8px;
+      color: var(--navy);
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: 34px;
+      line-height: 1;
+    }
+
+    .qr-panel p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr; }
+      .actions { justify-content: flex-start; }
+      .gallery { grid-template-columns: 1fr 1fr; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 680px) {
+      .wrap { padding-inline: 12px; }
+      .gallery,
+      .stats,
+      .qr-panel { grid-template-columns: 1fr; }
+      .mark { align-items: flex-start; }
+      .stamp { width: 48px; height: 48px; font-size: 25px; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div class="mark">
+        <div class="stamp" aria-hidden="true">V</div>
+        <div>
+          <h1>The Villager Subscribe Art</h1>
+          <p class="subhead">Collected subscription, renewal, Freedom 250, QR, and proofing assets for The Villager. Subscriber data stays behind the live read-only admin link.</p>
+        </div>
+      </div>
+      <nav class="actions" aria-label="Primary links">
+        <a class="btn primary" href="/villager-postcard-proofing/">Open Proofing Tool</a>
+        <a class="btn red" href="https://www.thevillager.today/subscribe">Subscribe Live</a>
+        <a class="btn" href="https://www.thevillager.today/admin/master-subscribers">Subscriber DB Read-Only</a>
+      </nav>
+    </header>
+
+    <section class="stats" aria-label="Collection status">
+      <div class="stat"><span>Art files</span><strong>3 postcard sources</strong></div>
+      <div class="stat"><span>QR target</span><strong>thevillager.today/subscribe</strong></div>
+      <div class="stat"><span>Address</span><strong>22095 E Chestnut Place, Aurora, CO 80016</strong></div>
+      <div class="stat"><span>Data policy</span><strong>read-only subscriber link</strong></div>
+    </section>
+
+    <div class="section-head">
+      <h2>Postcard Art</h2>
+      <div class="note">Download or open in proofing</div>
+    </div>
+
+    <section class="gallery" aria-label="Villager postcard artwork">
+      <article class="card">
+        <a class="media" href="/villager-postcard-proofing/assets/basic-renewal-primary.png">
+          <img src="/villager-postcard-proofing/assets/basic-renewal-primary.png" alt="Basic subscription renewal postcard art.">
+        </a>
+        <div class="body">
+          <h3>Basic Renewal</h3>
+          <p>Primary soft-paper renewal art with handwritten style, QR/mail response language, and $78 renewal cue.</p>
+          <div class="card-actions">
+            <a class="btn primary" href="/villager-postcard-proofing/?version=regular">Proof</a>
+            <a class="btn" href="/villager-postcard-proofing/assets/basic-renewal-primary.png" download>Download</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="media" href="/villager-postcard-proofing/assets/freedom-250-postcard.png">
+          <img src="/villager-postcard-proofing/assets/freedom-250-postcard.png" alt="Freedom is not free Villager postcard art.">
+        </a>
+        <div class="body">
+          <h3>Freedom 250</h3>
+          <p>America 250 / Colorado 150 subscription art with renewal QR, front and back proof copy, and patriotic campaign positioning.</p>
+          <div class="card-actions">
+            <a class="btn primary" href="/villager-postcard-proofing/?version=v123">Proof</a>
+            <a class="btn" href="/villager-postcard-proofing/assets/freedom-250-postcard.png" download>Download</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <a class="media" href="/villager-postcard-proofing/assets/clean-renewal-draft.png">
+          <img src="/villager-postcard-proofing/assets/clean-renewal-draft.png" alt="Clean blue and red Villager subscription renewal draft.">
+        </a>
+        <div class="body">
+          <h3>Clean Renewal Draft</h3>
+          <p>High-resolution white-background renewal draft with Villager masthead, postal panel, thank-you stamp, and subscriber label area.</p>
+          <div class="card-actions">
+            <a class="btn primary" href="/villager-postcard-proofing/?version=final">Proof</a>
+            <a class="btn" href="/villager-postcard-proofing/assets/clean-renewal-draft.png" download>Download</a>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <div class="section-head">
+      <h2>QR And Live Links</h2>
+      <div class="note">No subscriber rows stored here</div>
+    </div>
+
+    <section class="qr-panel" aria-label="QR and live subscribe links">
+      <img src="/villager-postcard-proofing/assets/subscribe-qr.png" alt="QR code for The Villager subscribe page.">
+      <div>
+        <h3>Subscribe QR</h3>
+        <p>The QR asset is generated for the live subscribe page. Use the proofing tool for review, checklist additions, upload previews, and printer quote prompt copy.</p>
+        <div class="card-actions">
+          <a class="btn red" href="https://www.thevillager.today/subscribe">Open Subscribe</a>
+          <a class="btn" href="/villager-postcard-proofing/assets/subscribe-qr.png" download>Download QR</a>
+          <a class="btn" href="/villager-postcard-proofing/">Proofing Tool</a>
+          <a class="btn" href="https://www.thevillager.today/admin/master-subscribers">Subscriber DB Read-Only</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
