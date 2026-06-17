@@ -85,6 +85,17 @@
     .feature .fbody h3 { margin: 6px 0 8px; font-family: Georgia, serif; font-size: 26px; line-height: 1.05; }
     @media (max-width: 940px) { .shell { grid-template-columns: 1fr; } .side { position: static; height: auto; } .hero-card { grid-template-columns: 1fr; } .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } .media-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .feature { grid-template-columns: 1fr; } }
     @media (max-width: 620px) { .main { padding: 22px 14px 42px; } .top { display: block; } .status { margin-top: 12px; white-space: normal; } .grid { grid-template-columns: 1fr; } .media-grid { grid-template-columns: 1fr; } }
+    /* Endpoints list */
+    .ep-panel { margin: 18px 0; }
+    .ep-list { display: grid; gap: 10px; margin-top: 12px; }
+    .ep { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; align-items: center; padding: 13px 15px; border: 1px solid var(--line); border-radius: 9px; background: rgba(255,255,255,.03); }
+    .ep.key { border-color: var(--gold); background: rgba(226,191,103,.09); }
+    .ep .lbl b { color: #fff; font-size: 14px; }
+    .ep .lbl span { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; }
+    .ep code { grid-column: 1 / -1; overflow-x: auto; color: var(--gold); font-size: 12px; background: rgba(0,0,0,.32); padding: 8px 10px; border-radius: 6px; border: 1px solid var(--line); white-space: nowrap; }
+    .ep-actions { display: flex; gap: 6px; }
+    .ep-actions .btn { min-height: 32px; padding: 6px 12px; font-size: 11px; }
+    .btn.copied { background: var(--ok); color: #15100a; border-color: var(--ok); }
   </style>
 </head>
 <body>
@@ -94,6 +105,7 @@
     <div class="sub">SATCOM operator dashboard</div>
     <nav>
       <a href="#overview">Overview</a>
+      <a href="#endpoints">Endpoints</a>
       <a href="#events">Upcoming events</a>
       <a href="#editorial">Editorial</a>
       <a href="#campaign">Campaign kit</a>
@@ -117,6 +129,44 @@
       </div>
       <div class="status"><span class="dot"></span> Live campaign kit attached</div>
     </div>
+
+    <section class="panel ep-panel" id="endpoints">
+      <h2>Endpoints</h2>
+      <div class="ep-list">
+        <div class="ep key">
+          <div class="lbl"><b>Onboarding link</b><span>Client account setup &mdash; send this to Rick's first.</span></div>
+          <div class="ep-actions">
+            <button class="btn primary" type="button" onclick="copyEp(this,'https://myappstore.biz/onboarding?client=ricks-cabaret-central-city')">Copy</button>
+            <a class="btn" target="_blank" rel="noopener" href="https://myappstore.biz/onboarding?client=ricks-cabaret-central-city">Open</a>
+          </div>
+          <code>https://myappstore.biz/onboarding?client=ricks-cabaret-central-city</code>
+        </div>
+        <div class="ep">
+          <div class="lbl"><b>Client portal</b><span>Public campaign kit &mdash; the showcase you share with the client.</span></div>
+          <div class="ep-actions">
+            <button class="btn" type="button" onclick="copyEp(this,'https://satcom.5280.menu/ricks-cabaret-campaign-kit/')">Copy</button>
+            <a class="btn" target="_blank" rel="noopener" href="https://satcom.5280.menu/ricks-cabaret-campaign-kit/">Open</a>
+          </div>
+          <code>https://satcom.5280.menu/ricks-cabaret-campaign-kit/</code>
+        </div>
+        <div class="ep">
+          <div class="lbl"><b>Admin portal</b><span>This operator dashboard &mdash; internal handoff and review.</span></div>
+          <div class="ep-actions">
+            <button class="btn" type="button" onclick="copyEp(this,'https://satcom.5280.menu/ricks-cabaret-dashboard/')">Copy</button>
+            <a class="btn" target="_blank" rel="noopener" href="https://satcom.5280.menu/ricks-cabaret-dashboard/">Open</a>
+          </div>
+          <code>https://satcom.5280.menu/ricks-cabaret-dashboard/</code>
+        </div>
+        <div class="ep">
+          <div class="lbl"><b>Asset hub</b><span>All art + the four workspaces in one place.</span></div>
+          <div class="ep-actions">
+            <button class="btn" type="button" onclick="copyEp(this,'https://ricks.conews.press/')">Copy</button>
+            <a class="btn" target="_blank" rel="noopener" href="https://ricks.conews.press/">Open</a>
+          </div>
+          <code>https://ricks.conews.press/</code>
+        </div>
+      </div>
+    </section>
 
     <div class="notice">
       Claude's README marked the NY case series as draft and not for publication until legal review. The editorial drafts are linked here for review with status explicit.
@@ -254,6 +304,14 @@
   </main>
 </div>
 <script>
+  function copyEp(btn, url) {
+    const done = () => { const o = btn.textContent; btn.textContent = 'Copied ✓'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = o; btn.classList.remove('copied'); }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done).catch(() => window.prompt('Copy link:', url));
+    } else {
+      window.prompt('Copy link:', url);
+    }
+  }
   function cardData(el) {
     const card = el.closest('.mcard');
     return { caption: card?.dataset.caption || '', url: card?.dataset.url || '' };
