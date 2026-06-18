@@ -1165,6 +1165,56 @@
       overflow-wrap: anywhere;
     }
 
+    .stamps-workflow {
+      display: grid;
+      gap: 12px;
+      border: 1px solid rgba(32,53,43,.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,.26);
+      padding: 12px;
+    }
+
+    .stamps-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .stamps-head h3 {
+      margin: 0;
+      color: var(--brown);
+      font: 900 12px "DM Mono", monospace;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+    }
+
+    .stamps-head p {
+      margin: 5px 0 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .stamps-output {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+    }
+
+    .stamps-output .quote-field {
+      min-width: 0;
+    }
+
+    #stamps-csv-output,
+    #stamps-handoff {
+      min-height: 210px;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
+      white-space: pre;
+      overflow: auto;
+    }
+
     textarea:focus {
       border-color: var(--gold);
       box-shadow: 0 0 0 3px rgba(196,154,90,.16);
@@ -1247,6 +1297,8 @@
       .proof-art { grid-template-columns: 1fr; }
       .quote-grid,
       .quote-data,
+      .stamps-head,
+      .stamps-output,
       .portfolio-layout,
       .portfolio-list,
       .portfolio-add { grid-template-columns: 1fr; }
@@ -1644,6 +1696,88 @@
               <code id="quote-email-inline">Not set</code>
             </div>
           </div>
+          <div class="stamps-workflow" aria-label="Stamps.com integration">
+            <div class="stamps-head">
+              <div>
+                <h3>Stamps.com Integration</h3>
+                <p>Generate the Stamps.com CSV/import handoff from the selected mailing, front card, and back card. Keep any Stamps.com API keys server-side; this public proof page only prepares import data and instructions.</p>
+              </div>
+              <a class="btn" id="stamps-developer-link" href="https://developer.stamps.com/" target="_blank" rel="noopener noreferrer">API Docs</a>
+            </div>
+            <div class="quote-grid">
+              <div class="quote-field">
+                <label for="stamps-mode">Stamps.com path</label>
+                <select id="stamps-mode">
+                  <option value="CSV import / manual Stamps.com workflow">CSV import / manual Stamps.com workflow</option>
+                  <option value="Printer handles Stamps.com postage">Printer handles Stamps.com postage</option>
+                  <option value="Server-side Stamps.com API connector">Server-side Stamps.com API connector</option>
+                </select>
+              </div>
+              <div class="quote-field">
+                <label for="stamps-account">Stamps.com account</label>
+                <input id="stamps-account" type="text" placeholder="Account email / printer account / TBD">
+              </div>
+              <div class="quote-field">
+                <label for="stamps-mailpiece">Mailpiece</label>
+                <select id="stamps-mailpiece">
+                  <option value="Postcard / commercial card, printer to confirm final dimensions">Postcard / commercial card, printer to confirm final dimensions</option>
+                  <option value="5 x 7 postcard, printer to confirm rate class">5 x 7 postcard, printer to confirm rate class</option>
+                  <option value="6 x 9 postcard, printer to confirm rate class">6 x 9 postcard, printer to confirm rate class</option>
+                </select>
+              </div>
+              <div class="quote-field">
+                <label for="stamps-mail-class">Mail class</label>
+                <select id="stamps-mail-class">
+                  <option value="Compare USPS Marketing Mail presort vs First-Class postcard/card">Compare USPS Marketing Mail presort vs First-Class postcard/card</option>
+                  <option value="USPS Marketing Mail / presort if quantity and list qualify">USPS Marketing Mail / presort if quantity and list qualify</option>
+                  <option value="First-Class Mail postcard/card">First-Class Mail postcard/card</option>
+                </select>
+              </div>
+              <div class="quote-field">
+                <label for="stamps-weight">Weight / stock</label>
+                <input id="stamps-weight" type="text" value="Printer to confirm 0.007-0.016 in card stock">
+              </div>
+              <div class="quote-field">
+                <label for="stamps-cost-code">Cost code / campaign</label>
+                <input id="stamps-cost-code" type="text" value="Villager-Subscription-Renewal-2026">
+              </div>
+            </div>
+            <div class="quote-data" aria-label="Stamps.com inline data">
+              <div class="quote-data-row">
+                <span>Stamps path</span>
+                <code id="stamps-mode-inline">CSV import / manual Stamps.com workflow</code>
+              </div>
+              <div class="quote-data-row">
+                <span>CSV / template status</span>
+                <code id="stamps-csv-status-inline">Ready to generate from selected front/back mailing.</code>
+              </div>
+              <div class="quote-data-row">
+                <span>Import source</span>
+                <code id="stamps-import-source-inline">2026 Subscriber Sheet</code>
+              </div>
+              <div class="quote-data-row">
+                <span>API safety</span>
+                <code>Do not place Stamps.com username, password, token, integration ID, or API key in this static page. Use a private server-side connector only.</code>
+              </div>
+            </div>
+            <div class="stamps-output">
+              <div class="quote-field">
+                <label for="stamps-csv-output">Stamps.com CSV / import template</label>
+                <textarea id="stamps-csv-output" readonly spellcheck="false"></textarea>
+              </div>
+              <div class="quote-field">
+                <label for="stamps-handoff">Stamps.com handoff</label>
+                <textarea id="stamps-handoff" readonly spellcheck="false"></textarea>
+              </div>
+            </div>
+            <div class="quote-links">
+              <button class="btn primary" type="button" id="generate-stamps-export">Generate Stamps Export</button>
+              <button class="btn" type="button" id="download-stamps-csv">Download Stamps CSV</button>
+              <button class="btn" type="button" id="copy-stamps-csv">Copy Stamps CSV</button>
+              <button class="btn" type="button" id="copy-stamps-handoff">Copy Stamps Handoff</button>
+              <button class="btn" type="button" id="email-stamps-handoff">Email Stamps Handoff</button>
+            </div>
+          </div>
           <div class="quote-links">
             <a class="btn" id="mailing-sheet-link" href="https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070" target="_blank" rel="noopener noreferrer">Open 2026 Sheet</a>
             <a class="btn" id="stamps-link" href="https://www.stamps.com/" target="_blank" rel="noopener noreferrer">Open Stamps.com</a>
@@ -1735,6 +1869,8 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const subscriberDbUrl = 'https://www.thevillager.today/admin/master-subscribers';
     const mailingSheetUrl = 'https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070';
     const stampsComUrl = 'https://www.stamps.com/';
+    const stampsImportHelpNote = 'Stamps.com Help Center: search for Import Orders from a CSV or TXT File - Online (Web).';
+    const stampsDeveloperUrl = 'https://developer.stamps.com/';
     const mailCheckAddress = 'The Villager, 22095 E Chestnut Place, Aurora, CO 80016';
     const defaultArtSrc = '/villager-postcard-proofing/assets/basic-renewal-primary.png';
     const artAssets = {
@@ -1892,6 +2028,17 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const quoteFrontInline = document.getElementById('quote-front-inline');
     const quoteBackInline = document.getElementById('quote-back-inline');
     const quoteEmailInline = document.getElementById('quote-email-inline');
+    const stampsMode = document.getElementById('stamps-mode');
+    const stampsAccount = document.getElementById('stamps-account');
+    const stampsMailpiece = document.getElementById('stamps-mailpiece');
+    const stampsMailClass = document.getElementById('stamps-mail-class');
+    const stampsWeight = document.getElementById('stamps-weight');
+    const stampsCostCode = document.getElementById('stamps-cost-code');
+    const stampsModeInline = document.getElementById('stamps-mode-inline');
+    const stampsCsvStatusInline = document.getElementById('stamps-csv-status-inline');
+    const stampsImportSourceInline = document.getElementById('stamps-import-source-inline');
+    const stampsCsvOutput = document.getElementById('stamps-csv-output');
+    const stampsHandoff = document.getElementById('stamps-handoff');
     const portfolioList = document.getElementById('portfolio-list');
     const frontDropZone = document.getElementById('front-drop-zone');
     const backDropZone = document.getElementById('back-drop-zone');
@@ -1996,6 +2143,170 @@ Requested changes:`;
       return `${card.title} | ${quoteVersionLabel(card.version)} | ${card.asset || 'No asset/note set'}`;
     }
 
+    function csvEscape(value) {
+      const text = String(value ?? '');
+      if (/[",\n\r]/.test(text)) {
+        return `"${text.replace(/"/g, '""')}"`;
+      }
+      return text;
+    }
+
+    function stampsAccountLabel() {
+      return stampsAccount.value.trim() || 'TBD / printer account';
+    }
+
+    function buildStampsCsv() {
+      const frontCard = selectedCard('front');
+      const backCard = selectedCard('back');
+      const frontKey = frontSelection.value;
+      const proofUrl = proofUrlFor(frontKey);
+      const mailingUrl = selectedMailingUrl();
+      const selectedQuantity = formatQuantity(mailingQuantity.value);
+      const headers = [
+        'RecipientFirstName',
+        'RecipientLastName',
+        'Company',
+        'Address1',
+        'Address2',
+        'City',
+        'State',
+        'ZIP',
+        'Country',
+        'Pieces',
+        'MailingSource',
+        'MailingDataURL',
+        'ProofURL',
+        'SubscribeURL',
+        'FrontCard',
+        'BackCard',
+        'Mailpiece',
+        'MailClass',
+        'WeightOrStock',
+        'CostCode',
+        'PostagePath',
+        'StampsPath',
+        'Notes'
+      ];
+      const rows = [
+        [
+          'Replace',
+          'With Subscriber 1',
+          'The Villager subscriber export',
+          'Address 1 from sheet',
+          'Address 2 from sheet',
+          'City from sheet',
+          'CO',
+          'ZIP from sheet',
+          'US',
+          '1',
+          mailingSource.value,
+          mailingUrl,
+          proofUrl,
+          subscribeUrl,
+          frontCard ? cardSummary(frontCard) : selectLabel(frontSelection),
+          backCard ? cardSummary(backCard) : selectLabel(backSelection),
+          stampsMailpiece.value,
+          stampsMailClass.value,
+          stampsWeight.value,
+          stampsCostCode.value,
+          mailingService.value,
+          stampsMode.value,
+          `Template row. Replace recipient columns with ${selectedQuantity} current subscriber rows before importing into Stamps.com.`
+        ],
+        [
+          'Replace',
+          'With Subscriber 2',
+          'The Villager subscriber export',
+          'Address 1 from sheet',
+          '',
+          'City from sheet',
+          'CO',
+          'ZIP from sheet',
+          'US',
+          '1',
+          mailingSource.value,
+          mailingUrl,
+          proofUrl,
+          subscribeUrl,
+          frontCard ? cardSummary(frontCard) : selectLabel(frontSelection),
+          backCard ? cardSummary(backCard) : selectLabel(backSelection),
+          stampsMailpiece.value,
+          stampsMailClass.value,
+          stampsWeight.value,
+          stampsCostCode.value,
+          mailingService.value,
+          stampsMode.value,
+          'Template row. Map these columns during Stamps.com CSV import, then delete unused template rows.'
+        ]
+      ];
+      return [
+        headers.map(csvEscape).join(','),
+        ...rows.map((row) => row.map(csvEscape).join(','))
+      ].join('\n');
+    }
+
+    function buildStampsHandoff() {
+      const frontCard = selectedCard('front');
+      const backCard = selectedCard('back');
+      return `Stamps.com handoff - The Villager subscription renewal mailing
+
+Selected mailing:
+- Source: ${mailingSource.value}
+- Source URL: ${selectedMailingUrl()}
+- Quantity: ${formatQuantity(mailingQuantity.value)} pieces
+- Target mail date: ${mailDate.value || 'TBD'}
+- Mailing/check address: ${mailCheckAddress}
+
+Selected card portfolio:
+- Front: ${frontCard ? cardSummary(frontCard) : 'No front card selected'}
+- Back: ${backCard ? cardSummary(backCard) : 'No back card selected'}
+- Proof URL: ${proofUrlFor(frontSelection.value)}
+- Subscribe / QR URL: ${subscribeUrl}
+
+Stamps.com configuration:
+- Path: ${stampsMode.value}
+- Account: ${stampsAccountLabel()}
+- Mailpiece: ${stampsMailpiece.value}
+- Mail class: ${stampsMailClass.value}
+- Weight / stock: ${stampsWeight.value || 'Printer to confirm'}
+- Cost code / campaign: ${stampsCostCode.value || 'TBD'}
+- Stamps.com URL: ${stampsComUrl}
+- CSV import help: ${stampsImportHelpNote}
+- API docs: ${stampsDeveloperUrl}
+
+Important:
+- Do not put Stamps.com credentials in this public static proofing page.
+- If API automation is needed, create a private server-side connector and keep all credentials in server environment variables.
+- For the immediate mailing, export the current subscriber rows from the selected source, map recipient columns in Stamps.com, and keep the selected proof/front/back metadata in the CSV notes or order reference fields.
+
+Generated CSV:
+${buildStampsCsv()}`;
+    }
+
+    function refreshStampsIntegration(options = {}) {
+      stampsModeInline.textContent = stampsMode.value;
+      stampsImportSourceInline.textContent = selectedMailingUrl();
+      stampsCsvOutput.value = buildStampsCsv();
+      stampsHandoff.value = buildStampsHandoff();
+      stampsCsvStatusInline.textContent = `${formatQuantity(mailingQuantity.value)} selected pieces / ${selectLabel(frontSelection)} + ${selectLabel(backSelection)} / ${stampsMode.value}`;
+      if (!options.silent) showToast('Stamps export generated');
+    }
+
+    function downloadStampsCsv() {
+      refreshStampsIntegration({ silent: true });
+      const blob = new Blob([stampsCsvOutput.value], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const stamp = new Date().toISOString().slice(0, 10);
+      link.href = url;
+      link.download = `villager-stamps-import-${stamp}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showToast('Stamps CSV downloaded');
+    }
+
     function savePortfolioState() {
       const payload = {
         savedAt: new Date().toISOString(),
@@ -2008,7 +2319,13 @@ Requested changes:`;
           frontSelection: frontSelection.value,
           backSelection: backSelection.value,
           mailDate: mailDate.value,
-          printerEmail: printerEmail.value
+          printerEmail: printerEmail.value,
+          stampsMode: stampsMode.value,
+          stampsAccount: stampsAccount.value,
+          stampsMailpiece: stampsMailpiece.value,
+          stampsMailClass: stampsMailClass.value,
+          stampsWeight: stampsWeight.value,
+          stampsCostCode: stampsCostCode.value
         }
       };
       localStorage.setItem(portfolioStorageKey, JSON.stringify(payload));
@@ -2034,6 +2351,12 @@ Requested changes:`;
           if (saved.form.backSelection) backSelection.value = saved.form.backSelection;
           if (saved.form.mailDate) mailDate.value = saved.form.mailDate;
           if (saved.form.printerEmail) printerEmail.value = saved.form.printerEmail;
+          if (saved.form.stampsMode) stampsMode.value = saved.form.stampsMode;
+          if (saved.form.stampsAccount) stampsAccount.value = saved.form.stampsAccount;
+          if (saved.form.stampsMailpiece) stampsMailpiece.value = saved.form.stampsMailpiece;
+          if (saved.form.stampsMailClass) stampsMailClass.value = saved.form.stampsMailClass;
+          if (saved.form.stampsWeight) stampsWeight.value = saved.form.stampsWeight;
+          if (saved.form.stampsCostCode) stampsCostCode.value = saved.form.stampsCostCode;
         }
         saveStatus.textContent = `Loaded saved mailing selection from ${saved.savedAt ? new Date(saved.savedAt).toLocaleString() : 'local storage'}.`;
       } catch {
@@ -2136,6 +2459,7 @@ Requested changes:`;
       quoteFrontInline.textContent = frontCard ? cardSummary(frontCard) : `${selectLabel(frontSelection)} | artwork: ${quoteArtLabel(frontSelection.value)} | file: ${quoteArtSrc(frontSelection.value)}`;
       quoteBackInline.textContent = backCard ? cardSummary(backCard) : selectLabel(backSelection);
       quoteEmailInline.textContent = printerEmail.value.trim() || 'Not set';
+      refreshStampsIntegration({ silent: true });
     }
 
     function buildQuotePrompt() {
@@ -2153,6 +2477,12 @@ Selected mailing:
 - Target mail date: ${mailDate.value || 'TBD'}
 - Postage / mailing path: ${mailingService.value}
 - Stamps.com option/link: ${stampsComUrl}
+- Stamps.com path: ${stampsMode.value}
+- Stamps.com account: ${stampsAccountLabel()}
+- Stamps.com mailpiece: ${stampsMailpiece.value}
+- Stamps.com mail class: ${stampsMailClass.value}
+- Stamps.com weight/stock: ${stampsWeight.value || 'Printer to confirm'}
+- Stamps.com cost code: ${stampsCostCode.value || 'TBD'}
 
 Selected proof:
 - Selected front portfolio card: ${frontCard ? cardSummary(frontCard) : 'No front card selected'}
@@ -2176,6 +2506,8 @@ Quote requested:
 - Paper stock options suitable for direct mail
 - Variable address merge / inkjet addressing from selected mailing source
 - Presort, postage, indicia, Stamps.com compatibility, and mail-drop services
+- Stamps.com CSV import compatibility, mapped columns, and whether the printer can import/export postage through Stamps.com
+- If API automation is recommended, quote a private server-side connector only; do not put credentials in static HTML
 - Turnaround time after final proof approval
 - PDF/export requirements, bleed, trim, safe-area specs, address block, barcode clear zone, and indicia placement
 - QR-code scan legibility check before print
@@ -2302,7 +2634,33 @@ Please include setup fees, postage estimate, proof timing, ship/mail date, and w
       location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     });
 
-    [mailingSource, mailingQuantity, mailingService, backSelection, mailDate, printerEmail].forEach((input) => {
+    document.getElementById('generate-stamps-export').addEventListener('click', () => {
+      refreshStampsIntegration();
+    });
+
+    document.getElementById('download-stamps-csv').addEventListener('click', () => {
+      downloadStampsCsv();
+    });
+
+    document.getElementById('copy-stamps-csv').addEventListener('click', () => {
+      refreshStampsIntegration({ silent: true });
+      copyText(stampsCsvOutput.value, 'Stamps CSV');
+    });
+
+    document.getElementById('copy-stamps-handoff').addEventListener('click', () => {
+      refreshStampsIntegration({ silent: true });
+      copyText(stampsHandoff.value, 'Stamps handoff');
+    });
+
+    document.getElementById('email-stamps-handoff').addEventListener('click', () => {
+      refreshStampsIntegration({ silent: true });
+      const subject = encodeURIComponent('The Villager Stamps.com mailing handoff');
+      const body = encodeURIComponent(stampsHandoff.value);
+      const recipient = encodeURIComponent(printerEmail.value.trim());
+      location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+    });
+
+    [mailingSource, mailingQuantity, mailingService, backSelection, mailDate, printerEmail, stampsMode, stampsAccount, stampsMailpiece, stampsMailClass, stampsWeight, stampsCostCode].forEach((input) => {
       input.addEventListener('input', updateQuoteSummary);
       input.addEventListener('change', updateQuoteSummary);
     });
@@ -2399,6 +2757,12 @@ Please include setup fees, postage estimate, proof timing, ship/mail date, and w
       backSelection.value = 'regular';
       mailDate.value = 'Before July 15';
       printerEmail.value = '';
+      stampsMode.value = 'CSV import / manual Stamps.com workflow';
+      stampsAccount.value = '';
+      stampsMailpiece.value = 'Postcard / commercial card, printer to confirm final dimensions';
+      stampsMailClass.value = 'Compare USPS Marketing Mail presort vs First-Class postcard/card';
+      stampsWeight.value = 'Printer to confirm 0.007-0.016 in card stock';
+      stampsCostCode.value = 'Villager-Subscription-Renewal-2026';
       localStorage.removeItem(portfolioStorageKey);
       selectVersion('regular');
       renderPortfolio();
