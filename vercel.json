@@ -18,7 +18,7 @@
   "rewrites": [
     {
       "source": "/console/api/hermes/:path*",
-      "destination": "https://codex.conews.press/console/api/hermes/:path*"
+      "destination": "https://codex.conews.press/api/v1/platform/hermes/:path*"
     }
   ]
 }
