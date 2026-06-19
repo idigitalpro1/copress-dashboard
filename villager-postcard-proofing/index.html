@@ -1202,8 +1202,38 @@
       gap: 10px;
     }
 
+    .subscriber-import {
+      display: grid;
+      gap: 10px;
+      border: 1px dashed rgba(32,53,43,.28);
+      border-radius: 8px;
+      background: rgba(255,255,255,.24);
+      padding: 12px;
+    }
+
+    .subscriber-import h3 {
+      margin: 0;
+      color: var(--brown);
+      font: 900 12px "DM Mono", monospace;
+      letter-spacing: .9px;
+      text-transform: uppercase;
+    }
+
+    .subscriber-import p {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
     .stamps-output .quote-field {
       min-width: 0;
+    }
+
+    #subscriber-csv-paste {
+      min-height: 120px;
+      font-family: "DM Mono", monospace;
+      font-size: 11px;
     }
 
     #stamps-csv-output,
@@ -1742,6 +1772,37 @@
                 <input id="stamps-cost-code" type="text" value="Villager-Subscription-Renewal-2026">
               </div>
             </div>
+            <div class="subscriber-import" aria-label="Subscriber CSV import">
+              <div>
+                <h3>Subscriber CSV Import</h3>
+                <p>Upload or paste a CSV export from the 2026 subscriber sheet. Parsing happens locally in this browser; the proofing page does not store the subscriber list or require Google/Stamps credentials.</p>
+              </div>
+              <div class="quote-grid">
+                <div class="quote-field">
+                  <label for="subscriber-csv-file">Upload subscriber CSV</label>
+                  <input id="subscriber-csv-file" type="file" accept=".csv,text/csv">
+                </div>
+                <div class="quote-field">
+                  <label for="subscriber-import-name">Import label</label>
+                  <input id="subscriber-import-name" type="text" value="2026 subscriber sheet export">
+                </div>
+                <div class="quote-field">
+                  <label for="subscriber-import-mode">Recipient mapping</label>
+                  <select id="subscriber-import-mode">
+                    <option value="Auto-map name/address columns">Auto-map name/address columns</option>
+                    <option value="Use raw rows with manual Stamps.com mapping">Use raw rows with manual Stamps.com mapping</option>
+                  </select>
+                </div>
+              </div>
+              <div class="quote-field">
+                <label for="subscriber-csv-paste">Paste subscriber CSV</label>
+                <textarea id="subscriber-csv-paste" spellcheck="false" placeholder="First Name,Last Name,Address,City,State,Zip&#10;Jane,Subscriber,123 Main St,Greenwood Village,CO,80111"></textarea>
+              </div>
+              <div class="quote-links">
+                <button class="btn primary" type="button" id="import-subscriber-csv">Import Subscriber CSV</button>
+                <button class="btn" type="button" id="clear-subscriber-csv">Clear Subscriber Import</button>
+              </div>
+            </div>
             <div class="quote-data" aria-label="Stamps.com inline data">
               <div class="quote-data-row">
                 <span>Stamps path</span>
@@ -1754,6 +1815,14 @@
               <div class="quote-data-row">
                 <span>Import source</span>
                 <code id="stamps-import-source-inline">2026 Subscriber Sheet</code>
+              </div>
+              <div class="quote-data-row">
+                <span>Subscriber rows</span>
+                <code id="subscriber-import-count-inline">No subscriber CSV imported; using template rows.</code>
+              </div>
+              <div class="quote-data-row">
+                <span>Detected columns</span>
+                <code id="subscriber-import-columns-inline">None yet.</code>
               </div>
               <div class="quote-data-row">
                 <span>API safety</span>
@@ -2039,6 +2108,12 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const stampsImportSourceInline = document.getElementById('stamps-import-source-inline');
     const stampsCsvOutput = document.getElementById('stamps-csv-output');
     const stampsHandoff = document.getElementById('stamps-handoff');
+    const subscriberCsvFile = document.getElementById('subscriber-csv-file');
+    const subscriberCsvPaste = document.getElementById('subscriber-csv-paste');
+    const subscriberImportName = document.getElementById('subscriber-import-name');
+    const subscriberImportMode = document.getElementById('subscriber-import-mode');
+    const subscriberImportCountInline = document.getElementById('subscriber-import-count-inline');
+    const subscriberImportColumnsInline = document.getElementById('subscriber-import-columns-inline');
     const portfolioList = document.getElementById('portfolio-list');
     const frontDropZone = document.getElementById('front-drop-zone');
     const backDropZone = document.getElementById('back-drop-zone');
@@ -2050,6 +2125,8 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const cardNotesInput = document.getElementById('card-notes');
     const saveStatus = document.getElementById('save-status');
     let uploadedArtUrl = '';
+    let importedSubscriberRows = [];
+    let importedSubscriberHeaders = [];
 
     function activeProofUrl() {
       if (location.protocol === 'http:' || location.protocol === 'https:') {
@@ -2151,6 +2228,138 @@ Requested changes:`;
       return text;
     }
 
+    function parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let inQuotes = false;
+      const value = String(text || '').replace(/^\uFEFF/, '');
+      for (let index = 0; index < value.length; index += 1) {
+        const char = value[index];
+        const next = value[index + 1];
+        if (char === '"') {
+          if (inQuotes && next === '"') {
+            field += '"';
+            index += 1;
+          } else {
+            inQuotes = !inQuotes;
+          }
+        } else if (char === ',' && !inQuotes) {
+          row.push(field);
+          field = '';
+        } else if ((char === '\n' || char === '\r') && !inQuotes) {
+          if (char === '\r' && next === '\n') index += 1;
+          row.push(field);
+          if (row.some((cell) => cell.trim())) rows.push(row);
+          row = [];
+          field = '';
+        } else {
+          field += char;
+        }
+      }
+      row.push(field);
+      if (row.some((cell) => cell.trim())) rows.push(row);
+      return rows;
+    }
+
+    function normalizeColumn(value) {
+      return String(value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+
+    function objectFromCsvRow(headers, row) {
+      const record = {};
+      headers.forEach((header, index) => {
+        record[header] = row[index] ?? '';
+        record[normalizeColumn(header)] = row[index] ?? '';
+      });
+      return record;
+    }
+
+    function fieldFromRecord(record, aliases) {
+      for (const alias of aliases) {
+        const value = record[normalizeColumn(alias)];
+        if (String(value || '').trim()) return String(value).trim();
+      }
+      return '';
+    }
+
+    function splitFullName(name) {
+      const parts = String(name || '').trim().split(/\s+/).filter(Boolean);
+      if (!parts.length) return { first: '', last: '' };
+      if (parts.length === 1) return { first: parts[0], last: '' };
+      return {
+        first: parts.slice(0, -1).join(' '),
+        last: parts[parts.length - 1]
+      };
+    }
+
+    function subscriberRecipient(record) {
+      const fullName = fieldFromRecord(record, ['Name', 'Subscriber Name', 'Full Name', 'Customer Name', 'Recipient Name']);
+      const splitName = splitFullName(fullName);
+      const first = fieldFromRecord(record, ['First Name', 'Firstname', 'First', 'FName']) || splitName.first;
+      const last = fieldFromRecord(record, ['Last Name', 'Lastname', 'Last', 'LName', 'Surname']) || splitName.last;
+      const address1 = fieldFromRecord(record, [
+        'Address 1',
+        'Address1',
+        'Address',
+        'Mailing Address',
+        'Street Address',
+        'Street',
+        'Delivery Address'
+      ]);
+      return {
+        first,
+        last,
+        company: fieldFromRecord(record, ['Company', 'Organization', 'Business', 'Account', 'Publication']),
+        address1,
+        address2: fieldFromRecord(record, ['Address 2', 'Address2', 'Apt', 'Suite', 'Unit', 'Secondary Address']),
+        city: fieldFromRecord(record, ['City', 'Town', 'Municipality']),
+        state: fieldFromRecord(record, ['State', 'ST', 'Province']),
+        zip: fieldFromRecord(record, ['Zip', 'ZIP', 'Zip Code', 'Postal Code', 'Postcode']),
+        country: fieldFromRecord(record, ['Country']) || 'US',
+        email: fieldFromRecord(record, ['Email', 'Email Address']),
+        phone: fieldFromRecord(record, ['Phone', 'Telephone', 'Mobile']),
+        rawName: fullName
+      };
+    }
+
+    function importedSubscriberLabel() {
+      const name = subscriberImportName.value.trim() || 'subscriber CSV import';
+      if (!importedSubscriberRows.length) return `${name}: no rows imported`;
+      return `${name}: ${importedSubscriberRows.length.toLocaleString('en-US')} recipient rows`;
+    }
+
+    function updateSubscriberImportStatus() {
+      subscriberImportCountInline.textContent = importedSubscriberRows.length
+        ? importedSubscriberLabel()
+        : 'No subscriber CSV imported; using template rows.';
+      subscriberImportColumnsInline.textContent = importedSubscriberHeaders.length
+        ? importedSubscriberHeaders.join(', ')
+        : 'None yet.';
+    }
+
+    function importSubscriberCsvText(text, label = '') {
+      const rows = parseCsv(text);
+      if (rows.length < 2) {
+        importedSubscriberRows = [];
+        importedSubscriberHeaders = [];
+        updateSubscriberImportStatus();
+        refreshStampsIntegration({ silent: true });
+        showToast('no subscriber rows found');
+        return;
+      }
+      const headers = rows[0].map((header, index) => header.trim() || `Column ${index + 1}`);
+      const records = rows.slice(1)
+        .map((row) => objectFromCsvRow(headers, row))
+        .filter((record) => Object.values(record).some((value) => String(value || '').trim()));
+      importedSubscriberHeaders = headers;
+      importedSubscriberRows = records;
+      if (label) subscriberImportName.value = label;
+      if (records.length) mailingQuantity.value = String(records.length);
+      updateSubscriberImportStatus();
+      refreshStampsIntegration();
+    }
+
     function stampsAccountLabel() {
       return stampsAccount.value.trim() || 'TBD / printer account';
     }
@@ -2187,58 +2396,71 @@ Requested changes:`;
         'StampsPath',
         'Notes'
       ];
-      const rows = [
-        [
-          'Replace',
-          'With Subscriber 1',
-          'The Villager subscriber export',
-          'Address 1 from sheet',
-          'Address 2 from sheet',
-          'City from sheet',
-          'CO',
-          'ZIP from sheet',
-          'US',
-          '1',
-          mailingSource.value,
-          mailingUrl,
-          proofUrl,
-          subscribeUrl,
-          frontCard ? cardSummary(frontCard) : selectLabel(frontSelection),
-          backCard ? cardSummary(backCard) : selectLabel(backSelection),
-          stampsMailpiece.value,
-          stampsMailClass.value,
-          stampsWeight.value,
-          stampsCostCode.value,
-          mailingService.value,
-          stampsMode.value,
-          `Template row. Replace recipient columns with ${selectedQuantity} current subscriber rows before importing into Stamps.com.`
-        ],
-        [
-          'Replace',
-          'With Subscriber 2',
-          'The Villager subscriber export',
-          'Address 1 from sheet',
-          '',
-          'City from sheet',
-          'CO',
-          'ZIP from sheet',
-          'US',
-          '1',
-          mailingSource.value,
-          mailingUrl,
-          proofUrl,
-          subscribeUrl,
-          frontCard ? cardSummary(frontCard) : selectLabel(frontSelection),
-          backCard ? cardSummary(backCard) : selectLabel(backSelection),
-          stampsMailpiece.value,
-          stampsMailClass.value,
-          stampsWeight.value,
-          stampsCostCode.value,
-          mailingService.value,
-          stampsMode.value,
-          'Template row. Map these columns during Stamps.com CSV import, then delete unused template rows.'
-        ]
+      const sharedColumns = [
+        mailingSource.value,
+        mailingUrl,
+        proofUrl,
+        subscribeUrl,
+        frontCard ? cardSummary(frontCard) : selectLabel(frontSelection),
+        backCard ? cardSummary(backCard) : selectLabel(backSelection),
+        stampsMailpiece.value,
+        stampsMailClass.value,
+        stampsWeight.value,
+        stampsCostCode.value,
+        mailingService.value,
+        stampsMode.value
       ];
+      const rows = importedSubscriberRows.length
+        ? importedSubscriberRows.map((record, index) => {
+          const recipient = subscriberRecipient(record);
+          const rawNote = subscriberImportMode.value === 'Use raw rows with manual Stamps.com mapping'
+            ? ` Raw source row ${index + 1}: ${importedSubscriberHeaders.map((header) => `${header}=${record[header] || ''}`).join(' | ')}`
+            : '';
+          return [
+            recipient.first || recipient.rawName || 'Subscriber',
+            recipient.last || '',
+            recipient.company || 'The Villager subscriber',
+            recipient.address1 || 'ADDRESS MISSING - CHECK SOURCE CSV',
+            recipient.address2,
+            recipient.city || 'CITY MISSING',
+            recipient.state || 'CO',
+            recipient.zip || 'ZIP MISSING',
+            recipient.country || 'US',
+            '1',
+            ...sharedColumns,
+            `${importedSubscriberLabel()}; row ${index + 1}.${rawNote}`
+          ];
+        })
+        : [
+          [
+            'Replace',
+            'With Subscriber 1',
+            'The Villager subscriber export',
+            'Address 1 from sheet',
+            'Address 2 from sheet',
+            'City from sheet',
+            'CO',
+            'ZIP from sheet',
+            'US',
+            '1',
+            ...sharedColumns,
+            `Template row. Replace recipient columns with ${selectedQuantity} current subscriber rows before importing into Stamps.com.`
+          ],
+          [
+            'Replace',
+            'With Subscriber 2',
+            'The Villager subscriber export',
+            'Address 1 from sheet',
+            '',
+            'City from sheet',
+            'CO',
+            'ZIP from sheet',
+            'US',
+            '1',
+            ...sharedColumns,
+            'Template row. Map these columns during Stamps.com CSV import, then delete unused template rows.'
+          ]
+        ];
       return [
         headers.map(csvEscape).join(','),
         ...rows.map((row) => row.map(csvEscape).join(','))
@@ -2254,6 +2476,8 @@ Selected mailing:
 - Source: ${mailingSource.value}
 - Source URL: ${selectedMailingUrl()}
 - Quantity: ${formatQuantity(mailingQuantity.value)} pieces
+- Imported subscriber CSV: ${importedSubscriberRows.length ? importedSubscriberLabel() : 'none imported; CSV output contains template rows'}
+- Detected subscriber columns: ${importedSubscriberHeaders.length ? importedSubscriberHeaders.join(', ') : 'none'}
 - Target mail date: ${mailDate.value || 'TBD'}
 - Mailing/check address: ${mailCheckAddress}
 
@@ -2286,9 +2510,10 @@ ${buildStampsCsv()}`;
     function refreshStampsIntegration(options = {}) {
       stampsModeInline.textContent = stampsMode.value;
       stampsImportSourceInline.textContent = selectedMailingUrl();
+      updateSubscriberImportStatus();
       stampsCsvOutput.value = buildStampsCsv();
       stampsHandoff.value = buildStampsHandoff();
-      stampsCsvStatusInline.textContent = `${formatQuantity(mailingQuantity.value)} selected pieces / ${selectLabel(frontSelection)} + ${selectLabel(backSelection)} / ${stampsMode.value}`;
+      stampsCsvStatusInline.textContent = `${formatQuantity(mailingQuantity.value)} selected pieces / ${importedSubscriberRows.length ? 'real subscriber rows imported' : 'template rows only'} / ${selectLabel(frontSelection)} + ${selectLabel(backSelection)} / ${stampsMode.value}`;
       if (!options.silent) showToast('Stamps export generated');
     }
 
@@ -2325,7 +2550,9 @@ ${buildStampsCsv()}`;
           stampsMailpiece: stampsMailpiece.value,
           stampsMailClass: stampsMailClass.value,
           stampsWeight: stampsWeight.value,
-          stampsCostCode: stampsCostCode.value
+          stampsCostCode: stampsCostCode.value,
+          subscriberImportName: subscriberImportName.value,
+          subscriberImportMode: subscriberImportMode.value
         }
       };
       localStorage.setItem(portfolioStorageKey, JSON.stringify(payload));
@@ -2357,6 +2584,8 @@ ${buildStampsCsv()}`;
           if (saved.form.stampsMailClass) stampsMailClass.value = saved.form.stampsMailClass;
           if (saved.form.stampsWeight) stampsWeight.value = saved.form.stampsWeight;
           if (saved.form.stampsCostCode) stampsCostCode.value = saved.form.stampsCostCode;
+          if (saved.form.subscriberImportName) subscriberImportName.value = saved.form.subscriberImportName;
+          if (saved.form.subscriberImportMode) subscriberImportMode.value = saved.form.subscriberImportMode;
         }
         saveStatus.textContent = `Loaded saved mailing selection from ${saved.savedAt ? new Date(saved.savedAt).toLocaleString() : 'local storage'}.`;
       } catch {
@@ -2660,7 +2889,29 @@ Please include setup fees, postage estimate, proof timing, ship/mail date, and w
       location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
     });
 
-    [mailingSource, mailingQuantity, mailingService, backSelection, mailDate, printerEmail, stampsMode, stampsAccount, stampsMailpiece, stampsMailClass, stampsWeight, stampsCostCode].forEach((input) => {
+    document.getElementById('import-subscriber-csv').addEventListener('click', () => {
+      importSubscriberCsvText(subscriberCsvPaste.value, subscriberImportName.value.trim());
+    });
+
+    document.getElementById('clear-subscriber-csv').addEventListener('click', () => {
+      importedSubscriberRows = [];
+      importedSubscriberHeaders = [];
+      subscriberCsvFile.value = '';
+      subscriberCsvPaste.value = '';
+      updateSubscriberImportStatus();
+      refreshStampsIntegration({ silent: true });
+      showToast('subscriber import cleared');
+    });
+
+    subscriberCsvFile.addEventListener('change', async () => {
+      const [file] = subscriberCsvFile.files || [];
+      if (!file) return;
+      const text = await file.text();
+      subscriberCsvPaste.value = text;
+      importSubscriberCsvText(text, file.name.replace(/\.[^.]+$/, ''));
+    });
+
+    [mailingSource, mailingQuantity, mailingService, backSelection, mailDate, printerEmail, stampsMode, stampsAccount, stampsMailpiece, stampsMailClass, stampsWeight, stampsCostCode, subscriberImportName, subscriberImportMode].forEach((input) => {
       input.addEventListener('input', updateQuoteSummary);
       input.addEventListener('change', updateQuoteSummary);
     });
@@ -2763,6 +3014,12 @@ Please include setup fees, postage estimate, proof timing, ship/mail date, and w
       stampsMailClass.value = 'Compare USPS Marketing Mail presort vs First-Class postcard/card';
       stampsWeight.value = 'Printer to confirm 0.007-0.016 in card stock';
       stampsCostCode.value = 'Villager-Subscription-Renewal-2026';
+      subscriberImportName.value = '2026 subscriber sheet export';
+      subscriberImportMode.value = 'Auto-map name/address columns';
+      subscriberCsvFile.value = '';
+      subscriberCsvPaste.value = '';
+      importedSubscriberRows = [];
+      importedSubscriberHeaders = [];
       localStorage.removeItem(portfolioStorageKey);
       selectVersion('regular');
       renderPortfolio();
