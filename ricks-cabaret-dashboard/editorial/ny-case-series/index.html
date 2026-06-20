@@ -28,13 +28,13 @@
     .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 7px; color: var(--paper); background: rgba(255,255,255,.045); font-size: 12px; font-weight: 850; text-transform: uppercase; letter-spacing: .5px; }
     .btn.primary { background: var(--gold); border-color: var(--gold); color: #15100a; }
     .notice { margin: 16px 0; padding: 14px 16px; border: 1px solid rgba(224,166,78,.45); border-radius: 8px; background: rgba(224,166,78,.08); color: #ead7b2; font-size: 14px; }
-    .layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 14px; }
-    .list, .reader { border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.045); }
-    .list { padding: 12px; height: fit-content; position: sticky; top: 12px; }
-    .doc-link { display: block; width: 100%; margin: 0 0 7px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 7px; color: var(--paper); background: rgba(255,255,255,.035); text-align: left; font: inherit; cursor: pointer; }
-    .doc-link:hover, .doc-link.active { border-color: var(--gold); background: rgba(226,191,103,.12); }
-    .doc-link b { display: block; color: var(--gold); font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; }
-    .doc-link span { display: block; margin-top: 3px; font-size: 13px; line-height: 1.25; }
+    .layout { display: block; }
+    .reader { border: 1px solid var(--line); border-radius: 8px; background: rgba(255,255,255,.045); }
+    /* Full-size article cards */
+    .list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin: 0 0 18px; }
+    .doc-link { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 128px; padding: 22px; border: 1px solid var(--line); border-radius: 10px; color: var(--paper); background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03)); text-align: left; font: inherit; cursor: pointer; transition: transform .15s ease, border-color .15s ease, background .15s ease; }
+    .doc-link:hover, .doc-link.active { border-color: var(--gold); background: rgba(226,191,103,.14); transform: translateY(-2px); }
+    .doc-link b { display: block; font-family: Georgia, serif; color: var(--gold); font-size: 24px; line-height: 1.05; letter-spacing: 0; text-transform: none; }
     .reader { min-height: 640px; padding: 24px; }
     .reader article { max-width: 780px; }
     .reader h1, .reader h2, .reader h3 { font-family: Georgia, serif; color: var(--paper); line-height: 1.08; }
@@ -69,8 +69,8 @@
 <main>
   <section class="hero">
     <div>
-      <div class="eyebrow">Internal editorial review</div>
-      <h1>Rick's Official U.S. Press Kit</h1>
+      <div class="eyebrow">Rick's Cabaret Central City</div>
+      <h1>OFFICIAL U.S. PRESS</h1>
       <p>Publisher-review materials and legal-review editorial drafts. These are review copies, not cleared publication pages.</p>
     </div>
     <div class="actions">
@@ -117,17 +117,17 @@
 
 <script>
 const docs = [
-  ['00-SERIES-EDITOR-NOTES.md', 'Notes', 'Editor working notes'],
-  ['01-presumed-innocent.md', 'Part 01', 'Presumed Innocent'],
-  ['02-allegation-not-verdict.md', 'Part 02', 'Allegation, Not Verdict'],
-  ['03-lou-bunch-mirror.md', 'Part 03', 'The Lou Bunch Mirror'],
-  ['04-proportion-and-priorities.md', 'Part 04', 'Proportion and Priorities'],
-  ['05-trial-by-press-release.md', 'Part 05', 'Trial by Press Release'],
-  ['06-local-stakes.md', 'Part 06', 'Local Stakes'],
-  ['07-record-fairly-stated.md', 'Part 07', 'The Record, Fairly Stated'],
-  ['08-due-process-over-mob-justice.md', 'Part 08', 'Due Process Over Mob Justice'],
-  ['09-selective-morality.md', 'Part 09', 'Selective Morality'],
-  ['10-what-comes-next.md', 'Part 10', 'What Comes Next']
+  ['00-SERIES-EDITOR-NOTES.md', 'Editor Notes', 'Editor working notes'],
+  ['01-presumed-innocent.md', 'Article 1', 'Presumed Innocent'],
+  ['02-allegation-not-verdict.md', 'Article 2', 'Allegation, Not Verdict'],
+  ['03-lou-bunch-mirror.md', 'Article 3', 'The Lou Bunch Mirror'],
+  ['04-proportion-and-priorities.md', 'Article 4', 'Proportion and Priorities'],
+  ['05-trial-by-press-release.md', 'Article 5', 'Trial by Press Release'],
+  ['06-local-stakes.md', 'Article 6', 'Local Stakes'],
+  ['07-record-fairly-stated.md', 'Article 7', 'The Record, Fairly Stated'],
+  ['08-due-process-over-mob-justice.md', 'Article 8', 'Due Process Over Mob Justice'],
+  ['09-selective-morality.md', 'Article 9', 'Selective Morality'],
+  ['10-what-comes-next.md', 'Article 10', 'What Comes Next']
 ];
 const base = '/ricks-cabaret-dashboard/editorial/ny-case-series/';
 const escapeHtml = (value) => value.replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
@@ -165,8 +165,8 @@ function activeFile() {
 
 function renderList(current) {
   document.getElementById('doc-list').innerHTML = docs.map(([file, label, title]) => `
-    <button class="doc-link ${file === current ? 'active' : ''}" data-doc="${file}">
-      <b>${label}</b><span>${title}</span>
+    <button class="doc-link ${file === current ? 'active' : ''}" data-doc="${file}" title="${title}">
+      <b>${label}</b>
     </button>
   `).join('');
 }
