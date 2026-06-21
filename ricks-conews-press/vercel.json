@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/ricks-cabaret-campaign-kit", "destination": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/" },
-    { "source": "/ricks-cabaret-campaign-kit/:path*", "destination": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/:path*" },
-    { "source": "/ricks-cabaret-dashboard", "destination": "https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/" },
-    { "source": "/ricks-cabaret-dashboard/:path*", "destination": "https://copress-dashboard.vercel.app/ricks-cabaret-dashboard/:path*" }
-  ]
-}
