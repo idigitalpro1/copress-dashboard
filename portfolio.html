@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Owned Assets — SATCOM Portfolio · CoNews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#070c14; --surface:#0d1520; --surface2:#101a28;
+    --gold:#c8a84b; --gold-dim:rgba(200,168,75,.5); --gold-pale:#e8d49a;
+    --red:#c0392b; --green:#27ae60; --amber:#f39c12; --blue:#3498db;
+    --ink:#e2ddd5; --ink-muted:#8a93a3; --ink-dim:#4a5060;
+    --border:rgba(200,168,75,.12); --border-hi:rgba(200,168,75,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;min-height:100vh}
+  a{color:inherit;text-decoration:none}
+  .topbar{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,#0a121d,#070c14);border-bottom:1px solid var(--border);padding:18px 26px}
+  .topbar h1{font-family:"Playfair Display",serif;font-weight:900;font-size:24px;letter-spacing:.5px}
+  .topbar h1 .accent{color:var(--gold)}
+  .topbar .sub{font-family:"DM Mono",monospace;font-size:11px;color:var(--ink-muted);margin-top:3px;letter-spacing:.4px}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+  .pill{font-family:"DM Sans";font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:7px 14px;border:1px solid var(--border-hi);border-radius:999px;background:transparent;color:var(--ink-muted);cursor:pointer;transition:.18s;white-space:nowrap}
+  .pill:hover{color:var(--gold-pale);border-color:var(--gold)}
+  .pill.active{background:var(--gold);color:#070c14;border-color:var(--gold)}
+  .pill .tag{font-size:9px;background:var(--red);color:#fff;padding:1px 5px;border-radius:6px;margin-left:6px;vertical-align:middle}
+  .search{margin-left:auto;background:var(--surface);border:1px solid var(--border);color:var(--ink);padding:8px 12px;border-radius:8px;font-family:"DM Mono";font-size:12px;min-width:200px}
+  .search:focus{outline:none;border-color:var(--gold)}
+  .layout{display:grid;grid-template-columns:240px 1fr;gap:24px;padding:24px 26px;align-items:start}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}}
+  .sidebar{position:sticky;top:140px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px}
+  .sidebar h3{font-family:"DM Mono";font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+  .sidebar a{display:block;font-size:13px;color:var(--ink-muted);padding:5px 8px;border-radius:6px;transition:.15s;border-left:2px solid transparent}
+  .sidebar a:hover{color:var(--gold-pale);background:var(--surface2);border-left-color:var(--gold)}
+  .section{margin-bottom:30px}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:14px}
+  .section-head h2{font-family:"Playfair Display",serif;font-weight:700;font-size:19px}
+  .section-head .count{font-family:"DM Mono";font-size:11px;color:var(--ink-dim)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:14px}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:15px;transition:.18s;position:relative;display:flex;flex-direction:column;gap:9px}
+  .card:hover{border-color:var(--border-hi);transform:translateY(-2px)}
+  .card .name{font-family:"Playfair Display",serif;font-weight:600;font-size:16px;line-height:1.2}
+  .card .url{font-family:"DM Mono";font-size:11px;color:var(--gold-dim);word-break:break-all}
+  .card .meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px}
+  .badge{font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px}
+  .b-live{background:rgba(39,174,96,.16);color:#5fd98b}
+  .b-pilot,.b-sprint1,.b-sprint2,.b-sprint3{background:rgba(52,152,219,.16);color:#7cc0ee}
+  .b-planned{background:rgba(243,156,18,.15);color:#f0b450}
+  .b-placeholder{background:rgba(120,130,150,.15);color:#9aa3b3}
+  .mkt{font-family:"DM Mono";font-size:9px;color:var(--ink-dim);letter-spacing:.08em;text-transform:uppercase}
+  .card .note{font-size:11.5px;color:var(--ink-muted);line-height:1.45}
+  .card .foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid var(--border)}
+  .open{font-family:"DM Mono";font-size:11px;color:var(--gold)}
+  .banner-toggle{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-muted);cursor:pointer;user-select:none}
+  .banner-toggle input{accent-color:var(--gold);width:14px;height:14px}
+  .tray{position:fixed;bottom:0;left:0;right:0;z-index:40;background:linear-gradient(0deg,#0a121d,#0d1520);border-top:1px solid var(--border-hi);padding:12px 26px;display:flex;align-items:center;gap:16px;transform:translateY(110%);transition:.25s}
+  .tray.show{transform:translateY(0)}
+  .tray .t-label{font-family:"DM Mono";font-size:12px;color:var(--gold-pale)}
+  .tray .t-list{flex:1;font-size:12px;color:var(--ink-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .btn{font-family:"DM Sans";font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:8px 16px;border-radius:8px;border:1px solid var(--gold);background:var(--gold);color:#070c14;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--gold)}
+  .tracker{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:30px}
+  .tracker .rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;margin-top:10px}
+  .trow{display:flex;align-items:center;justify-content:space-between;font-size:12px;background:var(--surface2);padding:7px 10px;border-radius:7px}
+  .err{padding:40px;text-align:center;color:var(--red);font-family:"DM Mono"}
+</style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>Owned Assets — <span class="accent">SATCOM Portfolio</span></h1>
+    <div class="sub" id="sub">spine: conews.press · loading inventory…</div>
+    <div class="controls" id="market-filter"></div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Custom Dashboards A–Z</h3>
+      <div id="az"></div>
+    </aside>
+    <main id="main"></main>
+  </div>
+
+  <div class="tray" id="tray">
+    <span class="t-label" id="tray-count">0 endpoints</span>
+    <span class="t-list" id="tray-list"></span>
+    <button class="btn ghost" onclick="clearSel()">Clear</button>
+    <button class="btn" onclick="copyKit()">Copy for Client Kit ▸</button>
+  </div>
+
+<script>
+const MKT_ORDER = [
+  { key:"all",   label:"All" },
+  { key:"metro", label:"Metro Denver", tag:"NEW" },
+  { key:"5280",  label:"Foothills / 5280" },
+  { key:"national", label:"National" },
+  { key:"ops",   label:"Dashboards & Kits" },
+];
+const CAT_LABEL = {
+  town:"Town Sites", news:"News Sites", activity:"Activity / Marketplace Sites",
+  editorial:"Editorial Desks", national:"National Network", dashboard:"Custom Dashboards",
+  kit:"Client Kits", tool:"Tools", newsletter:"Newsletter", tracker:"Trackers"
+};
+const CAT_ORDER = ["news","town","activity","editorial","national","dashboard","kit","newsletter","tracker","tool"];
+
+let DATA = [], activeMkt = "metro", query = "", sel = new Set();
+
+function badge(s){ const m={live:"LIVE",pilot:"PILOT",sprint1:"SPRINT 1",sprint2:"SPRINT 2",sprint3:"SPRINT 3",planned:"PLANNED",placeholder:"PLACEHOLDER"}; return `<span class="badge b-${s}">${m[s]||s}</span>`; }
+
+function render(){
+  const main = document.getElementById("main");
+  const items = DATA.filter(a =>
+    (activeMkt==="all" || a.market===activeMkt) &&
+    (!query || (a.name+a.url+(a.note||"")).toLowerCase().includes(query))
+  );
+  // Hermes rollout tracker (towns)
+  const towns = DATA.filter(a=>a.category==="town");
+  let html = "";
+  if (activeMkt==="all" || activeMkt==="5280"){
+    html += `<div class="tracker"><div class="section-head"><h2>Hermes Rollout Tracker</h2><span class="count">${towns.length} town sites</span></div>
+      <div class="rows">${towns.map(t=>`<div class="trow"><span>${t.name}</span>${badge(t.status)}</div>`).join("")}</div></div>`;
+  }
+  const byCat = {};
+  items.forEach(a=>{ (byCat[a.category] ||= []).push(a); });
+  CAT_ORDER.forEach(cat=>{
+    const list = byCat[cat]; if(!list || !list.length) return;
+    html += `<section class="section"><div class="section-head"><h2>${CAT_LABEL[cat]||cat}</h2><span class="count">${list.length}</span></div><div class="grid">`;
+    list.forEach(a=>{
+      const id = a.url;
+      html += `<div class="card">
+        <div class="name">${a.name}</div>
+        <a class="url" href="${a.url}" target="_blank" rel="noreferrer">${a.url.replace(/^https?:\/\//,"")}</a>
+        <div class="meta">${badge(a.status)}<span class="mkt">${a.market}</span></div>
+        ${a.note?`<div class="note">${a.note}</div>`:""}
+        <div class="foot">
+          <a class="open" href="${a.url}" target="_blank" rel="noreferrer">Open ▸</a>
+          ${a.banner?`<label class="banner-toggle"><input type="checkbox" data-id="${id}" ${sel.has(id)?"checked":""} onchange="toggleSel(this)"> banner</label>`:`<span class="mkt">${a.category}</span>`}
+        </div></div>`;
+    });
+    html += `</div></section>`;
+  });
+  main.innerHTML = html || `<div class="err">No assets match this view.</div>`;
+}
+
+function renderFilters(){
+  const f = document.getElementById("market-filter");
+  f.innerHTML = MKT_ORDER.map(m=>`<button class="pill ${m.key===activeMkt?"active":""}" onclick="setMkt('${m.key}')">${m.label}${m.tag?`<span class="tag">${m.tag}</span>`:""}</button>`).join("")
+    + `<input class="search" id="search" placeholder="search assets…" oninput="onSearch(this.value)">`;
+}
+function renderAZ(){
+  const dash = DATA.filter(a=>a.category==="dashboard"||a.category==="kit"||a.category==="newsletter")
+    .sort((a,b)=>a.name.localeCompare(b.name));
+  document.getElementById("az").innerHTML = dash.map(d=>`<a href="${d.url}" target="_blank" rel="noreferrer">${d.name}</a>`).join("");
+}
+function setMkt(k){ activeMkt=k; renderFilters(); render(); }
+function onSearch(v){ query=v.toLowerCase().trim(); render(); }
+function toggleSel(el){ el.checked?sel.add(el.dataset.id):sel.delete(el.dataset.id); updateTray(); }
+function clearSel(){ sel.clear(); render(); updateTray(); }
+function updateTray(){
+  const t=document.getElementById("tray");
+  document.getElementById("tray-count").textContent = `${sel.size} endpoint${sel.size===1?"":"s"}`;
+  document.getElementById("tray-list").textContent = [...sel].map(u=>u.replace(/^https?:\/\//,"")).join("  ·  ");
+  t.classList.toggle("show", sel.size>0);
+}
+function copyKit(){
+  const picked = DATA.filter(a=>sel.has(a.url)).map(a=>({name:a.name,url:a.url,market:a.market,category:a.category}));
+  const payload = JSON.stringify({ generated:new Date().toISOString(), bannerEndpoints:picked }, null, 2);
+  navigator.clipboard.writeText(payload).then(()=>{
+    const b=event.target; const o=b.textContent; b.textContent="Copied ✓"; setTimeout(()=>b.textContent=o,1500);
+  });
+}
+
+fetch("data/conews-portfolio.json").then(r=>r.json()).then(j=>{
+  DATA = j.assets;
+  document.getElementById("sub").textContent = `spine: ${j._meta.spine} · ${DATA.length} owned assets · ${j._meta.generated}`;
+  renderFilters(); renderAZ(); render();
+}).catch(e=>{
+  document.getElementById("main").innerHTML = `<div class="err">Could not load data/conews-portfolio.json — ${e}</div>`;
+});
+</script>
+</body>
+</html>

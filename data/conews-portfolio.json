@@ -1,0 +1,88 @@
+{
+  "_meta": {
+    "title": "CoNews Owned Assets — SATCOM Portfolio",
+    "spine": "conews.press (copress-dashboard.vercel.app)",
+    "generated": "2026-06-21",
+    "note": "Reconstructed Owned Assets inventory. Verify URLs/status before distributing to client kits. Markets: metro = Greater Metro Denver (NEW, promoted), 5280 = Foothills/5280 aggregate, national = National SATCOM view, ops = internal dashboards/tools.",
+    "markets": {
+      "metro": "Greater Metro Denver",
+      "5280": "Foothills / 5280",
+      "national": "National",
+      "ops": "Operations"
+    },
+    "categories": ["town", "news", "activity", "editorial", "dashboard", "kit", "tool", "national", "newsletter", "tracker"]
+  },
+  "assets": [
+    { "name": "CoNews Spine (Dashboard)", "url": "https://copress-dashboard.vercel.app", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "Operating spine — this portfolio lives here." },
+
+    { "name": "The Villager", "url": "https://www.thevillager.today", "market": "metro", "category": "news", "status": "live", "banner": true, "note": "Metro Denver flagship; admin to be wired into SATCOM." },
+    { "name": "Denver Daily Post", "url": "https://conews.press", "market": "metro", "category": "news", "status": "planned", "banner": true, "note": "conews.press editorial front; wire via Villager admin." },
+    { "name": "The Colorado Statesman", "url": "https://thecoloradostatesman.com", "market": "metro", "category": "news", "status": "planned", "banner": true, "note": "State politics desk; wire via Villager admin." },
+    { "name": "The Corridor", "url": "https://thecorridor.biz", "market": "metro", "category": "news", "status": "planned", "banner": true, "note": "DTC / business corridor; wire via Villager admin." },
+
+    { "name": "Editorial Desk — Boulder", "url": "https://www.thevillager.today/category/boulder", "market": "metro", "category": "editorial", "status": "planned", "banner": false, "note": "" },
+    { "name": "Editorial Desk — Denver", "url": "https://www.thevillager.today/category/denver", "market": "metro", "category": "editorial", "status": "planned", "banner": false, "note": "" },
+    { "name": "Editorial Desk — South Metro", "url": "https://www.thevillager.today/category/local-news", "market": "metro", "category": "editorial", "status": "live", "banner": false, "note": "" },
+    { "name": "Editorial Desk — Denver Tech Center", "url": "https://www.thevillager.today/category/denver-tech-center", "market": "metro", "category": "editorial", "status": "live", "banner": false, "note": "" },
+
+    { "name": "Greenwood Village", "url": "https://www.thevillager.today/category/greenwood-village", "market": "metro", "category": "activity", "status": "live", "banner": true, "note": "Marketplace site (Villager)." },
+    { "name": "Cherry Hills Village", "url": "https://www.thevillager.today/category/cherry-hills-village", "market": "metro", "category": "activity", "status": "live", "banner": true, "note": "Marketplace site (Villager)." },
+    { "name": "Centennial", "url": "https://www.thevillager.today/category/centennial", "market": "metro", "category": "activity", "status": "live", "banner": true, "note": "Marketplace site (Villager)." },
+    { "name": "Arapahoe County", "url": "https://www.thevillager.today/category/arapahoe-county", "market": "metro", "category": "activity", "status": "live", "banner": true, "note": "Marketplace site (Villager)." },
+
+    { "name": "5280 (Foothills Aggregate)", "url": "https://5280.conews.press", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Aggregate of marketable area from City of Morrison foothills; hub for activity feeds." },
+    { "name": "Red Rock Press", "url": "https://redrock.press", "market": "5280", "category": "news", "status": "live", "banner": true, "note": "Morrison / Red Rocks news site." },
+    { "name": "5280 Menu (Dining)", "url": "https://5280.menu", "market": "5280", "category": "activity", "status": "live", "banner": true, "note": "Dining activity feed." },
+    { "name": "Gaming (Colorado Gambler)", "url": "https://gambling.conews.press", "market": "5280", "category": "activity", "status": "live", "banner": true, "note": "Gaming activity feed / vertical." },
+    { "name": "Rafting", "url": "https://idahosprings.conews.press", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Rafting activity feed (Idaho Springs)." },
+    { "name": "Hiking", "url": "https://5280.conews.press/hiking", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Activity feed." },
+    { "name": "Biking", "url": "https://5280.conews.press/biking", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Activity feed." },
+    { "name": "Music", "url": "https://5280.conews.press/music", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Activity feed (Red Rocks venue)." },
+    { "name": "Skiing", "url": "https://5280.conews.press/skiing", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Activity feed." },
+    { "name": "Lodging", "url": "https://5280.conews.press/lodging", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Activity feed." },
+    { "name": "Transportation", "url": "https://5280.conews.press/transportation", "market": "5280", "category": "activity", "status": "planned", "banner": true, "note": "Activity feed." },
+
+    { "name": "Register Call", "url": "https://registercall.com", "market": "5280", "category": "news", "status": "live", "banner": true, "note": "Weekly Register-Call digital." },
+    { "name": "Weekly Register Call", "url": "https://weeklyregistercall.com", "market": "5280", "category": "news", "status": "live", "banner": true, "note": "Print + digital." },
+    { "name": "Empire Courier", "url": "https://empire-courier.com", "market": "5280", "category": "news", "status": "placeholder", "banner": false, "note": "Low priority placeholder." },
+
+    { "name": "Morrison / Red Rocks", "url": "https://redrocks.press", "market": "5280", "category": "town", "status": "pilot", "banner": true, "note": "Phase A pilot." },
+    { "name": "Nederland", "url": "https://nederland.conews.press", "market": "5280", "category": "town", "status": "pilot", "banner": true, "note": "Phase A pilot." },
+    { "name": "Black Hawk", "url": "https://blackhawk.conews.press", "market": "5280", "category": "town", "status": "sprint1", "banner": true, "note": "Revenue pair." },
+    { "name": "Central City", "url": "https://centralcity.conews.press", "market": "5280", "category": "town", "status": "sprint1", "banner": true, "note": "Revenue pair." },
+    { "name": "Idaho Springs", "url": "https://idahosprings.conews.press", "market": "5280", "category": "town", "status": "sprint2", "banner": true, "note": "Outdoor pair." },
+    { "name": "Georgetown", "url": "https://georgetown.conews.press", "market": "5280", "category": "town", "status": "sprint2", "banner": true, "note": "Outdoor pair." },
+    { "name": "Evergreen", "url": "https://evergreen.conews.press", "market": "5280", "category": "town", "status": "sprint3", "banner": true, "note": "Scale pair." },
+    { "name": "Golden", "url": "https://golden.conews.press", "market": "5280", "category": "town", "status": "sprint3", "banner": true, "note": "Scale pair." },
+
+    { "name": "National Intelligence", "url": "https://nationalintelligence.com", "market": "national", "category": "national", "status": "placeholder", "banner": true, "note": "National SATCOM brand." },
+    { "name": "Presidential Politics", "url": "https://presidentialpolitics.com", "market": "national", "category": "national", "status": "planned", "banner": true, "note": "" },
+    { "name": "News Grand Central", "url": "https://newsgrandcentral.com", "market": "national", "category": "national", "status": "planned", "banner": true, "note": "" },
+    { "name": "Network News", "url": "https://networknews.press", "market": "national", "category": "national", "status": "planned", "banner": true, "note": "Confirm exact domain/TLD." },
+    { "name": "Official U.S. Press", "url": "https://officialus.press", "market": "national", "category": "national", "status": "planned", "banner": true, "note": "OFFICIAL U.S. PRESS editorial." },
+
+    { "name": "Rick's Hub", "url": "https://ricks.conews.press", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "Client kit hub — banner endpoints selected here feed Rick's distribution." },
+    { "name": "Colorado Gambler Kit", "url": "https://copress-dashboard.vercel.app/cg-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
+    { "name": "Rick's Cabaret Kit", "url": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
+    { "name": "Stan's Auto Sales Kit", "url": "https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
+    { "name": "240 Deer Road Kit", "url": "https://copress-dashboard.vercel.app/240-deer-road-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
+
+    { "name": "Admin HQ", "url": "https://copress-dashboard.vercel.app/#admin", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "API Vault", "url": "https://copress-dashboard.vercel.app/apistore", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Accounting", "url": "https://copress-dashboard.vercel.app/#accounting", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Docs Hub", "url": "https://copress-dashboard.vercel.app/docs", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Editorial Desk", "url": "https://copress-dashboard.vercel.app/#editorial", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Hermes Orchestrator", "url": "https://copress-dashboard.vercel.app/#brains", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Linear", "url": "https://copress-dashboard.vercel.app/linear", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Marketing Hub", "url": "https://copress-dashboard.vercel.app/#marketing", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Network HQ", "url": "https://copress-dashboard.vercel.app/network", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Newsletter Studio", "url": "https://copress-dashboard.vercel.app/newsletter", "market": "ops", "category": "newsletter", "status": "live", "banner": false, "note": "" },
+    { "name": "SATCO Academy", "url": "https://copress-dashboard.vercel.app/learn", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Shop Local", "url": "https://copress-dashboard.vercel.app/#directory", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Stationery", "url": "https://copress-dashboard.vercel.app/#stationery", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+    { "name": "Villager Postcard Studio", "url": "https://copress-dashboard.vercel.app/villager-postcard-proofing/", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
+
+    { "name": "Hermes Rollout Tracker", "url": "https://copress-dashboard.vercel.app/#brains", "market": "ops", "category": "tracker", "status": "live", "banner": false, "note": "SATCOM 8-town rollout progress." },
+    { "name": "Newsletter", "url": "https://copress-dashboard.vercel.app/newsletter", "market": "ops", "category": "newsletter", "status": "live", "banner": false, "note": "" }
+  ]
+}
