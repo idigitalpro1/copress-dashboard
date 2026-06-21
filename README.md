@@ -202,6 +202,14 @@ Connects to Linear's GraphQL API (`https://api.linear.app/graphql`):
 
 Stores API keys in localStorage under `api_vault`. The dashboard also stores quick API panel values under `copress_api_*`.
 
+Canonical AI credential rules live in `/Users/Ace/Codex/docs/AI_CREDENTIALS_AND_VAULT_RUNBOOK.md`.
+The API Vault is browser-local operator storage only. It is not the production source of truth;
+production services read credentials from local or deployed environment variables.
+
+For the Google/Aiace lane, the active runtime key is `GOOGLE_AGENT_API_KEY`; service-account
+JSON and SATCOM token-minting modes are retired unless a new operator-approved runbook
+reintroduces them.
+
 | Key ID | Service |
 |--------|---------|
 | `google_places` | Google Places API |
@@ -215,6 +223,8 @@ Stores API keys in localStorage under `api_vault`. The dashboard also stores qui
 | `stripe_secret` | Stripe secret key |
 
 Agent handoff rule: never bulk-hand all keys to Hermes. Hermes/Aileen may request one named service credential for one task through a guarded local bridge or operator-reviewed export. Do not paste secrets into chat prompts, commit them, or store them in model/session config.
+
+Exact credential handoff rule for Hermes / Aileen: one service key, one task, one reason. Never bulk export.
 
 Export formats: selected `.env` values or JSON for local operator handoff only. MCP injection should be scoped to a service and reason.
 

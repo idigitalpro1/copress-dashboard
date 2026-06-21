@@ -59,7 +59,7 @@ Per new news endpoint, same checklist every time (mirrors the 8-town rollout):
 
 ### ✅ Done
 - **News-onboarding schema + tenant registry** — `data/conews-news-onboarding.json`: canonical per-tenant contract (site_key, market, brand, admin deep-link, 8-step checklist) + seeded tenants (Denver Daily Post, Colorado Statesman, The Corridor, national wire brands, Register Call). Locks in: one multi-tenant Villager admin, shared site_key backend, SATCOM deep-links.
-- **Vertex control node** — `[SYNC GOOGLE AI]` live on aspen (`/api/vertex/sync` + `/api/vertex/health`), keyless SATCOM vault, stub-until-env. apex/www re-aliased.
+- **Google/Aiace control node** — `[SYNC GOOGLE AI]` live on aspen (`/api/vertex/sync` + `/api/vertex/health`), using the canonical `GOOGLE_AGENT_API_KEY` lane with safe stub fallback. See `/Users/Ace/Codex/docs/AI_CREDENTIALS_AND_VAULT_RUNBOOK.md`.
 - SATCOM `/portfolio` — Owned Assets recovered, data-driven (`data/conews-portfolio.json`, 61 assets).
 - Market filter incl. **Metro Denver (NEW)**; A–Z dashboards; banner-endpoint → Copy-for-Kit export.
 - Hermes Rollout Tracker (8 foothills towns).
@@ -80,7 +80,7 @@ Per new news endpoint, same checklist every time (mirrors the 8-town rollout):
 - [ ] National view tenants: officialus.press, presidentialpolitics, newsgrandcentral, networknews, nationalintelligence.
 - [ ] SATCOM ↔ Villager **live status** (pull article/subscriber counts into portfolio cards).
 - [ ] Client-kit banner feed: wire Copy-for-Kit output directly into ricks.conews.press kit selection.
-- [ ] **Google Vertex** integration — spec received & persisted. Vertex is the **pipeline engine for the aspen Editorial Control Node** (`[SYNC GOOGLE AI]`), not a Claude prompt. Canonical instruction: `aspen/VERTEX_PIPELINE_ENGINE_SPEC.md`; contract: `aspen/server/vertex/pipeline-spec.json`. **Next:** wire `AdminDashboard.handleSyncAI` (currently a mock) → `POST /api/vertex/sync` server route → Vertex w/ that systemInstruction → parse JSON to update node state. Needs: `GOOGLE_CLOUD_PROJECT`, location, service-account, `VERTEX_MODEL`. Stub route returns the contract until creds land.
+- [ ] **Google/Aiace integration** — spec received & persisted. Aiace is the **pipeline engine for the aspen Editorial Control Node** (`[SYNC GOOGLE AI]`), not a Claude prompt. Canonical instruction: `aspen/VERTEX_PIPELINE_ENGINE_SPEC.md`; contract: `aspen/server/vertex/pipeline-spec.json`. Active credential: `GOOGLE_AGENT_API_KEY` in local/Vercel env. The old service-account JSON, SATCOM vault, `secret-manager`, and `self-hosted` modes are retired for this lane; if the key is absent, the route returns the validated stub contract.
 
 ---
 
@@ -90,8 +90,8 @@ Per new news endpoint, same checklist every time (mirrors the 8-town rollout):
 - **One source of truth for the network map:** `data/conews-portfolio.json`. UI is generated from it. Edit data, not markup.
 - **Deploy triggers:** spine + villager auto-deploy on push to `main`. Keep commits scoped; rebase over parallel commits (frequent on these repos).
 - **Operator-gated actions** stay gated: DNS, prod content publish, secrets. Codex proposes; operator approves.
-- **Local model first** per routing policy (Hermes/Qwen → Ollama → premium for hard/admin). Vertex to be added as a cloud tier next.
-- **No secrets in repo.** Forge/Supabase/Stripe keys live in env/localStorage only.
+- **Local model first** per routing policy (Hermes/Qwen → Ollama → premium for hard/admin). Google/Aiace is the cloud lane for Aspen/Villager AI calls when `GOOGLE_AGENT_API_KEY` is configured.
+- **No secrets in repo.** Google/Aiace, Forge, Supabase, Stripe, and other keys live in env or browser-local operator storage only. The SATCOM API Vault is not production source of truth.
 
 ## Open Decisions (need operator)
 1. Multi-tenant admin lives **in thevillager.today** (recommended) vs. a new SATCOM-hosted admin? (Recommend: Villager — avoids the clone.)
