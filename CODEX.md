@@ -78,7 +78,7 @@ Per new news endpoint, same checklist every time (mirrors the 8-town rollout):
 - [ ] National view tenants: officialus.press, presidentialpolitics, newsgrandcentral, networknews, nationalintelligence.
 - [ ] SATCOM ↔ Villager **live status** (pull article/subscriber counts into portfolio cards).
 - [ ] Client-kit banner feed: wire Copy-for-Kit output directly into ricks.conews.press kit selection.
-- [ ] **Google Vertex** integration into the AI routing stack (operator update pending — slot in when received).
+- [ ] **Google Vertex** integration — spec received & persisted. Vertex is the **pipeline engine for the aspen Editorial Control Node** (`[SYNC GOOGLE AI]`), not a Claude prompt. Canonical instruction: `aspen/VERTEX_PIPELINE_ENGINE_SPEC.md`; contract: `aspen/server/vertex/pipeline-spec.json`. **Next:** wire `AdminDashboard.handleSyncAI` (currently a mock) → `POST /api/vertex/sync` server route → Vertex w/ that systemInstruction → parse JSON to update node state. Needs: `GOOGLE_CLOUD_PROJECT`, location, service-account, `VERTEX_MODEL`. Stub route returns the contract until creds land.
 
 ---
 
