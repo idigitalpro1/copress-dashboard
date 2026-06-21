@@ -95,6 +95,7 @@ const MKT_ORDER = [
   { key:"metro", label:"Metro Denver", tag:"NEW" },
   { key:"5280",  label:"Foothills / 5280" },
   { key:"national", label:"National" },
+  { key:"onboarding", label:"News Onboarding" },
   { key:"ops",   label:"Dashboards & Kits" },
 ];
 const CAT_LABEL = {
@@ -104,12 +105,37 @@ const CAT_LABEL = {
 };
 const CAT_ORDER = ["news","town","activity","editorial","national","dashboard","kit","newsletter","tracker","tool"];
 
-let DATA = [], activeMkt = "metro", query = "", sel = new Set();
+let DATA = [], TENANTS = [], activeMkt = "metro", query = "", sel = new Set();
 
-function badge(s){ const m={live:"LIVE",pilot:"PILOT",sprint1:"SPRINT 1",sprint2:"SPRINT 2",sprint3:"SPRINT 3",planned:"PLANNED",placeholder:"PLACEHOLDER"}; return `<span class="badge b-${s}">${m[s]||s}</span>`; }
+function badge(s){ const m={live:"LIVE",pilot:"PILOT",sprint1:"SPRINT 1",sprint2:"SPRINT 2",sprint3:"SPRINT 3",planned:"PLANNED",placeholder:"PLACEHOLDER",provisioning:"PROVISIONING",deprecated:"DEPRECATED"}; return `<span class="badge b-${s}">${m[s]||s}</span>`; }
+
+function renderOnboarding(){
+  if(!TENANTS.length) return `<div class="err">No onboarding registry loaded.</div>`;
+  const order = {live:0,pilot:1,provisioning:2,planned:3,placeholder:4,deprecated:5};
+  const list = [...TENANTS].sort((a,b)=>(order[a.status]??9)-(order[b.status]??9));
+  let h = `<section class="section"><div class="section-head"><h2>News Onboarding</h2><span class="count">${list.length} tenants · one multi-tenant Villager admin</span></div><div class="grid">`;
+  list.forEach(t=>{
+    const done = (t.checklist_done||[]).length, pct = Math.round(done/8*100);
+    h += `<div class="card">
+      <div class="name">${t.name}</div>
+      <a class="url" href="https://${t.domain}" target="_blank" rel="noreferrer">${t.domain}</a>
+      <div class="meta">${badge(t.status)}<span class="mkt">${t.market}</span><span class="mkt">${t.site_key}</span></div>
+      <div style="margin:6px 0 2px">
+        <div style="height:6px;background:var(--surface2);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--gold)"></div></div>
+        <div class="mkt" style="margin-top:4px">onboarding ${done}/8</div>
+      </div>
+      ${t.note?`<div class="note">${t.note}</div>`:""}
+      <div class="foot">
+        <a class="open" href="https://${t.domain}" target="_blank" rel="noreferrer">Site ▸</a>
+        <a class="open" href="${(t.admin&&t.admin.deep_link)||'#'}" target="_blank" rel="noreferrer">Villager Admin ▸</a>
+      </div></div>`;
+  });
+  return h + `</div></section>`;
+}
 
 function render(){
   const main = document.getElementById("main");
+  if (activeMkt === "onboarding"){ main.innerHTML = renderOnboarding(); return; }
   const items = DATA.filter(a =>
     (activeMkt==="all" || a.market===activeMkt) &&
     (!query || (a.name+a.url+(a.note||"")).toLowerCase().includes(query))
@@ -171,12 +197,15 @@ function copyKit(){
   });
 }
 
-fetch("data/conews-portfolio.json").then(r=>r.json()).then(j=>{
-  DATA = j.assets;
-  document.getElementById("sub").textContent = `spine: ${j._meta.spine} · ${DATA.length} owned assets · ${j._meta.generated}`;
+Promise.all([
+  fetch("data/conews-portfolio.json").then(r=>r.json()),
+  fetch("data/conews-news-onboarding.json").then(r=>r.json()).catch(()=>({tenants:[]})),
+]).then(([j, on])=>{
+  DATA = j.assets; TENANTS = on.tenants || [];
+  document.getElementById("sub").textContent = `spine: ${j._meta.spine} · ${DATA.length} owned assets · ${TENANTS.length} news tenants · ${j._meta.generated}`;
   renderFilters(); renderAZ(); render();
 }).catch(e=>{
-  document.getElementById("main").innerHTML = `<div class="err">Could not load data/conews-portfolio.json — ${e}</div>`;
+  document.getElementById("main").innerHTML = `<div class="err">Could not load portfolio data — ${e}</div>`;
 });
 </script>
 </body>
