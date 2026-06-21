@@ -1,0 +1,183 @@
+{
+  "_meta": {
+    "title": "CoNews News-Asset Onboarding — Schema + Tenant Registry",
+    "purpose": "Canonical contract for onboarding a news site as a TENANT of the shared Villager backend (one multi-tenant admin, deep-linked from SATCOM). Mirrors the 5280 town-rollout model for news brands.",
+    "generated": "2026-06-21",
+    "decisions": {
+      "admin": "ONE multi-tenant admin in thevillager.today (scoped by site_key). No per-site admin clones.",
+      "backend": "Shared backend; every record carries a site_key column (registercall/Supabase pattern).",
+      "frontend": "One themeable build per brand OR distinct front-ends — both read the shared backend.",
+      "control_plane": "SATCOM /portfolio lists every tenant and deep-links into the Villager admin at ?site=<site_key>."
+    }
+  },
+
+  "schema": {
+    "site_key": "string · unique slug · primary tenant key (e.g. 'denver-daily-post')",
+    "name": "string · display name",
+    "domain": "string · canonical public host",
+    "market": "enum · metro | 5280 | national",
+    "category": "enum · news | town | activity | national",
+    "status": "enum · planned | provisioning | pilot | live | deprecated",
+    "brand": {
+      "masthead": "string",
+      "theme": "string · theme key for the shared front-end build",
+      "palette": "string · optional brand palette token"
+    },
+    "admin": {
+      "surface": "https://www.thevillager.today/admin",
+      "deep_link": "string · https://www.thevillager.today/admin?site=<site_key>",
+      "clone": false
+    },
+    "backend": { "shared": true, "store": "supabase|mysql", "tenant_column": "site_key" },
+    "editorial": {
+      "lead": "string · author lane",
+      "sections": "string[] · category slugs to seed",
+      "seo_pillars": "string[] · optional"
+    },
+    "commerce": {
+      "banner_eligible": "bool · selectable for client kits in SATCOM",
+      "kits": "string[] · campaign kit slugs"
+    },
+    "dns": { "provider": "string", "target": "string", "status": "enum · pending | live" },
+    "onboarding_checklist": [
+      "1. register in conews-portfolio.json (SATCOM card auto-appears)",
+      "2. create site_key tenant in shared backend",
+      "3. seed sections/categories",
+      "4. add site_key to Villager admin site-switcher (no new code)",
+      "5. DNS/host (operator-gated)",
+      "6. seed 5-10 launch articles",
+      "7. mark banner_eligible + attach kits",
+      "8. flip status planned -> live"
+    ]
+  },
+
+  "tenants": [
+    {
+      "site_key": "the-villager",
+      "name": "The Villager",
+      "domain": "www.thevillager.today",
+      "market": "metro", "category": "news", "status": "live",
+      "brand": { "masthead": "THE VILLAGER TODAY", "theme": "villager-dark" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "Patrick Henry Sweeney", "sections": ["local-news", "business", "society", "opinion", "obituaries"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "Manus", "target": "manus", "status": "live" },
+      "checklist_done": [1, 2, 3, 4, 5, 6, 7, 8],
+      "note": "Anchor tenant + the canonical admin surface all other tenants deep-link into."
+    },
+    {
+      "site_key": "denver-daily-post",
+      "name": "Denver Daily Post",
+      "domain": "conews.press",
+      "market": "metro", "category": "news", "status": "planned",
+      "brand": { "masthead": "DENVER DAILY POST", "theme": "metro-broadsheet" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=denver-daily-post", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["denver", "metro", "business", "politics"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "Vercel/Manus", "status": "pending" },
+      "checklist_done": [1],
+      "note": "FIRST non-Villager tenant — proves the multi-tenant model end-to-end (CODEX P2)."
+    },
+    {
+      "site_key": "colorado-statesman",
+      "name": "The Colorado Statesman",
+      "domain": "thecoloradostatesman.com",
+      "market": "metro", "category": "news", "status": "planned",
+      "brand": { "masthead": "THE COLORADO STATESMAN", "theme": "statehouse" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=colorado-statesman", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["politics", "state-government", "elections"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "TBD", "status": "pending" },
+      "checklist_done": [1]
+    },
+    {
+      "site_key": "the-corridor",
+      "name": "The Corridor",
+      "domain": "thecorridor.biz",
+      "market": "metro", "category": "news", "status": "planned",
+      "brand": { "masthead": "THE CORRIDOR", "theme": "dtc-business" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=the-corridor", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["denver-tech-center", "business", "real-estate"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "TBD", "status": "pending" }
+    },
+    {
+      "site_key": "national-intelligence",
+      "name": "National Intelligence",
+      "domain": "nationalintelligence.com",
+      "market": "national", "category": "national", "status": "placeholder",
+      "brand": { "masthead": "NATIONAL INTELLIGENCE", "theme": "national-wire" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=national-intelligence", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["national", "security"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "Vercel", "target": "Vercel", "status": "pending" }
+    },
+    {
+      "site_key": "official-us-press",
+      "name": "Official U.S. Press",
+      "domain": "officialus.press",
+      "market": "national", "category": "national", "status": "planned",
+      "brand": { "masthead": "OFFICIAL U.S. PRESS", "theme": "national-wire" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=official-us-press", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["national", "politics"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "TBD", "status": "pending" }
+    },
+    {
+      "site_key": "presidential-politics",
+      "name": "Presidential Politics",
+      "domain": "presidentialpolitics.com",
+      "market": "national", "category": "national", "status": "planned",
+      "brand": { "masthead": "PRESIDENTIAL POLITICS", "theme": "national-wire" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=presidential-politics", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["politics", "elections"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "TBD", "status": "pending" }
+    },
+    {
+      "site_key": "news-grand-central",
+      "name": "News Grand Central",
+      "domain": "newsgrandcentral.com",
+      "market": "national", "category": "national", "status": "planned",
+      "brand": { "masthead": "NEWS GRAND CENTRAL", "theme": "national-wire" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=news-grand-central", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["national", "wire"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "TBD", "status": "pending" }
+    },
+    {
+      "site_key": "network-news",
+      "name": "Network News",
+      "domain": "networknews.press",
+      "market": "national", "category": "national", "status": "planned",
+      "brand": { "masthead": "NETWORK NEWS", "theme": "national-wire" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=network-news", "clone": false },
+      "backend": { "shared": true, "store": "mysql", "tenant_column": "site_key" },
+      "editorial": { "lead": "TBD", "sections": ["national", "wire"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "TBD", "target": "TBD", "status": "pending" },
+      "note": "Confirm exact domain/TLD (networknews.press assumed)."
+    },
+    {
+      "site_key": "register-call",
+      "name": "Register Call",
+      "domain": "registercall.com",
+      "market": "5280", "category": "news", "status": "live",
+      "brand": { "masthead": "WEEKLY REGISTER-CALL", "theme": "registercall" },
+      "admin": { "surface": "https://www.thevillager.today/admin", "deep_link": "https://www.thevillager.today/admin?site=register-call", "clone": false },
+      "backend": { "shared": true, "store": "supabase", "tenant_column": "site_key" },
+      "editorial": { "lead": "Patrick Henry Sweeney", "sections": ["news", "government", "deep-dives"], "seo_pillars": [] },
+      "commerce": { "banner_eligible": true, "kits": [] },
+      "dns": { "provider": "GoDaddy", "target": "44.236.197.183", "status": "live" },
+      "note": "Already site_key-scoped in Supabase (site_key='registercall'); candidate to fold under the shared admin."
+    }
+  ]
+}

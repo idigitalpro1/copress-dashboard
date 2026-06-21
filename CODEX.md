@@ -58,6 +58,8 @@ Per new news endpoint, same checklist every time (mirrors the 8-town rollout):
 ## KANBAN
 
 ### ✅ Done
+- **News-onboarding schema + tenant registry** — `data/conews-news-onboarding.json`: canonical per-tenant contract (site_key, market, brand, admin deep-link, 8-step checklist) + seeded tenants (Denver Daily Post, Colorado Statesman, The Corridor, national wire brands, Register Call). Locks in: one multi-tenant Villager admin, shared site_key backend, SATCOM deep-links.
+- **Vertex control node** — `[SYNC GOOGLE AI]` live on aspen (`/api/vertex/sync` + `/api/vertex/health`), keyless SATCOM vault, stub-until-env. apex/www re-aliased.
 - SATCOM `/portfolio` — Owned Assets recovered, data-driven (`data/conews-portfolio.json`, 61 assets).
 - Market filter incl. **Metro Denver (NEW)**; A–Z dashboards; banner-endpoint → Copy-for-Kit export.
 - Hermes Rollout Tracker (8 foothills towns).
