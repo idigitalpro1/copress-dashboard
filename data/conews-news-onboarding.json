@@ -304,7 +304,7 @@
       "domain": "officialus.press",
       "market": "national",
       "category": "national",
-      "status": "planned",
+      "status": "provisioning",
       "brand": {
         "masthead": "OFFICIAL U.S. PRESS",
         "theme": "national-wire"
@@ -335,7 +335,16 @@
         "provider": "TBD",
         "target": "TBD",
         "status": "pending"
-      }
+      },
+      "checklist_done": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "note": "Seeded + host-mapped + isolation-verified; DNS cutover pending."
     },
     {
       "site_key": "presidential-politics",
@@ -343,7 +352,7 @@
       "domain": "presidentialpolitics.com",
       "market": "national",
       "category": "national",
-      "status": "planned",
+      "status": "provisioning",
       "brand": {
         "masthead": "PRESIDENTIAL POLITICS",
         "theme": "national-wire"
@@ -374,7 +383,16 @@
         "provider": "TBD",
         "target": "TBD",
         "status": "pending"
-      }
+      },
+      "checklist_done": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "note": "Seeded + host-mapped + isolation-verified; DNS cutover pending."
     },
     {
       "site_key": "news-grand-central",
@@ -382,7 +400,7 @@
       "domain": "newsgrandcentral.com",
       "market": "national",
       "category": "national",
-      "status": "planned",
+      "status": "provisioning",
       "brand": {
         "masthead": "NEWS GRAND CENTRAL",
         "theme": "national-wire"
@@ -413,7 +431,16 @@
         "provider": "TBD",
         "target": "TBD",
         "status": "pending"
-      }
+      },
+      "checklist_done": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ],
+      "note": "Seeded + host-mapped + isolation-verified; DNS cutover pending."
     },
     {
       "site_key": "network-news",
@@ -421,7 +448,7 @@
       "domain": "networknews.press",
       "market": "national",
       "category": "national",
-      "status": "planned",
+      "status": "provisioning",
       "brand": {
         "masthead": "NETWORK NEWS",
         "theme": "national-wire"
@@ -453,7 +480,15 @@
         "target": "TBD",
         "status": "pending"
       },
-      "note": "Confirm exact domain/TLD (networknews.press assumed)."
+      "note": "Confirm exact domain/TLD (networknews.press assumed). Seeded + host-mapped + isolation-verified; DNS cutover pending.",
+      "checklist_done": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        7
+      ]
     },
     {
       "site_key": "register-call",
