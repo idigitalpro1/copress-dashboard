@@ -214,7 +214,7 @@ reintroduces them.
 |--------|---------|
 | `google_places` | Google Places API |
 | `apify_token` | Apify scraping |
-| `gemini_key` | Google Gemini |
+| `google_agent_api_key` / `gemini_key` | Google/Aiace Gemini local operator reference |
 | `supabase_url` | Supabase project URL |
 | `supabase_anon` | Supabase anon key |
 | `sendy_url` | Sendy instance URL |

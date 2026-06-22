@@ -1,9 +1,9 @@
 {
   "id": "PROV-508",
   "title": "SATCOM Progress Monitor",
-  "generated": "2026-05-14",
-  "status": "build-artifact",
-  "dashboard": "https://copress-dashboard.vercel.app/network",
+  "generated": "2026-06-21",
+  "status": "operator-console-refresh",
+  "dashboard": "https://satcom.5280.menu/",
   "issues": [
     {"id": "PROV-501", "status": "deployed", "evidence": "SATCOM ownership board cards"},
     {"id": "PROV-502", "status": "deployed", "evidence": "town rollout JSON"},
@@ -12,13 +12,13 @@
     {"id": "PROV-505", "status": "deployed", "evidence": "contributor onboarding CTA JSON/CSV/MD"},
     {"id": "PROV-506", "status": "deployed", "evidence": "advertiser campaign kit JSON/CSV/MD"},
     {"id": "PROV-507", "status": "deployed", "evidence": "weekly edition sample JSON/MD"},
-    {"id": "PROV-508", "status": "deployed", "evidence": "SATCOM progress monitor packet"}
+    {"id": "PROV-508", "status": "refreshed", "evidence": "SATCOM progress monitor + API Vault/Aiace card language"}
   ],
   "blockers": [
-    "Linear connector auth is unavailable in this Codex session.",
-    "GitHub push auth has been blocked by invalid credentials.",
-    "3CX runtime config is missing.",
-    "MCP hooks need repair; file-based progress remains the fallback lane."
+    "Linear live issue sync still requires current connector/auth verification before treating the board as canonical.",
+    "API Vault is browser-local operator storage only; production Google/Aiace calls must read GOOGLE_AGENT_API_KEY from local or deployed env.",
+    "3CX runtime configuration remains external to the static SATCOM dashboard.",
+    "Run ~/bin/mcp-status before relying on Hermes/MCP action handoff."
   ],
   "restorePoints": [
     "fb975c5 Hermes kanban execution packet",
@@ -27,23 +27,23 @@
     "fd3f706 final sprint artifacts"
   ],
   "latestDeploy": {
-    "deployment": "dpl_3dFhEA1yuScnm9vYGn9r7NJSiBJm",
-    "url": "https://copress-dashboard.vercel.app/network",
+    "deployment": "see Vercel dashboard for latest production deployment",
+    "url": "https://satcom.5280.menu/",
     "smoke": [
-      "/network 200",
-      "PROV-506 files 200",
-      "PROV-507 files 200",
-      "PROV-508 files 200"
+      "/ 200 expected",
+      "/#admin 200 expected",
+      "/docs 200 expected",
+      "/apistore 200 expected"
     ]
   },
   "commitStatus": [
-    "local commit complete",
-    "Vercel production deploy complete",
-    "GitHub push still pending auth repair"
+    "GitHub push auth has been repaired for copress-dashboard main in the current operating lane.",
+    "AI credential runbook is canonical: GOOGLE_AGENT_API_KEY preferred; old JSON/token-minting lanes are legacy.",
+    "SATCOM cards and docs now label API Vault as browser-local and one-key-per-task."
   ],
   "nextChoices": [
-    "Refresh GitHub + Linear auth and sync the board.",
-    "Configure 3CX runtime in .env only.",
-    "Start public town page implementation from these static artifacts."
+    "Set GOOGLE_AGENT_API_KEY only in local/deployed env for apps that call Google/Aiace.",
+    "Use API Vault for operator-local named-key reference and handoff, never bulk agent export.",
+    "Run a SATCOM smoke check after deployment: /, /#admin, /docs, /apistore."
   ]
 }

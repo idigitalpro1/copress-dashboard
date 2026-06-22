@@ -1781,7 +1781,7 @@ body::before {
               <div class="card-icon">🔑</div>
               <div>
                 <div class="card-title">API Vault</div>
-                <div class="card-subtitle">Local keys · MCP injection · .env export</div>
+                <div class="card-subtitle">Browser-local keys · Aiace runtime uses env</div>
               </div>
             </div>
             <div class="card-stats">
@@ -1790,23 +1790,23 @@ body::before {
                 <span class="stat-value highlight">12</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Storage</span>
-                <span class="stat-value ok" style="font-size:11px;">Local</span>
+                <span class="stat-label">Runtime</span>
+                <span class="stat-value ok" style="font-size:11px;">Env</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">MCP</span>
-                <span class="stat-value" style="font-size:11px;">Scoped</span>
+                <span class="stat-label">Handoff</span>
+                <span class="stat-value" style="font-size:11px;">1 Key</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Export</span>
-                <span class="stat-value" style="font-size:11px;">.env</span>
+                <span class="stat-label">Bulk</span>
+                <span class="stat-value" style="font-size:11px;">Never</span>
               </div>
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/apistore'">Open Vault</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#inject'">Inject</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#export'">Export</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/apistore#inject'">Handoff</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/docs'">Runbook</button>
             </div>
           </div>
         </div>
@@ -2143,7 +2143,7 @@ body::before {
             <div class="admin-launch-title">Aileen / Hermes WebUI</div>
             <span class="admin-launch-tag">Local AI</span>
           </div>
-          <div class="admin-launch-desc">SATCOM Hermes console for prompts, chat continuity, model routing, and crew jobs.</div>
+          <div class="admin-launch-desc">SATCOM Hermes console for prompts, model routing, crew jobs, and one-key credential handoff.</div>
           <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
@@ -2236,7 +2236,7 @@ body::before {
               </div>
             </div>
             <div class="api-field">
-              <label>Gemini API Key</label>
+              <label>Aiace / Gemini API Key</label>
               <div class="api-field-wrap">
                 <input type="password" id="key-gemini" placeholder="AIza..." data-key="gemini_key">
                 <button class="show-toggle" onclick="toggleShow('key-gemini', this)">👁</button>
@@ -2939,7 +2939,7 @@ body::before {
 <div id="statusbar">
   <span class="status-left">● LIVE — satcom.5280.menu · unified admin home</span>
   <div class="status-center">
-    <div class="status-dot"><span class="dot" id="dot-gemini"></span> Gemini</div>
+    <div class="status-dot"><span class="dot" id="dot-gemini"></span> Aiace</div>
     <div class="status-dot"><span class="dot" id="dot-supabase"></span> Supabase</div>
     <div class="status-dot"><span class="dot" id="dot-sendy"></span> Sendy</div>
     <div class="status-dot"><span class="dot" id="dot-stripe"></span> Stripe</div>
@@ -3132,14 +3132,17 @@ function loadKeys() {
 
 function updateStatusDots() {
   const checks = {
-    'dot-gemini':   KEY_PREFIX + 'gemini_key',
+    'dot-gemini':   [KEY_PREFIX + 'google_agent_api_key', KEY_PREFIX + 'gemini_key'],
     'dot-supabase': KEY_PREFIX + 'supabase_anon',
     'dot-sendy':    KEY_PREFIX + 'sendy_key',
     'dot-stripe':   KEY_PREFIX + 'stripe_secret',
   };
   Object.entries(checks).forEach(([dotId, key]) => {
     const dot = document.getElementById(dotId);
-    if (dot) dot.classList.toggle('live', !!localStorage.getItem(key));
+    const hasValue = Array.isArray(key)
+      ? key.some(k => !!localStorage.getItem(k))
+      : !!localStorage.getItem(key);
+    if (dot) dot.classList.toggle('live', hasValue);
   });
   const invoiceManagerEl = document.getElementById('invoice-manager-status');
   if (invoiceManagerEl) invoiceManagerEl.textContent = 'Live';

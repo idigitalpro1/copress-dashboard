@@ -175,7 +175,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
   <div class="topnav-right">
     <a class="btn btn-gold" href="https://satcom.5280.menu/#admin" style="text-decoration:none;">⌘ Admin HQ</a>
     <span class="badge" id="vault-status">🔒 Vault: Local Only</span>
-    <button class="btn btn-ghost" onclick="exportVault()">📤 Export</button>
+    <button class="btn btn-ghost" onclick="exportVault()">📤 Local Export</button>
     <button class="btn btn-gold" onclick="openAddModal()">+ Add API Key</button>
   </div>
 </nav>
@@ -216,7 +216,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
     <div class="icon">🔐</div>
     <div>
       <h3>myappstore.biz — API Vault</h3>
-      <p>One local store for API credentials with service-scoped handoff.<br>Keys stay browser-local by default. Hermes, Claude Code, and Cursor should request only the named key required for the current task.</p>
+      <p>One browser-local store for operator credentials with service-scoped handoff.<br>Production AI services read env keys such as GOOGLE_AGENT_API_KEY; Hermes, Claude Code, and Cursor request only the named key required for the current task.</p>
     </div>
     <div class="cta">
       <button class="btn btn-gold" onclick="showMCP()">⚡ Setup MCP Bridge</button>
@@ -407,7 +407,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 // ── DEFAULT API REGISTRY ──────────────────────────────────────────────────
 const DEFAULT_APIS = [
   // AI
-  { id:'gemini', name:'Gemini', cat:'ai', icon:'🧠', color:'#1a73e8', desc:'Google Gemini 2.0 Flash — free tier, 1M tokens/day. Powers Editorial, Newsletter, Campaign Kit generation.', fields:[{label:'API Key',key:'GEMINI_API_KEY',ph:'AIza...'}], required:'required', inject:['editorial','marketing','newsletter'] },
+  { id:'gemini', name:'Aiace / Gemini', cat:'ai', icon:'🧠', color:'#1a73e8', desc:'Google/Aiace API-key lane for Gemini generation. Production uses GOOGLE_AGENT_API_KEY in env; this vault copy is browser-local operator reference only.', fields:[{label:'API Key',key:'GOOGLE_AGENT_API_KEY',ph:'AIza...'}], required:'required', inject:['editorial','marketing','newsletter'] },
   { id:'ollama', name:'Ollama / Hermes', cat:'ai', icon:'🤖', color:'#2d4a2d', desc:'Local LLM server. Hermes3:70b runs on your Mac. No cloud, no cost, no data leaving your machine.', fields:[{label:'Base URL',key:'OLLAMA_BASE_URL',ph:'http://localhost:11434'}], required:'hardwired', inject:['all'] },
   { id:'openai', name:'OpenAI', cat:'ai', icon:'⬛', color:'#10a37f', desc:'GPT-4o fallback. Optional — Gemini covers most use cases for free.', fields:[{label:'API Key',key:'OPENAI_API_KEY',ph:'sk-...'}], required:'optional', inject:[] },
   // Data
@@ -664,11 +664,11 @@ function toggleInject(card, target) {
 
 // ── MCP CONFIG ────────────────────────────────────────────────────────────
 const MCP_CONFIGS = {
-  hermes: `# Hermes scoped MCP policy:\n# Do not paste secrets into Hermes prompts or session config.\n# Request one approved key per task from the guarded local vault.\n# Example: mcp.api_vault.get_key(service="gemini", reason="newsletter draft generation") -> GEMINI_API_KEY\n# Bulk export/list-all is blocked for agent use.`,
+  hermes: `# Hermes scoped MCP policy:\n# Do not paste secrets into Hermes prompts or session config.\n# Request one approved key per task from the guarded local vault.\n# Example: mcp.api_vault.get_key(service="gemini", reason="newsletter draft generation") -> GOOGLE_AGENT_API_KEY\n# Bulk export/list-all is blocked for agent use.`,
   claude: `# Claude Code ~/.claude/settings.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["/Users/Ace/Codex/apps/api-vault-mcp/index.js"]\n    }\n  }\n}`,
   cursor: `# Cursor .cursor/mcp.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["~/Codex/apps/api-vault-mcp/index.js"]\n    }\n  }\n}`,
   n8n: `# n8n HTTP Request node:\n# GET http://localhost:8082/vault/key/SENDY_API_KEY?reason=newsletter-send-test\n# No bulk /vault/keys endpoint for agent workflows.\n# POST http://localhost:8082/vault/inject?target=newsletter&service=sendy`,
-  vercel: `# Push selected keys to Vercel:\nnpx vercel env add GEMINI_API_KEY production < vault_export_gemini.txt\n# Add only the env vars required by the current deploy.`,
+  vercel: `# Push selected keys to Vercel:\nnpx vercel env add GOOGLE_AGENT_API_KEY production < vault_export_aiace.txt\n# Add only the env vars required by the current deploy.`,
   env: `# Export selected .env values from vault:\n# Use only for local operator handoff, never commit.\n# File: .env.vault-export-${new Date().toISOString().slice(0,10)}`
 };
 
@@ -693,7 +693,7 @@ function exportVault() {
   a.href = URL.createObjectURL(blob);
   a.download = `.env.vault-${new Date().toISOString().slice(0,10)}`;
   a.click();
-  showToast('📤 .env exported — ready for any project', 'gold');
+  showToast('📤 Local .env export created — operator review required before use', 'gold');
 }
 
 // ── TOAST ─────────────────────────────────────────────────────────────────

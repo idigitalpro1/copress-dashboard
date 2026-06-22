@@ -1,8 +1,8 @@
 # SATCOM Progress Monitor Packet
 
-Status: PROV-508 build artifact  
-Generated: 2026-05-14  
-Dashboard: `https://copress-dashboard.vercel.app/network`
+Status: operator-console-refresh
+Generated: 2026-06-21
+Dashboard: `https://satcom.5280.menu/`
 
 ## Current Sprint State
 
@@ -15,14 +15,14 @@ Dashboard: `https://copress-dashboard.vercel.app/network`
 | PROV-505 | deployed | contributor onboarding CTA JSON/CSV/MD |
 | PROV-506 | deployed | advertiser campaign kit JSON/CSV/MD |
 | PROV-507 | deployed | weekly edition sample JSON/MD |
-| PROV-508 | deployed | this progress monitor packet |
+| PROV-508 | refreshed | SATCOM progress monitor plus API Vault/Aiace card language |
 
 ## Active Blockers
 
-- Linear connector auth is still unavailable in this Codex session.
-- GitHub push auth has been blocked by invalid credentials.
-- 3CX runtime config is missing.
-- MCP hooks need repair; file-based progress remains the fallback lane.
+- Linear live issue sync still requires current connector/auth verification before treating the board as canonical.
+- API Vault is browser-local operator storage only; production Google/Aiace calls must read `GOOGLE_AGENT_API_KEY` from local or deployed env.
+- 3CX runtime configuration remains external to the static SATCOM dashboard.
+- Run `~/bin/mcp-status` before relying on Hermes/MCP action handoff.
 
 ## Restore Points
 
@@ -33,9 +33,20 @@ Dashboard: `https://copress-dashboard.vercel.app/network`
 
 ## Latest Deploy
 
-- Deployment: `dpl_3dFhEA1yuScnm9vYGn9r7NJSiBJm`
-- URL: `https://copress-dashboard.vercel.app/network`
-- Smoke: `/network` 200; PROV-506, PROV-507, and PROV-508 files 200.
+- URL: `https://satcom.5280.menu/`
+- Latest deployment: see Vercel dashboard for the current production deployment ID.
+- Expected smoke: `/`, `/#admin`, `/docs`, and `/apistore` all return 200 after deployment.
+
+## AI Credential Lane
+
+Canonical runbook:
+`/Users/Ace/Codex/docs/AI_CREDENTIALS_AND_VAULT_RUNBOOK.md`
+
+Active rule:
+`GOOGLE_AGENT_API_KEY` is the preferred Google/Aiace runtime credential. It belongs in local or deployed env, never in Git and never pasted into prompts.
+
+API Vault:
+browser-local operator storage only. It can help identify a named key for a reviewed handoff, but it is not the production source of truth and it is not an agent bulk-export surface.
 
 ## Progress Log
 
@@ -47,6 +58,6 @@ Dashboard mirror:
 
 ## Next Choices
 
-1. Refresh GitHub + Linear auth and sync the board.
-2. Configure 3CX runtime in `.env` only.
-3. Start public town page implementation from these static artifacts.
+1. Set `GOOGLE_AGENT_API_KEY` only in local/deployed env for apps that call Google/Aiace.
+2. Use API Vault for operator-local named-key reference and handoff, never bulk agent export.
+3. Run a SATCOM smoke check after deployment: `/`, `/#admin`, `/docs`, `/apistore`.

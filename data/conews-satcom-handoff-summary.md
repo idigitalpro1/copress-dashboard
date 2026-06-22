@@ -3,6 +3,15 @@
 Status: Ready for Codex/Claude review
 Generated: 2026-05-14
 
+## 2026-06-21 SATCOM Credential Update
+
+SATCOM card and documentation language now follows the canonical AI credential runbook:
+
+- Google/Aiace runtime calls use `GOOGLE_AGENT_API_KEY` from local or deployed environment variables.
+- API Vault is browser-local operator storage only. It is useful for named-key reference and reviewed handoff, not as the production source of truth.
+- Hermes/Aileen credential handling is one service key, one task, one reason. Bulk "all keys" export is not an agent workflow.
+- Legacy service-account JSON and SATCOM token-minting paths are advanced/legacy lanes unless a newer operator-approved runbook reintroduces them.
+
 ## Executive Summary
 
 The CoNews.Press buildout should proceed as an 8-site rollout with Morrison/Red Rocks and Nederland as pilots, followed by the Black Hawk/Central City revenue pair, Idaho Springs/Georgetown outdoor pair, and Evergreen/Golden scale pair.
