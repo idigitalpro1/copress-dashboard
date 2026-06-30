@@ -1,0 +1,17 @@
+{
+  "template": "generated-stans-style-kit",
+  "prospectId": "idaho-01",
+  "title": "Rick's Gondola Project campaign kit",
+  "labels": [
+    "campaign-kit",
+    "owner-review",
+    "claim-check"
+  ],
+  "checklist": [
+    "Owner approves contact route",
+    "Owner approves offer",
+    "Claim check complete",
+    "Pricing route selected",
+    "First placement scheduled"
+  ]
+}

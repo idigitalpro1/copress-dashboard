@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Maverick Casino Campaign Kit",
+  "about": "Maverick Casino",
+  "description": "Black Hawk and Central City casino visibility campaign for gaming, dining, hotel, promotions, and responsible-gaming-safe handoff; verify property name, license, offers, and compliance before publication",
+  "url": "https://copress-dashboard.vercel.app/generated-campaign-kits/idaho-05-maverick-casino-campaign-kit/",
+  "isBasedOn": "https://www.maverickgaming.com/dragon-tiger-casino-co/?eventDisplay=list&post_type=tribe_venue&tribe_venue=z-casino-black-hawk"
+}

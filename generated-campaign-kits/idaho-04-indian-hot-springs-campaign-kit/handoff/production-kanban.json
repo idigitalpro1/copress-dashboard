@@ -1,0 +1,45 @@
+{
+  "campaign": "Indian Hot Springs",
+  "columns": [
+    {
+      "name": "Ready",
+      "cards": [
+        "Owner review link",
+        "Initial category positioning",
+        "Claim guardrail"
+      ]
+    },
+    {
+      "name": "Design",
+      "cards": [
+        "Showcase page",
+        "Banner set",
+        "Newsletter block"
+      ]
+    },
+    {
+      "name": "Copy",
+      "cards": [
+        "Campaign copy",
+        "Social copy",
+        "Owner email"
+      ]
+    },
+    {
+      "name": "Send",
+      "cards": [
+        "Choose pricing route",
+        "Attach approved assets",
+        "Schedule first placement"
+      ]
+    },
+    {
+      "name": "Track",
+      "cards": [
+        "Owner approval",
+        "Claim check",
+        "Billing lane"
+      ]
+    }
+  ]
+}

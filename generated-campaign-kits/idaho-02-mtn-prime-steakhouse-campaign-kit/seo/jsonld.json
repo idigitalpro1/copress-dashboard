@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "MTN Prime Steakhouse Campaign Kit",
+  "about": "MTN Prime Steakhouse",
+  "description": "Idaho Springs steakhouse campaign for reservations, brunch, dinner, cocktails, and mountain-town dining; verify hours, booking links, menu claims, and imagery before publication",
+  "url": "https://copress-dashboard.vercel.app/generated-campaign-kits/idaho-02-mtn-prime-steakhouse-campaign-kit/",
+  "isBasedOn": "https://www.mtnprime.com/"
+}

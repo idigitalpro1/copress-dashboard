@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Rick's Gondola Project Campaign Kit",
+  "about": "Rick's Gondola Project",
+  "description": "Central City and Black Hawk corridor access concept with nightlife and visitor-flow guardrails; verify route, approvals, claims, and legal status before publication",
+  "url": "https://copress-dashboard.vercel.app/generated-campaign-kits/idaho-01-rick-s-gondola-project-campaign-kit/",
+  "isBasedOn": "https://www.rickscentral.com/"
+}

@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Safeway Idaho Springs Campaign Kit",
+  "about": "Safeway Idaho Springs",
+  "description": "Grocery, pharmacy, pickup, weekly-ad, deli, and local essentials campaign; verify corporate approval, store offers, pharmacy claims, and alcohol rules before publication",
+  "url": "https://copress-dashboard.vercel.app/generated-campaign-kits/idaho-03-safeway-idaho-springs-campaign-kit/",
+  "isBasedOn": "https://local.safeway.com/safeway/co/idaho-springs/2425-miner-st.html"
+}

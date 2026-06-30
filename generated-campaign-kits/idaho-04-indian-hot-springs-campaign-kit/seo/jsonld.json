@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Indian Hot Springs Campaign Kit",
+  "about": "Indian Hot Springs",
+  "description": "Historic Idaho Springs hot springs, spa, lodging, pool, caves, and weekend getaway campaign; verify rates, availability, amenity language, and health/wellness claims before publication",
+  "url": "https://copress-dashboard.vercel.app/generated-campaign-kits/idaho-04-indian-hot-springs-campaign-kit/",
+  "isBasedOn": "https://indianhotsprings.com/"
+}

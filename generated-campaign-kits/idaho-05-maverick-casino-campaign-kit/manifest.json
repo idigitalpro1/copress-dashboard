@@ -1,0 +1,76 @@
+{
+  "campaign": "Maverick Casino - Local Visibility Campaign",
+  "brand": "Maverick Casino",
+  "version": "0.1.0",
+  "created": "2026-06-30",
+  "sourcePattern": "Stan's Auto Sales campaign kit generator",
+  "sourceProspectId": "idaho-05",
+  "sourceUrl": "",
+  "sourceProspectUrl": "https://www.maverickgaming.com/dragon-tiger-casino-co/?eventDisplay=list&post_type=tribe_venue&tribe_venue=z-casino-black-hawk",
+  "audience": [
+    "Local market customers",
+    "Local readers comparing trusted providers",
+    "Prospects who need a simple call, click, or visit path"
+  ],
+  "positioning": "Black Hawk and Central City casino visibility campaign for gaming, dining, hotel, promotions, and responsible-gaming-safe handoff; verify property name, license, offers, and compliance before publication",
+  "deliverables": {
+    "showcase": "index.html",
+    "banners": [
+      "banners/banner-leaderboard-728x90.html",
+      "banners/banner-medium-rect-300x250.html",
+      "banners/banner-skyscraper-160x600.html",
+      "banners/banner-half-page-300x600.html",
+      "banners/banner-mobile-320x50.html",
+      "banners/banner-social-square-1080x1080.html"
+    ],
+    "email": [
+      "email/newsletter-feature.html"
+    ],
+    "editorial": [
+      "editorial/campaign-copy.md",
+      "editorial/sponsored-editorial-sample.md",
+      "editorial/social-media-copy.md"
+    ],
+    "social": [
+      "social/social-card-local-search.html",
+      "social/social-card-weekend-reminder.html"
+    ],
+    "landingPages": [
+      "landing-pages/idaho-05-maverick-casino-5280-menu.html"
+    ],
+    "pricing": [
+      "pricing/menu-pricing.md"
+    ],
+    "print": [
+      "print/service-card.md",
+      "print/direct-mail-postcard.md"
+    ],
+    "audio": [
+      "audio/radio-spot.md"
+    ],
+    "crm": [
+      "crm/drip-sequence.md"
+    ],
+    "handoff": [
+      "handoff/owner-sms.txt",
+      "handoff/owner-email.md",
+      "handoff/production-kanban.json",
+      "handoff/linear-kanban-manus-template.md",
+      "handoff/linear-kanban-manus-template.json"
+    ],
+    "seo": [
+      "seo/meta.json",
+      "seo/jsonld.json"
+    ]
+  },
+  "contact": {
+    "name": "Approval contact pending",
+    "phone": "Phone pending",
+    "email": "Email pending",
+    "website": "",
+    "prospectUrl": "https://www.maverickgaming.com/dragon-tiger-casino-co/?eventDisplay=list&post_type=tribe_venue&tribe_venue=z-casino-black-hawk"
+  },
+  "claimGuidance": "Do not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Maverick Casino unless the owner verifies them before publication.",
+  "modelPolicy": "free-local-models",
+  "artRoute": "Use owner-approved photos or category-safe placeholders before publication."
+}
