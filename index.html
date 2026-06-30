@@ -3291,12 +3291,12 @@ body::before {
               <div class="hermes-command-card">
                 <div class="hermes-command-label">Current lane</div>
                 <div class="hermes-command-value" id="hermes-command-agent">SATCOM Operator</div>
-                <div class="hermes-command-note">Agent preset wraps every chat and crew handoff.</div>
+                <div class="hermes-command-note">Changes prompt wrapper, tier, and output defaults only.</div>
               </div>
               <div class="hermes-command-card">
                 <div class="hermes-command-label">Plugin bus</div>
                 <div class="hermes-command-value" id="hermes-command-plugins">Core stack</div>
-                <div class="hermes-command-note">MCP, docs, browser, media, and publishing tools.</div>
+                <div class="hermes-command-note">Changes context hints only; tools still require bridge support.</div>
                 <div class="hermes-panel-actions">
                   <button class="mini-btn ok" onclick="jumpToHermesPlugins()">Open Plugins</button>
                 </div>
@@ -3328,6 +3328,11 @@ body::before {
                   <textarea id="hermes-chat-prompt" placeholder="Ask Hermes Crew anything. Example: Draft a client onboarding handoff for Paul Hill."></textarea>
                 </div>
                 <div class="hermes-quick-actions">
+                  <button class="mini-btn ok" onclick="useHermesQuickPrompt('master')">Master</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('kits')">Kits</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('news')">News</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('activity')">Activity</button>
+                  <button class="mini-btn" onclick="useHermesQuickPrompt('comms')">Mass Comms</button>
                   <button class="mini-btn" onclick="useHermesQuickPrompt('doctor')">Doctor</button>
                   <button class="mini-btn" onclick="useHermesQuickPrompt('mcp')">Repair MCP</button>
                   <button class="mini-btn" onclick="useHermesQuickPrompt('publish')">Publish Check</button>
@@ -3377,6 +3382,8 @@ body::before {
                   <div class="hermes-panel-actions">
                     <button class="mini-btn" onclick="applyHermesPluginPreset('operator')">Operator Stack</button>
                     <button class="mini-btn" onclick="applyHermesPluginPreset('media')">Media Stack</button>
+                    <button class="mini-btn" onclick="applyHermesPluginPreset('publishing')">Publishing Stack</button>
+                    <button class="mini-btn" onclick="applyHermesPluginPreset('comms')">Comms Stack</button>
                     <button class="mini-btn" onclick="copyHermesPluginPrompt()">Copy Plugin Prompt</button>
                     <button class="mini-btn warn" onclick="resetHermesPlugins()">Reset</button>
                   </div>
@@ -4990,8 +4997,36 @@ const HERMES_PLUGIN_REGISTRY = [
 const HERMES_PLUGIN_PRESETS = {
   operator: ['ops_mcp', 'docs_mcp', 'file_context', 'browser_check', 'kanban', 'newsletter'],
   media: ['docs_mcp', 'file_context', 'browser_check', 'newsletter', 'image_gen', 'video_gen'],
+  publishing: ['ops_mcp', 'docs_mcp', 'file_context', 'browser_check', 'kanban', 'newsletter', 'image_gen'],
+  comms: ['ops_mcp', 'docs_mcp', 'file_context', 'browser_check', 'newsletter', 'outlook_local', 'api_vault'],
 };
+const HERMES_RESPONSE_CONTRACT = `Required output format. Do not preface, apologize, or explain the format. Use these exact headings:
+STATUS: ready, blocked, or needs operator input.
+DIRECT ANSWER: answer the operator's request first in plain language.
+WHAT CHANGES: say what the selected agent preset/plugin stack actually changes, if relevant; otherwise write "No setting change requested."
+BLOCKERS: list missing facts, files, approvals, or unavailable tools; write "None" if clear.
+NEXT SAFE STEP: one bounded action. No live sends, DNS/Plesk/firewall, billing, secrets, deploys, or destructive git unless explicitly approved.`;
 const HERMES_QUICK_PROMPTS = {
+  master: `Run the SATCOM master preset.
+Goal: turn the operator request into a logical answer and a safe next action.
+Check current lane, available docs/context, bridge status, and whether this is content, kits, news/activity updates, API readiness, or mass comms.
+Return the exact required headings: STATUS, DIRECT ANSWER, WHAT CHANGES, BLOCKERS, NEXT SAFE STEP.
+Do not execute live sends, billing, DNS/Plesk/firewall, production deploys, or secret handling.`,
+  kits: `Run the Campaign Kit preset.
+Create or review campaign kits using the Stans/CoPress/Idaho Springs standard.
+Return: STATUS, kit target, materials present, missing assets, over-promises, unverifiable claims, owner/operator handoff, NEXT SAFE STEP.
+Do not invent prices, phone numbers, claims, menu items, property facts, or availability.`,
+  news: `Run the News Sites preset.
+Prepare news-site update packets from available docs, manifests, live routes, and editorial status.
+Return: STATUS, site-by-site findings, content gaps, link/route issues, SEO needs, blockers, NEXT SAFE STEP.
+Do not publish or send newsletters.`,
+  activity: `Run the Activity Sites preset.
+Prepare activity/event/local-commerce update packets.
+Return: STATUS, activity inventory, route health plan, stale claims, missing proofs/assets, copy refresh recommendations, NEXT SAFE STEP.
+Do not make unsupported claims or deploy without approval.`,
+  comms: `Run the Mass Comms preset.
+Prepare communications only: audience plan, SMS/email drafts, approval checklist, test-recipient plan, send-readiness blockers, rollback/stop criteria.
+Do not send email, SMS, or production contact. Keep all output draft-only until the operator approves sender, audience, copy, timing, and credential lane.`,
   doctor: 'Run a SATCOM Hermes doctor pass. Check bridge health, model lane, MCP tool availability, history state, file context state, and identify the next concrete repair.',
   mcp: 'Repair Hermes connection to MCP. Use the current endpoint facts and logs, separate bridge health from MCP registration, and give the exact non-destructive fix path.',
   publish: 'Run a publish readiness check. Confirm content, links, images/video header, SEO fields, live route, deployment status, and any blocker before production.',
@@ -5492,6 +5527,7 @@ function buildHermesPrompt(prompt) {
   const plugins = getActiveHermesPlugins();
   const parts = [
     `Active SATCOM agent: ${agent.name}\nRole: ${agent.role}\nRouting tier: ${agent.tier}\nAgent instruction: ${agent.prompt}`,
+    HERMES_RESPONSE_CONTRACT,
   ];
   if (plugins.length) {
     parts.push(`Enabled plugin lanes:\n${plugins.map(plugin => `- ${plugin.name} (${plugin.source}): ${plugin.desc}`).join('\n')}`);
