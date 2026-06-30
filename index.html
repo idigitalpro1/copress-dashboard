@@ -62,6 +62,7 @@
   --c-postcards: #e8794a;
   --c-vault:     #f59e0b;
   --c-csv:       #14b8a6;
+  --c-ai-studio: #8ab4f8;
 }
 
 html, body {
@@ -1489,7 +1490,7 @@ body::before {
         <summary>
           <span class="shelf-chevron">⌄</span>
           <span class="shelf-label">E-L Dashboards</span>
-          <span class="shelf-count">4</span>
+          <span class="shelf-count">5</span>
         </summary>
         <div class="nav-shelf-items">
           <div class="nav-item" data-view="editorial">
@@ -1497,9 +1498,10 @@ body::before {
             <span class="nav-label">Editorial Desk</span>
             <span class="nav-badge count" id="editorial-nav-count">3</span>
           </div>
-          <div class="nav-item" onclick="openExternal('https://aistudio.google.com/')">
+          <div class="nav-item" data-view="ai-studio">
             <span class="nav-icon">G</span>
-            <span class="nav-label">Google AI</span>
+            <span class="nav-label">AI Studio Projects</span>
+            <span class="nav-badge new">Vercel</span>
           </div>
           <div class="nav-item" data-view="brains">
             <span class="nav-icon">◈</span>
@@ -1723,7 +1725,7 @@ body::before {
         </div>
 
         <!-- Google AI -->
-        <div class="module-card" onclick="openExternal('https://aistudio.google.com/')" style="cursor:pointer;--card-color:var(--c-google-ai);--card-glow:rgba(66,133,244,.08);">
+        <div class="module-card" data-target="ai-studio" style="--card-color:var(--c-google-ai);--card-glow:rgba(66,133,244,.08);">
           <div class="card-dept">
             <span class="card-dept-name">AI Cloud</span>
             <span class="card-led ok"></span>
@@ -1732,33 +1734,33 @@ body::before {
             <div class="card-icon-row">
               <div class="card-icon" style="color:#8ab4f8;border-color:rgba(66,133,244,.24);background:rgba(66,133,244,.1);">G</div>
               <div>
-                <div class="card-title">Google AI</div>
-                <div class="card-subtitle">AI Studio · Gemini API · Vertex AI</div>
+                <div class="card-title">AI Studio Projects</div>
+                <div class="card-subtitle">Watermark · Flerish · MIDI · MyAppStore</div>
               </div>
             </div>
             <div class="card-stats">
               <div class="card-stat">
-                <span class="stat-label">Studio</span>
-                <span class="stat-value ok" style="font-size:11px;">Ready</span>
+                <span class="stat-label">Mapped</span>
+                <span class="stat-value ok" style="font-size:11px;">6 Apps</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Gemini API</span>
-                <span class="stat-value highlight" style="font-size:11px;">Docs</span>
+                <span class="stat-label">Local Found</span>
+                <span class="stat-value highlight" style="font-size:11px;">3</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Vertex</span>
-                <span class="stat-value" style="font-size:11px;">Console</span>
+                <span class="stat-label">Needs Import</span>
+                <span class="stat-value" style="font-size:11px;">3</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Keys</span>
-                <span class="stat-value" style="font-size:11px;">Vault</span>
+                <span class="stat-label">Launch</span>
+                <span class="stat-value" style="font-size:11px;">Vercel</span>
               </div>
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); openExternal('https://aistudio.google.com/')">AI Studio</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('ai-studio')">Project Board</button>
               <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://ai.google.dev/gemini-api/docs')">Gemini Docs</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://console.cloud.google.com/vertex-ai')">Vertex</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal('/data/google-ai-studio-projects.json')">Manifest</button>
             </div>
           </div>
         </div>
@@ -3120,6 +3122,96 @@ body::before {
       </div>
     </div>
 
+    <div class="view" id="view-ai-studio">
+      <div class="module-view">
+        <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">Google AI Studio · Vercel Launch Lane</div>
+                <h2>Make the AI Studio projects functional from SATCOM.</h2>
+                <p>This board tracks the projects you named, the local code already found, what still needs an AI Studio export, and which lane should launch on Vercel.</p>
+              </div>
+              <div class="module-status">
+                <span class="pill">Projects <strong>6</strong></span>
+                <span class="pill">Local <strong>3</strong></span>
+                <span class="pill">Import <strong>3</strong></span>
+                <span class="pill">Secrets <strong>None</strong></span>
+              </div>
+            </div>
+
+            <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
+              <a class="admin-launch" style="--admin-color:var(--c-ai-studio);" href="https://aistudio.google.com/" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Watermark Remix</div>
+                  <span class="admin-launch-tag">Found</span>
+                </div>
+                <div class="admin-launch-desc">Existing watermark component lives in codex-admin. Next step is wrapping it as a client-ready remix surface and assigning a Vercel target.</div>
+                <div class="admin-launch-url">apps/codex-admin · watermark component</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-google-ai);" href="https://aistudio.google.com/" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Flerish Studio</div>
+                  <span class="admin-launch-tag">Import</span>
+                </div>
+                <div class="admin-launch-desc">Needs the AI Studio source or export before a functional SATCOM/Vercel build can be verified. Known adjacent surface: fleurish-society.</div>
+                <div class="admin-launch-url">https://fleurish-society.vercel.app</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-ai-studio);" href="https://aistudio.google.com/" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Watermark Tracker</div>
+                  <span class="admin-launch-tag">Import</span>
+                </div>
+                <div class="admin-launch-desc">No dedicated local app folder was found. Import source, define tracker inputs and outputs, then pair it with Watermark Remix.</div>
+                <div class="admin-launch-url">Google AI Studio source required</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-vercel);" href="https://vercel.com/dashboard" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">VDJ MIDI</div>
+                  <span class="admin-launch-tag">Review</span>
+                </div>
+                <div class="admin-launch-desc">Likely needs a browser-safety decision. If MIDI hardware or desktop access is required, Vercel should be a preview/docs launcher, not the runtime.</div>
+                <div class="admin-launch-url">AI Studio import · browser capability check</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-marketing);" href="https://myappstore-biz.vercel.app" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">MyAppStore</div>
+                  <span class="admin-launch-tag">Live</span>
+                </div>
+                <div class="admin-launch-desc">Vite app builds cleanly and is deployed on Vercel. Use this as the marketplace/dashboard surface while AI Studio imports continue.</div>
+                <div class="admin-launch-url">https://myappstore-biz.vercel.app</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="https://myappstore-biz.vercel.app/dashboard/intelligence" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Live Intelligence</div>
+                  <span class="admin-launch-tag">Live</span>
+                </div>
+                <div class="admin-launch-desc">Client-safe routing board is live in MyAppStore. Keep it in mock mode until real signal feed credentials are explicitly approved.</div>
+                <div class="admin-launch-url">/dashboard/intelligence</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-vault);" href="/data/google-ai-studio-projects.json" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Project Manifest</div>
+                  <span class="admin-launch-tag">JSON</span>
+                </div>
+                <div class="admin-launch-desc">Machine-readable SATCOM routing map for Hermes, Open WebUI, Vercel launch work, and import status. No secrets or customer data.</div>
+                <div class="admin-launch-url">/data/google-ai-studio-projects.json</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://aistudio.google.com/" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Google AI Studio</div>
+                  <span class="admin-launch-tag">Source</span>
+                </div>
+                <div class="admin-launch-desc">Use this as the source-of-truth export point for the missing projects. Bring source into SATCOM before any production deploy.</div>
+                <div class="admin-launch-url">https://aistudio.google.com/</div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="view" id="view-stationery">
       <div class="module-view">
         <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
@@ -3470,6 +3562,10 @@ function routeFromHash() {
     aileen: 'brains',
     crew: 'brains',
     adminhq: 'admin',
+    ai: 'ai-studio',
+    googleai: 'ai-studio',
+    aistudio: 'ai-studio',
+    projects: 'ai-studio',
   };
   navTo(aliases[target] || target);
 }

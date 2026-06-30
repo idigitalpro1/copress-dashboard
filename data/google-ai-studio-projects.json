@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "updated": "2026-06-30",
+  "owner": "SATCOM",
+  "source": "Google AI Studio project recovery lane",
+  "satcom_route": "/#ai-studio",
+  "policy": {
+    "secrets": "No API keys, OAuth tokens, customer files, or private prompts are stored here.",
+    "launch_rule": "Projects can be linked, staged, and deployed only after the operator confirms the source files and Vercel target.",
+    "handoff": "Hermes/Open WebUI may use this manifest as a routing map, not as authority to mutate billing, DNS, production data, or credentials."
+  },
+  "projects": [
+    {
+      "id": "watermark-remix",
+      "name": "Watermark Remix",
+      "status": "local-component-found",
+      "priority": "high",
+      "source_system": "Google AI Studio",
+      "local_evidence": [
+        "apps/codex-admin/components/ui/watermark/watermark.tsx",
+        "apps/codex-admin/app/[lang]/(dashboard)/(components)/watermark/page.tsx"
+      ],
+      "satcom_action": "Wrap the existing watermark UI as a client-ready remix tool, then create a Vercel target.",
+      "launch_target": "Vercel static/app route after source confirmation",
+      "links": [
+        {
+          "label": "Google AI Studio",
+          "url": "https://aistudio.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "flerish-studio",
+      "name": "Flerish Studio",
+      "status": "needs-source-import",
+      "priority": "high",
+      "source_system": "Google AI Studio",
+      "local_evidence": [
+        "docs/ENDPOINTS_CHEATSHEET.md references fleurish-society Vercel"
+      ],
+      "satcom_action": "Import or paste the AI Studio project files, verify spelling and brand lane, then stage as a SATCOM launch card.",
+      "launch_target": "Vercel project or SATCOM sub-route after source import",
+      "links": [
+        {
+          "label": "Known Vercel surface",
+          "url": "https://fleurish-society.vercel.app"
+        },
+        {
+          "label": "Google AI Studio",
+          "url": "https://aistudio.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "watermark-tracker",
+      "name": "Watermark Tracker",
+      "status": "needs-source-import",
+      "priority": "high",
+      "source_system": "Google AI Studio",
+      "local_evidence": [
+        "No dedicated local app folder found in /Users/Ace/Codex"
+      ],
+      "satcom_action": "Bring source export into SATCOM, define tracker inputs/outputs, then connect it to the Watermark Remix lane.",
+      "launch_target": "Vercel route after working local build",
+      "links": [
+        {
+          "label": "Google AI Studio",
+          "url": "https://aistudio.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "vdj-midi",
+      "name": "VDJ MIDI",
+      "status": "needs-source-import",
+      "priority": "medium",
+      "source_system": "Google AI Studio",
+      "local_evidence": [
+        "No dedicated local app folder found in /Users/Ace/Codex"
+      ],
+      "satcom_action": "Import the AI Studio project, classify browser-only versus desktop/MIDI dependencies, and decide if Vercel is a preview or docs launcher.",
+      "launch_target": "Vercel preview only if browser-safe; otherwise SATCOM docs/control card",
+      "links": [
+        {
+          "label": "Google AI Studio",
+          "url": "https://aistudio.google.com/"
+        }
+      ]
+    },
+    {
+      "id": "myappstore",
+      "name": "MyAppStore",
+      "status": "local-app-found",
+      "priority": "high",
+      "source_system": "Local repo plus Google AI Studio adjunct",
+      "local_evidence": [
+        "frontend/myappstore-biz",
+        "frontend/myappstore-biz/src/pages/DashboardIntelligencePage.tsx"
+      ],
+      "satcom_action": "Build and deploy the existing Vite app, then add the Vercel URL back into SATCOM.",
+      "launch_target": "Vercel project for frontend/myappstore-biz",
+      "links": [
+        {
+          "label": "Live app",
+          "url": "https://myappstore-biz.vercel.app"
+        },
+        {
+          "label": "Live Intelligence",
+          "url": "https://myappstore-biz.vercel.app/dashboard/intelligence"
+        }
+      ]
+    },
+    {
+      "id": "live-intelligence",
+      "name": "Live Intelligence",
+      "status": "local-surfaces-found",
+      "priority": "high",
+      "source_system": "SATCOM / MyAppStore / admin-spa",
+      "local_evidence": [
+        "frontend/admin-spa/src/pages/LiveIntelligencePage.jsx",
+        "frontend/myappstore-biz/src/components/dashboard/LiveIntelligencePanel.tsx"
+      ],
+      "satcom_action": "Promote the client-safe routing board into the MyAppStore dashboard and link the launch surface from SATCOM.",
+      "launch_target": "Vercel with client-safe mock mode until signal feed credentials are approved",
+      "links": [
+        {
+          "label": "Live Intelligence",
+          "url": "https://myappstore-biz.vercel.app/dashboard/intelligence"
+        }
+      ]
+    }
+  ]
+}

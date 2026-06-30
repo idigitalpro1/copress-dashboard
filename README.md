@@ -26,6 +26,7 @@ Nest is the command center for copress.news — a Colorado mountain newspaper ne
 | `/apistore` | `apistore.html` | ✅ Live | API Vault — browser-local key reference and scoped one-key MCP handoff |
 | `/learn` | `learn.html` | ✅ Live | SATCO Academy — 72 flash cards, XP system, 9 levels, 18 badges |
 | `/linear` | `linear.html` | ✅ Live | Linear integration — live issues, cycles, projects, quick-create |
+| `/#ai-studio` | `index.html` | ✅ Live | Google AI Studio project launch board for Watermark Remix, Flerish Studio, Watermark Tracker, VDJ MIDI, MyAppStore, and Live Intelligence |
 
 ## Campaign Kit Generator
 
@@ -74,6 +75,7 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. Nest only
 - Hermes Crew → `data-view=brains`
 - Newsletter Studio → `/newsletter`
 - API Vault → `/apistore`
+- AI Studio Projects → `/#ai-studio`
 - Linear → `/linear`
 - SATCO Academy → `/learn`
 
@@ -90,6 +92,7 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. Nest only
 | City Sites | `/network` | Network ownership screen |
 | Newsletter Studio | `/newsletter` | Email designer, Sendy lane, and campaign handoff |
 | API Vault | `/apistore` | Local key store, scoped MCP injection, and .env export |
+| AI Studio Projects | `/#ai-studio`, `/data/google-ai-studio-projects.json` | Launch/import map for Google AI Studio projects and Vercel readiness |
 | Accounting | `data-view=accounting`, `https://invoicemanager.weeklyregistercall.com` | Invoice-manager bridge and local handoff |
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
@@ -193,6 +196,30 @@ https://satcom.5280.menu/data/satcom-agent-context.json
 
 These files contain endpoint references and hard review hooks only. They do not
 contain secrets, live customer data, or credential values.
+
+## Google AI Studio Project Launch Board
+
+SATCOM tracks the operator-facing Google AI Studio recovery lane at:
+
+```text
+https://satcom.5280.menu/#ai-studio
+https://satcom.5280.menu/data/google-ai-studio-projects.json
+```
+
+Current project map:
+
+| Project | Current SATCOM status | Next action |
+|---|---|---|
+| Watermark Remix | Local component found in `apps/codex-admin` | Wrap as a client-ready remix tool and assign a Vercel target |
+| Flerish Studio | Needs AI Studio source import | Confirm spelling/brand lane, import source, then stage |
+| Watermark Tracker | Needs AI Studio source import | Define tracker inputs/outputs and pair with Watermark Remix |
+| VDJ MIDI | Needs AI Studio source import | Decide if Vercel is runtime or preview/docs launcher |
+| MyAppStore | Live on Vercel at `https://myappstore-biz.vercel.app` | Continue wiring AI Studio project imports and approved runtime credentials |
+| Live Intelligence | Live on Vercel at `https://myappstore-biz.vercel.app/dashboard/intelligence` | Keep client-safe mock mode until signal feed credentials are approved |
+
+The JSON manifest is intentionally secret-free. It is safe for Hermes and Open
+WebUI retrieval, but it is not permission to touch credentials, DNS, billing,
+customer data, or production deploys without explicit operator approval.
 
 The PCI report is an internal readiness artifact for PCI DSS v4.0.1 evidence
 collection. It is not a ROC, AOC, or SAQ and does not replace processor,
