@@ -89,6 +89,12 @@
       "role": "Internal annual PCI readiness packet for SATCOM/operator review; not a ROC, AOC, or SAQ."
     },
     {
+      "title": "Idaho Springs CRM Integration Packet",
+      "url": "https://satcom.5280.menu/data/idaho-springs-crm-integration-packet-2026-06-30.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/idaho-springs-crm-integration-packet-2026-06-30.md",
+      "role": "Staged CRM-ready packet for Idaho Springs corridor kits; review only, no SMS/email sends or production CRM writes without operator approval."
+    },
+    {
       "title": "Hermes Command Packet",
       "url": "https://satcom.5280.menu/data/conews-hermes-command-packet.md",
       "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-command-packet.md",

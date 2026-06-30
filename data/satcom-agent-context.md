@@ -39,6 +39,7 @@ Local repo fallback:
 | Agent context | `https://satcom.5280.menu/data/satcom-agent-context.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/satcom-agent-context.md` |
 | Hermes/Open WebUI prompt | `https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/satcom-hermes-openwebui-prompt.md` |
 | Annual PCI readiness report | `https://satcom.5280.menu/data/pci-annual-compliance-report-2026.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/pci-annual-compliance-report-2026.md` |
+| Idaho Springs CRM integration packet | `https://satcom.5280.menu/data/idaho-springs-crm-integration-packet-2026-06-30.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/idaho-springs-crm-integration-packet-2026-06-30.md` |
 | Hermes command packet | `https://satcom.5280.menu/data/conews-hermes-command-packet.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-command-packet.md` |
 | Hermes execution policy | `https://satcom.5280.menu/data/conews-hermes-execution-policy.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-execution-policy.md` |
 | Hermes / Claude handoff | `https://satcom.5280.menu/data/conews-hermes-claude-handoff.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-claude-handoff.md` |

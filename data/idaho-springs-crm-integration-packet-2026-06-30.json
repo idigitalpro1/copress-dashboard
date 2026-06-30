@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "updated": "2026-06-30",
+  "source": "Antigravity normalized CRM packet pasted into Codex",
+  "sourceAttachment": "/Users/Ace/.codex/attachments/7168b417-fe15-4849-9373-e1c1a84ca865/pasted-text.txt",
+  "publicBoard": "https://satcom.5280.menu/showcase-prospects/",
+  "policy": {
+    "crmWrites": "blocked until explicit operator approval",
+    "messaging": "do not send SMS or email from this packet",
+    "secrets": "no API keys, tokens, OAuth secrets, or private customer data are stored here",
+    "claims": "all facts, offers, images, contact routes, regulated claims, and time-sensitive details require owner or compliance approval before publication"
+  },
+  "crmPacket": [
+    {
+      "leadId": "ricks-gondola-project",
+      "companyName": "Rick's Gondola Project",
+      "campaignName": "Central City / Black Hawk Corridor Access Concept",
+      "industry": "Hospitality / mobility concept",
+      "priority": "Hot",
+      "status": "Generated review kit",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=ricks-gondola-project",
+      "sourceProspectUrl": "https://www.rickscentral.com/",
+      "website": "",
+      "kitPreviewUrl": "https://satcom.5280.menu/generated-campaign-kits/idaho-01-rick-s-gondola-project-campaign-kit/",
+      "contactName": "Approval contact pending",
+      "contactPhone": "Phone pending",
+      "contactEmail": "Email pending",
+      "smsText": "Approval contact pending, here is the Rick's Gondola Project campaign kit preview: https://satcom.5280.menu/generated-campaign-kits/idaho-01-rick-s-gondola-project-campaign-kit/ It includes the showcase, banners, newsletter block, pricing route, production kanban, SEO, and owner handoff files. Please review the contact info, current offer, service area, and claim guardrail before anything publishes.",
+      "emailSubject": "Rick's gondola project kit",
+      "emailBody": "Approval contact pending,\n\nHere is the Rick's Gondola Project campaign kit preview:\n\nhttps://satcom.5280.menu/generated-campaign-kits/idaho-01-rick-s-gondola-project-campaign-kit/\n\nThe kit includes the owner-facing showcase, banner set, newsletter block, pricing route, production kanban, SEO files, and handoff copy. Before anything publishes, please approve:\n\n- Business/category positioning\n- Contact route\n- Current offer\n- Service area\n- Any regulated, price, inventory, availability, or time-sensitive claim\n\nVerification note:\nDo not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Rick's Gondola Project unless the owner verifies them before publication.",
+      "seoTitle": "Rick's Gondola Project Campaign Kit",
+      "seoDescription": "Central City and Black Hawk corridor access concept with nightlife and visitor-flow guardrails; verify route, approvals, claims, and legal status before publication",
+      "claimGuardrail": "Do not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Rick's Gondola Project unless the owner verifies them before publication.",
+      "crmWriteStatus": "blocked_until_operator_approval",
+      "sendStatus": "do_not_send",
+      "artworkStatus": "missing",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "complianceRequired": true
+    },
+    {
+      "leadId": "mtn-prime-steakhouse",
+      "companyName": "MTN Prime Steakhouse",
+      "campaignName": "Idaho Springs Mountain Dining Campaign",
+      "industry": "Restaurant / steakhouse",
+      "priority": "Hot",
+      "status": "Generated review kit",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=mtn-prime-steakhouse",
+      "sourceProspectUrl": "https://www.mtnprime.com/",
+      "website": "",
+      "kitPreviewUrl": "https://satcom.5280.menu/generated-campaign-kits/idaho-02-mtn-prime-steakhouse-campaign-kit/",
+      "contactName": "Approval contact pending",
+      "contactPhone": "Phone pending",
+      "contactEmail": "Email pending",
+      "smsText": "Approval contact pending, here is the MTN Prime Steakhouse campaign kit preview: https://satcom.5280.menu/generated-campaign-kits/idaho-02-mtn-prime-steakhouse-campaign-kit/ It includes the showcase, banners, newsletter block, pricing route, production kanban, SEO, and owner handoff files. Please review the contact info, current offer, service area, and claim guardrail before anything publishes.",
+      "emailSubject": "MTN Prime steakhouse kit",
+      "emailBody": "Approval contact pending,\n\nHere is the MTN Prime Steakhouse campaign kit preview:\n\nhttps://satcom.5280.menu/generated-campaign-kits/idaho-02-mtn-prime-steakhouse-campaign-kit/\n\nThe kit includes the owner-facing showcase, banner set, newsletter block, pricing route, production kanban, SEO files, and handoff copy. Before anything publishes, please approve:\n\n- Business/category positioning\n- Contact route\n- Current offer\n- Service area\n- Any regulated, price, inventory, availability, or time-sensitive claim\n\nVerification note:\nDo not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for MTN Prime Steakhouse unless the owner verifies them before publication.",
+      "seoTitle": "MTN Prime Steakhouse Campaign Kit",
+      "seoDescription": "Idaho Springs steakhouse campaign for reservations, brunch, dinner, cocktails, and mountain-town dining; verify hours, booking links, menu claims, and imagery before publication",
+      "claimGuardrail": "Do not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for MTN Prime Steakhouse unless the owner verifies them before publication.",
+      "crmWriteStatus": "blocked_until_operator_approval",
+      "sendStatus": "do_not_send",
+      "artworkStatus": "missing",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "complianceRequired": true
+    },
+    {
+      "leadId": "safeway-idaho-springs",
+      "companyName": "Safeway Idaho Springs",
+      "campaignName": "Idaho Springs Local Essentials Campaign",
+      "industry": "Grocery / pharmacy",
+      "priority": "Active",
+      "status": "Generated review kit",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=safeway-idaho-springs",
+      "sourceProspectUrl": "https://local.safeway.com/safeway/co/idaho-springs/2425-miner-st.html",
+      "website": "",
+      "kitPreviewUrl": "https://satcom.5280.menu/generated-campaign-kits/idaho-03-safeway-idaho-springs-campaign-kit/",
+      "contactName": "Approval contact pending",
+      "contactPhone": "Phone pending",
+      "contactEmail": "Email pending",
+      "smsText": "Approval contact pending, here is the Safeway Idaho Springs campaign kit preview: https://satcom.5280.menu/generated-campaign-kits/idaho-03-safeway-idaho-springs-campaign-kit/ It includes the showcase, banners, newsletter block, pricing route, production kanban, SEO, and owner handoff files. Please review the contact info, current offer, service area, and claim guardrail before anything publishes.",
+      "emailSubject": "Safeway Idaho Springs kit",
+      "emailBody": "Approval contact pending,\n\nHere is the Safeway Idaho Springs campaign kit preview:\n\nhttps://satcom.5280.menu/generated-campaign-kits/idaho-03-safeway-idaho-springs-campaign-kit/\n\nThe kit includes the owner-facing showcase, banner set, newsletter block, pricing route, production kanban, SEO files, and handoff copy. Before anything publishes, please approve:\n\n- Business/category positioning\n- Contact route\n- Current offer\n- Service area\n- Any regulated, price, inventory, availability, or time-sensitive claim\n\nVerification note:\nDo not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Safeway Idaho Springs unless the owner verifies them before publication.",
+      "seoTitle": "Safeway Idaho Springs Campaign Kit",
+      "seoDescription": "Grocery, pharmacy, pickup, weekly-ad, deli, and local essentials campaign; verify corporate approval, store offers, pharmacy claims, and alcohol rules before publication",
+      "claimGuardrail": "Do not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Safeway Idaho Springs unless the owner verifies them before publication.",
+      "crmWriteStatus": "blocked_until_operator_approval",
+      "sendStatus": "do_not_send",
+      "artworkStatus": "missing",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "complianceRequired": true
+    },
+    {
+      "leadId": "indian-hot-springs",
+      "companyName": "Indian Hot Springs",
+      "campaignName": "Idaho Springs Historic Soak Getaway",
+      "industry": "Resort / hot springs",
+      "priority": "Hot",
+      "status": "Generated review kit",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=indian-hot-springs",
+      "sourceProspectUrl": "https://indianhotsprings.com/",
+      "website": "",
+      "kitPreviewUrl": "https://satcom.5280.menu/generated-campaign-kits/idaho-04-indian-hot-springs-campaign-kit/",
+      "contactName": "Approval contact pending",
+      "contactPhone": "Phone pending",
+      "contactEmail": "Email pending",
+      "smsText": "Approval contact pending, here is the Indian Hot Springs campaign kit preview: https://satcom.5280.menu/generated-campaign-kits/idaho-04-indian-hot-springs-campaign-kit/ It includes the showcase, banners, newsletter block, pricing route, production kanban, SEO, and owner handoff files. Please review the contact info, current offer, service area, and claim guardrail before anything publishes.",
+      "emailSubject": "Indian Hot Springs kit",
+      "emailBody": "Approval contact pending,\n\nHere is the Indian Hot Springs campaign kit preview:\n\nhttps://satcom.5280.menu/generated-campaign-kits/idaho-04-indian-hot-springs-campaign-kit/\n\nThe kit includes the owner-facing showcase, banner set, newsletter block, pricing route, production kanban, SEO files, and handoff copy. Before anything publishes, please approve:\n\n- Business/category positioning\n- Contact route\n- Current offer\n- Service area\n- Any regulated, price, inventory, availability, or time-sensitive claim\n\nVerification note:\nDo not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Indian Hot Springs unless the owner verifies them before publication.",
+      "seoTitle": "Indian Hot Springs Campaign Kit",
+      "seoDescription": "Historic Idaho Springs hot springs, spa, lodging, pool, caves, and weekend getaway campaign; verify rates, availability, amenity language, and health/wellness claims before publication",
+      "claimGuardrail": "Do not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Indian Hot Springs unless the owner verifies them before publication.",
+      "crmWriteStatus": "blocked_until_operator_approval",
+      "sendStatus": "do_not_send",
+      "artworkStatus": "missing",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "complianceRequired": true
+    },
+    {
+      "leadId": "maverick-casino",
+      "companyName": "Maverick Casino",
+      "campaignName": "Black Hawk / Central City Gaming Visibility Kit",
+      "industry": "Casino / gaming",
+      "priority": "Active",
+      "status": "Generated review kit",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=maverick-casino",
+      "sourceProspectUrl": "https://www.maverickgaming.com/dragon-tiger-casino-co/?eventDisplay=list&post_type=tribe_venue&tribe_venue=z-casino-black-hawk",
+      "website": "",
+      "kitPreviewUrl": "https://satcom.5280.menu/generated-campaign-kits/idaho-05-maverick-casino-campaign-kit/",
+      "contactName": "Approval contact pending",
+      "contactPhone": "Phone pending",
+      "contactEmail": "Email pending",
+      "smsText": "Approval contact pending, here is the Maverick Casino campaign kit preview: https://satcom.5280.menu/generated-campaign-kits/idaho-05-maverick-casino-campaign-kit/ It includes the showcase, banners, newsletter block, pricing route, production kanban, SEO, and owner handoff files. Please review the contact info, current offer, service area, and claim guardrail before anything publishes.",
+      "emailSubject": "Maverick casino kit",
+      "emailBody": "Approval contact pending,\n\nHere is the Maverick Casino campaign kit preview:\n\nhttps://satcom.5280.menu/generated-campaign-kits/idaho-05-maverick-casino-campaign-kit/\n\nThe kit includes the owner-facing showcase, banner set, newsletter block, pricing route, production kanban, SEO files, and handoff copy. Before anything publishes, please approve:\n\n- Business/category positioning\n- Contact route\n- Current offer\n- Service area\n- Any regulated, price, inventory, availability, or time-sensitive claim\n\nVerification note:\nDo not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Maverick Casino unless the owner verifies them before publication.",
+      "seoTitle": "Maverick Casino Campaign Kit",
+      "seoDescription": "Black Hawk and Central City casino visibility campaign for gaming, dining, hotel, promotions, and responsible-gaming-safe handoff; verify property name, license, offers, and compliance before publication",
+      "claimGuardrail": "Do not publish prices, guarantees, regulated claims, availability, inventory, financing, warranties, coverage, service-area promises, or time-sensitive offers for Maverick Casino unless the owner verifies them before publication.",
+      "crmWriteStatus": "blocked_until_operator_approval",
+      "sendStatus": "do_not_send",
+      "artworkStatus": "missing",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "complianceRequired": true
+    }
+  ],
+  "missingFieldsReport": [
+    {
+      "leadId": "ricks-gondola-project",
+      "companyName": "Rick's Gondola Project",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "notes": "Needs stakeholder contact details, route approvals, legal/compliance notes, and custom concept art."
+    },
+    {
+      "leadId": "mtn-prime-steakhouse",
+      "companyName": "MTN Prime Steakhouse",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "notes": "Needs owner or manager details, current hours, booking link, menu proof, and restaurant photos."
+    },
+    {
+      "leadId": "safeway-idaho-springs",
+      "companyName": "Safeway Idaho Springs",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "notes": "Requires corporate or local manager contact, approved weekly-ad language, and pharmacy/alcohol clearance."
+    },
+    {
+      "leadId": "indian-hot-springs",
+      "companyName": "Indian Hot Springs",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "notes": "Needs resort manager contact, rate/amenity URLs, approved spa imagery, and health/wellness claim review."
+    },
+    {
+      "leadId": "maverick-casino",
+      "companyName": "Maverick Casino",
+      "missingFields": [
+        "contactName",
+        "contactPhone",
+        "contactEmail",
+        "website",
+        "imagePath"
+      ],
+      "notes": "Requires license/compliance review, promotion contact, age restriction language, responsible-gaming signoff, and approved artwork."
+    }
+  ],
+  "safeNextActions": [
+    "Import packet into CRM staging or review queue only.",
+    "Collect approval contact name, phone, and email for each account.",
+    "Attach approved artwork or mark placeholder art explicitly.",
+    "Run compliance review before any casino, grocery/pharmacy, health/wellness, pricing, promotion, or availability claim.",
+    "Request exactly one named CRM/API key only when a staged import is approved."
+  ]
+}

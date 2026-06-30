@@ -183,6 +183,7 @@ local Mac path is not mounted into a container.
 | Machine manifest | `https://satcom.5280.menu/data/satcom-agent-context.json` | `data/satcom-agent-context.json` |
 | Paste-ready prompt | `https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md` | `data/satcom-hermes-openwebui-prompt.md` |
 | Annual PCI readiness report | `https://satcom.5280.menu/data/pci-annual-compliance-report-2026.md` | `data/pci-annual-compliance-report-2026.md` |
+| Idaho Springs CRM integration packet | `https://satcom.5280.menu/data/idaho-springs-crm-integration-packet-2026-06-30.md` | `data/idaho-springs-crm-integration-packet-2026-06-30.md` |
 
 Open WebUI collection name: `SATCOM Ops`.
 
@@ -196,6 +197,12 @@ https://satcom.5280.menu/data/satcom-agent-context.json
 
 These files contain endpoint references and hard review hooks only. They do not
 contain secrets, live customer data, or credential values.
+
+The Idaho Springs CRM packet is a staging/review artifact only. It stores
+normalized account, kit, handoff, and missing-field data for Rick's Gondola
+Project, MTN Prime Steakhouse, Safeway Idaho Springs, Indian Hot Springs, and
+Maverick Casino. It must not be used to send SMS/email or write production CRM
+records until the operator explicitly approves the target CRM and credential.
 
 ## Google AI Studio Project Launch Board
 
