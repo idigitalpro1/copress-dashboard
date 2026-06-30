@@ -1,7 +1,7 @@
 {
   "campaign": "CoPress Nest - Publishing Spine",
   "brand": "CoPress Dashboard",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "created": "2026-05-19",
   "ecosystem": "CoPress / Nest Campaign Kit",
   "tagline": "One command center for local publishing, billing, campaigns, and reader growth.",
@@ -106,6 +106,91 @@
     "data": [
       "data/offer-matrix.json",
       "data/offer-matrix.md"
+    ]
+  },
+  "materialsContract": {
+    "status": "operator-ready",
+    "displayedAt": "index.html#materials",
+    "assetCount": 28,
+    "routePolicy": "The materials section may expose review links, pricing cues, copy sources, and production queues. It must not send email or SMS, change DNS, modify billing, deploy production, or call external APIs without separate operator approval.",
+    "reviewFlow": [
+      "Open the campaign kit link",
+      "Review each visible material card",
+      "Use pricing/menu-pricing.md to choose the route",
+      "Use handoff/production-kanban.json to stage production",
+      "Require operator approval before any external action"
+    ],
+    "groups": [
+      {
+        "name": "Display",
+        "route": "web and social placement",
+        "pricingCue": "$15 banner / $5 social",
+        "files": [
+          "banners/banner-leaderboard-728x90.html",
+          "banners/banner-medium-rect-300x250.html",
+          "banners/banner-mobile-320x50.html",
+          "banners/banner-social-square-1080x1080.html",
+          "banners/content-banner-native.html"
+        ]
+      },
+      {
+        "name": "Sponsored Content",
+        "route": "article, CMS, and native placement",
+        "pricingCue": "$25 content / $30 editorial",
+        "files": [
+          "content/sponsored-post.html",
+          "editorial/campaign-copy.md",
+          "editorial/press-release.md",
+          "editorial/sponsored-post.md",
+          "editorial/social-media-copy.md"
+        ]
+      },
+      {
+        "name": "Newsletter and Social",
+        "route": "manual Sendy/newsletter review and feed placement",
+        "pricingCue": "$20 newsletter / $5 social",
+        "files": [
+          "email/newsletter-command-spine.html",
+          "social/social-card-command-center.html",
+          "social/social-card-operator-readiness.html"
+        ]
+      },
+      {
+        "name": "Print, Audio, CRM",
+        "route": "offline handoff and owner follow-up",
+        "pricingCue": "$20 print / $15 audio / $25 CRM",
+        "files": [
+          "print/operator-one-sheet.md",
+          "print/direct-mail-postcard.md",
+          "audio/radio-spot.md",
+          "crm/drip-sequence.md"
+        ]
+      },
+      {
+        "name": "Placement Modules",
+        "route": "site carousel and embedded content unit",
+        "pricingCue": "placement review",
+        "files": [
+          "carousel/registercall-home-carousel.html",
+          "carousel/embed-snippet.html"
+        ]
+      },
+      {
+        "name": "Pricing, Data, Handoff, SEO",
+        "route": "operator approval and production tracking",
+        "pricingCue": "approval required",
+        "files": [
+          "pricing/menu-pricing.md",
+          "data/offer-matrix.md",
+          "data/offer-matrix.json",
+          "handoff/two-link-handoff.md",
+          "handoff/owner-sms.txt",
+          "handoff/owner-email.md",
+          "handoff/production-kanban.json",
+          "seo/meta.json",
+          "seo/jsonld.json"
+        ]
+      }
     ]
   },
   "officialFacts": {

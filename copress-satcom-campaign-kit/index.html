@@ -79,10 +79,21 @@
   .asset-preview .preview-native{width:640px;height:320px}
   .asset-preview .preview-rect{width:300px;height:250px}
   .preview-stack{display:grid;gap:14px}
+  .materials-brief{display:grid;grid-template-columns:1.1fr .95fr .95fr;gap:14px;margin-bottom:18px}
+  .materials-brief article{background:linear-gradient(145deg,rgba(17,29,46,.98),rgba(7,16,27,.98));border:1px solid var(--line);padding:20px;min-height:146px}
+  .materials-brief b{display:block;color:var(--blue);font-family:"DM Mono",monospace;font-size:11px;text-transform:uppercase;letter-spacing:.16em;margin-bottom:10px}
+  .materials-brief strong{display:block;color:var(--paper);font-family:"Playfair Display",Georgia,serif;font-size:28px;line-height:1.05}
+  .materials-brief span{display:block;color:#bac7d4;font-size:14px;margin-top:10px}
   .materials{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-  .asset{display:block;text-decoration:none;background:#0e1a2c;border:1px solid rgba(86,182,200,.25);padding:22px;min-height:178px}
+  .asset{display:flex;flex-direction:column;text-decoration:none;background:#0e1a2c;border:1px solid rgba(86,182,200,.25);padding:22px;min-height:208px}
   .asset:hover{border-color:var(--gold);transform:translateY(-2px)}
-  .asset small{display:block;color:var(--blue);font-weight:800;margin-top:16px}
+  .asset small{display:block;color:var(--blue);font-weight:800;margin-top:auto;padding-top:16px}
+  .asset-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .asset-meta em{font-style:normal;color:#f7f1e3;background:rgba(86,182,200,.12);border:1px solid rgba(86,182,200,.24);padding:4px 7px;font-family:"DM Mono",monospace;font-size:10px;letter-spacing:.04em;text-transform:uppercase}
+  .materials-rule{margin-top:18px;background:#0d1520;border:1px solid rgba(200,168,75,.34);padding:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+  .materials-rule b{display:block;color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:.16em;margin-bottom:6px}
+  .materials-rule span{display:block;color:#c7d3df}
+  .materials-rule a{color:var(--blue);font-weight:900;text-transform:uppercase;letter-spacing:.1em;font-size:12px;text-decoration:none}
   .content-pack{margin-top:18px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
   .content-card{display:block;text-decoration:none;background:#0d1520;border:1px solid rgba(200,168,75,.2);padding:18px;min-height:142px}
   .content-card:hover{border-color:var(--gold);transform:translateY(-2px)}
@@ -125,14 +136,15 @@
   .footer{padding:28px 22px;color:var(--muted);font-size:13px}
   .footer-inner{max-width:1180px;margin:0 auto;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
   @media(max-width:960px){
-    .facts,.materials,.routes,.kanban,.content-pack{grid-template-columns:1fr 1fr}
+    .facts,.materials,.materials-brief,.routes,.kanban,.content-pack{grid-template-columns:1fr 1fr}
     .section-head,.showcase-grid,.banner-stage,.post-shell,.newsletter,.asset-preview{grid-template-columns:1fr}
     .hero{min-height:780px}
     h1{font-size:64px}
     .section-head h2{font-size:42px}
   }
   @media(max-width:640px){
-    .facts,.materials,.routes,.kanban,.link-suite,.content-pack{grid-template-columns:1fr}
+    .facts,.materials,.materials-brief,.routes,.kanban,.link-suite,.content-pack{grid-template-columns:1fr}
+    .materials-rule{grid-template-columns:1fr}
     .nav{display:none}
     .hero-inner{padding-top:90px}
     .preview-wall{padding:12px}
@@ -222,17 +234,42 @@
             <div class="kicker">Campaign materials</div>
             <h2>Actual assets, not placeholders.</h2>
           </div>
-          <p>The kit now exposes finished creative lanes directly on the showcase page, with real file links for handoff and review.</p>
+          <p>The kit exposes every finished lane directly on the showcase page, with real file links, route labels, pricing cues, and operator-safe guardrails for handoff, review, publishing, and follow-up.</p>
+        </div>
+        <div class="materials-brief" aria-label="Campaign material readiness summary">
+          <article><b>Reviewable now</b><strong>28 linked materials</strong><span>Every visible card opens a real file in the kit. No placeholder promises, hidden folders, or mystery attachments.</span></article>
+          <article><b>Production route</b><strong>Send, place, track</strong><span>Each material is labeled for the lane it feeds: display, content, newsletter, print, audio, CRM, handoff, data, or SEO.</span></article>
+          <article><b>Operator guardrail</b><strong>Approval before action</strong><span>External writes, deploys, billing, email sends, SMS, DNS, and backend changes stay gated by the operator.</span></article>
         </div>
         <div class="materials">
-          <a class="asset" href="./banners/banner-leaderboard-728x90.html"><b>Display</b><h3>Leaderboard</h3><p>728x90 top-of-page ad creative.</p><small>Open asset</small></a>
-          <a class="asset" href="./banners/banner-medium-rect-300x250.html"><b>Display</b><h3>Medium rectangle</h3><p>300x250 article and sidebar creative.</p><small>Open asset</small></a>
-          <a class="asset" href="./banners/content-banner-native.html"><b>Content banner</b><h3>Native sponsor module</h3><p>Editorial-style sponsored block.</p><small>Open asset</small></a>
-          <a class="asset" href="./content/sponsored-post.html"><b>Sponsored content</b><h3>Launch article</h3><p>Full sponsored post HTML.</p><small>Open article</small></a>
-          <a class="asset" href="./email/newsletter-command-spine.html"><b>Email</b><h3>Newsletter block</h3><p>Sendy/manual feature unit.</p><small>Open email</small></a>
-          <a class="asset" href="./editorial/sponsored-post.md"><b>Editorial</b><h3>Sponsored post copy</h3><p>Markdown source for CMS use.</p><small>Open copy</small></a>
-          <a class="asset" href="./social/social-card-command-center.html"><b>Social</b><h3>Command card</h3><p>Square feed creative.</p><small>Open social</small></a>
-          <a class="asset" href="./handoff/two-link-handoff.md"><b>Handoff</b><h3>Two-link send</h3><p>Owner-ready link instructions.</p><small>Open handoff</small></a>
+          <a class="asset" href="./banners/banner-leaderboard-728x90.html"><b>Display</b><h3>Leaderboard</h3><p>728x90 top-of-page ad creative for site inventory and campaign launch traffic.</p><span class="asset-meta"><em>Web slot</em><em>$15 banner</em></span><small>Open asset</small></a>
+          <a class="asset" href="./banners/banner-medium-rect-300x250.html"><b>Display</b><h3>Medium rectangle</h3><p>300x250 article, directory, and sidebar unit with command-center positioning.</p><span class="asset-meta"><em>Article slot</em><em>$15 banner</em></span><small>Open asset</small></a>
+          <a class="asset" href="./banners/banner-mobile-320x50.html"><b>Display</b><h3>Mobile banner</h3><p>320x50 phone-first unit for local readers, alerts, and newsletter click-throughs.</p><span class="asset-meta"><em>Mobile slot</em><em>$15 banner</em></span><small>Open asset</small></a>
+          <a class="asset" href="./banners/banner-social-square-1080x1080.html"><b>Display</b><h3>Social square</h3><p>1080x1080 feed-ready graphic for Shop Local, owner updates, and promo posts.</p><span class="asset-meta"><em>Feed creative</em><em>$5 social</em></span><small>Open asset</small></a>
+          <a class="asset" href="./banners/content-banner-native.html"><b>Content banner</b><h3>Native sponsor module</h3><p>Editorial-style sponsored block that can sit inside an article or local guide.</p><span class="asset-meta"><em>Native unit</em><em>$25 content</em></span><small>Open asset</small></a>
+          <a class="asset" href="./content/sponsored-post.html"><b>Sponsored content</b><h3>Launch article</h3><p>Finished advertorial HTML for publishing review, proofing, and placement.</p><span class="asset-meta"><em>Article page</em><em>$30 editorial</em></span><small>Open article</small></a>
+          <a class="asset" href="./editorial/campaign-copy.md"><b>Editorial</b><h3>Campaign copy</h3><p>Headlines, positioning, CTA copy, proof notes, and placement language.</p><span class="asset-meta"><em>Copy source</em><em>Review</em></span><small>Open copy</small></a>
+          <a class="asset" href="./editorial/press-release.md"><b>Editorial</b><h3>Press release</h3><p>Launch announcement for publisher, operator, partner, or newsroom review.</p><span class="asset-meta"><em>Announcement</em><em>Review</em></span><small>Open release</small></a>
+          <a class="asset" href="./editorial/social-media-copy.md"><b>Editorial</b><h3>Social captions</h3><p>Platform-ready post copy that pairs with the square card and readiness card.</p><span class="asset-meta"><em>Caption set</em><em>$5 social</em></span><small>Open captions</small></a>
+          <a class="asset" href="./email/newsletter-command-spine.html"><b>Email</b><h3>Newsletter block</h3><p>Sendy/manual feature unit with subject, preheader, CTA, and operator copy.</p><span class="asset-meta"><em>Email unit</em><em>$20 newsletter</em></span><small>Open email</small></a>
+          <a class="asset" href="./editorial/sponsored-post.md"><b>Editorial</b><h3>Sponsored post copy</h3><p>Markdown source for CMS paste-in, editor review, and local rewrite work.</p><span class="asset-meta"><em>CMS source</em><em>$30 editorial</em></span><small>Open copy</small></a>
+          <a class="asset" href="./social/social-card-command-center.html"><b>Social</b><h3>Command card</h3><p>Square feed creative for the dashboard value proposition and owner send.</p><span class="asset-meta"><em>Social HTML</em><em>$5 social</em></span><small>Open social</small></a>
+          <a class="asset" href="./social/social-card-operator-readiness.html"><b>Social</b><h3>Readiness card</h3><p>Operator-facing social graphic for readiness, handoff, and local proofing.</p><span class="asset-meta"><em>Social HTML</em><em>$5 social</em></span><small>Open social</small></a>
+          <a class="asset" href="./print/operator-one-sheet.md"><b>Print</b><h3>Operator one-sheet</h3><p>One-page sales handout for publisher, owner, or production review.</p><span class="asset-meta"><em>Print copy</em><em>$20 print</em></span><small>Open print</small></a>
+          <a class="asset" href="./print/direct-mail-postcard.md"><b>Print</b><h3>Direct mail</h3><p>Postcard copy for local outreach, owner proofing, and neighborhood follow-up.</p><span class="asset-meta"><em>Mailer copy</em><em>$20 print</em></span><small>Open postcard</small></a>
+          <a class="asset" href="./audio/radio-spot.md"><b>Audio</b><h3>Radio spot</h3><p>15s and 30s reads for radio, podcast, hold audio, or voiceover handoff.</p><span class="asset-meta"><em>Audio script</em><em>$15 audio</em></span><small>Open script</small></a>
+          <a class="asset" href="./crm/drip-sequence.md"><b>CRM</b><h3>Owner drip</h3><p>Four-touch follow-up sequence for operator education and approval routing.</p><span class="asset-meta"><em>Follow-up</em><em>$25 CRM</em></span><small>Open drip</small></a>
+          <a class="asset" href="./carousel/registercall-home-carousel.html"><b>Carousel</b><h3>Home placement</h3><p>Register-Call style campaign carousel demo for homepage or feature rail use.</p><span class="asset-meta"><em>Site module</em><em>Placement</em></span><small>Open carousel</small></a>
+          <a class="asset" href="./carousel/embed-snippet.html"><b>Carousel</b><h3>Embed snippet</h3><p>Drop-in content unit with scoped HTML, CSS, and JavaScript for site placement.</p><span class="asset-meta"><em>Embed</em><em>Placement</em></span><small>Open embed</small></a>
+          <a class="asset" href="./pricing/menu-pricing.md"><b>Pricing</b><h3>Menu pricing</h3><p>Operator trial, placement, add-on pricing, and immediate-route map.</p><span class="asset-meta"><em>Estimate</em><em>Approval</em></span><small>Open pricing</small></a>
+          <a class="asset" href="./data/offer-matrix.md"><b>Data</b><h3>Offer matrix</h3><p>Human-readable offer, package, route, and campaign-lane mapping.</p><span class="asset-meta"><em>Operator data</em><em>Review</em></span><small>Open matrix</small></a>
+          <a class="asset" href="./data/offer-matrix.json"><b>Data</b><h3>Offer JSON</h3><p>Structured offer matrix for dashboard, monitor, or automation consumption.</p><span class="asset-meta"><em>JSON</em><em>Automation</em></span><small>Open JSON</small></a>
+          <a class="asset" href="./handoff/two-link-handoff.md"><b>Handoff</b><h3>Two-link send</h3><p>Owner-ready link instructions that keep the send clean and reviewable.</p><span class="asset-meta"><em>Owner route</em><em>Handoff</em></span><small>Open handoff</small></a>
+          <a class="asset" href="./handoff/owner-sms.txt"><b>Handoff</b><h3>Owner SMS</h3><p>Short operator text message for a manual, approval-first owner send.</p><span class="asset-meta"><em>SMS copy</em><em>No auto-send</em></span><small>Open SMS</small></a>
+          <a class="asset" href="./handoff/owner-email.md"><b>Handoff</b><h3>Owner email</h3><p>Owner-ready email explaining the kit, links, assets, and next step.</p><span class="asset-meta"><em>Email copy</em><em>No auto-send</em></span><small>Open email</small></a>
+          <a class="asset" href="./handoff/production-kanban.json"><b>Handoff</b><h3>Kanban JSON</h3><p>Production queue for intake, design, publish, approval, and follow-up.</p><span class="asset-meta"><em>Queue</em><em>JSON</em></span><small>Open kanban</small></a>
+          <a class="asset" href="./seo/meta.json"><b>SEO</b><h3>Meta contract</h3><p>Title, description, OG, canonical, and preview metadata for the kit.</p><span class="asset-meta"><em>Metadata</em><em>JSON</em></span><small>Open meta</small></a>
+          <a class="asset" href="./seo/jsonld.json"><b>SEO</b><h3>JSON-LD</h3><p>SoftwareApplication and Service schema for structured publishing context.</p><span class="asset-meta"><em>Schema</em><em>JSON-LD</em></span><small>Open schema</small></a>
         </div>
         <div class="content-pack" aria-label="Direct content banner asset links">
           <a class="content-card" href="./banners/content-banner-native.html"><b>Content banner</b><strong>Native sponsor module</strong><span>The actual article-style content banner block.</span><small>Open native banner</small></a>
@@ -241,6 +278,10 @@
           <a class="content-card" href="./email/newsletter-command-spine.html"><b>Newsletter</b><strong>Feature banner block</strong><span>Email-ready content banner for newsletter placement.</span><small>Open email banner</small></a>
           <a class="content-card" href="./carousel/registercall-home-carousel.html"><b>Carousel demo</b><strong>Home-page placement</strong><span>Reviewable content carousel placement demo.</span><small>Open carousel</small></a>
           <a class="content-card" href="./carousel/embed-snippet.html"><b>Embed snippet</b><strong>Drop-in content unit</strong><span>Scoped HTML/CSS/JS block for site placement.</span><small>Open embed</small></a>
+        </div>
+        <div class="materials-rule">
+          <div><b>Locked health contract</b><span>Materials are safe to review and copy. Nothing here sends email/SMS, changes DNS, updates billing, deploys production, or calls external APIs without a separate operator-approved action.</span></div>
+          <a href="./handoff/production-kanban.json">Open production queue</a>
         </div>
       </div>
     </section>
