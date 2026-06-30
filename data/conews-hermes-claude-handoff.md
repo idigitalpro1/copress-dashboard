@@ -18,8 +18,8 @@ Run SATCOM / CoPress / Hermes as one operator stack with a clean shared handoff 
 
 ## Current Local URLs
 
-- Aileen / Hermes WebUI canonical dashboard: `http://127.0.0.1:8787/`
-- Current Aileen session example: `http://127.0.0.1:8787/session/f99b5ca43f08`
+- Aileen / Hermes WebUI canonical dashboard: `http://127.0.0.1:8786/`
+- Current Aileen session example: `http://127.0.0.1:8786/session/f99b5ca43f08`
 - Hermes Agent diagnostics only: `http://127.0.0.1:9119/sessions`
 - SATCOM dashboard live: `https://copress-dashboard.vercel.app/`
 - Kanban: `http://127.0.0.1:8096`
@@ -132,9 +132,9 @@ Bulk "all keys" export is not an agent workflow. Codex/Claude keep execution and
 ## Useful Commands
 
 ```bash
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | egrep "hermes|8787|9119|8793|8096"
-curl -sS http://127.0.0.1:8787/api/settings | python3 -m json.tool
-curl -sS http://127.0.0.1:8787/api/models | python3 -m json.tool | sed -n '1,80p'
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | egrep "hermes|8786|9119|8793|8096"
+curl -sS http://127.0.0.1:8786/api/settings | python3 -m json.tool
+curl -sS http://127.0.0.1:8786/api/models | python3 -m json.tool | sed -n '1,80p'
 docker logs --tail=120 hermes-webui-manual
 tail -80 /Users/Ace/workspace/02_Output/hermes_conews_progress.md
 curl -I --max-time 10 https://copress-dashboard.vercel.app/network

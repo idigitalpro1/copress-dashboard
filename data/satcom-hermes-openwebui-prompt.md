@@ -87,9 +87,9 @@ One named key, one task, one reason. Never bulk export credentials.
 Use these only as local operator references:
 
 ```text
-Open WebUI login:              http://127.0.0.1:8093/auth
-Hermes Codex knowledge base:   http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728
-Aileen / Hermes WebUI:        http://127.0.0.1:8787/
+Open WebUI login:              http://127.0.0.1:8094/auth
+Hermes Codex knowledge base:   http://127.0.0.1:8094/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728
+Aileen / Hermes WebUI:        http://127.0.0.1:8786/
 Hermes diagnostics:           http://127.0.0.1:9119/sessions
 Hermes Crew bridge health:    http://127.0.0.1:8793/health
 OpenAI-compatible gateway:    http://127.0.0.1:8642/v1
@@ -100,6 +100,8 @@ SATCOM public dashboard:      https://satcom.5280.menu/
 SATCOM Docs Hub:              https://satcom.5280.menu/docs
 SATCOM API Vault reference:   https://satcom.5280.menu/apistore
 ```
+
+Use `8094` as the trusted Open WebUI lane unless the operator verifies that `8093` has been reclaimed by a real Open WebUI process. `8093` can appear healthy when Docker is holding a stale binding, so prefer process verification plus `/health`.
 
 Before relying on MCP handoff, ask the operator/Codex to verify:
 

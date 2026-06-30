@@ -52,17 +52,19 @@ Local repo fallback:
 
 | Endpoint | URL | Use |
 |---|---|---|
-| Open WebUI Login | `http://127.0.0.1:8093/auth` | Local Open WebUI login for Hermes Kit Build Mode, model selection, file upload, and knowledge-base management |
-| Hermes Codex knowledge base | `http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728` | Open WebUI knowledge base loaded with curated SATCOM/Hermes docs |
-| Aileen / Hermes WebUI | `http://127.0.0.1:8787/` | Human operator dashboard for prompts, chat continuity, and local model routing |
+| Open WebUI Login | `http://127.0.0.1:8094/auth` | Local Open WebUI login for Hermes Kit Build Mode, model selection, file upload, and knowledge-base management |
+| Hermes Codex knowledge base | `http://127.0.0.1:8094/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728` | Open WebUI knowledge base loaded with curated SATCOM/Hermes docs |
+| Aileen / Hermes WebUI | `http://127.0.0.1:8786/` | Human operator dashboard for prompts, chat continuity, and local model routing |
 | Hermes diagnostics | `http://127.0.0.1:9119/sessions` | Sessions, analytics, models, logs, skills, plugins, profiles, config, and keys |
 | Hermes Crew bridge | `http://127.0.0.1:8793/health` | Local crew run/status/result API |
 | OpenAI-compatible local gateway | `http://127.0.0.1:8642/v1` | Open WebUI/API base URL for local model clients |
 | Kanban Ops | `http://127.0.0.1:8096` | Local board for operator work |
 | API Vault Bridge (macOS) | `http://127.0.0.1:3579/health` | Local guarded one-key request bridge; never bulk export |
-| API Vault Bridge (Open WebUI Docker) | `http://host.docker.internal:3579` | Use as the Open WebUI tool base URL for API Vault requests |
+| API Vault Bridge (Open WebUI container) | `http://host.docker.internal:3579` | Use as the Open WebUI tool base URL only when Open WebUI is containerized |
 
 Direct diagnostics API calls may return `401 Unauthorized` without the dashboard session token. That does not prove Hermes is down. The Open WebUI knowledge-base URL requires the local Open WebUI login session.
+
+Current recovery note: `8094` is the trusted Open WebUI lane. `8093` may be held by a stale Docker backend binding and should not be treated as authoritative until Docker releases the port and `/health` is verified against a real Open WebUI process.
 
 ## Open WebUI Setup
 

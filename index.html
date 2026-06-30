@@ -1538,7 +1538,7 @@ body::before {
             <span class="nav-label">Owned Assets</span>
             <span class="nav-badge new">SATCOM</span>
           </div>
-          <div class="nav-item" onclick="openExternal('http://127.0.0.1:8093/auth')">
+          <div class="nav-item" onclick="openExternal('http://127.0.0.1:8094/auth')">
             <span class="nav-icon">O</span>
             <span class="nav-label">Open WebUI Login</span>
           </div>
@@ -1670,7 +1670,7 @@ body::before {
             </span>
             <span class="asset-health-code" data-asset-code>LOCAL</span>
           </a>
-          <a class="asset-health pending" data-asset-id="local-bridge" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
+          <a class="asset-health pending" data-asset-id="local-bridge" href="http://127.0.0.1:8786/" target="_blank" rel="noopener">
             <span class="asset-dot"></span>
             <span class="asset-health-main">
               <span class="asset-health-label">Local Bridge</span>
@@ -2501,12 +2501,12 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">⚡ Hermes</button>
               <button class="card-btn" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8093/auth','_blank')">Open WebUI</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728','_blank')">Hermes Codex</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8094/auth','_blank')">Open WebUI</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8094/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728','_blank')">Hermes Codex</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119','_blank')">Agent Dashboard</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">History</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew / Swarm</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8787/','_blank')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786/','_blank')">Aileen</button>
             </div>
           </div>
         </div>
@@ -2571,13 +2571,13 @@ body::before {
           <div class="admin-launch-desc">SATCOM Hermes console for prompts, model routing, crew jobs, and one-key credential handoff.</div>
           <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8093/auth" target="_blank" rel="noopener">
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
           <div class="admin-launch-top">
             <div class="admin-launch-title">Open WebUI Login</div>
             <span class="admin-launch-tag">Knowledge</span>
           </div>
           <div class="admin-launch-desc">Local Open WebUI login for Hermes Kit Build Mode and the Hermes Codex knowledge base.</div>
-          <div class="admin-launch-url">127.0.0.1:8093/auth</div>
+          <div class="admin-launch-url">127.0.0.1:8094/auth</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
           <div class="admin-launch-top">
@@ -3059,13 +3059,13 @@ body::before {
             <div class="admin-launch-desc">Primary SATCOM Hermes console. Chat and crew jobs run through the public bridge proxy.</div>
             <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8093/auth" target="_blank" rel="noopener">
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Open WebUI Login</div>
               <span class="admin-launch-tag">Local AI</span>
             </div>
             <div class="admin-launch-desc">Login for Hermes Kit Build Mode, file upload, model selection, and the Hermes Codex knowledge base.</div>
-            <div class="admin-launch-url">http://127.0.0.1:8093/auth</div>
+            <div class="admin-launch-url">http://127.0.0.1:8094/auth</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/console/api/hermes/health" target="_blank" rel="noopener">
             <div class="admin-launch-top">
@@ -3635,7 +3635,7 @@ const OWNED_ASSET_CHECKS = [
   { id: 'models', label: 'Model Route', url: '/console/api/hermes/models', mode: 'fetch' },
   { id: 'rollout', label: 'Rollout Update', url: '/rollout/update', mode: 'fetch' },
   { id: 'browser', label: 'Browser Harness', url: 'http://127.0.0.1:9119/sessions', mode: 'local' },
-  { id: 'local-bridge', label: 'Local Bridge', url: 'http://127.0.0.1:8787/', mode: 'local' }
+  { id: 'local-bridge', label: 'Local Bridge', url: 'http://127.0.0.1:8786/', mode: 'local' }
 ];
 
 function openExternal(url) {

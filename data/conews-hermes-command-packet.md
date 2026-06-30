@@ -2,12 +2,12 @@
 
 Date: 2026-05-14
 Operator: Ace
-Runtime target: Hermes / Aileen at `http://127.0.0.1:8787`
+Runtime target: Hermes / Aileen at `http://127.0.0.1:8786`
 Repo root: `/Users/Ace/Codex`
 
 ## Current Hook Status
 
-`~/bin/mcp-status` is currently not green for the local Ops MCP hooks. Until that is fixed, run Hermes in docs-first/suggest-mode and use file-based progress hooks.
+`~/bin/mcp-status` is currently green for local and edge MCP hooks. Hermes may use guarded MCP handoff for status and reviewed requests, while Codex/Claude still own repo edits, commits, deploys, and production verification.
 
 Do not use raw destructive actions. Do not deploy. Do not modify DNS, Plesk, secrets, `.env`, Sendy, PDF pipeline, customer data, or dirty/untracked repo files.
 
@@ -131,8 +131,8 @@ echo "=== GIT ==="
 git status --short
 echo
 echo "=== HERMES WEBUI ==="
-docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | egrep "hermes|8787|9119|8793|NAMES"
-curl -sS --max-time 5 http://127.0.0.1:8787/api/settings | python3 -m json.tool | sed -n '1,80p'
+docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}" | egrep "hermes|8786|9119|8793|NAMES"
+curl -sS --max-time 5 http://127.0.0.1:8786/api/settings | python3 -m json.tool | sed -n '1,80p'
 echo
 echo "=== MCP HOOKS ==="
 ~/bin/mcp-status

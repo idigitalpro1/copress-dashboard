@@ -47,7 +47,7 @@ Generated kits land under `generated-campaign-kits/<prospect-slug>-campaign-kit/
 **Admin section**
 - Admin HQ — primary launch surface for operator tools
 - CoPress Dashboard — `https://copress-dashboard.vercel.app/`
-- Aileen / Hermes WebUI — `http://127.0.0.1:8787/`
+- Aileen / Hermes WebUI — `http://127.0.0.1:8786/`
 - Hermes Agent diagnostics — `http://127.0.0.1:9119/sessions`
 - Hermes Crew Bridge — `http://127.0.0.1:8793/health`
 - Kanban Ops — `http://127.0.0.1:8096`
@@ -154,15 +154,17 @@ Hermes Agent has two separate local surfaces:
 | URL | Purpose | Use for |
 |-----|---------|---------|
 | `https://copress-dashboard.vercel.app/` → Hermes Crew | CoPress operator front end | Chat, crew jobs, status, local endpoint links |
-| `http://127.0.0.1:8093/auth` | Open WebUI login | Hermes Kit Build Mode, model selection, file upload, and knowledge-base management |
-| `http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728` | Hermes Codex knowledge base | Curated SATCOM/Hermes docs loaded into Open WebUI |
-| `http://127.0.0.1:8787/` | Aileen / Hermes WebUI | Canonical human operator dashboard for prompts, chat continuity, and local model routing |
+| `http://127.0.0.1:8094/auth` | Open WebUI login | Hermes Kit Build Mode, model selection, file upload, and knowledge-base management |
+| `http://127.0.0.1:8094/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728` | Hermes Codex knowledge base | Curated SATCOM/Hermes docs loaded into Open WebUI |
+| `http://127.0.0.1:8786/` | Aileen / Hermes WebUI | Canonical human operator dashboard for prompts, chat continuity, and local model routing |
 | `http://127.0.0.1:9119/sessions` | Hermes Agent diagnostics | Raw sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
 | `http://127.0.0.1:8793` | Hermes Crew bridge | Local chat, crew run/status/result API, Qwen/Ollama routing |
 | `http://127.0.0.1:8501` | Streamlit fallback | Local fallback chat and Crew Runner UI |
 | `http://127.0.0.1:8642/v1` | OpenAI-compatible gateway | Open WebUI / API clients |
 
-`http://127.0.0.1:8787/` is the canonical Aileen/Hermes operator dashboard. Individual `/session/...` URLs are chat threads inside that dashboard, not the canonical entry point. `http://127.0.0.1:9119/sessions` is diagnostics only. The diagnostics API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean Hermes is down.
+`http://127.0.0.1:8786/` is the canonical Aileen/Hermes operator dashboard. Individual `/session/...` URLs are chat threads inside that dashboard, not the canonical entry point. `http://127.0.0.1:9119/sessions` is diagnostics only. The diagnostics API under `/api/*` is session-protected and can return `401 {"detail":"Unauthorized"}` when called directly without the embedded dashboard session token. That is expected for raw API calls and does not mean Hermes is down.
+
+Open WebUI recovery note: `http://127.0.0.1:8094` is the current trusted local Open WebUI lane. Treat `8093` as legacy/stale unless `lsof` shows an actual Open WebUI process and `/health` returns `200`.
 
 For Open WebUI, point the OpenAI-compatible base URL at:
 
@@ -326,7 +328,8 @@ Local bridge endpoints:
 | Runtime | URL | Notes |
 |--------|-----|-------|
 | macOS / Claude Code | `http://127.0.0.1:3579` | LaunchAgent label: `com.conews.api-vault-mcp` |
-| Open WebUI Docker | `http://host.docker.internal:3579` | Use this as the Open WebUI tool `bridge_url` |
+| Open WebUI, local uvx | `http://127.0.0.1:3579` | Use this as the Open WebUI tool `bridge_url` when Open WebUI runs directly on macOS |
+| Open WebUI, containerized | `http://host.docker.internal:3579` | Use this as the Open WebUI tool `bridge_url` only from inside a container |
 | Request log | `/Users/Ace/.api-vault/requests.jsonl` | Pending operator approvals only |
 
 Expected safe status: `/health` returns `bulk_export_allowed=false`,
