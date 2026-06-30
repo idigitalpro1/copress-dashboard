@@ -203,6 +203,10 @@ normalized account, kit, handoff, and missing-field data for Rick's Gondola
 Project, MTN Prime Steakhouse, Safeway Idaho Springs, Indian Hot Springs, and
 Maverick Casino. It must not be used to send SMS/email or write production CRM
 records until the operator explicitly approves the target CRM and credential.
+Its staging CSV and follow-up task queue are available at
+`https://satcom.5280.menu/data/idaho-springs-crm-staging-import-2026-06-30.csv`
+and
+`https://satcom.5280.menu/data/idaho-springs-crm-followup-tasks-2026-06-30.json`.
 
 ## Google AI Studio Project Launch Board
 

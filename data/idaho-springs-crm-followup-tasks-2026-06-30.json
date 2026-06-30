@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "updated": "2026-06-30",
+  "sourcePacket": "https://satcom.5280.menu/data/idaho-springs-crm-integration-packet-2026-06-30.json",
+  "policy": {
+    "crmWrites": "blocked until explicit operator approval",
+    "messaging": "do not send SMS or email from this packet",
+    "secrets": "no API keys, tokens, OAuth secrets, or private customer data are stored here",
+    "claims": "all facts, offers, images, contact routes, regulated claims, and time-sensitive details require owner or compliance approval before publication"
+  },
+  "tasks": [
+    {
+      "leadId": "ricks-gondola-project",
+      "companyName": "Rick's Gondola Project",
+      "status": "blocked_missing_contact_and_artwork",
+      "ownerContactTasks": [
+        "Find and verify approval contact name",
+        "Find and verify approval contact phone",
+        "Find and verify approval contact email"
+      ],
+      "artworkTasks": [
+        "Collect approved logo/photos or mark placeholder art",
+        "Confirm image rights before publication"
+      ],
+      "complianceTasks": [
+        "Verify current offers, rates, availability, hours, regulated claims, and time-sensitive copy",
+        "Confirm compliance signoff before sending or importing to production CRM"
+      ],
+      "safeNextAction": "CRM staging import only; do not send and do not write production CRM."
+    },
+    {
+      "leadId": "mtn-prime-steakhouse",
+      "companyName": "MTN Prime Steakhouse",
+      "status": "blocked_missing_contact_and_artwork",
+      "ownerContactTasks": [
+        "Find and verify approval contact name",
+        "Find and verify approval contact phone",
+        "Find and verify approval contact email"
+      ],
+      "artworkTasks": [
+        "Collect approved logo/photos or mark placeholder art",
+        "Confirm image rights before publication"
+      ],
+      "complianceTasks": [
+        "Verify current offers, rates, availability, hours, regulated claims, and time-sensitive copy",
+        "Confirm compliance signoff before sending or importing to production CRM"
+      ],
+      "safeNextAction": "CRM staging import only; do not send and do not write production CRM."
+    },
+    {
+      "leadId": "safeway-idaho-springs",
+      "companyName": "Safeway Idaho Springs",
+      "status": "blocked_missing_contact_and_artwork",
+      "ownerContactTasks": [
+        "Find and verify approval contact name",
+        "Find and verify approval contact phone",
+        "Find and verify approval contact email"
+      ],
+      "artworkTasks": [
+        "Collect approved logo/photos or mark placeholder art",
+        "Confirm image rights before publication"
+      ],
+      "complianceTasks": [
+        "Verify current offers, rates, availability, hours, regulated claims, and time-sensitive copy",
+        "Confirm compliance signoff before sending or importing to production CRM"
+      ],
+      "safeNextAction": "CRM staging import only; do not send and do not write production CRM."
+    },
+    {
+      "leadId": "indian-hot-springs",
+      "companyName": "Indian Hot Springs",
+      "status": "blocked_missing_contact_and_artwork",
+      "ownerContactTasks": [
+        "Find and verify approval contact name",
+        "Find and verify approval contact phone",
+        "Find and verify approval contact email"
+      ],
+      "artworkTasks": [
+        "Collect approved logo/photos or mark placeholder art",
+        "Confirm image rights before publication"
+      ],
+      "complianceTasks": [
+        "Verify current offers, rates, availability, hours, regulated claims, and time-sensitive copy",
+        "Confirm compliance signoff before sending or importing to production CRM"
+      ],
+      "safeNextAction": "CRM staging import only; do not send and do not write production CRM."
+    },
+    {
+      "leadId": "maverick-casino",
+      "companyName": "Maverick Casino",
+      "status": "blocked_missing_contact_and_artwork",
+      "ownerContactTasks": [
+        "Find and verify approval contact name",
+        "Find and verify approval contact phone",
+        "Find and verify approval contact email"
+      ],
+      "artworkTasks": [
+        "Collect approved logo/photos or mark placeholder art",
+        "Confirm image rights before publication"
+      ],
+      "complianceTasks": [
+        "Verify current offers, rates, availability, hours, regulated claims, and time-sensitive copy",
+        "Confirm compliance signoff before sending or importing to production CRM"
+      ],
+      "safeNextAction": "CRM staging import only; do not send and do not write production CRM."
+    }
+  ]
+}
