@@ -54,6 +54,8 @@
   --c-network:   #27ae60;
   --c-hermes:    #06b6d4;
   --c-admin:     #d946ef;
+  --c-google-ai: #4285f4;
+  --c-vercel:    #f5f5f5;
   --c-stationery:#f472b6;
   --c-gambling:  #22c55e;
   --c-newsletter:#2c7be5;
@@ -208,6 +210,72 @@ body::before {
 
 .nav-divider { height: 1px; background: var(--rule); margin: 8px 16px; }
 
+.nav-home {
+  margin-bottom: 8px;
+}
+.nav-shelves {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 10px;
+}
+.nav-shelf {
+  border-top: 1px solid var(--rule);
+  padding: 2px 0;
+}
+.nav-shelf:first-child {
+  border-top: 0;
+}
+.nav-shelf summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 7px 16px;
+  color: rgba(200,168,75,.55);
+  cursor: pointer;
+  user-select: none;
+  font: 700 9px 'DM Mono', monospace;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+.nav-shelf summary::-webkit-details-marker { display: none; }
+.shelf-chevron {
+  width: 12px;
+  color: var(--gold);
+  transform: rotate(-90deg);
+  transition: transform var(--transition);
+}
+.nav-shelf[open] .shelf-chevron {
+  transform: rotate(0deg);
+}
+.shelf-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.shelf-count {
+  color: rgba(255,255,255,.28);
+  border: 1px solid var(--border);
+  padding: 1px 5px;
+  border-radius: 2px;
+  letter-spacing: 0;
+}
+.nav-shelf-items {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 5px;
+}
+.nav-shelf:not([open]) .nav-shelf-items {
+  display: none;
+}
+.nav-shelf .nav-item {
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
 /* Sidebar footer: server status */
 .sidebar-footer {
   margin-top: auto; padding: 16px;
@@ -265,6 +333,167 @@ body::before {
 .page-subtitle {
   font-size: 13px; color: var(--ink-muted); font-family: 'DM Mono', monospace;
   letter-spacing: .5px;
+}
+
+/* ── Owned Assets Status ───────────────────────────────────────── */
+.owned-assets-card {
+  margin: 24px 44px 0;
+  background: linear-gradient(135deg, rgba(18,22,30,.98), rgba(12,15,22,.98));
+  border: 1px solid var(--border-hi);
+  border-top: 3px solid var(--gold);
+  border-radius: 2px;
+  display: grid;
+  grid-template-columns: minmax(220px, .75fr) minmax(0, 1.45fr);
+  gap: 18px;
+  padding: 18px;
+  box-shadow: 0 18px 44px rgba(0,0,0,.18);
+}
+.owned-assets-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.asset-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+.asset-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0;
+}
+.asset-copy {
+  color: var(--ink-mid);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+}
+.asset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.asset-action {
+  border: 1px solid var(--border-hi);
+  background: rgba(255,255,255,.04);
+  color: var(--ink);
+  border-radius: 2px;
+  padding: 8px 10px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
+}
+.asset-action:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(200,168,75,.08);
+}
+.asset-action.primary {
+  background: rgba(200,168,75,.12);
+  border-color: rgba(200,168,75,.45);
+  color: var(--gold);
+}
+.asset-checked {
+  color: var(--ink-muted);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+}
+.asset-health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.asset-health {
+  text-decoration: none;
+  color: var(--ink);
+  min-width: 0;
+  min-height: 72px;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 2px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 9px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  transition: background var(--transition), border-color var(--transition), transform var(--transition);
+}
+.asset-health:hover {
+  transform: translateY(-1px);
+  border-color: rgba(200,168,75,.4);
+  background: rgba(200,168,75,.06);
+}
+.asset-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #526070;
+  box-shadow: 0 0 0 2px rgba(82,96,112,.18);
+}
+.asset-health-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.asset-health-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.asset-health-detail {
+  font-size: 10px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.asset-health-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+.asset-health.ok .asset-dot {
+  background: #27ae60;
+  box-shadow: 0 0 9px rgba(39,174,96,.55);
+}
+.asset-health.ok .asset-health-code { color: #27ae60; }
+.asset-health.warn .asset-dot,
+.asset-health.link .asset-dot,
+.asset-health.local .asset-dot {
+  background: #f39c12;
+  box-shadow: 0 0 9px rgba(243,156,18,.55);
+}
+.asset-health.warn .asset-health-code,
+.asset-health.link .asset-health-code,
+.asset-health.local .asset-health-code { color: #f39c12; }
+.asset-health.bad .asset-dot {
+  background: #e74c3c;
+  box-shadow: 0 0 9px rgba(231,76,60,.55);
+}
+.asset-health.bad .asset-health-code { color: #e74c3c; }
+.asset-health.pending .asset-dot {
+  animation: led-pulse 1.6s ease-in-out infinite;
+}
+@media (max-width: 1100px) {
+  .owned-assets-card { grid-template-columns: 1fr; }
+  .asset-health-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 760px) {
+  .owned-assets-card { margin: 18px 20px 0; padding: 14px; }
+  .asset-health-grid { grid-template-columns: 1fr; }
 }
 
 /* ── Cards Grid ─────────────────────────────────────────────────── */
@@ -1213,105 +1442,137 @@ body::before {
   <!-- Sidebar -->
   <nav id="sidebar">
 
-    <div class="sidebar-section">
-      <span class="sidebar-rule-line"></span>
-      <span class="sidebar-section-label">Publishing</span>
-      <span class="sidebar-rule-line right"></span>
+    <div class="nav-home">
+      <div class="nav-item active" data-view="dashboard">
+        <span class="nav-icon">◼</span>
+        <span class="nav-label">Dashboard</span>
+      </div>
     </div>
 
-    <div class="nav-item active" data-view="dashboard">
-      <span class="nav-icon">◼</span>
-      <span class="nav-label">Dashboard</span>
-    </div>
-    <div class="nav-item" data-view="admin">
-      <span class="nav-icon">⌘</span>
-      <span class="nav-label">Admin HQ</span>
-      <span class="nav-badge new">HOME</span>
-    </div>
-    <div class="nav-item" data-view="editorial">
-      <span class="nav-icon">✒</span>
-      <span class="nav-label">Editorial Desk</span>
-      <span class="nav-badge count" id="editorial-nav-count">3</span>
-    </div>
-    <div class="nav-item" data-view="directory">
-      <span class="nav-icon">📍</span>
-      <span class="nav-label">Shop Local</span>
-    </div>
-    <div class="nav-item" data-view="cities">
-      <span class="nav-icon">🏔</span>
-      <span class="nav-label">City Sites</span>
-    </div>
+    <div class="nav-shelves" aria-label="Dashboard shelves">
+      <details class="nav-shelf" data-shelf="a-d" open>
+        <summary>
+          <span class="shelf-chevron">⌄</span>
+          <span class="shelf-label">A-D Dashboards</span>
+          <span class="shelf-count">6</span>
+        </summary>
+        <div class="nav-shelf-items">
+          <div class="nav-item" data-view="accounting">
+            <span class="nav-icon">📒</span>
+            <span class="nav-label">Accounting</span>
+          </div>
+          <div class="nav-item" data-view="admin">
+            <span class="nav-icon">⌘</span>
+            <span class="nav-label">Admin HQ</span>
+            <span class="nav-badge new">HOME</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/apistore'">
+            <span class="nav-icon">🔑</span>
+            <span class="nav-label">API Vault</span>
+          </div>
+          <div class="nav-item" data-view="cities">
+            <span class="nav-icon">🏔</span>
+            <span class="nav-label">City Sites</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/csv-manager'">
+            <span class="nav-icon">C</span>
+            <span class="nav-label">CSV Manager</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/docs'">
+            <span class="nav-icon">📚</span>
+            <span class="nav-label">Docs Hub</span>
+          </div>
+        </div>
+      </details>
 
-    <div class="nav-divider"></div>
+      <details class="nav-shelf" data-shelf="e-l" open>
+        <summary>
+          <span class="shelf-chevron">⌄</span>
+          <span class="shelf-label">E-L Dashboards</span>
+          <span class="shelf-count">4</span>
+        </summary>
+        <div class="nav-shelf-items">
+          <div class="nav-item" data-view="editorial">
+            <span class="nav-icon">✒</span>
+            <span class="nav-label">Editorial Desk</span>
+            <span class="nav-badge count" id="editorial-nav-count">3</span>
+          </div>
+          <div class="nav-item" onclick="openExternal('https://aistudio.google.com/')">
+            <span class="nav-icon">G</span>
+            <span class="nav-label">Google AI</span>
+          </div>
+          <div class="nav-item" data-view="brains">
+            <span class="nav-icon">◈</span>
+            <span class="nav-label">Hermes Crew</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/linear'">
+            <span class="nav-icon">📐</span>
+            <span class="nav-label">Linear</span>
+          </div>
+        </div>
+      </details>
 
-    <div class="sidebar-section">
-      <span class="sidebar-rule-line"></span>
-      <span class="sidebar-section-label">Revenue</span>
-      <span class="sidebar-rule-line right"></span>
-    </div>
+      <details class="nav-shelf" data-shelf="m-r" open>
+        <summary>
+          <span class="shelf-chevron">⌄</span>
+          <span class="shelf-label">M-R Dashboards</span>
+          <span class="shelf-count">6</span>
+        </summary>
+        <div class="nav-shelf-items">
+          <div class="nav-item" data-view="marketing">
+            <span class="nav-icon">📣</span>
+            <span class="nav-label">Marketing Hub</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/network'">
+            <span class="nav-icon">🌐</span>
+            <span class="nav-label">Network HQ</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/newsletter'">
+            <span class="nav-icon">📧</span>
+            <span class="nav-label">Newsletter Studio</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/portfolio'">
+            <span class="nav-icon">🛰</span>
+            <span class="nav-label">Owned Assets</span>
+            <span class="nav-badge new">SATCOM</span>
+          </div>
+          <div class="nav-item" onclick="openExternal('http://127.0.0.1:8093/auth')">
+            <span class="nav-icon">O</span>
+            <span class="nav-label">Open WebUI Login</span>
+          </div>
+          <div class="nav-item" onclick="openPostcardStudio()">
+            <span class="nav-icon">▤</span>
+            <span class="nav-label">Postcard Studio</span>
+          </div>
+        </div>
+      </details>
 
-    <div class="nav-item" data-view="marketing">
-      <span class="nav-icon">📣</span>
-      <span class="nav-label">Marketing Hub</span>
-    </div>
-    <div class="nav-item" data-view="accounting">
-      <span class="nav-icon">📒</span>
-      <span class="nav-label">Accounting</span>
-    </div>
-
-    <div class="nav-divider"></div>
-
-    <div class="sidebar-section">
-      <span class="sidebar-rule-line"></span>
-      <span class="sidebar-section-label">Tools</span>
-      <span class="sidebar-rule-line right"></span>
-    </div>
-
-    <div class="nav-item" onclick="window.location.href='/network'">
-      <span class="nav-icon">🌐</span>
-      <span class="nav-label">Network HQ</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/portfolio'">
-      <span class="nav-icon">🛰</span>
-      <span class="nav-label">Owned Assets</span>
-      <span class="nav-badge new">SATCOM</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/docs'">
-      <span class="nav-icon">📚</span>
-      <span class="nav-label">Docs Hub</span>
-    </div>
-    <div class="nav-item" data-view="stationery">
-      <span class="nav-icon">▣</span>
-      <span class="nav-label">Stationery</span>
-    </div>
-    <div class="nav-item" data-view="brains">
-      <span class="nav-icon">◈</span>
-      <span class="nav-label">Hermes Crew</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/newsletter'">
-      <span class="nav-icon">📧</span>
-      <span class="nav-label">Newsletter Studio</span>
-    </div>
-    <div class="nav-item" onclick="openPostcardStudio()">
-      <span class="nav-icon">▤</span>
-      <span class="nav-label">Postcard Studio</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/apistore'">
-      <span class="nav-icon">🔑</span>
-      <span class="nav-label">API Vault</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/csv-manager'">
-      <span class="nav-icon">C</span>
-      <span class="nav-label">CSV Manager</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/linear'">
-      <span class="nav-icon">📐</span>
-      <span class="nav-label">Linear</span>
-    </div>
-    <div class="nav-item" onclick="window.location.href='/learn'">
-      <span class="nav-icon">🎓</span>
-      <span class="nav-label">SATCO Academy</span>
-      <span class="nav-badge new">NEW</span>
+      <details class="nav-shelf" data-shelf="s-z" open>
+        <summary>
+          <span class="shelf-chevron">⌄</span>
+          <span class="shelf-label">S-Z Dashboards</span>
+          <span class="shelf-count">4</span>
+        </summary>
+        <div class="nav-shelf-items">
+          <div class="nav-item" onclick="window.location.href='/learn'">
+            <span class="nav-icon">🎓</span>
+            <span class="nav-label">SATCO Academy</span>
+            <span class="nav-badge new">NEW</span>
+          </div>
+          <div class="nav-item" data-view="directory">
+            <span class="nav-icon">📍</span>
+            <span class="nav-label">Shop Local</span>
+          </div>
+          <div class="nav-item" data-view="stationery">
+            <span class="nav-icon">▣</span>
+            <span class="nav-label">Stationery</span>
+          </div>
+          <div class="nav-item" onclick="openExternal('https://vercel.com/dashboard')">
+            <span class="nav-icon">▲</span>
+            <span class="nav-label">Vercel</span>
+          </div>
+        </div>
+      </details>
     </div>
 
     <!-- Server status footer -->
@@ -1338,6 +1599,85 @@ body::before {
         <h1 class="page-title">SATCOM</h1>
         <p class="page-subtitle">This Vercel dashboard is the admin home. Open legacy consoles only from here.</p>
       </div>
+
+      <section class="owned-assets-card" aria-label="Owned assets status">
+        <div class="owned-assets-head">
+          <div class="asset-kicker">Owned Assets</div>
+          <h2 class="asset-title">SATCOM asset health</h2>
+          <p class="asset-copy">Primary owned routes, bridge endpoints, and local-only tools checked from the dashboard surface.</p>
+          <div class="asset-actions">
+            <button class="asset-action primary" type="button" onclick="refreshOwnedAssets()">Refresh</button>
+            <button class="asset-action" type="button" onclick="window.location.href='/portfolio'">Open Portfolio</button>
+          </div>
+          <div class="asset-checked" id="asset-health-updated">Waiting for first check</div>
+        </div>
+        <div class="asset-health-grid" id="owned-assets-grid">
+          <a class="asset-health pending" data-asset-id="satcom" href="/">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">SATCOM</span>
+              <span class="asset-health-detail" data-asset-detail>checking</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>...</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="docs" href="/docs">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Docs Hub</span>
+              <span class="asset-health-detail" data-asset-detail>checking</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>...</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="kanban" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Kanban Ops</span>
+              <span class="asset-health-detail" data-asset-detail>external admin</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>LINK</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="hermes" href="/console/api/hermes/health" target="_blank" rel="noopener">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Hermes Bridge</span>
+              <span class="asset-health-detail" data-asset-detail>checking</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>...</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="models" href="/console/api/hermes/models" target="_blank" rel="noopener">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Model Route</span>
+              <span class="asset-health-detail" data-asset-detail>checking</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>...</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="rollout" href="/rollout/update">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Rollout Update</span>
+              <span class="asset-health-detail" data-asset-detail>checking</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>...</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="browser" href="http://127.0.0.1:9119/sessions" target="_blank" rel="noopener">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Browser Harness</span>
+              <span class="asset-health-detail" data-asset-detail>local only</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>LOCAL</span>
+          </a>
+          <a class="asset-health pending" data-asset-id="local-bridge" href="http://127.0.0.1:8787/" target="_blank" rel="noopener">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Local Bridge</span>
+              <span class="asset-health-detail" data-asset-detail>local only</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>LOCAL</span>
+          </a>
+        </div>
+      </section>
 
       <div class="cards-grid">
 
@@ -1378,6 +1718,88 @@ body::before {
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Aileen</button>
               <button class="card-btn" onclick="event.stopPropagation(); openM365Admin()">M365</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google AI -->
+        <div class="module-card" onclick="openExternal('https://aistudio.google.com/')" style="cursor:pointer;--card-color:var(--c-google-ai);--card-glow:rgba(66,133,244,.08);">
+          <div class="card-dept">
+            <span class="card-dept-name">AI Cloud</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon" style="color:#8ab4f8;border-color:rgba(66,133,244,.24);background:rgba(66,133,244,.1);">G</div>
+              <div>
+                <div class="card-title">Google AI</div>
+                <div class="card-subtitle">AI Studio · Gemini API · Vertex AI</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Studio</span>
+                <span class="stat-value ok" style="font-size:11px;">Ready</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Gemini API</span>
+                <span class="stat-value highlight" style="font-size:11px;">Docs</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Vertex</span>
+                <span class="stat-value" style="font-size:11px;">Console</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Keys</span>
+                <span class="stat-value" style="font-size:11px;">Vault</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); openExternal('https://aistudio.google.com/')">AI Studio</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://ai.google.dev/gemini-api/docs')">Gemini Docs</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://console.cloud.google.com/vertex-ai')">Vertex</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vercel -->
+        <div class="module-card" onclick="openExternal('https://vercel.com/dashboard')" style="cursor:pointer;--card-color:var(--c-vercel);--card-glow:rgba(255,255,255,.055);">
+          <div class="card-dept">
+            <span class="card-dept-name">Vercel</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon" style="color:#fff;border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.07);">▲</div>
+              <div>
+                <div class="card-title">Vercel</div>
+                <div class="card-subtitle">Deployments · Domains · AI Gateway</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">SATCOM</span>
+                <span class="stat-value ok" style="font-size:11px;">Prod</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">CLI</span>
+                <span class="stat-value highlight" style="font-size:11px;">Ready</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Domain</span>
+                <span class="stat-value ok" style="font-size:10px;">5280.menu</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">AI Gateway</span>
+                <span class="stat-value" style="font-size:11px;">Docs</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); openExternal('https://vercel.com/dashboard')">Dashboard</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://vercel.com/patrick-sweeneys-projects-434de4c7/copress-dashboard')">SATCOM Project</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://vercel.com/docs/ai-gateway')">AI Gateway</button>
             </div>
           </div>
         </div>
@@ -1992,7 +2414,7 @@ body::before {
               <div class="card-icon">📚</div>
               <div>
                 <div class="card-title">Docs Hub</div>
-                <div class="card-subtitle">Vendor docs · NotebookLM · Notion</div>
+                <div class="card-subtitle">Runbooks · agent prompts · NotebookLM</div>
               </div>
             </div>
             <div class="card-stats">
@@ -2015,9 +2437,9 @@ body::before {
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/docs'">+ Add Docs</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/docs'">Library</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/docs'">NLM Queue</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/docs'">Docs Hub</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('/data/satcom-agent-context.md','_blank')">Agent Packet</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('/data/satcom-hermes-openwebui-prompt.md','_blank')">Prompt</button>
             </div>
           </div>
         </div>
@@ -2077,7 +2499,8 @@ body::before {
             <div class="card-actions">
               <button class="card-btn primary" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">⚡ Hermes</button>
               <button class="card-btn" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786','_blank')">WebUI · Chat</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8093/auth','_blank')">Open WebUI</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728','_blank')">Hermes Codex</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119','_blank')">Agent Dashboard</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">History</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew / Swarm</button>
@@ -2145,6 +2568,14 @@ body::before {
           </div>
           <div class="admin-launch-desc">SATCOM Hermes console for prompts, model routing, crew jobs, and one-key credential handoff.</div>
           <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
+        </a>
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8093/auth" target="_blank" rel="noopener">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Open WebUI Login</div>
+            <span class="admin-launch-tag">Knowledge</span>
+          </div>
+          <div class="admin-launch-desc">Local Open WebUI login for Hermes Kit Build Mode and the Hermes Codex knowledge base.</div>
+          <div class="admin-launch-url">127.0.0.1:8093/auth</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
           <div class="admin-launch-top">
@@ -2626,6 +3057,14 @@ body::before {
             <div class="admin-launch-desc">Primary SATCOM Hermes console. Chat and crew jobs run through the public bridge proxy.</div>
             <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
           </a>
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8093/auth" target="_blank" rel="noopener">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Open WebUI Login</div>
+              <span class="admin-launch-tag">Local AI</span>
+            </div>
+            <div class="admin-launch-desc">Login for Hermes Kit Build Mode, file upload, model selection, and the Hermes Codex knowledge base.</div>
+            <div class="admin-launch-url">http://127.0.0.1:8093/auth</div>
+          </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/console/api/hermes/health" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Hermes Crew Bridge</div>
@@ -2988,7 +3427,10 @@ function navTo(section) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   view.classList.add('active');
   const nav = document.querySelector('[data-view="' + section + '"]');
-  if (nav) nav.classList.add('active');
+  if (nav) {
+    nav.classList.add('active');
+    nav.closest('.nav-shelf')?.setAttribute('open', '');
+  }
   if (section === 'dashboard') {
     document.querySelectorAll('.module-card').forEach((c, i) => {
       c.style.animation = 'none';
@@ -3032,6 +3474,36 @@ function routeFromHash() {
   navTo(aliases[target] || target);
 }
 
+const NAV_SHELF_KEY = 'satcom_nav_shelves';
+
+function readNavShelfState() {
+  try {
+    return JSON.parse(localStorage.getItem(NAV_SHELF_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function writeNavShelfState() {
+  const state = {};
+  document.querySelectorAll('.nav-shelf').forEach(shelf => {
+    state[shelf.dataset.shelf] = shelf.open;
+  });
+  localStorage.setItem(NAV_SHELF_KEY, JSON.stringify(state));
+}
+
+function hydrateNavShelves() {
+  const saved = readNavShelfState();
+  document.querySelectorAll('.nav-shelf').forEach(shelf => {
+    if (Object.prototype.hasOwnProperty.call(saved, shelf.dataset.shelf)) {
+      shelf.open = !!saved[shelf.dataset.shelf];
+    }
+    shelf.addEventListener('toggle', writeNavShelfState);
+  });
+}
+
+hydrateNavShelves();
+
 document.querySelectorAll('.nav-item[data-view]').forEach(item => {
   item.addEventListener('click', () => { if(item.dataset.view) navTo(item.dataset.view); });
 });
@@ -3059,9 +3531,66 @@ const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
 const POSTCARD_STUDIO_URL = '/villager-postcard-proofing/';
+const OWNED_ASSET_CHECKS = [
+  { id: 'satcom', label: 'SATCOM', url: '/', mode: 'fetch' },
+  { id: 'docs', label: 'Docs Hub', url: '/docs', mode: 'fetch' },
+  { id: 'kanban', label: 'Kanban Ops', url: 'https://admin.conews.press/console/kanban', mode: 'link' },
+  { id: 'hermes', label: 'Hermes Bridge', url: '/console/api/hermes/health', mode: 'fetch' },
+  { id: 'models', label: 'Model Route', url: '/console/api/hermes/models', mode: 'fetch' },
+  { id: 'rollout', label: 'Rollout Update', url: '/rollout/update', mode: 'fetch' },
+  { id: 'browser', label: 'Browser Harness', url: 'http://127.0.0.1:9119/sessions', mode: 'local' },
+  { id: 'local-bridge', label: 'Local Bridge', url: 'http://127.0.0.1:8787/', mode: 'local' }
+];
 
 function openExternal(url) {
   window.open(url, '_blank', 'noopener');
+}
+
+function setOwnedAssetState(asset, state, detail, code) {
+  const node = document.querySelector(`[data-asset-id="${asset.id}"]`);
+  if (!node) return state;
+  node.classList.remove('pending', 'ok', 'warn', 'bad', 'link', 'local');
+  node.classList.add(state);
+  const detailNode = node.querySelector('[data-asset-detail]');
+  const codeNode = node.querySelector('[data-asset-code]');
+  if (detailNode) detailNode.textContent = detail;
+  if (codeNode) codeNode.textContent = code;
+  node.setAttribute('aria-label', `${asset.label}: ${detail}`);
+  return state;
+}
+
+async function probeOwnedAsset(asset) {
+  if (asset.mode === 'link') {
+    return setOwnedAssetState(asset, 'link', 'external admin link', 'LINK');
+  }
+  if (asset.mode === 'local') {
+    return setOwnedAssetState(asset, 'local', 'operator localhost', 'LOCAL');
+  }
+
+  setOwnedAssetState(asset, 'pending', 'checking', '...');
+  try {
+    const res = await fetch(asset.url, { cache: 'no-store' });
+    const statusText = res.statusText || (res.ok ? 'OK' : 'HTTP');
+    const detail = `${res.status} ${statusText}`.trim();
+    return setOwnedAssetState(asset, res.ok ? 'ok' : 'bad', detail, String(res.status));
+  } catch (err) {
+    return setOwnedAssetState(asset, 'bad', err.message || 'unreachable', 'ERR');
+  }
+}
+
+async function refreshOwnedAssets() {
+  const updated = document.getElementById('asset-health-updated');
+  if (updated) updated.textContent = 'Checking owned assets...';
+
+  const states = await Promise.all(OWNED_ASSET_CHECKS.map(probeOwnedAsset));
+  const ready = states.filter(state => state === 'ok').length;
+  const attention = states.filter(state => state === 'bad' || state === 'warn').length;
+  const linked = states.filter(state => state === 'link' || state === 'local').length;
+  const checkedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  if (updated) {
+    updated.textContent = `${ready} ready · ${attention} attention · ${linked} link/local · checked ${checkedAt}`;
+  }
 }
 
 function openInvoiceManager(path = '/') {
@@ -5371,6 +5900,7 @@ renderHermesChat();
 renderHermesActivity();
 loadKeys();
 updateStatusDots();
+refreshOwnedAssets();
 refreshRolloutTrackers();
 
 loadLiveDashboardData();

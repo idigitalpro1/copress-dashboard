@@ -1,0 +1,171 @@
+{
+  "schema": "satcom.agent_context.v1",
+  "updated": "2026-06-30",
+  "name": "SATCOM Agent Context Packet",
+  "purpose": "URL-first documentation, prompt, and endpoint map for Hermes and Open WebUI when local filesystem access is unavailable.",
+  "publicBaseUrl": "https://satcom.5280.menu",
+  "fallbackBaseUrl": "https://copress-dashboard.vercel.app",
+  "localRepo": "/Users/Ace/Codex/apps/copress-dashboard",
+  "entrypoints": {
+    "satcomDashboard": "https://satcom.5280.menu/",
+    "docsHub": "https://satcom.5280.menu/docs",
+    "apiVault": "https://satcom.5280.menu/apistore",
+    "agentContextMarkdown": "https://satcom.5280.menu/data/satcom-agent-context.md",
+    "agentContextJson": "https://satcom.5280.menu/data/satcom-agent-context.json",
+    "hermesOpenWebuiPrompt": "https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md"
+  },
+  "localEndpoints": [
+    {
+      "name": "Open WebUI Login",
+      "url": "http://127.0.0.1:8093/auth",
+      "purpose": "Local Open WebUI login for Hermes Kit Build Mode, model selection, file upload, and knowledge-base management.",
+      "notes": "Use this when the browser needs to authenticate before opening Hermes Codex."
+    },
+    {
+      "name": "Hermes Codex Knowledge Base",
+      "url": "http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728",
+      "purpose": "Open WebUI knowledge base currently loaded with curated SATCOM/Hermes docs.",
+      "notes": "Requires local Open WebUI login."
+    },
+    {
+      "name": "Aileen / Hermes WebUI",
+      "url": "http://127.0.0.1:8787/",
+      "purpose": "Human operator dashboard for prompts, chat continuity, and local model routing.",
+      "notes": "Canonical Hermes entrypoint when running locally."
+    },
+    {
+      "name": "Hermes Agent Diagnostics",
+      "url": "http://127.0.0.1:9119/sessions",
+      "purpose": "Raw sessions, analytics, models, logs, skills, plugins, profiles, config, and keys.",
+      "notes": "Diagnostics only. Direct /api calls can return 401 without an embedded dashboard session."
+    },
+    {
+      "name": "Hermes Crew Bridge",
+      "url": "http://127.0.0.1:8793/health",
+      "purpose": "Local chat, crew run/status/result API, Qwen/Ollama routing.",
+      "notes": "Use for local crew jobs after the bridge is healthy."
+    },
+    {
+      "name": "OpenAI-Compatible Local Gateway",
+      "url": "http://127.0.0.1:8642/v1",
+      "purpose": "Base URL for Open WebUI or API clients.",
+      "notes": "Verified local model id in SATCOM docs: ollama-qwen."
+    },
+    {
+      "name": "Kanban Ops",
+      "url": "http://127.0.0.1:8096",
+      "purpose": "Local Planka/Kanban board for operator work."
+    },
+    {
+      "name": "API Vault Bridge (macOS)",
+      "url": "http://127.0.0.1:3579/health",
+      "purpose": "Local guarded one-key request bridge health check.",
+      "notes": "Reports bulk_export_allowed=false and key_values_returned_by_default=false. Missing keys.enc is a safe degraded state."
+    },
+    {
+      "name": "API Vault Bridge (Open WebUI Docker)",
+      "url": "http://host.docker.internal:3579",
+      "purpose": "Docker-reachable API Vault tool base URL for Open WebUI.",
+      "notes": "Use this instead of localhost from inside the Open WebUI container."
+    }
+  ],
+  "sourceDocs": [
+    {
+      "title": "SATCOM Agent Context",
+      "url": "https://satcom.5280.menu/data/satcom-agent-context.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/satcom-agent-context.md",
+      "role": "Start here when local files are not mounted."
+    },
+    {
+      "title": "Hermes / Open WebUI Prompt",
+      "url": "https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/satcom-hermes-openwebui-prompt.md",
+      "role": "Paste into Hermes or Open WebUI to establish scope and guardrails."
+    },
+    {
+      "title": "Annual PCI Compliance Readiness Report 2026",
+      "url": "https://satcom.5280.menu/data/pci-annual-compliance-report-2026.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/pci-annual-compliance-report-2026.md",
+      "role": "Internal annual PCI readiness packet for SATCOM/operator review; not a ROC, AOC, or SAQ."
+    },
+    {
+      "title": "Hermes Command Packet",
+      "url": "https://satcom.5280.menu/data/conews-hermes-command-packet.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-command-packet.md",
+      "role": "CoNews buildout mission, subagent model, and progress hooks."
+    },
+    {
+      "title": "Hermes Execution Policy",
+      "url": "https://satcom.5280.menu/data/conews-hermes-execution-policy.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-execution-policy.md",
+      "role": "Allowed work, hard review hooks, and stop conditions."
+    },
+    {
+      "title": "Hermes / Claude Shared Handoff",
+      "url": "https://satcom.5280.menu/data/conews-hermes-claude-handoff.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-hermes-claude-handoff.md",
+      "role": "Roles, current local URLs, and credential handoff rule."
+    },
+    {
+      "title": "SATCOM Handoff Summary",
+      "url": "https://satcom.5280.menu/data/conews-satcom-handoff-summary.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-satcom-handoff-summary.md",
+      "role": "Current rollout state and recommended implementation sequence."
+    },
+    {
+      "title": "SATCOM Progress Monitor",
+      "url": "https://satcom.5280.menu/data/conews-satcom-progress-monitor.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-satcom-progress-monitor.md",
+      "role": "Deployed sprint evidence, active blockers, and restore points."
+    },
+    {
+      "title": "Deploy Hooks",
+      "url": "https://satcom.5280.menu/data/conews-deploy-hooks.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/conews-deploy-hooks.md",
+      "role": "Static Vercel dashboard validation and smoke checks."
+    },
+    {
+      "title": "Kit Generator Prompt",
+      "url": "https://satcom.5280.menu/_kit-template/HERMES-KIT-PROMPT.md",
+      "localPath": "/Users/Ace/Codex/apps/copress-dashboard/_kit-template/HERMES-KIT-PROMPT.md",
+      "role": "Bulk ShopLocal campaign kit generation instructions."
+    }
+  ],
+  "openWebUi": {
+    "collectionName": "SATCOM Ops",
+    "importMode": "Prefer URL import. If URL import is unavailable, paste the markdown prompt and add the manifest URL as a source note.",
+    "apiVaultToolBaseUrl": "http://host.docker.internal:3579",
+    "minimumUrls": [
+      "https://satcom.5280.menu/data/satcom-agent-context.md",
+      "https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md",
+      "https://satcom.5280.menu/data/satcom-agent-context.json"
+    ]
+  },
+  "hermes": {
+    "mode": "docs-first suggest-mode unless Codex/operator explicitly approves execution",
+    "promptUrl": "https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md",
+    "mcpPreflight": "~/bin/mcp-status",
+    "progressHook": "/Users/Ace/workspace/02_Output/hermes_conews_progress.md"
+  },
+  "safety": {
+    "credentialRule": "One named key, one task, one reason. Never bulk export credentials to Hermes, Open WebUI, prompts, Git, browser session config, or model config.",
+    "hardReviewHooks": [
+      "secrets, tokens, private keys, .env, or credential handling",
+      "customer/subscriber data or private CSVs",
+      "DNS, Plesk, SSL, firewall, or domain changes",
+      "Sendy, live email sends, 3CX live SMS/voice, or external contact",
+      "billing, Stripe, bank, invoice, subscription, or Microsoft 365 account changes",
+      "production deploys unless explicitly approved by the operator",
+      "destructive filesystem or git operations"
+    ],
+    "allowedWithoutStopping": [
+      "static packet generation",
+      "markdown, JSON, CSV, and dashboard data artifacts",
+      "local read-only checks",
+      "local static route checks",
+      "non-secret prompt packets",
+      "SATCOM planning links",
+      "file-based progress updates"
+    ]
+  }
+}

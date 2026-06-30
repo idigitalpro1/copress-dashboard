@@ -265,7 +265,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
   <!-- MCP PANEL -->
   <div class="mcp-panel" id="mcp-panel" style="display:none;">
     <h3>⚡ MCP Bridge — Scoped Credential Handoff</h3>
-    <p>Point AI tools at a guarded local bridge so they can request approved credentials by service name. Do not dump the full vault into Hermes, chat prompts, Git, or browser session state.</p>
+    <p>Point AI tools at the guarded local bridge so they can request one approved credential by service name. macOS uses 127.0.0.1:3579; Open WebUI Docker uses host.docker.internal:3579. Do not dump the full vault into Hermes, chat prompts, Git, or browser session state.</p>
     <div class="mcp-code" id="mcp-code-block">
 # Add to Claude Code settings (~/.claude/settings.json):
 {
@@ -278,6 +278,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
   }
 }
 
+# Health checks:
+# macOS / Claude Code: curl http://127.0.0.1:3579/health
+# Open WebUI Docker:  http://host.docker.internal:3579
+#
 # Then in any Claude/Hermes session:
 # "request SENDY_API_KEY for newsletter send test" → operator-approved single-key handoff
 # "request GOOGLE_PLACES_KEY for Shop Local import" → one service, one task
@@ -664,10 +668,10 @@ function toggleInject(card, target) {
 
 // ── MCP CONFIG ────────────────────────────────────────────────────────────
 const MCP_CONFIGS = {
-  hermes: `# Hermes scoped MCP policy:\n# Do not paste secrets into Hermes prompts or session config.\n# Request one approved key per task from the guarded local vault.\n# Example: mcp.api_vault.get_key(service="gemini", reason="newsletter draft generation") -> GOOGLE_AGENT_API_KEY\n# Bulk export/list-all is blocked for agent use.`,
-  claude: `# Claude Code ~/.claude/settings.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["/Users/Ace/Codex/apps/api-vault-mcp/index.js"]\n    }\n  }\n}`,
-  cursor: `# Cursor .cursor/mcp.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["~/Codex/apps/api-vault-mcp/index.js"]\n    }\n  }\n}`,
-  n8n: `# n8n HTTP Request node:\n# GET http://localhost:8082/vault/key/SENDY_API_KEY?reason=newsletter-send-test\n# No bulk /vault/keys endpoint for agent workflows.\n# POST http://localhost:8082/vault/inject?target=newsletter&service=sendy`,
+  hermes: `# Hermes scoped MCP policy:\n# Do not paste secrets into Hermes prompts or session config.\n# Request one approved key per task from the guarded local vault.\n# macOS bridge health: curl http://127.0.0.1:3579/health\n# Open WebUI Docker tool base URL: http://host.docker.internal:3579\n# Example request: service=GOOGLE_PLACES_KEY reason="Shop Local import for one approved batch"\n# Bulk export/list-all is blocked for agent use.`,
+  claude: `# Add to Claude Code settings (~/.claude/settings.json):\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["/Users/Ace/Codex/apps/api-vault-mcp/index.js"],\n      "env": { "VAULT_PATH": "/Users/Ace/.api-vault/keys.enc" }\n    }\n  }\n}\n\n# Health: curl http://127.0.0.1:3579/health\n# Then in any Claude/Hermes session:\n# "request SENDY_API_KEY for newsletter send test" -> operator-approved single-key handoff\n# "request GOOGLE_PLACES_KEY for Shop Local import" -> one service, one task\n# Bulk "all keys" export is intentionally blocked for agent use.`,
+  cursor: `# Cursor .cursor/mcp.json:\n{\n  "mcpServers": {\n    "api-vault": {\n      "command": "node",\n      "args": ["/Users/Ace/Codex/apps/api-vault-mcp/index.js"],\n      "env": { "VAULT_PATH": "/Users/Ace/.api-vault/keys.enc" }\n    }\n  }\n}`,
+  n8n: `# HTTP Request node, local Mac:\n# GET http://127.0.0.1:3579/vault/key/SENDY_API_KEY?reason=newsletter-send-test\n#\n# HTTP Request node, Docker/Open WebUI-style network:\n# POST http://host.docker.internal:3579/vault/request\n# Body: {"service":"SENDY_API_KEY","reason":"newsletter send test for one approved recipient"}\n#\n# No bulk /vault/keys endpoint for agent workflows.`,
   vercel: `# Push selected keys to Vercel:\nnpx vercel env add GOOGLE_AGENT_API_KEY production < vault_export_aiace.txt\n# Add only the env vars required by the current deploy.`,
   env: `# Export selected .env values from vault:\n# Use only for local operator handoff, never commit.\n# File: .env.vault-export-${new Date().toISOString().slice(0,10)}`
 };

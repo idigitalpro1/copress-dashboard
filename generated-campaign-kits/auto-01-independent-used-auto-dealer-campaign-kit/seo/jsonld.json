@@ -1,0 +1,9 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Independent used auto dealer Campaign Kit",
+  "about": "Independent used auto dealer",
+  "description": "Inventory, call-ahead, and local trust campaign",
+  "url": "https://copress-dashboard.vercel.app/generated-campaign-kits/auto-01-independent-used-auto-dealer-campaign-kit/",
+  "isBasedOn": "https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/?prospect=auto-01"
+}

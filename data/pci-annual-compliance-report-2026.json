@@ -1,0 +1,144 @@
+{
+  "schema": "satcom.pci_annual_readiness_report.v1",
+  "reportYear": 2026,
+  "preparedOn": "2026-06-30",
+  "standard": "PCI DSS v4.0.1",
+  "status": "draft_internal_readiness_report",
+  "attestation": false,
+  "publicUrl": "https://satcom.5280.menu/data/pci-annual-compliance-report-2026.md",
+  "localPath": "/Users/Ace/Codex/apps/copress-dashboard/data/pci-annual-compliance-report-2026.md",
+  "scope": {
+    "knownSurfaces": [
+      {
+        "surface": "myappstore.biz /pci/",
+        "role": "PCI compliance dashboard route referenced by the eleven-labs PCI app",
+        "posture": "internal reporting/admin surface"
+      },
+      {
+        "surface": "5280.menu /invoice/",
+        "role": "invoice/payment workflow reference in repo docs",
+        "posture": "needs payment-flow verification"
+      },
+      {
+        "surface": "Stripe / payment links",
+        "role": "billing and subscription pathway referenced by SATCOM docs",
+        "posture": "prefer hosted/payment-link flow; do not store PAN locally"
+      },
+      {
+        "surface": "SATCOM API Vault",
+        "role": "browser-local operator key reference",
+        "posture": "not a PCI card-data store"
+      },
+      {
+        "surface": "Sendy / subscriber systems",
+        "role": "email and renewal campaign systems",
+        "posture": "keep separate from cardholder data environment"
+      }
+    ],
+    "cardDataAssumption": "SATCOM/local systems should not store full PAN, CVV, magnetic-stripe data, PIN data, or payment-card screenshots."
+  },
+  "readiness": {
+    "rating": "needs_operator_evidence",
+    "reason": "Static docs and the PCI dashboard route exist, but annual evidence still needs current payment-flow screenshots, processor settings, user access review, scan evidence where applicable, and confirmation that no local workflow stores cardholder data."
+  },
+  "controlAreas": [
+    {
+      "area": "network_security_controls",
+      "expectation": "Keep production ports minimal; do not expose internal ports publicly.",
+      "evidenceNeeded": "Firewall/Plesk/Lightsail screenshot or exported rule summary.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "secure_configuration",
+      "expectation": "Harden hosting, admin, and deployment settings.",
+      "evidenceNeeded": "Server/app config review summary; no default credentials.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "stored_account_data",
+      "expectation": "Avoid storing cardholder data in SATCOM/local apps.",
+      "evidenceNeeded": "Operator statement plus repo/storage search for PAN-like data.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "transmission_security",
+      "expectation": "HTTPS for public payment/admin routes.",
+      "evidenceNeeded": "TLS checks for payment-facing domains.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "malware_and_endpoint_protection",
+      "expectation": "Protect operator machine and server surfaces.",
+      "evidenceNeeded": "Endpoint/server protection status.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "secure_systems_and_software",
+      "expectation": "Keep app dependencies and static deploys reviewed.",
+      "evidenceNeeded": "Build/test evidence; dependency review for payment app.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "access_by_business_need",
+      "expectation": "Limit payment/admin access to required users.",
+      "evidenceNeeded": "User/access list review.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "user_identification_and_authentication",
+      "expectation": "Unique accounts and MFA for payment/admin systems.",
+      "evidenceNeeded": "GitHub, Vercel, Stripe, M365, Plesk MFA/access review.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "physical_access",
+      "expectation": "Keep physical/payment devices out of scope or documented.",
+      "evidenceNeeded": "If no card-present devices, record not-applicable rationale.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "logging_and_monitoring",
+      "expectation": "Track admin/payment-relevant access.",
+      "evidenceNeeded": "Payment provider logs and hosting audit log notes.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "security_testing",
+      "expectation": "Run scans/tests appropriate to scope.",
+      "evidenceNeeded": "Vulnerability scan or ASV evidence if required.",
+      "status": "needs_evidence"
+    },
+    {
+      "area": "security_policy",
+      "expectation": "Maintain annual PCI operating policy.",
+      "evidenceNeeded": "This packet plus operator sign-off and hard-review hooks.",
+      "status": "drafted"
+    }
+  ],
+  "hardReviewHooks": [
+    "payment-card data in prompts, chats, screenshots, CSVs, issue trackers, or source control",
+    "live payment, subscription, billing, bank, invoice, or account-access changes",
+    "secrets, tokens, private keys, .env, or payment-provider credential handling",
+    "customer/subscriber data or private CSVs",
+    "DNS, Plesk, SSL, firewall, or domain changes",
+    "production deploys unless explicitly approved"
+  ],
+  "evidenceChecklist": [
+    "current payment flow description",
+    "confirmed SAQ type from processor/acquirer",
+    "payment provider PCI/compliance dashboard export or screenshot",
+    "confirmation that local systems do not store full PAN/CVV/sensitive authentication data",
+    "public HTTPS check for payment-facing domains",
+    "privileged access review for Stripe/payment provider, Vercel, GitHub, Plesk, M365, and invoice admin",
+    "MFA status for privileged accounts",
+    "server/network firewall summary if payment-facing route is self-hosted",
+    "dependency/build evidence for PCI dashboard or invoice app",
+    "incident-response contact and escalation owner",
+    "operator sign-off date"
+  ],
+  "officialReferences": [
+    "https://www.pcisecuritystandards.org/document_library/",
+    "https://www.pcisecuritystandards.org/standards/pci-dss/",
+    "https://www.pcisecuritystandards.org/official_statements/pci-security-standards-council-bulletin-saqs-for-pci-dss-v4-0-1-now-available/"
+  ]
+}

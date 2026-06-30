@@ -23,9 +23,21 @@ Nest is the command center for copress.news — a Colorado mountain newspaper ne
 | `/network` | `network.html` | ✅ Live | Network HQ — server IP, 6 property cards, 3CX phone system |
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
 | `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
-| `/apistore` | `apistore.html` | ✅ Live | API Vault — secure key store, MCP injection, .env export |
+| `/apistore` | `apistore.html` | ✅ Live | API Vault — browser-local key reference and scoped one-key MCP handoff |
 | `/learn` | `learn.html` | ✅ Live | SATCO Academy — 72 flash cards, XP system, 9 levels, 18 badges |
 | `/linear` | `linear.html` | ✅ Live | Linear integration — live issues, cycles, projects, quick-create |
+
+## Campaign Kit Generator
+
+Use the Stan's-style generator to turn one row from `stans-auto-sales-campaign-kit/prospects/top-20-prospects.csv`
+into a review-ready campaign bundle:
+
+```bash
+./scripts/generate-campaign-kit.mjs --row 1
+```
+
+Generated kits land under `generated-campaign-kits/<prospect-slug>-campaign-kit/`. Re-run with
+`--force` only when intentionally replacing a generated review bundle.
 
 ---
 
@@ -139,6 +151,8 @@ Hermes Agent has two separate local surfaces:
 | URL | Purpose | Use for |
 |-----|---------|---------|
 | `https://copress-dashboard.vercel.app/` → Hermes Crew | CoPress operator front end | Chat, crew jobs, status, local endpoint links |
+| `http://127.0.0.1:8093/auth` | Open WebUI login | Hermes Kit Build Mode, model selection, file upload, and knowledge-base management |
+| `http://127.0.0.1:8093/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728` | Hermes Codex knowledge base | Curated SATCOM/Hermes docs loaded into Open WebUI |
 | `http://127.0.0.1:8787/` | Aileen / Hermes WebUI | Canonical human operator dashboard for prompts, chat continuity, and local model routing |
 | `http://127.0.0.1:9119/sessions` | Hermes Agent diagnostics | Raw sessions, analytics, models, logs, skills, plugins, profiles, config, keys |
 | `http://127.0.0.1:8793` | Hermes Crew bridge | Local chat, crew run/status/result API, Qwen/Ollama routing |
@@ -154,6 +168,35 @@ http://127.0.0.1:8642/v1
 ```
 
 The current gateway model id verified locally is `ollama-qwen`.
+
+## SATCOM Agent Context Packet
+
+Hermes and Open WebUI should use SATCOM as the URL-first docs source when the
+local Mac path is not mounted into a container.
+
+| Item | Public URL | Local fallback |
+|---|---|---|
+| Agent context | `https://satcom.5280.menu/data/satcom-agent-context.md` | `data/satcom-agent-context.md` |
+| Machine manifest | `https://satcom.5280.menu/data/satcom-agent-context.json` | `data/satcom-agent-context.json` |
+| Paste-ready prompt | `https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md` | `data/satcom-hermes-openwebui-prompt.md` |
+| Annual PCI readiness report | `https://satcom.5280.menu/data/pci-annual-compliance-report-2026.md` | `data/pci-annual-compliance-report-2026.md` |
+
+Open WebUI collection name: `SATCOM Ops`.
+
+Minimum import URLs:
+
+```text
+https://satcom.5280.menu/data/satcom-agent-context.md
+https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md
+https://satcom.5280.menu/data/satcom-agent-context.json
+```
+
+These files contain endpoint references and hard review hooks only. They do not
+contain secrets, live customer data, or credential values.
+
+The PCI report is an internal readiness artifact for PCI DSS v4.0.1 evidence
+collection. It is not a ROC, AOC, or SAQ and does not replace processor,
+acquirer, QSA, or approved-scanning validation.
 
 ---
 
@@ -226,7 +269,37 @@ Agent handoff rule: never bulk-hand all keys to Hermes. Hermes/Aileen may reques
 
 Exact credential handoff rule for Hermes / Aileen: one service key, one task, one reason. Never bulk export.
 
-Export formats: selected `.env` values or JSON for local operator handoff only. MCP injection should be scoped to a service and reason.
+Claude Code MCP settings should point at the guarded local bridge and encrypted vault path:
+
+```json
+{
+  "mcpServers": {
+    "api-vault": {
+      "command": "node",
+      "args": ["/Users/Ace/Codex/apps/api-vault-mcp/index.js"],
+      "env": { "VAULT_PATH": "/Users/Ace/.api-vault/keys.enc" }
+    }
+  }
+}
+```
+
+Local bridge endpoints:
+
+| Runtime | URL | Notes |
+|--------|-----|-------|
+| macOS / Claude Code | `http://127.0.0.1:3579` | LaunchAgent label: `com.conews.api-vault-mcp` |
+| Open WebUI Docker | `http://host.docker.internal:3579` | Use this as the Open WebUI tool `bridge_url` |
+| Request log | `/Users/Ace/.api-vault/requests.jsonl` | Pending operator approvals only |
+
+Expected safe status: `/health` returns `bulk_export_allowed=false`,
+`key_values_returned_by_default=false`, and `approval_required=true`. If
+`/Users/Ace/.api-vault/keys.enc` is not present, the bridge should report
+`vault_present=false` and continue recording one-key requests for operator
+review.
+
+In Claude/Hermes, request one named key for one task, such as `request SENDY_API_KEY for newsletter send test` or `request GOOGLE_PLACES_KEY for Shop Local import`. Bulk `all keys` export is intentionally blocked for agent use.
+
+Export formats: selected `.env` values or JSON for local operator handoff only. MCP handoff must stay scoped to a service and reason.
 
 ---
 
