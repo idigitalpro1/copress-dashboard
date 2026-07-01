@@ -1,5 +1,5 @@
 {
-  "updated": "2026-06-30",
+  "updated": "2026-07-01",
   "note": "Internal SATCOM operator board for current showcase and campaign-kit leads. Do not publish as a client-facing sales page.",
   "leads": [
     {
@@ -118,6 +118,28 @@
       "sms": "CoPress SATCOM operator kit: {{url}}. Reply with your publication, market, newsletter system, billing setup, and launch contact.",
       "emailSubject": "CoPress SATCOM operator kit",
       "emailBody": "Here is the CoPress SATCOM operator kit: {{url}}\n\nReply with your publication, market, newsletter system, billing setup, domain status, and launch contact so we can map the operator workflow."
+    },
+    {
+      "id": "henderson-mine",
+      "brand": "Henderson Mine / Climax Molybdenum",
+      "campaign": "Clear Creek Mountain Community Press Kit",
+      "industry": "Mining / community partnership",
+      "status": "Field press kit + showcase prospect",
+      "priority": "Hot",
+      "kitPath": "https://registercall.com/stories/inside-henderson-mine-engine-clear-creek-county",
+      "dashboardPath": "/showcase-prospects/henderson-mine-press-kit.html",
+      "satcomPath": "/showcase-prospects/",
+      "editorialPath": "https://weeklyregistercall.com/stories/inside-henderson-mine-engine-clear-creek-county",
+      "manifestPath": "/showcase-prospects/henderson-mine-press-kit.json",
+      "emailPath": "/showcase-prospects/henderson-mine-press-kit.html",
+      "onboardingUrl": "https://myappstore.biz/onboarding?client=henderson-mine-community-partner",
+      "imagePath": "/showcase-prospects/art/henderson-mine.jpg",
+      "imageAlt": "Henderson Mine community partnership prospect artwork",
+      "fit": "Field-ready mine/community partnership press-kit lane for a writer plus photographer/videographer: jobs, molybdenum, water, safety, local partnerships, and Clear Creek/Grand County future planning.",
+      "nextAction": "Use as a two-person crew press-kit/prospect handoff; verify titles, access permissions, photo/video restrictions, current headcount, and life-of-mine language before publication.",
+      "sms": "Henderson Mine field press kit: {{url}}. Verify titles, access permissions, photo/video restrictions, current headcount, and life-of-mine language before publication.",
+      "emailSubject": "Henderson Mine field press kit and showcase prospect",
+      "emailBody": "Henderson Mine field press kit is ready: {{url}}\n\nLive Register-Call proof: https://registercall.com/stories/inside-henderson-mine-engine-clear-creek-county\nWeekly mirror: https://weeklyregistercall.com/stories/inside-henderson-mine-engine-clear-creek-county\n\nBefore publication or outreach, verify titles, access permissions, photo/video restrictions, current headcount, life-of-mine language, artwork credit, and any technical-accuracy review requirement."
     },
     {
       "id": "ricks-gondola-project",

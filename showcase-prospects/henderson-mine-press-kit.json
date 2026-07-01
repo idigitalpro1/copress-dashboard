@@ -1,0 +1,89 @@
+{
+  "id": "henderson-mine",
+  "brand": "Henderson Mine / Climax Molybdenum",
+  "campaign": "Clear Creek Mountain Community Press Kit",
+  "status": "Field press kit + showcase prospect",
+  "priority": "Hot",
+  "updated": "2026-07-01",
+  "paths": {
+    "satcomPressKit": "/showcase-prospects/henderson-mine-press-kit.html",
+    "registerCallStory": "https://registercall.com/stories/inside-henderson-mine-engine-clear-creek-county",
+    "weeklyRegisterCallStory": "https://weeklyregistercall.com/stories/inside-henderson-mine-engine-clear-creek-county",
+    "artwork": "/showcase-prospects/art/henderson-mine.jpg"
+  },
+  "angle": {
+    "coreStory": "Henderson Mine is not just a mine story. It is a Colorado mountain community story about jobs, molybdenum, water, safety, long-term operations, local partnerships, and what comes next for Clear Creek and Grand counties.",
+    "workingHeadline": "Inside Henderson Mine: The Colorado Molybdenum Operation Connecting Work, Water, and Mountain Communities",
+    "nutGraf": "Henderson Mine, operated by Climax Molybdenum Company, is an underground molybdenum operation near Empire, Colorado, with its mill across the Continental Divide in Grand County."
+  },
+  "quickFacts": [
+    "Henderson Mine is operated by Climax Molybdenum Company, a Freeport-McMoRan company.",
+    "The mine is near Empire, Georgetown, and Idaho Springs; the Henderson mill site is in Grand County.",
+    "The mine and mill are separated by the Continental Divide and connected by a 10-mile conveyor tunnel plus an additional surface conveyor.",
+    "Public materials describe the operation as a large block-cave underground mining complex feeding a concentrator.",
+    "Q1 2026 community materials listed approximately 425 employees and 80 contractors.",
+    "Public materials say the Northwest panel supports the current life-of-mine plan through 2038."
+  ],
+  "contacts": {
+    "corporateHeadquarters": "4340 E. Cotton Center Blvd., Suite 110, Phoenix, AZ 85040",
+    "phoneUs": "+1 800.255.7684",
+    "phoneInternational": "+1 602.345.5918",
+    "email": "Climax@fmi.com",
+    "hendersonListing": "Climax Molybdenum Company, Henderson Mine, P.O. Box 68, Empire, CO 80438; +1 303.569.3221",
+    "communityLine": "877-629-2609"
+  },
+  "storyThemes": [
+    "Jobs and mountain-town stability",
+    "Water, drought, and environmental management",
+    "Community partnerships",
+    "Future of the site",
+    "Mining and mountain communities"
+  ],
+  "interviewQuestions": [
+    "What role does Henderson Mine play in Climax Molybdenum's Colorado strategy today?",
+    "What should local readers understand about molybdenum that they probably do not know?",
+    "What does the current life-of-mine plan through 2038 mean for employees and nearby communities?",
+    "Walk us through a normal day at Henderson without using technical jargon.",
+    "What part of the operation would surprise a first-time visitor?",
+    "What is the first safety lesson every new worker learns?",
+    "What are the main water systems Henderson manages?",
+    "How does the Community Partnership Panel work?",
+    "What local needs are most pressing right now?",
+    "When people drive past this area, what do you hope they understand about the people working here?"
+  ],
+  "shotList": {
+    "mustGet": [
+      "Henderson Mine sign / entrance area, only where approved.",
+      "Wide mountain landscape showing the high-country setting.",
+      "U.S. Highway 40 / Empire context shots.",
+      "Workers in PPE walking, talking, checking equipment, or entering approved work areas.",
+      "Portraits of leadership and workers with mountains, equipment, or site buildings behind them.",
+      "Community visuals: schools, Main Street, trail signs, parks, storefronts."
+    ],
+    "avoidUnlessApproved": [
+      "Restricted areas.",
+      "Security infrastructure.",
+      "Computer screens or control-room displays.",
+      "License plates, badges, personal contact info, or sensitive operational boards.",
+      "Drone footage without written permission.",
+      "Any underground footage unless the company explicitly approves and escorts it."
+    ]
+  },
+  "mustVerify": [
+    "Correct spelling and title of every person interviewed.",
+    "Whether comments are on the record, background, or off the record.",
+    "Current site manager / general manager name and title.",
+    "Current headcount numbers.",
+    "Whether life-of-mine through 2038 is still the preferred public phrasing.",
+    "Exact credit line for the attached partner artwork.",
+    "Whether the company wants Henderson Mine, Henderson operations, or Henderson Mine and Mill.",
+    "Safety restrictions for photo, video, drone, and underground access.",
+    "Any required technical-accuracy review before publication."
+  ],
+  "guardrails": [
+    "Do not publish unverified titles, headcount, production, or life-of-mine language as final.",
+    "Do not shoot restricted areas, security infrastructure, screens, badges, or underground footage without explicit approval.",
+    "Treat recent public staff names as references that require on-site title verification.",
+    "Use the live Register-Call story as the public proof path and this SATCOM page as the internal field kit."
+  ]
+}
