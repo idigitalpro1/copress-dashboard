@@ -55,6 +55,7 @@
   --c-hermes:    #06b6d4;
   --c-admin:     #d946ef;
   --c-google-ai: #4285f4;
+  --c-grok:      #a3e635;
   --c-vercel:    #f5f5f5;
   --c-stationery:#f472b6;
   --c-gambling:  #22c55e;
@@ -63,6 +64,7 @@
   --c-vault:     #f59e0b;
   --c-csv:       #14b8a6;
   --c-ai-studio: #8ab4f8;
+  --c-progress:  #38bdf8;
 }
 
 html, body {
@@ -1093,6 +1095,11 @@ body::before {
 .hermes-control-row {
   display: grid; grid-template-columns: 1fr auto auto; gap: 8px; align-items: center; margin-top: 8px;
 }
+.hermes-tier-field { display: grid; gap: 4px; }
+.hermes-tier-label {
+  font: 10px 'DM Mono', monospace; color: var(--ink-muted); text-transform: uppercase;
+  letter-spacing: .06em;
+}
 .hermes-control-row select {
   width: 100%; border: 1px solid rgba(200,168,75,.14); background: var(--bg-mid);
   color: var(--ink); border-radius: 2px; padding: 8px 10px; outline: none;
@@ -1503,9 +1510,14 @@ body::before {
             <span class="nav-label">AI Studio Projects</span>
             <span class="nav-badge new">Vercel</span>
           </div>
+          <div class="nav-item" data-view="grok">
+            <span class="nav-icon">x</span>
+            <span class="nav-label">Grok Developer</span>
+            <span class="nav-badge new">DEV</span>
+          </div>
           <div class="nav-item" data-view="brains">
             <span class="nav-icon">◈</span>
-            <span class="nav-label">Hermes Crew</span>
+            <span class="nav-label">Hermes Links</span>
           </div>
           <div class="nav-item" onclick="window.location.href='/linear'">
             <span class="nav-icon">📐</span>
@@ -1518,7 +1530,7 @@ body::before {
         <summary>
           <span class="shelf-chevron">⌄</span>
           <span class="shelf-label">M-R Dashboards</span>
-          <span class="shelf-count">6</span>
+          <span class="shelf-count">7</span>
         </summary>
         <div class="nav-shelf-items">
           <div class="nav-item" data-view="marketing">
@@ -1545,6 +1557,11 @@ body::before {
           <div class="nav-item" onclick="openPostcardStudio()">
             <span class="nav-icon">▤</span>
             <span class="nav-label">Postcard Studio</span>
+          </div>
+          <div class="nav-item" onclick="openWeeklyProgressDashboard()">
+            <span class="nav-icon">⑤</span>
+            <span class="nav-label">Progress Dashboard</span>
+            <span class="nav-badge new">NEXT</span>
           </div>
         </div>
       </details>
@@ -1641,16 +1658,16 @@ body::before {
           <a class="asset-health pending" data-asset-id="hermes" href="/console/api/hermes/health" target="_blank" rel="noopener">
             <span class="asset-dot"></span>
             <span class="asset-health-main">
-              <span class="asset-health-label">Hermes Bridge</span>
-              <span class="asset-health-detail" data-asset-detail>checking</span>
+              <span class="asset-health-label">Bridge (admin only)</span>
+              <span class="asset-health-detail" data-asset-detail>admin host only</span>
             </span>
             <span class="asset-health-code" data-asset-code>...</span>
           </a>
           <a class="asset-health pending" data-asset-id="models" href="/console/api/hermes/models" target="_blank" rel="noopener">
             <span class="asset-dot"></span>
             <span class="asset-health-main">
-              <span class="asset-health-label">Model Route</span>
-              <span class="asset-health-detail" data-asset-detail>checking</span>
+              <span class="asset-health-label">Model Route (admin)</span>
+              <span class="asset-health-detail" data-asset-detail>admin host only</span>
             </span>
             <span class="asset-health-code" data-asset-code>...</span>
           </a>
@@ -1683,6 +1700,50 @@ body::before {
 
       <div class="cards-grid">
 
+        <!-- Next 5 Things -->
+        <div class="module-card" onclick="openWeeklyProgressDashboard()" style="cursor:pointer;--card-color:var(--c-progress);--card-glow:rgba(56,189,248,.08);">
+          <div class="card-dept">
+            <span class="card-dept-name">SATCOM Priority Queue</span>
+            <span class="card-led active"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon" style="color:#7dd3fc;border-color:rgba(56,189,248,.26);background:rgba(56,189,248,.1);">⑤</div>
+              <div>
+                <div class="card-title">Next 5 Things</div>
+                <div class="card-subtitle">1-800 telecom · billing · kits · vPay/AWS · CRM</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">#1 Lane</span>
+                <span class="stat-value highlight" style="font-size:11px;">1-800</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Billing</span>
+                <span class="stat-value ok" style="font-size:11px;">Send</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Kits</span>
+                <span class="stat-value ok" style="font-size:11px;">Normalize</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">CRM</span>
+                <span class="stat-value" style="font-size:11px;">Wire</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); openWeeklyProgressDashboard()">Open Dashboard</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openWeeklyProgressDashboard('#next-five')">Next 5</button>
+              <button class="card-btn" onclick="event.stopPropagation(); checkWeeklyProgressData()">GET Data</button>
+              <button class="card-btn" onclick="event.stopPropagation(); refreshWeeklyProgressDashboard()">Refresh</button>
+              <button class="card-btn" onclick="event.stopPropagation(); executeTopWeeklyProgressFollowUp()">Execute Top</button>
+              <button class="card-btn" onclick="event.stopPropagation(); copyWeeklyProgressEndpoints()">Copy Endpoints</button>
+            </div>
+          </div>
+        </div>
+
         <!-- Admin HQ -->
         <div class="module-card" data-target="admin" style="--card-color:var(--c-admin);--card-glow:rgba(217,70,239,.07);">
           <div class="card-dept">
@@ -1708,7 +1769,7 @@ body::before {
               </div>
               <div class="card-stat">
                 <span class="stat-label">AI</span>
-                <span class="stat-value ok" style="font-size:11px;">Hermes</span>
+                <span class="stat-value highlight" style="font-size:11px;">Grok</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Ops</span>
@@ -1718,7 +1779,7 @@ body::before {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
-              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('grok')">Grok Operator</button>
               <button class="card-btn" onclick="event.stopPropagation(); openM365Admin()">M365</button>
             </div>
           </div>
@@ -1802,6 +1863,48 @@ body::before {
               <button class="card-btn primary" onclick="event.stopPropagation(); openExternal('https://vercel.com/dashboard')">Dashboard</button>
               <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://vercel.com/patrick-sweeneys-projects-434de4c7/copress-dashboard')">SATCOM Project</button>
               <button class="card-btn" onclick="event.stopPropagation(); openExternal('https://vercel.com/docs/ai-gateway')">AI Gateway</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grok Developer -->
+        <div class="module-card" data-target="grok" style="--card-color:var(--c-grok);--card-glow:rgba(163,230,53,.075);">
+          <div class="card-dept">
+            <span class="card-dept-name">Grok Developer</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon" style="color:#bef264;border-color:rgba(163,230,53,.25);background:rgba(163,230,53,.09);">x</div>
+              <div>
+                <div class="card-title">Grok Developer</div>
+                <div class="card-subtitle">xAI console · Grok Build · approved execution</div>
+              </div>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">MCP</span>
+                <span class="stat-value" style="font-size:10px;">Suggest</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Exec</span>
+                <span class="stat-value highlight" style="font-size:11px;">Grok</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Mode</span>
+                <span class="stat-value ok" style="font-size:11px;">Approve</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Stops</span>
+                <span class="stat-value" style="font-size:10px;">DNS+</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('grok')">Open Panel</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal(XAI_CONSOLE_URL)">Console</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openExternal(XAI_DOCS_URL)">Docs</button>
+              <button class="card-btn" onclick="event.stopPropagation(); copyGrokDeveloperHandoff()">Copy Handoff</button>
             </div>
           </div>
         </div>
@@ -2446,18 +2549,18 @@ body::before {
           </div>
         </div>
 
-        <!-- Hermes Orchestrator Card -->
+        <!-- Hermes Links Card -->
         <div class="module-card" data-target="brains" style="--card-color:var(--c-hermes);--card-glow:rgba(6,182,212,.06);">
           <div class="card-dept">
-            <span class="card-dept-name">AI Brains</span>
+            <span class="card-dept-name">Local Links</span>
             <span class="card-led ok"></span>
           </div>
           <div class="card-body">
             <div class="card-icon-row">
               <div class="card-icon">🧠</div>
               <div>
-                <div class="card-title">Hermes Orchestrator</div>
-                <div class="card-subtitle">Local AI · Swarm · Fallback Stack</div>
+                <div class="card-title">Hermes Links</div>
+                <div class="card-subtitle">Local briefs · Open WebUI · bridge status</div>
               </div>
             </div>
             <!-- Brain routing stack -->
@@ -2499,14 +2602,15 @@ body::before {
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">⚡ Hermes</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('grok')">Grok Operator</button>
+              <button class="card-btn" onclick="toast('Checking Hermes bridge…'); fetch('/console/api/hermes/health').then(()=>toast('Hermes bridge ✓ Online')).catch(()=>toast('Hermes bridge unavailable'))">Bridge Health</button>
               <button class="card-btn" onclick="toast('Pinging Ollama :11434…'); fetch('http://localhost:11434/api/tags').then(()=>toast('Ollama ✓ Online')).catch(()=>toast('Ollama offline — start with: ollama serve'))">⚡ Ollama</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8094/auth','_blank')">Open WebUI</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8094/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728','_blank')">Hermes Codex</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119','_blank')">Agent Dashboard</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">History</button>
-              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Crew / Swarm</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786/','_blank')">Aileen</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Briefs / Jobs</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786/','_blank')">Local WebUI</button>
             </div>
           </div>
         </div>
@@ -2563,13 +2667,21 @@ body::before {
           <div class="admin-launch-desc">The clean operator hub for all admin, AI, publishing, billing, upload, and service links.</div>
           <div class="admin-launch-url">satcom.5280.menu</div>
         </a>
+        <a class="admin-launch" style="--admin-color:var(--c-grok);" href="#grok" onclick="event.preventDefault(); navTo('grok')">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Grok Developer</div>
+            <span class="admin-launch-tag">Operator Brain</span>
+          </div>
+          <div class="admin-launch-desc">Primary SATCOM intelligence lane. Cursor/Grok implement; Codex verifies and handles approved integration/deploy work.</div>
+          <div class="admin-launch-url">Cursor · grok CLI · console.x.ai</div>
+        </a>
         <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
           <div class="admin-launch-top">
-            <div class="admin-launch-title">Aileen / Hermes WebUI</div>
-            <span class="admin-launch-tag">Local AI</span>
+            <div class="admin-launch-title">Hermes Links / Open WebUI</div>
+            <span class="admin-launch-tag">Local Only</span>
           </div>
-          <div class="admin-launch-desc">SATCOM Hermes console for prompts, model routing, crew jobs, and one-key credential handoff.</div>
-          <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
+          <div class="admin-launch-desc">Optional local fallback surface for briefs, prompt packets, model routing notes, and bridge health checks.</div>
+          <div class="admin-launch-url">Local WebUI · 8793 bridge · 9119 dashboard</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
           <div class="admin-launch-top">
@@ -3043,6 +3155,14 @@ body::before {
         <p class="page-subtitle">This is the single operator dashboard. Old admin panels are intentionally not linked from here.</p>
 
         <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
+          <a class="admin-launch" style="--admin-color:var(--c-grok);" href="#grok" onclick="event.preventDefault(); navTo('grok')">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Grok Developer</div>
+              <span class="admin-launch-tag">Operator Brain</span>
+            </div>
+            <div class="admin-launch-desc">Approved SATCOM execution lane. MCP inspects; Grok/Cursor implement after operator review.</div>
+            <div class="admin-launch-url">Cursor · grok CLI · console.x.ai</div>
+          </a>
           <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://satcom.5280.menu/" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">CoPress Dashboard</div>
@@ -3053,11 +3173,11 @@ body::before {
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
             <div class="admin-launch-top">
-              <div class="admin-launch-title">Aileen / Hermes WebUI</div>
-              <span class="admin-launch-tag">Local AI</span>
+              <div class="admin-launch-title">Hermes Links / Open WebUI</div>
+              <span class="admin-launch-tag">Local Only</span>
             </div>
-            <div class="admin-launch-desc">Primary SATCOM Hermes console. Chat and crew jobs run through the public bridge proxy.</div>
-            <div class="admin-launch-url">/console/api/hermes · SATCOM</div>
+            <div class="admin-launch-desc">Local fallback links for prompt packets, Open WebUI, bridge checks, and history. Grok Developer is the SATCOM operator brain.</div>
+            <div class="admin-launch-url">Local WebUI · bridge health · history</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
             <div class="admin-launch-top">
@@ -3070,9 +3190,9 @@ body::before {
           <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/console/api/hermes/health" target="_blank" rel="noopener">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Hermes Crew Bridge</div>
-              <span class="admin-launch-tag">Runtime</span>
+              <span class="admin-launch-tag">Health</span>
             </div>
-            <div class="admin-launch-desc">CrewAI bridge health check. Chat and crew jobs run through the production proxy.</div>
+            <div class="admin-launch-desc">Bridge health check only. Do not treat same-origin SATCOM chat as the dependable execution lane.</div>
             <div class="admin-launch-url">/console/api/hermes/health</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
@@ -3118,6 +3238,138 @@ body::before {
             <div class="admin-launch-desc">Campaign email builder and newsletter handoff lane inside this same dashboard.</div>
             <div class="admin-launch-url">/newsletter</div>
           </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-grok">
+      <div class="module-view">
+        <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
+        <div class="module-workbench">
+          <div class="module-workbench-inner">
+            <div class="module-heading">
+              <div>
+                <div class="module-kicker">xAI Grok Build · SATCOM Execution Lane</div>
+                <h2>Load Grok Developer as the approved coding panel.</h2>
+                <p>MCP inspects and proposes. Grok/Cursor execute only after operator approval, with DNS, billing, secrets, M365, live sends, and deploys held behind explicit confirmation.</p>
+              </div>
+              <div class="module-status">
+                <span class="pill">MCP <strong>Suggest</strong></span>
+                <span class="pill">Grok <strong>Execute</strong></span>
+                <span class="pill">Secrets <strong>No Echo</strong></span>
+                <span class="pill">Hard Stops <strong>On</strong></span>
+              </div>
+            </div>
+
+            <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
+              <a class="admin-launch" style="--admin-color:var(--c-grok);" href="https://console.x.ai/" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">xAI Console</div>
+                  <span class="admin-launch-tag">Account</span>
+                </div>
+                <div class="admin-launch-desc">Manage API keys, credits, models, team access, usage, and billing from the official developer console.</div>
+                <div class="admin-launch-url">https://console.x.ai/</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-ai-studio);" href="https://docs.x.ai/overview" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">xAI Docs</div>
+                  <span class="admin-launch-tag">Reference</span>
+                </div>
+                <div class="admin-launch-desc">Grok API overview, models, tools, Responses API, web search, structured outputs, and SDK guidance.</div>
+                <div class="admin-launch-url">https://docs.x.ai/overview</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-vercel);" href="https://x.ai/news/grok-build-0-1" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Grok Build</div>
+                  <span class="admin-launch-tag">Coding</span>
+                </div>
+                <div class="admin-launch-desc">Agentic coding model lane for implementation work, debugging, MCP support, and repo-oriented execution.</div>
+                <div class="admin-launch-url">grok-build-0.1 · public beta</div>
+              </a>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-hermes);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">MCP Role</div>
+                  <span class="admin-launch-tag">Read Only</span>
+                </div>
+                <div class="admin-launch-desc">MCP checks status, discovers routes, reads docs, and prepares Kanban handoff metadata. It does not deploy, alter DNS, touch billing, expose secrets, or run destructive shell by default.</div>
+                <div class="admin-launch-status">
+                  <span class="ok">Inspect</span>
+                  <span class="ok">Plan</span>
+                  <span class="warn">Operator approves execution</span>
+                </div>
+              </div>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-hermes);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Retire / Keep</div>
+                  <span class="admin-launch-tag">Policy</span>
+                </div>
+                <div class="admin-launch-desc">Retire same-origin SATCOM Hermes chat, browser-to-Mac Ollama assumptions, and Hermes as the always-on SATCOM brain. Keep SATCOM docs, dashboard links, Grok/Cursor, MCP, and Kanban CLI.</div>
+                <div class="admin-launch-status">
+                  <span class="warn">Retire Hermes chat</span>
+                  <span class="ok">Keep Grok first</span>
+                </div>
+              </div>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Lead Engineers</div>
+                  <span class="admin-launch-tag">Grok + Codex</span>
+                </div>
+                <div class="admin-launch-desc">Grok is the lead implementer in Cursor or the Grok TUI. Codex is the lead integrator for MCP checks, server handoffs, deploy hooks, and production verification after approval.</div>
+                <div class="admin-launch-status">
+                  <span class="ok">Grok implements</span>
+                  <span class="ok">Codex verifies</span>
+                  <span class="warn">SATCOM stages only</span>
+                </div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="openCursorWorkspace()">Open in Cursor</button>
+                  <button class="admin-launch-action" type="button" onclick="copyGrokCliCommand()">Copy Grok TUI</button>
+                  <button class="admin-launch-action" type="button" onclick="copyLeadEngineerRoles()">Copy Roles</button>
+                </div>
+              </div>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-progress);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Deadline Failover</div>
+                  <span class="admin-launch-tag">Primary / Fallback / Backup</span>
+                </div>
+                <div class="admin-launch-desc">Primary intelligence is Grok in Cursor or TUI. Fallback is Codex with repo and MCP verification. Backup is local Open WebUI/Qwen plus docs/Kanban for briefs when cloud lanes are unavailable.</div>
+                <div class="admin-launch-status">
+                  <span class="ok">Primary Grok</span>
+                  <span class="ok">Fallback Codex</span>
+                  <span class="warn">Backup Local</span>
+                </div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="copyDeadlineFailoverRunbook()">Copy Runbook</button>
+                  <button class="admin-launch-action" type="button" onclick="copyGrokCliCommand()">Grok TUI</button>
+                  <button class="admin-launch-action" type="button" onclick="navTo('brains')">Backup Links</button>
+                </div>
+              </div>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-admin);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Daily Operator Flow</div>
+                  <span class="admin-launch-tag">Copy</span>
+                </div>
+                <div class="admin-launch-desc">SATCOM docs and priorities → Kanban CLI/cards → MCP verification → Grok/Cursor implementation → explicit approval for hard stops.</div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="copyGrokDailyWorkflow()">Copy Flow</button>
+                  <button class="admin-launch-action" type="button" onclick="openExternal('https://satcom.5280.menu')">SATCOM</button>
+                  <button class="admin-launch-action" type="button" onclick="openExternal('https://admin.conews.press/console/kanban')">Kanban</button>
+                  <button class="admin-launch-action" type="button" onclick="navTo('brains')">Hermes Links</button>
+                </div>
+              </div>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-vault);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Execution Handoff</div>
+                  <span class="admin-launch-tag">Prompt</span>
+                </div>
+                <div class="admin-launch-desc">Copy the SATCOM-ready Grok prompt with repo guardrails, MCP boundaries, and hard-stop policy already included.</div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="copyGrokDeveloperHandoff()">Copy Prompt</button>
+                  <button class="admin-launch-action" type="button" onclick="openExternal('https://docs.x.ai/developers/models')">Models</button>
+                  <button class="admin-launch-action" type="button" onclick="openExternal('https://docs.x.ai/developers/tools/overview')">Tools</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -3195,9 +3447,9 @@ body::before {
                   <div class="admin-launch-title">Project Manifest</div>
                   <span class="admin-launch-tag">JSON</span>
                 </div>
-                <div class="admin-launch-desc">Machine-readable SATCOM routing map for Hermes, Open WebUI, Vercel launch work, and import status. No secrets or customer data.</div>
-                <div class="admin-launch-url">/data/google-ai-studio-projects.json</div>
-              </a>
+              <div class="admin-launch-desc">Machine-readable SATCOM routing map for Grok, MCP, Hermes fallback links, Vercel launch work, and import status. No secrets or customer data.</div>
+              <div class="admin-launch-url">/data/google-ai-studio-projects.json</div>
+            </a>
               <a class="admin-launch" style="--admin-color:var(--c-admin);" href="https://aistudio.google.com/" target="_blank" rel="noopener">
                 <div class="admin-launch-top">
                   <div class="admin-launch-title">Google AI Studio</div>
@@ -3272,9 +3524,9 @@ body::before {
           <div class="module-workbench-inner">
             <div class="module-heading">
               <div>
-                <div class="module-kicker">Hermes · Local Workforce</div>
-                <h2>Agentic front end for Qwen, Crew, and OpenClaw.</h2>
-                <p>Use this panel as the SATCOM operator surface. Public mode talks through <code>/console/api/hermes</code>; local previews still use the 8793 bridge.</p>
+                <div class="module-kicker">Hermes · Local Fallback Links</div>
+                <h2>Use Hermes for local briefs and recovery links only.</h2>
+                <p>Grok Developer is the SATCOM operator brain. This panel keeps local WebUI, prompt packets, bridge status, and history visible without depending on browser-to-Mac Ollama chat.</p>
               </div>
               <div class="module-status">
                 <span class="pill">Crew <strong id="hermes-crew-status">Check</strong></span>
@@ -3290,8 +3542,8 @@ body::before {
             <div class="hermes-command-strip">
               <div class="hermes-command-card">
                 <div class="hermes-command-label">Current lane</div>
-                <div class="hermes-command-value" id="hermes-command-agent">SATCOM Operator</div>
-                <div class="hermes-command-note">Changes prompt wrapper, tier, and output defaults only.</div>
+                <div class="hermes-command-value" id="hermes-command-agent">Local Brief Builder</div>
+                <div class="hermes-command-note">Prompt material only; approved execution belongs in Grok/Cursor.</div>
               </div>
               <div class="hermes-command-card">
                 <div class="hermes-command-label">Plugin bus</div>
@@ -3315,17 +3567,17 @@ body::before {
 
             <div class="hermes-console-grid">
               <div class="module-panel hermes-chat-panel">
-                <h3>Chat</h3>
+                <h3>Prompt → Grok</h3>
                 <div class="hermes-agent-active" id="hermes-active-agent-box">
-                  <strong>SATCOM Operator</strong>
-                  <span>Local Qwen lane with Ops MCP, docs, and browser context enabled.</span>
+                  <strong>Grok Operator Lane</strong>
+                  <span>Draft here, then Send copies the SATCOM handoff and opens Grok Developer. Hermes chat is not used on this dashboard.</span>
                 </div>
                 <div class="hermes-chat-log" id="hermes-chat-log">
-                  <div class="hermes-msg assistant">Hermes Crew is ready when the local bridge is running. Ask for strategy, drafting, routing, or a safe execution plan.</div>
+                  <div class="hermes-msg assistant">Write a brief or question here. Send copies the Grok handoff (with your text) and routes you to the Grok panel. Execute in Cursor + Grok or `cd ~/Codex && grok` on the Mac.</div>
                 </div>
                 <div class="module-field">
-                  <label>Prompt</label>
-                  <textarea id="hermes-chat-prompt" placeholder="Ask Hermes Crew anything. Example: Draft a client onboarding handoff for Paul Hill."></textarea>
+                  <label>Operator request</label>
+                  <textarea id="hermes-chat-prompt" placeholder="Example: Draft wildfire live-tracker checklist for Patrick and sync to Kanban."></textarea>
                 </div>
                 <div class="hermes-quick-actions">
                   <button class="mini-btn ok" onclick="useHermesQuickPrompt('master')">Master</button>
@@ -3337,20 +3589,24 @@ body::before {
                   <button class="mini-btn" onclick="useHermesQuickPrompt('mcp')">Repair MCP</button>
                   <button class="mini-btn" onclick="useHermesQuickPrompt('publish')">Publish Check</button>
                   <button class="mini-btn" onclick="useHermesQuickPrompt('seo')">SEO Kanban</button>
-                  <button class="mini-btn" onclick="copyHermesPreparedPrompt()">Copy Full Prompt</button>
+                  <button class="mini-btn" onclick="copyHermesPreparedPrompt()">Copy Grok Handoff</button>
                 </div>
                 <div class="hermes-context-chip" id="hermes-prompt-context">
                   <span>No file context attached.</span>
                   <button class="mini-btn" onclick="document.getElementById('hermes-file-input')?.click()">Add Files</button>
                 </div>
                 <div class="hermes-control-row">
-                  <select id="hermes-chat-tier" title="Routing tier">
-                    <option value="local">Qwen 35B local</option>
-                    <option value="free">Hermes 8B fast local</option>
-                    <option value="local_heavy">Hermes 70B local heavy</option>
-                    <option value="openclaw">OpenClaw operator lane</option>
-                  </select>
-                  <button class="module-btn primary" onclick="sendHermesChat()">Send</button>
+                  <div class="hermes-tier-field">
+                    <label class="hermes-tier-label" for="hermes-chat-tier">Brief style (metadata only)</label>
+                    <select id="hermes-chat-tier" title="Brief style metadata only — does not change Grok execution">
+                      <option value="local">Qwen local</option>
+                      <option value="free">Hermes fast</option>
+                      <option value="local_heavy">Local heavy</option>
+                      <option value="openclaw">OpenClaw</option>
+                    </select>
+                  </div>
+                  <button class="module-btn primary" onclick="sendHermesChat()">Send to Grok</button>
+                  <button class="module-btn" onclick="navTo('grok')">Open Grok Panel</button>
                   <button class="module-btn" onclick="clearHermesChat()">Clear</button>
                 </div>
                 <div class="hermes-activity" aria-label="Hermes activity recovery log">
@@ -3436,7 +3692,7 @@ body::before {
                 </div>
 
                 <div class="hermes-endpoint-strip">
-                  <button class="mini-btn" onclick="navTo('brains')">Aileen</button>
+                  <button class="mini-btn ok" onclick="navTo('grok')">Grok</button>
                   <button class="mini-btn" onclick="window.open('/console/api/hermes/health','_blank')">Health</button>
                   <button class="mini-btn" onclick="window.open('https://admin.conews.press/console/kanban','_blank')">Kanban</button>
                   <button class="mini-btn" onclick="window.open('/console/api/hermes/models','_blank')">Models</button>
@@ -3566,12 +3822,15 @@ function routeFromHash() {
   }
   const aliases = {
     hermes: 'brains',
-    aileen: 'brains',
+    aileen: 'grok',
     crew: 'brains',
     adminhq: 'admin',
     ai: 'ai-studio',
     googleai: 'ai-studio',
     aistudio: 'ai-studio',
+    grok: 'grok',
+    xai: 'grok',
+    developer: 'grok',
     projects: 'ai-studio',
   };
   navTo(aliases[target] || target);
@@ -3633,13 +3892,265 @@ const M365_ACCOUNT_SWITCH_URL =
 const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
+const WEEKLY_PROGRESS_DASHBOARD_URL = 'http://127.0.0.1:8190';
+const WEEKLY_PROGRESS_DASHBOARD_STANDARD_URL = 'http://127.0.0.1:8090';
+const WEEKLY_PROGRESS_API_URL = 'http://127.0.0.1:8080';
+const WEEKLY_PROGRESS_API_FALLBACK_URL = 'http://127.0.0.1:8180';
+const XAI_CONSOLE_URL = 'https://console.x.ai/';
+const XAI_DOCS_URL = 'https://docs.x.ai/overview';
+const GROK_BUILD_URL = 'https://x.ai/news/grok-build-0-1';
+const CODEX_WORKSPACE_PATH = '/Users/Ace/Codex';
+const CURSOR_WORKSPACE_URL = 'cursor://file/Users/Ace/Codex';
+
+function openWeeklyProgressDashboard(path = '') {
+  const suffix = path && !path.startsWith('#') && !path.startsWith('/') ? `/${path}` : path;
+  const baseUrl = localStorage.getItem('weekly_progress_dashboard_url') || WEEKLY_PROGRESS_DASHBOARD_URL;
+  window.open(`${baseUrl}${suffix || ''}`, '_blank', 'noopener,noreferrer');
+}
+
+function openWeeklyProgressApi(path = '/api/progress') {
+  window.open(`${getWeeklyProgressApiUrls()[0]}${path}`, '_blank', 'noopener,noreferrer');
+}
+
+function getWeeklyProgressApiUrls() {
+  const override = localStorage.getItem('weekly_progress_api_url');
+  return [override, WEEKLY_PROGRESS_API_URL, WEEKLY_PROGRESS_API_FALLBACK_URL].filter((url, index, urls) => {
+    return url && urls.indexOf(url) === index;
+  });
+}
+
+async function fetchWeeklyProgressApi(path, init) {
+  let lastError;
+  for (const baseUrl of getWeeklyProgressApiUrls()) {
+    try {
+      const response = await fetch(`${baseUrl}${path}`, init);
+      if (response.ok) return { response, baseUrl };
+      lastError = new Error(`${baseUrl}${path} HTTP ${response.status}`);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Weekly progress API unavailable.');
+}
+
+async function checkWeeklyProgressData() {
+  toast('Checking weekly progress dataset…');
+  try {
+    const { response, baseUrl } = await fetchWeeklyProgressApi('/api/progress');
+    const dataset = await response.json();
+    toast(`Weekly progress data ready: ${dataset?.records?.length || 0} records via ${baseUrl}.`);
+  } catch (error) {
+    toast('Weekly progress data endpoint unavailable.');
+  }
+}
+
+async function refreshWeeklyProgressDashboard() {
+  toast('Refreshing weekly progress sources…');
+  try {
+    const { baseUrl } = await fetchWeeklyProgressApi('/api/progress/refresh', { method: 'POST' });
+    toast('Weekly progress refreshed. Open Next 5 to review follow-ups.');
+  } catch (error) {
+    toast('Weekly progress API not reachable. Start the dashboard API on 8080 or 8180.');
+  }
+}
+
+async function executeTopWeeklyProgressFollowUp() {
+  toast('Loading top weekly progress follow-up…');
+  try {
+    const { response: datasetResponse, baseUrl } = await fetchWeeklyProgressApi('/api/progress');
+    const dataset = await datasetResponse.json();
+    const action = dataset?.actionCenter?.nextFive?.[0];
+    if (!action?.id) {
+      toast('No executable weekly progress follow-up is available.');
+      return;
+    }
+    const executeResponse = await fetch(`${baseUrl}/api/progress/actions/${encodeURIComponent(action.id)}/execute`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ filters: { team: 'all', project: 'all', week: 'all' } }),
+    });
+    if (!executeResponse.ok) throw new Error(`execute HTTP ${executeResponse.status}`);
+    toast(`Executed top follow-up: ${action.title}`);
+  } catch (error) {
+    toast('Execute failed. Start weekly progress API or check endpoint config.');
+  }
+}
+
+async function copyWeeklyProgressEndpoints() {
+  const endpoints = [
+    `OPEN ${WEEKLY_PROGRESS_DASHBOARD_URL}`,
+    `OPEN ${WEEKLY_PROGRESS_DASHBOARD_STANDARD_URL}`,
+    ...getWeeklyProgressApiUrls().flatMap((baseUrl) => [
+      `GET ${baseUrl}/api/progress`,
+      `POST ${baseUrl}/api/progress/refresh`,
+      `POST ${baseUrl}/api/progress/actions/:actionId/execute`,
+    ]),
+  ].join('\n');
+  try {
+    await navigator.clipboard.writeText(endpoints);
+    toast('Weekly progress endpoints copied.');
+  } catch (error) {
+    toast(endpoints);
+  }
+}
+
+async function copyTextWithToast(text, successMessage) {
+  try {
+    await navigator.clipboard.writeText(text);
+    toast(successMessage);
+  } catch (error) {
+    toast(text);
+  }
+}
+
+function copyGrokDailyWorkflow() {
+  const flow = [
+    'SATCOM daily operator flow',
+    '',
+    '1. SATCOM: review docs, priorities, dashboard links, and launch points.',
+    '2. Kanban CLI/Admin Kanban: move cards and collect assignment metadata.',
+    '3. MCP: verify endpoints, docs, route status, and ops state in read-only mode.',
+    '4. Grok/Cursor: implement approved repo changes in /Users/Ace/Codex.',
+    '5. Codex: integrate, verify, and deploy only after approval.',
+    '6. Hermes: optional local briefs or prompt packets only; do not depend on public SATCOM chat.',
+    '7. Hard stops need explicit operator approval: DNS, billing, M365, secrets, deploys, destructive shell, and live sends.',
+    '',
+    'Commands:',
+    '~/bin/mcp-status',
+    'hermes --profile qwen kanban --board conewspress-dev list',
+    'open https://satcom.5280.menu',
+    'open https://satcom.conews.press',
+    'open https://admin.conews.press/console/kanban',
+    'open http://127.0.0.1:8786  # optional local Hermes fallback',
+    'open https://console.x.ai/',
+    'open -a Cursor /Users/Ace/Codex',
+    'cd /Users/Ace/Codex && grok',
+  ].join('\n');
+  copyTextWithToast(flow, 'Grok daily workflow copied.');
+}
+
+function leadEngineerRolesText() {
+  return [
+    'SATCOM lead-engineer split',
+    '',
+    'Lead implementer: Grok in Cursor or Grok TUI',
+    '- Owns code, debugging, patches, repo edits, and tests.',
+    '- Runs with filesystem and session history in /Users/Ace/Codex.',
+    '',
+    'Lead integrator: Codex',
+    '- Owns MCP checks, server handoffs, deploy hooks, and production verification.',
+    '- Executes deploys or hard-stop actions only after explicit operator approval.',
+    '',
+    'SATCOM role:',
+    '- Cockpit only: priorities, links, Kanban, MCP status, copy handoff, and approval prompts.',
+    '- No API keys in HTML, no browser shell, no direct deploy/DNS/billing/M365/live sends.',
+  ].join('\n');
+}
+
+function copyLeadEngineerRoles() {
+  copyTextWithToast(leadEngineerRolesText(), 'Lead engineer roles copied.');
+}
+
+function deadlineFailoverRunbookText() {
+  return [
+    'SATCOM deadline failover runbook',
+    '',
+    'Rule: if the active intelligence lane is blocked for more than 2 minutes during a press deadline, switch lanes. Do not spend the deadline repairing the lane.',
+    '',
+    'Primary intelligence: Grok in Cursor or Grok TUI',
+    '- Use for code, debugging, patches, repo edits, and tests.',
+    '- Workspace: /Users/Ace/Codex',
+    '- Launch: open -a Cursor /Users/Ace/Codex',
+    '- Terminal: cd /Users/Ace/Codex && grok',
+    '',
+    'Fallback intelligence/integration: Codex',
+    '- Use for repo inspection, implementation support, MCP checks, deploy hooks, and production verification after approval.',
+    '- Keep MCP read-only unless the operator approves execution.',
+    '- Check: ~/bin/mcp-status',
+    '',
+    'Backup intelligence: local Open WebUI/Qwen/Hermes links',
+    '- Use for briefs, checklists, draft copy, and handoff packets when cloud lanes are unavailable.',
+    '- Open WebUI: http://127.0.0.1:8094/auth',
+    '- Local WebUI: http://127.0.0.1:8786',
+    '- Hermes dashboard/history: http://127.0.0.1:9119',
+    '- Do not rely on same-origin SATCOM Hermes chat for deadline execution.',
+    '',
+    'Non-intelligence backup: SATCOM docs, Kanban, and runbooks',
+    '- Use static docs, Kanban cards, and copied handoff prompts if all model lanes are down.',
+    '- This keeps assignment and production flow moving, but it is not a model replacement.',
+    '',
+    'Hard stops always need explicit approval: DNS, billing, M365, secrets, deploys, destructive shell, and live sends.',
+  ].join('\n');
+}
+
+function copyDeadlineFailoverRunbook() {
+  copyTextWithToast(deadlineFailoverRunbookText(), 'Deadline failover runbook copied.');
+}
+
+function copyGrokCliCommand() {
+  const commands = [
+    'cd /Users/Ace/Codex',
+    'grok',
+  ].join('\n');
+  copyTextWithToast(commands, 'Grok TUI command copied.');
+}
+
+function openCursorWorkspace() {
+  const commands = [
+    'open -a Cursor /Users/Ace/Codex',
+    'cd /Users/Ace/Codex && grok',
+  ].join('\n');
+  copyTextWithToast(commands, 'Cursor launch commands copied.');
+  window.location.href = CURSOR_WORKSPACE_URL;
+}
+
+function buildGrokOperatorHandoff(operatorRequest = '') {
+  const lines = [
+    'You are Grok Developer inside the SATCOM operating lane.',
+    '',
+    'Context:',
+    '- SATCOM is dashboard + Planka/Admin Kanban + Hermes links + admin console.',
+    '- Grok/Cursor is the operator brain. Hermes is optional local briefs/prompt packets only.',
+    '- Grok is the lead implementer for code, debugging, patches, repo edits, and tests.',
+    '- Codex is the lead integrator for MCP checks, server handoffs, deploy hooks, and production verification after approval.',
+    '- SATCOM is only the cockpit: priorities, links, Kanban, MCP status, copy handoff, and approval prompts.',
+    '- Deadline failover: primary Grok, fallback Codex, backup local Open WebUI/Qwen/Hermes links plus static docs/Kanban.',
+    '- MCP is read-only/suggest by default: inspect, plan, route discovery, endpoint checks, docs reads, and Kanban handoff metadata.',
+    '- MCP does not deploy, mutate DNS, touch billing, expose secrets, run destructive shell, perform live sends, or change M365 without explicit operator approval.',
+    '- Execution happens only after approval through Grok/Cursor, Codex, or POST /api/v1/agent/run.',
+    '- Do not depend on same-origin SATCOM Hermes chat or browser-to-Mac Ollama.',
+    '',
+    'Daily flow:',
+    '1. Read SATCOM priorities and Kanban cards.',
+    '2. Use MCP to verify status, docs, and routes in read-only mode.',
+    '3. Use Grok/Cursor in /Users/Ace/Codex to implement approved repo changes with targeted diffs and tests.',
+    '4. Use Codex for integration, server handoff verification, deploy hooks, and production checks after approval.',
+    '5. Use Hermes links only for optional local briefs or prompt packets.',
+    '6. Stop and request approval for DNS, billing, M365, deploys, secrets, destructive shell, and live sends.',
+    '',
+    'Repo rules:',
+    '- Work from /Users/Ace/Codex unless told otherwise.',
+    '- Read relevant docs first.',
+    '- Never echo secrets.',
+    '- Keep changes minimal and targeted.',
+    '- Never use git add -A.',
+    '- Verify before closeout.',
+  ];
+  const request = (operatorRequest || '').trim();
+  if (request) lines.push('', '--- SATCOM operator request ---', request);
+  return lines.join('\n');
+}
+
+function copyGrokDeveloperHandoff(operatorRequest = '') {
+  copyTextWithToast(buildGrokOperatorHandoff(operatorRequest), 'Grok developer handoff copied.');
+}
 const POSTCARD_STUDIO_URL = '/villager-postcard-proofing/';
 const OWNED_ASSET_CHECKS = [
   { id: 'satcom', label: 'SATCOM', url: '/', mode: 'fetch' },
   { id: 'docs', label: 'Docs Hub', url: '/docs', mode: 'fetch' },
   { id: 'kanban', label: 'Kanban Ops', url: 'https://admin.conews.press/console/kanban', mode: 'link' },
-  { id: 'hermes', label: 'Hermes Bridge', url: '/console/api/hermes/health', mode: 'fetch' },
-  { id: 'models', label: 'Model Route', url: '/console/api/hermes/models', mode: 'fetch' },
+  { id: 'hermes', label: 'Bridge (admin only)', url: '/console/api/hermes/health', mode: 'fetch' },
+  { id: 'models', label: 'Model Route (admin)', url: '/console/api/hermes/models', mode: 'fetch' },
   { id: 'rollout', label: 'Rollout Update', url: '/rollout/update', mode: 'fetch' },
   { id: 'browser', label: 'Browser Harness', url: 'http://127.0.0.1:9119/sessions', mode: 'local' },
   { id: 'local-bridge', label: 'Local Bridge', url: 'http://127.0.0.1:8786/', mode: 'local' }
@@ -4884,13 +5395,12 @@ function refreshModuleStatus() {
 }
 
 // ── Hermes Crew Console ───────────────────────────────────────────
-const HERMES_CREW_BASE = (() => {
+function isHermesLocalHost() {
   const localHosts = new Set(['127.0.0.1', 'localhost', '']);
-  if (localHosts.has(window.location.hostname) || window.location.protocol === 'file:') {
-    return 'http://127.0.0.1:8793';
-  }
-  return '/console/api/hermes';
-})();
+  return localHosts.has(window.location.hostname) || window.location.protocol === 'file:';
+}
+
+const HERMES_CREW_BASE = isHermesLocalHost() ? 'http://127.0.0.1:8793' : '/console/api/hermes';
 const HERMES_CHAT_KEY = 'copress_hermes_chat_messages_v1';
 const HERMES_ACTIVITY_KEY = 'copress_hermes_activity_v1';
 const HERMES_AGENT_KEY = 'copress_hermes_active_agent_v1';
@@ -4901,13 +5411,13 @@ const HERMES_PREF_KEY = 'copress_hermes_preferences_v1';
 const HERMES_AGENT_PRESETS = [
   {
     id: 'satcom-operator',
-    name: 'SATCOM Operator',
+    name: 'Local Brief Builder',
     tier: 'local',
-    role: 'Console quarterback',
+    role: 'Fallback prompt lane',
     outputs: ['web', 'newsletter', 'seo'],
-    crewTopic: 'SATCOM production handoff',
-    desc: 'Keeps the qwen36-35b-a3b-satcom lane focused on production triage, plugin routing, MCP health, and visible next actions.',
-    prompt: 'Act as the SATCOM operator. Diagnose the current request, use the enabled plugin lanes as context, preserve production safety, and return the exact next action with commands or handoff text when useful.',
+    crewTopic: 'SATCOM local brief packet',
+    desc: 'Uses qwen36-35b-a3b-satcom for optional local briefs, prompt packets, and recovery notes. Grok/Cursor remains the approved execution lane.',
+    prompt: 'Act as the SATCOM local brief builder. Prepare concise context, checklists, and handoff text for Grok/Cursor execution. Do not claim to deploy, mutate DNS, touch secrets, or act as the always-on SATCOM brain.',
   },
   {
     id: 'editorial-desk',
@@ -5560,9 +6070,12 @@ function useHermesQuickPrompt(key) {
 }
 
 async function copyHermesPreparedPrompt() {
-  const prompt = document.getElementById('hermes-chat-prompt')?.value.trim() || 'Continue the SATCOM Hermes operator task from the current page state.';
-  await navigator.clipboard.writeText(buildHermesPrompt(prompt));
-  toast('Full Hermes prompt copied');
+  const prompt = document.getElementById('hermes-chat-prompt')?.value.trim() || 'Continue the SATCOM operator task from the current page state.';
+  const preparedPrompt = buildHermesPrompt(prompt);
+  await copyTextWithToast(
+    buildGrokOperatorHandoff(preparedPrompt),
+    'Grok handoff copied — paste into Cursor/Grok.',
+  );
 }
 
 function loadHermesActivity() {
@@ -5712,119 +6225,47 @@ async function refreshHermesCrewStatus() {
     setText('hermes-crew-model', 'Local');
     setText('hermes-crew-writes', 'Off');
     const box = document.getElementById('hermes-output-box');
-    if (box) box.textContent = `Hermes Crew bridge not reachable at ${HERMES_CREW_BASE}.\n\nLocal preview uses /Users/Ace/Codex/apps/hermes-crew on port 8793. Public SATCOM uses the production bridge proxy.\n\n${err.message}`;
+    if (box) box.textContent = `Hermes bridge not reachable at ${HERMES_CREW_BASE}.\n\nGrok Developer is the SATCOM operator brain. Hermes links are optional Mac-local fallback only.\n\n${err.message}`;
     return null;
   }
 }
 
-async function sendHermesChat() {
-  const input = document.getElementById('hermes-chat-prompt');
-  const tier = document.getElementById('hermes-chat-tier')?.value || 'local';
-  const prompt = input?.value.trim();
-  if (!prompt) {
-    toast('Add a Hermes prompt first');
-    return;
-  }
-  const preparedPrompt = buildHermesPrompt(prompt);
+async function routePromptToGrokOperator(userPrompt) {
+  const preparedPrompt = buildHermesPrompt(userPrompt);
   const agent = getActiveHermesAgent();
-  const plugins = getActiveHermesPlugins();
-  const activity = addHermesActivity(prompt, tier);
-  addHermesHistory('chat', `Chat sent through ${agent.name}`, prompt, {
-    prompt,
+  const tier = document.getElementById('hermes-chat-tier')?.value || 'local';
+  const activity = addHermesActivity(userPrompt, tier);
+  addHermesHistory('grok', `Routed to Grok from ${agent.name}`, userPrompt, {
+    prompt: userPrompt,
     preparedPrompt,
     tier,
     agent: agent.id,
-    plugins: plugins.map(plugin => plugin.id),
+    plugins: getActiveHermesPlugins().map(plugin => plugin.id),
     files: hermesFileManifest(),
   });
-  appendHermesMessage('user', prompt);
-  if (input) input.value = '';
-  const assistant = appendHermesMessage('assistant', 'Thinking locally...');
-  if (assistant?.el) assistant.el.classList.add('pending');
-  let buffer = '';
-  try {
-    updateHermesActivity(activity, 'streaming', 'Waiting for local model response...');
-    const res = await fetch(`${HERMES_CREW_BASE}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tier,
-        temperature: 0.45,
-        messages: [{ role: 'user', content: preparedPrompt }],
-      }),
-    });
-    if (!res.ok || !res.body) throw new Error(`Hermes chat HTTP ${res.status}`);
-    updateHermesActivity(activity, 'streaming', 'Response stream opened.');
-    const reader = res.body.getReader();
-    const decoder = new TextDecoder();
-    let pending = '';
-    let lastActivityPreviewAt = 0;
-    const updateStreamingPreview = (force = false) => {
-      const now = Date.now();
-      if (!force && now - lastActivityPreviewAt < 750) return;
-      lastActivityPreviewAt = now;
-      updateHermesActivity(activity, 'streaming', buffer);
-    };
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      pending += decoder.decode(value, { stream: true });
-      const events = pending.split('\n\n');
-      pending = events.pop() || '';
-      events.forEach(evt => {
-        const line = evt.split('\n').find(part => part.startsWith('data: '));
-        if (!line) return;
-        const raw = line.slice(6);
-        if (raw === '[DONE]') return;
-        try {
-          const data = JSON.parse(raw);
-          if (data.error) throw new Error(data.error);
-          if (data.delta) {
-            buffer += data.delta;
-            if (assistant?.el) {
-              assistant.el.textContent = buffer;
-              assistant.el.classList.remove('pending');
-            }
-            if (assistant?.message) assistant.message.content = buffer;
-            updateStreamingPreview();
-            scrollHermesChatToBottom();
-          }
-        } catch (err) {
-          if (assistant?.el) {
-            assistant.el.className = 'hermes-msg error';
-            assistant.el.textContent = `Hermes chat error: ${err.message}`;
-          }
-          if (assistant?.message) assistant.message.content = `Hermes chat error: ${err.message}`;
-          saveHermesChatMessages();
-          updateHermesActivity(activity, 'error', err.message);
-        }
-      });
-    }
-    if (assistant?.el) assistant.el.classList.remove('pending');
-    if (assistant?.el && !buffer.trim()) {
-      assistant.el.textContent = 'No response returned. Try Hermes 8B fast local or check the bridge log.';
-      if (assistant.message) assistant.message.content = assistant.el.textContent;
-      saveHermesChatMessages();
-      updateHermesActivity(activity, 'error', assistant.el.textContent);
-    } else {
-      saveHermesChatMessages();
-      updateStreamingPreview(true);
-      updateHermesActivity(activity, 'done', buffer);
-      addHermesHistory('response', `Response from ${agent.name}`, buffer, {
-        prompt,
-        tier,
-        agent: agent.id,
-      });
-    }
-  } catch (err) {
-    if (assistant?.el) {
-      assistant.el.className = 'hermes-msg error';
-      assistant.el.textContent = `Hermes chat unavailable: ${err.message}`;
-    }
-    if (assistant?.message) assistant.message.content = `Hermes chat unavailable: ${err.message}`;
-    saveHermesChatMessages();
-    updateHermesActivity(activity, 'error', err.message);
+  appendHermesMessage('user', userPrompt);
+  await copyTextWithToast(
+    buildGrokOperatorHandoff(preparedPrompt),
+    'Grok handoff copied — paste into Cursor/Grok.',
+  );
+  appendHermesMessage(
+    'assistant',
+    'Hermes chat is retired on this dashboard. Handoff copied. Open Grok Developer in Cursor or run `cd ~/Codex && grok` on the Mac for approved execution.',
+  );
+  saveHermesChatMessages();
+  updateHermesActivity(activity, 'done', 'Routed to Grok Developer');
+  navTo('grok');
+}
+
+async function sendHermesChat() {
+  const input = document.getElementById('hermes-chat-prompt');
+  const prompt = input?.value.trim();
+  if (!prompt) {
+    toast('Add an operator request first');
+    return;
   }
+  if (input) input.value = '';
+  await routePromptToGrokOperator(prompt);
 }
 
 function selectedHermesOutputs() {
@@ -5842,6 +6283,13 @@ async function runHermesCrew() {
   const topic = document.getElementById('hermes-crew-topic')?.value.trim();
   if (!topic) {
     toast('Add a crew topic first');
+    return;
+  }
+  if (!isHermesLocalHost()) {
+    toast('Crew runner is Mac-local only. Routing topic to Grok.');
+    const input = document.getElementById('hermes-chat-prompt');
+    if (input) input.value = `Crew topic: ${topic}`;
+    await routePromptToGrokOperator(`Crew topic: ${topic}`);
     return;
   }
   const payload = {
