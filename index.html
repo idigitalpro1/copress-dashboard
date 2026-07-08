@@ -1878,7 +1878,7 @@ body::before {
               <div class="card-icon" style="color:#bef264;border-color:rgba(163,230,53,.25);background:rgba(163,230,53,.09);">x</div>
               <div>
                 <div class="card-title">Grok Developer</div>
-                <div class="card-subtitle">xAI console · Grok Build · approved execution</div>
+                <div class="card-subtitle">Cursor Grok Build · Open WebUI · Hermes local</div>
               </div>
             </div>
             <div class="card-stats">
@@ -1901,9 +1901,9 @@ body::before {
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('grok')">Open Panel</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openExternal(XAI_CONSOLE_URL)">Console</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openExternal(XAI_DOCS_URL)">Docs</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); openCursorWorkspace()">Grok Build (Cursor)</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openOpenWebUi()">Open WebUI</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('grok')">All launchers</button>
               <button class="card-btn" onclick="event.stopPropagation(); copyGrokDeveloperHandoff()">Copy Handoff</button>
             </div>
           </div>
@@ -3249,9 +3249,9 @@ body::before {
           <div class="module-workbench-inner">
             <div class="module-heading">
               <div>
-                <div class="module-kicker">xAI Grok Build · SATCOM Execution Lane</div>
-                <h2>Load Grok Developer as the approved coding panel.</h2>
-                <p>MCP inspects and proposes. Grok/Cursor execute only after operator approval, with DNS, billing, secrets, M365, live sends, and deploys held behind explicit confirmation.</p>
+                <div class="module-kicker">Grok Developer GUIs · Not console.x.ai</div>
+                <h2>Open a real Grok workspace — Cursor, Open WebUI, or Hermes.</h2>
+                <p><strong>console.x.ai is API keys and billing only</strong> — not a chat or coding IDE. Grok Build runs inside <strong>Cursor</strong> (this session). Open WebUI is your multi-model hub on this Mac. Hermes WebUI handles deadline editorial locally.</p>
               </div>
               <div class="module-status">
                 <span class="pill">MCP <strong>Suggest</strong></span>
@@ -3262,12 +3262,50 @@ body::before {
             </div>
 
             <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
-              <a class="admin-launch" style="--admin-color:var(--c-grok);" href="https://console.x.ai/" target="_blank" rel="noopener">
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Grok Build in Cursor</div>
+                  <span class="admin-launch-tag">Primary GUI</span>
+                </div>
+                <div class="admin-launch-desc">The sophisticated Grok Developer interface — agentic coding, repo edits, MCP tools. Opens ~/Codex in Cursor with Grok Build (same lane as this chat).</div>
+                <div class="admin-launch-url">cursor://file/Users/Ace/Codex</div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="openCursorWorkspace()">Open in Cursor</button>
+                  <button class="admin-launch-action" type="button" onclick="copyGrokCliCommand()">Copy Grok TUI</button>
+                </div>
+              </div>
+              <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Open WebUI</div>
+                  <span class="admin-launch-tag">Multi-Model</span>
+                </div>
+                <div class="admin-launch-desc">Your local chat hub — Gemini, Perplexity, private LLM, Docker AI, and other API keys you configured. Mac localhost only.</div>
+                <div class="admin-launch-url">http://127.0.0.1:8094/auth</div>
+              </a>
+              <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8786" target="_blank" rel="noopener">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Hermes WebUI</div>
+                  <span class="admin-launch-tag">Editorial</span>
+                </div>
+                <div class="admin-launch-desc">Deadline drafting on local Ollama — qwen36-35b-a3b-satcom, hermes3. No cloud wait. Bridge at :8793.</div>
+                <div class="admin-launch-url">http://127.0.0.1:8786</div>
+              </a>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Grok TUI (terminal)</div>
+                  <span class="admin-launch-tag">CLI GUI</span>
+                </div>
+                <div class="admin-launch-desc">Terminal UI when Cursor is not open. Run on the Mac: <code>cd ~/Codex && grok</code></div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="copyGrokCliCommand()">Copy command</button>
+                </div>
+              </div>
+              <a class="admin-launch" style="--admin-color:var(--c-vault);" href="https://console.x.ai/" target="_blank" rel="noopener">
                 <div class="admin-launch-top">
                   <div class="admin-launch-title">xAI Console</div>
-                  <span class="admin-launch-tag">Account</span>
+                  <span class="admin-launch-tag">API Keys Only</span>
                 </div>
-                <div class="admin-launch-desc">Manage API keys, credits, models, team access, usage, and billing from the official developer console.</div>
+                <div class="admin-launch-desc">Not a chat IDE — keys, credits, billing, team access. Use Cursor or Open WebUI for actual Grok sessions.</div>
                 <div class="admin-launch-url">https://console.x.ai/</div>
               </a>
               <a class="admin-launch" style="--admin-color:var(--c-ai-studio);" href="https://docs.x.ai/overview" target="_blank" rel="noopener">
@@ -3275,16 +3313,16 @@ body::before {
                   <div class="admin-launch-title">xAI Docs</div>
                   <span class="admin-launch-tag">Reference</span>
                 </div>
-                <div class="admin-launch-desc">Grok API overview, models, tools, Responses API, web search, structured outputs, and SDK guidance.</div>
+                <div class="admin-launch-desc">API reference — models, Responses API, SDKs. For integration work, not day-to-day operator chat.</div>
                 <div class="admin-launch-url">https://docs.x.ai/overview</div>
               </a>
               <a class="admin-launch" style="--admin-color:var(--c-vercel);" href="https://x.ai/news/grok-build-0-1" target="_blank" rel="noopener">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Grok Build</div>
-                  <span class="admin-launch-tag">Coding</span>
+                  <div class="admin-launch-title">Grok Build (news)</div>
+                  <span class="admin-launch-tag">Release notes</span>
                 </div>
-                <div class="admin-launch-desc">Agentic coding model lane for implementation work, debugging, MCP support, and repo-oriented execution.</div>
-                <div class="admin-launch-url">grok-build-0.1 · public beta</div>
+                <div class="admin-launch-desc">Product announcement — not a login page. To use Grok Build, open Cursor or the grok TUI on this Mac.</div>
+                <div class="admin-launch-url">x.ai/news/grok-build-0-1</div>
               </a>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-hermes);">
                 <div class="admin-launch-top">
@@ -3331,16 +3369,16 @@ body::before {
                   <div class="admin-launch-title">Deadline Failover</div>
                   <span class="admin-launch-tag">Primary / Fallback / Backup</span>
                 </div>
-                <div class="admin-launch-desc">Primary intelligence is Grok in Cursor or TUI. Fallback is Codex with repo and MCP verification. Backup is local Open WebUI/Qwen plus docs/Kanban for briefs when cloud lanes are unavailable.</div>
+                <div class="admin-launch-desc">Press night: Hermes local first for editorial. Grok/Cursor for implementation. Open WebUI when you need Gemini/Perplexity/private LLM. Codex verifies after copy — not first draft.</div>
                 <div class="admin-launch-status">
-                  <span class="ok">Primary Grok</span>
-                  <span class="ok">Fallback Codex</span>
-                  <span class="warn">Backup Local</span>
+                  <span class="ok">Primary Hermes</span>
+                  <span class="ok">Fallback Grok</span>
+                  <span class="warn">Backup WebUI</span>
                 </div>
                 <div class="admin-launch-actions">
-                  <button class="admin-launch-action primary" type="button" onclick="copyDeadlineFailoverRunbook()">Copy Runbook</button>
-                  <button class="admin-launch-action" type="button" onclick="copyGrokCliCommand()">Grok TUI</button>
-                  <button class="admin-launch-action" type="button" onclick="navTo('brains')">Backup Links</button>
+                  <button class="admin-launch-action primary" type="button" onclick="openHermesWebUi()">Hermes WebUI</button>
+                  <button class="admin-launch-action" type="button" onclick="copyDeadlineFailoverRunbook()">Copy Runbook</button>
+                  <button class="admin-launch-action" type="button" onclick="openOpenWebUi()">Open WebUI</button>
                 </div>
               </div>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-admin);">
@@ -3898,6 +3936,8 @@ const WEEKLY_PROGRESS_API_URL = 'http://127.0.0.1:8080';
 const WEEKLY_PROGRESS_API_FALLBACK_URL = 'http://127.0.0.1:8180';
 const XAI_CONSOLE_URL = 'https://console.x.ai/';
 const XAI_DOCS_URL = 'https://docs.x.ai/overview';
+const OPEN_WEBUI_URL = 'http://127.0.0.1:8094/auth';
+const HERMES_WEBUI_URL = 'http://127.0.0.1:8786';
 const GROK_BUILD_URL = 'https://x.ai/news/grok-build-0-1';
 const CODEX_WORKSPACE_PATH = '/Users/Ace/Codex';
 const CURSOR_WORKSPACE_URL = 'cursor://file/Users/Ace/Codex';
@@ -4057,27 +4097,28 @@ function deadlineFailoverRunbookText() {
     '',
     'Rule: if the active intelligence lane is blocked for more than 2 minutes during a press deadline, switch lanes. Do not spend the deadline repairing the lane.',
     '',
-    'Primary intelligence: Grok in Cursor or Grok TUI',
-    '- Use for code, debugging, patches, repo edits, and tests.',
-    '- Workspace: /Users/Ace/Codex',
-    '- Launch: open -a Cursor /Users/Ace/Codex',
-    '- Terminal: cd /Users/Ace/Codex && grok',
+    'Primary intelligence: Hermes local (editorial / deadline drafting)',
+    '- Hermes WebUI: http://127.0.0.1:8786',
+    '- Bridge health: http://127.0.0.1:8793/health — run make hermes-health on Mac',
+    '- Models: qwen36-35b-a3b-satcom, hermes3 — private, no cloud wait',
     '',
-    'Fallback intelligence/integration: Codex',
-    '- Use for repo inspection, implementation support, MCP checks, deploy hooks, and production verification after approval.',
-    '- Keep MCP read-only unless the operator approves execution.',
-    '- Check: ~/bin/mcp-status',
+    'Fallback intelligence: Grok Developer (implementation + execution)',
+    '- Cursor Grok Build — sophisticated GUI: open -a Cursor /Users/Ace/Codex',
+    '- Terminal TUI: cd /Users/Ace/Codex && grok',
+    '- NOT console.x.ai — that page is API keys/billing only, not a chat IDE',
     '',
-    'Backup intelligence: local Open WebUI/Qwen/Hermes links',
-    '- Use for briefs, checklists, draft copy, and handoff packets when cloud lanes are unavailable.',
-    '- Open WebUI: http://127.0.0.1:8094/auth',
-    '- Local WebUI: http://127.0.0.1:8786',
-    '- Hermes dashboard/history: http://127.0.0.1:9119',
+    'Backup intelligence: Open WebUI + multi-model hub',
+    '- Open WebUI: http://127.0.0.1:8094/auth — Gemini, Perplexity, private LLM, Docker AI keys',
+    '- Hermes history: http://127.0.0.1:9119',
     '- Do not rely on same-origin SATCOM Hermes chat for deadline execution.',
     '',
+    'Integration (after copy): Codex + MCP',
+    '- MCP checks, deploy hooks, production verification — not first draft.',
+    '- Check: ~/bin/mcp-status',
+    '',
     'Non-intelligence backup: SATCOM docs, Kanban, and runbooks',
-    '- Use static docs, Kanban cards, and copied handoff prompts if all model lanes are down.',
-    '- This keeps assignment and production flow moving, but it is not a model replacement.',
+    '- Kanban: https://satcom.conews.press',
+    '- Static docs and copied handoff prompts if all model lanes are down.',
     '',
     'Hard stops always need explicit approval: DNS, billing, M365, secrets, deploys, destructive shell, and live sends.',
   ].join('\n');
@@ -4095,13 +4136,17 @@ function copyGrokCliCommand() {
   copyTextWithToast(commands, 'Grok TUI command copied.');
 }
 
+function openOpenWebUi() {
+  window.open(OPEN_WEBUI_URL, '_blank', 'noopener');
+}
+
+function openHermesWebUi() {
+  window.open(HERMES_WEBUI_URL, '_blank', 'noopener');
+}
+
 function openCursorWorkspace() {
-  const commands = [
-    'open -a Cursor /Users/Ace/Codex',
-    'cd /Users/Ace/Codex && grok',
-  ].join('\n');
-  copyTextWithToast(commands, 'Cursor launch commands copied.');
   window.location.href = CURSOR_WORKSPACE_URL;
+  copyTextWithToast('open -a Cursor /Users/Ace/Codex', 'Opening Cursor — Grok Build GUI');
 }
 
 function buildGrokOperatorHandoff(operatorRequest = '') {
