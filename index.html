@@ -1390,6 +1390,105 @@ body::before {
 @keyframes toastIn  { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 @keyframes toastOut { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(8px); } }
 
+/* ── Operator Gate ──────────────────────────────────────────────── */
+body.satcom-gated #topbar,
+body.satcom-gated #shell,
+body.satcom-gated #statusbar {
+  display: none;
+}
+#satcom-entry-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(200,168,75,.08), transparent 32%),
+    radial-gradient(circle at 80% 78%, rgba(163,230,53,.08), transparent 30%),
+    #050912;
+}
+body.satcom-gated #satcom-entry-gate {
+  display: flex;
+}
+.gate-panel {
+  width: min(760px, 100%);
+  border: 1px solid rgba(200,168,75,.24);
+  background: rgba(7,12,20,.94);
+  box-shadow: var(--shadow-lg);
+  padding: 34px;
+}
+.gate-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.gate-title {
+  margin-top: 12px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: .95;
+  color: var(--ink);
+}
+.gate-copy {
+  margin-top: 16px;
+  max-width: 620px;
+  color: var(--ink-mid);
+  line-height: 1.65;
+}
+.gate-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+.gate-pill {
+  border: 1px solid rgba(200,168,75,.18);
+  color: var(--gold-pale);
+  background: rgba(200,168,75,.06);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .9px;
+  padding: 7px 10px;
+  text-transform: uppercase;
+}
+.gate-pill.warn {
+  border-color: rgba(245,158,11,.3);
+  color: #fbbf24;
+}
+.gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+.gate-btn {
+  border: 1px solid rgba(200,168,75,.28);
+  background: rgba(255,255,255,.04);
+  color: var(--ink);
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 12px 16px;
+  text-transform: uppercase;
+}
+.gate-btn.primary {
+  background: var(--gold);
+  color: #07101a;
+  border-color: var(--gold);
+  font-weight: 700;
+}
+.gate-note {
+  margin-top: 18px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 /* ── Scrollbar ──────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -1428,7 +1527,28 @@ body::before {
 }
 </style>
 </head>
-<body>
+<body class="satcom-gated">
+
+<div id="satcom-entry-gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <div class="gate-panel">
+    <div class="gate-eyebrow">SATCOM Operator Gate</div>
+    <h1 class="gate-title" id="gate-title">Microsoft 365 first.</h1>
+    <p class="gate-copy">SATCOM stays a dashboard, but deadline operations should start with a known operator session. Use Microsoft 365 login, then continue into Grok/Codex, Kanban, MCP status, and the local fallback links.</p>
+    <div class="gate-status">
+      <span class="gate-pill">Grok primary</span>
+      <span class="gate-pill">Codex fallback</span>
+      <span class="gate-pill">MCP read-only</span>
+      <span class="gate-pill warn">Hard stops still require approval</span>
+    </div>
+    <div class="gate-actions">
+      <button class="gate-btn primary" type="button" onclick="openM365Login()">365 Login</button>
+      <button class="gate-btn" type="button" onclick="enterSatcomGate()">I’m signed in — enter SATCOM</button>
+      <button class="gate-btn" type="button" onclick="openM365AccountSwitch()">Switch Microsoft account</button>
+      <button class="gate-btn" type="button" onclick="copyM365Callback()">Copy callback</button>
+    </div>
+    <p class="gate-note">This is a front-door operator gate for the static dashboard. The real Microsoft session and secrets stay on <code>admin.conews.press</code>; do not put credentials into SATCOM HTML.</p>
+  </div>
+</div>
 
 <!-- ── Topbar ─────────────────────────────────────────────────────── -->
 <header id="topbar">
@@ -3934,6 +4054,7 @@ const M365_ACCOUNT_SWITCH_URL =
   encodeURIComponent(M365_LOGIN_URL);
 const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
+const SATCOM_GATE_KEY = 'satcom_operator_gate_entered_v1';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
 const WEEKLY_PROGRESS_DASHBOARD_URL = 'http://127.0.0.1:8190';
 const WEEKLY_PROGRESS_DASHBOARD_STANDARD_URL = 'http://127.0.0.1:8090';
@@ -4274,6 +4395,23 @@ function openM365Login() {
   openExternal(M365_LOGIN_URL);
 }
 
+function enterSatcomGate() {
+  localStorage.setItem(SATCOM_GATE_KEY, '1');
+  document.body.classList.remove('satcom-gated');
+  toast('SATCOM operator gate cleared.');
+}
+
+function resetSatcomGate() {
+  localStorage.removeItem(SATCOM_GATE_KEY);
+  document.body.classList.add('satcom-gated');
+}
+
+function hydrateSatcomGate() {
+  if (localStorage.getItem(SATCOM_GATE_KEY) === '1') {
+    document.body.classList.remove('satcom-gated');
+  }
+}
+
 function openM365AccountSwitch() {
   openExternal(M365_ACCOUNT_SWITCH_URL);
 }
@@ -4290,6 +4428,8 @@ async function copyM365Callback() {
     window.prompt('Copy Azure callback URL', M365_AZURE_CALLBACK_URL);
   }
 }
+
+hydrateSatcomGate();
 
 // ── API Panel ──────────────────────────────────────────────────────
 const apiToggle = document.getElementById('api-toggle');
