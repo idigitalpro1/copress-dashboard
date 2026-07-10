@@ -1,0 +1,154 @@
+{
+  "board": "conewspress-dev",
+  "target_systems": [
+    "hermes kanban --board conewspress-dev",
+    "admin.conews.press/console/api/kanban",
+    "satcom.5280.menu"
+  ],
+  "note": "comsat.conews.press does not resolve (NXDOMAIN). Use satcom.5280.menu or admin.conews.press/console/kanban.",
+  "schema_version": "1.0",
+  "cards": [
+    {
+      "title": "Wildfire Live Tracker - Master Post",
+      "type": "breaking",
+      "priority": "high",
+      "owner": "Patrick",
+      "status": "in_progress",
+      "column": "active",
+      "deadline": "continuous",
+      "description": "Maintain single live wildfire tracker. No duplicate stories. All updates must include timestamps and verified changes only.",
+      "checklist": [
+        "Create/confirm live tracker post",
+        "Post updates every 60-90 minutes",
+        "Include timestamps on every entry",
+        "Verify sources before posting",
+        "Embed map or image where possible"
+      ],
+      "tags": ["wildfire", "breaking", "live"],
+      "escalation": [
+        "Evacuations",
+        "Structure loss",
+        "Road closures (I-70)",
+        "Fatalities"
+      ]
+    },
+    {
+      "title": "Evening Shift - Breaking Coverage",
+      "type": "shift",
+      "priority": "high",
+      "owner": "Patrick",
+      "status": "in_progress",
+      "column": "active",
+      "deadline": "10:30 PM",
+      "description": "Launch live coverage and publish evening updates.",
+      "checklist": [
+        "Launch live tracker",
+        "Publish 'What we know tonight'",
+        "Post 2-3 updates",
+        "Push 1 social alert",
+        "Confirm morning assignments"
+      ],
+      "tags": ["shift", "evening", "breaking"],
+      "escalation": []
+    },
+    {
+      "title": "Overnight Monitoring",
+      "type": "shift",
+      "priority": "medium",
+      "owner": "Paul",
+      "status": "pending",
+      "column": "backlog",
+      "deadline": "6:30 AM",
+      "description": "Monitor alerts overnight. Only publish if escalation triggers occur.",
+      "checklist": [
+        "Monitor wildfire alerts",
+        "Log updates for morning",
+        "Publish only if escalation triggered"
+      ],
+      "tags": ["overnight", "monitoring"],
+      "escalation": [
+        "Evacuations",
+        "Major fire growth",
+        "Fatalities"
+      ]
+    },
+    {
+      "title": "Morning Briefing + Core Stories",
+      "type": "assignment",
+      "priority": "high",
+      "owner": "Paul",
+      "status": "pending",
+      "column": "backlog",
+      "deadline": "9:00 AM",
+      "description": "Produce morning briefing and two core stories.",
+      "checklist": [
+        "Publish 'What You Need to Know Today'",
+        "Write air quality story",
+        "Update live tracker",
+        "Coordinate with editor for publish"
+      ],
+      "tags": ["morning", "briefing"],
+      "escalation": []
+    },
+    {
+      "title": "I-70 / Foothills Impact Story",
+      "type": "assignment",
+      "priority": "medium",
+      "owner": "JW",
+      "status": "pending",
+      "column": "backlog",
+      "deadline": "1:00 PM",
+      "description": "Cover local transportation and economic impact.",
+      "checklist": [
+        "Identify closures and delays",
+        "Quote local businesses",
+        "Add local angle (Idaho Springs)",
+        "Submit via CMS"
+      ],
+      "tags": ["local", "transportation"],
+      "escalation": []
+    },
+    {
+      "title": "CMS Submission Enforcement",
+      "type": "system",
+      "priority": "high",
+      "owner": "Patrick",
+      "status": "active",
+      "column": "active",
+      "deadline": "ongoing",
+      "description": "Enforce CMS-only submissions and required fields.",
+      "checklist": [
+        "Reject incomplete submissions",
+        "Ensure bylines are assigned",
+        "Verify images included",
+        "Confirm category + tags"
+      ],
+      "tags": ["cms", "workflow"],
+      "escalation": [
+        "Missing byline",
+        "Missing image",
+        "Submission outside CMS"
+      ]
+    },
+    {
+      "title": "Writer Pay Tracking Validation",
+      "type": "system",
+      "priority": "medium",
+      "owner": "Patrick",
+      "status": "pending",
+      "column": "backlog",
+      "deadline": "daily",
+      "description": "Ensure all published stories are correctly attributed for pay.",
+      "checklist": [
+        "Verify byline matches writer account",
+        "Confirm CMS submission exists",
+        "Log published stories per writer"
+      ],
+      "tags": ["pay", "tracking"],
+      "escalation": [
+        "Missing attribution",
+        "Untracked story"
+      ]
+    }
+  ]
+}
