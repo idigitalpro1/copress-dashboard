@@ -379,6 +379,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
         <input type="password" class="field-input" id="new-key" placeholder="paste key here — stored locally only">
       </div>
       <div class="field-group">
+        <label class="field-label">Environment Variable</label>
+        <input type="text" class="field-input" id="new-env-key" placeholder="e.g. XAI_API_KEY" autocomplete="off">
+      </div>
+      <div class="field-group">
         <label class="field-label">Base URL (optional)</label>
         <input type="text" class="field-input" id="new-url" placeholder="https://api.example.com">
       </div>
@@ -436,6 +440,75 @@ const DEFAULT_APIS = [
 let apis = [];
 let currentCat = 'all';
 
+function slugifyId(value) {
+  return String(value || 'custom-api')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'custom-api';
+}
+
+function normalizeEnvKey(value, fallback = 'CUSTOM_API_KEY') {
+  const normalized = String(value || '')
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+  const safe = normalized && /^[A-Z_]/.test(normalized) ? normalized : `_${normalized}`;
+  return safe || fallback;
+}
+
+function inferEnvKey(name) {
+  if (/xai|grok/i.test(name)) return 'XAI_API_KEY';
+  return `${normalizeEnvKey(name, 'CUSTOM')}_API_KEY`;
+}
+
+function normalizeCustomApi(saved) {
+  const rawName = saved.name || String(saved.id || 'Custom API')
+    .split(/[-_]+/)
+    .filter(Boolean)
+    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
+  const isXai = /xai|grok/i.test(`${rawName} ${saved.id || ''}`);
+  const values = { ...(saved.values || {}) };
+  const savedFields = Array.isArray(saved.fields) ? saved.fields : [];
+  const legacyKey = savedFields.find(field => !/url/i.test(field.key || ''))?.key
+    || Object.keys(values).find(key => !/url/i.test(key));
+  const legacyUrlKey = savedFields.find(field => /url/i.test(field.key || ''))?.key
+    || Object.keys(values).find(key => /url/i.test(key));
+  const keyName = isXai ? 'XAI_API_KEY' : normalizeEnvKey(legacyKey || inferEnvKey(rawName));
+  const urlKey = isXai ? 'XAI_BASE_URL' : normalizeEnvKey(legacyUrlKey || `${keyName.replace(/_API_KEY$/, '')}_BASE_URL`);
+
+  if (legacyKey && legacyKey !== keyName && values[legacyKey]) {
+    values[keyName] = values[legacyKey];
+    delete values[legacyKey];
+  }
+  if (legacyUrlKey && legacyUrlKey !== urlKey && values[legacyUrlKey]) {
+    values[urlKey] = values[legacyUrlKey];
+    delete values[legacyUrlKey];
+  }
+
+  const fields = [
+    { label: 'API Key', key: keyName, ph: 'paste key here' },
+  ];
+  if (values[urlKey] || savedFields.some(field => /url/i.test(field.key || ''))) {
+    fields.push({ label: 'Base URL', key: urlKey, ph: 'https://...' });
+  }
+
+  return {
+    id: slugifyId(isXai ? 'xai-grok' : (saved.id || rawName)),
+    name: isXai ? 'xAI / Grok' : rawName,
+    cat: saved.cat || 'ai',
+    icon: saved.icon || '🔑',
+    color: saved.color || '#888',
+    desc: saved.desc || `${rawName} API credentials`,
+    fields,
+    required: saved.required || 'optional',
+    inject: Array.isArray(saved.inject) ? saved.inject : [],
+    values,
+    custom: true,
+  };
+}
+
 function loadVault() {
   try {
     const saved = JSON.parse(localStorage.getItem('api_vault') || '[]');
@@ -445,12 +518,33 @@ function loadVault() {
       return { ...def, values: saved_entry.values || {} };
     });
     // Add any custom APIs not in defaults
-    saved.filter(s => !DEFAULT_APIS.find(d => d.id === s.id)).forEach(s => apis.push(s));
+    saved
+      .filter(s => !DEFAULT_APIS.find(d => d.id === s.id))
+      .map(normalizeCustomApi)
+      .forEach(s => apis.push(s));
+    saveVault();
   } catch { apis = DEFAULT_APIS.map(d => ({ ...d, values: {} })); }
 }
 
 function saveVault() {
-  const data = apis.map(a => ({ id: a.id, values: a.values || {} }));
+  const data = apis.map(a => {
+    if (DEFAULT_APIS.some(def => def.id === a.id)) {
+      return { id: a.id, values: a.values || {} };
+    }
+    return {
+      id: a.id,
+      name: a.name,
+      cat: a.cat,
+      icon: a.icon,
+      color: a.color,
+      desc: a.desc,
+      fields: a.fields,
+      required: a.required,
+      inject: a.inject || [],
+      values: a.values || {},
+      custom: true,
+    };
+  });
   localStorage.setItem('api_vault', JSON.stringify(data));
   updateStats();
 }
@@ -459,6 +553,15 @@ function hasKey(api) {
   if (!api.values) return false;
   const firstField = api.fields[0];
   return !!(api.values[firstField.key] && api.values[firstField.key].trim());
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ── RENDER ────────────────────────────────────────────────────────────────
@@ -474,23 +577,23 @@ function renderGrid(cat = 'all') {
     return `
     <div class="api-card ${active ? 'active-key' : (api.required !== 'optional' ? 'missing-key' : '')}" id="card-${api.id}">
       <div class="api-card-header">
-        <div class="api-logo" style="background:${api.color}20;">${api.icon}</div>
+        <div class="api-logo" style="background:${escapeHtml(api.color)}20;">${escapeHtml(api.icon)}</div>
         <div class="api-meta">
-          <div class="api-name">${api.name}</div>
-          <div class="api-category">${api.cat} · ${reqLabel}</div>
+          <div class="api-name">${escapeHtml(api.name)}</div>
+          <div class="api-category">${escapeHtml(api.cat)} · ${escapeHtml(reqLabel)}</div>
         </div>
-        <div class="api-status ${statusClass}">${statusText}</div>
+        <div class="api-status ${statusClass}">${escapeHtml(statusText)}</div>
       </div>
       <div class="api-card-body">
-        <div class="api-desc">${api.desc}</div>
+        <div class="api-desc">${escapeHtml(api.desc)}</div>
         ${api.fields.map(f => `
         <div class="key-field">
-          <div class="key-label">${f.label}</div>
+          <div class="key-label">${escapeHtml(f.label)}</div>
           <div class="key-input-wrap">
             <input type="password" class="key-input ${api.values && api.values[f.key] ? 'filled' : ''}"
-              id="inp-${api.id}-${f.key}"
-              placeholder="${f.ph}"
-              value="${api.values && api.values[f.key] ? api.values[f.key] : ''}"
+              id="inp-${escapeHtml(api.id)}-${escapeHtml(f.key)}"
+              placeholder="${escapeHtml(f.ph)}"
+              value="${escapeHtml(api.values && api.values[f.key] ? api.values[f.key] : '')}"
               oninput="updateKey('${api.id}','${f.key}',this.value)">
             <button class="eye-btn" onclick="toggleEye('inp-${api.id}-${f.key}',this)">👁</button>
           </div>
@@ -498,7 +601,7 @@ function renderGrid(cat = 'all') {
       </div>
       <div class="api-card-footer">
         <div class="injected-badges">
-          ${(api.inject||[]).map(t => `<span class="inj-badge ${active?'active':''}">${t}</span>`).join('')}
+          ${(api.inject||[]).map(t => `<span class="inj-badge ${active?'active':''}">${escapeHtml(t)}</span>`).join('')}
           ${(api.inject||[]).length === 0 ? '<span style="font-size:10px;color:var(--muted);">No injection targets</span>' : ''}
         </div>
         <div class="card-actions">
@@ -560,15 +663,41 @@ function injectKey(apiId) {
   const api = apis.find(a => a.id === apiId);
   if (!api) return;
   if (!hasKey(api)) { showToast(`⚠ Add a key for ${api.name} first`, 'red'); return; }
-  // In production: POST to /api/inject with targets
-  showToast(`💉 ${api.name} injected into: ${(api.inject||['all']).join(', ')}`, 'gold');
+  if (!(api.inject || []).length) {
+    showToast(`⚠ ${api.name} has no injection target; use a scoped export or MCP request`, 'red');
+    return;
+  }
+  showToast(`ℹ ${api.name} targets recorded locally; no credential was transmitted`, 'gold');
 }
 
-function testKey(apiId) {
+async function testKey(apiId) {
   const api = apis.find(a => a.id === apiId);
   if (!api || !hasKey(api)) { showToast('⚠ No key to test', 'red'); return; }
+  const isXai = /xai|grok/i.test(`${api.id} ${api.name}`);
+  if (!isXai) {
+    showToast(`ℹ No live browser tester is configured for ${api.name}`, 'gold');
+    return;
+  }
+
+  const keyField = api.fields.find(field => /api_key/i.test(field.key));
+  const urlField = api.fields.find(field => /url/i.test(field.key));
+  const apiKey = keyField && api.values[keyField.key];
+  const baseUrl = (urlField && api.values[urlField.key] || 'https://api.x.ai/v1').replace(/\/+$/, '');
   showToast(`🔍 Testing ${api.name} connection…`, 'gold');
-  setTimeout(() => showToast(`✓ ${api.name} key valid`, 'green'), 1800);
+  try {
+    const response = await fetch(`${baseUrl}/models`, {
+      headers: { Authorization: `Bearer ${apiKey}` },
+    });
+    if (response.ok) {
+      showToast(`✓ ${api.name} key accepted by xAI`, 'green');
+    } else if (response.status === 401 || response.status === 403) {
+      showToast(`✕ ${api.name} rejected the key (${response.status})`, 'red');
+    } else {
+      showToast(`⚠ xAI returned HTTP ${response.status}; key not confirmed`, 'red');
+    }
+  } catch {
+    showToast('⚠ Browser could not reach xAI directly; key not confirmed', 'red');
+  }
 }
 
 // ── FILTER ────────────────────────────────────────────────────────────────
@@ -601,22 +730,30 @@ function closeModal() {
 function saveNewKey() {
   const name = document.getElementById('new-service').value.trim();
   if (!name) { showToast('⚠ Enter a service name', 'red'); return; }
+  const id = slugifyId(name);
+  if (apis.some(api => api.id === id)) {
+    showToast(`⚠ ${name} already exists`, 'red');
+    return;
+  }
+  const envKey = normalizeEnvKey(document.getElementById('new-env-key').value || inferEnvKey(name));
   const inject = [...document.querySelectorAll('input[name="inject"]:checked')].map(i => i.value);
   const newApi = {
-    id: name.toLowerCase().replace(/\s+/g,'-'),
+    id,
     name,
     cat: document.getElementById('new-cat').value,
     icon: '🔑',
     color: '#888',
     desc: document.getElementById('new-desc').value || `${name} API credentials`,
-    fields: [{ label:'API Key', key: name.toUpperCase().replace(/\s+/g,'_')+'_KEY', ph:'paste key here' }],
+    fields: [{ label:'API Key', key: envKey, ph:'paste key here' }],
     required: document.getElementById('new-required').value,
     inject: inject.includes('all') ? ['editorial','shoplocal','marketing','newsletter','accounting','citysites'] : inject,
-    values: { [name.toUpperCase().replace(/\s+/g,'_')+'_KEY']: document.getElementById('new-key').value }
+    values: { [envKey]: document.getElementById('new-key').value },
+    custom: true,
   };
   if (document.getElementById('new-url').value) {
-    newApi.fields.push({ label:'Base URL', key: name.toUpperCase().replace(/\s+/g,'_')+'_URL', ph:'https://...' });
-    newApi.values[name.toUpperCase().replace(/\s+/g,'_')+'_URL'] = document.getElementById('new-url').value;
+    const urlKey = envKey.replace(/_API_KEY$/, '') + '_BASE_URL';
+    newApi.fields.push({ label:'Base URL', key: urlKey, ph:'https://...' });
+    newApi.values[urlKey] = document.getElementById('new-url').value.trim();
   }
   apis.push(newApi);
   saveVault();
@@ -685,18 +822,26 @@ function copyMCPConfig(tool) {
 // ── EXPORT ────────────────────────────────────────────────────────────────
 function exportVault() {
   const lines = ['# API Vault Export — ' + new Date().toISOString(), '# Generated by myappstore.biz API Vault', ''];
+  const dotenvValue = value => `"${String(value)
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\r/g, '\\r')
+    .replace(/\n/g, '\\n')}"`;
   apis.forEach(api => {
     if (!api.values) return;
     api.fields.forEach(f => {
       const v = api.values[f.key];
-      if (v) lines.push(`${f.key}=${v}`);
+      if (v) lines.push(`${normalizeEnvKey(f.key)}=${dotenvValue(v)}`);
     });
   });
   const blob = new Blob([lines.join('\n')], { type:'text/plain' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `.env.vault-${new Date().toISOString().slice(0,10)}`;
+  document.body.appendChild(a);
   a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
   showToast('📤 Local .env export created — operator review required before use', 'gold');
 }
 

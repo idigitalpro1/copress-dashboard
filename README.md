@@ -342,6 +342,11 @@ In Claude/Hermes, request one named key for one task, such as `request SENDY_API
 
 Export formats: selected `.env` values or JSON for local operator handoff only. MCP handoff must stay scoped to a service and reason.
 
+Custom vault entries require an explicit environment-variable name such as `XAI_API_KEY`.
+Names are normalized to dotenv-safe identifiers, and custom service metadata survives reloads.
+The browser test action reports success only after a supported provider accepts the key; unsupported
+services and browser/CORS failures remain unconfirmed rather than showing a simulated pass.
+
 ---
 
 ## Network HQ (`/network`)
