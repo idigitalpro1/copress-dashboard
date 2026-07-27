@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monday Executive Briefing — SATCOM</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Libre+Baskerville&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#c8a43a;--goldl:#e8c97a;--bg:#1a1a10;--panel:#111108;--border:#28281a;--green:#2a4a18;--red:#8b1a1a;--muted:#666;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:#ccc;font-family:'Libre Baskerville',Georgia,serif;min-height:100vh;}
+.hdr{background:#060604;border-bottom:2px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.hdr a{color:var(--gold);text-decoration:none;font-family:'Cormorant Garamond',serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;}
+.hdr h1{font-family:'Cormorant Garamond',serif;font-size:22px;color:#fff;font-weight:600;}
+.hdr-meta{font-size:11px;color:var(--muted);}
+.wrap{max-width:1400px;margin:0 auto;padding:20px 24px 40px;}
+.grid{display:grid;grid-template-columns:320px 1fr;gap:20px;align-items:start;}
+@media(max-width:960px){.grid{grid-template-columns:1fr;}}
+.panel{background:var(--panel);border:1px solid var(--border);border-top:2px solid var(--gold);}
+.panel-hd{padding:12px 16px;border-bottom:1px solid var(--border);font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+.panel-bd{padding:16px;}
+.stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1a1a10;font-size:13px;}
+.stat-row:last-child{border:none;}
+.stat-lbl{color:#888;}
+.stat-val{color:#fff;font-weight:600;}
+.stat-val.ok{color:#4ade80;}
+.stat-val.warn{color:#fbbf24;}
+.stat-val.bad{color:#f87171;}
+.btn{width:100%;background:var(--gold);color:#060604;border:none;padding:10px;font-family:'Cormorant Garamond',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;font-weight:700;margin-top:8px;}
+.btn:hover{background:var(--goldl);}
+.btn.outline{background:transparent;color:var(--gold);border:1px solid var(--gold);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+.chip{display:inline-block;font-size:9px;letter-spacing:1px;padding:2px 6px;border:1px solid #333;margin:2px 2px 0 0;font-family:monospace;color:#888;}
+.chip.ok{border-color:#183010;color:#4a7a2a;}
+.chip.plan{border-color:#403010;color:#a08030;}
+#preview-frame{width:100%;border:none;background:#e8e4da;min-height:720px;display:block;}
+.status{font-size:11px;color:var(--muted);margin-top:10px;font-family:monospace;line-height:1.6;}
+.section-list{list-style:none;}
+.section-list li{padding:6px 0;border-bottom:1px solid #141408;font-size:12px;display:flex;align-items:center;gap:8px;}
+.section-list li::before{content:'◆';color:var(--gold);font-size:8px;}
+.tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.tbl th{text-align:left;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:9px;letter-spacing:2px;padding:6px 4px;border-bottom:1px solid var(--border);}
+.tbl td{padding:6px 4px;border-bottom:1px solid #141408;color:#aaa;vertical-align:top;}
+.banner{background:linear-gradient(90deg,var(--green),var(--gold),var(--red));height:3px;margin-bottom:16px;}
+.note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:12px;padding:10px;background:#0a0a06;border:1px solid #1a1a10;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <div>
+    <a href="/">← SATCOM</a>
+    <h1>Monday Executive Briefing</h1>
+    <div class="hdr-meta">Gerri · Bob · VMG Leadership · Every Monday 8:00 AM MT</div>
+  </div>
+  <div class="hdr-meta" id="last-built">Not built yet</div>
+</header>
+<div class="wrap">
+  <div class="banner"></div>
+  <div class="grid">
+    <aside>
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-hd">Overview</div>
+        <div class="panel-bd">
+          <div class="stat-row"><span class="stat-lbl">Delivery</span><span class="stat-val">bsween1@aol.com</span></div>
+          <div class="stat-row"><span class="stat-lbl">CC</span><span class="stat-val" style="font-size:11px;">gerri@villagerpublishing.com</span></div>
+          <div class="stat-row"><span class="stat-lbl">Schedule</span><span class="stat-val">Mon 8:00 AM MT</span></div>
+          <div class="stat-row"><span class="stat-lbl">Invoiced</span><span class="stat-val" id="ov-invoiced">—</span></div>
+          <div class="stat-row"><span class="stat-lbl">Paid</span><span class="stat-val ok" id="ov-paid">—</span></div>
+          <div class="stat-row"><span class="stat-lbl">Overdue</span><span class="stat-val bad" id="ov-overdue">—</span></div>
+          <div class="stat-row"><span class="stat-lbl">Subscribers</span><span class="stat-val" id="ov-subs">—</span></div>
+          <div class="stat-row"><span class="stat-lbl">Published (7d)</span><span class="stat-val" id="ov-pub">—</span></div>
+          <button class="btn" id="btn-build" onclick="buildBriefing()">Build Preview</button>
+          <button class="btn outline" onclick="exportHTML()">Export HTML</button>
+          <button class="btn outline" onclick="openInvoiceManagerReports()">Send via Invoice Manager</button>
+          <p class="status" id="status">Loads financial data from Invoice Manager when available. Editorial and subscriber counts use API Vault keys.</p>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">Briefing Sections</div>
+        <div class="panel-bd">
+          <ul class="section-list">
+            <li>WRC + Villager letterhead</li>
+            <li>Financial results</li>
+            <li>Overdue invoices</li>
+            <li>Local news & sports</li>
+            <li>SEO & audience stats</li>
+            <li>Subscriber growth</li>
+            <li>Top 20 prospects</li>
+            <li>Editorial calendar</li>
+            <li>Bulk email plans (planning only)</li>
+            <li>SATCOM posting history</li>
+          </ul>
+          <p class="note">Bulk email and Sendy sends are <strong>planning only</strong> in this briefing. No unauthorized sends.</p>
+        </div>
+      </div>
+    </aside>
+    <main>
+      <div class="panel">
+        <div class="panel-hd">HTML Newsletter Preview</div>
+        <div class="panel-bd" style="padding:0;">
+          <iframe id="preview-frame" title="Monday briefing preview"></iframe>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:16px;">
+        <div class="panel-hd">Top Prospects (preview)</div>
+        <div class="panel-bd">
+          <table class="tbl" id="prospects-table"><thead><tr><th>#</th><th>Brand</th><th>Priority</th><th>Next Action</th></tr></thead><tbody></tbody></table>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script>
+const INVOICE_MANAGER = 'https://invoicemanager.weeklyregistercall.com';
+let latestHTML = '';
+
+function readVault(key, envKey) {
+  try {
+    const vault = JSON.parse(localStorage.getItem('copress_api_vault') || '{}');
+    if (vault[key]) return vault[key];
+  } catch {}
+  return localStorage.getItem(key) || '';
+}
+
+function fmt(n) { return '$' + Number(n || 0).toFixed(2); }
+function fmtNum(n) { return Number(n || 0).toLocaleString(); }
+function dateStr(d) {
+  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function weekLabel() {
+  const now = new Date();
+  const day = now.getDay();
+  const daysToLastMonday = day === 0 ? 6 : day - 1;
+  const weekEnd = new Date(now);
+  weekEnd.setDate(now.getDate() - daysToLastMonday);
+  const weekStart = new Date(weekEnd);
+  weekStart.setDate(weekEnd.getDate() - 6);
+  return dateStr(weekStart) + ' – ' + dateStr(weekEnd);
+}
+
+async function fetchShowcaseLeads() {
+  const res = await fetch('/showcase-prospects/showcase-leads.json');
+  if (!res.ok) return [];
+  const data = await res.json();
+  const rank = p => ({ hot: 0, active: 1, house: 2 }[String(p).toLowerCase()] ?? 3);
+  return (data.leads || []).slice().sort((a, b) => rank(a.priority) - rank(b.priority)).slice(0, 20);
+}
+
+async function fetchSatcomHistory() {
+  const res = await fetch('/data/briefing-satcom-history.json');
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data.history || []).slice(0, 12);
+}
+
+async function fetchSupabasePosts() {
+  const url = readVault('supabase_url', 'SUPABASE_URL').replace(/\/+$/, '');
+  const key = readVault('supabase_anon', 'SUPABASE_ANON_KEY');
+  if (!url || !key) return { drafts: 0, published: 0, week: 0, stories: [], sports: [] };
+  const api = new URL(url + '/rest/v1/public_posts');
+  api.searchParams.set('site_key', 'eq.registercall');
+  api.searchParams.set('select', 'title,headline,status,category,tags,published_at,created_at');
+  api.searchParams.set('limit', '200');
+  api.searchParams.set('order', 'published_at.desc.nullslast,created_at.desc');
+  const res = await fetch(api, { headers: { apikey: key, Authorization: 'Bearer ' + key } });
+  if (!res.ok) throw new Error('Supabase ' + res.status);
+  const posts = await res.json();
+  const weekStart = new Date(); weekStart.setDate(weekStart.getDate() - 7);
+  const titleOf = p => p.title || p.headline || 'Untitled';
+  const statusOf = p => String(p.status || '').toLowerCase();
+  const stampOf = p => p.published_at || p.created_at;
+  return {
+    drafts: posts.filter(p => statusOf(p).includes('draft')).length,
+    published: posts.filter(p => statusOf(p).includes('publish')).length,
+    week: posts.filter(p => stampOf(p) && new Date(stampOf(p)) >= weekStart).length,
+    stories: posts.filter(p => statusOf(p).includes('publish')).slice(0, 8).map(p => ({ title: titleOf(p), at: stampOf(p) })),
+    sports: posts.filter(p => /sport|athlete|game/i.test(`${p.category} ${p.tags} ${titleOf(p)}`)).slice(0, 6).map(p => titleOf(p)),
+  };
+}
+
+async function fetchSendyCount() {
+  const sendyUrl = readVault('sendy_url', 'SENDY_URL').replace(/\/+$/, '');
+  const apiKey = readVault('sendy_key', 'SENDY_API_KEY');
+  const ids = [...new Set([
+    readVault('sendy_list_id', 'SENDY_LIST_ID'),
+    readVault('sendy_list_paid', 'SENDY_LIST_PAID'),
+    readVault('sendy_list_editorial', 'SENDY_LIST_EDITORIAL'),
+    readVault('sendy_list_marketing', 'SENDY_LIST_MARKETING'),
+  ].filter(Boolean))];
+  if (!sendyUrl || !apiKey || !ids.length) return 0;
+  let total = 0;
+  for (const listId of ids) {
+    const body = new URLSearchParams({ api_key: apiKey, list_id: listId });
+    const res = await fetch(sendyUrl + '/api/subscribers/active-subscriber-count.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+    const raw = (await res.text()).trim().replace(/,/g, '');
+    const n = Number(raw);
+    if (Number.isFinite(n)) total += n;
+  }
+  return total;
+}
+
+function stubFinancial() {
+  return {
+    totalInvoiced: 0, totalPaid: 0, totalOutstanding: 0, totalOverdue: 0,
+    stripeChargesTotal: 0, stripeChargesCount: 0, stripeBalance: 0,
+    overdueCount: 0, note: 'Connect Invoice Manager for live financials — server sends full report Monday 8 AM.',
+  };
+}
+
+function buildCalendar(drafts) {
+  const add = n => { const d = new Date(); d.setDate(d.getDate() + n); return dateStr(d); };
+  return [
+    { date: add(0), title: 'WRC publication day (Wednesday)', source: 'Schedule' },
+    { date: add(2), title: 'Villager bulk mail edition prep', source: 'Schedule' },
+    { date: add(4), title: 'Mid-week PDF extraction window', source: 'SATCOM' },
+    drafts > 0 ? { date: add(1), title: drafts + ' draft(s) in queue', source: 'Supabase' } : null,
+    { date: add(6), title: 'Next Monday briefing (8:00 AM MT)', source: 'Automation' },
+  ].filter(Boolean);
+}
+
+function sectionHeader(t) {
+  return `<div style="font-size:11px;text-transform:uppercase;letter-spacing:0.22em;color:#c8a43a;border-bottom:1px solid #3a3a28;padding-bottom:6px;margin:0 0 12px;font-weight:700;">${t}</div>`;
+}
+
+function buildHTML(data) {
+  const f = data.financial;
+  const storyLi = data.stories.length
+    ? data.stories.map(s => `<li style="margin:0 0 6px;color:#ddd;font-size:13px;">${s.title}${s.at ? ` <span style="color:#666;font-size:11px;">(${dateStr(s.at)})</span>` : ''}</li>`).join('')
+    : '<li style="color:#666;">No stories loaded — configure Supabase in API Vault</li>';
+  const sportsLi = data.sports.length
+    ? data.sports.map(s => `<li style="margin:0 0 6px;color:#ddd;font-size:13px;">${s}</li>`).join('')
+    : '<li style="color:#666;">No sports stories this week</li>';
+  const prospectRows = data.prospects.map(p =>
+    `<tr><td style="padding:4px 8px 4px 0;color:#888;font-size:11px;">${p.rank}</td><td style="padding:4px 8px;color:#ddd;font-size:12px;">${p.brand}</td><td style="padding:4px 8px;color:#aaa;font-size:11px;">${p.priority}</td><td style="padding:4px 0;color:#999;font-size:11px;">${p.nextAction}</td></tr>`
+  ).join('');
+  const calRows = data.calendar.map(c =>
+    `<tr><td style="padding:4px 12px 4px 0;color:#888;font-size:12px;">${c.date}</td><td style="padding:4px 0;color:#ddd;font-size:12px;">${c.title} <span style="color:#555;">· ${c.source}</span></td></tr>`
+  ).join('');
+  const histRows = data.history.length
+    ? data.history.map(h => `<tr><td style="padding:4px 12px 4px 0;color:#666;font-size:11px;">${h.date}</td><td style="padding:4px 8px;color:#aaa;font-size:11px;">${h.surface}</td><td style="padding:4px 0;color:#ccc;font-size:12px;">${h.action} — ${h.detail}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:#666;font-size:12px;">No history loaded</td></tr>';
+
+  return `<!DOCTYPE html><html><head><meta charset="utf-8"></head><body style="background:#1a1a10;color:#e5e5e5;font-family:Georgia,serif;margin:0;padding:0;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;margin:0 auto;background:#111108;">
+<tr><td><table width="100%"><tr>
+<td style="background:linear-gradient(135deg,#0d1a0d,#1a0808);border-bottom:3px solid #c8a43a;padding:24px 28px;width:50%;"><div style="font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:#6a8a5a;">Central City · Since 1862</div><div style="font-size:20px;font-weight:700;color:#fff;">Weekly Register-Call</div></td>
+<td style="background:linear-gradient(135deg,#1a0808,#0d0d0d);border-bottom:3px solid #c8a43a;padding:24px 28px;width:50%;text-align:right;"><div style="font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:#8b6060;">Bringing Cities Together</div><div style="font-size:20px;font-weight:700;color:#fff;">The Villager</div></td>
+</tr></table></td></tr>
+<tr><td style="height:4px;background:linear-gradient(90deg,#2a4a18,#c8a43a,#8b1a1a,#1a2838);"></td></tr>
+<tr><td style="padding:20px 28px;"><div style="font-size:22px;font-weight:700;color:#fff;">Monday Executive Briefing</div><div style="font-size:12px;color:#888;margin-top:4px;">Week of ${data.weekLabel}</div><div style="font-size:11px;color:#666;margin-top:6px;font-style:italic;">Planning only — no unauthorized bulk sends.</div></td></tr>
+<tr><td style="padding:12px 28px;">${sectionHeader('Financial Results')}<table width="100%"><tr><td style="padding:6px 0;color:#aaa;">Invoiced</td><td style="text-align:right;color:#fff;font-weight:600;">${fmt(f.totalInvoiced)}</td></tr><tr><td style="padding:6px 0;color:#aaa;">Paid</td><td style="text-align:right;color:#4ade80;font-weight:600;">${fmt(f.totalPaid)}</td></tr><tr><td style="padding:6px 0;color:#aaa;">Overdue</td><td style="text-align:right;color:#f87171;font-weight:600;">${fmt(f.totalOverdue)}</td></tr><tr><td style="padding:6px 0;color:#aaa;">Stripe</td><td style="text-align:right;color:#fff;">${fmt(f.stripeChargesTotal)} (${f.stripeChargesCount} txns)</td></tr></table>${f.note ? `<p style="font-size:11px;color:#666;margin-top:8px;">${f.note}</p>` : ''}</td></tr>
+<tr><td style="padding:16px 28px;">${sectionHeader('Local News')}<ul style="margin:0;padding-left:18px;">${storyLi}</ul></td></tr>
+<tr><td style="padding:16px 28px;">${sectionHeader('Weekly Sports')}<ul style="margin:0;padding-left:18px;">${sportsLi}</ul></td></tr>
+<tr><td style="padding:16px 28px;">${sectionHeader('SEO & Audience')}<table width="100%"><tr><td style="padding:6px 0;color:#aaa;">Published (7d)</td><td style="text-align:right;color:#fff;">${data.editorial.week}</td></tr><tr><td style="padding:6px 0;color:#aaa;">Draft queue</td><td style="text-align:right;color:#fff;">${data.editorial.drafts}</td></tr><tr><td style="padding:6px 0;color:#aaa;">Subscribers</td><td style="text-align:right;color:#fff;">${fmtNum(data.subscribers)}</td></tr></table></td></tr>
+<tr><td style="padding:16px 28px;">${sectionHeader('Top 20 Prospects')}<table width="100%"><tr><td style="color:#666;font-size:10px;">#</td><td style="color:#666;font-size:10px;">Brand</td><td style="color:#666;font-size:10px;">Priority</td><td style="color:#666;font-size:10px;">Next</td></tr>${prospectRows}</table></td></tr>
+<tr><td style="padding:16px 28px;">${sectionHeader('Calendar')}<table width="100%">${calRows}</table></td></tr>
+<tr><td style="padding:16px 28px;">${sectionHeader('Bulk Email Plans')}<p style="font-size:12px;color:#ddd;">WRC issue newsletter · Villager bulk edition · Sponsor follow-ups</p><p style="font-size:11px;color:#8b6060;font-weight:600;margin-top:8px;">⚠ Planning only — operator approval required for Sendy sends.</p></td></tr>
+<tr><td style="padding:16px 28px 28px;">${sectionHeader('SATCOM History')}<table width="100%">${histRows}</table></td></tr>
+</table></body></html>`;
+}
+
+function renderProspects(prospects) {
+  const tbody = document.querySelector('#prospects-table tbody');
+  tbody.innerHTML = prospects.map(p =>
+    `<tr><td>${p.rank}</td><td>${p.brand}</td><td>${p.priority}</td><td>${p.nextAction}</td></tr>`
+  ).join('');
+}
+
+async function buildBriefing() {
+  const btn = document.getElementById('btn-build');
+  const status = document.getElementById('status');
+  btn.disabled = true;
+  status.textContent = 'Building briefing…';
+  try {
+    const [editorial, prospects, history, subscribers] = await Promise.all([
+      fetchSupabasePosts().catch(() => ({ drafts: 0, published: 0, week: 0, stories: [], sports: [] })),
+      fetchShowcaseLeads(),
+      fetchSatcomHistory(),
+      fetchSendyCount().catch(() => 0),
+    ]);
+    const financial = stubFinancial();
+    const payload = {
+      weekLabel: weekLabel(),
+      financial,
+      editorial,
+      subscribers,
+      stories: editorial.stories,
+      sports: editorial.sports,
+      prospects: prospects.map((p, i) => ({ rank: i + 1, brand: p.brand, priority: p.priority || '—', nextAction: p.nextAction || 'Review' })),
+      calendar: buildCalendar(editorial.drafts),
+      history,
+    };
+    latestHTML = buildHTML(payload);
+    document.getElementById('preview-frame').srcdoc = latestHTML;
+    document.getElementById('ov-invoiced').textContent = fmt(financial.totalInvoiced);
+    document.getElementById('ov-paid').textContent = fmt(financial.totalPaid);
+    document.getElementById('ov-overdue').textContent = fmt(financial.totalOverdue);
+    document.getElementById('ov-subs').textContent = fmtNum(subscribers);
+    document.getElementById('ov-pub').textContent = fmtNum(editorial.week);
+    document.getElementById('last-built').textContent = 'Built ' + new Date().toLocaleString();
+    renderProspects(payload.prospects);
+    status.textContent = 'Preview ready. Server automation sends live financials + email Monday 8 AM MT to bsween1@aol.com.';
+  } catch (err) {
+    status.textContent = 'Build error: ' + err.message;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function exportHTML() {
+  if (!latestHTML) { alert('Build preview first.'); return; }
+  const blob = new Blob([latestHTML], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'vmg-monday-briefing-' + new Date().toISOString().slice(0, 10) + '.html';
+  a.click();
+}
+
+function openInvoiceManagerReports() {
+  window.open(INVOICE_MANAGER + '/reports', '_blank');
+}
+
+buildBriefing();
+</script>
+</body>
+</html>

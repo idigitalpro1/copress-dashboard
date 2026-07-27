@@ -1532,21 +1532,21 @@ body.satcom-gated #satcom-entry-gate {
 <div id="satcom-entry-gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
   <div class="gate-panel">
     <div class="gate-eyebrow">SATCOM Operator Gate</div>
-    <h1 class="gate-title" id="gate-title">Microsoft 365 first.</h1>
-    <p class="gate-copy">SATCOM stays a dashboard, but deadline operations should start with a known operator session. Use Microsoft 365 login, then continue into Grok/Codex, Kanban, MCP status, and the local fallback links.</p>
+    <h1 class="gate-title" id="gate-title">Villager Google Workspace first.</h1>
+    <p class="gate-copy">SATCOM deadline operations start with a verified <strong>villagerpublishing.com</strong> Google Workspace session. Registered Workspace users can then continue into Cursor running Grok, Kanban, MCP status, and the local fallback links.</p>
     <div class="gate-status">
       <span class="gate-pill">Grok primary</span>
-      <span class="gate-pill">Codex fallback</span>
+      <span class="gate-pill">Hermes/Qwen fallback</span>
       <span class="gate-pill">MCP read-only</span>
       <span class="gate-pill warn">Hard stops still require approval</span>
     </div>
     <div class="gate-actions">
-      <button class="gate-btn primary" type="button" onclick="openM365Login()">365 Login</button>
+      <button class="gate-btn primary" type="button" onclick="openGoogleWorkspaceLogin()">Google Workspace Login</button>
       <button class="gate-btn" type="button" onclick="enterSatcomGate()">I’m signed in — enter SATCOM</button>
-      <button class="gate-btn" type="button" onclick="openM365AccountSwitch()">Switch Microsoft account</button>
-      <button class="gate-btn" type="button" onclick="copyM365Callback()">Copy callback</button>
+      <button class="gate-btn" type="button" onclick="openGoogleWorkspaceLogin()">Switch Google account</button>
+      <button class="gate-btn" type="button" onclick="copyGoogleCallback()">Copy Google callback</button>
     </div>
-    <p class="gate-note">This is a front-door operator gate for the static dashboard. The real Microsoft session and secrets stay on <code>admin.conews.press</code>; do not put credentials into SATCOM HTML.</p>
+    <p class="gate-note">This is a front-door launcher for the static dashboard. The real Google session, verified-domain check, and OAuth secrets stay on <code>admin.conews.press</code>; do not put credentials into SATCOM HTML.</p>
   </div>
 </div>
 
@@ -1664,6 +1664,11 @@ body.satcom-gated #satcom-entry-gate {
           <div class="nav-item" onclick="window.location.href='/newsletter'">
             <span class="nav-icon">📧</span>
             <span class="nav-label">Newsletter Studio</span>
+          </div>
+          <div class="nav-item" onclick="window.location.href='/briefing'">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Monday Briefing</span>
+            <span class="nav-badge new">MON</span>
           </div>
           <div class="nav-item" onclick="window.location.href='/portfolio'">
             <span class="nav-icon">🛰</span>
@@ -1900,7 +1905,7 @@ body.satcom-gated #satcom-entry-gate {
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('admin')">Open Admin HQ</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('grok')">Grok Operator</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openM365Login()">365 Login</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openGoogleWorkspaceLogin()">Google Login</button>
             </div>
           </div>
         </div>
@@ -1987,18 +1992,18 @@ body.satcom-gated #satcom-entry-gate {
           </div>
         </div>
 
-        <!-- Grok Developer -->
+        <!-- Cursor Running Grok -->
         <div class="module-card" data-target="grok" style="--card-color:var(--c-grok);--card-glow:rgba(163,230,53,.075);">
           <div class="card-dept">
-            <span class="card-dept-name">Grok Developer</span>
+            <span class="card-dept-name">Starting Lineup</span>
             <span class="card-led ok"></span>
           </div>
           <div class="card-body">
             <div class="card-icon-row">
               <div class="card-icon" style="color:#bef264;border-color:rgba(163,230,53,.25);background:rgba(163,230,53,.09);">x</div>
               <div>
-                <div class="card-title">Grok Developer</div>
-                <div class="card-subtitle">Cursor Grok Build · Open WebUI · Hermes local</div>
+                <div class="card-title">Cursor Running Grok</div>
+                <div class="card-subtitle">Primary · Hermes/Qwen fallback · Open WebUI backup</div>
               </div>
             </div>
             <div class="card-stats">
@@ -2534,6 +2539,7 @@ body.satcom-gated #satcom-entry-gate {
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); openInvoiceManager('/invoices/new')">New Invoice</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/briefing'">Monday Briefing</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('accounting')">Accounting</button>
               <button class="card-btn" onclick="event.stopPropagation(); openInvoiceManager('/assistant')">Assistant</button>
             </div>
@@ -2789,11 +2795,11 @@ body.satcom-gated #satcom-entry-gate {
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-grok);" href="#grok" onclick="event.preventDefault(); navTo('grok')">
           <div class="admin-launch-top">
-            <div class="admin-launch-title">Grok Developer</div>
-            <span class="admin-launch-tag">Operator Brain</span>
+            <div class="admin-launch-title">Cursor Running Grok</div>
+            <span class="admin-launch-tag">Primary · Start Here</span>
           </div>
-          <div class="admin-launch-desc">Primary SATCOM intelligence lane. Cursor/Grok implement; Codex verifies and handles approved integration/deploy work.</div>
-          <div class="admin-launch-url">Cursor · grok CLI · console.x.ai</div>
+          <div class="admin-launch-desc">Starting intelligence lane. Open the Codex workspace in Cursor with Grok; Codex verifies and handles approved integration/deploy work.</div>
+          <div class="admin-launch-url">Cursor + Grok · /Users/Ace/Codex</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
           <div class="admin-launch-top">
@@ -2827,10 +2833,26 @@ body.satcom-gated #satcom-entry-gate {
           <div class="admin-launch-desc">Client intake, upload notes, stationery, and onboarding handoff lane inside SATCOM.</div>
           <div class="admin-launch-url">SATCOM / Stationery</div>
         </a>
+        <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
+          <div class="admin-launch-top">
+            <div class="admin-launch-title">Villager Google Workspace</div>
+            <span class="admin-launch-tag">Primary Login</span>
+          </div>
+          <div class="admin-launch-desc">Primary SATCOM identity for verified registered users at villagerpublishing.com. OAuth secrets and domain enforcement stay server-side.</div>
+          <div class="admin-launch-status">
+            <span class="ok">Google primary</span>
+            <span class="ok">Verified domain</span>
+            <span class="warn">Secrets server-side</span>
+          </div>
+          <div class="admin-launch-actions">
+            <button class="admin-launch-action primary" type="button" onclick="openGoogleWorkspaceLogin()">Google Login</button>
+            <button class="admin-launch-action" type="button" onclick="copyGoogleCallback()">Copy Callback</button>
+          </div>
+        </div>
         <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-accounting);">
           <div class="admin-launch-top">
             <div class="admin-launch-title">Microsoft 365 Access</div>
-            <span class="admin-launch-tag">Optional Login</span>
+            <span class="admin-launch-tag">Fallback Login</span>
           </div>
           <div class="admin-launch-desc">Launch Microsoft 365 sign-in or tenant admin without locking SATCOM. Auth secrets and callbacks stay server-side.</div>
           <div class="admin-launch-status">
@@ -3333,10 +3355,28 @@ body.satcom-gated #satcom-entry-gate {
             <div class="admin-launch-desc">Publisher intake, file upload notes, and client onboarding handoff lane inside SATCOM.</div>
             <div class="admin-launch-url">SATCOM / Stationery</div>
           </a>
+          <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
+            <div class="admin-launch-top">
+              <div class="admin-launch-title">Villager Google Workspace</div>
+              <span class="admin-launch-tag">Primary Login</span>
+            </div>
+            <div class="admin-launch-desc">Use a verified registered villagerpublishing.com account for primary SATCOM access.</div>
+            <div class="admin-launch-status">
+              <span class="ok">Google primary</span>
+              <span class="ok">Domain restricted</span>
+              <span class="warn">Callback locked</span>
+              <span>admin.conews.press</span>
+              <span>/console/api/auth</span>
+            </div>
+            <div class="admin-launch-actions">
+              <button class="admin-launch-action primary" type="button" onclick="openGoogleWorkspaceLogin()">Google Login</button>
+              <button class="admin-launch-action" type="button" onclick="copyGoogleCallback()">Copy Callback</button>
+            </div>
+          </div>
           <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-accounting);">
             <div class="admin-launch-top">
               <div class="admin-launch-title">Microsoft 365 Access</div>
-              <span class="admin-launch-tag">Optional Login</span>
+              <span class="admin-launch-tag">Fallback Login</span>
             </div>
             <div class="admin-launch-desc">Launch Microsoft 365 sign-in, tenant admin, or a clean account-switch path when Microsoft reuses the wrong cached session.</div>
             <div class="admin-launch-status">
@@ -3490,17 +3530,18 @@ body.satcom-gated #satcom-entry-gate {
               </div>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-progress);">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Deadline Failover</div>
-                  <span class="admin-launch-tag">Primary / Fallback / Backup</span>
-                </div>
-                <div class="admin-launch-desc">Start in Grok/Cursor. If Grok is blocked for two minutes, move the same prompt to Hermes/Qwen on this Mac. Use Open WebUI as the model backup. Codex verifies approved integration and deployment work.</div>
+                <div class="admin-launch-title">Starting Lineup</div>
+                <span class="admin-launch-tag">Primary / Fallback / Backup</span>
+              </div>
+                <div class="admin-launch-desc">Start with Cursor running Grok. If Grok is blocked for two minutes, move the same prompt to Hermes/Qwen on this Mac. Use Open WebUI as the model backup. Codex verifies approved integration and deployment work.</div>
                 <div class="admin-launch-status">
-                  <span class="ok">Primary Grok</span>
+                  <span class="ok">Primary Cursor + Grok</span>
                   <span class="ok">Fallback Hermes</span>
                   <span class="warn">Backup WebUI</span>
                 </div>
                 <div class="admin-launch-actions">
-                  <button class="admin-launch-action primary" type="button" onclick="openHermesWebUi()">Hermes WebUI</button>
+                  <button class="admin-launch-action primary" type="button" onclick="openCursorWorkspace()">Open Cursor + Grok</button>
+                  <button class="admin-launch-action" type="button" onclick="openHermesWebUi()">Hermes WebUI</button>
                   <button class="admin-launch-action" type="button" onclick="copyDeadlineFailoverRunbook()">Copy Runbook</button>
                   <button class="admin-launch-action" type="button" onclick="openOpenWebUi()">Open WebUI</button>
                 </div>
@@ -4049,6 +4090,8 @@ function toast(msg) {
 
 const M365_ADMIN_USERS_URL = 'https://admin.microsoft.com/Adminportal/Home#/users';
 const M365_LOGIN_URL = 'https://admin.conews.press/console/api/auth/signin/azure-ad';
+const GOOGLE_WORKSPACE_LOGIN_URL = 'https://admin.conews.press/console/api/auth/signin/google';
+const GOOGLE_WORKSPACE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/google';
 const M365_ACCOUNT_SWITCH_URL =
   'https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=' +
   encodeURIComponent(M365_LOGIN_URL);
@@ -4223,8 +4266,8 @@ function deadlineFailoverRunbookText() {
     '',
     'Rule: if the active intelligence lane is blocked for more than 2 minutes during a press deadline, switch lanes. Do not spend the deadline repairing the lane.',
     '',
-    'Primary intelligence: Grok Developer (implementation + execution)',
-    '- Cursor Grok Build — sophisticated GUI: open -a Cursor /Users/Ace/Codex',
+    'Primary intelligence: Cursor running Grok (implementation + execution)',
+    '- Start here: open -a Cursor /Users/Ace/Codex',
     '- Terminal TUI: cd /Users/Ace/Codex && grok',
     '- NOT console.x.ai — that page is API keys/billing only, not a chat IDE',
     '',
@@ -4298,11 +4341,11 @@ function buildGrokOperatorHandoff(operatorRequest = '') {
     '',
     'Context:',
     '- SATCOM is dashboard + Planka/Admin Kanban + Hermes links + admin console.',
-    '- Grok/Cursor is the operator brain. Hermes is optional local briefs/prompt packets only.',
+    '- Cursor running Grok is the primary operator brain. Hermes/Qwen is the local fallback; Open WebUI is the backup.',
     '- Grok is the lead implementer for code, debugging, patches, repo edits, and tests.',
     '- Codex is the lead integrator for MCP checks, server handoffs, deploy hooks, and production verification after approval.',
     '- SATCOM is only the cockpit: priorities, links, Kanban, MCP status, copy handoff, and approval prompts.',
-    '- Deadline failover: primary Grok, fallback Codex, backup local Open WebUI/Qwen/Hermes links plus static docs/Kanban.',
+    '- Starting lineup: primary Cursor running Grok, fallback Hermes/Qwen, backup Open WebUI. Codex verifies approved integration and deployment work.',
     '- MCP is read-only/suggest by default: inspect, plan, route discovery, endpoint checks, docs reads, and Kanban handoff metadata.',
     '- MCP does not deploy, mutate DNS, touch billing, expose secrets, run destructive shell, perform live sends, or change M365 without explicit operator approval.',
     '- Execution happens only after approval through Grok/Cursor, Codex, or POST /api/v1/agent/run.',
@@ -4410,6 +4453,14 @@ function openM365Admin() {
 
 function openM365Login() {
   openExternal(M365_LOGIN_URL);
+}
+
+function openGoogleWorkspaceLogin() {
+  openExternal(GOOGLE_WORKSPACE_LOGIN_URL);
+}
+
+function copyGoogleCallback() {
+  copyTextWithToast(GOOGLE_WORKSPACE_CALLBACK_URL, 'Google Workspace callback copied.');
 }
 
 function enterSatcomGate() {
