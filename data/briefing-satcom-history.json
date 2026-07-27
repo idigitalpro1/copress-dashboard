@@ -1,0 +1,90 @@
+{
+  "updated": "2026-07-27",
+  "note": "Weekly SATCOM operator actions for Monday briefing history section. Append new rows after significant deployments or sends.",
+  "history": [
+    {
+      "date": "Jul 27, 2026",
+      "action": "Hot News lead desk and Aileen direct line",
+      "surface": "Publisher's Note email",
+      "detail": "Added a privacy-safe community-board lead workflow with same-day SMS/email planning and postmaster intake; replaced Aileen's synthetic portrait with a user-supplied image clearly labeled for placement only, kept Aileen identified as an AI service, and confirmed the receptionist host is configured for 877-357-8499"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Visitor guide and awards preview",
+      "surface": "Publisher's Note email",
+      "detail": "Added the supplied Colorado Editors' Choice cover as a coming-soon concept with planned coverage, revenue opportunities and prelaunch approval requirements"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Uploaded-art and AP-style redesign",
+      "surface": "Publisher's Note email",
+      "detail": "Rebuilt the report around the user's Colorado/WRC and Villager quill artwork, added the supplied renewal card, and introduced a responsive two-column AP-style news digest"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Recipient review and visual update",
+      "surface": "Publisher's Note email",
+      "detail": "Added reply-for-edits instruction, 20-minute execution statement, live TheVillager.Today homepage screenshot, and a clearly labeled AI-generated illustrative portrait of Aileen"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Publisher's Note attribution",
+      "surface": "Monday newsletter",
+      "detail": "Reframed the email as a Publisher's Note from the desk of Patrick Henry Sweeney, Associate Publisher, and removed leadership-briefing terminology"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Executive briefing clarity and QR status",
+      "surface": "Monday newsletter",
+      "detail": "Simplified financial and SEO sections for nontechnical leadership; added live subscriber totals, renewal-data caution, QR/postcard and printer workflow, Invoice Manager screenshot and links, plus Aileen's configured department-extension map and outside-call verification checklist"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Monday Briefing automation",
+      "surface": "Invoice Manager + SATCOM",
+      "detail": "Dated HTML executive newsletter posted at /briefings/2026-07-27.html and emailed to Gerri — live financials, current-issue editorial/calendar, 20 revenue priorities; subscriber and SEO sections marked unavailable pending access"
+    },
+    {
+      "date": "Jul 27, 2026",
+      "action": "Starting lineup update",
+      "surface": "SATCOM dashboard",
+      "detail": "Cursor/Grok primary, Hermes/Qwen fallback, Open WebUI backup"
+    },
+    {
+      "date": "Jun 30, 2026",
+      "action": "Idaho Springs CRM packet",
+      "surface": "Showcase prospects",
+      "detail": "Five generated campaign kits linked on prospects board"
+    },
+    {
+      "date": "Jun 21, 2026",
+      "action": "Progress monitor refresh",
+      "surface": "SATCOM PROV-508",
+      "detail": "Operator console cards, API Vault language, docs hub smoke paths"
+    },
+    {
+      "date": "Jun 16, 2026",
+      "action": "Newsletter Studio QA",
+      "surface": "/newsletter",
+      "detail": "Six-step builder validated; Sendy handoff remains operator-approved only"
+    },
+    {
+      "date": "Jun 9, 2026",
+      "action": "Henderson Mine press kit",
+      "surface": "Showcase prospects",
+      "detail": "Field press kit live on registercall.com with SATCOM handoff"
+    },
+    {
+      "date": "May 18, 2026",
+      "action": "Campaign kit generator",
+      "surface": "AI Studio",
+      "detail": "Stan's-style auto prospect board and generated-campaign-kits lane"
+    },
+    {
+      "date": "May 14, 2026",
+      "action": "Dual invoice manager lanes",
+      "surface": "Billing",
+      "detail": "Print WRC + digital RegisterCall invoice domains connected"
+    }
+  ]
+}

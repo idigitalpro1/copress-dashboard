@@ -1,0 +1,252 @@
+WEEKLY REGISTER-CALL / THE VILLAGER
+MONDAY PUBLISHER'S NOTE
+From the desk of: Patrick Henry Sweeney, Associate Publisher
+To Gerri
+Reporting period: July 20-26, 2026
+Generated: July 27, 2026 at 8:05 AM Mountain Time
+
+Please reply to this email with edits or corrections. Approved changes can be
+placed into execution within 20 minutes.
+
+PUBLISHER'S NOTE
+
+The newspaper has $29,733 outstanding and has collected $16,800. One $900
+overdue bill needs personal attention. No new customer billing or payments were
+recorded during the July 20-26 reporting period.
+
+Subscriber Management is now live: 840 active subscribers are recorded—302
+Weekly Register-Call and 538 Villager. The immediate task is to clean the
+renewal dates before sending reminders.
+
+FINANCIAL REPORT
+
+- Money still owed: $29,733
+- Money collected: $16,800
+- July billing: $13,960
+- Needs attention now: Main Street Central City, $900 overdue
+
+Staff note: the system also contains four pending legal notices and one small
+$495 draft for routine review. Two cancelled system tests were excluded.
+
+Live Invoice Manager:
+https://invoicemanager.weeklyregistercall.com/
+
+NEWS AND SPORTS
+
+TheVillager.Today homepage: https://www.thevillager.today/
+
+- Gilpin County commissioners are not presently advancing a countywide
+  sales-tax question, while county funding needs remain under discussion.
+- Rick Thomas Distillery's new American single-malt whiskey won a national
+  competition gold medal.
+- Continue fact-checked Central City coverage involving Mayor Jeremy Fey,
+  Rick's Cabaret, licensing, and conflict questions.
+- Follow Bigfoot Casino/Gregory Gulch development and Black Hawk public-safety
+  the publisher.
+- Publish a Gilpin County Fair results/photo follow-up.
+- Follow opening-week activity at Clear Creek Sports Shooting Park.
+- Prepare advance coverage for Boxing Central on August 29.
+
+SEO AND AUDIENCE
+
+Publisher's question: Are more people finding our stories, and which coverage
+brings them back?
+
+Every Monday we will track:
+- People finding us in Google: search appearances and visits from search.
+- Stories readers choose: most-read pages and subjects gaining interest.
+- Reader loyalty: returning visitors and newsletter clicks.
+- Weekly direction: up, down, or steady compared with the prior week.
+
+Starting point: no trusted baseline is connected yet. This week's task is to
+connect the approved website and Google reporting sources. Blank data means
+"not connected," never zero.
+
+SUBSCRIBERS AND RENEWALS
+
+Live subscriber scorecard:
+- Total records: 841.
+- Active subscribers: 840.
+- Weekly Register-Call: 302 active.
+- The Villager: 538 active.
+- Records with email: 376.
+- Check payments: 400 total records.
+- Renewals due in the next 30 days: 12.
+- Renewals due in days 31-60: 8.
+- Renewals due in days 61-90: 5.
+
+Renewal-date caution: 417 records marked active show an expiration date before
+today, and 302 active records have no expiration date. Staff should reconcile
+those records before treating them as lapsed or sending a renewal mailing.
+
+Source: live Subscriber Management dashboard, refreshed July 27, 2026 at
+8:24 AM Mountain Time. Names, addresses, phone numbers, and email addresses are
+intentionally excluded.
+
+SUBSCRIPTION QR CODE STATUS
+
+- QR code artwork: LIVE.
+- Public subscription page with visible plans and prices: LIVE.
+- QR placement in the printed renewal proof: READY.
+- Complete signup/payment test: FINAL TEST NEEDED. No real purchase was made
+  during this review.
+
+Every Monday we will track QR scans, form starts, completed subscriptions or
+renewals, and the percentage who complete after scanning. Printed pieces should
+use campaign labels so the publisher can see which mailing produced results.
+
+POSTCARD MAILING DECISION
+
+The publisher chooses:
+- One postcard design: Basic Renewal, Clean Renewal, or Freedom 250.
+- A regular-renewal or final-renewal message for the back.
+- The subscriber group and mailing quantity.
+
+How it goes to the printer:
+1. Export the current subscriber mailing list.
+2. Start from the 840 active records, reconcile past or missing expiration
+   dates, and remove duplicates, bad addresses, and people outside the group.
+3. Send the chosen front/back art and protected address file to the printer.
+4. The printer confirms size, bleed, trim, safe area, address block, barcode
+   clear zone, paper weight, postal indicia, presort, postage, and mail drop.
+5. The publisher approves the final printer proof before production.
+
+No shells or envelopes are needed. This is a two-sided self-mailing postcard.
+
+Readiness today: artwork choices, QR code, subscriber CSV handoff, and printer
+instructions are available. It is not yet released to print. The publisher must
+choose the version, the authorized subscriber list must be exported, and the
+printer must return a final postal/production proof. Current artwork is PNG;
+request the printer's required press-ready PDF specifications before release.
+
+Selection and handoff:
+https://subscribe.thevillager.today/villager-postcard-proofing/
+
+LIVE MANAGEMENT LINKS
+
+- Invoice Manager: https://invoicemanager.weeklyregistercall.com/
+- Subscriber Management: https://subs.weeklyregistercall.com/
+- Postcard Proofing:
+  https://subscribe.thevillager.today/villager-postcard-proofing/
+
+AI PHONE ASSISTANT - TEST-CALL STATUS
+
+Aileen is the publications' AI executive assistant. She is a virtual AI service,
+not a human employee.
+
+The portrait shown in the HTML draft is for placement only and does not depict
+Aileen.
+
+Configured direct line: 877-357-8499.
+
+The live receptionist host is configured with Aileen's direct Twilio line and
+these department extensions. A complete outside-call test is still required
+before every transfer is treated as proven.
+
+- Press 1: Patrick / Publisher, extension 17410.
+- Say "news tip" or press 2: Editorial, extension 17413.
+- Say "subscription" or press 3: Subscriptions, extension 17414.
+- Say "advertising" or press 4: Advertising and Sales, extension 17415.
+- Say "production" or press 5: Production, extension 17416.
+- Press 0 or make an unclear request: General Desk, extension 17460.
+
+Known test item: saying "Patrick" currently routes to the General Desk in the
+application logic, while pressing 1 routes to Patrick's extension. Correct and
+retest the spoken-name route before announcing it as live.
+
+Call Aileen to test: place one outside call to 877-357-8499 for each row.
+Confirm the greeting, speech recognition, keypad choice, correct extension
+ringing, answered-call audio, voicemail/fallback, and the call appearing in
+Aileen's Conversations log. Do not forward the line back to itself.
+
+HOT NEWS AND COMMUNITY LEAD DESK
+
+Community bulletin boards can supply timely story tips, event notices and
+local-business leads. Staff can review a submitted board photo and prepare a
+Hot News alert or personalized sales-outreach draft the same business day.
+
+- News tip or event brief for editorial review.
+- SMS alert only for people who consented to receive texts.
+- Custom outreach email tailored to the business or organization.
+- Duplicate, relevance and contact-source check before delivery.
+
+Send community-board photos and lead requests to:
+postmaster@weeklyregistercall.com
+
+Same-day delivery depends on a complete request, staff approval and lawful
+contact permission. Marketing texts must identify the sender and honor
+STOP/UNSUBSCRIBE requests.
+
+TOP REVENUE PRIORITIES
+
+1. Rick's Cabaret & Steakhouse
+2. Henderson Mine / Climax Molybdenum
+3. Rick's Gondola Project
+4. MTN Prime Steakhouse
+5. Indian Hot Springs
+6. Stan's Auto Sales
+7. 240 Deer Road, Evergreen
+8. Colorado Gambler
+9. Safeway Idaho Springs
+10. Maverick Casino
+11. CoPress Dashboard / SATCOM
+12. 240 Deer Road Template Demo
+13. Main Street Central City - $900 overdue
+14. HARD District - $7,800 open
+15. Sasquatch Casino - $5,500 open
+16. City of Black Hawk - Other - $5,200 open
+17. Bigfoot Casino - $2,400 open
+18. Keller/Williams Happy Trails - $2,000 open
+19. Squatch Fabrication & Welding - $1,600 open
+20. Clear Creek Realty - $675 open
+
+COMING SOON: COLORADO VISITOR GUIDE AND EDITORS' CHOICE AWARDS
+
+The Weekly Register-Call is developing a statewide visitor guide and Editors'
+Choice recognition package focused on Colorado places, people and experiences.
+
+Planned coverage:
+- Local news, business, outdoor recreation and sports.
+- Colorado destinations and community experiences.
+- Sponsorships, destination profiles, advertising packages and award-recipient
+  promotions.
+
+Before launch, approve the release date, geographic scope, nomination and
+judging rules, sponsorship disclosures, award categories and final cover
+wording. The artwork is a concept cover. Despite wording inside the concept,
+the package is coming soon and is not being represented as already released.
+
+UPCOMING CALENDAR
+
+- July 30: St. Paul's peach pickup; confirm next WRC production schedule.
+- August 1: Central City Freedom Festival, noon-6 PM.
+- Through August 2: Central City Opera summer festival.
+- August 2: Roy "Slug" Slaughenhoupt memorial, 1-4 PM.
+- August 3: next Monday briefing, 8 AM Mountain Time.
+- August 7: First Fridays at Gregory Plaza, 4-8 PM.
+- August 8: Second Saturday concert and Dostal Alley Dog Days benefit.
+- August 20: Gilpin County 2027 grant deadline, 5 PM.
+- August 22: Great Central City Beer Festival, 1-6 PM.
+- August 29: Boxing Central and C3 Fest.
+
+BULK-EMAIL PLAN
+
+Planning only; no bulk campaign was sent.
+
+- July 23 issue recap after subscriber-list access returns.
+- August 1-8 events digest after links and schedules are rechecked.
+- Renewal reminder after 30/60/90-day expiration export and suppression review.
+- Open advertiser accounts require personal reconciliation, not a bulk blast.
+
+RECOMMENDED ACTIONS
+
+1. Collect: personally follow up on the $900 overdue bill.
+2. Measure: restore subscriber access and connect approved website reports.
+3. Decide: select the postcard, renewal group, quantity, and printer.
+4. Verify: perform a safe final signup-path test and add QR campaign tracking.
+5. Publish: assign August 1-8 event coverage and confirm the next paper date.
+6. Sell: choose the first five prospects for personal review.
+
+Sources: Invoice Manager live dashboard/API, SATCOM showcase board and history,
+Weekly Register-Call July 23 issue, Subscriber Management authentication state,
+and active SATCOM browser configuration.
