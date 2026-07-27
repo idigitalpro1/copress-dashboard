@@ -22,7 +22,7 @@ Nest is the command center for copress.news — a Colorado mountain newspaper ne
 | `/` | `index.html` | ✅ Live | Main dashboard — sidebar nav, 10 cards, live data hooks, 5 module workbenches |
 | `/network` | `network.html` | ✅ Live | Network HQ — server IP, 6 property cards, 3CX phone system |
 | `/docs` | `docs.html` | ✅ Live | Documentation Hub — bulk import, NotebookLM queue, Notion sync |
-| `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — 6-step designer, 3 templates, Sendy API |
+| `/newsletter` | `newsletter.html` | ✅ Live | Newsletter Studio — WRC/Villager publication modes, 6-step designer, 3 templates, Sendy API |
 | `/apistore` | `apistore.html` | ✅ Live | API Vault — browser-local key reference and scoped one-key MCP handoff |
 | `/learn` | `learn.html` | ✅ Live | SATCO Academy — 72 flash cards, XP system, 9 levels, 18 badges |
 | `/linear` | `linear.html` | ✅ Live | Linear integration — live issues, cycles, projects, quick-create |
@@ -39,6 +39,19 @@ into a review-ready campaign bundle:
 
 Generated kits land under `generated-campaign-kits/<prospect-slug>-campaign-kit/`. Re-run with
 `--force` only when intentionally replacing a generated review bundle.
+
+## Newsletter publication modes
+
+Newsletter Studio keeps one six-step workflow for both publications:
+
+- `wrc` - Weekly Register-Call masthead, links, sender defaults, subscriber counts and export name.
+- `villager` - The Villager masthead, links, sender defaults, subscriber counts and export name.
+
+The selected publication is stored with `nl_state`. Campaign handoffs may include
+`"publication": "wrc"` or `"publication": "villager"` to open the marketing
+template in the correct brand lane. Sendy URL and API key remain browser-local;
+publication-specific from-name, from-email and reply-to values are stored
+separately so switching brands does not overwrite the other publication.
 
 ---
 
