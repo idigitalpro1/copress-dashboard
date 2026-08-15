@@ -437,6 +437,8 @@ const DEFAULT_APIS = [
 ];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
+const VAULT_STORAGE_KEY = 'api_vault';
+const VAULT_DEDUPE_BACKUP_KEY = 'api_vault_backup_before_dedupe_v1';
 let apis = [];
 let currentCat = 'all';
 
@@ -509,19 +511,64 @@ function normalizeCustomApi(saved) {
   };
 }
 
+function mergeCustomApis(savedCustomApis) {
+  const merged = new Map();
+  let hadDuplicates = false;
+  const requirementRank = { optional: 0, required: 1, hardwired: 2 };
+
+  savedCustomApis.map(normalizeCustomApi).forEach(api => {
+    const existing = merged.get(api.id);
+    if (!existing) {
+      merged.set(api.id, api);
+      return;
+    }
+
+    hadDuplicates = true;
+    const fields = new Map(existing.fields.map(field => [field.key, field]));
+    api.fields.forEach(field => fields.set(field.key, field));
+
+    const values = { ...(existing.values || {}) };
+    Object.entries(api.values || {}).forEach(([key, value]) => {
+      if ((value !== '' && value != null) || !(key in values)) values[key] = value;
+    });
+
+    const required = (requirementRank[api.required] || 0) >= (requirementRank[existing.required] || 0)
+      ? api.required
+      : existing.required;
+
+    merged.set(api.id, {
+      ...existing,
+      ...api,
+      fields: [...fields.values()],
+      required,
+      inject: [...new Set([...(existing.inject || []), ...(api.inject || [])])],
+      values,
+      custom: true,
+    });
+  });
+
+  return { apis: [...merged.values()], hadDuplicates };
+}
+
 function loadVault() {
   try {
-    const saved = JSON.parse(localStorage.getItem('api_vault') || '[]');
+    const saved = JSON.parse(localStorage.getItem(VAULT_STORAGE_KEY) || '[]');
+    if (!Array.isArray(saved)) throw new Error('Invalid API Vault data');
     // Merge defaults with saved keys
     apis = DEFAULT_APIS.map(def => {
       const saved_entry = saved.find(s => s.id === def.id) || {};
       return { ...def, values: saved_entry.values || {} };
     });
-    // Add any custom APIs not in defaults
-    saved
-      .filter(s => !DEFAULT_APIS.find(d => d.id === s.id))
-      .map(normalizeCustomApi)
-      .forEach(s => apis.push(s));
+    // Normalize and merge legacy custom entries that resolve to the same service.
+    const customResult = mergeCustomApis(saved.filter(s => !DEFAULT_APIS.find(d => d.id === s.id)));
+    if (customResult.hadDuplicates) {
+      try {
+        if (!localStorage.getItem(VAULT_DEDUPE_BACKUP_KEY)) {
+          localStorage.setItem(VAULT_DEDUPE_BACKUP_KEY, JSON.stringify(saved));
+        }
+      } catch { /* Continue with the in-memory repair if backup storage is unavailable. */ }
+    }
+    apis.push(...customResult.apis);
     saveVault();
   } catch { apis = DEFAULT_APIS.map(d => ({ ...d, values: {} })); }
 }
@@ -545,7 +592,7 @@ function saveVault() {
       custom: true,
     };
   });
-  localStorage.setItem('api_vault', JSON.stringify(data));
+  localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(data));
   updateStats();
 }
 
