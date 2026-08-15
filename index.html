@@ -596,6 +596,8 @@ body::before {
   display: flex; flex-direction: column;
   min-height: 230px;
   position: relative; overflow: hidden;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 230px;
   opacity: 0; transform: translateY(14px);
   animation: cardIn 380ms forwards;
 }
@@ -788,11 +790,14 @@ body::before {
   border-top: 3px solid var(--admin-color, var(--c-admin));
   background: rgba(13,21,32,.82);
   color: var(--ink); text-decoration: none;
-  transition: var(--transition);
+  contain: layout paint style;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 132px;
+  transition: transform 120ms ease, border-color 120ms ease;
 }
 .admin-launch:hover {
   border-color: var(--border-hi);
-  box-shadow: 0 0 0 1px rgba(217,70,239,.18), var(--shadow);
+  box-shadow: 0 0 0 1px rgba(217,70,239,.18);
   transform: translateY(-1px);
 }
 .admin-launch-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -832,7 +837,8 @@ body::before {
   border: 1px solid var(--border); background: transparent;
   color: var(--ink-muted); cursor: pointer; text-decoration: none;
   font-family: 'DM Sans', sans-serif; font-size: 10.5px;
-  padding: 5px 8px; line-height: 1.2; transition: var(--transition);
+  padding: 5px 8px; line-height: 1.2;
+  transition: color 120ms ease, border-color 120ms ease, background-color 120ms ease;
 }
 .admin-launch-action:hover {
   border-color: var(--admin-color, var(--c-admin));
@@ -1597,8 +1603,14 @@ body.satcom-gated #satcom-entry-gate {
 ::-webkit-scrollbar-thumb { background: rgba(200,168,75,.15); border-radius: 99px; }
 
 /* ── Press Atmosphere ───────────────────────────────────────────── */
-#press-atm { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-#gears-svg { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .13; }
+#press-atm {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  contain: layout paint style;
+}
+#gears-svg {
+  position: absolute; inset: 0; width: 100%; height: 100%; opacity: .13;
+  transform: translateZ(0);
+}
 
 @keyframes gear-cw-slow  { to { transform: rotate(360deg); } }
 @keyframes gear-ccw-slow { to { transform: rotate(-360deg); } }
@@ -1608,24 +1620,51 @@ body.satcom-gated #satcom-entry-gate {
 .gear-c { animation: gear-cw-slow  28s linear infinite; transform-origin: 1405px 302px; }
 .gear-d { animation: gear-ccw-slow 58s linear infinite; transform-origin: 1340px 820px; }
 .gear-e { animation: gear-cw-slow  22s linear infinite; transform-origin: 80px 140px; }
+.gear-a, .gear-b, .gear-c, .gear-d, .gear-e { will-change: transform; }
 
 #spotlight {
   position: absolute; width: 1000px; height: 1000px; border-radius: 50%;
   background: radial-gradient(circle at center,
     rgba(200,168,75,.04) 0%, rgba(200,168,75,.02) 30%, transparent 68%);
   animation: spot-drift 55s ease-in-out infinite;
-  transform: translate(-50%, -50%);
-  top: 40%; left: 40%;
+  top: 0; left: 0;
+  transform: translate3d(calc(45vw - 50%), calc(35vh - 50%), 0);
+  will-change: transform;
 }
 @keyframes spot-drift {
-  0%   { top:35%;  left:45%; }
-  15%  { top:20%;  left:65%; }
-  30%  { top:50%;  left:75%; }
-  45%  { top:70%;  left:55%; }
-  60%  { top:60%;  left:30%; }
-  75%  { top:30%;  left:20%; }
-  90%  { top:15%;  left:40%; }
-  100% { top:35%;  left:45%; }
+  0%, 100% { transform: translate3d(calc(45vw - 50%), calc(35vh - 50%), 0); }
+  15%      { transform: translate3d(calc(65vw - 50%), calc(20vh - 50%), 0); }
+  30%      { transform: translate3d(calc(75vw - 50%), calc(50vh - 50%), 0); }
+  45%      { transform: translate3d(calc(55vw - 50%), calc(70vh - 50%), 0); }
+  60%      { transform: translate3d(calc(30vw - 50%), calc(60vh - 50%), 0); }
+  75%      { transform: translate3d(calc(20vw - 50%), calc(30vh - 50%), 0); }
+  90%      { transform: translate3d(calc(40vw - 50%), calc(15vh - 50%), 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gear-a, .gear-b, .gear-c, .gear-d, .gear-e,
+  #spotlight,
+  .module-placeholder-gear-hint {
+    animation: none;
+  }
+  .module-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .gear-a, .gear-b, .gear-c, .gear-d, .gear-e,
+  #spotlight,
+  .module-placeholder-gear-hint {
+    animation: none;
+  }
+  .module-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
 }
 </style>
 </head>
@@ -4155,13 +4194,6 @@ function navTo(section) {
   if (nav) {
     nav.classList.add('active');
     nav.closest('.nav-shelf')?.setAttribute('open', '');
-  }
-  if (section === 'dashboard') {
-    document.querySelectorAll('.module-card').forEach((c, i) => {
-      c.style.animation = 'none';
-      c.offsetHeight;
-      c.style.animation = `cardIn 380ms ${i * 60}ms forwards`;
-    });
   }
   if (section === 'brains') {
     renderHermesOperatorState();
