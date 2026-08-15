@@ -4,6 +4,12 @@
   "history": [
     {
       "date": "Aug 15, 2026",
+      "action": "Analytics and calendar connection pass",
+      "surface": "Register Call + SATCOM weekly history",
+      "detail": "Deployed the verified registercall.com GA4 tag to both Register Call domains, restored authenticated Google Calendar coverage, corrected the public-site freshness note, and documented the exact Search Console access and Sendy-vault blockers without inventing metrics or sending a campaign"
+    },
+    {
+      "date": "Aug 15, 2026",
       "action": "August 10 briefing repair",
       "surface": "SATCOM weekly history",
       "detail": "Restored Chrome control and completed the existing Invoice Manager sign-in; replaced stale July 27 baseline warnings with live August 15 financial and subscriber dashboard figures while leaving unconnected SEO and campaign metrics explicitly unavailable"

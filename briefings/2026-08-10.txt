@@ -4,11 +4,11 @@ From the desk of Patrick Henry Sweeney, Associate Publisher
 Reporting period: August 3-9, 2026
 Generated August 10, 2026 at 8:02 a.m. Mountain Time
 
-REPAIR COMPLETED AUGUST 15
-Chrome browser control and Invoice Manager sign-in now work. Financial and subscriber figures below were verified directly from the live dashboards. SEO and campaign analytics remain unavailable because their connectors are not configured.
+CONNECTION AND CORRECTION PASS COMPLETED AUGUST 15
+Invoice Manager, Subscriber Manager and Google Calendar were verified through the authenticated Chrome session. GA4 tracking is deployed on registercall.com and weeklyregistercall.com. Search Console access for weeklyregistercall.com is blocked for the signed-in Google account. Sendy reporting remains unavailable because the guarded credential vault has no configured Sendy keys. No figures are estimated.
 
 EXECUTIVE BRIEFING
-Receivables and collections are unchanged from July 27. The $900 Main Street Central City invoice remains overdue. Subscriber Management shows 841 total records, 840 active, 302 WRC and 539 Villager. Update the public WRC archive beyond July 23. No bulk campaign was sent.
+Receivables and collections are unchanged from July 27. The $900 Main Street Central City invoice remains overdue. Subscriber Management shows 841 total records, 840 active, 302 WRC and 539 Villager. The public site has an August 15 sponsored government story; the latest regular WRC issue remains July 23. GA4 data collection has started from a new deployment, so no historical analytics are claimed. No bulk campaign was sent.
 
 FINANCIAL - LIVE AUGUST 15
 Outstanding: $29,733.02. Collected: $16,800.40. August billing shown: $0. Four pending legal notices. Main Street Central City: $900 overdue. Totals are unchanged from July 27. The dashboard does not expose a reliable weekly created/paid count. The $495 draft remains a minor review item.
@@ -19,20 +19,22 @@ SUBSCRIBERS - LIVE AUGUST 15
 QR AND POSTCARD
 Prior status: QR artwork and public subscription page live; end-to-end purchase test still required. Choose Basic Renewal, Clean Renewal or Freedom 250, the recipient group and quantity. Send protected addresses and two-sided art directly to the printer for delivery; no shells or envelopes are required. Obtain final postal proof.
 
-SEO
-Unavailable. Begin tracking organic visits, impressions, clicks, CTR, average position, top pages, top queries, returning readers, newsletter clicks and week-over-week direction.
+SEO AND AUDIENCE
+GA4 connected August 15. The existing registercall.com property and measurement tag G-BH9154CE82 were verified, and the tag was deployed to both registercall.com and weeklyregistercall.com. Google Analytics showed no received site data before installation, so no historical traffic totals are claimed. Confirm Realtime collection and allow normal processing time before quoting visits, events, returning readers or trends.
+
+Search Console remains blocked: idigitalpro@gmail.com does not have access to the weeklyregistercall.com property. An authorized owner must grant access or complete ownership verification before impressions, clicks, CTR, position, top pages or queries can be reported.
 
 NEWS AND SPORTS
-Update the WRC archive beyond July 23. Follow Henderson Mine, Gregory Gulch resort and truck impacts, Central City government and gaming oversight. Confirm Clear Creek Sports Shooting Park follow-up, late-summer school schedules, and August 29 Boxing Central/C3 Fest coverage.
+The public site has an August 15 sponsored government story; publish the next regular issue after July 23. Follow Henderson Mine, Gregory Gulch resort and truck impacts, Central City government and gaming oversight. Confirm Clear Creek Sports Shooting Park follow-up, late-summer school schedules, and August 29 Boxing Central/C3 Fest coverage.
 
 TOP 20
 Rick's Cabaret; Henderson Mine; Rick's Gondola; MTN Prime; Indian Hot Springs; Stan's Auto; 240 Deer Road; Colorado Gambler; Safeway Idaho Springs; Maverick Casino; CoPress/SATCOM; 240 Deer Road Demo; Main Street Central City; HARD District; Sasquatch Casino; City of Black Hawk; Bigfoot Casino; Keller Williams Happy Trails; Squatch Fabrication; Clear Creek Realty. Rankings carried forward and must be refreshed before outreach.
 
-CALENDAR
-Aug. 13 Thursday publication cycle; Aug. 20 Gilpin grant deadline; Aug. 22 beer festival; Aug. 29 Boxing Central/C3 Fest. Visitor-guide and awards scope, rules, disclosures, categories and release date still need approval.
+CALENDAR - VERIFIED AUGUST 15
+The authenticated Google Calendar day view showed 13 events: 12 all-day items plus Rockies at Giants from 2:05-5:05 p.m. All-day items included the Leadville Trail 100 Mountain Bike Race, High Country Stampede Rodeo and Mountain Town Food Festival. Operating-note items still requiring event-detail verification: Aug. 20 Gilpin grant deadline, Aug. 22 beer festival and Aug. 29 Boxing Central/C3 Fest. Visitor-guide and awards scope, rules, disclosures, categories and release date still need approval.
 
 BULK EMAIL
-Planning only. Current-issue recap, events digest, renewal reminder after list cleanup, and individually approved advertiser outreach. No bulk campaign sent.
+Planning only. SATCOM contains the Sendy integration path, but its guarded API vault has no configured encrypted vault. Configure only the required Sendy URL, API key and approved list IDs through guarded storage; do not place credentials in briefing files or chat. Current-issue recap, events digest, renewal reminder after list cleanup and individually approved advertiser outreach remain plans. No bulk campaign sent.
 
 HOT NEWS
 Send board photos and leads to postmaster@weeklyregistercall.com. Require staff approval, consent, sender identification and STOP/UNSUBSCRIBE handling. Do not publish private details from photos.
@@ -41,4 +43,4 @@ AILEEN
 Aileen is a virtual AI executive assistant, not a human employee. Direct line: 877-357-8499. Outside-call transfer testing remains required. Any portrait is placement only and does not depict Aileen.
 
 CHANGES AND UNAVAILABLE SOURCES
-Browser access is repaired. Invoice and subscriber figures are current as of August 15. SEO/Search Console, campaign analytics and connected calendar data remain unavailable. The public WRC archive still ends July 23.
+Browser access, invoice data, subscriber data and Google Calendar coverage are restored. GA4 tracking is live on both Register Call domains, but reporting must wait for data collection. Search Console ownership/access and Sendy campaign metrics remain unavailable. The public site has an August 15 sponsored story; the latest regular issue remains July 23.
