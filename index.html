@@ -5334,14 +5334,25 @@ function publishEditorialDraft(index) {
   localStorage.setItem(EDITORIAL_PUBLISH_HANDOFF_STORE, JSON.stringify(handoff));
 
   const publishPackage = formatEditorialPublishHandoff(story);
-  if (navigator.clipboard?.writeText) {
-    navigator.clipboard.writeText(publishPackage)
-      .then(() => toast('Draft copied; Villager Admin opened for final publish'))
-      .catch(() => toast('Publish handoff saved locally; Villager Admin opened'));
-  } else {
-    toast('Publish handoff saved locally; Villager Admin opened');
+  const clipboardField = document.createElement('textarea');
+  clipboardField.value = publishPackage;
+  clipboardField.setAttribute('readonly', '');
+  clipboardField.style.position = 'fixed';
+  clipboardField.style.opacity = '0';
+  document.body.appendChild(clipboardField);
+  clipboardField.select();
+
+  let copied = false;
+  try {
+    copied = document.execCommand('copy');
+  } finally {
+    clipboardField.remove();
   }
+
   window.open(REGISTER_CALL_ADMIN_URL, '_blank', 'noopener,noreferrer');
+  toast(copied
+    ? 'Draft copied; Villager Admin opened for final publish'
+    : 'Publish handoff saved locally; copy unavailable');
 }
 
 function generateDailyStoryList() {
