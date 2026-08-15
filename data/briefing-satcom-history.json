@@ -1,7 +1,25 @@
 {
-  "updated": "2026-07-27",
+  "updated": "2026-08-15",
   "note": "Weekly SATCOM operator actions for Monday briefing history section. Append new rows after significant deployments or sends.",
   "history": [
+    {
+      "date": "Aug 15, 2026",
+      "action": "August 10 briefing repair",
+      "surface": "SATCOM weekly history",
+      "detail": "Restored Chrome control and completed the existing Invoice Manager sign-in; replaced stale July 27 baseline warnings with live August 15 financial and subscriber dashboard figures while leaving unconnected SEO and campaign metrics explicitly unavailable"
+    },
+    {
+      "date": "Aug 10, 2026",
+      "action": "Monday Publisher's Note",
+      "surface": "SATCOM weekly history",
+      "detail": "Prepared the dated HTML and plain-text briefing; protected Invoice Manager and Subscriber Manager figures remain an explicitly labeled July 27 baseline because Chrome blocked authenticated automation for a second consecutive Monday; public archive freshness, SEO connection, renewal cleanup, QR/postcard proofing and Aileen outside-call verification remain action items"
+    },
+    {
+      "date": "Aug 3, 2026",
+      "action": "Monday Publisher's Note",
+      "surface": "SATCOM weekly history",
+      "detail": "Prepared the dated HTML and plain-text briefing; protected Invoice Manager and Subscriber Manager figures were carried only as a clearly labeled July 27 baseline because Chrome blocked authenticated browser automation; public archive freshness, SEO connection, renewal cleanup, QR/postcard proofing and Aileen outside-call verification remain action items"
+    },
     {
       "date": "Jul 27, 2026",
       "action": "Hot News lead desk and Aileen direct line",
