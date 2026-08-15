@@ -1074,7 +1074,7 @@ body::before {
 .module-btn:hover { border-color: var(--gold); }
 .module-list { display: grid; gap: 8px; }
 .module-row {
-  display: grid; grid-template-columns: 92px 1fr auto; gap: 12px; align-items: center;
+  display: grid; grid-template-columns: 92px 1fr minmax(170px, auto); gap: 12px; align-items: center;
   padding: 10px 0; border-bottom: 1px solid rgba(200,168,75,.08);
 }
 .module-row:last-child { border-bottom: 0; }
@@ -1086,6 +1086,17 @@ body::before {
 .module-row-title { color: var(--ink); font-size: 13px; font-weight: 600; }
 .module-row-meta { color: var(--ink-muted); font-size: 11px; margin-top: 2px; }
 .module-row-state { color: var(--ink-muted); font: 700 10px 'DM Mono', monospace; text-transform: uppercase; }
+.module-row-actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.module-btn.publish-ready {
+  border-color: rgba(39,174,96,.45); color: #9be9b5; background: rgba(39,174,96,.08);
+}
+.module-btn.publish-ready:hover { border-color: #8de0a8; background: rgba(39,174,96,.14); }
+.module-btn:disabled {
+  cursor: not-allowed; opacity: .42; border-color: rgba(200,168,75,.1); color: var(--ink-muted);
+}
+.editorial-publish-note {
+  margin: 9px 0 0; color: var(--ink-muted); font: 10px/1.5 'DM Mono', monospace;
+}
 .invoice-upgrade-grid {
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px; margin-top: 10px;
@@ -1418,6 +1429,11 @@ body::before {
   .invoice-launch-grid, .invoice-upgrade-grid { grid-template-columns: 1fr; }
   .module-heading { align-items: flex-start; flex-direction: column; }
   .module-status { justify-content: flex-start; }
+}
+@media (max-width: 720px) {
+  .module-row { grid-template-columns: 1fr; gap: 8px; }
+  .module-tag { justify-self: start; }
+  .module-row-actions { justify-content: flex-start; }
 }
 
 /* ── Status bar ─────────────────────────────────────────────────── */
@@ -3219,6 +3235,7 @@ body.satcom-gated #satcom-entry-gate {
                   <button class="module-btn" onclick="generateDailyStoryList()">Daily List</button>
                   <button class="module-btn" onclick="toast('Weekly PDF packet queued for export')">Weekly PDF</button>
                 </div>
+                <p class="editorial-publish-note">Ready stories can be handed to the canonical Villager Admin for the authenticated final publish step. SATCOM never stores a Supabase service-role key.</p>
               </div>
               <div class="module-panel">
                 <h3>New Assignment</h3>
@@ -5079,6 +5096,8 @@ function loadLiveDashboardData() {
 
 // ── Module workbenches ─────────────────────────────────────────────
 const EDITORIAL_STORE = 'copress_editorial_queue_v1';
+const EDITORIAL_PUBLISH_HANDOFF_STORE = 'copress_editorial_publish_handoff_v1';
+const REGISTER_CALL_ADMIN_URL = 'https://www.thevillager.today/admin?site=register-call';
 const DIRECTORY_STORE = 'copress_directory_batch_v1';
 const DIRECTORY_SCAN_STORE = 'copress_directory_scan_meta_v1';
 let editorialRemoteStories = [];
@@ -5199,26 +5218,35 @@ function renderEditorialStories() {
   const stories = hasRemote ? editorialRemoteStories : readEditorialStories();
   const list = document.getElementById('editorial-story-list');
   if (!list) return;
-  list.innerHTML = stories.map((story, index) => `
-    <div class="module-row">
-      <span class="module-tag">${escapeHTML(story.town)}</span>
-      <div>
-        <div class="module-row-title">${escapeHTML(story.title)}</div>
-        <div class="module-row-meta">${escapeHTML(story.notes || 'No notes yet')}</div>
+  list.innerHTML = stories.map((story, index) => {
+    const isReady = String(story.status || '').toLowerCase() === 'ready';
+    const actions = hasRemote
+      ? `<button class="module-btn" onclick="openEditorialStory(${index})">${escapeHTML(story.url ? 'Open' : story.status)}</button>`
+      : `
+          <button class="module-btn" onclick="advanceEditorialStory(${index})" aria-label="Advance ${escapeHTML(story.title)} from ${escapeHTML(story.status)}">${escapeHTML(story.status)}</button>
+          <button class="module-btn ${isReady ? 'publish-ready' : ''}" onclick="publishEditorialDraft(${index})" ${isReady ? '' : 'disabled'} aria-label="Publish ${escapeHTML(story.title)}">Publish Draft</button>
+        `;
+    return `
+      <div class="module-row">
+        <span class="module-tag">${escapeHTML(story.town)}</span>
+        <div>
+          <div class="module-row-title">${escapeHTML(story.title)}</div>
+          <div class="module-row-meta">${escapeHTML(story.notes || 'No notes yet')}</div>
+        </div>
+        <div class="module-row-actions">${actions}</div>
       </div>
-      <button class="module-btn" onclick="${hasRemote ? `openEditorialStory(${index})` : `advanceEditorialStory(${index})`}">${escapeHTML(hasRemote && story.url ? 'Open' : story.status)}</button>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 	  const activeCount = hasRemote
 	    ? stories.filter(s => String(s.status || '').toLowerCase().includes('draft')).length
 	    : stories.filter(s => s.status !== 'Ready').length;
-  const readyCount = stories.filter(s => /ready|publish/.test(String(s.status || '').toLowerCase())).length;
 	  setText('editorial-module-drafts', activeCount);
 	  setText('editorial-module-source', hasRemote ? 'Supabase' : 'Local');
   setText('live-drafts', formatNumber(activeCount));
   setText('editorial-nav-count', formatNumber(activeCount));
   if (!hasRemote) {
-    setText('live-published', formatNumber(readyCount));
+    const publishedCount = stories.filter(s => String(s.status || '').toLowerCase().includes('publish')).length;
+    setText('live-published', formatNumber(publishedCount));
     setText('live-this-week', formatNumber(stories.length));
   }
   renderEditorialTownStatus(stories, hasRemote);
@@ -5262,6 +5290,69 @@ function openEditorialStory(index) {
     return;
   }
   toast('No public URL stored for this Supabase article');
+}
+
+function formatEditorialPublishHandoff(story) {
+  return [
+    'SATCOM EDITORIAL PUBLISH HANDOFF',
+    'Site: Register Call (registercall)',
+    `Town: ${story.town || 'Unassigned'}`,
+    `Status: ${story.status || 'Draft'}`,
+    `Headline: ${story.title || 'Untitled'}`,
+    '',
+    'Notes:',
+    story.notes || 'No notes provided.',
+    '',
+    'Final gate: verify facts, links, images, author, section, slug, and publication date in Villager Admin before publishing.',
+  ].join('\n');
+}
+
+function publishEditorialDraft(index) {
+  if (editorialRemoteStories.length) return;
+  const stories = readEditorialStories();
+  const story = stories[index];
+  if (!story) {
+    toast('Draft is no longer available');
+    return;
+  }
+  if (String(story.status || '').toLowerCase() !== 'ready') {
+    toast('Move the draft to Ready before publishing');
+    return;
+  }
+
+  const handoff = {
+    version: 1,
+    site_key: 'registercall',
+    created_at: new Date().toISOString(),
+    story: {
+      town: story.town || '',
+      title: story.title || '',
+      status: story.status || 'Ready',
+      notes: story.notes || '',
+    },
+  };
+  localStorage.setItem(EDITORIAL_PUBLISH_HANDOFF_STORE, JSON.stringify(handoff));
+
+  const publishPackage = formatEditorialPublishHandoff(story);
+  const clipboardField = document.createElement('textarea');
+  clipboardField.value = publishPackage;
+  clipboardField.setAttribute('readonly', '');
+  clipboardField.style.position = 'fixed';
+  clipboardField.style.opacity = '0';
+  document.body.appendChild(clipboardField);
+  clipboardField.select();
+
+  let copied = false;
+  try {
+    copied = document.execCommand('copy');
+  } finally {
+    clipboardField.remove();
+  }
+
+  window.open(REGISTER_CALL_ADMIN_URL, '_blank', 'noopener,noreferrer');
+  toast(copied
+    ? 'Draft copied; Villager Admin opened for final publish'
+    : 'Publish handoff saved locally; copy unavailable');
 }
 
 function generateDailyStoryList() {
