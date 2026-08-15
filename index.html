@@ -1917,10 +1917,10 @@ body.satcom-gated #satcom-entry-gate {
             </span>
             <span class="asset-health-code" data-asset-code>...</span>
           </a>
-          <a class="asset-health pending" data-asset-id="rollout" href="/rollout/update">
+          <a class="asset-health pending" data-asset-id="rollout" href="/data/conews-satcom-progress-monitor.json" target="_blank" rel="noopener">
             <span class="asset-dot"></span>
             <span class="asset-health-main">
-              <span class="asset-health-label">Rollout Update</span>
+              <span class="asset-health-label">Rollout Monitor</span>
               <span class="asset-health-detail" data-asset-detail>checking</span>
             </span>
             <span class="asset-health-code" data-asset-code>...</span>
@@ -2419,7 +2419,7 @@ body.satcom-gated #satcom-entry-gate {
               </div>
             </div>
             <div style="margin-top:12px;">
-              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/rollout/update'">Update Stage</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.open('/data/conews-satcom-progress-monitor.json', '_blank', 'noopener')">Open Monitor</button>
               <button class="card-btn" onclick="event.stopPropagation(); refreshRolloutTrackers()">Refresh</button>
             </div>
           </div>
@@ -4737,7 +4737,7 @@ const OWNED_ASSET_CHECKS = [
   { id: 'kanban', label: 'Kanban Ops', url: 'https://admin.conews.press/console/kanban', mode: 'link' },
   { id: 'hermes', label: 'Bridge (admin only)', url: '/console/api/hermes/health', mode: 'fetch' },
   { id: 'models', label: 'Model Route (admin)', url: '/console/api/hermes/models', mode: 'fetch' },
-  { id: 'rollout', label: 'Rollout Update', url: '/rollout/update', mode: 'fetch' },
+  { id: 'rollout', label: 'Rollout Monitor', url: '/data/conews-satcom-progress-monitor.json', mode: 'fetch' },
   { id: 'browser', label: 'Browser Harness', url: 'http://127.0.0.1:9119/sessions', mode: 'local' },
   { id: 'local-bridge', label: 'Local Bridge', url: 'http://127.0.0.1:8786/', mode: 'local' }
 ];
