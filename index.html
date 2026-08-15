@@ -65,6 +65,7 @@
   --c-csv:       #14b8a6;
   --c-ai-studio: #8ab4f8;
   --c-progress:  #38bdf8;
+  --c-events:    #f97316;
 }
 
 html, body {
@@ -657,6 +658,21 @@ body::before {
 .progress-text { font-size: 10px; color: var(--ink-muted); text-align: right; margin-top: 2px; }
 
 .card-rule { height: 1px; background: var(--rule); margin: 12px 0 10px; }
+
+.event-source-pulse {
+  display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
+  margin-top: 9px;
+}
+.event-source-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  border: 1px solid rgba(249,115,22,.16); background: rgba(249,115,22,.045);
+  color: var(--ink-muted); padding: 3px 6px; border-radius: 2px;
+  font: 700 8px 'DM Mono', monospace; letter-spacing: .6px; text-transform: uppercase;
+}
+.event-source-chip::before {
+  content: ''; width: 5px; height: 5px; border-radius: 50%; background: #f59e0b;
+}
+.event-source-chip.live::before { background: #27ae60; box-shadow: 0 0 6px rgba(39,174,96,.5); }
 
 /* Card actions */
 .card-actions { display: flex; flex-wrap: wrap; gap: 5px; padding-bottom: 14px; }
@@ -2071,6 +2087,52 @@ body.satcom-gated #satcom-entry-gate {
               <button class="card-btn primary" onclick="event.stopPropagation(); navTo('editorial')">+ New Story</button>
               <button class="card-btn" onclick="event.stopPropagation(); toast('Generating daily story list…')">Daily List</button>
               <button class="card-btn" onclick="event.stopPropagation(); toast('Exporting weekly PDF…')">Weekly PDF</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Events Network -->
+        <div class="module-card" onclick="window.open('https://registercall.com/#events','_blank','noopener,noreferrer')" style="cursor:pointer;--card-color:var(--c-events);--card-glow:rgba(249,115,22,.08);">
+          <div class="card-dept">
+            <span class="card-dept-name">Calendar Network</span>
+            <span class="card-led active" id="event-feed-led"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon" style="color:#fdba74;border-color:rgba(249,115,22,.26);background:rgba(249,115,22,.09);">◆</div>
+              <div>
+                <div class="card-title">Mountain Events</div>
+                <div class="card-subtitle">Print · Red Rocks · 8 activity feeds</div>
+              </div>
+            </div>
+            <div class="event-source-pulse" aria-label="Event source readiness">
+              <span class="event-source-chip live">Print</span>
+              <span class="event-source-chip live">Red Rocks</span>
+              <span class="event-source-chip">Activity x8</span>
+            </div>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Upcoming</span>
+                <span class="stat-value highlight" id="event-upcoming-count">—</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Next Date</span>
+                <span class="stat-value" id="event-next-date" style="font-size:11px;">Loading</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Live Sources</span>
+                <span class="stat-value ok" id="event-live-count">—</span>
+              </div>
+              <div class="card-stat">
+                <span class="stat-label">Staged</span>
+                <span class="stat-value" id="event-staged-count">—</span>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.open('https://registercall.com/#events','_blank','noopener,noreferrer')">Open Carousel</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('/data/conews-events.json','_blank','noopener,noreferrer')">Feed JSON</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/network'">Sources</button>
             </div>
           </div>
         </div>
@@ -6733,6 +6795,47 @@ function refreshRolloutTrackers() {
   })();
 }
 
+// ── Mountain Events ──────────────────────────────────────────────
+async function hydrateEventCard() {
+  const upcomingEl = document.getElementById('event-upcoming-count');
+  if (!upcomingEl) return;
+
+  const nextEl = document.getElementById('event-next-date');
+  const liveEl = document.getElementById('event-live-count');
+  const stagedEl = document.getElementById('event-staged-count');
+  const led = document.getElementById('event-feed-led');
+
+  try {
+    const response = await fetch('/data/conews-events.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`event feed HTTP ${response.status}`);
+    const payload = await response.json();
+    const now = Date.now();
+    const events = (Array.isArray(payload.events) ? payload.events : [])
+      .filter(item => Number.isFinite(Date.parse(item.start)) && Date.parse(item.end || item.start) >= now)
+      .sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+    const sources = Array.isArray(payload.sources) ? payload.sources : [];
+    const live = sources.filter(source => source.status === 'live').length;
+    const staged = sources.filter(source => source.status === 'staged').length;
+
+    upcomingEl.textContent = String(events.length);
+    if (liveEl) liveEl.textContent = String(live);
+    if (stagedEl) stagedEl.textContent = String(staged);
+    if (nextEl) {
+      nextEl.textContent = events.length
+        ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'America/Denver' }).format(new Date(events[0].start))
+        : 'No dates';
+    }
+    if (led) led.className = events.length ? 'card-led ok' : 'card-led warn';
+  } catch (error) {
+    upcomingEl.textContent = '—';
+    if (nextEl) nextEl.textContent = 'Feed offline';
+    if (liveEl) liveEl.textContent = '—';
+    if (stagedEl) stagedEl.textContent = '—';
+    if (led) led.className = 'card-led warn';
+    console.warn('Mountain event feed unavailable:', error);
+  }
+}
+
 // ── Init ───────────────────────────────────────────────────────────
 loadHermesOperatorState();
 loadHermesChatMessages();
@@ -6744,6 +6847,7 @@ loadKeys();
 updateStatusDots();
 refreshOwnedAssets();
 refreshRolloutTrackers();
+hydrateEventCard();
 
 loadLiveDashboardData();
 renderEditorialStories();

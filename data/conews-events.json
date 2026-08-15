@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "title": "Register-Call Mountain Events",
+    "generatedAt": "2026-08-15T02:30:00-06:00",
+    "timezone": "America/Denver",
+    "publicTarget": "https://registercall.com/#events",
+    "disclosure": "Published cards require a verified date and source link. Activity feeds without approved events remain visible as staged sources."
+  },
+  "sources": [
+    { "id": "print", "label": "WRC Print Desk", "group": "print", "status": "live", "url": "https://weeklyregistercall.com/" },
+    { "id": "redrocks", "label": "Red Rocks", "group": "redrocks", "status": "live", "url": "https://www.redrocksonline.com/events/" },
+    { "id": "dining", "label": "Dining", "group": "activity", "status": "live", "url": "https://5280.menu/" },
+    { "id": "gaming", "label": "Gaming", "group": "activity", "status": "live", "url": "https://gambling.conews.press/" },
+    { "id": "rafting", "label": "Rafting", "group": "activity", "status": "staged", "url": "https://idahosprings.conews.press/" },
+    { "id": "hiking", "label": "Hiking", "group": "activity", "status": "staged", "url": "https://5280.conews.press/hiking" },
+    { "id": "biking", "label": "Biking", "group": "activity", "status": "staged", "url": "https://5280.conews.press/biking" },
+    { "id": "skiing", "label": "Skiing", "group": "activity", "status": "staged", "url": "https://5280.conews.press/skiing" },
+    { "id": "lodging", "label": "Lodging", "group": "activity", "status": "staged", "url": "https://5280.conews.press/lodging" },
+    { "id": "transportation", "label": "Transportation", "group": "activity", "status": "staged", "url": "https://5280.conews.press/transportation" }
+  ],
+  "events": [
+    { "id": "lcd-soundsystem-red-rocks-2026-08-16", "title": "LCD Soundsystem", "start": "2026-08-16T19:00:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "LCD Soundsystem with Feist and Victoryland.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/", "category": "Concert" },
+    { "id": "train-red-rocks-2026-08-17", "title": "Train: Drops of Jupiter", "start": "2026-08-17T18:45:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "The 25 Years in the Atmosphere tour with Barenaked Ladies and Matt Nathanson.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/", "category": "Concert" },
+    { "id": "nathaniel-rateliff-red-rocks-2026-08-18", "title": "Nathaniel Rateliff with the Colorado Symphony", "start": "2026-08-18T20:00:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "A Colorado Symphony performance with Lucius.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/", "category": "Concert" },
+    { "id": "illenium-red-rocks-2026-08-19", "title": "ILLENIUM", "start": "2026-08-19T18:00:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "A midweek Red Rocks headline performance.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/illenium-1511360/", "category": "Concert" },
+    { "id": "tori-amos-red-rocks-2026-08-20", "title": "Tori Amos: In Times of Dragons Tour", "start": "2026-08-20T20:00:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "Tori Amos with Bartees Strange.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/", "category": "Concert" },
+    { "id": "grupo-frontera-red-rocks-2026-08-21", "title": "Grupo Frontera", "start": "2026-08-21T19:30:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "The Triste Pero Bien C*bron Tour.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/", "category": "Concert" },
+    { "id": "central-city-beer-fest-2026-08-22", "title": "The Great Central City Beer Fest", "start": "2026-08-22T13:00:00-06:00", "end": "2026-08-22T18:00:00-06:00", "location": "Historic Main Street", "city": "Central City", "summary": "Colorado breweries, brewmasters, live music and a Main Street tasting festival.", "sourceId": "print", "sourceUrl": "https://www.centralcitybeerfest.com/", "category": "Festival", "activityKey": "dining" },
+    { "id": "reggae-on-the-rocks-2026-08-22", "title": "Reggae on the Rocks", "start": "2026-08-22T15:00:00-06:00", "location": "Red Rocks Amphitheatre", "city": "Morrison", "summary": "Rebelution, MAOLI, Skip Marley, Third World, Etana and Judge Roughneck.", "sourceId": "redrocks", "sourceUrl": "https://www.redrocksonline.com/events/", "category": "Concert" },
+    { "id": "hit-squad-back-to-school-2026-08-29", "title": "Hit Squad's Back to School Show", "start": "2026-08-29T06:00:00-06:00", "end": "2026-08-29T21:00:00-06:00", "location": "121 Main Street", "city": "Central City", "summary": "A USA Boxing-sanctioned community show hosted by Hit Squad Boxing Club.", "sourceId": "print", "sourceUrl": "https://usaboxing.webpoint.us/wp15/Events2/ViewEvt-wp.php?EventID=722675&Tab=Event+Details", "category": "Sports" }
+  ]
+}
