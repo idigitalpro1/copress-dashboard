@@ -1,0 +1,22 @@
+{
+  "version": "2026-08-22",
+  "clients": [
+    {
+      "id": "thevillager-today",
+      "business_name": "TheVillager.today",
+      "town": "greater-metro-denver",
+      "category": "news-publisher",
+      "short_description": "The Villager's digital home for community news across south metro Denver and Colorado.",
+      "website": "https://www.thevillager.today",
+      "verification_status": "verified",
+      "tier": "partner",
+      "hero_image": "https://daxjmynehyuytracntne.supabase.co/storage/v1/object/public/editorial-media/publishers-hall-of-fame/hero.jpg",
+      "tracking_slug": "thevillager-publisher-inducted",
+      "client_list_host": "shoploacal.copress.news",
+      "campaign_kit": "https://satcom.5280.menu/thevillager-publisher-inducted-campaign-kit/",
+      "campaign": "Publisher Inducted",
+      "status": "active",
+      "last_verified_at": "2026-08-22"
+    }
+  ]
+}

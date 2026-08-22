@@ -1,0 +1,143 @@
+{
+  "campaign": "TheVillager.today \u2014 Publisher Inducted",
+  "brand": "TheVillager.today",
+  "ecosystem": "SATCOM \u00b7 ShopLocalOnline Campaign Kit",
+  "tagline": "Publisher Inducted into the Colorado Journalism Hall of Fame",
+  "positioning": "A publication-ready campaign celebrating Gerri and Bob Sweeney's induction and The Villager's decades of community journalism.",
+  "customerKitName": "Publisher Inducted artwork and article campaign",
+  "customerBlurb": "Approved archival artwork, live feature-story links, newsletter and social placements, and production handoff items for TheVillager.today.",
+  "colors": {
+    "bg": "#101f3a",
+    "panel": "#182b4d",
+    "accent": "#b18a33",
+    "accent2": "#d7bf78",
+    "text": "#fffdf7",
+    "mute": "#c9c2b2"
+  },
+  "fonts": {
+    "display": "Libre Baskerville",
+    "body": "Source Sans 3"
+  },
+  "assets": {
+    "hero": "https://daxjmynehyuytracntne.supabase.co/storage/v1/object/public/editorial-media/publishers-hall-of-fame/hero.jpg",
+    "publisherColleague": "https://daxjmynehyuytracntne.supabase.co/storage/v1/object/public/editorial-media/publishers-hall-of-fame/publisher-colleague.jpg",
+    "familyPortrait": "https://daxjmynehyuytracntne.supabase.co/storage/v1/object/public/editorial-media/publishers-hall-of-fame/family-portrait.jpg",
+    "nationalConvention": "https://daxjmynehyuytracntne.supabase.co/storage/v1/object/public/editorial-media/publishers-hall-of-fame/national-convention.jpg",
+    "clintonArchive": "https://daxjmynehyuytracntne.supabase.co/storage/v1/object/public/editorial-media/publishers-hall-of-fame/clinton-archive.jpg"
+  },
+  "links": {
+    "campaignKitLanding": "https://satcom.5280.menu/thevillager-publisher-inducted-campaign-kit/",
+    "customerLink": "https://registercall.com/stories/colorado-journalism-hall-of-fame-honors-gerri-bob-sweeney"
+  },
+  "officialFacts": {
+    "market": "Greater Metro Denver / Colorado",
+    "propertyType": "News publisher campaign",
+    "subjectProperty": "Gerri and Bob Sweeney \u2014 Colorado Journalism Hall of Fame",
+    "address": "TheVillager.today",
+    "hours": "Campaign active"
+  },
+  "pricing": [
+    {
+      "id": "owned",
+      "name": "Owned editorial campaign",
+      "price": 0
+    },
+    {
+      "id": "homepage",
+      "name": "Homepage feature placement",
+      "price": 0
+    },
+    {
+      "id": "newsletter",
+      "name": "Newsletter feature block",
+      "price": 0
+    },
+    {
+      "id": "social",
+      "name": "Social announcement set",
+      "price": 0
+    },
+    {
+      "id": "archive",
+      "name": "Archival photo gallery",
+      "price": 0
+    }
+  ],
+  "kanban": {
+    "Published": [
+      "Register-Call feature story",
+      "Approved archival hero artwork"
+    ],
+    "Ready": [
+      "TheVillager.today placement",
+      "Newsletter feature",
+      "Social announcement"
+    ],
+    "Review": [
+      "Final captions and image credits",
+      "Hall of Fame dinner details"
+    ],
+    "Archive": [
+      "Preserve source photos",
+      "Record campaign links"
+    ]
+  },
+  "sections": [
+    {
+      "name": "Artwork",
+      "items": [
+        [
+          "Publisher Inducted hero",
+          "approved archival Reagan/Sweeney photograph"
+        ],
+        [
+          "Gallery",
+          "four supporting archival images"
+        ]
+      ]
+    },
+    {
+      "name": "Editorial",
+      "items": [
+        [
+          "Register-Call feature",
+          "live"
+        ],
+        [
+          "TheVillager.today placement",
+          "campaign-ready"
+        ]
+      ]
+    },
+    {
+      "name": "Distribution",
+      "items": [
+        [
+          "Newsletter",
+          "feature block"
+        ],
+        [
+          "Social",
+          "announcement set"
+        ],
+        [
+          "SATCOM",
+          "campaign-kit dashboard"
+        ]
+      ]
+    },
+    {
+      "name": "Handoff",
+      "items": [
+        [
+          "Manifest",
+          "machine-readable"
+        ],
+        [
+          "Portfolio record",
+          "live client and kit entries"
+        ]
+      ]
+    }
+  ]
+}
