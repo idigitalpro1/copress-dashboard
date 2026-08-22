@@ -1674,7 +1674,7 @@ body.satcom-gated #satcom-entry-gate {
   <div class="gate-panel">
     <div class="gate-eyebrow">SATCOM Operator Gate</div>
     <h1 class="gate-title" id="gate-title">Villager Google Workspace first.</h1>
-    <p class="gate-copy">SATCOM deadline operations start with a verified <strong>villagerpublishing.com</strong> Google Workspace session. Registered Workspace users can then continue into Cursor running Grok, Kanban, MCP status, and the local fallback links.</p>
+    <p class="gate-copy">SATCOM deadline operations start with a verified <strong>villagerpublishing.com</strong> Google Workspace session or the approved administrator account <strong>idigitalpro@gmail.com</strong>. Registered operators can then continue into Cursor running Grok, Kanban, MCP status, and the local fallback links.</p>
     <div class="gate-status">
       <span class="gate-pill">Grok primary</span>
       <span class="gate-pill">Hermes/Qwen fallback</span>
@@ -1683,11 +1683,12 @@ body.satcom-gated #satcom-entry-gate {
     </div>
     <div class="gate-actions">
       <button class="gate-btn primary" type="button" onclick="openGoogleWorkspaceLogin()">Google Workspace Login</button>
+      <button class="gate-btn primary" type="button" onclick="openIdigitalProAdminLogin()">Admin Login · idigitalpro@gmail.com</button>
       <button class="gate-btn" type="button" onclick="enterSatcomGate()">I’m signed in — enter SATCOM</button>
       <button class="gate-btn" type="button" onclick="openGoogleWorkspaceLogin()">Switch Google account</button>
       <button class="gate-btn" type="button" onclick="copyGoogleCallback()">Copy Google callback</button>
     </div>
-    <p class="gate-note">This is a front-door launcher for the static dashboard. The real Google session, verified-domain check, and OAuth secrets stay on <code>admin.conews.press</code>; do not put credentials into SATCOM HTML.</p>
+    <p class="gate-note">Approved identities: registered <code>villagerpublishing.com</code> Workspace users and <code>idigitalpro@gmail.com</code> as SATCOM administrator. The real Google session, authorization check, and OAuth secrets stay on <code>admin.conews.press</code>; do not put credentials into SATCOM HTML.</p>
   </div>
 </div>
 
@@ -2081,21 +2082,21 @@ body.satcom-gated #satcom-entry-gate {
               <div class="card-icon" style="color:#8ab4f8;border-color:rgba(66,133,244,.24);background:rgba(66,133,244,.1);">G</div>
               <div>
                 <div class="card-title">AI Studio Projects</div>
-                <div class="card-subtitle">Watermark · Flerish · MIDI · MyAppStore</div>
+                <div class="card-subtitle">Fleurish · Watermark CRM · PromptDJ · Live Intelligence · MyAppStore</div>
               </div>
             </div>
             <div class="card-stats">
               <div class="card-stat">
                 <span class="stat-label">Mapped</span>
-                <span class="stat-value ok" style="font-size:11px;">6 Apps</span>
+                <span class="stat-value ok" style="font-size:11px;">8 Apps</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Local Found</span>
                 <span class="stat-value highlight" style="font-size:11px;">3</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Needs Import</span>
-                <span class="stat-value" style="font-size:11px;">3</span>
+                <span class="stat-label">Under Testing</span>
+                <span class="stat-value" style="font-size:11px;">8</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Launch</span>
@@ -4479,6 +4480,7 @@ const M365_ADMIN_USERS_URL = 'https://admin.microsoft.com/Adminportal/Home#/user
 const M365_LOGIN_URL = 'https://admin.conews.press/console/api/auth/signin/azure-ad';
 const GOOGLE_WORKSPACE_LOGIN_URL = 'https://admin.conews.press/console/api/auth/signin/google';
 const GOOGLE_WORKSPACE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/google';
+const SATCOM_ADMIN_EMAIL = 'idigitalpro@gmail.com';
 const M365_ACCOUNT_SWITCH_URL =
   'https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=' +
   encodeURIComponent(M365_LOGIN_URL);
@@ -4844,6 +4846,11 @@ function openM365Login() {
 
 function openGoogleWorkspaceLogin() {
   openExternal(GOOGLE_WORKSPACE_LOGIN_URL);
+}
+
+function openIdigitalProAdminLogin() {
+  const separator = GOOGLE_WORKSPACE_LOGIN_URL.includes('?') ? '&' : '?';
+  openExternal(`${GOOGLE_WORKSPACE_LOGIN_URL}${separator}login_hint=${encodeURIComponent(SATCOM_ADMIN_EMAIL)}`);
 }
 
 function copyGoogleCallback() {
