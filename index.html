@@ -3389,6 +3389,28 @@ body.satcom-gated #satcom-entry-gate {
             </div>
             <div class="module-grid-2">
               <div class="module-panel">
+                <h3>1. Shared Intake Engine</h3>
+                <p>Start every campaign here. Import a prospect, business, article, or existing package, then normalize it into the same Shop Local and SATCOM campaign workflow.</p>
+                <div class="module-form">
+                  <div class="module-field"><label>Intake source</label><select id="marketing-intake-type" onchange="refreshCampaignIntakeFields()"><option value="url">From URL</option><option value="google">From Google</option><option value="csv">From CSV</option><option value="upload">Upload JSON / HTML / ZIP</option><option value="shoplocal">From Shop Local</option><option value="manual">Manual entry</option></select></div>
+                  <div class="module-field" id="marketing-intake-url-wrap"><label>Source URL</label><input id="marketing-intake-url" type="url" placeholder="https://business.example.com or published article URL"></div>
+                  <div class="module-field" id="marketing-intake-google-wrap" hidden><label>Google source</label><input id="marketing-intake-google" placeholder="Google Drive, Docs, Sheets, Maps, or Business Profile URL"></div>
+                  <div class="module-field" id="marketing-intake-file-wrap" hidden><label>Upload source file</label><input id="marketing-intake-file" type="file" accept=".csv,.json,.html,.htm,.zip,text/csv,application/json,text/html,application/zip"></div>
+                  <div class="module-field" id="marketing-intake-shoplocal-wrap" hidden><label>Shop Local record</label><input id="marketing-intake-shoplocal" placeholder="Business name, listing ID, town, or category"></div>
+                  <div class="module-field" id="marketing-intake-manual-wrap" hidden><label>Manual entry</label><textarea id="marketing-intake-manual" placeholder="Business, contact, offer, audience, deadline, town, links, notes..."></textarea></div>
+                  <div class="module-form two">
+                    <div class="module-field"><label>Intake source tag</label><input id="marketing-intake-source" value="campaign-kit"></div>
+                    <div class="module-field"><label>Default outreach</label><select id="marketing-intake-kit"><option>Editorial Outreach</option><option>NDA Request</option><option>Information Request</option><option>Issue Email</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Sponsor Prospect</option></select></div>
+                  </div>
+                </div>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="stageCampaignIntake()">Stage Intake</button>
+                  <button class="module-btn" onclick="openSharedIntakeFromMarketing()">Open Shop Local Intake</button>
+                  <button class="module-btn" onclick="resetCampaignIntake()">Reset</button>
+                </div>
+                <div class="output-box" id="campaign-intake-output">Choose an intake source to begin.</div>
+              </div>
+              <div class="module-panel">
                 <h3>Campaign Brief</h3>
                 <div class="module-form">
                   <div class="module-field"><label>Business / offer</label><input id="campaign-title" placeholder="Mother's Day brunch at..."></div>
@@ -3408,15 +3430,22 @@ body.satcom-gated #satcom-entry-gate {
                 </div>
               </div>
               <div class="module-panel">
-                <h3>Shared Intake Engine</h3>
-                <p>Use the same intake engine as Shop Local for campaign lists, civic scans, resident/business outreach, and onboarding. Records get a source tag and dedupe against the main directory index.</p>
-                <div class="module-form">
-                  <div class="module-field"><label>Intake source tag</label><input id="marketing-intake-source" value="marketing-hub"></div>
-                  <div class="module-field"><label>Default kit</label><select id="marketing-intake-kit"><option>Editorial Outreach</option><option>You're Invited</option><option>We'd Like Your Opinion</option><option>Claim Your Listing</option><option>Shop Local Welcome</option><option>Sponsor Prospect</option></select></div>
+                <h3>Toolkit Output</h3>
+                <p>Select the complete showcase package or only the deliverables needed for this campaign.</p>
+                <div class="module-form two" id="campaign-toolkit-options">
+                  <label><input type="checkbox" name="campaign-toolkit" value="Showcase landing page" checked> Showcase landing page</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Display and web banners" checked> Display and web banners</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Logo and brand lockup" checked> Logo and brand lockup</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Social media post pack" checked> Social media posts</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Editorial story and outreach" checked> Editorial</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Newsletter feature block" checked> Newsletter feature</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Media kit placement" checked> Media kit placement</label>
+                  <label><input type="checkbox" name="campaign-toolkit" value="Stationery and letter package" checked> Stationery package</label>
                 </div>
                 <div class="module-actions">
-                  <button class="module-btn primary" onclick="openSharedIntakeFromMarketing()">Open Intake</button>
-                  <button class="module-btn" onclick="toast('Shared engine: one dedupe path for Shop Local, Marketing, Editorial outreach, and civic scans')">Explain</button>
+                  <button class="module-btn primary" onclick="setCampaignToolkit(true)">Select Full Toolkit</button>
+                  <button class="module-btn" onclick="setCampaignToolkit(false)">Clear</button>
+                  <button class="module-btn" onclick="window.location.href='/showcase-prospects/'">Showcase Examples</button>
                 </div>
               </div>
               <div class="module-panel">
@@ -3425,6 +3454,18 @@ body.satcom-gated #satcom-entry-gate {
                 <div class="module-actions">
                   <button class="module-btn primary" id="campaign-newsletter-link" onclick="sendCampaignToNewsletter()" disabled>Send to Newsletter Studio</button>
                   <button class="module-btn" onclick="window.location.href='/newsletter'">Open Newsletter</button>
+                  <button class="module-btn" onclick="window.location.href='/media-kit-5280-2016-2017.html'">Open Media Kit</button>
+                  <button class="module-btn" onclick="navTo('stationery')">Open Stationery</button>
+                </div>
+                <h3 style="margin-top:18px;">Editorial Outreach</h3>
+                <p>Open a prepared email draft from the latest campaign handoff. Review the recipient and content before sending.</p>
+                <div class="module-actions">
+                  <button class="module-btn primary" onclick="openCampaignOutreachDraft('nda')">Send NDA Draft</button>
+                  <button class="module-btn" onclick="openCampaignOutreachDraft('request')">Send Information Request</button>
+                  <button class="module-btn" onclick="openCampaignOutreachDraft('issue')">Send Issue Email</button>
+                  <button class="module-btn" onclick="openCampaignOutreachDraft('newsletter')">Newsletter Outreach</button>
+                  <button class="module-btn" onclick="openCampaignOutreachDraft('media-kit')">Media Kit Outreach</button>
+                  <button class="module-btn" onclick="openCampaignOutreachDraft('stationery')">Stationery Outreach</button>
                 </div>
               </div>
             </div>
@@ -5813,6 +5854,79 @@ function sendDirectoryOnboarding() {
   toast('Onboarding handoff queued locally');
 }
 
+const CAMPAIGN_INTAKE_STORE = 'copress_campaign_intake_v1';
+
+function refreshCampaignIntakeFields() {
+  const type = document.getElementById('marketing-intake-type')?.value || 'url';
+  ['url', 'google', 'file', 'shoplocal', 'manual'].forEach(name => {
+    const wrap = document.getElementById(`marketing-intake-${name}-wrap`);
+    if (!wrap) return;
+    wrap.hidden = name === 'file' ? !['csv', 'upload'].includes(type) : name !== type;
+  });
+}
+
+function readCampaignIntake() {
+  try {
+    return JSON.parse(localStorage.getItem(CAMPAIGN_INTAKE_STORE) || 'null');
+  } catch {
+    return null;
+  }
+}
+
+function stageCampaignIntake() {
+  const type = document.getElementById('marketing-intake-type')?.value || 'url';
+  const file = document.getElementById('marketing-intake-file')?.files?.[0];
+  const values = {
+    url: document.getElementById('marketing-intake-url')?.value.trim(),
+    google: document.getElementById('marketing-intake-google')?.value.trim(),
+    csv: file?.name,
+    upload: file?.name,
+    shoplocal: document.getElementById('marketing-intake-shoplocal')?.value.trim(),
+    manual: document.getElementById('marketing-intake-manual')?.value.trim(),
+  };
+  const value = values[type] || '';
+  if (!value) {
+    toast('Add the selected intake source first');
+    return;
+  }
+  const intake = {
+    type,
+    value,
+    fileType: file?.type || '',
+    fileSize: file?.size || 0,
+    sourceTag: document.getElementById('marketing-intake-source')?.value.trim() || 'campaign-kit',
+    outreach: document.getElementById('marketing-intake-kit')?.value || 'Editorial Outreach',
+    status: 'staged',
+    createdAt: new Date().toISOString(),
+  };
+  localStorage.setItem(CAMPAIGN_INTAKE_STORE, JSON.stringify(intake));
+  document.getElementById('campaign-intake-output').textContent =
+    `Staged ${type.toUpperCase()} intake\nSource: ${value}\nTag: ${intake.sourceTag}\nDefault outreach: ${intake.outreach}`;
+  toast('Campaign intake staged');
+}
+
+function resetCampaignIntake() {
+  localStorage.removeItem(CAMPAIGN_INTAKE_STORE);
+  ['marketing-intake-url', 'marketing-intake-google', 'marketing-intake-shoplocal', 'marketing-intake-manual'].forEach(id => {
+    const field = document.getElementById(id);
+    if (field) field.value = '';
+  });
+  const file = document.getElementById('marketing-intake-file');
+  if (file) file.value = '';
+  const output = document.getElementById('campaign-intake-output');
+  if (output) output.textContent = 'Choose an intake source to begin.';
+  toast('Campaign intake reset');
+}
+
+function getSelectedCampaignToolkit() {
+  return Array.from(document.querySelectorAll('input[name="campaign-toolkit"]:checked')).map(input => input.value);
+}
+
+function setCampaignToolkit(selected) {
+  document.querySelectorAll('input[name="campaign-toolkit"]').forEach(input => { input.checked = selected; });
+  toast(selected ? 'Full campaign toolkit selected' : 'Toolkit selections cleared');
+}
+
 function openSharedIntakeFromMarketing() {
   const sourceTag = document.getElementById('marketing-intake-source')?.value.trim() || 'marketing-hub';
   const kit = document.getElementById('marketing-intake-kit')?.value || 'Editorial Outreach';
@@ -5897,20 +6011,26 @@ function generateCampaignKit() {
   const brief = document.getElementById('campaign-brief').value.trim() || 'No brief supplied yet.';
   const industry = document.getElementById('campaign-industry').value;
   const artRoute = document.getElementById('campaign-art-route').value;
+  const intake = readCampaignIntake();
+  const toolkit = getSelectedCampaignToolkit();
   const pattern = getCampaignPattern(industry);
   const artworkLine = artRoute === 'premium'
     ? 'Artwork route: Premium artwork requested. Escalate to Nano Banana 2 / Claude design / Google AI Studio before final art.'
     : artRoute === 'none'
       ? 'Artwork route: Copy kit only. No generated artwork requested.'
       : 'Artwork route: Free local models only. Use local Hermes/Ollama pattern generation; no premium artwork spend.';
+  const intakeLine = intake ? `${intake.type.toUpperCase()} · ${intake.value}` : 'Manual campaign brief only';
+  const toolkitLine = toolkit.length ? toolkit.map(item => `☑ ${item}`).join('\n') : 'No toolkit items selected';
   const output =
-    `Brand: ${title}\nIndustry: ${industry}\nTone: ${pattern.tone}\n${artworkLine}\n\nCampaign spine:\n1. Branding pass: offer, audience, proof, CTA, visual direction\n2. Build kit: landing/showcase copy, newsletter block, digital ad copy, print ad copy, social captions\n3. Invoice mapping: ${pattern.invoiceItems.join(' · ')}\n4. Sending options: ${pattern.sendOptions.join(' · ')}\n5. Follow-up / drip: ${pattern.drip.join(' → ')}\n\nHeadline: ${title} for mountain readers\n\nEmail subject: ${title}: local feature and invitation\n\nNewsletter copy: ${brief}\n\nDigital / social copy: ${title} is ready for a Register-Call campaign across web, newsletter, print, and follow-up channels.\n\nPrint CTA: Reserve space in the Weekly Register-Call and reach Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`;
+    `Brand: ${title}\nIndustry: ${industry}\nTone: ${pattern.tone}\nIntake: ${intakeLine}\n${artworkLine}\n\nSelected toolkit:\n${toolkitLine}\n\nCampaign spine:\n1. Normalize intake and source evidence\n2. Branding pass: offer, audience, proof, CTA, visual direction\n3. Build selected showcase and editorial assets\n4. Invoice mapping: ${pattern.invoiceItems.join(' · ')}\n5. Sending options: ${pattern.sendOptions.join(' · ')}\n6. Follow-up / drip: ${pattern.drip.join(' → ')}\n\nHeadline: ${title} for mountain readers\n\nEmail subject: ${title}: local feature and invitation\n\nNewsletter copy: ${brief}\n\nDigital / social copy: ${title} is ready for a Register-Call campaign across web, newsletter, print, and follow-up channels.\n\nPrint CTA: Reserve space in the Weekly Register-Call and reach Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.`;
   document.getElementById('campaign-output').textContent = output;
   localStorage.setItem('copress_campaign_handoff', JSON.stringify({
     title,
     brief,
     industry,
     artRoute,
+    intake,
+    toolkit,
     pattern,
     output,
     modelPolicy: artRoute === 'premium' ? 'premium-artwork-escalation' : 'free-local-models',
@@ -5928,6 +6048,22 @@ function sendCampaignToNewsletter() {
     return;
   }
   window.location.href = '/newsletter?campaign=latest';
+}
+
+function openCampaignOutreachDraft(kind) {
+  const handoff = JSON.parse(localStorage.getItem('copress_campaign_handoff') || '{}');
+  const title = handoff.title || document.getElementById('campaign-title')?.value.trim() || 'SATCOM campaign';
+  const brief = handoff.brief || document.getElementById('campaign-brief')?.value.trim() || 'Please review the attached campaign request.';
+  const templates = {
+    nda: { subject: `NDA request — ${title}`, body: `Hello,\n\nBefore we exchange campaign materials for ${title}, please review and return the NDA.\n\nProject note: ${brief}\n\nThank you.` },
+    request: { subject: `Information request — ${title}`, body: `Hello,\n\nPlease send the approved facts, contacts, dates, artwork, links, pricing, and permissions needed for ${title}.\n\nCurrent brief: ${brief}\n\nThank you.` },
+    issue: { subject: `Editorial issue / correction — ${title}`, body: `Hello,\n\nWe are documenting an editorial issue or correction request for ${title}. Please reply with the exact correction, supporting source, authorized contact, and deadline.\n\nCurrent brief: ${brief}\n\nThank you.` },
+    newsletter: { subject: `Newsletter opportunity — ${title}`, body: `Hello,\n\nWe would like to prepare a newsletter feature for ${title}. Please send approved copy, images, links, offer details, and timing.\n\nCurrent brief: ${brief}\n\nThank you.` },
+    'media-kit': { subject: `Media kit and placement options — ${title}`, body: `Hello,\n\nHere are the next steps for selecting print, web, newsletter, social, and showcase placements for ${title}. Please reply with audience, timing, budget, and preferred formats.\n\nCurrent brief: ${brief}\n\nThank you.` },
+    stationery: { subject: `Stationery and file handoff — ${title}`, body: `Hello,\n\nPlease use this thread to return approved logos, photos, documents, captions, names, dates, and credit lines for ${title}.\n\nCurrent brief: ${brief}\n\nThank you.` },
+  };
+  const draft = templates[kind] || templates.request;
+  window.location.href = `mailto:?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}`;
 }
 
 function stageInvoice() {
@@ -7184,6 +7320,7 @@ hydrateEventCard();
 loadLiveDashboardData();
 renderEditorialStories();
 loadDirectoryBatch();
+refreshCampaignIntakeFields();
 refreshStationeryTemplate();
 refreshModuleStatus();
 routeFromHash();
