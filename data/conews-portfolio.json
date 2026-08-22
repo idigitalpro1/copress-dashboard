@@ -15,7 +15,7 @@
   "assets": [
     { "name": "CoNews Spine (Dashboard)", "url": "https://copress-dashboard.vercel.app", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "Operating spine — this portfolio lives here." },
 
-    { "name": "The Villager", "url": "https://www.thevillager.today", "market": "metro", "category": "news", "status": "live", "banner": true, "note": "Metro Denver flagship; admin to be wired into SATCOM." },
+    { "name": "The Villager", "url": "https://www.thevillager.today", "market": "metro", "category": "news", "status": "live", "banner": true, "note": "Metro Denver flagship; verified ShopLocalOnline partner client with SATCOM campaign-kit routing." },
     { "name": "Denver Daily Post", "url": "https://conews.press", "market": "metro", "category": "news", "status": "planned", "banner": true, "note": "conews.press editorial front; wire via Villager admin." },
     { "name": "The Colorado Statesman", "url": "https://thecoloradostatesman.com", "market": "metro", "category": "news", "status": "planned", "banner": true, "note": "State politics desk; wire via Villager admin." },
     { "name": "The Corridor", "url": "https://thecorridor.biz", "market": "metro", "category": "news", "status": "planned", "banner": true, "note": "DTC / business corridor; wire via Villager admin." },
@@ -66,6 +66,7 @@
     { "name": "Rick's Cabaret Kit", "url": "https://copress-dashboard.vercel.app/ricks-cabaret-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
     { "name": "Stan's Auto Sales Kit", "url": "https://copress-dashboard.vercel.app/stans-auto-sales-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
     { "name": "240 Deer Road Kit", "url": "https://copress-dashboard.vercel.app/240-deer-road-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "" },
+    { "name": "TheVillager.today — Publisher Inducted Kit", "url": "https://satcom.5280.menu/thevillager-publisher-inducted-campaign-kit/", "market": "ops", "category": "kit", "status": "live", "banner": false, "note": "ShopLocalOnline client campaign using approved archival Publisher Inducted artwork." },
 
     { "name": "Admin HQ", "url": "https://copress-dashboard.vercel.app/#admin", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
     { "name": "API Vault", "url": "https://copress-dashboard.vercel.app/apistore", "market": "ops", "category": "dashboard", "status": "live", "banner": false, "note": "" },
