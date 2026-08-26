@@ -128,6 +128,8 @@
   }
   .topbar-title span { color: var(--gold); }
   .topbar-actions { display: flex; gap: 10px; align-items: center; }
+  .topbar-link { display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,.78); text-decoration:none; font-size:11px; font-weight:600; letter-spacing:.02em; padding:7px 8px; border-radius:4px; transition:all .15s; }
+  .topbar-link:hover, .topbar-link:focus-visible { color:var(--gold); background:rgba(255,255,255,.07); outline:none; }
   .btn { padding: 7px 16px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
   .btn-ghost { background: transparent; border: 1.5px solid rgba(255,255,255,0.25); color: #fff; }
   .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
@@ -745,6 +747,30 @@
   .config-row input { flex: 1; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'DM Mono', monospace; background: #fff; }
   .config-row input:focus { outline: none; border-color: var(--gold); }
 
+  /* Delivery library */
+  .library-backdrop { position:fixed; inset:0; z-index:1000; display:none; align-items:stretch; justify-content:flex-end; background:rgba(4,10,20,.58); }
+  .library-backdrop.open { display:flex; }
+  .library-panel { width:min(620px,100%); height:100%; overflow-y:auto; background:var(--warm-white); box-shadow:-18px 0 50px rgba(0,0,0,.24); }
+  .library-header { position:sticky; top:0; z-index:2; display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding:24px 28px 20px; color:#fff; background:var(--navy); border-bottom:3px solid var(--gold); }
+  .library-header h2 { font:700 24px 'Playfair Display',serif; margin-bottom:4px; }
+  .library-header p { color:#b8c4d8; font-size:12px; line-height:1.5; }
+  .library-close { background:transparent; border:1px solid rgba(255,255,255,.25); color:#fff; border-radius:4px; padding:7px 10px; cursor:pointer; }
+  .library-close:hover { border-color:var(--gold); color:var(--gold); }
+  .library-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 28px; border-bottom:1px solid var(--border); }
+  .library-count { color:var(--muted); font:500 11px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.06em; }
+  .library-list { padding:8px 28px 32px; }
+  .history-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:16px; margin-top:12px; }
+  .history-card-head { display:flex; justify-content:space-between; gap:16px; align-items:flex-start; }
+  .history-card h3 { font:600 16px 'Playfair Display',serif; line-height:1.35; margin-bottom:5px; }
+  .history-meta { color:var(--muted); font:400 10px 'DM Mono',monospace; line-height:1.6; }
+  .history-status { flex-shrink:0; padding:4px 7px; border-radius:999px; font:700 9px 'DM Mono',monospace; text-transform:uppercase; letter-spacing:.05em; background:rgba(200,168,75,.16); color:#7b5c00; }
+  .history-status.sent { background:rgba(45,122,58,.12); color:#2d7a3a; }
+  .history-status.failed { background:rgba(192,57,43,.1); color:var(--red); }
+  .history-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+  .history-empty { margin-top:20px; border:1px dashed var(--border); border-radius:8px; padding:34px 20px; text-align:center; color:var(--muted); line-height:1.6; }
+  body.library-open { overflow:hidden; }
+  @media (max-width:1050px) { .topbar-link span { display:none; } #topbar-issue { display:none; } }
+
 </style>
 </head>
 <body>
@@ -792,6 +818,8 @@
     <div class="topbar-title"><span id="topbar-publication">Weekly Register-Call</span> — Newsletter Studio</div>
     <div class="topbar-actions">
       <span id="topbar-issue" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">Issue: Apr 23, 2026</span>
+      <a class="topbar-link" href="#" onclick="shareBySMS(event)" title="Send this issue by SMS">📱 <span>SMS</span></a>
+      <a class="topbar-link" href="#" onclick="openDeliveryLibrary(event)" title="Open sent email history">🗂 <span>Sent History</span></a>
       <button class="btn btn-ghost" onclick="saveConfig()">💾 Save Draft</button>
       <button class="btn btn-gold" onclick="goStep(currentStep + 1)">Continue →</button>
     </div>
@@ -1143,6 +1171,23 @@
 
   </div><!-- /content-wrap -->
 </div><!-- /main -->
+
+<div class="library-backdrop" id="delivery-library" role="dialog" aria-modal="true" aria-labelledby="delivery-library-title" onclick="closeDeliveryLibrary(event)">
+  <section class="library-panel">
+    <header class="library-header">
+      <div>
+        <h2 id="delivery-library-title">Sent History</h2>
+        <p>Your library of prepared, exported, and sent newsletter activity on this device.</p>
+      </div>
+      <button class="library-close" type="button" onclick="closeDeliveryLibrary()" aria-label="Close sent history">✕</button>
+    </header>
+    <div class="library-toolbar">
+      <span class="library-count" id="history-count">0 deliveries</span>
+      <button class="btn btn-outline" type="button" onclick="clearDeliveryHistory()">Clear History</button>
+    </div>
+    <div class="library-list" id="delivery-history-list"></div>
+  </section>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -1560,22 +1605,144 @@ function updateReview() {
 }
 
 // ── SEND ──────────────────────────────────────────────────────────────────
+const DELIVERY_HISTORY_KEY = 'newsletter_delivery_history_v1';
+
+function getDeliveryHistory() {
+  try {
+    const items = JSON.parse(localStorage.getItem(DELIVERY_HISTORY_KEY) || '[]');
+    return Array.isArray(items) ? items : [];
+  } catch {
+    return [];
+  }
+}
+
+function recordDelivery(status, detail = {}) {
+  const subject = document.getElementById('subject-line')?.value || `${getPublication().name} Newsletter`;
+  const item = {
+    id: `delivery-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    createdAt: new Date().toISOString(),
+    publication: getPublication().name,
+    publicationKey: state.publication,
+    subject,
+    status,
+    recipients: detail.recipients || 0,
+    html: detail.html || '',
+  };
+  const items = [item, ...getDeliveryHistory()].slice(0, 100);
+  try { localStorage.setItem(DELIVERY_HISTORY_KEY, JSON.stringify(items)); }
+  catch { item.html = ''; localStorage.setItem(DELIVERY_HISTORY_KEY, JSON.stringify([item, ...items.slice(1)])); }
+  return item;
+}
+
+function escapeHistoryText(value) {
+  const el = document.createElement('div');
+  el.textContent = String(value || '');
+  return el.innerHTML;
+}
+
+function renderDeliveryHistory() {
+  const list = document.getElementById('delivery-history-list');
+  const count = document.getElementById('history-count');
+  if (!list || !count) return;
+  const items = getDeliveryHistory();
+  count.textContent = `${items.length} ${items.length === 1 ? 'delivery' : 'deliveries'}`;
+  if (!items.length) {
+    list.innerHTML = '<div class="history-empty"><strong>No delivery history yet.</strong><br>Exports, SMS handoffs, and send attempts will appear here.</div>';
+    return;
+  }
+  list.innerHTML = items.map(item => {
+    const when = new Date(item.createdAt).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' });
+    const statusClass = item.status === 'Sent' ? 'sent' : item.status === 'Send unavailable' ? 'failed' : '';
+    return `<article class="history-card">
+      <div class="history-card-head">
+        <div><h3>${escapeHistoryText(item.subject)}</h3><div class="history-meta">${escapeHistoryText(item.publication)} · ${escapeHistoryText(when)}${item.recipients ? ` · ${Number(item.recipients).toLocaleString()} recipients` : ''}</div></div>
+        <span class="history-status ${statusClass}">${escapeHistoryText(item.status)}</span>
+      </div>
+      <div class="history-actions">
+        ${item.html ? `<button class="btn btn-outline" type="button" onclick="downloadHistoryItem('${item.id}')">Download HTML</button>` : ''}
+        <button class="btn btn-outline" type="button" onclick="reuseHistoryItem('${item.id}')">Reuse Subject</button>
+      </div>
+    </article>`;
+  }).join('');
+}
+
+function openDeliveryLibrary(event) {
+  if (event) event.preventDefault();
+  renderDeliveryHistory();
+  document.getElementById('delivery-library').classList.add('open');
+  document.body.classList.add('library-open');
+  document.querySelector('.library-close')?.focus();
+}
+
+function closeDeliveryLibrary(event) {
+  if (event && event.target !== event.currentTarget) return;
+  document.getElementById('delivery-library').classList.remove('open');
+  document.body.classList.remove('library-open');
+}
+
+function clearDeliveryHistory() {
+  if (!getDeliveryHistory().length || !confirm('Clear the newsletter delivery history stored on this device?')) return;
+  localStorage.removeItem(DELIVERY_HISTORY_KEY);
+  renderDeliveryHistory();
+  showToast('Sent history cleared', 'gold');
+}
+
+function reuseHistoryItem(id) {
+  const item = getDeliveryHistory().find(entry => entry.id === id);
+  if (!item) return;
+  document.getElementById('subject-line').value = item.subject;
+  if (item.publicationKey && PUBLICATIONS[item.publicationKey] && item.publicationKey !== state.publication) {
+    savePublicationFields();
+    state.publication = item.publicationKey;
+    applyPublication({ resetCopy:false });
+    document.getElementById('subject-line').value = item.subject;
+  }
+  closeDeliveryLibrary();
+  goStep(5);
+  showToast('Subject restored from sent history', 'gold');
+}
+
+function downloadHistoryItem(id) {
+  const item = getDeliveryHistory().find(entry => entry.id === id);
+  if (!item?.html) return;
+  downloadNewsletterHTML(item.html, `${item.publicationKey || 'newsletter'}-${item.createdAt.slice(0,10)}.html`);
+}
+
+function shareBySMS(event) {
+  if (event) event.preventDefault();
+  const brand = getPublication();
+  const subject = document.getElementById('subject-line')?.value || `${brand.name} Newsletter`;
+  const message = `${subject}\n\nRead the latest from ${brand.name}: ${brand.site}`;
+  recordDelivery('SMS handoff');
+  window.location.href = `sms:?&body=${encodeURIComponent(message)}`;
+  showToast('📱 SMS message prepared', 'gold');
+}
+
 async function sendNewsletter() {
   if (!state.sendyUrl || !state.sendyKey) {
+    recordDelivery('Send unavailable');
     showToast('⚠ Sendy not configured — export HTML to send manually', 'red');
     return;
   }
+  recordDelivery('Send unavailable');
   showToast(`⚠ ${getPublication().name} campaign prepared — live Sendy delivery is not connected yet. Export the HTML to continue.`, 'red');
+}
+
+function downloadNewsletterHTML(html, filename) {
+  const blob = new Blob([html], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 0);
 }
 
 function exportHTML() {
   const brand = getPublication();
-  const html = document.getElementById('email-preview').outerHTML;
-  const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${brand.name} Newsletter</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`], { type: 'text/html' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `${brand.key}-newsletter-${new Date().toISOString().slice(0, 10)}.html`;
-  a.click();
+  const preview = document.getElementById('email-preview').outerHTML;
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${brand.name} Newsletter</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${preview}</body></html>`;
+  downloadNewsletterHTML(html, `${brand.key}-newsletter-${new Date().toISOString().slice(0, 10)}.html`);
+  recordDelivery('Exported', { html });
   showToast(`📥 ${brand.name} HTML exported — ready to paste into Sendy`, 'gold');
 }
 
