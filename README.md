@@ -47,6 +47,18 @@ Newsletter Studio keeps one six-step workflow for both publications:
 - `wrc` - Weekly Register-Call masthead, links, sender defaults, subscriber counts and export name.
 - `villager` - The Villager masthead, links, sender defaults, subscriber counts and export name.
 
+Step 4 includes a browser-local audience manager. Operators can create custom
+subscriber lists, add named/email members to built-in or custom lists, remove
+local additions, and see the updated counts in Review & Send. WRC and Villager
+audience additions are stored separately under publication-scoped localStorage
+keys; they are not sent to Sendy until a server-side sync endpoint is connected.
+
+The top-bar `Repeat Last` action restores the last prepared newsletter's
+publication, template, length, selected stories, subscriber lists, subject, and
+delivery settings, then returns the operator to Select Content. Exporting HTML
+or preparing a configured Sendy campaign records those options under
+`nl_last_options`; saved drafts remain available under `nl_state` as a fallback.
+
 The selected publication is stored with `nl_state`. Campaign handoffs may include
 `"publication": "wrc"` or `"publication": "villager"` to open the marketing
 template in the correct brand lane. Sendy URL and API key remain browser-local;

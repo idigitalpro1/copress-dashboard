@@ -350,6 +350,104 @@
     border-color: var(--gold);
     color: var(--navy);
   }
+  #custom-list-options { display: flex; flex-direction: column; gap: 10px; }
+  .list-card .list-remove {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 10px;
+    padding: 4px 2px;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .list-card .list-remove:hover { color: var(--red); }
+
+  .audience-manager {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    padding: 16px;
+    margin: -8px 0 18px;
+  }
+  .audience-manager-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .audience-manager-title { font-size: 13px; font-weight: 600; }
+  .audience-manager-copy { font-size: 10px; color: var(--muted); margin-top: 2px; }
+  .audience-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .audience-panel {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 12px;
+  }
+  .audience-panel.active { display: block; }
+  .audience-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .audience-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 5px;
+  }
+  .audience-field input,
+  .audience-field select {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 9px;
+    font: 12px 'DM Sans', sans-serif;
+    color: var(--text);
+    background: #fff;
+  }
+  .audience-field input:focus,
+  .audience-field select:focus { outline: none; border-color: var(--gold); }
+  .audience-form-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+  .audience-feedback {
+    display: none;
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin: 10px 0 0;
+    font-size: 11px;
+  }
+  .audience-feedback.show { display: block; }
+  .audience-feedback.ok { color: #2d7a3a; background: rgba(45,122,58,0.08); }
+  .audience-feedback.error { color: var(--red); background: rgba(192,57,43,0.08); }
+  .member-directory { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 14px; }
+  .member-directory h4 { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+  .member-directory-empty { font-size: 11px; color: var(--muted); padding-top: 8px; }
+  .member-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 0.7fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    font-size: 11px;
+  }
+  .member-row:last-child { border-bottom: 0; }
+  .member-name { font-weight: 600; overflow-wrap: anywhere; }
+  .member-email { color: var(--muted); font-family: 'DM Mono', monospace; font-size: 10px; overflow-wrap: anywhere; }
+  .member-list-label { color: var(--muted); }
+  .member-remove { border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 10px; }
+  .member-remove:hover { color: var(--red); }
+  @media (max-width: 760px) {
+    .audience-manager-head { align-items: flex-start; flex-direction: column; }
+    .audience-form-grid { grid-template-columns: 1fr; }
+    .member-row { grid-template-columns: 1fr auto; }
+    .member-list-label { grid-column: 1; }
+    .member-remove { grid-column: 2; grid-row: 1 / span 2; }
+  }
 
   /* Subject line + settings */
   .field-group { margin-bottom: 20px; }
@@ -687,6 +785,59 @@
   }
   .send-big-btn:hover { background: #a93226; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(192,57,43,0.3); }
 
+  .send-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+  }
+  .send-draft-btn {
+    width: 100%;
+    padding: 14px;
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid var(--gold);
+    border-radius: 6px;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+  }
+  .send-draft-btn:hover { background: var(--paper); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(184,134,11,0.18); }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  .draft-proof-box {
+    background: #fffdf7;
+    border-color: rgba(184,134,11,0.35);
+  }
+  .draft-proof-copy {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+    margin: -2px 0 10px;
+  }
+  .draft-recipient-row { display: flex; gap: 8px; align-items: center; }
+  .draft-recipient-row input {
+    flex: 1;
+    min-width: 0;
+    padding: 9px 11px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    background: #fff;
+  }
+  .draft-recipient-row input:focus { outline: none; border-color: var(--gold); }
+
   .sendy-status {
     background: rgba(192,57,43,0.08);
     border: 1px solid rgba(192,57,43,0.2);
@@ -745,6 +896,11 @@
   .config-row input { flex: 1; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 4px; font-size: 12px; font-family: 'DM Mono', monospace; background: #fff; }
   .config-row input:focus { outline: none; border-color: var(--gold); }
 
+  @media (max-width: 760px) {
+    .send-actions { grid-template-columns: 1fr; }
+    .draft-recipient-row { align-items: stretch; flex-direction: column; }
+  }
+
 </style>
 </head>
 <body>
@@ -791,7 +947,8 @@
   <div class="topbar">
     <div class="topbar-title"><span id="topbar-publication">Weekly Register-Call</span> — Newsletter Studio</div>
     <div class="topbar-actions">
-      <span id="topbar-issue" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">Issue: Apr 23, 2026</span>
+      <span id="topbar-issue" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">Issue: Aug 20, 2026</span>
+      <button class="btn btn-ghost" data-testid="repeat-newsletter-options" onclick="repeatNewsletterOptions()" title="Reuse the publication, layout, content, lists, and delivery settings from the last prepared newsletter">↻ Repeat Last</button>
       <button class="btn btn-ghost" onclick="saveConfig()">💾 Save Draft</button>
       <button class="btn btn-gold" onclick="goStep(currentStep + 1)">Continue →</button>
     </div>
@@ -885,7 +1042,7 @@
                 <div style="font-size:7px;color:#999;letter-spacing:0.1em;">GILPIN & CLEAR CREEK COUNTIES</div>
               </div>
               <div style="display:flex;justify-content:space-between;padding:2px 8px;background:#f0ece4;font-size:7px;color:#999;">
-                <span>VOL. 164</span><span>APR 23, 2026</span>
+                <span>VOL. 164</span><span>AUG 20, 2026</span>
               </div>
               <div style="padding:6px 8px;">
                 <div style="border-bottom:1px solid #c8a84b;margin-bottom:4px;"><div class="tpl-line" style="background:#c8a84b;height:2px;width:50%;margin:0 0 2px;"></div></div>
@@ -915,15 +1072,15 @@
             <p>Top 3 headlines only. Fast read for busy readers.</p>
             <span class="length-tag" style="background:rgba(45,122,58,0.1);color:#2d7a3a;">~200 words</span>
           </div>
-          <div class="length-opt selected" data-len="standard" onclick="selectLength('standard', this)">
+          <div class="length-opt" data-len="standard" onclick="selectLength('standard', this)">
             <h4>📰 Standard</h4>
             <p>Lead story + 4 briefs + CTA. Balanced editorial email.</p>
             <span class="length-tag" style="background:rgba(200,168,75,0.15);color:#8a6800;">~450 words · Recommended</span>
           </div>
-          <div class="length-opt" data-len="full" onclick="selectLength('full', this)">
-            <h4>📖 Full Edition</h4>
-            <p>All major stories, town-by-town sections, full content.</p>
-            <span class="length-tag" style="background:rgba(192,57,43,0.1);color:var(--red);">~900 words</span>
+          <div class="length-opt selected" data-len="full" onclick="selectLength('full', this)">
+            <h4>📖 Full Editorial Desk</h4>
+            <p>All newsletter-ready August items; review holds stay excluded.</p>
+            <span class="length-tag" style="background:rgba(192,57,43,0.1);color:var(--red);">All approved stories</span>
           </div>
         </div>
         <div class="step-nav-btns">
@@ -936,7 +1093,7 @@
       <div class="step-section" id="step-3">
         <div class="step-header">
           <h2>Select Stories</h2>
-          <p>Newest stories roll to the top — check stories to include. Pub dates shown on each item.</p>
+          <p>45 newsletter cards cover all 47 preserved August source files. Repeated weekly updates are consolidated; raw police, legal and sensitive opinion items are clearly held for review.</p>
         </div>
         <div id="story-list" style="margin-bottom:20px;"></div>
         <div class="step-nav-btns">
@@ -951,7 +1108,7 @@
           <h2>Subscriber Lists</h2>
           <p id="lists-publication-copy">Choose which Weekly Register-Call audiences receive this newsletter</p>
         </div>
-        <div class="list-options">
+        <div class="list-options" id="subscriber-list-options">
           <div class="list-card selected" data-list="editorial" onclick="toggleList('editorial', this)">
             <div class="list-icon" style="background:rgba(10,22,40,0.08);">📰</div>
             <div class="list-info">
@@ -987,6 +1144,65 @@
             </div>
             <div class="list-count" id="count-sales">— </div>
             <div class="list-check">✓</div>
+          </div>
+          <div id="custom-list-options"></div>
+        </div>
+
+        <div class="audience-manager">
+          <div class="audience-manager-head">
+            <div>
+              <div class="audience-manager-title">Manage subscriber lists</div>
+              <div class="audience-manager-copy">New lists and members are saved privately in this browser for the selected publication.</div>
+            </div>
+            <div class="audience-actions">
+              <button type="button" class="btn btn-outline" onclick="openAudiencePanel('new-list')">＋ New List</button>
+              <button type="button" class="btn btn-gold" onclick="openAudiencePanel('new-member')">＋ Add Member</button>
+            </div>
+          </div>
+
+          <div class="audience-feedback" id="audience-feedback" role="status" aria-live="polite"></div>
+
+          <form class="audience-panel" id="new-list-panel" onsubmit="createSubscriberList(event)">
+            <div class="audience-form-grid">
+              <div class="audience-field">
+                <label for="new-list-name">List name</label>
+                <input id="new-list-name" type="text" maxlength="60" placeholder="Community Events" required>
+              </div>
+              <div class="audience-field">
+                <label for="new-list-description">Description</label>
+                <input id="new-list-description" type="text" maxlength="120" placeholder="Readers interested in local events">
+              </div>
+            </div>
+            <div class="audience-form-actions">
+              <button type="button" class="btn btn-outline" onclick="closeAudiencePanels()">Cancel</button>
+              <button type="submit" class="btn btn-gold">Create List</button>
+            </div>
+          </form>
+
+          <form class="audience-panel" id="new-member-panel" onsubmit="addSubscriberMember(event)">
+            <div class="audience-form-grid">
+              <div class="audience-field">
+                <label for="member-list">Subscriber list</label>
+                <select id="member-list" required></select>
+              </div>
+              <div class="audience-field">
+                <label for="member-email">Email address</label>
+                <input id="member-email" type="email" maxlength="254" autocomplete="email" placeholder="reader@example.com" required>
+              </div>
+              <div class="audience-field">
+                <label for="member-name">Member name</label>
+                <input id="member-name" type="text" maxlength="100" autocomplete="name" placeholder="Reader name">
+              </div>
+            </div>
+            <div class="audience-form-actions">
+              <button type="button" class="btn btn-outline" onclick="closeAudiencePanels()">Cancel</button>
+              <button type="submit" class="btn btn-gold">Add Member</button>
+            </div>
+          </form>
+
+          <div class="member-directory">
+            <h4>Members added in SATCOM</h4>
+            <div id="member-directory-list"></div>
           </div>
         </div>
 
@@ -1025,11 +1241,11 @@
         </div>
         <div class="field-group">
           <label class="field-label">Subject Line</label>
-          <input type="text" class="field-input" id="subject-line" value="Weekly Register-Call — April 23, 2026 | Gregory Gulch Resort, Charlie's Place & Floyd Hill Closures" oninput="updatePreview()">
+          <input type="text" class="field-input" id="subject-line" value="Weekly Register-Call — August 20, 2026 | Highway 119, Timberline, jobs and late-summer events" oninput="updatePreview()">
         </div>
         <div class="field-group">
           <label class="field-label">Preview Text (inbox snippet)</label>
-          <input type="text" class="field-input" id="preview-text" value="This week: A billion-dollar casino faces council review, an animal shelter fights for funding, and I-70 overnight closures begin at Floyd Hill..." oninput="updatePreview()">
+          <input type="text" class="field-input" id="preview-text" value="Highway 119 repair questions, Timberline's proposed ballot request, public-safety guidance, jobs, sports, opinion and the late-summer calendar." oninput="updatePreview()">
         </div>
         <div class="field-row">
           <div class="field-group">
@@ -1038,7 +1254,7 @@
           </div>
           <div class="field-group">
             <label class="field-label">UTM Campaign Tag</label>
-            <input type="text" class="field-input" id="utm-tag" value="wrc-2026-04-23-weekly">
+            <input type="text" class="field-input" id="utm-tag" value="wrc-2026-08-20-digital">
           </div>
         </div>
         <div class="field-group">
@@ -1082,11 +1298,11 @@
         <div class="review-box">
           <h4>Campaign Summary</h4>
           <div class="review-row"><span class="review-label">Publication</span><span class="review-val" id="rv-publication">Weekly Register-Call</span></div>
-          <div class="review-row"><span class="review-label">Issue Date</span><span class="review-val">April 23, 2026</span></div>
+          <div class="review-row"><span class="review-label">Issue Date</span><span class="review-val" id="rv-issue-date">August 20, 2026</span></div>
           <div class="review-row"><span class="review-label">Template</span><span class="review-val" id="rv-template">Editorial Broadsheet</span></div>
-          <div class="review-row"><span class="review-label">Length</span><span class="review-val" id="rv-length">Standard (~450 words)</span></div>
-          <div class="review-row"><span class="review-label">Stories Selected</span><span class="review-val" id="rv-stories">5 of 8</span></div>
-          <div class="review-row"><span class="review-label">Subject</span><span class="review-val" id="rv-subject" style="max-width:240px;text-align:right;font-size:11px;">Weekly Register-Call — April 23</span></div>
+          <div class="review-row"><span class="review-label">Length</span><span class="review-val" id="rv-length">Full Editorial Desk</span></div>
+          <div class="review-row"><span class="review-label">Stories Selected</span><span class="review-val" id="rv-stories">Loading August desk…</span></div>
+          <div class="review-row"><span class="review-label">Subject</span><span class="review-val" id="rv-subject" style="max-width:240px;text-align:right;font-size:11px;">Weekly Register-Call — August 20</span></div>
           <div class="review-row"><span class="review-label">Schedule</span><span class="review-val ok" id="rv-schedule">Send Now</span></div>
         </div>
 
@@ -1096,6 +1312,7 @@
           <div class="review-row"><span class="review-label">⭐ Paid</span><span class="review-val" id="rv-paid">✓ Included</span></div>
           <div class="review-row"><span class="review-label">📣 Marketing</span><span class="review-val" id="rv-marketing">— Skipped</span></div>
           <div class="review-row"><span class="review-label">💼 Sales</span><span class="review-val" id="rv-sales">— Skipped</span></div>
+          <div id="rv-custom-lists"></div>
         </div>
 
         <div class="total-send">
@@ -1109,9 +1326,23 @@
           </div>
         </div>
 
-        <button class="send-big-btn" onclick="sendNewsletter()">
-          🚀 Launch Newsletter
-        </button>
+        <div class="review-box draft-proof-box">
+          <h4>Draft Proof</h4>
+          <p class="draft-proof-copy">Send one review copy through your mail app. This does not contact subscriber lists or launch the campaign.</p>
+          <div class="draft-recipient-row">
+            <label class="sr-only" for="draft-recipient">Draft recipient</label>
+            <input type="email" id="draft-recipient" autocomplete="email" placeholder="Reviewer email address" oninput="saveDraftRecipient()">
+          </div>
+        </div>
+
+        <div class="send-actions">
+          <button class="send-draft-btn" type="button" onclick="sendDraft()">
+            ✉ Send Draft
+          </button>
+          <button class="send-big-btn" type="button" onclick="sendNewsletter()">
+            🚀 Launch Newsletter
+          </button>
+        </div>
 
         <div class="sendy-status" id="sendy-status-msg">
           ⚠ Sendy not configured. Add your URL + API key in Step 4 to send live. Preview mode is active.
@@ -1164,9 +1395,9 @@ const PUBLICATIONS = {
     fromName: 'Weekly Register-Call',
     fromEmail: 'news@weeklyregistercall.com',
     replyTo: 'news@weeklyregistercall.com',
-    subject: 'Weekly Register-Call — Mountain news, business and community',
-    preview: 'This week’s reporting from Gilpin and Clear Creek counties.',
-    utm: 'wrc-weekly',
+    subject: 'Weekly Register-Call — August 20, 2026 | Highway 119, Timberline, jobs and late-summer events',
+    preview: 'Highway 119 repair questions, Timberline’s proposed ballot request, public-safety guidance, jobs, sports, opinion and the late-summer calendar.',
+    utm: 'wrc-2026-08-20-digital',
     audienceLabel: 'WRC',
     adTitle: 'Advertise in the Weekly Register-Call',
     adCopy: 'Reach readers across Colorado’s mountain communities.',
@@ -1200,7 +1431,7 @@ const PUBLICATIONS = {
 const state = {
   publication: 'wrc',
   template: 'editorial',
-  length: 'standard',
+  length: 'full',
   lists: { editorial: true, paid: true, marketing: false, sales: false },
   stories: [],
   subject: '',
@@ -1213,89 +1444,86 @@ function getPublication() {
   return PUBLICATIONS[state.publication] || PUBLICATIONS.wrc;
 }
 
-// ── ISSUE DATA (WRC Apr 23, 2026) ─────────────────────────────────────────
-// published = ISO date; feed auto-sorts newest first
+// ── ISSUE DATA (WRC August 6, 13 & 20, 2026 source desk) ──────────────────
+// Forty-seven preserved Word sources are represented by 45 newsletter cards.
+// Repeated jobs, calendar, recreation and Highway 119 updates are consolidated.
+const CURRENT_ISSUE = {
+  label: 'August 20, 2026',
+  shortLabel: 'Aug 20, 2026',
+  fallbackDate: 'Thursday, August 20, 2026',
+};
+const CONTENT_VERSION = 'wrc-2026-08-20-full-source-desk-v1';
+
+function issueStory(id, title, kicker, published, body, options = {}) {
+  return {
+    id,
+    title,
+    kicker,
+    published,
+    body,
+    readmore: 'https://registercall.com/',
+    newsletterEligible: options.newsletterEligible !== false,
+    selected: options.newsletterEligible !== false,
+    ...options,
+  };
+}
+
 const STORIES = [
-  {
-    id: 'gregory-gulch',
-    title: 'Gregory Gulch Resort Plan to Face Council',
-    byline: 'By Don Ireland, Senior Reporter',
-    kicker: 'Development · Central City',
-    published: '2026-04-22',
-    lead: true,
-    body: 'Central City Council won\'t consider revised plans for G3 Gaming\'s Gregory Gulch Gaming Resort until next month. The nearly $1 billion casino project received a green light from the Planning Commission on April 1, but city officials need additional time to review technical aspects of the development plan.',
-    readmore: 'https://registercall.com',
-    selected: true,
-  },
-  {
-    id: 'charlies-place',
-    title: 'Save Charlie\'s Place',
-    kicker: 'Community · Animal Shelter',
-    published: '2026-04-21',
-    body: 'The fate of our local animal shelter rests with county commissioners who continue to fund new initiatives — but not the shelter that serves both Gilpin and Clear Creek counties. Friends of Charlie\'s Place contributes $90,000–$100,000 each year covering food, medical care, and surgeries.',
-    readmore: 'https://registercall.com',
-    selected: true,
-  },
-  {
-    id: 'floyd-hill',
-    title: 'Overnight Floyd Hill Shutdowns Begin Next Week',
-    kicker: 'Transportation · I-70',
-    published: '2026-04-20',
-    body: 'Overnight closures of westbound I-70 at the bottom of Floyd Hill begin next week due to new bridge construction. Westbound drivers will detour via County Road 314 through Idaho Springs. Closures are not expected to affect eastbound traffic.',
-    readmore: 'https://registercall.com',
-    selected: true,
-  },
-  {
-    id: 'cabaret',
-    title: 'Central Spends $49K on Cabaret Fight',
-    kicker: 'Government · Central City',
-    byline: 'By Don Ireland',
-    published: '2026-04-18',
-    body: 'Council instructed city staff to prepare a response to the Central City Business Improvement District, which complained about Main Street maintenance standards being "sub-standard for a city whose economy is tourism based."',
-    readmore: 'https://registercall.com',
-    selected: true,
-  },
-  {
-    id: 'council-seat',
-    title: 'Deadline for Vacant Central Council Seat',
-    kicker: 'Government · Elections',
-    published: '2026-04-17',
-    body: 'The deadline for Central City residents to apply for a soon-to-be-vacant city council seat is just one week away. Applicants must meet all qualifications set forth in Section 3.3 of the Home Rule Charter.',
-    readmore: 'https://registercall.com',
-    selected: true,
-  },
-  {
-    id: 'bighorn-fire',
-    title: 'Structure Fire at Bighorn Apartments',
-    kicker: 'Public Safety · Idaho Springs',
-    published: '2026-04-04',
-    body: 'Idaho Springs Police and Clear Creek Fire Authority responded to a structure fire at the Bighorn Apartments on April 4. The fire originated in a third-floor residence. All residents were safely evacuated with no injuries; one couple is being assisted by the American Red Cross.',
-    readmore: 'https://registercall.com',
-    selected: false,
-  },
-  {
-    id: 'colorado-gold',
-    title: 'Where the Gold Was Found — and Where Colorado Was Built',
-    kicker: 'History · Anniversary',
-    published: '2026-04-03',
-    body: 'As we mark the 250th anniversary of the United States and approach the 150th anniversary of Colorado\'s statehood, it is worth revisiting the discovery of gold by John Gregory in 1859 — the defining moment in our state\'s history.',
-    readmore: 'https://registercall.com',
-    selected: false,
-  },
-  {
-    id: 'gilpin-prom',
-    title: 'Gilpin Eagles Soar at Prom',
-    kicker: 'Community · Education',
-    published: '2026-04-02',
-    body: 'Longtime Russell Gulch resident John Kittridge spoke about Central City\'s history following the Great Fire of 1874 during a Belvidere Foundation event that also celebrated Gilpin High School\'s prom season.',
-    readmore: 'https://registercall.com',
-    selected: false,
-  },
+  issueStory('highway-119-school-project', 'School sewer project advances as Highway 119 repair talks remain unresolved', 'Transportation · Schools', '2026-08-20', 'Drivers waiting for a smoother stretch of Highway 119 near the Gilpin County school campus do not yet have a repair date. The district says it continues to work with ESCO Construction and CDOT on pavement concerns and project closeout.', { byline: 'WRC Staff, adapted from a letter by Superintendent David MacKenzie and earlier WRC reporting', lead: true, reviewNote: 'Seek responses from CDOT and ESCO before straight-news publication.' }),
+  issueStory('black-hawk-jobs', 'Five public-service openings posted in Black Hawk', 'Jobs · Help Wanted', '2026-08-20', 'Black Hawk’s employment materials list openings in emergency communications, fleet, water, maintenance and policing, together with city benefits. Applicants should use the city’s official page for current descriptions and requirements.', { readmore: 'https://www.cityofblackhawk.org/employee-services/page/current-job-openings', reviewNote: 'Consolidates three weekly job-ad files; refresh the official page immediately before publication.' }),
+  issueStory('late-summer-events', 'Late-summer calendar brings festivals, public safety and mountain traditions', 'Events · Community Calendar', '2026-08-20', 'The calendar includes Central City’s Cemetery Crawl and beer festival, the Shelby Allen Memorial Volleyball Tournament, C3 Fest, Fairgrounds Frenzy, First Friday and planned Boxing Central dates.', { reviewNote: 'August 22 was verified for the Cemetery Crawl and Beer Fest; refresh remaining event details before publication.' }),
+  issueStory('rec-center-current-hours', 'Community Center reopens with school-year pool hours', 'Community · Recreation', '2026-08-20', 'After its annual maintenance closure, the Gilpin County Community Center returns to school-year operations. The pool is scheduled for midday closures from noon to 4:30 p.m. on Mondays and Wednesdays.', { reviewNote: 'Consolidates recreation updates from all three source weeks; confirm the live facility calendar.' }),
+  issueStory('when-god-hands-you-a-shovel', 'When God Hands You a Shovel', 'Faith · Column', '2026-08-20', 'James Carnes returns to the story of Gideon, reflecting on how obedience and God’s presence—not personality, stature or talent—shape courage and purpose.', { byline: 'By James Carnes' }),
+  issueStory('timberline-mill-levy', 'Timberline weighs roughly six-mill request to strengthen emergency response', 'Public Safety · Elections', '2026-08-13', 'Timberline Fire Protection District is considering a November request of roughly six mills to support around-the-clock staffing at Station 3, wildfire mitigation and rising capital costs.', { byline: 'Adapted from reporting by Don Ireland', reviewNote: 'Update with adopted ballot language and a household tax-impact table.' }),
+  issueStory('hi-lo-evacuation-alert', 'Hear the Hi-Lo siren? It is time to go', 'Public Safety · Preparedness', '2026-08-13', 'Clear Creek and Jefferson counties are standardizing evacuation language and adding Hi-Lo sirens to patrol vehicles. The alternating tone is reserved for an evacuation order—an immediate threat that requires residents and visitors to leave.', { reviewNote: 'Confirm current alert-registration links before publication.' }),
+  issueStory('ricks-cabaret-ballot', 'Central voters may face another strip-club ballot issue', 'Government · Elections', '2026-08-13', 'A campaign tied to Rick’s Cabaret says it is gathering signatures for another Central City ballot question. Qualification, final ballot text and the city’s response still require confirmation.', { byline: 'By Don Ireland, Senior Reporter', newsletterEligible: false, reviewNote: 'HOLD: legal and election review; verify petition submission, signatures and ballot text, and seek a City response.' }),
+  issueStory('gilpin-tabor-questions', 'Gilpin voters could face two TABOR questions', 'Government · Elections', '2026-08-13', 'Gilpin County commissioners are considering a de-Brucing measure while a separate statewide sporting-goods sales-tax proposal moves through the initiative process.', { byline: 'By Becky Osterwald, Managing Editor', reviewNote: 'Refresh ballot status and final wording before publication.' }),
+  issueStory('commissioners-ballot-wording', 'Commissioners balk at de-Brucing ballot wording', 'Government · Gilpin County', '2026-08-13', 'Gilpin County commissioners delayed final wording for a proposed de-Brucing measure after objecting to language that did not clearly limit how retained revenue would be used.', { byline: 'By Becky Osterwald, Managing Editor', reviewNote: 'Update with the final adopted language.' }),
+  issueStory('transparency-editorial', 'Transparency? Not with Gilpin County', 'Opinion · Editorial', '2026-08-13', 'Managing Editor Becky Osterwald argues that Gilpin County failed to provide reasonable advance notice of a commissioners’ meeting despite Colorado open-meetings notification requirements.', { byline: 'By Becky Osterwald, Managing Editor', newsletterEligible: false, reviewNote: 'HOLD: Opinion lane only; verify current notification policy and offer the county a chance to respond.' }),
+  issueStory('redaction-commentary', 'Here a redaction, there a redaction, everywhere a redaction', 'Opinion · Local Government', '2026-08-13', 'A commentary questions inconsistent redactions in materials prepared for the Gilpin County Board of Equalization and asks what public information should remain visible.', { newsletterEligible: false, reviewNote: 'HOLD: Opinion lane; complete records-law and fairness review.' }),
+  issueStory('fake-court-texts', 'Fake court text messages target Colorado residents', 'Public Safety · Scam Alert', '2026-08-13', 'Colorado residents are being warned about fraudulent texts that claim recipients must appear in district court for a traffic ticket. Recipients should delete the messages and avoid clicking links.', { reviewNote: 'Confirm the warning remains current with the Colorado Judicial Branch.' }),
+  issueStory('gilpin-sports', 'Gilpin fall sports and activities get underway', 'Sports · Schools', '2026-08-13', 'Gilpin County students are back in class and the 2026–27 athletic calendar is beginning, with high-school and middle-school volleyball among the first scheduled contests.', { reviewNote: 'Refresh dates, opponents and start times before sending.' }),
+  issueStory('wildfire-workshop', 'Wildfire preparedness and forest-health workshop set in Dumont', 'Public Safety · Wildfire', '2026-08-13', 'CSU Extension and Clear Creek Fire Authority plan a free workshop on mountain pine beetles, forest ecology, home mitigation, emergency preparation and evacuation.', { reviewNote: 'Confirm event status and venue before sending.' }),
+  issueStory('probate-mistakes', 'About the Law: 10 mistakes that cause probate problems', 'Advice · About the Law', '2026-08-13', 'The column outlines common mistakes personal representatives make after accepting fiduciary responsibility for an estate and explains why beneficiaries’ interests must come first.', { reviewNote: 'General information only; preserve the author disclaimer and avoid presenting it as individual legal advice.' }),
+  issueStory('mighty-because-with-us', 'Mighty only because He is with us', 'Faith · Column', '2026-08-13', 'Pastoral intern James Carnes reflects on Gideon’s weakness, courage and the order of the words “The Lord is with you, mighty man of valor.”', { byline: 'By James Carnes, Pastoral Intern' }),
+  issueStory('baby-boomers-column', 'Generalizing about Baby Boomers', 'Opinion · Humor', '2026-08-13', 'A columnist pushes back on a clickbait list of supposedly laughable Baby Boomer habits and considers how recommendation algorithms turn stereotypes into repeat engagement.', { reviewNote: 'Preserve original byline from the source before publication.' }),
+  issueStory('critics-column', 'There has never been a statue built to a critic', 'Opinion · Commentary', '2026-08-13', 'A commentary contrasts the country’s constant criticism with the visionaries and builders who took risks to create railroads, towns and institutions.', { reviewNote: 'Preserve original byline from the source before publication.' }),
+  issueStory('grandpa-sassy-dog-days', 'Grandpa Sassy: Growling at Dog Days', 'Humor · Grandpa Sassy', '2026-08-13', 'Grandpa Sassy visits the Dog Days fundraiser for Charlie’s Place and finds that some of the sharpest growling at the community event comes from local political figures.', { reviewNote: 'For amusement only; complete names-and-fairness review.' }),
+  issueStory('news-briefs-aug-13', 'Community briefs: clinics, facilities and public information', 'Community · News Briefs', '2026-08-13', 'The weekly brief desk includes the Community Center maintenance closure, fall vaccination clinics and other short public-service notices for Gilpin County readers.', { reviewNote: 'Refresh every date and contact detail before sending.' }),
+  issueStory('recreation-aug-13', 'Soccer, volleyball, Tai Chi and Dog Park Days', 'Community · Recreation', '2026-08-13', 'Gilpin recreation listings include adult and youth soccer, the Shelby Allen Memorial Scholarship Volleyball Tournament, Tai Chi and weekly Dog Park Days.', { reviewNote: 'This source is represented in the consolidated current recreation card; verify current dates if selected.' }),
+  issueStory('looking-back-aug-16', 'Looking Back: Magnolia Road forest fire', 'History · Archives', '2026-08-13', 'The August 16, 1996 archive recounts a campfire-sparked forest fire near Magnolia Road that drew about three dozen firefighters and aerial water support.', { reviewNote: 'Archive copy; complete names and historical-context review.' }),
+  issueStory('black-hawk-blotter', 'Black Hawk police blotter: July 20–August 2', 'Public Safety · Police Blotter', '2026-08-13', 'An edited blotter groups Black Hawk Police Department calls from July 20 through August 2, including traffic, casino and public-safety incidents.', { newsletterEligible: false, reviewNote: 'HOLD: review names, minors, medical details, dispositions and pending cases before digital reuse.' }),
+  issueStory('housing-snapshot', 'Gilpin’s summer housing market is moving faster—even as prices cool', 'Real Estate · Market Watch', '2026-08-13', 'Recent market data shows a lower three-month median sale price and faster average sales than a year earlier. In a small mountain market, countywide numbers are a signal—not a property-specific conclusion.', { reviewNote: 'Do not reuse hard-coded sample listing cards as live inventory.' }),
+  issueStory('colorado-250-150-calendar', '250–150 celebrations continue across the Centennial State', 'Events · Colorado 150', '2026-08-06', 'Colorado’s statehood anniversary celebrations continue with balloon events, county fairs, drone shows and other America 250–Colorado 150 programs around the state.', { byline: 'By Don Ireland, Senior Reporter', reviewNote: 'Remove expired events and refresh remaining organizer details.' }),
+  issueStory('death-certificates', 'About the Law: How many death certificates should be ordered?', 'Advice · About the Law', '2026-08-06', 'The column explains the cost of certified Colorado death certificates and lists estate, property and account matters that may require an original certificate.', { reviewNote: 'General information only; preserve the author disclaimer and verify current state fees.' }),
+  issueStory('master-gardener-and-fen', 'Mountain-hardy bulbs and a tour of the Library Fen', 'Community · CSU Extension', '2026-08-06', 'Gilpin County CSU Extension highlights a Master Gardener bulb fundraiser and a free walking tour of the Library Fen with a local botanist and ecologist.', { reviewNote: 'Remove expired listings and confirm future event details.' }),
+  issueStory('lexus-is-350-review', 'A sports sedan built for the young at heart', 'Motoring · Review', '2026-08-06', 'A week in the 2026 Lexus IS 350 F SPORT AWD finds a low-slung sedan pairing a 311-horsepower V-6, all-wheel drive and mountain-road performance with everyday practicality.', { reviewNote: 'Preserve the original reviewer byline and disclose any manufacturer vehicle arrangement.' }),
+  issueStory('sports-betting-law', 'Colorado law targets addictive sports-betting practices', 'Statehouse · Consumer Protection', '2026-08-06', 'Bipartisan legislation taking effect in August restricts marketing to people under 21 and creates future transactional-data reporting requirements for sports-betting operators.', { reviewNote: 'Verify the enacted bill number and effective-date details before publication.' }),
+  issueStory('central-sob-rules', 'Central council approves gender-neutral rules for sexually oriented businesses', 'Government · Central City', '2026-08-06', 'Central City Council approved changes removing gender-specific language from sexually oriented business rules after questions about how the definitions would apply in other settings.', { reviewNote: 'Link the adopted ordinance and include the city attorney’s final interpretation.' }),
+  issueStory('central-candidates', 'Central City opens candidate petitions for November election', 'Government · Elections', '2026-08-06', 'Central City’s regular election will fill the mayor’s seat and two alderman seats. Candidate-petition deadlines and clerk contact information appear in the official notice.', { reviewNote: 'The source deadline may have passed; retain only as an archive item unless refreshed.' }),
+  issueStory('highway-46-and-119', 'Local highway update: Highway 46 resurfacing and Highway 119 talks', 'Transportation · Roads', '2026-08-06', 'CDOT anticipated Highway 46 resurfacing near the Community Center while the school district continued discussions over Highway 119 pavement affected by its wastewater interconnect project.', { reviewNote: 'Represented by the current Highway 119 lead; refresh Highway 46 status before separate use.' }),
+  issueStory('gaming-fiscal-year', 'Black Hawk gaming surpasses last year while Central slips', 'Business · Gaming', '2026-08-06', 'Source reporting says Central City casino revenue fell in June and finished the fiscal year slightly lower, while Black Hawk ended the year ahead despite a softer June.', { byline: 'By Don Ireland, Senior Reporter', reviewNote: 'Verify figures against final Colorado Division of Gaming tables.' }),
+  issueStory('grandpa-sassy-football', 'Grandpa Sassy: August arrives with football predictions', 'Humor · Grandpa Sassy', '2026-08-06', 'Grandpa Sassy and friends move from restaurant “efficiency experts” and pickle quality to predictions for the approaching Denver Broncos preseason.', { reviewNote: 'For amusement only; verify current schedule references.' }),
+  issueStory('looking-back-aug-9', 'Looking Back: Charges filed in 1996 Gamble Gulch death', 'History · Archives', '2026-08-06', 'The August 9, 1996 archive revisits the filing of a first-degree murder charge after a fatal shooting at a Gamble Gulch home.', { newsletterEligible: false, reviewNote: 'HOLD: archive crime copy requires names, disposition and sensitivity review.' }),
+  issueStory('news-briefs-aug-6', 'Community briefs: Dog Days, Fill the Bus and more', 'Community · News Briefs', '2026-08-06', 'The weekly brief desk highlights the Dog Days fundraiser for Friends of Charlie’s Place, the school-supply Fill the Bus campaign and other short local notices.', { reviewNote: 'Remove expired items and refresh dates before sending.' }),
+  issueStory('recreation-aug-6', 'What’s happening in Gilpin County Parks & Recreation', 'Community · Recreation', '2026-08-06', 'The early-August recreation calendar includes Dog Park Days, the Second Saturday Artisans Market, youth soccer and the co-ed adult soccer league.', { reviewNote: 'This source is represented in the consolidated current recreation card; remove expired items if selected.' }),
+  issueStory('sheriff-report-may', 'Gilpin County sheriff report: May incidents', 'Public Safety · Sheriff Report', '2026-08-06', 'The source report groups May calls involving alleged fraud, counterfeit currency, criminal mischief and other incidents handled by Gilpin County deputies.', { newsletterEligible: false, reviewNote: 'HOLD: review names, addresses, minors, medical details, dispositions and pending cases.' }),
+  issueStory('black-hawk-bulletin-july-13-19', 'Black Hawk police bulletin: July 13–19', 'Public Safety · Source Bulletin', '2026-08-06', 'The raw Black Hawk Police Department bulletin lists calls and incident narratives from July 13 through July 19.', { newsletterEligible: false, reviewNote: 'HOLD: raw agency data; use the edited blotter only after privacy and case-status review.' }),
+  issueStory('black-hawk-bulletin-july-20-aug-2', 'Black Hawk police bulletin: July 20–August 2', 'Public Safety · Source Bulletin', '2026-08-13', 'The raw Black Hawk Police Department bulletin lists calls and incident narratives from July 20 through August 2.', { newsletterEligible: false, reviewNote: 'HOLD: raw agency data; use the edited blotter only after privacy and case-status review.' }),
+  issueStory('graham-rotunda-column', 'From the Sanitary Café to the Capitol Rotunda', 'Opinion · Commentary', '2026-08-06', 'A column reflects on public service, political differences and the meaning of national honors during a televised Capitol Rotunda ceremony.', { newsletterEligible: false, reviewNote: 'HOLD: fact-check every named person, event and date before reuse.' }),
+  issueStory('blue-sky-settlement-notice', 'Contractor settlement notice: Crooks Palace HVAC replacement', 'Legal Notice · Black Hawk', '2026-08-06', 'The City of Black Hawk notice describes final settlement procedures for the Crooks Palace HVAC replacement contract with Blue Sky Plumbing, Heating, Cooling & Electric.', { newsletterEligible: false, reviewNote: 'HOLD: paid/legal notice; preserve exact approved copy and publication schedule.' }),
+  issueStory('lighthouse-settlement-notice', 'Contractor settlement notice: Gregory and Main signal replacement', 'Legal Notice · Black Hawk', '2026-08-06', 'The City of Black Hawk notice describes final settlement procedures for the Gregory and Main Streets signal-replacement contract with Lighthouse Transportation Group.', { newsletterEligible: false, reviewNote: 'HOLD: paid/legal notice; preserve exact approved copy and publication schedule.' }),
+  issueStory('central-ordinance-26-14-notice', 'Legal notice: Central City Ordinance 26-14', 'Legal Notice · Central City', '2026-08-06', 'The official notice records passage of Ordinance 26-14, which amends definitions and rules concerning sexually oriented businesses and nudity in commercial establishments.', { newsletterEligible: false, reviewNote: 'HOLD: paid/legal notice; preserve exact approved copy and publication schedule.' }),
 ];
 
 function storyPubTime(story) {
   const raw = story && (story.published || story.pubDate || story.date);
   if (!raw) return 0;
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/.exec(raw);
+  if (dateOnly) {
+    const [, year, month, day] = dateOnly;
+    return new Date(Number(year), Number(month) - 1, Number(day), 12).getTime();
+  }
   const t = Date.parse(raw);
   return Number.isFinite(t) ? t : 0;
 }
@@ -1401,7 +1629,8 @@ function applyPublication(options = {}) {
     if (preview) preview.value = brand.preview;
     if (utm) utm.value = brand.utm;
   }
-  loadListCounts();
+  loadAudienceData();
+  renderAudienceManager();
   updatePreview();
 }
 
@@ -1430,15 +1659,19 @@ function selectLength(len, el) {
   document.querySelectorAll('.length-opt').forEach(o => o.classList.remove('selected'));
   el.classList.add('selected');
   state.length = len;
-  // Keep newest-first order, then auto-select the latest N
+  // Keep newest-first order, then auto-select the latest eligible items.
+  // Raw police material and legal/editorial holds stay unselected.
   state.stories = rollLatestNewsToTop(state.stories);
-  if (len === 'brief') {
-    state.stories.forEach((s, i) => s.selected = i < 3);
-  } else if (len === 'standard') {
-    state.stories.forEach((s, i) => s.selected = i < 5);
-  } else {
-    state.stories.forEach(s => s.selected = true);
-  }
+  const maxSelected = len === 'brief' ? 3 : len === 'standard' ? 5 : Infinity;
+  let selectedCount = 0;
+  state.stories.forEach(story => {
+    if (story.newsletterEligible === false) {
+      story.selected = false;
+      return;
+    }
+    story.selected = selectedCount < maxSelected;
+    selectedCount += 1;
+  });
   state.stories = rollLatestNewsToTop(state.stories);
   renderStoryList();
   updatePreview();
@@ -1460,8 +1693,10 @@ function renderStoryList() {
           ${pub ? `<div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);white-space:nowrap;letter-spacing:0.04em;">${pub}</div>` : ''}
         </div>
         <div style="font-family:'Playfair Display',serif;font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3;">${story.title}</div>
-        ${story.lead ? '<span style="background:var(--red);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;letter-spacing:0.06em;margin-bottom:4px;display:inline-block;">LEAD · LATEST</span>' : ''}
+        ${story.lead ? '<span style="background:var(--red);color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;letter-spacing:0.06em;margin:0 5px 4px 0;display:inline-block;">LEAD · LATEST</span>' : ''}
+        ${story.newsletterEligible === false ? '<span style="background:#eee6dc;color:#7a4c20;font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700;letter-spacing:0.06em;margin-bottom:4px;display:inline-block;">HOLD · REVIEW</span>' : ''}
         <div style="font-size:11px;color:#666;line-height:1.5;">${story.body.substring(0, 100)}…</div>
+        ${story.reviewNote ? `<div style="font-size:10px;color:${story.newsletterEligible === false ? 'var(--red)' : '#8a6800'};line-height:1.45;margin-top:5px;">${story.reviewNote}</div>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -1480,9 +1715,87 @@ const LIST_COUNTS = {
   villager: { editorial: 538, paid: 538, marketing: 203, sales: 89 },
 };
 
+const BUILTIN_LISTS = [
+  { id: 'editorial', icon: '📰', label: 'Editorial Subscribers' },
+  { id: 'paid', icon: '⭐', label: 'Paid Subscribers' },
+  { id: 'marketing', icon: '📣', label: 'Marketing List' },
+  { id: 'sales', icon: '💼', label: 'Sales Prospects' },
+];
+
+let audienceData = { customLists: [], members: [] };
+
+function audienceStorageKey() {
+  return `newsletter_audiences_v1_${state.publication}`;
+}
+
+function createAudienceId(prefix) {
+  const value = (window.crypto && typeof window.crypto.randomUUID === 'function')
+    ? window.crypto.randomUUID()
+    : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  return `${prefix}-${value}`;
+}
+
+function loadAudienceData() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(audienceStorageKey()) || 'null'); }
+  catch { saved = null; }
+
+  const customLists = Array.isArray(saved && saved.customLists)
+    ? saved.customLists.filter(list => list && typeof list.id === 'string' && list.id.startsWith('custom-') && typeof list.name === 'string')
+      .map(list => ({
+        id: list.id,
+        name: list.name.trim().slice(0, 60),
+        description: String(list.description || '').trim().slice(0, 120),
+        selected: list.selected !== false,
+      }))
+      .filter(list => list.name)
+    : [];
+  const validListIds = new Set([...BUILTIN_LISTS.map(list => list.id), ...customLists.map(list => list.id)]);
+  const members = Array.isArray(saved && saved.members)
+    ? saved.members.filter(member => member && typeof member.id === 'string' && validListIds.has(member.listId) && typeof member.email === 'string' && member.email.includes('@'))
+      .map(member => ({
+        id: member.id,
+        listId: member.listId,
+        email: member.email.trim().toLowerCase().slice(0, 254),
+        name: String(member.name || '').trim().slice(0, 100),
+        createdAt: member.createdAt || '',
+      }))
+    : [];
+
+  audienceData = { customLists, members };
+  Object.keys(state.lists).filter(key => key.startsWith('custom-')).forEach(key => delete state.lists[key]);
+  audienceData.customLists.forEach(list => { state.lists[list.id] = list.selected; });
+}
+
+function persistAudienceData() {
+  localStorage.setItem(audienceStorageKey(), JSON.stringify(audienceData));
+}
+
+function getListLabel(listId) {
+  const custom = audienceData.customLists.find(list => list.id === listId);
+  if (custom) return custom.name;
+  const builtin = BUILTIN_LISTS.find(list => list.id === listId);
+  if (!builtin) return 'Subscriber list';
+  if (listId === 'editorial' || listId === 'paid') return `${getPublication().audienceLabel} ${builtin.label}`;
+  return builtin.label;
+}
+
+function getListCount(listId) {
+  const counts = LIST_COUNTS[state.publication] || LIST_COUNTS.wrc;
+  const base = counts[listId] || 0;
+  const localMembers = audienceData.members.filter(member => member.listId === listId).length;
+  return base + localMembers;
+}
+
 function toggleList(key, el) {
   state.lists[key] = !state.lists[key];
   el.classList.toggle('selected', state.lists[key]);
+  const custom = audienceData.customLists.find(list => list.id === key);
+  if (custom) {
+    custom.selected = state.lists[key];
+    persistAudienceData();
+  }
+  if (currentStep === 6) updateReview();
   updatePreview();
 }
 
@@ -1490,8 +1803,218 @@ function loadListCounts() {
   const counts = LIST_COUNTS[state.publication] || LIST_COUNTS.wrc;
   Object.keys(counts).forEach(k => {
     const el = document.getElementById('count-' + k);
-    if (el) el.textContent = counts[k].toLocaleString() + ' subs';
+    if (el) el.textContent = getListCount(k).toLocaleString() + ' subs';
   });
+  audienceData.customLists.forEach(list => {
+    const el = document.getElementById('count-' + list.id);
+    if (el) el.textContent = getListCount(list.id).toLocaleString() + ' subs';
+  });
+}
+
+function renderCustomLists() {
+  const container = document.getElementById('custom-list-options');
+  if (!container) return;
+  container.textContent = '';
+
+  audienceData.customLists.forEach(list => {
+    const card = document.createElement('div');
+    card.className = 'list-card' + (state.lists[list.id] ? ' selected' : '');
+    card.dataset.list = list.id;
+    card.onclick = () => toggleList(list.id, card);
+
+    const icon = document.createElement('div');
+    icon.className = 'list-icon';
+    icon.style.background = 'rgba(75,98,122,0.10)';
+    icon.textContent = '👥';
+
+    const info = document.createElement('div');
+    info.className = 'list-info';
+    const name = document.createElement('div');
+    name.className = 'list-name';
+    name.textContent = list.name;
+    const description = document.createElement('div');
+    description.className = 'list-desc';
+    description.textContent = list.description || 'Custom subscriber audience';
+    info.append(name, description);
+
+    const count = document.createElement('div');
+    count.className = 'list-count';
+    count.id = 'count-' + list.id;
+
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'list-remove';
+    remove.textContent = 'Remove';
+    remove.setAttribute('aria-label', `Remove ${list.name} list`);
+    remove.onclick = event => {
+      event.stopPropagation();
+      removeSubscriberList(list.id);
+    };
+
+    const check = document.createElement('div');
+    check.className = 'list-check';
+    check.textContent = '✓';
+    card.append(icon, info, count, remove, check);
+    container.appendChild(card);
+  });
+}
+
+function populateMemberListSelect(selectedId = '') {
+  const select = document.getElementById('member-list');
+  if (!select) return;
+  const options = [
+    ...BUILTIN_LISTS.map(list => ({ id: list.id, label: getListLabel(list.id) })),
+    ...audienceData.customLists.map(list => ({ id: list.id, label: list.name })),
+  ];
+  select.textContent = '';
+  options.forEach(option => {
+    const node = document.createElement('option');
+    node.value = option.id;
+    node.textContent = option.label;
+    select.appendChild(node);
+  });
+  if (selectedId && options.some(option => option.id === selectedId)) select.value = selectedId;
+}
+
+function renderMemberDirectory() {
+  const container = document.getElementById('member-directory-list');
+  if (!container) return;
+  container.textContent = '';
+  if (!audienceData.members.length) {
+    const empty = document.createElement('div');
+    empty.className = 'member-directory-empty';
+    empty.textContent = 'No members have been added in SATCOM yet.';
+    container.appendChild(empty);
+    return;
+  }
+
+  [...audienceData.members].reverse().forEach(member => {
+    const row = document.createElement('div');
+    row.className = 'member-row';
+    const identity = document.createElement('div');
+    const name = document.createElement('div');
+    name.className = 'member-name';
+    name.textContent = member.name || member.email;
+    const email = document.createElement('div');
+    email.className = 'member-email';
+    email.textContent = member.email;
+    identity.append(name, email);
+    const list = document.createElement('div');
+    list.className = 'member-list-label';
+    list.textContent = getListLabel(member.listId);
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.className = 'member-remove';
+    remove.textContent = 'Remove';
+    remove.setAttribute('aria-label', `Remove ${member.email} from ${getListLabel(member.listId)}`);
+    remove.onclick = () => removeSubscriberMember(member.id);
+    row.append(identity, list, remove);
+    container.appendChild(row);
+  });
+}
+
+function renderAudienceManager() {
+  renderCustomLists();
+  populateMemberListSelect();
+  renderMemberDirectory();
+  loadListCounts();
+}
+
+function setAudienceFeedback(message, type = 'ok') {
+  const el = document.getElementById('audience-feedback');
+  if (!el) return;
+  el.textContent = message;
+  el.className = `audience-feedback show ${type}`;
+}
+
+function closeAudiencePanels() {
+  document.querySelectorAll('.audience-panel').forEach(panel => panel.classList.remove('active'));
+}
+
+function openAudiencePanel(panelName) {
+  const target = document.getElementById(panelName + '-panel');
+  const shouldOpen = target && !target.classList.contains('active');
+  closeAudiencePanels();
+  if (!shouldOpen) return;
+  target.classList.add('active');
+  if (panelName === 'new-member') populateMemberListSelect();
+  const firstField = target.querySelector('input, select');
+  if (firstField) firstField.focus();
+}
+
+function createSubscriberList(event) {
+  event.preventDefault();
+  const nameInput = document.getElementById('new-list-name');
+  const descriptionInput = document.getElementById('new-list-description');
+  const name = nameInput.value.trim();
+  const description = descriptionInput.value.trim();
+  if (!name) return;
+  const duplicate = audienceData.customLists.some(list => list.name.toLowerCase() === name.toLowerCase());
+  if (duplicate) {
+    setAudienceFeedback(`A list named “${name}” already exists.`, 'error');
+    return;
+  }
+
+  const list = { id: createAudienceId('custom'), name, description, selected: true };
+  audienceData.customLists.push(list);
+  state.lists[list.id] = true;
+  persistAudienceData();
+  renderAudienceManager();
+  event.target.reset();
+  closeAudiencePanels();
+  setAudienceFeedback(`“${name}” was created and included in this newsletter.`, 'ok');
+  showToast(`✓ Subscriber list created: ${name}`, 'green');
+}
+
+function addSubscriberMember(event) {
+  event.preventDefault();
+  const listId = document.getElementById('member-list').value;
+  const emailInput = document.getElementById('member-email');
+  const nameInput = document.getElementById('member-name');
+  const email = emailInput.value.trim().toLowerCase();
+  const name = nameInput.value.trim();
+  if (!listId || !email) return;
+  const duplicate = audienceData.members.some(member => member.listId === listId && member.email === email);
+  if (duplicate) {
+    setAudienceFeedback(`${email} is already on ${getListLabel(listId)}.`, 'error');
+    return;
+  }
+
+  audienceData.members.push({
+    id: createAudienceId('member'),
+    listId,
+    email,
+    name,
+    createdAt: new Date().toISOString(),
+  });
+  persistAudienceData();
+  renderAudienceManager();
+  event.target.reset();
+  closeAudiencePanels();
+  setAudienceFeedback(`${name || email} was added to ${getListLabel(listId)}.`, 'ok');
+  showToast(`✓ Member added to ${getListLabel(listId)}`, 'green');
+}
+
+function removeSubscriberMember(memberId) {
+  const member = audienceData.members.find(item => item.id === memberId);
+  if (!member) return;
+  audienceData.members = audienceData.members.filter(item => item.id !== memberId);
+  persistAudienceData();
+  renderAudienceManager();
+  setAudienceFeedback(`${member.name || member.email} was removed from ${getListLabel(member.listId)}.`, 'ok');
+  if (currentStep === 6) updateReview();
+}
+
+function removeSubscriberList(listId) {
+  const list = audienceData.customLists.find(item => item.id === listId);
+  if (!list || !window.confirm(`Remove “${list.name}” and its locally added members?`)) return;
+  audienceData.customLists = audienceData.customLists.filter(item => item.id !== listId);
+  audienceData.members = audienceData.members.filter(member => member.listId !== listId);
+  delete state.lists[listId];
+  persistAudienceData();
+  renderAudienceManager();
+  setAudienceFeedback(`“${list.name}” was removed.`, 'ok');
+  if (currentStep === 6) updateReview();
 }
 
 // ── SENDY CONFIG ──────────────────────────────────────────────────────────
@@ -1539,9 +2062,10 @@ function selectSched(sched, el) {
 function updateReview() {
   const brand = getPublication();
   const tplLabels = { editorial: 'Editorial Broadsheet', marketing: 'Business Digest', bulletin: 'Town Bulletin' };
-  const lenLabels = { brief: 'Brief (~200 words)', standard: 'Standard (~450 words)', full: 'Full Edition (~900 words)' };
+  const lenLabels = { brief: 'Brief (~200 words)', standard: 'Standard (~450 words)', full: 'Full Editorial Desk (all approved stories)' };
   const schedLabels = { now: 'Send Now', today: '9am Today', tomorrow: 'Tomorrow 8am', custom: 'Custom Time' };
   document.getElementById('rv-publication').textContent = brand.name;
+  document.getElementById('rv-issue-date').textContent = CURRENT_ISSUE.label;
   document.getElementById('rv-template').textContent = tplLabels[state.template] || state.template;
   document.getElementById('rv-length').textContent = lenLabels[state.length] || state.length;
   document.getElementById('rv-stories').textContent = state.stories.filter(s => s.selected).length + ' of ' + state.stories.length;
@@ -1549,27 +2073,93 @@ function updateReview() {
   document.getElementById('rv-schedule').textContent = schedLabels[state.schedule] || state.schedule;
 
   let total = 0;
-  const counts = LIST_COUNTS[state.publication] || LIST_COUNTS.wrc;
-  Object.entries(state.lists).forEach(([k, v]) => {
-    const el = document.getElementById('rv-' + k);
-    if (el) { el.textContent = v ? '✓ Included' : '— Skipped'; el.className = 'review-val' + (v ? ' ok' : ''); }
-    if (v) total += counts[k] || 0;
+  BUILTIN_LISTS.forEach(list => {
+    const included = Boolean(state.lists[list.id]);
+    const el = document.getElementById('rv-' + list.id);
+    if (el) {
+      el.textContent = included ? '✓ Included' : '— Skipped';
+      el.className = 'review-val' + (included ? ' ok' : '');
+    }
+    if (included) total += getListCount(list.id);
   });
+
+  const customReview = document.getElementById('rv-custom-lists');
+  if (customReview) {
+    customReview.textContent = '';
+    audienceData.customLists.forEach(list => {
+      const included = Boolean(state.lists[list.id]);
+      const row = document.createElement('div');
+      row.className = 'review-row';
+      const label = document.createElement('span');
+      label.className = 'review-label';
+      label.textContent = `👥 ${list.name}`;
+      const value = document.createElement('span');
+      value.className = 'review-val' + (included ? ' ok' : '');
+      value.textContent = included ? `✓ Included · ${getListCount(list.id).toLocaleString()}` : '— Skipped';
+      row.append(label, value);
+      customReview.appendChild(row);
+      if (included) total += getListCount(list.id);
+    });
+  }
   document.getElementById('rv-total').textContent = total.toLocaleString();
   document.getElementById('rv-delivery').textContent = state.schedule === 'now' ? 'Immediate' : schedLabels[state.schedule];
 }
 
 // ── SEND ──────────────────────────────────────────────────────────────────
+function saveDraftRecipient() {
+  const field = document.getElementById('draft-recipient');
+  if (field) localStorage.setItem('nl_draft_recipient', field.value.trim());
+}
+
+function loadDraftRecipient() {
+  const field = document.getElementById('draft-recipient');
+  if (field) field.value = localStorage.getItem('nl_draft_recipient') || '';
+}
+
+function sendDraft() {
+  const brand = getPublication();
+  const recipientField = document.getElementById('draft-recipient');
+  const recipient = recipientField ? recipientField.value.trim() : '';
+  if (!recipient || !recipientField.checkValidity()) {
+    if (recipientField) {
+      recipientField.focus();
+      recipientField.reportValidity();
+    }
+    showToast('Enter a valid reviewer email address', 'red');
+    return;
+  }
+
+  saveDraftRecipient();
+  rememberNewsletterOptions();
+  const campaignSubject = document.getElementById('subject-line').value.trim() || `${brand.name} newsletter`;
+  const previewText = document.getElementById('preview-text').value.trim();
+  const proofText = document.getElementById('email-preview').innerText.trim();
+  const body = [
+    `DRAFT PROOF — ${brand.name}`,
+    '',
+    previewText,
+    '',
+    proofText,
+    '',
+    'Review only — this draft was prepared in SATCOM and was not sent to subscriber lists.',
+  ].filter((line, index, lines) => line || lines[index - 1]).join('\n');
+  const mailto = `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(`[DRAFT] ${campaignSubject}`)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+  showToast(`✉ Draft opened for ${recipient} — review, then send from your mail app`, 'green');
+}
+
 async function sendNewsletter() {
   if (!state.sendyUrl || !state.sendyKey) {
     showToast('⚠ Sendy not configured — export HTML to send manually', 'red');
     return;
   }
+  rememberNewsletterOptions();
   showToast(`⚠ ${getPublication().name} campaign prepared — live Sendy delivery is not connected yet. Export the HTML to continue.`, 'red');
 }
 
 function exportHTML() {
   const brand = getPublication();
+  rememberNewsletterOptions();
   const html = document.getElementById('email-preview').outerHTML;
   const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${brand.name} Newsletter</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`], { type: 'text/html' });
   const a = document.createElement('a');
@@ -1579,20 +2169,46 @@ function exportHTML() {
   showToast(`📥 ${brand.name} HTML exported — ready to paste into Sendy`, 'gold');
 }
 
+function captureNewsletterOptions() {
+  return {
+    version: 3,
+    contentVersion: CONTENT_VERSION,
+    publication: state.publication,
+    template: state.template,
+    length: state.length,
+    lists: { ...state.lists },
+    schedule: state.schedule,
+    storyIds: state.stories.filter(story => story.selected).map(story => story.id),
+    subject: document.getElementById('subject-line').value,
+    preview: document.getElementById('preview-text').value,
+    replyTo: document.getElementById('reply-to').value,
+    utm: document.getElementById('utm-tag').value,
+    customTime: document.getElementById('custom-time').value,
+  };
+}
+
+function rememberNewsletterOptions() {
+  localStorage.setItem('nl_last_options', JSON.stringify(captureNewsletterOptions()));
+}
+
 function saveConfig() {
   savePublicationFields();
-  localStorage.setItem('nl_state', JSON.stringify({ publication: state.publication, template: state.template, length: state.length, lists: state.lists, schedule: state.schedule }));
+  localStorage.setItem('nl_state', JSON.stringify(captureNewsletterOptions()));
   showToast(`💾 ${getPublication().name} draft saved`, 'gold');
 }
 
+function readNewsletterOptions(storageKey) {
+  try { return JSON.parse(localStorage.getItem(storageKey) || 'null'); }
+  catch { return null; }
+}
+
 function loadDraftConfig() {
-  let saved = null;
-  try { saved = JSON.parse(localStorage.getItem('nl_state') || 'null'); }
-  catch { saved = null; }
-  if (!saved) return;
+  const saved = readNewsletterOptions('nl_state');
+  if (!saved) return null;
+  const sameContentVersion = saved.contentVersion === CONTENT_VERSION;
   if (saved.publication && PUBLICATIONS[saved.publication]) state.publication = saved.publication;
   if (['editorial', 'marketing', 'bulletin'].includes(saved.template)) state.template = saved.template;
-  if (['brief', 'standard', 'full'].includes(saved.length)) state.length = saved.length;
+  if (sameContentVersion && ['brief', 'standard', 'full'].includes(saved.length)) state.length = saved.length;
   if (saved.lists && typeof saved.lists === 'object') state.lists = { ...state.lists, ...saved.lists };
   if (['now', 'today', 'tomorrow', 'custom'].includes(saved.schedule)) state.schedule = saved.schedule;
 
@@ -1600,6 +2216,70 @@ function loadDraftConfig() {
   document.querySelectorAll('.length-opt').forEach(card => card.classList.toggle('selected', card.dataset.len === state.length));
   document.querySelectorAll('.list-card').forEach(card => card.classList.toggle('selected', Boolean(state.lists[card.dataset.list])));
   document.querySelectorAll('.sched-opt').forEach(card => card.classList.toggle('selected', card.dataset.sched === state.schedule));
+  return saved;
+}
+
+function applyNewsletterOptions(saved) {
+  if (!saved || typeof saved !== 'object') return false;
+  const sameContentVersion = saved.contentVersion === CONTENT_VERSION;
+
+  if (saved.publication && PUBLICATIONS[saved.publication]) state.publication = saved.publication;
+  if (['editorial', 'marketing', 'bulletin'].includes(saved.template)) state.template = saved.template;
+  if (sameContentVersion && ['brief', 'standard', 'full'].includes(saved.length)) state.length = saved.length;
+  if (['now', 'today', 'tomorrow', 'custom'].includes(saved.schedule)) state.schedule = saved.schedule;
+
+  applyPublication({ resetCopy: false });
+
+  const validListIds = new Set([
+    ...BUILTIN_LISTS.map(list => list.id),
+    ...audienceData.customLists.map(list => list.id),
+  ]);
+  if (saved.lists && typeof saved.lists === 'object') {
+    validListIds.forEach(listId => {
+      if (typeof saved.lists[listId] === 'boolean') state.lists[listId] = saved.lists[listId];
+    });
+  }
+
+  document.querySelectorAll('.template-card').forEach(card => card.classList.toggle('selected', card.dataset.tpl === state.template));
+  document.querySelectorAll('.length-opt').forEach(card => card.classList.toggle('selected', card.dataset.len === state.length));
+  document.querySelectorAll('.sched-opt').forEach(card => card.classList.toggle('selected', card.dataset.sched === state.schedule));
+
+  if (sameContentVersion && Array.isArray(saved.storyIds)) {
+    const selectedStoryIds = new Set(saved.storyIds.filter(id => typeof id === 'string'));
+    state.stories.forEach(story => { story.selected = selectedStoryIds.has(story.id); });
+    state.stories = rollLatestNewsToTop(state.stories);
+  } else {
+    selectLength(state.length, document.querySelector(`[data-len="${state.length}"]`));
+  }
+
+  const values = {
+    'subject-line': sameContentVersion ? saved.subject : getPublication().subject,
+    'preview-text': sameContentVersion ? saved.preview : getPublication().preview,
+    'reply-to': saved.replyTo,
+    'utm-tag': sameContentVersion ? saved.utm : getPublication().utm,
+    'custom-time': saved.customTime,
+  };
+  Object.entries(values).forEach(([id, value]) => {
+    const field = document.getElementById(id);
+    if (field && typeof value === 'string') field.value = value;
+  });
+
+  document.getElementById('custom-time-row').style.display = state.schedule === 'custom' ? 'block' : 'none';
+  renderAudienceManager();
+  document.querySelectorAll('.list-card').forEach(card => card.classList.toggle('selected', Boolean(state.lists[card.dataset.list])));
+  renderStoryList();
+  updatePreview();
+  return true;
+}
+
+function repeatNewsletterOptions() {
+  const saved = readNewsletterOptions('nl_last_options') || readNewsletterOptions('nl_state') || captureNewsletterOptions();
+  if (!applyNewsletterOptions(saved)) {
+    showToast('Could not repeat the last newsletter options', 'red');
+    return;
+  }
+  goStep(3);
+  showToast(`↻ ${getPublication().name} options repeated — update content, then review`, 'green');
 }
 
 // ── CAMPAIGN HANDOFF ──────────────────────────────────────────────────────
@@ -1682,7 +2362,9 @@ function updatePreview() {
   const lead = selected.find(s => s.lead) || selected[0];
   const rest = selected.filter(s => s !== lead);
   const subject = (document.getElementById('subject-line') || {}).value || brand.name;
-  const date = lead ? (formatPubDate(lead, 'long') || 'Wednesday, April 23, 2026') : 'Wednesday, April 23, 2026';
+  const date = lead ? (formatPubDate(lead, 'long') || CURRENT_ISSUE.fallbackDate) : CURRENT_ISSUE.fallbackDate;
+  const restLimit = state.length === 'brief' ? 2 : state.length === 'standard' ? 4 : Infinity;
+  const previewRest = rest.slice(0, restLimit);
   const storyLink = story => state.publication === 'villager'
     ? (story.villagerUrl || brand.site)
     : (story.wrcUrl || story.readmore || brand.site);
@@ -1704,9 +2386,9 @@ function updatePreview() {
           <a class="read-more" href="${storyLink(lead)}">Continue reading →</a>
         </div>
         <div class="divider"></div>` : ''}
-        ${rest.length ? `
+        ${previewRest.length ? `
         <div class="story-grid">
-          ${rest.slice(0,4).map(s => `
+          ${previewRest.map(s => `
           <div class="story-item">
             <div style="font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin-bottom:4px;">${s.kicker}${formatPubDate(s) ? ' · ' + formatPubDate(s) : ''}</div>
             <h3>${s.title}</h3>
@@ -1741,7 +2423,7 @@ function updatePreview() {
           </div>
         </div>` : ''}
         <div class="news-list">
-          ${rest.slice(0,4).map((s, i) => `
+          ${previewRest.map((s, i) => `
           <div class="news-item">
             <div class="news-num">${String(i+1).padStart(2,'0')}</div>
             <div><h4>${s.title}</h4>${formatPubDate(s) ? `<div style="font-size:10px;color:#888;margin:2px 0 4px;">${formatPubDate(s)}</div>` : ''}<p>${s.body.substring(0,90)}…</p></div>
@@ -1776,7 +2458,7 @@ function updatePreview() {
         <hr class="rule">` : ''}
         <div class="town-section">
           <div class="town-header">This Week's News</div>
-          ${rest.slice(0,5).map(s => `
+          ${previewRest.map(s => `
           <div class="story-brief">
             <h3>${s.title}</h3>
             ${formatPubDate(s) ? `<div class="byline">${formatPubDate(s)}</div>` : ''}
@@ -1805,6 +2487,7 @@ window.addEventListener('DOMContentLoaded', () => {
   loadDraftConfig();
   applyPublication();
   loadSendyConfig();
+  loadDraftRecipient();
   selectLength(state.length, document.querySelector(`[data-len="${state.length}"]`));
   updatePreview();
   maybeLoadCampaignHandoff();
