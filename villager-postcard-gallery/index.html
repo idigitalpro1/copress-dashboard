@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Postcard Gallery — The Villager</title>
+<meta name="description" content="Print-proof gallery of Villager subscription and renewal postcards, with press-readiness checks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f4ead6; --paper-deep:#eadbc2;
+    --ink:#20352b; --ink-soft:#5c6e5a;
+    --gold:#c49a5a; --brown:#6c4328; --navy:#1e3159; --red:#a73333;
+    --line:rgba(32,53,43,.18); --line-strong:rgba(32,53,43,.36);
+    --radius:8px; --shadow:0 18px 60px rgba(68,43,24,.18);
+    --ok:#3f6b4a; --warn:#8a6320;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"DM Sans",Arial,sans-serif; font-weight:400; line-height:1.55;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(24px,4vw,56px) clamp(16px,3vw,32px)}
+
+  header.masthead{border-bottom:2px solid var(--line-strong);padding-bottom:22px;margin-bottom:34px}
+  .eyebrow{
+    font-family:"DM Mono",monospace;font-size:.7rem;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--brown);margin:0 0 10px
+  }
+  h1{
+    font-family:"Playfair Display",Georgia,serif;font-weight:700;
+    font-size:clamp(2rem,5vw,3rem);line-height:1.08;margin:0 0 12px;letter-spacing:-.01em
+  }
+  .lede{margin:0;max-width:62ch;color:var(--ink-soft);font-size:1.03rem}
+  .backlink{
+    display:inline-block;margin-top:18px;font-family:"DM Mono",monospace;
+    font-size:.78rem;color:var(--brown);text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:2px
+  }
+  .backlink:hover,.backlink:focus-visible{color:var(--ink)}
+
+  .summary{
+    display:flex;flex-wrap:wrap;gap:10px;margin:0 0 30px;padding:0;list-style:none
+  }
+  .summary li{
+    font-family:"DM Mono",monospace;font-size:.74rem;letter-spacing:.04em;
+    background:var(--paper-deep);border:1px solid var(--line);border-radius:99px;padding:6px 13px
+  }
+
+  .grid{
+    display:grid;gap:clamp(20px,3vw,30px);
+    grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+    margin:0;padding:0;list-style:none
+  }
+  .card{
+    background:#fffaf0;border:1px solid var(--line);border-radius:var(--radius);
+    overflow:hidden;display:flex;flex-direction:column;
+    transition:transform .18s ease, box-shadow .18s ease
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+  .shot{
+    display:block;width:100%;border:0;padding:0;margin:0;cursor:zoom-in;
+    background:var(--paper-deep);line-height:0
+  }
+  .shot img{width:100%;height:auto;display:block;aspect-ratio:3/2;object-fit:contain}
+  .shot:focus-visible{outline:3px solid var(--gold);outline-offset:-3px}
+
+  .meta{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .meta h2{
+    font-family:"Playfair Display",Georgia,serif;font-size:1.16rem;
+    font-weight:600;margin:0;line-height:1.25
+  }
+  .note{margin:0;font-size:.88rem;color:var(--ink-soft)}
+  dl.specs{
+    margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 12px;
+    font-family:"DM Mono",monospace;font-size:.74rem
+  }
+  dl.specs dt{color:var(--ink-soft)}
+  dl.specs dd{margin:0}
+
+  .tag{
+    align-self:flex-start;margin-top:auto;
+    font-family:"DM Mono",monospace;font-size:.7rem;letter-spacing:.06em;
+    text-transform:uppercase;padding:4px 10px;border-radius:99px;border:1px solid currentColor
+  }
+  .tag.ok{color:var(--ok)}
+  .tag.warn{color:var(--warn)}
+  .tag.stop{color:var(--red)}
+
+  /* lightbox */
+  dialog.lb{
+    border:0;padding:0;max-width:min(94vw,1500px);max-height:94vh;
+    background:transparent;color:var(--paper);overflow:visible
+  }
+  dialog.lb::backdrop{background:rgba(20,14,8,.88)}
+  .lb-inner{display:flex;flex-direction:column;gap:12px;align-items:center}
+  .lb img{
+    max-width:100%;max-height:78vh;width:auto;height:auto;display:block;
+    border-radius:4px;box-shadow:0 30px 80px rgba(0,0,0,.5);background:#fff
+  }
+  .lb-bar{
+    display:flex;gap:14px;align-items:center;justify-content:center;flex-wrap:wrap;
+    font-family:"DM Mono",monospace;font-size:.78rem
+  }
+  .lb-bar button{
+    font:inherit;background:rgba(244,234,214,.14);color:var(--paper);
+    border:1px solid rgba(244,234,214,.4);border-radius:99px;
+    padding:7px 15px;cursor:pointer
+  }
+  .lb-bar button:hover{background:rgba(244,234,214,.26)}
+  .lb-bar button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  #lbCap{margin:0;text-align:center}
+
+  footer.foot{
+    margin-top:48px;padding-top:20px;border-top:1px solid var(--line);
+    font-family:"DM Mono",monospace;font-size:.74rem;color:var(--ink-soft)
+  }
+  @media (prefers-reduced-motion:reduce){
+    .card{transition:none}
+    .card:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">The Villager · SATCOM</p>
+    <h1>Postcard Gallery</h1>
+    <p class="lede">
+      Every subscription and renewal card currently held in the proofing repository,
+      with measured dimensions and a press-readiness check at 300&nbsp;DPI.
+      Select any card to view it full size.
+    </p>
+    <a class="backlink" href="/villager-postcard-proofing">← Renewal proofing sheet</a>
+  </header>
+
+  <ul class="summary">
+    <li>3 postcard designs</li>
+    <li>1 QR asset</li>
+    <li>Measured 2026-08-24</li>
+    <li>Trim target 6″ × 4″</li>
+  </ul>
+
+  <ul class="grid" id="grid">
+
+    <li class="card">
+      <button class="shot" data-i="0" aria-label="View Basic Renewal — Primary full size">
+        <img src="/villager-postcard-proofing/assets/basic-renewal-primary.png"
+             alt="Basic Renewal postcard, primary design" loading="lazy" decoding="async">
+      </button>
+      <div class="meta">
+        <h2>Basic Renewal — Primary</h2>
+        <p class="note">Primary renewal card carried in the current proofing sheet.</p>
+        <dl class="specs">
+          <dt>Pixels</dt><dd>1484 × 1060</dd>
+          <dt>At 300 DPI</dt><dd>4.95″ × 3.53″</dd>
+          <dt>For 6″ × 4″</dt><dd>247 DPI</dd>
+          <dt>File</dt><dd>2.7 MB PNG</dd>
+        </dl>
+        <span class="tag warn">Below 300 DPI</span>
+      </div>
+    </li>
+
+    <li class="card">
+      <button class="shot" data-i="1" aria-label="View Clean Renewal draft full size">
+        <img src="/villager-postcard-proofing/assets/clean-renewal-draft.png"
+             alt="Clean Renewal postcard, draft design" loading="lazy" decoding="async">
+      </button>
+      <div class="meta">
+        <h2>Clean Renewal — Draft</h2>
+        <p class="note">Simplified layout. Largest source file of the three.</p>
+        <dl class="specs">
+          <dt>Pixels</dt><dd>1536 × 1024</dd>
+          <dt>At 300 DPI</dt><dd>5.12″ × 3.41″</dd>
+          <dt>For 6″ × 4″</dt><dd>256 DPI</dd>
+          <dt>File</dt><dd>2.9 MB PNG</dd>
+        </dl>
+        <span class="tag warn">Below 300 DPI</span>
+      </div>
+    </li>
+
+    <li class="card">
+      <button class="shot" data-i="2" aria-label="View Freedom 250 postcard full size">
+        <img src="/villager-postcard-proofing/assets/freedom-250-postcard.png"
+             alt="Freedom 250 commemorative postcard" loading="lazy" decoding="async">
+      </button>
+      <div class="meta">
+        <h2>Freedom 250</h2>
+        <p class="note">Commemorative card. Present as a screen-resolution asset only.</p>
+        <dl class="specs">
+          <dt>Pixels</dt><dd>480 × 320</dd>
+          <dt>At 300 DPI</dt><dd>1.60″ × 1.07″</dd>
+          <dt>For 6″ × 4″</dt><dd>80 DPI</dd>
+          <dt>File</dt><dd>316 KB PNG</dd>
+        </dl>
+        <span class="tag stop">Not print ready</span>
+      </div>
+    </li>
+
+    <li class="card">
+      <button class="shot" data-i="3" aria-label="View subscribe QR code full size">
+        <img src="/villager-postcard-proofing/assets/subscribe-qr.png"
+             alt="Subscription QR code" loading="lazy" decoding="async">
+      </button>
+      <div class="meta">
+        <h2>Subscribe QR</h2>
+        <p class="note">Shared QR placed on the renewal cards. Vector regeneration preferred for print.</p>
+        <dl class="specs">
+          <dt>Pixels</dt><dd>264 × 264</dd>
+          <dt>At 300 DPI</dt><dd>0.88″ × 0.88″</dd>
+          <dt>Type</dt><dd>Raster PNG</dd>
+          <dt>File</dt><dd>378 B</dd>
+        </dl>
+        <span class="tag ok">Adequate at ≤ 0.8″</span>
+      </div>
+    </li>
+
+  </ul>
+
+  <footer class="foot">
+    Dimensions measured from the committed assets on 2026-08-24.
+    DPI figures assume the stated trim size with no bleed allowance.
+    Confirm final trim, bleed, and safe margin with the mail house before release.
+  </footer>
+</div>
+
+<dialog class="lb" id="lb" aria-label="Postcard viewer">
+  <div class="lb-inner">
+    <img id="lbImg" src="" alt="">
+    <div class="lb-bar">
+      <button type="button" id="lbPrev">← Prev</button>
+      <p id="lbCap"></p>
+      <button type="button" id="lbNext">Next →</button>
+      <button type="button" id="lbClose">Close ✕</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+  var shots = Array.prototype.slice.call(document.querySelectorAll('.shot'));
+  var lb = document.getElementById('lb');
+  var lbImg = document.getElementById('lbImg');
+  var lbCap = document.getElementById('lbCap');
+  var idx = 0;
+
+  if (!lb || typeof lb.showModal !== 'function') return; // graceful: cards still render
+
+  function itemAt(i){
+    var img = shots[i].querySelector('img');
+    var title = shots[i].closest('.card').querySelector('h2').textContent.trim();
+    return { src: img.getAttribute('src'), alt: img.getAttribute('alt') || title, title: title };
+  }
+  function show(i){
+    idx = (i + shots.length) % shots.length;
+    var it = itemAt(idx);
+    lbImg.src = it.src;
+    lbImg.alt = it.alt;
+    lbCap.textContent = it.title + '  ·  ' + (idx + 1) + ' of ' + shots.length;
+  }
+  shots.forEach(function(btn, i){
+    btn.addEventListener('click', function(){ show(i); lb.showModal(); });
+  });
+  document.getElementById('lbPrev').addEventListener('click', function(){ show(idx - 1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ show(idx + 1); });
+  document.getElementById('lbClose').addEventListener('click', function(){ lb.close(); });
+  lb.addEventListener('click', function(e){ if (e.target === lb) lb.close(); });
+  document.addEventListener('keydown', function(e){
+    if (!lb.open) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(idx - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); show(idx + 1); }
+  });
+  lb.addEventListener('close', function(){ if (shots[idx]) shots[idx].focus(); });
+})();
+</script>
+</body>
+</html>
