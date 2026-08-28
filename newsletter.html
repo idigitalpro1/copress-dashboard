@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Newsletter Studio — copress.news</title>
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -2162,6 +2166,10 @@ function exportHTML() {
   rememberNewsletterOptions();
   const html = document.getElementById('email-preview').outerHTML;
   const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${brand.name} Newsletter</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`], { type: 'text/html' });
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `${brand.key}-newsletter-${new Date().toISOString().slice(0, 10)}.html`;
