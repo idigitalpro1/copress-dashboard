@@ -430,26 +430,26 @@ const sportsBooks = {
 
 const SCREEN_SETS = {
   all: [
-    { src:'book-screens/tennis.png', alt:'Tennis', label:'Court Philippe — Set 3' },
-    { src:'book-screens/racing.png', alt:'Horse Racing', label:'Hippodrome — Race 4' },
-    { src:'book-screens/soccer.png', alt:'Soccer', label:'Stade Louis II — 70\'' },
-    { src:'book-screens/basketball.png', alt:'Basketball', label:'Lake City Pavilion — Q3' },
+    { src:'book-screens/tennis.png', alt:'Tennis', label:'Court Philippe — Set 3', sport:'tennis' },
+    { src:'book-screens/racing.png', alt:'Horse Racing', label:'Hippodrome — Race 4', sport:'racing' },
+    { src:'book-screens/soccer.png', alt:'Soccer', label:'Stade Louis II — 70\'', sport:'soccer' },
+    { src:'book-screens/basketball.png', alt:'Basketball', label:'Lake City Pavilion — Q3', sport:'basketball' },
     { src:'book-screens/golf.png', alt:'Golf', label:'Monte Carlo — Live' },
   ],
   soccer: [
-    { src:'book-screens/soccer.png', alt:'Soccer', label:'Stade Louis II — 70\'' },
-    { src:'book-screens/soccer2.png', alt:'Soccer', label:'Stade Louis II — Live' },
+    { src:'book-screens/soccer.png', alt:'Soccer', label:'Stade Louis II — 70\'', sport:'soccer' },
+    { src:'book-screens/soccer2.png', alt:'Soccer', label:'Stade Louis II — Live', sport:'soccer' },
   ],
   basketball: [
-    { src:'book-screens/basketball.png', alt:'Basketball', label:'Lake City Pavilion — Q3' },
-    { src:'book-screens/basketball2.png', alt:'Basketball', label:'Riviera Court — Live' },
+    { src:'book-screens/basketball.png', alt:'Basketball', label:'Lake City Pavilion — Q3', sport:'basketball' },
+    { src:'book-screens/basketball2.png', alt:'Basketball', label:'Riviera Court — Live', sport:'basketball' },
   ],
   tennis: [
-    { src:'book-screens/tennis.png', alt:'Tennis', label:'Court Philippe — Set 3' },
+    { src:'book-screens/tennis.png', alt:'Tennis', label:'Court Philippe — Set 3', sport:'tennis' },
   ],
   racing: [
-    { src:'book-screens/racing.png', alt:'Horse Racing', label:'Hippodrome — Race 4' },
-    { src:'book-screens/racing2.png', alt:'Horse Racing', label:'Grand Steeple — Race 4' },
+    { src:'book-screens/racing.png', alt:'Horse Racing', label:'Hippodrome — Race 4', sport:'racing' },
+    { src:'book-screens/racing2.png', alt:'Horse Racing', label:'Grand Steeple — Race 4', sport:'racing' },
   ],
 };
 
@@ -459,7 +459,7 @@ function renderScreens(sport) {
   const set = SCREEN_SETS[sport] || SCREEN_SETS.all;
   el.dataset.count = String(set.length);
   el.innerHTML = set.map(s => `
-    <div class="screen active">
+    <div class="screen active" data-sport="${s.sport || 'all'}">
       <img src="${s.src}" alt="${s.alt}">
       <div class="label">${s.label}</div>
       <div class="live-badge">LIVE</div>
@@ -813,19 +813,36 @@ function initTicker() {
   document.getElementById('ticker').innerHTML = text + ' &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ' + text;
 }
 
-// ─── TABS ───────────────────────────────────────────────────────────────────
+// ─── SPORT SWITCH ───────────────────────────────────────────────────────────
+function setSport(sport) {
+  if (!sport) return;
+  currentSport = sport;
+  document.querySelectorAll('#sportTabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.sport === sport);
+  });
+  renderBoard();
+}
+
 document.getElementById('sportTabs').addEventListener('click', e => {
   if (e.target.tagName !== 'BUTTON') return;
-  document.querySelectorAll('#sportTabs button').forEach(b => b.classList.remove('active'));
-  e.target.classList.add('active');
-  currentSport = e.target.dataset.sport;
-  renderBoard();
+  setSport(e.target.dataset.sport);
+});
+
+document.getElementById('screens').addEventListener('click', e => {
+  const screen = e.target.closest('.screen[data-sport]');
+  if (!screen) return;
+  setSport(screen.dataset.sport);
 });
 
 // ─── ODDS / POLY CLICK → BET SLIP ──────────────────────────────────────────
 document.addEventListener('click', e => {
   const card = e.target.closest('[data-poly]');
   if (card && !e.target.closest('.odds')) {
+    if (card.closest('#tipMovers, #mostAction')) {
+      const left = document.getElementById('drawerLeft');
+      if (left && !left.classList.contains('open')) setDrawer('left', true);
+    }
+    setSport('politics');
     addPolyToSlip(card.dataset.poly);
     return;
   }

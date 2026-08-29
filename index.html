@@ -1933,6 +1933,14 @@ body.satcom-gated #satcom-entry-gate {
             </span>
             <span class="asset-health-code" data-asset-code>...</span>
           </a>
+          <a class="asset-health pending" data-asset-id="book" href="/le-grand-book">
+            <span class="asset-dot"></span>
+            <span class="asset-health-main">
+              <span class="asset-health-label">Le Grand Book</span>
+              <span class="asset-health-detail" data-asset-detail>checking</span>
+            </span>
+            <span class="asset-health-code" data-asset-code>...</span>
+          </a>
           <a class="asset-health pending" data-asset-id="kanban" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
             <span class="asset-dot"></span>
             <span class="asset-health-main">
@@ -2401,6 +2409,29 @@ body.satcom-gated #satcom-entry-gate {
               <button class="card-btn primary" onclick="event.stopPropagation(); window.open('/cg-campaign-kit/manifest.json','_blank')">Campaign Kit</button>
               <button class="card-btn" onclick="event.stopPropagation(); loadCasinoDirectory()">Load Casinos</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.open('https://github.com/idigitalpro1/colorado-gambler','_blank')">Repo</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Le Grand Book -->
+        <div class="module-card" onclick="window.location.href='/le-grand-book'" style="cursor:pointer;--card-color:#c9a84c;--card-glow:rgba(201,168,76,.08);">
+          <div class="card-dept">
+            <span class="card-dept-name">Aspen.Fashion</span>
+            <span class="card-led ok"></span>
+          </div>
+          <div class="card-body">
+            <div class="card-icon-row">
+              <div class="card-icon">♣</div>
+              <div>
+                <div class="card-title">Le Grand Book</div>
+                <div class="card-subtitle">Monte Carlo lounge · Aspen.Fashion</div>
+              </div>
+            </div>
+            <div class="card-rule"></div>
+            <div class="card-actions">
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/le-grand-book'">Open Book</button>
+              <button class="card-btn" onclick="event.stopPropagation(); window.open('https://github.com/idigitalpro1/Aspen-Fashion','_blank')">Repo</button>
             </div>
           </div>
         </div>
@@ -4809,6 +4840,7 @@ const POSTCARD_STUDIO_URL = '/villager-postcard-proofing/';
 const OWNED_ASSET_CHECKS = [
   { id: 'satcom', label: 'SATCOM', url: '/', mode: 'fetch' },
   { id: 'docs', label: 'Docs Hub', url: '/docs', mode: 'fetch' },
+  { id: 'book', label: 'Le Grand Book', url: '/le-grand-book', mode: 'fetch' },
   { id: 'kanban', label: 'Kanban Ops', url: 'https://admin.conews.press/console/kanban', mode: 'link' },
   { id: 'hermes', label: 'Bridge (admin only)', url: '/console/api/hermes/health', mode: 'fetch' },
   { id: 'models', label: 'Model Route (admin)', url: '/console/api/hermes/models', mode: 'fetch' },
