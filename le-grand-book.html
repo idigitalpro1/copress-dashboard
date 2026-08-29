@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Grand Book — Aspen.Fashion</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c9a84c;--gold-dim:#8c6a2b;--gold-glow:rgba(201,168,76,.15);
+  --navy:#0a0e1a;--navy-light:#131929;
+  --panel:#0d1220;--panel-border:#1e2a4a;--panel-hover:#141e35;
+  --text:#e8e4dc;--text-dim:#8a8578;
+  --green:#2ecc71;--green-dim:#1a9c54;--red:#e74c3c;--red-dim:#c0392b;
+  --blue:#3498db;--purple:#9b59b6;--cyan:#1abc9c;
+}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
+.bg-layer{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(10,14,26,.93) 0%,rgba(10,14,26,.88) 100%),url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80') center/cover no-repeat}
+.app{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr 280px;grid-template-rows:auto auto 1fr auto;min-height:100vh}
+
+/* Header */
+header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:14px 28px;border-bottom:1px solid var(--panel-border);backdrop-filter:blur(20px);background:rgba(13,18,32,.85)}
+.logo{font-size:10px;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:var(--gold)}
+.logo span{display:block;font-size:20px;letter-spacing:.12em;font-family:Georgia,serif;color:var(--text);margin-top:2px}
+.logo small{font-size:8px;letter-spacing:.4em;color:var(--text-dim);font-weight:400}
+.header-center{display:flex;align-items:center;gap:16px}
+.nav-pills{display:flex;gap:2px;background:var(--panel);border:1px solid var(--panel-border);border-radius:4px;padding:3px}
+.nav-pills button{padding:7px 14px;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;border:none;background:transparent;color:var(--text-dim);cursor:pointer;border-radius:3px;transition:all .2s}
+.nav-pills button.active{background:var(--gold);color:var(--navy)}
+.nav-pills button:hover:not(.active){color:var(--text)}
+.header-right{display:flex;align-items:center;gap:16px}
+.live-indicator{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--green)}
+.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite;box-shadow:0 0 8px var(--green)}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+/* Portfolio Bar */
+.portfolio-bar{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;padding:10px 28px;background:rgba(13,18,32,.7);border-bottom:1px solid var(--panel-border)}
+.portfolio-bar .stat{display:flex;align-items:center;gap:8px}
+.portfolio-bar .stat-label{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim)}
+.portfolio-bar .stat-value{font-size:14px;font-weight:700;font-family:'Courier New',monospace;color:var(--text)}
+.portfolio-bar .stat-value.profit{color:var(--green)}
+.portfolio-bar .stat-value.loss{color:var(--red)}
+.portfolio-bar .actions{display:flex;gap:8px}
+.btn-sm{padding:6px 14px;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--panel-border);background:transparent;color:var(--text-dim);cursor:pointer;border-radius:3px;transition:all .2s}
+.btn-sm:hover{border-color:var(--gold);color:var(--gold)}
+.btn-sm.primary{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+.btn-sm.primary:hover{background:#d4b85c}
+
+/* Main Board */
+.main-board{padding:20px;overflow-y:auto}
+.board-title{text-align:center;margin-bottom:16px}
+.board-title h1{font-family:Georgia,serif;font-size:26px;letter-spacing:.14em;color:var(--text)}
+.board-title p{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-dim);margin-top:3px}
+.screens{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.screen{aspect-ratio:16/9;background:var(--panel);border:1px solid var(--panel-border);border-radius:6px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s}
+.screen:hover{border-color:var(--gold-dim)}
+.screen img{width:100%;height:100%;object-fit:cover;opacity:.75;transition:opacity .2s}
+.screen:hover img{opacity:.9}
+.screen .label{position:absolute;bottom:0;left:0;right:0;padding:5px 8px;background:linear-gradient(transparent,rgba(0,0,0,.85));font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.screen .live-badge{position:absolute;top:6px;right:6px;background:var(--red);color:#fff;padding:2px 6px;border-radius:2px;font-size:8px;font-weight:700;letter-spacing:.1em;animation:pulse 2s infinite}
+
+.section-label{display:flex;align-items:center;gap:10px;padding:8px 14px;background:linear-gradient(90deg,rgba(140,106,43,.2),transparent);border-left:3px solid var(--gold);border-radius:4px;margin:14px 0 8px;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+table{width:100%;border-collapse:collapse}
+table th{font-size:8px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);padding:6px 10px;text-align:right}
+table th:first-child{text-align:left}
+table td{padding:8px 10px;border-bottom:1px solid rgba(30,42,74,.5);font-size:12px}
+table td:first-child{color:var(--text)}
+.match-info{display:flex;align-items:center;gap:8px}
+.match-time{display:inline-block;background:var(--panel);border:1px solid var(--panel-border);padding:2px 6px;border-radius:3px;font-size:9px;color:var(--gold);font-family:'Courier New',monospace}
+.odds-cell{text-align:right;padding:4px}
+.odds{display:inline-block;font-weight:700;font-family:'Courier New',monospace;font-size:12px;cursor:pointer;padding:5px 10px;border-radius:3px;border:1px solid transparent;transition:all .15s;min-width:60px;text-align:center}
+.odds.home{color:var(--blue)}
+.odds.draw{color:var(--text-dim)}
+.odds.away{color:var(--red)}
+.odds:hover{background:var(--gold);color:var(--navy);border-color:var(--gold);transform:scale(1.05)}
+.odds.selected{background:var(--gold);color:var(--navy);border-color:var(--gold);box-shadow:0 0 12px var(--gold-glow)}
+.odds.flash-up{animation:flashGreen .4s ease-out}
+.odds.flash-down{animation:flashRed .4s ease-out}
+@keyframes flashGreen{0%{background:rgba(46,204,113,.3)}100%{background:transparent}}
+@keyframes flashRed{0%{background:rgba(231,76,60,.3)}100%{background:transparent}}
+
+.inplay-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:linear-gradient(90deg,rgba(46,204,113,.12),transparent);border-left:3px solid var(--green);border-radius:4px;margin:18px 0 8px}
+.inplay-header span{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green)}
+.inplay-header .meta{font-size:8px;color:var(--text-dim);letter-spacing:.1em}
+
+/* Market Depth */
+.depth-section{margin-top:20px;padding:14px;background:var(--panel);border:1px solid var(--panel-border);border-radius:6px}
+.depth-title{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.depth-chart{display:grid;grid-template-columns:1fr 60px 1fr;gap:2px;font-size:10px}
+.depth-row{display:contents}
+.depth-bar-buy{height:22px;background:linear-gradient(90deg,transparent,rgba(46,204,113,.3));border-radius:2px 0 0 2px;display:flex;align-items:center;justify-content:flex-end;padding:0 6px;color:var(--green);font-weight:600;font-family:'Courier New',monospace}
+.depth-bar-sell{height:22px;background:linear-gradient(270deg,transparent,rgba(231,76,60,.3));border-radius:0 2px 2px 0;display:flex;align-items:center;padding:0 6px;color:var(--red);font-weight:600;font-family:'Courier New',monospace}
+.depth-price{height:22px;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text);font-family:'Courier New',monospace;background:rgba(30,42,74,.5);font-size:11px}
+
+/* Ticker */
+.ticker{grid-column:1/-1;padding:8px 28px;background:rgba(13,18,32,.95);border-top:1px solid var(--panel-border);font-size:10px;color:var(--gold);overflow:hidden;white-space:nowrap}
+.ticker-inner{display:inline-block;animation:scroll 35s linear infinite}
+@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* Sidebars */
+.sidebar{padding:14px;overflow-y:auto;border-left:1px solid var(--panel-border);background:rgba(13,18,32,.5);backdrop-filter:blur(12px)}
+.sidebar.left{border-left:none;border-right:1px solid var(--panel-border)}
+.sidebar-title{font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--panel-border)}
+.sidebar-title span{color:var(--text-dim);margin-left:6px}
+.market-card{padding:10px;border:1px solid var(--panel-border);border-radius:5px;margin-bottom:8px;background:var(--panel);transition:all .2s;cursor:pointer}
+.market-card:hover{border-color:var(--gold-dim);background:var(--panel-hover)}
+.market-card h4{font-size:11px;color:var(--text);margin-bottom:6px;line-height:1.3}
+.market-card .row{display:flex;align-items:center;justify-content:space-between}
+.market-card .pct{font-size:18px;font-weight:700;font-family:'Courier New',monospace}
+.market-card .pct.up{color:var(--green)}
+.market-card .pct.down{color:var(--red)}
+.market-card .vol{font-size:8px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase}
+.market-card .prices{display:flex;gap:6px;margin-top:5px;font-size:9px;font-weight:600}
+.market-card .prices .yes{color:var(--green)}
+.market-card .prices .no{color:var(--red)}
+.market-card .spark{display:flex;align-items:flex-end;gap:1px;height:20px;margin-top:6px}
+.market-card .spark-bar{width:3px;background:var(--green);border-radius:1px;transition:height .3s}
+
+/* Bet Slip */
+.bet-slip{margin-top:auto;padding-top:12px;border-top:1px solid var(--panel-border)}
+.bet-slip-title{font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.bet-slip-title .count{background:var(--gold);color:var(--navy);padding:2px 6px;border-radius:10px;font-size:9px}
+.slip-item{padding:8px;background:var(--panel);border:1px solid var(--panel-border);border-radius:4px;margin-bottom:6px;position:relative}
+.slip-item .match{font-size:10px;color:var(--text-dim);margin-bottom:3px}
+.slip-item .selection{font-size:12px;font-weight:700;color:var(--text)}
+.slip-item .slip-odds{position:absolute;top:8px;right:8px;font-size:13px;font-weight:700;font-family:'Courier New',monospace;color:var(--gold)}
+.slip-item .stake-row{display:flex;align-items:center;gap:6px;margin-top:6px}
+.slip-item input{width:70px;padding:4px 8px;background:var(--navy);border:1px solid var(--panel-border);border-radius:3px;color:var(--text);font-size:11px;font-family:'Courier New',monospace}
+.slip-item .payout{font-size:9px;color:var(--green)}
+.slip-item .remove{position:absolute;top:4px;right:4px;width:14px;height:14px;border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:12px;display:none}
+.slip-item:hover .remove{display:block}
+.place-bet{width:100%;padding:10px;background:var(--green);color:#fff;border:none;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;border-radius:4px;cursor:pointer;transition:all .2s;margin-top:8px}
+.place-bet:hover{background:var(--green-dim);transform:translateY(-1px);box-shadow:0 4px 12px rgba(46,204,113,.3)}
+.place-bet:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+.news-card{padding:8px;border-bottom:1px solid rgba(30,42,74,.5);cursor:pointer;transition:background .2s}
+.news-card:hover{background:var(--gold-glow)}
+.news-card h4{font-size:10px;color:var(--text);margin-bottom:3px;line-height:1.4}
+.news-card .meta{font-size:8px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.1em}
+
+/* Responsive */
+@media(max-width:1200px){.app{grid-template-columns:240px 1fr 220px}}
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;grid-template-rows:auto auto auto auto auto auto}
+  .sidebar{border:none!important;border-top:1px solid var(--panel-border)!important}
+  .screens{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="app">
+  <header>
+    <div class="logo">
+      Aspen.Fashion
+      <span>LE GRAND BOOK</span>
+      <small>Monte Carlo — Live</small>
+    </div>
+    <div class="header-center">
+      <nav class="nav-pills" id="sportTabs">
+        <button data-sport="all">All</button>
+        <button class="active" data-sport="soccer">Soccer</button>
+        <button data-sport="basketball">Basketball</button>
+        <button data-sport="tennis">Tennis</button>
+        <button data-sport="racing">Racing</button>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="live-indicator">
+        <div class="live-dot"></div>
+        <span>LIVE</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Portfolio Bar -->
+  <div class="portfolio-bar">
+    <div style="display:flex;gap:28px">
+      <div class="stat">
+        <span class="stat-label">Balance</span>
+        <span class="stat-value" id="balance">€12,480.00</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Open Positions</span>
+        <span class="stat-value">7</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Today P&L</span>
+        <span class="stat-value profit" id="pnl">+€1,240.50</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Exposure</span>
+        <span class="stat-value">€3,200.00</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn-sm">Withdraw</button>
+      <button class="btn-sm primary">Deposit</button>
+    </div>
+  </div>
+
+  <!-- Left Sidebar: Predictive Markets -->
+  <aside class="sidebar left">
+    <div class="sidebar-title">Predictive Markets <span>Top Volume</span></div>
+    <div class="market-card" id="market-1">
+      <h4>Alpina lift the Champions Trophy tonight</h4>
+      <div class="row">
+        <span class="pct up" data-base="64">▲ 64%</span>
+        <span class="vol">Vol: €2.4M</span>
+      </div>
+      <div class="prices"><span class="yes">YES €0.64</span> <span class="no">NO €0.36</span></div>
+      <div class="spark"></div>
+    </div>
+    <div class="market-card" id="market-2">
+      <h4>Thunderbolt wins the Grand Steeple</h4>
+      <div class="row">
+        <span class="pct up" data-base="32">▲ 32%</span>
+        <span class="vol">Vol: €1.8M</span>
+      </div>
+      <div class="prices"><span class="yes">YES €0.32</span> <span class="no">NO €0.68</span></div>
+      <div class="spark"></div>
+    </div>
+    <div class="market-card" id="market-3">
+      <h4>Voss takes the Riviera Open</h4>
+      <div class="row">
+        <span class="pct up" data-base="59">▲ 59%</span>
+        <span class="vol">Vol: €3.1M</span>
+      </div>
+      <div class="prices"><span class="yes">YES €0.59</span> <span class="no">NO €0.41</span></div>
+      <div class="spark"></div>
+    </div>
+    <div class="market-card" id="market-4">
+      <h4>Monaco SC unbeaten this season</h4>
+      <div class="row">
+        <span class="pct down" data-base="41">▼ 41%</span>
+        <span class="vol">Vol: €890K</span>
+      </div>
+      <div class="prices"><span class="yes">YES €0.41</span> <span class="no">NO €0.59</span></div>
+      <div class="spark"></div>
+    </div>
+    <div class="market-card" id="market-5">
+      <h4>Lake City sweep the final series</h4>
+      <div class="row">
+        <span class="pct up" data-base="72">▲ 72%</span>
+        <span class="vol">Vol: €1.5M</span>
+      </div>
+      <div class="prices"><span class="yes">YES €0.72</span> <span class="no">NO €0.28</span></div>
+      <div class="spark"></div>
+    </div>
+
+    <!-- Bet Slip -->
+    <div class="bet-slip" id="betSlip">
+      <div class="bet-slip-title">
+        Bet Slip <span class="count" id="slipCount">0</span>
+      </div>
+      <div id="slipItems"></div>
+      <button class="place-bet" id="placeBetBtn" disabled>Place Bet</button>
+    </div>
+  </aside>
+
+  <!-- Main Board -->
+  <main class="main-board">
+    <div class="board-title">
+      <h1>LE GRAND BOOK</h1>
+      <p>Monte Carlo — Live</p>
+    </div>
+
+    <div class="screens">
+      <div class="screen">
+        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&q=70" alt="Tennis">
+        <div class="label">Court Philippe — Set 3</div>
+        <div class="live-badge">LIVE</div>
+      </div>
+      <div class="screen">
+        <img src="https://images.unsplash.com/photo-1529516222410-8e40ff5d5089?w=600&q=70" alt="Horse Racing">
+        <div class="label">Hippodrome — Race 4</div>
+        <div class="live-badge">LIVE</div>
+      </div>
+      <div class="screen">
+        <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=600&q=70" alt="Soccer">
+        <div class="label">Stade Louis II — 70'</div>
+        <div class="live-badge">LIVE</div>
+      </div>
+    </div>
+
+    <div class="section-label">⚽ Soccer — Most Active</div>
+    <table id="oddsTable">
+      <thead>
+        <tr><th>Match</th><th>Home</th><th>Draw</th><th>Away</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="inplay-header">
+      <span>⚡ In-Play — Next Off</span>
+      <span class="meta">Handle €4.82M · Settles &lt; 3m</span>
+    </div>
+    <table id="inplayTable">
+      <thead>
+        <tr><th>Event</th><th>Home</th><th>Draw</th><th>Away</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- Market Depth -->
+    <div class="depth-section">
+      <div class="depth-title">Market Depth — Monaco SC v Lyon Est (Match Winner)</div>
+      <div class="depth-chart" id="depthChart"></div>
+    </div>
+  </main>
+
+  <!-- Right Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Predictive Markets</div>
+    <div class="news-card"><h4>Skaric rematch announced by Sept.</h4><div class="meta">Vol: €720K · 58% YES</div></div>
+    <div class="news-card"><h4>Monaco SC unbeaten this season</h4><div class="meta">Vol: €890K · 41% YES</div></div>
+    <div class="news-card"><h4>Lake City sweep the final series</h4><div class="meta">Vol: €1.2M · 72% YES</div></div>
+    <div class="news-card"><h4>Alpine Cup moves to neutral venue</h4><div class="meta">Vol: €540K · 33% YES</div></div>
+    <div class="news-card"><h4>Riviera Open seed upset probability</h4><div class="meta">Vol: €2.1M · 27% YES</div></div>
+    <div class="news-card"><h4>Thunderbolt confirmed for Grand Steeple</h4><div class="meta">Vol: €1.8M · 32% YES</div></div>
+    <div class="news-card"><h4>Real Alpina Champions League bid</h4><div class="meta">Vol: €3.4M · 64% YES</div></div>
+    <div class="news-card"><h4>Geneva league promotion odds shift</h4><div class="meta">Vol: €680K · 55% YES</div></div>
+  </aside>
+
+  <!-- Ticker -->
+  <div class="ticker">
+    <div class="ticker-inner" id="ticker"></div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────────────────────────
+const matches = [
+  { id:'m1', teams:'Monaco SC v Lyon Est', time:'62:00', home:1.99, draw:3.53, away:4.82 },
+  { id:'m2', teams:'Real Alpina v Inter Riva', time:'€3.4M', home:2.13, draw:3.46, away:3.18 },
+  { id:'m3', teams:'Geneva v Serbia Blu', time:'€1.8M', home:2.36, draw:4.27, away:2.86 },
+  { id:'m4', teams:'Olympia v Cote Nord', time:'€1.6M', home:1.62, draw:3.88, away:4.60 },
+  { id:'m5', teams:'Riviera FC v Alpen United', time:'€1.2M', home:2.19, draw:4.34, away:1.58 },
+  { id:'m6', teams:'Porto Fino v Nizza Azzurra', time:'€0.9M', home:1.90, draw:3.56, away:4.14 },
+];
+
+const inplayEvents = [
+  { id:'ip1', event:'⚽ Real Alpina - Next Goal', home:1.86, draw:6.62, away:2.25 },
+  { id:'ip2', event:'🏇 Race 4 - Thunderbolt Win', home:3.55, draw:null, away:1.33 },
+  { id:'ip3', event:'🎾 Voss - Set 3 Winner', home:1.53, draw:null, away:2.35 },
+];
+
+const depthData = [
+  { price:1.95, buy:12400, sell:8200 },
+  { price:1.97, buy:9800, sell:6100 },
+  { price:1.99, buy:15600, sell:4300 },
+  { price:2.01, buy:7200, sell:11800 },
+  { price:2.03, buy:4100, sell:14200 },
+  { price:2.05, buy:2800, sell:18600 },
+];
+
+let betSlip = [];
+
+// ─── RENDER TABLES ──────────────────────────────────────────────────────────
+function renderOddsTable() {
+  const tbody = document.querySelector('#oddsTable tbody');
+  tbody.innerHTML = matches.map(m => `
+    <tr>
+      <td><div class="match-info">${m.teams} <span class="match-time">${m.time}</span></div></td>
+      <td class="odds-cell"><span class="odds home" data-id="${m.id}" data-type="home" data-odds="${m.home}">${m.home.toFixed(2)}</span></td>
+      <td class="odds-cell"><span class="odds draw" data-id="${m.id}" data-type="draw" data-odds="${m.draw}">${m.draw.toFixed(2)}</span></td>
+      <td class="odds-cell"><span class="odds away" data-id="${m.id}" data-type="away" data-odds="${m.away}">${m.away.toFixed(2)}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderInplayTable() {
+  const tbody = document.querySelector('#inplayTable tbody');
+  tbody.innerHTML = inplayEvents.map(e => `
+    <tr>
+      <td>${e.event}</td>
+      <td class="odds-cell"><span class="odds home" data-id="${e.id}" data-type="home" data-odds="${e.home}">${e.home.toFixed(2)}</span></td>
+      <td class="odds-cell"><span class="odds draw" data-id="${e.id}" data-type="draw" data-odds="${e.draw}">${e.draw ? e.draw.toFixed(2) : '—'}</span></td>
+      <td class="odds-cell"><span class="odds away" data-id="${e.id}" data-type="away" data-odds="${e.away}">${e.away.toFixed(2)}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderDepth() {
+  const chart = document.getElementById('depthChart');
+  const maxVol = Math.max(...depthData.map(d => Math.max(d.buy, d.sell)));
+  chart.innerHTML = depthData.map(d => `
+    <div class="depth-row">
+      <div class="depth-bar-buy" style="width:${(d.buy/maxVol)*100}%">€${(d.buy/1000).toFixed(1)}K</div>
+      <div class="depth-price">${d.price.toFixed(2)}</div>
+      <div class="depth-bar-sell" style="width:${(d.sell/maxVol)*100}%">€${(d.sell/1000).toFixed(1)}K</div>
+    </div>
+  `).join('');
+}
+
+// ─── LIVE ODDS ANIMATION ────────────────────────────────────────────────────
+function fluctuateOdds() {
+  const allOdds = document.querySelectorAll('.odds[data-odds]');
+  const target = allOdds[Math.floor(Math.random() * allOdds.length)];
+  if (!target || target.textContent === '—') return;
+  
+  let current = parseFloat(target.dataset.odds);
+  const delta = (Math.random() - 0.48) * 0.08;
+  current = Math.max(1.01, +(current + delta).toFixed(2));
+  target.dataset.odds = current;
+  target.textContent = current.toFixed(2);
+  
+  target.classList.remove('flash-up', 'flash-down');
+  void target.offsetWidth;
+  target.classList.add(delta > 0 ? 'flash-up' : 'flash-down');
+  setTimeout(() => target.classList.remove('flash-up', 'flash-down'), 500);
+}
+
+// ─── SPARKLINES ─────────────────────────────────────────────────────────────
+function initSparklines() {
+  document.querySelectorAll('.market-card .spark').forEach(spark => {
+    const bars = Array.from({length: 20}, () => {
+      const bar = document.createElement('div');
+      bar.className = 'spark-bar';
+      bar.style.height = (5 + Math.random() * 15) + 'px';
+      spark.appendChild(bar);
+      return bar;
+    });
+    setInterval(() => {
+      const bar = bars[Math.floor(Math.random() * bars.length)];
+      bar.style.height = (5 + Math.random() * 15) + 'px';
+    }, 800 + Math.random() * 1200);
+  });
+}
+
+// ─── PREDICTIVE MARKET ANIMATION ────────────────────────────────────────────
+function fluctuateMarkets() {
+  document.querySelectorAll('.market-card .pct').forEach(el => {
+    const base = parseInt(el.dataset.base);
+    const delta = (Math.random() - 0.5) * 2;
+    const newVal = Math.min(99, Math.max(1, Math.round(base + delta)));
+    el.dataset.base = newVal;
+    const isUp = newVal >= 50;
+    el.className = `pct ${isUp ? 'up' : 'down'}`;
+    el.textContent = `${isUp ? '▲' : '▼'} ${newVal}%`;
+    
+    const card = el.closest('.market-card');
+    const yes = card.querySelector('.yes');
+    const no = card.querySelector('.no');
+    yes.textContent = `YES €${(newVal/100).toFixed(2)}`;
+    no.textContent = `NO €${((100-newVal)/100).toFixed(2)}`;
+  });
+}
+
+// ─── BET SLIP ───────────────────────────────────────────────────────────────
+function addToSlip(matchId, type, odds, teams) {
+  const existing = betSlip.findIndex(b => b.matchId === matchId && b.type === type);
+  if (existing >= 0) { betSlip.splice(existing, 1); } 
+  else { betSlip.push({ matchId, type, odds: parseFloat(odds), teams, stake: 100 }); }
+  renderSlip();
+}
+
+function renderSlip() {
+  const container = document.getElementById('slipItems');
+  const count = document.getElementById('slipCount');
+  const btn = document.getElementById('placeBetBtn');
+  count.textContent = betSlip.length;
+  btn.disabled = betSlip.length === 0;
+  
+  document.querySelectorAll('.odds.selected').forEach(el => el.classList.remove('selected'));
+  betSlip.forEach(b => {
+    const el = document.querySelector(`.odds[data-id="${b.matchId}"][data-type="${b.type}"]`);
+    if (el) el.classList.add('selected');
+  });
+  
+  container.innerHTML = betSlip.map((b, i) => `
+    <div class="slip-item">
+      <button class="remove" onclick="removeFromSlip(${i})">×</button>
+      <div class="match">${b.teams || b.matchId}</div>
+      <div class="selection">${b.type.toUpperCase()}</div>
+      <div class="slip-odds">${b.odds.toFixed(2)}</div>
+      <div class="stake-row">
+        <input type="number" value="${b.stake}" min="1" onchange="updateStake(${i}, this.value)">
+        <span class="payout">→ €${(b.stake * b.odds).toFixed(2)}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function removeFromSlip(idx) { betSlip.splice(idx, 1); renderSlip(); }
+function updateStake(idx, val) { betSlip[idx].stake = parseFloat(val) || 0; renderSlip(); }
+
+// ─── TICKER ─────────────────────────────────────────────────────────────────
+function initTicker() {
+  const msgs = [
+    '2-1 INTER RIVA 70\'','MONACO SC V LYON EST — €2.8M TRADED','THUNDERBOLT: ALPINA 1/4',
+    'VOSS BREAKS SERVE SET 3','GRAND STEEPLE 16:30 POST','RIVIERA FC LINEUP CONFIRMED',
+    'HANDLE: €14.2M SESSION','ALPINA CHAMPIONS TROPHY — 64% YES','LAKE CITY SWEEP: 72%',
+    'NEXT GOAL MKT: €420K VOLUME','OLYMPIA RED CARD 82\' — ODDS SHIFT'
+  ];
+  const text = msgs.join(' &nbsp;•&nbsp; ');
+  document.getElementById('ticker').innerHTML = text + ' &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ' + text;
+}
+
+// ─── TABS ───────────────────────────────────────────────────────────────────
+document.getElementById('sportTabs').addEventListener('click', e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  document.querySelectorAll('#sportTabs button').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+});
+
+// ─── ODDS CLICK → BET SLIP ─────────────────────────────────────────────────
+document.addEventListener('click', e => {
+  const odds = e.target.closest('.odds');
+  if (!odds || odds.textContent === '—') return;
+  const id = odds.dataset.id;
+  const type = odds.dataset.type;
+  const val = odds.dataset.odds;
+  const row = odds.closest('tr');
+  const teams = row ? row.querySelector('td').textContent.trim() : id;
+  addToSlip(id, type, val, teams);
+});
+
+// ─── PLACE BET ──────────────────────────────────────────────────────────────
+document.getElementById('placeBetBtn').addEventListener('click', () => {
+  if (!betSlip.length) return;
+  const total = betSlip.reduce((sum, b) => sum + b.stake, 0);
+  const bal = document.getElementById('balance');
+  const current = parseFloat(bal.textContent.replace(/[€,]/g, ''));
+  bal.textContent = '€' + (current - total).toLocaleString('en', {minimumFractionDigits:2});
+  betSlip = [];
+  renderSlip();
+  document.getElementById('placeBetBtn').textContent = '✓ BET PLACED';
+  setTimeout(() => { document.getElementById('placeBetBtn').textContent = 'PLACE BET'; }, 2000);
+});
+
+// ─── INIT ───────────────────────────────────────────────────────────────────
+renderOddsTable();
+renderInplayTable();
+renderDepth();
+initSparklines();
+initTicker();
+
+setInterval(fluctuateOdds, 1200);
+setInterval(fluctuateMarkets, 3000);
+setInterval(() => {
+  renderDepth();
+  depthData.forEach(d => {
+    d.buy = Math.max(500, d.buy + Math.round((Math.random()-.5)*2000));
+    d.sell = Math.max(500, d.sell + Math.round((Math.random()-.5)*2000));
+  });
+}, 2500);
+</script>
+</body>
+</html>
