@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computer, Aperture, and the AMD box — iDigitalPro</title>
+<meta name="description" content="What Perplexity Computer, Tailscale Aperture, and an AMD Ryzen AI box each actually do in 2026 — sourced, no invented stack.">
+<link rel="canonical" href="https://satcom.conews.press/computer-aperture-amd">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:wght@600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070c14;--surface:#0d1520;--gold:#c8a84b;--gold-pale:#e8d49a;--ink:#e2ddd5;--muted:#8a8480;--dim:#4a5060;--border:rgba(200,168,75,.16);--rule:rgba(255,255,255,.05);}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:'DM Sans',sans-serif;line-height:1.65}
+a{color:var(--gold)}
+a:hover{color:var(--gold-pale)}
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:#040810;border-bottom:1px solid var(--border)}
+.top::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.brand{font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:18px;color:var(--gold);text-decoration:none}
+.brand span{color:rgba(200,168,75,.5);font-weight:400}
+.crumb{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dim)}
+.wrap{max-width:760px;margin:0 auto;padding:48px 24px 80px}
+.kicker{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--gold)}
+h1{font-family:'Playfair Display',Georgia,serif;font-size:clamp(32px,5vw,46px);line-height:1.15;margin:12px 0 16px;font-weight:900}
+.dek{font-size:18px;color:var(--muted);margin-bottom:18px}
+.meta{font-size:13px;color:var(--dim);margin-bottom:36px;padding-bottom:22px;border-bottom:1px solid var(--rule)}
+h2{font-family:'Playfair Display',Georgia,serif;font-size:26px;margin:40px 0 12px;color:#fff}
+p,li{font-size:16.5px;color:#cfc8be}
+p{margin:0 0 16px}
+ul{margin:0 0 18px 22px}
+li{margin:0 0 8px}
+.note{font-size:13px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px 14px;margin:22px 0}
+.sources{margin-top:48px;padding-top:22px;border-top:1px solid var(--rule)}
+.sources h2{font-size:18px;margin-top:0}
+.sources li{font-size:14px;color:var(--muted)}
+.foot{margin-top:40px;font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/">idigitalpro<span>.com</span></a>
+  <a class="crumb" href="/">SATCOM</a>
+</header>
+<article class="wrap">
+  <div class="kicker">iDigitalPro · Stack note</div>
+  <h1>Computer, Aperture, and the AMD box</h1>
+  <p class="dek">Three products, one honest stack. Perplexity Computer does the work. Tailscale Aperture is the gate. AMD is the machine you actually own.</p>
+  <p class="meta">August 28, 2026 · Patrick Sweeney · Published on SATCOM (the live idigitalpro.com homepage)</p>
+
+  <p>People keep naming these four things in one breath: Perplexity Computer, Tailscale, AMD, and Aperture. They are real. They are not one vendor’s kit. The useful way to read them is as a 2026 operator stack — a digital worker in the cloud, an identity-aware AI gateway on your tailnet, and a local AMD box that can run models without sending every token out.</p>
+
+  <h2>Perplexity Computer</h2>
+  <p>Perplexity introduced <a href="https://www.perplexity.ai/hub/blog/introducing-perplexity-computer">Computer</a> on February 25, 2026. The company’s own line: it is a general-purpose digital worker that operates the same interfaces you do. Chat answers. Agents do tasks. Computer creates and executes whole workflows, and Perplexity says those runs can last hours or months.</p>
+  <p>The <a href="https://www.perplexity.ai/products/computer">product page</a> now lists Computer for Pro and Max subscribers on desktop, mobile, Slack, and Microsoft 365. The launch post said Max first, with Enterprise Max coming. A later Perplexity post put Computer inside Word, Excel, PowerPoint, Outlook, and Teams. Treat plan availability as whatever Perplexity shows on the product page the day you subscribe — not a screenshot from February.</p>
+  <p>This is not a laptop. It is software that browses, researches, writes, and connects tools. That is the piece people mean when they say “Perplexity Computer.”</p>
+  <p>Official <a href="https://www.perplexity.ai/hub/pricing">pricing</a> as of this week: Pro is $20 a month ("Expanded Computer access"); Max is $200 a month ("Maximum Computer usage," 10,000 Computer credits). Confirm on that page before you subscribe.</p>
+  <p>Two official local cousins, neither of them AMD: <a href="https://www.perplexity.ai/hub/blog/personal-computer-is-here">Personal Computer</a> rolled out to Max on Mac on April 16, 2026 (Mac mini for 24/7). <a href="https://www.perplexity.ai/hub/blog/introducing-portable-computer-for-local-first-ai">Portable Computer</a> launched August 25, 2026 as local-first on NVIDIA DGX Spark (Qwen 3.8 27B or PPLX 27B on-device; cloud escalation needs permission; Linux first).</p>
+
+  <h2>Tailscale, then Aperture</h2>
+  <p><a href="https://tailscale.com/">Tailscale</a> is the identity-based mesh. Official positioning: a Zero Trust connectivity platform that replaces a legacy VPN and connects people, clouds, CI, and AI workloads without hanging them on the public internet.</p>
+  <p><a href="https://tailscale.com/docs/aperture/what-is-aperture">Aperture</a> is Tailscale’s AI gateway — not a camera app, not Apple’s old photo product. Docs last validated July 28, 2026: it is a reverse proxy between your LLM clients (chat, coding assistants, agents) and upstream providers. Keys stay on the server. Identity comes from the tailnet. Clients name a model; Aperture routes it.</p>
+  <p>On August 26, 2026 Tailscale put Aperture in <a href="https://tailscale.com/blog/aperture-ga">general availability</a>, with starter tokens, MCP endpoints that can add tailnet nodes and use Tailscale SSH, and Projects that share context and tool permissions across chats. Two constraints matter for a real shop: Aperture does not take traffic off the open internet (you are on the tailnet, or you use their CLI bridge / <code>ts-unplug</code>), and Tailscale documents Perplexity as an OpenAI-compatible provider you can point at a <code>baseurl</code>. It also proxies self-hosted models that already live on the tailnet.</p>
+  <p>That is the actual link. Aperture can front Perplexity. It is not an official “Perplexity Computer inside Tailscale” bundle.</p>
+
+  <h2>The AMD box</h2>
+  <p>AMD’s current local-AI story is Ryzen AI Max and ROCm, not a secret Perplexity SKU. The <a href="https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-max-plus-395.html">Ryzen AI Max+ 395</a> is sold as a next-gen AI PC part. The <a href="https://www.amd.com/en/products/processors/desktops/ryzen/ryzen-ai-halo.html">Ryzen AI Halo</a> developer platform ships that chip with 128 GB of LPDDR5x unified memory, full ROCm, Windows or Linux, and AMD’s claim of local models up to 200B parameters. A 192 GB Halo with the Ryzen AI Max+ PRO 495 is listed as coming soon. AMD’s own May 2026 footnotes price the 128 GB Halo box at $3,999 and compare it with NVIDIA’s DGX Spark.</p>
+  <p>ROCm documentation also lists discrete Radeon cards (including the RX 7900 and 9070 families) and Instinct accelerators. That is the official local path: your hardware, your models, your power bill.</p>
+  <p class="note">What we are not claiming: Portable Computer’s official local-first launch is NVIDIA (DGX Spark; RTX PCs "soon"). Personal Computer is Mac. AMD has not published Computer certification. On an AMD box, the sourced local path is ROCm (Ollama / LM Studio / vLLM on Halo or Ryzen AI Max). Cloud Computer still runs in Perplexity’s cloud regardless of the chip on your desk.</p>
+
+  <h2>How the four fit</h2>
+  <ul>
+    <li><strong>Computer</strong> is the worker you prompt in Perplexity — research, browser, files in their cloud, Microsoft 365 if you connect it.</li>
+    <li><strong>Tailscale</strong> is how your machines, NAS, and agents see each other without a public hole.</li>
+    <li><strong>Aperture</strong> is the choke point: one place for keys, spend, logs, guardrails, and MCP. Point it at Perplexity or at a model on the AMD box.</li>
+    <li><strong>AMD</strong> is the local compute. Halo / Ryzen AI Max + ROCm if you want the work to stay in the room.</li>
+  </ul>
+  <p>If you already run a tailnet, the next useful move is an Aperture instance on that tailnet, with Perplexity as one provider and a self-hosted ROCm endpoint as another. Computer stays the product you open when the job is “go do the thing.” Aperture stays the product you open when the job is “do not spray keys, and show me who spent what.”</p>
+
+  <section class="sources">
+    <h2>Sources</h2>
+    <ul>
+      <li>Perplexity, “Introducing Perplexity Computer,” Feb 25, 2026. <a href="https://www.perplexity.ai/hub/blog/introducing-perplexity-computer">perplexity.ai/hub/blog/introducing-perplexity-computer</a></li>
+      <li>Perplexity, Computer product page. <a href="https://www.perplexity.ai/products/computer">perplexity.ai/products/computer</a></li>
+      <li>Perplexity, “Computer comes to Excel, Word, PowerPoint, and Outlook.” <a href="https://www.perplexity.ai/hub/blog/computer-comes-to-word-excel-powerpoint-and-outlook">product blog</a></li>
+      <li>Tailscale, homepage. <a href="https://tailscale.com/">tailscale.com</a></li>
+      <li>Tailscale docs, “What is Aperture?,” last validated Jul 28, 2026. <a href="https://tailscale.com/docs/aperture/what-is-aperture">docs</a></li>
+      <li>Remy Guercio, “Aperture GA,” Aug 26, 2026. <a href="https://tailscale.com/blog/aperture-ga">tailscale.com/blog/aperture-ga</a></li>
+      <li>AMD, Ryzen AI Max+ 395. <a href="https://www.amd.com/en/products/processors/laptop/ryzen/ai-300-series/amd-ryzen-ai-max-plus-395.html">product page</a></li>
+      <li>AMD, Ryzen AI Halo for AI Developers (128 GB, ROCm, $3,999 in May 2026 footnote SHO-61). <a href="https://www.amd.com/en/products/processors/desktops/ryzen/ryzen-ai-halo.html">amd.com Halo</a></li>
+      <li>AMD ROCm compatibility / install docs for Ryzen AI, Radeon, and Instinct. <a href="https://rocm.docs.amd.com/en/latest/">rocm.docs.amd.com</a></li>
+      <li>Perplexity pricing. <a href="https://www.perplexity.ai/hub/pricing">perplexity.ai/hub/pricing</a></li>
+      <li>Perplexity, “Personal Computer is here,” Apr 16, 2026. <a href="https://www.perplexity.ai/hub/blog/personal-computer-is-here">blog</a></li>
+      <li>Perplexity, “Introducing Portable Computer for local-first AI,” Aug 25, 2026. <a href="https://www.perplexity.ai/hub/blog/introducing-portable-computer-for-local-first-ai">blog</a></li>
+      <li>AMD, “AMD powers next-generation agent computers,” May 20, 2026. <a href="https://www.amd.com/en/blogs/2026/amd-powers-next-generation-agent-computers-with-new-ryzen-ai-hal.html">AMD blog</a></li>
+    </ul>
+  </section>
+  <p class="foot">iDigitalPro / SATCOM. Offers, plan prices, and hardware street prices change. Confirm on the official page before you buy or subscribe. This page does not invent an official Perplexity-plus-AMD bundle.</p>
+</article>
+</body>
+</html>
