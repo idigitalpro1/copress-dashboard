@@ -15,7 +15,7 @@
   --blue:#3498db;--purple:#9b59b6;--cyan:#1abc9c;
 }
 body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
-.bg-layer{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(10,14,26,.93) 0%,rgba(10,14,26,.88) 100%),url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=1920&q=80') center/cover no-repeat}
+.bg-layer{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(10,14,26,.93) 0%,rgba(10,14,26,.88) 100%),url('le-grand-book-reference.png') center/cover no-repeat}
 .app{position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr 280px;grid-template-rows:auto auto 1fr auto;min-height:100vh}
 
 /* Header */
@@ -52,6 +52,7 @@ header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-be
 .board-title h1{font-family:Georgia,serif;font-size:26px;letter-spacing:.14em;color:var(--text)}
 .board-title p{font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-dim);margin-top:3px}
 .screens{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.screens.hidden{display:none}
 .screen{aspect-ratio:16/9;background:var(--panel);border:1px solid var(--panel-border);border-radius:6px;overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s}
 .screen:hover{border-color:var(--gold-dim)}
 .screen img{width:100%;height:100%;object-fit:cover;opacity:.75;transition:opacity .2s}
@@ -78,10 +79,15 @@ table td:first-child{color:var(--text)}
 .odds.flash-down{animation:flashRed .4s ease-out}
 @keyframes flashGreen{0%{background:rgba(46,204,113,.3)}100%{background:transparent}}
 @keyframes flashRed{0%{background:rgba(231,76,60,.3)}100%{background:transparent}}
+.meta-cell{text-align:right;font-family:'Courier New',monospace;font-size:11px;color:var(--text-dim)}
+.chg.up{color:var(--green)}
+.chg.down{color:var(--red)}
+.chg.flat{color:var(--text-dim)}
 
 .inplay-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:linear-gradient(90deg,rgba(46,204,113,.12),transparent);border-left:3px solid var(--green);border-radius:4px;margin:18px 0 8px}
 .inplay-header span{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--green)}
 .inplay-header .meta{font-size:8px;color:var(--text-dim);letter-spacing:.1em}
+.sports-only.hidden,.politics-only.hidden{display:none}
 
 /* Market Depth */
 .depth-section{margin-top:20px;padding:14px;background:var(--panel);border:1px solid var(--panel-border);border-radius:6px}
@@ -102,6 +108,7 @@ table td:first-child{color:var(--text)}
 .sidebar.left{border-left:none;border-right:1px solid var(--panel-border)}
 .sidebar-title{font-size:8px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--panel-border)}
 .sidebar-title span{color:var(--text-dim);margin-left:6px}
+.source-line{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-dim);margin:-6px 0 12px}
 .market-card{padding:10px;border:1px solid var(--panel-border);border-radius:5px;margin-bottom:8px;background:var(--panel);transition:all .2s;cursor:pointer}
 .market-card:hover{border-color:var(--gold-dim);background:var(--panel-hover)}
 .market-card h4{font-size:11px;color:var(--text);margin-bottom:6px;line-height:1.3}
@@ -115,6 +122,7 @@ table td:first-child{color:var(--text)}
 .market-card .prices .no{color:var(--red)}
 .market-card .spark{display:flex;align-items:flex-end;gap:1px;height:20px;margin-top:6px}
 .market-card .spark-bar{width:3px;background:var(--green);border-radius:1px;transition:height .3s}
+.market-card .wk{font-size:9px;font-family:'Courier New',monospace;margin-top:4px}
 
 /* Bet Slip */
 .bet-slip{margin-top:auto;padding-top:12px;border-top:1px solid var(--panel-border)}
@@ -163,6 +171,7 @@ table td:first-child{color:var(--text)}
         <button data-sport="basketball">Basketball</button>
         <button data-sport="tennis">Tennis</button>
         <button data-sport="racing">Racing</button>
+        <button data-sport="politics">Politics</button>
       </nav>
     </div>
     <div class="header-right">
@@ -185,7 +194,7 @@ table td:first-child{color:var(--text)}
         <span class="stat-value">7</span>
       </div>
       <div class="stat">
-        <span class="stat-label">Today P&L</span>
+        <span class="stat-label">Today P&amp;L</span>
         <span class="stat-value profit" id="pnl">+€1,240.50</span>
       </div>
       <div class="stat">
@@ -199,54 +208,12 @@ table td:first-child{color:var(--text)}
     </div>
   </div>
 
-  <!-- Left Sidebar: Predictive Markets -->
+  <!-- Left Sidebar: Tip Movers + Most Action -->
   <aside class="sidebar left">
-    <div class="sidebar-title">Predictive Markets <span>Top Volume</span></div>
-    <div class="market-card" id="market-1">
-      <h4>Alpina lift the Champions Trophy tonight</h4>
-      <div class="row">
-        <span class="pct up" data-base="64">▲ 64%</span>
-        <span class="vol">Vol: €2.4M</span>
-      </div>
-      <div class="prices"><span class="yes">YES €0.64</span> <span class="no">NO €0.36</span></div>
-      <div class="spark"></div>
-    </div>
-    <div class="market-card" id="market-2">
-      <h4>Thunderbolt wins the Grand Steeple</h4>
-      <div class="row">
-        <span class="pct up" data-base="32">▲ 32%</span>
-        <span class="vol">Vol: €1.8M</span>
-      </div>
-      <div class="prices"><span class="yes">YES €0.32</span> <span class="no">NO €0.68</span></div>
-      <div class="spark"></div>
-    </div>
-    <div class="market-card" id="market-3">
-      <h4>Voss takes the Riviera Open</h4>
-      <div class="row">
-        <span class="pct up" data-base="59">▲ 59%</span>
-        <span class="vol">Vol: €3.1M</span>
-      </div>
-      <div class="prices"><span class="yes">YES €0.59</span> <span class="no">NO €0.41</span></div>
-      <div class="spark"></div>
-    </div>
-    <div class="market-card" id="market-4">
-      <h4>Monaco SC unbeaten this season</h4>
-      <div class="row">
-        <span class="pct down" data-base="41">▼ 41%</span>
-        <span class="vol">Vol: €890K</span>
-      </div>
-      <div class="prices"><span class="yes">YES €0.41</span> <span class="no">NO €0.59</span></div>
-      <div class="spark"></div>
-    </div>
-    <div class="market-card" id="market-5">
-      <h4>Lake City sweep the final series</h4>
-      <div class="row">
-        <span class="pct up" data-base="72">▲ 72%</span>
-        <span class="vol">Vol: €1.5M</span>
-      </div>
-      <div class="prices"><span class="yes">YES €0.72</span> <span class="no">NO €0.28</span></div>
-      <div class="spark"></div>
-    </div>
+    <div class="sidebar-title">Tip Movers <span>Abs Week</span></div>
+    <div id="tipMovers"></div>
+    <div class="sidebar-title" style="margin-top:16px">Most Action <span>Vol 24h</span></div>
+    <div id="mostAction"></div>
 
     <!-- Bet Slip -->
     <div class="bet-slip" id="betSlip">
@@ -262,10 +229,10 @@ table td:first-child{color:var(--text)}
   <main class="main-board">
     <div class="board-title">
       <h1>LE GRAND BOOK</h1>
-      <p>Monte Carlo — Live</p>
+      <p id="boardSub">Monte Carlo — Live</p>
     </div>
 
-    <div class="screens">
+    <div class="screens sports-only" id="screens">
       <div class="screen">
         <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=600&q=70" alt="Tennis">
         <div class="label">Court Philippe — Set 3</div>
@@ -283,19 +250,17 @@ table td:first-child{color:var(--text)}
       </div>
     </div>
 
-    <div class="section-label">⚽ Soccer — Most Active</div>
+    <div class="section-label" id="sectionLabel">⚽ Soccer — Most Active</div>
     <table id="oddsTable">
-      <thead>
-        <tr><th>Match</th><th>Home</th><th>Draw</th><th>Away</th></tr>
-      </thead>
+      <thead></thead>
       <tbody></tbody>
     </table>
 
-    <div class="inplay-header">
+    <div class="inplay-header sports-only" id="inplayHeader">
       <span>⚡ In-Play — Next Off</span>
       <span class="meta">Handle €4.82M · Settles &lt; 3m</span>
     </div>
-    <table id="inplayTable">
+    <table id="inplayTable" class="sports-only">
       <thead>
         <tr><th>Event</th><th>Home</th><th>Draw</th><th>Away</th></tr>
       </thead>
@@ -303,23 +268,17 @@ table td:first-child{color:var(--text)}
     </table>
 
     <!-- Market Depth -->
-    <div class="depth-section">
-      <div class="depth-title">Market Depth — Monaco SC v Lyon Est (Match Winner)</div>
+    <div class="depth-section sports-only" id="depthSection">
+      <div class="depth-title" id="depthTitle">Market Depth — Monaco SC v Lyon Est (Match Winner)</div>
       <div class="depth-chart" id="depthChart"></div>
     </div>
   </main>
 
-  <!-- Right Sidebar -->
+  <!-- Right Sidebar: Presidential 2028 -->
   <aside class="sidebar">
-    <div class="sidebar-title">Predictive Markets</div>
-    <div class="news-card"><h4>Skaric rematch announced by Sept.</h4><div class="meta">Vol: €720K · 58% YES</div></div>
-    <div class="news-card"><h4>Monaco SC unbeaten this season</h4><div class="meta">Vol: €890K · 41% YES</div></div>
-    <div class="news-card"><h4>Lake City sweep the final series</h4><div class="meta">Vol: €1.2M · 72% YES</div></div>
-    <div class="news-card"><h4>Alpine Cup moves to neutral venue</h4><div class="meta">Vol: €540K · 33% YES</div></div>
-    <div class="news-card"><h4>Riviera Open seed upset probability</h4><div class="meta">Vol: €2.1M · 27% YES</div></div>
-    <div class="news-card"><h4>Thunderbolt confirmed for Grand Steeple</h4><div class="meta">Vol: €1.8M · 32% YES</div></div>
-    <div class="news-card"><h4>Real Alpina Champions League bid</h4><div class="meta">Vol: €3.4M · 64% YES</div></div>
-    <div class="news-card"><h4>Geneva league promotion odds shift</h4><div class="meta">Vol: €680K · 55% YES</div></div>
+    <div class="sidebar-title">Presidential 2028</div>
+    <div class="source-line" id="polySource">Polymarket</div>
+    <div id="presList"></div>
   </aside>
 
   <!-- Ticker -->
@@ -329,49 +288,292 @@ table td:first-child{color:var(--text)}
 </div>
 
 <script>
-// ─── DATA ───────────────────────────────────────────────────────────────────
-const matches = [
-  { id:'m1', teams:'Monaco SC v Lyon Est', time:'62:00', home:1.99, draw:3.53, away:4.82 },
-  { id:'m2', teams:'Real Alpina v Inter Riva', time:'€3.4M', home:2.13, draw:3.46, away:3.18 },
-  { id:'m3', teams:'Geneva v Serbia Blu', time:'€1.8M', home:2.36, draw:4.27, away:2.86 },
-  { id:'m4', teams:'Olympia v Cote Nord', time:'€1.6M', home:1.62, draw:3.88, away:4.60 },
-  { id:'m5', teams:'Riviera FC v Alpen United', time:'€1.2M', home:2.19, draw:4.34, away:1.58 },
-  { id:'m6', teams:'Porto Fino v Nizza Azzurra', time:'€0.9M', home:1.90, draw:3.56, away:4.14 },
+// ─── SPORTS (fictional Monte Carlo / Alpine book) ───────────────────────────
+const sportsBooks = {
+  soccer: {
+    label: '⚽ Soccer — Most Active',
+    sub: 'Monte Carlo — Live',
+    cols: ['Match','Home','Draw','Away'],
+    kinds: ['home','draw','away'],
+    depthTitle: 'Market Depth — Monaco SC v Lyon Est (Match Winner)',
+    matches: [
+      { id:'s1', teams:'Monaco SC v Lyon Est', time:'62:00', home:1.99, draw:3.53, away:4.82 },
+      { id:'s2', teams:'Real Alpina v Inter Riva', time:'€3.4M', home:2.13, draw:3.46, away:3.18 },
+      { id:'s3', teams:'Geneva v Serbia Blu', time:'€1.8M', home:2.36, draw:4.27, away:2.86 },
+      { id:'s4', teams:'Olympia v Cote Nord', time:'€1.6M', home:1.62, draw:3.88, away:4.60 },
+      { id:'s5', teams:'Riviera FC v Alpen United', time:'€1.2M', home:2.19, draw:4.34, away:1.58 },
+      { id:'s6', teams:'Porto Fino v Nizza Azzurra', time:'€0.9M', home:1.90, draw:3.56, away:4.14 },
+    ],
+    inplay: [
+      { id:'sip1', event:'⚽ Real Alpina - Next Goal', home:1.86, draw:6.62, away:2.25 },
+    ],
+  },
+  basketball: {
+    label: '🏀 Basketball — Alpine Court',
+    sub: 'Lake City Pavilion — Live',
+    cols: ['Match','Home','Away'],
+    kinds: ['home','away'],
+    depthTitle: 'Market Depth — Lake City v Riviera Court (Moneyline)',
+    matches: [
+      { id:'b1', teams:'Lake City v Riviera Court', time:'Q3 4:12', home:1.72, away:2.18 },
+      { id:'b2', teams:'Alpina BC v Monaco Court', time:'€1.1M', home:1.88, away:1.96 },
+      { id:'b3', teams:'Geneva Heights v Cote Nord', time:'€0.8M', home:2.24, away:1.68 },
+      { id:'b4', teams:'Porto Fino Five v Nizza Azzurra', time:'€0.6M', home:1.55, away:2.48 },
+      { id:'b5', teams:'Olympia v Alpen United', time:'€0.5M', home:2.05, away:1.81 },
+    ],
+    inplay: [
+      { id:'bip1', event:'🏀 Lake City - Next Basket', home:1.92, draw:null, away:1.88 },
+    ],
+  },
+  tennis: {
+    label: '🎾 Tennis — Riviera Open',
+    sub: 'Court Philippe — Set 3',
+    cols: ['Match','P1','P2'],
+    kinds: ['home','away'],
+    depthTitle: 'Market Depth — Voss v Skaric (Match Winner)',
+    matches: [
+      { id:'t1', teams:'Voss v Skaric', time:'Set 3', home:1.53, away:2.35 },
+      { id:'t2', teams:'Moreau v Klein', time:'€720K', home:1.78, away:2.04 },
+      { id:'t3', teams:'Santos v Berg', time:'€540K', home:2.12, away:1.71 },
+      { id:'t4', teams:'Chen v Rossi', time:'€410K', home:1.44, away:2.76 },
+      { id:'t5', teams:'Dubois v Hale', time:'€380K', home:1.91, away:1.89 },
+    ],
+    inplay: [
+      { id:'tip1', event:'🎾 Voss - Set 3 Winner', home:1.53, draw:null, away:2.35 },
+    ],
+  },
+  racing: {
+    label: '🏇 Racing — Hippodrome',
+    sub: 'Grand Steeple — Race 4',
+    cols: ['Runner','Win','Place'],
+    kinds: ['home','away'],
+    depthTitle: 'Market Depth — Race 4 Thunderbolt (Win)',
+    matches: [
+      { id:'r1', teams:'Thunderbolt', time:'Race 4', home:3.55, away:1.45 },
+      { id:'r2', teams:'Riviera Star', time:'Race 4', home:4.20, away:1.62 },
+      { id:'r3', teams:'Alpina Gold', time:'Race 4', home:5.80, away:1.88 },
+      { id:'r4', teams:'Cote Noir', time:'Race 4', home:8.50, away:2.40 },
+      { id:'r5', teams:'Monte Carlo', time:'Race 5', home:2.90, away:1.32 },
+      { id:'r6', teams:'Lake City Filly', time:'Race 5', home:6.40, away:2.05 },
+    ],
+    inplay: [
+      { id:'rip1', event:'🏇 Race 4 - Thunderbolt Win', home:3.55, draw:null, away:1.33 },
+    ],
+  },
+};
+
+const depthBySport = {
+  soccer: [
+    { price:1.95, buy:12400, sell:8200 },
+    { price:1.97, buy:9800, sell:6100 },
+    { price:1.99, buy:15600, sell:4300 },
+    { price:2.01, buy:7200, sell:11800 },
+    { price:2.03, buy:4100, sell:14200 },
+    { price:2.05, buy:2800, sell:18600 },
+  ],
+  basketball: [
+    { price:1.68, buy:9800, sell:7200 },
+    { price:1.70, buy:11200, sell:5400 },
+    { price:1.72, buy:14100, sell:3900 },
+    { price:1.74, buy:6100, sell:9800 },
+    { price:1.76, buy:3400, sell:12400 },
+    { price:1.78, buy:2100, sell:15600 },
+  ],
+  tennis: [
+    { price:1.49, buy:8600, sell:4100 },
+    { price:1.51, buy:10200, sell:3600 },
+    { price:1.53, buy:13400, sell:2800 },
+    { price:1.55, buy:5400, sell:8900 },
+    { price:1.57, buy:3100, sell:11200 },
+    { price:1.59, buy:1800, sell:13800 },
+  ],
+  racing: [
+    { price:3.40, buy:7200, sell:5400 },
+    { price:3.48, buy:9100, sell:4100 },
+    { price:3.55, buy:12800, sell:3200 },
+    { price:3.62, buy:4800, sell:8600 },
+    { price:3.70, buy:2600, sell:11400 },
+    { price:3.80, buy:1500, sell:14200 },
+  ],
+};
+
+// Snapshot 2026-08-28 6:40 PM MT — used only if live fetch fails. Do not invent extras.
+const POLY_FALLBACK = [
+  { name:'JD Vance', yes:0.2375, week:0.033, day:null, vol24:18341 },
+  { name:'AOC', yes:0.1305, week:0.004, day:null, vol24:7614 },
+  { name:'Marco Rubio', yes:0.1065, week:-0.005, day:null, vol24:24743 },
+  { name:'Gavin Newsom', yes:0.0845, week:0.001, day:null, vol24:13393 },
+  { name:'Kamala Harris', yes:0.0325, week:-0.005, day:null, vol24:6282 },
+  { name:'Pete Buttigieg', yes:0.0235, week:-0.001, day:null, vol24:404 },
+  { name:'Donald Trump', yes:0.0195, week:-0.0055, day:null, vol24:2669 },
+  { name:'Ron DeSantis', yes:0.0145, week:0, day:0.001, vol24:33850 },
 ];
 
-const inplayEvents = [
-  { id:'ip1', event:'⚽ Real Alpina - Next Goal', home:1.86, draw:6.62, away:2.25 },
-  { id:'ip2', event:'🏇 Race 4 - Thunderbolt Win', home:3.55, draw:null, away:1.33 },
-  { id:'ip3', event:'🎾 Voss - Set 3 Winner', home:1.53, draw:null, away:2.35 },
-];
+const POLY_URL = 'https://gamma-api.polymarket.com/events?slug=presidential-election-winner-2028';
 
-const depthData = [
-  { price:1.95, buy:12400, sell:8200 },
-  { price:1.97, buy:9800, sell:6100 },
-  { price:1.99, buy:15600, sell:4300 },
-  { price:2.01, buy:7200, sell:11800 },
-  { price:2.03, buy:4100, sell:14200 },
-  { price:2.05, buy:2800, sell:18600 },
-];
-
+let polyCandidates = POLY_FALLBACK.slice();
+let polyLive = false;
+let currentSport = 'soccer';
 let betSlip = [];
+let depthData = depthBySport.soccer.map(d => ({...d}));
 
-// ─── RENDER TABLES ──────────────────────────────────────────────────────────
-function renderOddsTable() {
-  const tbody = document.querySelector('#oddsTable tbody');
-  tbody.innerHTML = matches.map(m => `
-    <tr>
-      <td><div class="match-info">${m.teams} <span class="match-time">${m.time}</span></div></td>
-      <td class="odds-cell"><span class="odds home" data-id="${m.id}" data-type="home" data-odds="${m.home}">${m.home.toFixed(2)}</span></td>
-      <td class="odds-cell"><span class="odds draw" data-id="${m.id}" data-type="draw" data-odds="${m.draw}">${m.draw.toFixed(2)}</span></td>
-      <td class="odds-cell"><span class="odds away" data-id="${m.id}" data-type="away" data-odds="${m.away}">${m.away.toFixed(2)}</span></td>
-    </tr>
-  `).join('');
+// ─── HELPERS ────────────────────────────────────────────────────────────────
+function fmtVol(n) {
+  const v = Number(n) || 0;
+  if (v >= 1e6) return (v/1e6).toFixed(1) + 'M';
+  if (v >= 1000) return (v/1000).toFixed(1) + 'K';
+  return String(Math.round(v));
+}
+function fmtChg(n) {
+  if (n == null || Number.isNaN(Number(n))) return { text:'—', cls:'flat' };
+  const v = Number(n);
+  if (v === 0) return { text:'0', cls:'flat' };
+  const sign = v > 0 ? '+' : '';
+  return { text: sign + v.toFixed(4).replace(/0+$/,'').replace(/\.$/,''), cls: v > 0 ? 'up' : 'down' };
+}
+function decOdds(p) {
+  const x = Number(p);
+  if (!x) return 0;
+  return Math.max(1.01, +(1 / x).toFixed(2));
+}
+function slugId(name) {
+  return 'p-' + String(name).toLowerCase().replace(/[^a-z0-9]+/g,'-');
 }
 
-function renderInplayTable() {
-  const tbody = document.querySelector('#inplayTable tbody');
-  tbody.innerHTML = inplayEvents.map(e => `
+// ─── POLYMARKET ─────────────────────────────────────────────────────────────
+function parsePolyEvent(event) {
+  const markets = event.markets || [];
+  const out = [];
+  for (const m of markets) {
+    let yes = 0;
+    try {
+      const prices = JSON.parse(m.outcomePrices || '[]');
+      yes = parseFloat(prices[0]);
+    } catch (e) {
+      yes = parseFloat(m.outcomePrices);
+    }
+    if (!Number.isFinite(yes) || yes <= 0) continue;
+    const name = (m.groupItemTitle || '').trim()
+      || String(m.question || '').replace(/^Will\s+/i,'').replace(/\s+win the 2028.*$/i,'').trim();
+    if (!name) continue;
+    const week = m.oneWeekPriceChange != null ? Number(m.oneWeekPriceChange) : 0;
+    const day = m.oneDayPriceChange != null ? Number(m.oneDayPriceChange) : null;
+    const vol24 = Number(m.volume24hr || 0);
+    out.push({ name, yes, week, day, vol24 });
+  }
+  out.sort((a,b) => b.yes - a.yes);
+  return out;
+}
+
+async function loadPolymarket() {
+  try {
+    const res = await fetch(POLY_URL);
+    if (!res.ok) throw new Error('http ' + res.status);
+    const data = await res.json();
+    const event = Array.isArray(data) ? data[0] : data;
+    const parsed = parsePolyEvent(event || {});
+    if (!parsed.length) throw new Error('empty');
+    polyCandidates = parsed;
+    polyLive = true;
+  } catch (e) {
+    polyCandidates = POLY_FALLBACK.slice();
+    polyLive = false;
+  }
+  renderPolySidebars();
+  if (currentSport === 'politics') renderBoard();
+  initTicker();
+}
+
+function polyCard(c, extra) {
+  const pct = Math.round(c.yes * 1000) / 10;
+  const chg = fmtChg(c.week);
+  const arrow = c.week > 0 ? '▲' : (c.week < 0 ? '▼' : '•');
+  const cls = c.week >= 0 ? 'up' : 'down';
+  return `<div class="market-card" data-poly="${c.name.replace(/"/g,'&quot;')}">
+    <h4>${c.name}</h4>
+    <div class="row">
+      <span class="pct ${cls}">${arrow} ${pct}%</span>
+      <span class="vol">Vol: ${fmtVol(c.vol24)}</span>
+    </div>
+    <div class="prices"><span class="yes">YES €${c.yes.toFixed(4)}</span> <span class="no">NO €${(1-c.yes).toFixed(4)}</span></div>
+    <div class="wk chg ${chg.cls}">WK ${chg.text}${extra || ''}</div>
+  </div>`;
+}
+
+function renderPolySidebars() {
+  const movers = polyCandidates.slice().sort((a,b) => Math.abs(b.week) - Math.abs(a.week)).slice(0, 5);
+  const action = polyCandidates.slice().sort((a,b) => b.vol24 - a.vol24).slice(0, 5);
+  document.getElementById('tipMovers').innerHTML = movers.map(c => polyCard(c)).join('');
+  document.getElementById('mostAction').innerHTML = action.map(c => {
+    const day = c.day != null ? ` · D ${fmtChg(c.day).text}` : '';
+    return polyCard(c, day);
+  }).join('');
+
+  const src = document.getElementById('polySource');
+  src.textContent = polyLive ? 'Polymarket' : 'Polymarket · Snapshot 2026-08-28 6:40 PM MT';
+
+  const list = polyLive
+    ? polyCandidates.filter(c => c.yes >= 0.01)
+    : polyCandidates;
+  document.getElementById('presList').innerHTML = list.map(c => {
+    const chg = fmtChg(c.week);
+    return `<div class="news-card" data-poly="${c.name.replace(/"/g,'&quot;')}">
+      <h4>${c.name}</h4>
+      <div class="meta">YES ${c.yes.toFixed(4)} · WK <span class="chg ${chg.cls}">${chg.text}</span> · VOL ${fmtVol(c.vol24)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ─── BOARD ──────────────────────────────────────────────────────────────────
+function bookFor(sport) {
+  if (sport === 'all') {
+    const take = (key, n) => sportsBooks[key].matches.slice(0, n).map(m => ({...m, sport:key}));
+    return {
+      label: 'All Sports — Alpine Book',
+      sub: 'Monte Carlo — Live',
+      cols: ['Match','Home','Draw','Away'],
+      kinds: ['home','draw','away'],
+      depthTitle: sportsBooks.soccer.depthTitle,
+      matches: [
+        ...take('soccer', 3),
+        ...take('basketball', 2),
+        ...take('tennis', 2),
+        ...take('racing', 2),
+      ],
+      inplay: [
+        ...sportsBooks.soccer.inplay,
+        ...sportsBooks.basketball.inplay,
+        ...sportsBooks.tennis.inplay,
+        ...sportsBooks.racing.inplay,
+      ],
+    };
+  }
+  return sportsBooks[sport];
+}
+
+function renderSportsBoard(sport) {
+  const book = bookFor(sport);
+  document.getElementById('boardSub').textContent = book.sub;
+  document.getElementById('sectionLabel').textContent = book.label;
+  document.querySelectorAll('.sports-only').forEach(el => el.classList.remove('hidden'));
+
+  const thead = document.querySelector('#oddsTable thead');
+  thead.innerHTML = `<tr>${book.cols.map(c => `<th>${c}</th>`).join('')}</tr>`;
+  const tbody = document.querySelector('#oddsTable tbody');
+  tbody.innerHTML = book.matches.map(m => {
+    const cells = book.kinds.map(k => {
+      const val = m[k];
+      if (val == null) return `<td class="odds-cell"><span class="odds ${k}">—</span></td>`;
+      return `<td class="odds-cell"><span class="odds ${k}" data-id="${m.id}" data-type="${k}" data-odds="${val}">${Number(val).toFixed(2)}</span></td>`;
+    }).join('');
+    return `<tr>
+      <td><div class="match-info">${m.teams} <span class="match-time">${m.time}</span></div></td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  const ipBody = document.querySelector('#inplayTable tbody');
+  ipBody.innerHTML = book.inplay.map(e => `
     <tr>
       <td>${e.event}</td>
       <td class="odds-cell"><span class="odds home" data-id="${e.id}" data-type="home" data-odds="${e.home}">${e.home.toFixed(2)}</span></td>
@@ -379,11 +581,48 @@ function renderInplayTable() {
       <td class="odds-cell"><span class="odds away" data-id="${e.id}" data-type="away" data-odds="${e.away}">${e.away.toFixed(2)}</span></td>
     </tr>
   `).join('');
+
+  const depthKey = sport === 'all' ? 'soccer' : sport;
+  depthData = (depthBySport[depthKey] || depthBySport.soccer).map(d => ({...d}));
+  document.getElementById('depthTitle').textContent = book.depthTitle;
+  renderDepth();
+  renderSlip();
+}
+
+function renderPoliticsBoard() {
+  document.getElementById('boardSub').textContent = polyLive ? 'Presidential 2028 — Polymarket Live' : 'Presidential 2028 — Polymarket Snapshot';
+  document.getElementById('sectionLabel').textContent = 'Presidential Election Winner 2028';
+  document.querySelectorAll('.sports-only').forEach(el => el.classList.add('hidden'));
+
+  const rows = polyLive ? polyCandidates.filter(c => c.yes >= 0.01) : polyCandidates;
+  const thead = document.querySelector('#oddsTable thead');
+  thead.innerHTML = `<tr><th>Candidate</th><th>Yes</th><th>No</th><th>Week</th><th>24h Vol</th></tr>`;
+  const tbody = document.querySelector('#oddsTable tbody');
+  tbody.innerHTML = rows.map(c => {
+    const yesDec = decOdds(c.yes);
+    const noDec = decOdds(1 - c.yes);
+    const chg = fmtChg(c.week);
+    const id = slugId(c.name);
+    const dayBit = c.day != null ? ` · D ${fmtChg(c.day).text}` : '';
+    return `<tr>
+      <td><div class="match-info">${c.name} <span class="match-time">${(c.yes*100).toFixed(2)}%</span></div></td>
+      <td class="odds-cell"><span class="odds home" data-id="${id}" data-type="yes" data-odds="${yesDec}">${c.yes.toFixed(4)}</span></td>
+      <td class="odds-cell"><span class="odds away" data-id="${id}" data-type="no" data-odds="${noDec}">${(1-c.yes).toFixed(4)}</span></td>
+      <td class="meta-cell"><span class="chg ${chg.cls}">${chg.text}${dayBit}</span></td>
+      <td class="meta-cell">${fmtVol(c.vol24)}</td>
+    </tr>`;
+  }).join('');
+  renderSlip();
+}
+
+function renderBoard() {
+  if (currentSport === 'politics') renderPoliticsBoard();
+  else renderSportsBoard(currentSport);
 }
 
 function renderDepth() {
   const chart = document.getElementById('depthChart');
-  const maxVol = Math.max(...depthData.map(d => Math.max(d.buy, d.sell)));
+  const maxVol = Math.max(...depthData.map(d => Math.max(d.buy, d.sell)), 1);
   chart.innerHTML = depthData.map(d => `
     <div class="depth-row">
       <div class="depth-bar-buy" style="width:${(d.buy/maxVol)*100}%">€${(d.buy/1000).toFixed(1)}K</div>
@@ -393,64 +632,27 @@ function renderDepth() {
   `).join('');
 }
 
-// ─── LIVE ODDS ANIMATION ────────────────────────────────────────────────────
+// ─── LIVE ODDS ANIMATION (sports only) ──────────────────────────────────────
 function fluctuateOdds() {
-  const allOdds = document.querySelectorAll('.odds[data-odds]');
+  if (currentSport === 'politics') return;
+  const allOdds = document.querySelectorAll('#oddsTable .odds[data-odds], #inplayTable .odds[data-odds]');
   const target = allOdds[Math.floor(Math.random() * allOdds.length)];
   if (!target || target.textContent === '—') return;
-  
   let current = parseFloat(target.dataset.odds);
   const delta = (Math.random() - 0.48) * 0.08;
   current = Math.max(1.01, +(current + delta).toFixed(2));
   target.dataset.odds = current;
   target.textContent = current.toFixed(2);
-  
   target.classList.remove('flash-up', 'flash-down');
   void target.offsetWidth;
   target.classList.add(delta > 0 ? 'flash-up' : 'flash-down');
   setTimeout(() => target.classList.remove('flash-up', 'flash-down'), 500);
 }
 
-// ─── SPARKLINES ─────────────────────────────────────────────────────────────
-function initSparklines() {
-  document.querySelectorAll('.market-card .spark').forEach(spark => {
-    const bars = Array.from({length: 20}, () => {
-      const bar = document.createElement('div');
-      bar.className = 'spark-bar';
-      bar.style.height = (5 + Math.random() * 15) + 'px';
-      spark.appendChild(bar);
-      return bar;
-    });
-    setInterval(() => {
-      const bar = bars[Math.floor(Math.random() * bars.length)];
-      bar.style.height = (5 + Math.random() * 15) + 'px';
-    }, 800 + Math.random() * 1200);
-  });
-}
-
-// ─── PREDICTIVE MARKET ANIMATION ────────────────────────────────────────────
-function fluctuateMarkets() {
-  document.querySelectorAll('.market-card .pct').forEach(el => {
-    const base = parseInt(el.dataset.base);
-    const delta = (Math.random() - 0.5) * 2;
-    const newVal = Math.min(99, Math.max(1, Math.round(base + delta)));
-    el.dataset.base = newVal;
-    const isUp = newVal >= 50;
-    el.className = `pct ${isUp ? 'up' : 'down'}`;
-    el.textContent = `${isUp ? '▲' : '▼'} ${newVal}%`;
-    
-    const card = el.closest('.market-card');
-    const yes = card.querySelector('.yes');
-    const no = card.querySelector('.no');
-    yes.textContent = `YES €${(newVal/100).toFixed(2)}`;
-    no.textContent = `NO €${((100-newVal)/100).toFixed(2)}`;
-  });
-}
-
 // ─── BET SLIP ───────────────────────────────────────────────────────────────
 function addToSlip(matchId, type, odds, teams) {
   const existing = betSlip.findIndex(b => b.matchId === matchId && b.type === type);
-  if (existing >= 0) { betSlip.splice(existing, 1); } 
+  if (existing >= 0) { betSlip.splice(existing, 1); }
   else { betSlip.push({ matchId, type, odds: parseFloat(odds), teams, stake: 100 }); }
   renderSlip();
 }
@@ -461,13 +663,13 @@ function renderSlip() {
   const btn = document.getElementById('placeBetBtn');
   count.textContent = betSlip.length;
   btn.disabled = betSlip.length === 0;
-  
+
   document.querySelectorAll('.odds.selected').forEach(el => el.classList.remove('selected'));
   betSlip.forEach(b => {
     const el = document.querySelector(`.odds[data-id="${b.matchId}"][data-type="${b.type}"]`);
     if (el) el.classList.add('selected');
   });
-  
+
   container.innerHTML = betSlip.map((b, i) => `
     <div class="slip-item">
       <button class="remove" onclick="removeFromSlip(${i})">×</button>
@@ -485,6 +687,12 @@ function renderSlip() {
 function removeFromSlip(idx) { betSlip.splice(idx, 1); renderSlip(); }
 function updateStake(idx, val) { betSlip[idx].stake = parseFloat(val) || 0; renderSlip(); }
 
+function addPolyToSlip(name) {
+  const c = polyCandidates.find(x => x.name === name);
+  if (!c) return;
+  addToSlip(slugId(c.name), 'yes', decOdds(c.yes), 'Presidential 2028 — ' + c.name);
+}
+
 // ─── TICKER ─────────────────────────────────────────────────────────────────
 function initTicker() {
   const msgs = [
@@ -493,7 +701,10 @@ function initTicker() {
     'HANDLE: €14.2M SESSION','ALPINA CHAMPIONS TROPHY — 64% YES','LAKE CITY SWEEP: 72%',
     'NEXT GOAL MKT: €420K VOLUME','OLYMPIA RED CARD 82\' — ODDS SHIFT'
   ];
-  const text = msgs.join(' &nbsp;•&nbsp; ');
+  const lead = polyCandidates.slice(0, 3).map(c =>
+    `2028 ${c.name.toUpperCase()} YES ${c.yes.toFixed(4)} WK ${fmtChg(c.week).text}`
+  );
+  const text = [...lead, ...msgs].join(' &nbsp;•&nbsp; ');
   document.getElementById('ticker').innerHTML = text + ' &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ' + text;
 }
 
@@ -502,10 +713,17 @@ document.getElementById('sportTabs').addEventListener('click', e => {
   if (e.target.tagName !== 'BUTTON') return;
   document.querySelectorAll('#sportTabs button').forEach(b => b.classList.remove('active'));
   e.target.classList.add('active');
+  currentSport = e.target.dataset.sport;
+  renderBoard();
 });
 
-// ─── ODDS CLICK → BET SLIP ─────────────────────────────────────────────────
+// ─── ODDS / POLY CLICK → BET SLIP ──────────────────────────────────────────
 document.addEventListener('click', e => {
+  const card = e.target.closest('[data-poly]');
+  if (card && !e.target.closest('.odds')) {
+    addPolyToSlip(card.dataset.poly);
+    return;
+  }
   const odds = e.target.closest('.odds');
   if (!odds || odds.textContent === '—') return;
   const id = odds.dataset.id;
@@ -530,20 +748,19 @@ document.getElementById('placeBetBtn').addEventListener('click', () => {
 });
 
 // ─── INIT ───────────────────────────────────────────────────────────────────
-renderOddsTable();
-renderInplayTable();
-renderDepth();
-initSparklines();
+renderBoard();
+renderPolySidebars();
 initTicker();
+loadPolymarket();
 
 setInterval(fluctuateOdds, 1200);
-setInterval(fluctuateMarkets, 3000);
 setInterval(() => {
-  renderDepth();
+  if (currentSport === 'politics') return;
   depthData.forEach(d => {
     d.buy = Math.max(500, d.buy + Math.round((Math.random()-.5)*2000));
     d.sell = Math.max(500, d.sell + Math.round((Math.random()-.5)*2000));
   });
+  renderDepth();
 }, 2500);
 </script>
 </body>
