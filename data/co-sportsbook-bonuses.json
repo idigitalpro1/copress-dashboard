@@ -1,0 +1,143 @@
+{
+  "updated": null,
+  "source": "licensed-operator-list; offers empty until n8n or operator confirms",
+  "helpline": "1-800-522-4700",
+  "n8nWebhook": "",
+  "books": [
+    {
+      "id": "bally-bet",
+      "name": "Bally Bet",
+      "officialUrl": "https://www.ballybet.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "bet365",
+      "name": "bet365",
+      "officialUrl": "https://www.bet365.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "betmgm",
+      "name": "BetMGM",
+      "officialUrl": "https://sports.betmgm.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "betmonarch",
+      "name": "BetMonarch",
+      "officialUrl": "https://monarchblackhawk.com/casino/sportsbook/betmonarch",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "betrivers",
+      "name": "BetRivers",
+      "officialUrl": "https://www.betrivers.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "caesars",
+      "name": "Caesars",
+      "officialUrl": "https://www.caesars.com/sportsbook-and-casino",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "circa-sports",
+      "name": "Circa Sports",
+      "officialUrl": "https://www.circasports.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "draftkings",
+      "name": "DraftKings",
+      "officialUrl": "https://sportsbook.draftkings.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "thescore-bet",
+      "name": "theScore Bet",
+      "officialUrl": "https://www.thescore.bet/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "fanatics",
+      "name": "Fanatics",
+      "officialUrl": "https://sportsbook.fanatics.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "fanduel",
+      "name": "FanDuel",
+      "officialUrl": "https://sportsbook.fanduel.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "hard-rock-bet",
+      "name": "Hard Rock Bet",
+      "officialUrl": "https://www.hardrock.bet/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "playup",
+      "name": "PlayUp",
+      "officialUrl": "https://www.playup.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "sbk",
+      "name": "SBK",
+      "officialUrl": "https://getsbk.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    },
+    {
+      "id": "sky-ute",
+      "name": "Sky Ute",
+      "officialUrl": "https://www.skyutecasino.com/",
+      "offer": "",
+      "code": "",
+      "status": "confirm-on-site",
+      "notes": ""
+    }
+  ]
+}
