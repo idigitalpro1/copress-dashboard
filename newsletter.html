@@ -787,8 +787,9 @@
 
   .send-actions {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: 1fr;
     gap: 10px;
+    margin-top: 4px;
   }
   .send-draft-btn {
     width: 100%;
@@ -837,6 +838,64 @@
     background: #fff;
   }
   .draft-recipient-row input:focus { outline: none; border-color: var(--gold); }
+
+  .send-one-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 0 0 12px;
+    border: 1.5px solid var(--navy);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .send-one-tab {
+    background: #fff;
+    color: var(--navy);
+    border: none;
+    padding: 9px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .send-one-tab + .send-one-tab { border-left: 1.5px solid var(--navy); }
+  .send-one-tab.active {
+    background: var(--navy);
+    color: var(--gold);
+  }
+  .send-one-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.03em;
+    line-height: 1.45;
+    color: var(--navy);
+    background: rgba(10,22,40,0.04);
+    border-left: 3px solid var(--gold);
+    padding: 8px 10px;
+    margin: 0 0 12px;
+  }
+  .send-one-fields { display: grid; gap: 10px; }
+  .send-one-actions {
+    display: grid;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .send-one-secondary {
+    width: 100%;
+    padding: 12px;
+    background: var(--navy);
+    color: var(--gold);
+    border: 1.5px solid var(--navy);
+    border-radius: 6px;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s;
+  }
+  .send-one-secondary:hover { background: var(--navy-mid); transform: translateY(-1px); }
 
   .sendy-status {
     background: rgba(192,57,43,0.08);
@@ -898,7 +957,8 @@
 
   @media (max-width: 760px) {
     .send-actions { grid-template-columns: 1fr; }
-    .draft-recipient-row { align-items: stretch; flex-direction: column; }
+    .draft-recipient-row,
+    .send-one-fields .field-row { align-items: stretch; flex-direction: column; }
   }
 
 </style>
@@ -1326,19 +1386,69 @@
           </div>
         </div>
 
-        <div class="review-box draft-proof-box">
-          <h4>Draft Proof</h4>
-          <p class="draft-proof-copy">Send one review copy through your mail app. This does not contact subscriber lists or launch the campaign.</p>
-          <div class="draft-recipient-row">
-            <label class="sr-only" for="draft-recipient">Draft recipient</label>
-            <input type="email" id="draft-recipient" autocomplete="email" placeholder="Reviewer email address" oninput="saveDraftRecipient()">
+        <div class="review-box draft-proof-box send-one-box">
+          <h4>Send One</h4>
+          <p class="draft-proof-copy">Sends to ONE typed recipient only. This does not contact subscriber lists, increment campaign counts, or launch the newsletter.</p>
+          <div class="send-one-toggle" role="tablist" aria-label="Send one channel">
+            <button class="send-one-tab active" type="button" data-channel="email" onclick="setSendOneChannel('email')">Email</button>
+            <button class="send-one-tab" type="button" data-channel="postcard" onclick="setSendOneChannel('postcard')">Postcard</button>
+          </div>
+          <p class="send-one-note">One recipient. Not the Editorial, Paid, Marketing, Sales, or custom lists.</p>
+
+          <div class="send-one-fields" id="send-one-email-fields">
+            <div class="field-group" style="margin-bottom:0;">
+              <label class="field-label" for="draft-recipient">To email (required)</label>
+              <input type="email" class="field-input" id="draft-recipient" autocomplete="email" placeholder="" oninput="saveDraftRecipient()">
+            </div>
+            <div class="field-group" style="margin-bottom:0;">
+              <label class="field-label" for="send-one-email-name">Name (optional)</label>
+              <input type="text" class="field-input" id="send-one-email-name" autocomplete="name" placeholder="">
+            </div>
+          </div>
+
+          <div class="send-one-fields" id="send-one-postcard-fields" hidden>
+            <div class="field-group" style="margin-bottom:0;">
+              <label class="field-label" for="send-one-pc-name">Name (required)</label>
+              <input type="text" class="field-input" id="send-one-pc-name" autocomplete="name" placeholder="">
+            </div>
+            <div class="field-group" style="margin-bottom:0;">
+              <label class="field-label" for="send-one-pc-address1">Address (required)</label>
+              <input type="text" class="field-input" id="send-one-pc-address1" autocomplete="address-line1" placeholder="">
+            </div>
+            <div class="field-row">
+              <div class="field-group" style="margin-bottom:0;">
+                <label class="field-label" for="send-one-pc-city">City (required)</label>
+                <input type="text" class="field-input" id="send-one-pc-city" autocomplete="address-level2" placeholder="">
+              </div>
+              <div class="field-group" style="margin-bottom:0;">
+                <label class="field-label" for="send-one-pc-state">State (required)</label>
+                <input type="text" class="field-input" id="send-one-pc-state" autocomplete="address-level1" placeholder="" maxlength="24">
+              </div>
+              <div class="field-group" style="margin-bottom:0;">
+                <label class="field-label" for="send-one-pc-zip">ZIP (required)</label>
+                <input type="text" class="field-input" id="send-one-pc-zip" autocomplete="postal-code" placeholder="" maxlength="10">
+              </div>
+            </div>
+            <div class="field-group" style="margin-bottom:0;">
+              <label class="field-label" for="send-one-pc-email">Email (optional)</label>
+              <input type="email" class="field-input" id="send-one-pc-email" autocomplete="email" placeholder="">
+            </div>
+          </div>
+
+          <div class="send-one-actions">
+            <button class="send-draft-btn" id="btn-send-one-email" type="button" onclick="sendOneEmail()">
+              ✉ Send one email
+            </button>
+            <button class="send-draft-btn" id="btn-send-one-postcard" type="button" hidden onclick="sendOnePostcard()">
+              Send one postcard
+            </button>
+            <button class="send-one-secondary" id="btn-open-postcard-studio" type="button" hidden onclick="openPostcardStudio()">
+              Open in Postcard Studio
+            </button>
           </div>
         </div>
 
         <div class="send-actions">
-          <button class="send-draft-btn" type="button" onclick="sendDraft()">
-            ✉ Send Draft
-          </button>
           <button class="send-big-btn" type="button" onclick="sendNewsletter()">
             🚀 Launch Newsletter
           </button>
@@ -2106,6 +2216,23 @@ function updateReview() {
 }
 
 // ── SEND ──────────────────────────────────────────────────────────────────
+function setSendOneChannel(channel) {
+  const isEmail = channel !== 'postcard';
+  document.querySelectorAll('.send-one-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.channel === (isEmail ? 'email' : 'postcard'));
+  });
+  const emailFields = document.getElementById('send-one-email-fields');
+  const postcardFields = document.getElementById('send-one-postcard-fields');
+  const emailBtn = document.getElementById('btn-send-one-email');
+  const postcardBtn = document.getElementById('btn-send-one-postcard');
+  const studioBtn = document.getElementById('btn-open-postcard-studio');
+  if (emailFields) emailFields.hidden = !isEmail;
+  if (postcardFields) postcardFields.hidden = isEmail;
+  if (emailBtn) emailBtn.hidden = !isEmail;
+  if (postcardBtn) postcardBtn.hidden = isEmail;
+  if (studioBtn) studioBtn.hidden = isEmail;
+}
+
 function saveDraftRecipient() {
   const field = document.getElementById('draft-recipient');
   if (field) localStorage.setItem('nl_draft_recipient', field.value.trim());
@@ -2114,6 +2241,16 @@ function saveDraftRecipient() {
 function loadDraftRecipient() {
   const field = document.getElementById('draft-recipient');
   if (field) field.value = localStorage.getItem('nl_draft_recipient') || '';
+  loadSendOnePostcardFields();
+}
+
+function sendOneFieldValue(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+function sendOneEmail() {
+  sendDraft();
 }
 
 function sendDraft() {
@@ -2121,11 +2258,12 @@ function sendDraft() {
   const recipientField = document.getElementById('draft-recipient');
   const recipient = recipientField ? recipientField.value.trim() : '';
   if (!recipient || !recipientField.checkValidity()) {
+    setSendOneChannel('email');
     if (recipientField) {
       recipientField.focus();
       recipientField.reportValidity();
     }
-    showToast('Enter a valid reviewer email address', 'red');
+    showToast('Enter one valid To email — this is not a list send', 'red');
     return;
   }
 
@@ -2134,18 +2272,222 @@ function sendDraft() {
   const campaignSubject = document.getElementById('subject-line').value.trim() || `${brand.name} newsletter`;
   const previewText = document.getElementById('preview-text').value.trim();
   const proofText = document.getElementById('email-preview').innerText.trim();
+  const optionalName = sendOneFieldValue('send-one-email-name');
+  const greeting = optionalName ? `For: ${optionalName}` : '';
   const body = [
-    `DRAFT PROOF — ${brand.name}`,
+    `ONE EMAIL — ${brand.name}`,
+    greeting,
     '',
     previewText,
     '',
     proofText,
     '',
-    'Review only — this draft was prepared in SATCOM and was not sent to subscriber lists.',
+    'This message is for ONE typed recipient. SATCOM did not contact subscriber lists or launch a campaign.',
   ].filter((line, index, lines) => line || lines[index - 1]).join('\n');
-  const mailto = `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(`[DRAFT] ${campaignSubject}`)}&body=${encodeURIComponent(body)}`;
+  const mailto = `mailto:${encodeURIComponent(recipient)}?subject=${encodeURIComponent(campaignSubject)}&body=${encodeURIComponent(body)}`;
   window.location.href = mailto;
-  showToast(`✉ Draft opened for ${recipient} — review, then send from your mail app`, 'green');
+  showToast(`✉ One email opened for ${recipient} — send from your mail app`, 'green');
+}
+
+function collectPostcardRecipient() {
+  return {
+    name: sendOneFieldValue('send-one-pc-name'),
+    address1: sendOneFieldValue('send-one-pc-address1'),
+    city: sendOneFieldValue('send-one-pc-city'),
+    state: sendOneFieldValue('send-one-pc-state'),
+    zip: sendOneFieldValue('send-one-pc-zip'),
+    email: sendOneFieldValue('send-one-pc-email'),
+  };
+}
+
+function validatePostcardRecipient(rec) {
+  const missing = [];
+  if (!rec.name) missing.push('name');
+  if (!rec.address1) missing.push('address');
+  if (!rec.city) missing.push('city');
+  if (!rec.state) missing.push('state');
+  if (!rec.zip) missing.push('ZIP');
+  return missing;
+}
+
+function stashSinglePostcard(rec) {
+  const brand = getPublication();
+  const payload = {
+    name: rec.name,
+    address1: rec.address1,
+    city: rec.city,
+    state: rec.state,
+    zip: rec.zip,
+    email: rec.email,
+    subject: document.getElementById('subject-line').value.trim(),
+    publication: brand.name,
+    created: new Date().toISOString(),
+  };
+  localStorage.setItem('nl_single_postcard', JSON.stringify(payload));
+  return payload;
+}
+
+function loadSendOnePostcardFields() {
+  let payload = null;
+  try {
+    payload = JSON.parse(localStorage.getItem('nl_single_postcard') || '');
+  } catch (err) {
+    return;
+  }
+  if (!payload || typeof payload !== 'object') return;
+  const map = {
+    'send-one-pc-name': payload.name,
+    'send-one-pc-address1': payload.address1,
+    'send-one-pc-city': payload.city,
+    'send-one-pc-state': payload.state,
+    'send-one-pc-zip': payload.zip,
+    'send-one-pc-email': payload.email,
+  };
+  Object.entries(map).forEach(([id, value]) => {
+    const field = document.getElementById(id);
+    if (field && !field.value && value) field.value = String(value);
+  });
+}
+
+function escapeHtml(str) {
+  return String(str == null ? '' : str).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[ch]));
+}
+
+function sendOnePostcard() {
+  setSendOneChannel('postcard');
+  const rec = collectPostcardRecipient();
+  const missing = validatePostcardRecipient(rec);
+  if (missing.length) {
+    const firstId = {
+      name: 'send-one-pc-name',
+      address: 'send-one-pc-address1',
+      city: 'send-one-pc-city',
+      state: 'send-one-pc-state',
+      ZIP: 'send-one-pc-zip',
+    }[missing[0]];
+    const field = document.getElementById(firstId);
+    if (field) field.focus();
+    showToast('Enter name, address, city, state, and ZIP for ONE postcard', 'red');
+    return;
+  }
+  const payload = stashSinglePostcard(rec);
+  rememberNewsletterOptions();
+  const previewText = document.getElementById('preview-text').value.trim();
+  const previewLines = previewText.split(/(?<=[.!?])\s+/).filter(Boolean).slice(0, 2).join(' ');
+  const win = window.open('', '_blank', 'width=820,height=640');
+  if (!win) {
+    showToast('Allow pop-ups to print the one-up postcard', 'red');
+    return;
+  }
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>One postcard — ${escapeHtml(payload.publication)}</title>
+<style>
+  @page { size: 6in 4in landscape; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #d8d2c4; font-family: Georgia, 'Times New Roman', serif; color: #0a1628; }
+  .sheet {
+    width: 6in;
+    height: 4in;
+    margin: 16px auto;
+    background: #fafaf8;
+    border: 1px solid #0a1628;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .mast {
+    background: #0a1628;
+    color: #c8a84b;
+    padding: 10px 16px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 10px;
+  }
+  .mast strong { font-size: 13px; letter-spacing: 0.04em; }
+  .card-body { flex: 1; padding: 14px 16px 10px; display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 14px; }
+  h1 { font-size: 16px; line-height: 1.25; color: #0a1628; margin-bottom: 8px; }
+  .preview { font-family: system-ui, sans-serif; font-size: 11px; line-height: 1.45; color: #1a1a1a; }
+  .addr {
+    border: 1px solid rgba(10,22,40,0.2);
+    background: #fffdf7;
+    padding: 10px 12px;
+    align-self: end;
+    min-height: 1.55in;
+  }
+  .addr-label { font-family: system-ui, sans-serif; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: #5c6b80; margin-bottom: 6px; }
+  .addr-block { font-size: 12px; line-height: 1.4; }
+  .foot {
+    border-top: 2px solid #c8a84b;
+    padding: 6px 16px;
+    font-family: system-ui, sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0a1628;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+  }
+  @media print {
+    body { background: #fff; }
+    .sheet { margin: 0; border: none; }
+    .no-print { display: none; }
+  }
+</style>
+</head>
+<body>
+  <p class="no-print" style="text-align:center;margin:12px;font:12px system-ui,sans-serif;color:#0a1628;">One 6&times;4 card — print or Save as PDF. Not a list.</p>
+  <article class="sheet">
+    <header class="mast">
+      <strong>SATCOM · ${escapeHtml(payload.publication)}</strong>
+      <span>One card</span>
+    </header>
+    <div class="card-body">
+      <div>
+        <h1>${escapeHtml(payload.subject || payload.publication)}</h1>
+        <p class="preview">${escapeHtml(previewLines || previewText)}</p>
+      </div>
+      <div class="addr">
+        <div class="addr-label">Deliver to · one recipient</div>
+        <div class="addr-block">
+          ${escapeHtml(payload.name)}<br>
+          ${escapeHtml(payload.address1)}<br>
+          ${escapeHtml(payload.city)}, ${escapeHtml(payload.state)} ${escapeHtml(payload.zip)}
+        </div>
+      </div>
+    </div>
+    <footer class="foot">
+      <span>${escapeHtml(payload.publication)}</span>
+      <span>Single send · not a subscriber list</span>
+    </footer>
+  </article>
+</body>
+</html>`;
+  win.document.open();
+  win.document.write(html);
+  win.document.close();
+  const triggerPrint = () => { try { win.focus(); win.print(); } catch (err) {} };
+  if (win.document.readyState === 'complete') setTimeout(triggerPrint, 200);
+  else win.addEventListener('load', () => setTimeout(triggerPrint, 200));
+  showToast('🖨 One 6×4 postcard opened — print or save as PDF', 'green');
+}
+
+function openPostcardStudio() {
+  const rec = collectPostcardRecipient();
+  if (!validatePostcardRecipient(rec).length) stashSinglePostcard(rec);
+  window.location.href = '/villager-postcard-proofing/';
 }
 
 async function sendNewsletter() {
