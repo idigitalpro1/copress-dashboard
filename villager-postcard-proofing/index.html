@@ -1356,6 +1356,18 @@
       .qr-row img { width: 86px; height: 86px; }
     }
 
+    .nl-single-handoff {
+      display: none;
+      margin: 10px 0 0;
+      padding: 10px 12px;
+      border: 1px solid var(--gold);
+      background: rgba(196,154,90,.14);
+      color: var(--navy);
+      font: 700 12px "DM Mono", monospace;
+      letter-spacing: .04em;
+    }
+    .nl-single-handoff.is-visible { display: block; }
+
     @media print {
       body { background: #fff; }
       .topbar,
@@ -1390,6 +1402,8 @@
         <button class="btn primary" type="button" id="copy-proof-link">Copy Proof Link</button>
       </nav>
     </header>
+
+    <div class="nl-single-handoff" id="nl-single-handoff" hidden></div>
 
     <section class="status-strip" aria-label="Proof status">
       <div class="status">
@@ -2323,6 +2337,37 @@ Requested changes:`;
       };
     }
 
+    function loadNewsletterSinglePostcard() {
+      let payload = null;
+      try {
+        payload = JSON.parse(localStorage.getItem('nl_single_postcard') || '');
+      } catch (err) {
+        return false;
+      }
+      if (!payload || typeof payload !== 'object') return false;
+      const name = String(payload.name || '').trim();
+      const address1 = String(payload.address1 || '').trim();
+      const city = String(payload.city || '').trim();
+      const state = String(payload.state || '').trim();
+      const zip = String(payload.zip || '').trim();
+      if (!name || !address1 || !city || !state || !zip) return false;
+      const email = String(payload.email || '').trim();
+      const publication = String(payload.publication || '').trim();
+      const subject = String(payload.subject || '').trim();
+      importedSubscriberHeaders = ['Name', 'Address1', 'City', 'State', 'Zip', 'Email', 'Publication', 'Subject'];
+      importedSubscriberRows = [objectFromCsvRow(importedSubscriberHeaders, [name, address1, city, state, zip, email, publication, subject])];
+      mailingQuantity.value = '1';
+      subscriberImportName.value = 'Newsletter Studio — one recipient';
+      updateSubscriberImportStatus();
+      const banner = document.getElementById('nl-single-handoff');
+      if (banner) {
+        banner.hidden = false;
+        banner.classList.add('is-visible');
+        banner.textContent = `ONE Newsletter Studio recipient loaded: ${name}, ${city}, ${state}. Not a list.`;
+      }
+      return true;
+    }
+
     function importedSubscriberLabel() {
       const name = subscriberImportName.value.trim() || 'subscriber CSV import';
       if (!importedSubscriberRows.length) return `${name}: no rows imported`;
@@ -3110,6 +3155,7 @@ Please include setup fees, postage estimate, proof timing, ship/mail date, and w
     proofLinkEl.textContent = activeProofUrl();
     proofLinkEl.href = activeProofUrl();
     loadPortfolioState();
+    const loadedSingle = loadNewsletterSinglePostcard();
     const requestedVersion = new URLSearchParams(location.search).get('version');
     const initialVersion = versions[requestedVersion] ? requestedVersion : (versions[frontSelection.value] ? frontSelection.value : 'regular');
     if (requestedVersion && versions[requestedVersion]) {
@@ -3122,6 +3168,10 @@ Please include setup fees, postage estimate, proof timing, ship/mail date, and w
     selectVersion(initialVersion);
     renderPortfolio();
     generateQuote({ silent: true });
+    if (loadedSingle) {
+      refreshStampsIntegration({ silent: true });
+      showToast('one newsletter postcard recipient loaded');
+    }
   </script>
 </body>
 </html>
