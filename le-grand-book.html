@@ -213,6 +213,7 @@ table td:first-child{color:var(--text)}
 }
 
 </style>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <div class="bg-layer"></div>
@@ -235,6 +236,14 @@ table td:first-child{color:var(--text)}
       </nav>
     </div>
     <div class="header-right">
+      <div id="googleSignInContainer" style="margin-right: 8px;">
+        <div id="googleSignInButton"></div>
+      </div>
+      <div id="userProfile" style="display: none; align-items: center; gap: 8px; margin-right: 8px;">
+        <img id="userAvatar" src="" alt="Avatar" style="width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--gold);" />
+        <span id="userName" style="font-size: 9px; font-weight: 700; color: var(--text); font-family: monospace; letter-spacing: 0.1em; text-transform: uppercase;"></span>
+        <button id="signOutBtn" class="btn-sm" style="padding: 2px 6px; font-size: 8px;">Sign Out</button>
+      </div>
       <div class="hdr-drawers">
         <button class="btn-sm" type="button" data-drawer="left" aria-expanded="false">Movers</button>
         <button class="btn-sm" type="button" data-drawer="right" aria-expanded="false">2028</button>
@@ -926,6 +935,7 @@ renderPolySidebars();
 initTicker();
 loadPolymarket();
 initDrawers();
+initGoogleSignIn();
 
 setInterval(fluctuateOdds, 1200);
 setInterval(() => {
@@ -936,6 +946,76 @@ setInterval(() => {
   });
   renderDepth();
 }, 2500);
+
+
+// ─── GOOGLE OAUTH SIGN-IN ───────────────────────────────────────────────────
+function initGoogleSignIn() {
+  if (typeof google === 'undefined') {
+    setTimeout(initGoogleSignIn, 100);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: "870636402371-g0o2d2adg880j9lp5p5pe3c2ad2ea3be.apps.googleusercontent.com",
+    callback: handleCredentialResponse
+  });
+  
+  const savedUser = localStorage.getItem('google_user');
+  if (savedUser) {
+    showUser(JSON.parse(savedUser));
+  } else {
+    renderGoogleButton();
+  }
+}
+
+function renderGoogleButton() {
+  const btnContainer = document.getElementById("googleSignInButton");
+  if (btnContainer) {
+    google.accounts.id.renderButton(
+      btnContainer,
+      { theme: "dark", size: "small", shape: "rectangular", text: "signin_with" }
+    );
+  }
+}
+
+function handleCredentialResponse(response) {
+  try {
+    const jwt = response.credential;
+    const payload = JSON.parse(atob(jwt.split('.')[1]));
+    const user = {
+      name: payload.name || payload.email.split('@')[0],
+      email: payload.email,
+      picture: payload.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80&h=80&fit=crop'
+    };
+    localStorage.setItem('google_user', JSON.stringify(user));
+    showUser(user);
+  } catch (e) {
+    console.error("Error parsing credential:", e);
+  }
+}
+
+function showUser(user) {
+  const signinCont = document.getElementById("googleSignInContainer");
+  const profileCont = document.getElementById("userProfile");
+  const avatarImg = document.getElementById("userAvatar");
+  const nameSpan = document.getElementById("userName");
+  
+  if (signinCont) signinCont.style.display = "none";
+  if (profileCont) profileCont.style.display = "flex";
+  if (avatarImg) avatarImg.src = user.picture;
+  if (nameSpan) {
+    const firstName = user.name.split(' ')[0];
+    nameSpan.textContent = firstName.substring(0, 10);
+  }
+}
+
+document.getElementById("signOutBtn").addEventListener("click", () => {
+  localStorage.removeItem('google_user');
+  document.getElementById("userProfile").style.display = "none";
+  document.getElementById("googleSignInContainer").style.display = "block";
+  renderGoogleButton();
+});
+
+initGoogleSignIn();
 
 </script>
 </body>
