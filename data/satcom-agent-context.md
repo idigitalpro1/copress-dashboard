@@ -46,6 +46,8 @@ Local repo fallback:
 | SATCOM handoff summary | `https://satcom.5280.menu/data/conews-satcom-handoff-summary.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/conews-satcom-handoff-summary.md` |
 | SATCOM progress monitor | `https://satcom.5280.menu/data/conews-satcom-progress-monitor.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/conews-satcom-progress-monitor.md` |
 | Deploy hooks | `https://satcom.5280.menu/data/conews-deploy-hooks.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/conews-deploy-hooks.md` |
+| ElevenLabs receptionist agent (draft) | `https://satcom.5280.menu/data/satcom-elevenlabs-receptionist-agent.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/satcom-elevenlabs-receptionist-agent.md` |
+| ElevenLabs receptionist tool config (draft) | `https://satcom.5280.menu/data/satcom-elevenlabs-receptionist-tools.md` | `/Users/Ace/Codex/apps/copress-dashboard/data/satcom-elevenlabs-receptionist-tools.md` |
 | Kit generator prompt | `https://satcom.5280.menu/_kit-template/HERMES-KIT-PROMPT.md` | `/Users/Ace/Codex/apps/copress-dashboard/_kit-template/HERMES-KIT-PROMPT.md` |
 
 ## Local Endpoint Map
