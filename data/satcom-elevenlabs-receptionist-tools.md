@@ -1,7 +1,7 @@
 # Tool Config Reference: SATCOM ElevenLabs Receptionist
 
 Updated: 2026-09-01
-Status: DRAFT — reference for manual entry into the ElevenLabs dashboard. Nothing here has been activated.
+Status: DRAFT — MCP server is deployed but not yet configured into an ElevenLabs agent. Nothing here has been activated.
 
 Companion to `satcom-elevenlabs-receptionist-agent.md`. That file covers the system prompt and build order; this one covers the two tool sources in detail.
 
@@ -10,8 +10,8 @@ Companion to `satcom-elevenlabs-receptionist-agent.md`. That file covers the sys
 Source: `../satcom-receptionist-mcp-server/`. These are not entered as JSON in the ElevenLabs dashboard — they come from adding the deployed server as a custom MCP server:
 
 1. ElevenLabs Dashboard → Agent → **Integrations → MCP Servers → Add Custom MCP Server**.
-2. **Server URL**: `https://<wherever-it-is-hosted>/mcp` (streamable HTTP endpoint — see the server's README for hosting options).
-3. **Header**: `Authorization: Bearer <MCP_AUTH_TOKEN>` — same secret the server was started with.
+2. **Server URL**: `https://eleven-claude.vercel.app/mcp` — deployed and live (Vercel project `eleven-claude`, team 5280menu). Not linked to any GitHub repo; deployed by manual file upload, independent of `copress-dashboard`'s deploy pipeline.
+3. **Header**: `Authorization: Bearer <MCP_AUTH_TOKEN>` — the operator must set `MCP_AUTH_TOKEN` as an environment variable on the `eleven-claude` Vercel project (Project Settings → Environment Variables) and redeploy before this works; the deployment currently has no token configured, so `/mcp` returns 500 until that's done. Use the same value here.
 4. **Tool approval**: require approval / review while testing; only relax to auto-approve once test calls confirm `take_message` behaves correctly, including the failure path when `MESSAGE_WEBHOOK_URL` isn't delivering.
 5. The agent will then see `take_message` and `list_departments` exactly as described in each tool's own description string (see `satcom-receptionist-mcp-server/src/tools/`).
 

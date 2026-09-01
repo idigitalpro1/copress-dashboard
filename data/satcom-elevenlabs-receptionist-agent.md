@@ -1,7 +1,7 @@
 # Draft: ElevenLabs Conversational AI Receptionist For 3CX
 
 Updated: 2026-09-01
-Status: DRAFT — not wired to live 3CX or Twilio. Nothing in this packet has been activated.
+Status: DRAFT — MCP server is deployed and live at `https://eleven-claude.vercel.app`, but not yet configured into an ElevenLabs agent, and not wired to live 3CX or Twilio. Nothing in this packet has been activated.
 
 ## Why this exists
 
@@ -13,8 +13,8 @@ This is a config draft only. Building the agent in the ElevenLabs dashboard and 
 
 1. ElevenLabs Dashboard → Agents Platform → Agents → Create Agent.
 2. Paste the **System Prompt** and **First Message** below.
-3. Deploy `../satcom-receptionist-mcp-server/` somewhere reachable over HTTPS (its own small Vercel project, or alongside the existing Hermes/API Vault services), running in `TRANSPORT=http` mode with `MCP_AUTH_TOKEN` and `MESSAGE_WEBHOOK_URL` set. See that server's own README for exact steps.
-4. In the agent's **Integrations → MCP Servers** panel, add a custom MCP server pointing at that deployment's `/mcp` URL, with a header `Authorization: Bearer <MCP_AUTH_TOKEN>`. This gives the agent the `take_message` and `list_departments` tools.
+3. `satcom-receptionist-mcp-server/` is already deployed at `https://eleven-claude.vercel.app` (Vercel project `eleven-claude`, team 5280menu — manual file deploy, not linked to any GitHub repo). It does not work yet: the operator still needs to set `MCP_AUTH_TOKEN` (and optionally `MESSAGE_WEBHOOK_URL`) as environment variables on that Vercel project and trigger a redeploy — see that server's own README for the exact variables.
+4. In the agent's **Integrations → MCP Servers** panel, add a custom MCP server pointing at `https://eleven-claude.vercel.app/mcp`, with a header `Authorization: Bearer <MCP_AUTH_TOKEN>` (same value set in step 3). This gives the agent the `take_message` and `list_departments` tools.
 5. Add the native **Transfer to Human** system tool (`transfer_to_number`) and enter the five SIP transfer rules from `satcom-elevenlabs-receptionist-tools.md` — these are UI-entered per rule, not importable as JSON.
 6. Publish the agent. It cannot take calls while unpublished.
 7. Telephony → Phone Numbers → Import Number → From SIP Trunk, using the existing Twilio number or a new one issued for testing — do not repoint the live `+18773578499` number without Patrick's sign-off, since that number is already in production.
@@ -61,14 +61,14 @@ Thanks for calling the CoNews newspaper network — this is the AI receptionist.
 | `list_departments` | MCP (`satcom-receptionist-mcp-server`) | Read-only directory of the five SIP extensions and when to use each — lets the agent (or an operator debugging it) confirm routing without it being baked only into the prompt text. |
 | Transfer to Human | Native ElevenLabs system tool (`transfer_to_number`) | SIP REFER transfer to one of the five extensions on `1722.3cx.cloud`, per the condition table in `satcom-elevenlabs-receptionist-tools.md`. |
 
-The MCP server lives at `../satcom-receptionist-mcp-server/` in this repo — see its README for build, run, and deploy steps. It is a separate, undeployed project: nothing here is live until an operator hosts it and sets `MESSAGE_WEBHOOK_URL` to a real intake endpoint. Do not publish this agent for live calls before that.
+The MCP server lives at `../satcom-receptionist-mcp-server/` in this repo, deployed at `https://eleven-claude.vercel.app` — see its README for build/run steps. `take_message` cannot deliver anything until an operator sets `MCP_AUTH_TOKEN` (required) and `MESSAGE_WEBHOOK_URL` (optional, for real delivery) as environment variables on that Vercel project. Do not publish this agent for live calls before that.
 
 ## Guardrails (same standard as the rest of the SATCOM agent packets)
 
 Stop and get operator approval before:
 
 - pointing this agent at the live `+18773578499` number or any other number already receiving real customer/advertiser calls
-- deploying `satcom-receptionist-mcp-server` anywhere publicly reachable, or wiring `MESSAGE_WEBHOOK_URL` to a real intake endpoint
+- setting `MCP_AUTH_TOKEN` / `MESSAGE_WEBHOOK_URL` on the `eleven-claude` Vercel project (already deployed, but inert without them)
 - adding any tool that sends SMS, email, or otherwise contacts a customer on the agent's own initiative
 - adding payment, billing, Stripe, or subscription-write actions to any tool
 - storing or logging anything beyond name, callback number, department, and message text

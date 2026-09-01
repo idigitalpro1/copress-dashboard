@@ -506,7 +506,7 @@ Campaign guardrail: the static kit explains and packages the dashboard workflow.
 - 17410 Patrick · 17413 Editorial · 17414 Subscriptions · 17415 Advertising · 17416 Production
 - AI Receptionist: Twilio +18773578499 → claude-opus-4-5 → SIP route
 
-**ElevenLabs receptionist (draft, not live):** an alternative/companion voice-agent config for the same job, using ElevenLabs Conversational AI's native SIP transfer instead of the Twilio/Claude lane above. Not wired to any phone number. See `data/satcom-elevenlabs-receptionist-agent.md`, `data/satcom-elevenlabs-receptionist-tools.md`, and the `satcom-receptionist-mcp-server/` project for the tool backend.
+**ElevenLabs receptionist (draft, not live):** an alternative/companion voice-agent config for the same job, using ElevenLabs Conversational AI's native SIP transfer instead of the Twilio/Claude lane above. Not wired to any phone number. Its tool backend, `satcom-receptionist-mcp-server/`, is deployed at `https://eleven-claude.vercel.app` (separate Vercel project, no GitHub link) but inert until `MCP_AUTH_TOKEN` is set. See `data/satcom-elevenlabs-receptionist-agent.md` and `data/satcom-elevenlabs-receptionist-tools.md` for the rest.
 
 **City Sites:** Black Hawk ⛏ · Central City 🎰 · Nederland 🏔 · Georgetown 🚂 · Idaho Springs ⛷
 

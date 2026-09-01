@@ -5,11 +5,11 @@ MCP server exposing two tools to the ElevenLabs Conversational AI receptionist a
 - **`take_message`** — logs a caller's name, callback number, department, and summary, and forwards it to an operator-configured webhook (n8n, Slack, email relay — whatever the operator points `MESSAGE_WEBHOOK_URL` at). Never claims a message was received if delivery failed.
 - **`list_departments`** — read-only directory of the five network SIP extensions (Patrick, Editorial, Subscriptions, Advertising, Production), sourced from the same extension list documented in the root `README.md`'s "3CX SIP Extensions" section and `network.html`.
 
-This is a standalone project, deliberately decoupled from the static-HTML Vercel deploy that serves the rest of `copress-dashboard`. It is **not wired into `vercel.json`** and will not deploy automatically — it needs its own hosting decision (its own Vercel project, or running alongside the existing Hermes/API Vault services) before it does anything.
+This is a standalone project, deliberately decoupled from the static-HTML Vercel deploy that serves the rest of `copress-dashboard`. It is **not wired into `vercel.json`** and does not deploy automatically from this repo — `api/mcp.ts` and `api/health.ts` are deployed separately as a manual file upload to their own Vercel project (see Deploying below), unlinked to any GitHub repo.
 
 ## Status
 
-Draft / not yet deployed. Building and running this locally is safe — it only starts a local server and, if `MESSAGE_WEBHOOK_URL` isn't set, refuses to deliver anything (it logs the failure instead of pretending to succeed). It has no path to the live `+1 877-357-8499` receptionist number unless an operator deliberately points ElevenLabs at it.
+**Deployed, but inert.** Live at `https://eleven-claude.vercel.app` (Vercel project `eleven-claude`, team 5280menu). `MCP_AUTH_TOKEN` has not been set on that deployment yet, so `POST /mcp` currently returns `500` for every request — this is the intended fail-closed behavior, not a bug. It has no path to the live `+1 877-357-8499` receptionist number unless an operator sets the token, configures `MESSAGE_WEBHOOK_URL`, and deliberately points an ElevenLabs agent at it.
 
 ## Setup
 
@@ -28,13 +28,15 @@ npm run dev
 node dist/index.js
 ```
 
-**Remote (streamable HTTP) — what ElevenLabs' Integrations → MCP Servers panel needs:**
+**Local (streamable HTTP), via `src/index.ts` + Express** — an alternative to the Vercel deployment below, for running this alongside the existing Hermes/API Vault services instead:
 
 ```bash
 TRANSPORT=http MCP_AUTH_TOKEN=<shared-secret> MESSAGE_WEBHOOK_URL=<intake-webhook-url> PORT=3000 node dist/index.js
 ```
 
-The server listens on `POST /mcp` and requires `Authorization: Bearer <shared-secret>` on every request — set the same value as a custom header when adding this as a custom MCP server in the ElevenLabs agent config. `GET /health` is unauthenticated and returns `{ ok: true }` for uptime checks.
+**Deployed (Vercel), what's actually live** — `api/mcp.ts` and `api/health.ts` are separate serverless functions (no `app.listen`, no Express at request time); `vercel.json` rewrites `/mcp` → `/api/mcp` and `/health` → `/api/health` so the public paths match what's documented everywhere else. Live at `https://eleven-claude.vercel.app`.
+
+Either way, `POST /mcp` requires `Authorization: Bearer <shared-secret>` on every request — set the same value as a custom header when adding this as a custom MCP server in the ElevenLabs agent config. `GET /health` is unauthenticated and returns `{ ok: true }` for uptime checks.
 
 ## Environment Variables
 
@@ -57,4 +59,6 @@ Call `list_departments` first (no side effects) to confirm the directory looks r
 
 ## Deploying
 
-Not decided yet — this needs an operator call on where it runs (its own small Vercel project with `TRANSPORT=http`, or alongside the existing Hermes/API Vault Bridge services). Whatever host is chosen, keep it off the same deploy pipeline as the static dashboard so a bad push to this server can never break `copress-dashboard.vercel.app`.
+Already deployed once, manually, to a standalone Vercel project (`eleven-claude`, team 5280menu, unlinked to any GitHub repo — deployed by uploading the source files directly, not via git push). To redeploy after code changes, either repeat that manual upload or connect the project to this repo's `claude/agent-eleven-labs-zk75q6` branch / a later `main` merge with root directory `satcom-receptionist-mcp-server` (Vercel → Project Settings → Git).
+
+**Still required before this does anything real:** set `MCP_AUTH_TOKEN` (and `MESSAGE_WEBHOOK_URL` once a real intake endpoint exists) on the `eleven-claude` project — Vercel Dashboard → `eleven-claude` → Settings → Environment Variables — then redeploy so the new values are picked up. Kept off the static dashboard's deploy pipeline on purpose, so a bad push to this server can never break `copress-dashboard.vercel.app`.
