@@ -2166,10 +2166,6 @@ function exportHTML() {
   rememberNewsletterOptions();
   const html = document.getElementById('email-preview').outerHTML;
   const blob = new Blob([`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${brand.name} Newsletter</title></head><body style="margin:0;padding:20px;background:#e8e4dc;">${html}</body></html>`], { type: 'text/html' });
-<script>
-  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-</script>
-<script defer src="/_vercel/insights/script.js"></script>
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = `${brand.key}-newsletter-${new Date().toISOString().slice(0, 10)}.html`;
