@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0",
+  "updatedAt": "2026-09-03T09:00:00-06:00",
+  "source": "repository-seed",
+  "towns": [
+    {
+      "id": "empire",
+      "name": "Empire",
+      "placement": {
+        "state": "featured",
+        "label": "Featured Listing"
+      },
+      "venues": [
+        {
+          "id": "valero-empire",
+          "name": "Valero - Empire",
+          "category": "Mountain Market",
+          "items": [
+            {
+              "id": "i70-road-kit",
+              "name": "I-70 Road Kit",
+              "price": {
+                "display": "$14",
+                "amount": 14,
+                "currency": "USD"
+              },
+              "description": "Coffee, bottled water, trail mix, and quick-pack snacks for mountain traffic.",
+              "tags": [
+                "grab-and-go",
+                "travel"
+              ]
+            },
+            {
+              "id": "breakfast-burrito-stop",
+              "name": "Breakfast Burrito Stop",
+              "price": {
+                "display": "$11",
+                "amount": 11,
+                "currency": "USD"
+              },
+              "description": "Hot burrito, coffee refill, and convenience essentials before the pass.",
+              "tags": [
+                "breakfast",
+                "local pick"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "georgetown",
+      "name": "Georgetown",
+      "placement": {
+        "state": "sponsor-open",
+        "label": "Open Sponsor Slot"
+      },
+      "venues": [
+        {
+          "id": "georgetown-dining-desk",
+          "name": "Georgetown Dining Desk",
+          "category": "Dining Guide",
+          "items": [
+            {
+              "id": "historic-district-lunch",
+              "name": "Historic District Lunch",
+              "price": {
+                "display": "Sponsor slot",
+                "amount": null,
+                "currency": null
+              },
+              "description": "Rotating lunch feature for shops and restaurants near 6th Street.",
+              "tags": [
+                "lunch",
+                "downtown"
+              ]
+            },
+            {
+              "id": "railroad-weekend-special",
+              "name": "Railroad Weekend Special",
+              "price": {
+                "display": "Sponsor slot",
+                "amount": null,
+                "currency": null
+              },
+              "description": "Family-friendly meal placement for train traffic and weekend visitors.",
+              "tags": [
+                "weekend",
+                "family"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
