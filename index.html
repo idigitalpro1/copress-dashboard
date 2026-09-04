@@ -1796,9 +1796,9 @@ body.satcom-gated #satcom-entry-gate {
             <span class="nav-label">Grok Developer</span>
             <span class="nav-badge new">DEV</span>
           </div>
-          <div class="nav-item" data-view="brains">
+          <div class="nav-item" onclick="window.location.href='/hermes'">
             <span class="nav-icon">◈</span>
-            <span class="nav-label">Hermes Links</span>
+            <span class="nav-label">Hermes</span>
           </div>
           <div class="nav-item" onclick="window.location.href='/linear'">
             <span class="nav-icon">📐</span>
@@ -2170,7 +2170,7 @@ body.satcom-gated #satcom-entry-gate {
         </div>
 
         <!-- Cursor Running Grok -->
-        <div class="module-card" data-target="grok" style="--card-color:var(--c-grok);--card-glow:rgba(163,230,53,.075);">
+        <div class="module-card" id="starting-lineup" data-target="grok" style="--card-color:var(--c-grok);--card-glow:rgba(163,230,53,.075);">
           <div class="card-dept">
             <span class="card-dept-name">Starting Lineup</span>
             <span class="card-led ok"></span>
@@ -3026,68 +3026,42 @@ body.satcom-gated #satcom-entry-gate {
           </div>
         </div>
 
-        <!-- Hermes Links Card -->
-        <div class="module-card" data-target="brains" style="--card-color:var(--c-hermes);--card-glow:rgba(6,182,212,.06);">
+        <!-- Hermes fallback card -->
+        <div class="module-card" onclick="window.location.href='/hermes'" style="cursor:pointer;--card-color:var(--c-hermes);--card-glow:rgba(6,182,212,.06);">
           <div class="card-dept">
-            <span class="card-dept-name">Local Links</span>
+            <span class="card-dept-name">Local Fallback</span>
             <span class="card-led ok"></span>
           </div>
           <div class="card-body">
             <div class="card-icon-row">
-              <div class="card-icon">🧠</div>
+              <div class="card-icon">◈</div>
               <div>
-                <div class="card-title">Hermes Links</div>
-                <div class="card-subtitle">Local briefs · Open WebUI · bridge status</div>
+                <div class="card-title">Hermes</div>
+                <div class="card-subtitle">Local fallback only · briefs · Open WebUI · bridge health</div>
               </div>
             </div>
-            <!-- Brain routing stack -->
-            <div class="brain-stack">
-              <div class="brain-row">
-                <span class="brain-led ok"></span>
-                <span class="brain-model">Grok Developer</span>
-                <span class="brain-role">Primary</span>
-                <span class="brain-tier cloud">CURSOR</span>
+            <div class="card-stats">
+              <div class="card-stat">
+                <span class="stat-label">Role</span>
+                <span class="stat-value ok" style="font-size:11px;">Fallback</span>
               </div>
-              <div class="brain-row">
-                <span class="brain-led ok"></span>
-                <span class="brain-model">Hermes / Qwen36</span>
-                <span class="brain-role">Local Fallback</span>
-                <span class="brain-tier local">LOCAL</span>
+              <div class="card-stat">
+                <span class="stat-label">Brain</span>
+                <span class="stat-value highlight" style="font-size:11px;">Grok</span>
               </div>
-              <div class="brain-row">
-                <span class="brain-led ok"></span>
-                <span class="brain-model">Open WebUI</span>
-                <span class="brain-role">Model Backup</span>
-                <span class="brain-tier local">KEYED</span>
+              <div class="card-stat">
+                <span class="stat-label">Scope</span>
+                <span class="stat-value" style="font-size:11px;">LOCAL</span>
               </div>
-              <div class="brain-row">
-                <span class="brain-led ok"></span>
-                <span class="brain-model">Codex</span>
-                <span class="brain-role">Verify / Integrate</span>
-                <span class="brain-tier cloud">CLOUD</span>
+              <div class="card-stat">
+                <span class="stat-label">Chat</span>
+                <span class="stat-value" style="font-size:10px;">Retired</span>
               </div>
-              <div class="brain-row">
-                <span class="brain-led dim"></span>
-                <span class="brain-model">Static Docs / Kanban</span>
-                <span class="brain-role">No-model Recovery</span>
-                <span class="brain-tier ref">REF ONLY</span>
-              </div>
-            </div>
-            <div class="card-stat" style="margin-top:6px;">
-              <span class="stat-label">Failover</span>
-              <span class="stat-value ok" style="font-size:11px;">Grok → Hermes local → Open WebUI</span>
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); navTo('grok')">Grok Operator</button>
-              <button class="card-btn" onclick="checkHermesBridge()">Bridge Health</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8793/health','_blank')">⚡ Local Health</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8094/auth','_blank')">Open WebUI</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8094/workspace/knowledge/7c336629-c94b-468c-b7fc-37affea32728','_blank')">Hermes Codex</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119','_blank')">Agent Dashboard</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:9119/sessions','_blank')">History</button>
-              <button class="card-btn" onclick="event.stopPropagation(); navTo('brains')">Briefs / Jobs</button>
-              <button class="card-btn" onclick="event.stopPropagation(); window.open('http://127.0.0.1:8786/','_blank')">Local WebUI</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); window.location.href='/hermes'">Open /hermes</button>
+              <button class="card-btn" onclick="event.stopPropagation(); navTo('grok')">Grok panel</button>
             </div>
           </div>
         </div>
@@ -3152,21 +3126,13 @@ body.satcom-gated #satcom-entry-gate {
           <div class="admin-launch-desc">Starting intelligence lane. Open the Codex workspace in Cursor with Grok; Codex verifies and handles approved integration/deploy work.</div>
           <div class="admin-launch-url">Cursor + Grok · /Users/Ace/Codex</div>
         </a>
-        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
+        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/hermes">
           <div class="admin-launch-top">
-            <div class="admin-launch-title">Hermes Links / Open WebUI</div>
-            <span class="admin-launch-tag">Local Only</span>
+            <div class="admin-launch-title">Hermes</div>
+            <span class="admin-launch-tag">Local Fallback</span>
           </div>
-          <div class="admin-launch-desc">Optional local fallback surface for briefs, prompt packets, model routing notes, and bridge health checks.</div>
-          <div class="admin-launch-url">Local WebUI · 8793 bridge · 9119 dashboard</div>
-        </a>
-        <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
-          <div class="admin-launch-top">
-            <div class="admin-launch-title">Open WebUI Login</div>
-            <span class="admin-launch-tag">Knowledge</span>
-          </div>
-          <div class="admin-launch-desc">Local Open WebUI login for Hermes Kit Build Mode and the Hermes Codex knowledge base.</div>
-          <div class="admin-launch-url">127.0.0.1:8094/auth</div>
+          <div class="admin-launch-desc">Local briefs, Open WebUI, and bridge health. Grok/Cursor remains the SATCOM operator brain.</div>
+          <div class="admin-launch-url">/hermes</div>
         </a>
         <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
           <div class="admin-launch-top">
@@ -3718,29 +3684,13 @@ body.satcom-gated #satcom-entry-gate {
             <div class="admin-launch-desc">Main operator surface for publishing, admin, tools, training, docs, network, and API storage.</div>
             <div class="admin-launch-url">https://satcom.5280.menu/</div>
           </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="#brains" onclick="event.preventDefault(); navTo('brains')">
+          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/hermes">
             <div class="admin-launch-top">
-              <div class="admin-launch-title">Hermes Links / Open WebUI</div>
-              <span class="admin-launch-tag">Local Only</span>
+              <div class="admin-launch-title">Hermes</div>
+              <span class="admin-launch-tag">Local Fallback</span>
             </div>
-            <div class="admin-launch-desc">Local fallback links for prompt packets, Open WebUI, bridge checks, and history. Grok Developer is the SATCOM operator brain.</div>
-            <div class="admin-launch-url">Local WebUI · bridge health · history</div>
-          </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
-            <div class="admin-launch-top">
-              <div class="admin-launch-title">Open WebUI Login</div>
-              <span class="admin-launch-tag">Local AI</span>
-            </div>
-            <div class="admin-launch-desc">Login for Hermes Kit Build Mode, file upload, model selection, and the Hermes Codex knowledge base.</div>
-            <div class="admin-launch-url">http://127.0.0.1:8094/auth</div>
-          </a>
-          <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/console/api/hermes/health" target="_blank" rel="noopener">
-            <div class="admin-launch-top">
-              <div class="admin-launch-title">Hermes Crew Bridge</div>
-              <span class="admin-launch-tag">Health</span>
-            </div>
-            <div class="admin-launch-desc">Bridge health check only. Do not treat same-origin SATCOM chat as the dependable execution lane.</div>
-            <div class="admin-launch-url">/console/api/hermes/health</div>
+            <div class="admin-launch-desc">Local briefs, Open WebUI, and bridge health. Grok Developer is the SATCOM operator brain.</div>
+            <div class="admin-launch-url">/hermes</div>
           </a>
           <a class="admin-launch" style="--admin-color:var(--c-network);" href="https://admin.conews.press/console/kanban" target="_blank" rel="noopener">
             <div class="admin-launch-top">
@@ -3817,8 +3767,8 @@ body.satcom-gated #satcom-entry-gate {
             <div class="module-heading">
               <div>
                 <div class="module-kicker">Grok Developer GUIs · Not console.x.ai</div>
-                <h2>Open a real Grok workspace — Cursor, Open WebUI, or Hermes.</h2>
-                <p><strong>console.x.ai is API keys and billing only</strong> — not a chat or coding IDE. Grok Build runs inside <strong>Cursor</strong> (this session). Open WebUI is your multi-model hub on this Mac. Hermes WebUI handles deadline editorial locally.</p>
+                <h2>Open a real Grok workspace — Cursor is the SATCOM brain.</h2>
+                <p><strong>console.x.ai is API keys and billing only</strong> — not a chat or coding IDE. Grok Build runs inside <strong>Cursor</strong> (this session). Hermes is the local fallback lane at <a href="/hermes">/hermes</a>, not a second SATCOM brain.</p>
               </div>
               <div class="module-status">
                 <span class="pill">MCP <strong>Suggest</strong></span>
@@ -3841,21 +3791,13 @@ body.satcom-gated #satcom-entry-gate {
                   <button class="admin-launch-action" type="button" onclick="copyGrokCliCommand()">Copy Grok TUI</button>
                 </div>
               </div>
-              <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
+              <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="/hermes">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Open WebUI</div>
-                  <span class="admin-launch-tag">Multi-Model</span>
+                  <div class="admin-launch-title">Hermes</div>
+                  <span class="admin-launch-tag">Local Fallback</span>
                 </div>
-                <div class="admin-launch-desc">Your local chat hub — Gemini, Perplexity, private LLM, Docker AI, and other API keys you configured. Mac localhost only.</div>
-                <div class="admin-launch-url">http://127.0.0.1:8094/auth</div>
-              </a>
-              <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8786" target="_blank" rel="noopener">
-                <div class="admin-launch-top">
-                  <div class="admin-launch-title">Hermes WebUI</div>
-                  <span class="admin-launch-tag">Editorial</span>
-                </div>
-                <div class="admin-launch-desc">Deadline drafting on local Ollama — qwen36-35b-a3b-satcom, hermes3. No cloud wait. Bridge at :8793.</div>
-                <div class="admin-launch-url">http://127.0.0.1:8786</div>
+                <div class="admin-launch-desc">Local briefs, Open WebUI, and bridge health. Do not treat this as the SATCOM operator brain.</div>
+                <div class="admin-launch-url">/hermes</div>
               </a>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
                 <div class="admin-launch-top">
@@ -3944,7 +3886,7 @@ body.satcom-gated #satcom-entry-gate {
                 </div>
                 <div class="admin-launch-actions">
                   <button class="admin-launch-action primary" type="button" onclick="openCursorWorkspace()">Open Cursor + Grok</button>
-                  <button class="admin-launch-action" type="button" onclick="openHermesWebUi()">Hermes WebUI</button>
+                  <a class="admin-launch-action" href="/hermes">Hermes fallback</a>
                   <button class="admin-launch-action" type="button" onclick="copyDeadlineFailoverRunbook()">Copy Runbook</button>
                   <button class="admin-launch-action" type="button" onclick="openOpenWebUi()">Open WebUI</button>
                 </div>
@@ -3959,7 +3901,7 @@ body.satcom-gated #satcom-entry-gate {
                   <button class="admin-launch-action primary" type="button" onclick="copyGrokDailyWorkflow()">Copy Flow</button>
                   <button class="admin-launch-action" type="button" onclick="openExternal('https://satcom.5280.menu')">SATCOM</button>
                   <button class="admin-launch-action" type="button" onclick="openExternal('https://admin.conews.press/console/kanban')">Kanban</button>
-                  <button class="admin-launch-action" type="button" onclick="navTo('brains')">Hermes Links</button>
+                  <a class="admin-launch-action" href="/hermes">Hermes</a>
                 </div>
               </div>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-vault);">
@@ -4123,221 +4065,12 @@ body.satcom-gated #satcom-entry-gate {
       </div>
     </div>
 
-    <div class="view" id="view-brains">
-      <div class="module-view">
-        <div class="module-view-back" onclick="navTo('dashboard')">← Back to Dashboard</div>
-        <div class="module-workbench">
-          <div class="module-workbench-inner">
-            <div class="module-heading">
-              <div>
-                <div class="module-kicker">Hermes · Local Fallback Links</div>
-                <h2>Use Hermes for local briefs and recovery links only.</h2>
-                <p>Grok Developer is the SATCOM operator brain. This panel keeps local WebUI, prompt packets, bridge status, and history visible without depending on browser-to-Mac Ollama chat.</p>
-              </div>
-              <div class="module-status">
-                <span class="pill">Crew <strong id="hermes-crew-status">Check</strong></span>
-                <span class="pill">Model <strong id="hermes-crew-model">Qwen</strong></span>
-                <span class="pill">Writes <strong id="hermes-crew-writes">Off</strong></span>
-                <span class="pill">Agent <strong id="hermes-agent-status">SATCOM</strong></span>
-                <span class="pill">Plugins <strong id="hermes-plugin-count">0</strong></span>
-                <span class="pill">Files <strong id="hermes-file-count">0</strong></span>
-                <span class="pill">History <strong id="hermes-history-count">0</strong></span>
-              </div>
-            </div>
-
-            <div class="hermes-command-strip">
-              <div class="hermes-command-card">
-                <div class="hermes-command-label">Current lane</div>
-                <div class="hermes-command-value" id="hermes-command-agent">Local Brief Builder</div>
-                <div class="hermes-command-note">Prompt material only; approved execution belongs in Grok/Cursor.</div>
-              </div>
-              <div class="hermes-command-card">
-                <div class="hermes-command-label">Plugin bus</div>
-                <div class="hermes-command-value" id="hermes-command-plugins">Core stack</div>
-                <div class="hermes-command-note">Changes context hints only; tools still require bridge support.</div>
-                <div class="hermes-panel-actions">
-                  <button class="mini-btn ok" onclick="jumpToHermesPlugins()">Open Plugins</button>
-                </div>
-              </div>
-              <div class="hermes-command-card">
-                <div class="hermes-command-label">File context</div>
-                <div class="hermes-command-value" id="hermes-command-files">No files</div>
-                <div class="hermes-command-note">Local queue injects file text into the next prompt.</div>
-              </div>
-              <div class="hermes-command-card">
-                <div class="hermes-command-label">Run memory</div>
-                <div class="hermes-command-value" id="hermes-command-history">0 entries</div>
-                <div class="hermes-command-note">Searchable history survives refreshes.</div>
-              </div>
-            </div>
-
-            <div class="hermes-console-grid">
-              <div class="module-panel hermes-chat-panel">
-                <h3>Prompt → Grok</h3>
-                <div class="hermes-agent-active" id="hermes-active-agent-box">
-                  <strong>Grok Operator Lane</strong>
-                  <span>Draft here, then Send copies the SATCOM handoff and opens Grok Developer. Hermes chat is not used on this dashboard.</span>
-                </div>
-                <div class="hermes-chat-log" id="hermes-chat-log">
-                  <div class="hermes-msg assistant">Write a brief or question here. Send copies the Grok handoff (with your text) and routes you to the Grok panel. Execute in Cursor + Grok or `cd ~/Codex && grok` on the Mac.</div>
-                </div>
-                <div class="module-field">
-                  <label>Operator request</label>
-                  <textarea id="hermes-chat-prompt" placeholder="Example: Draft wildfire live-tracker checklist for Patrick and sync to Kanban."></textarea>
-                </div>
-                <div class="hermes-quick-actions">
-                  <button class="mini-btn ok" onclick="useHermesQuickPrompt('master')">Master</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('kits')">Kits</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('news')">News</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('activity')">Activity</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('comms')">Mass Comms</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('doctor')">Doctor</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('mcp')">Repair MCP</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('publish')">Publish Check</button>
-                  <button class="mini-btn" onclick="useHermesQuickPrompt('seo')">SEO Kanban</button>
-                  <button class="mini-btn" onclick="copyHermesPreparedPrompt()">Copy Grok Handoff</button>
-                </div>
-                <div class="hermes-context-chip" id="hermes-prompt-context">
-                  <span>No file context attached.</span>
-                  <button class="mini-btn" onclick="document.getElementById('hermes-file-input')?.click()">Add Files</button>
-                </div>
-                <div class="hermes-control-row">
-                  <div class="hermes-tier-field">
-                    <label class="hermes-tier-label" for="hermes-chat-tier">Brief style (metadata only)</label>
-                    <select id="hermes-chat-tier" title="Brief style metadata only — does not change Grok execution">
-                      <option value="local">Qwen local</option>
-                      <option value="free">Hermes fast</option>
-                      <option value="local_heavy">Local heavy</option>
-                      <option value="openclaw">OpenClaw</option>
-                    </select>
-                  </div>
-                  <button class="module-btn primary" onclick="sendHermesChat()">Send to Grok</button>
-                  <button class="module-btn" onclick="navTo('grok')">Open Grok Panel</button>
-                  <button class="module-btn" onclick="clearHermesChat()">Clear</button>
-                </div>
-                <div class="hermes-activity" aria-label="Hermes activity recovery log">
-                  <div class="hermes-activity-head">
-                    <div class="hermes-activity-title">Activity Recovery</div>
-                    <div class="hermes-activity-actions">
-                      <button class="mini-btn" onclick="copyHermesRecoveryPrompt()">Copy Recovery Prompt</button>
-                      <button class="mini-btn" onclick="clearHermesActivity()">Clear Log</button>
-                    </div>
-                  </div>
-                  <div class="hermes-activity-log" id="hermes-activity-log">
-                    <div class="hermes-activity-item">
-                      <div class="hermes-activity-meta"><span>Waiting</span><span class="hermes-activity-status">Ready</span></div>
-                      <div class="hermes-activity-text">Submit a prompt to pin the activity here before compaction.</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="hermes-side-stack">
-                <div class="module-panel">
-                  <h3>Agent Presets</h3>
-                  <div class="hermes-agent-grid" id="hermes-agent-grid"></div>
-                </div>
-
-                <div class="module-panel" id="hermes-plugin-panel">
-                  <h3>Plugin Center</h3>
-                  <div class="hermes-plugin-grid" id="hermes-plugin-grid"></div>
-                  <div class="hermes-panel-actions">
-                    <button class="mini-btn" onclick="applyHermesPluginPreset('operator')">Operator Stack</button>
-                    <button class="mini-btn" onclick="applyHermesPluginPreset('media')">Media Stack</button>
-                    <button class="mini-btn" onclick="applyHermesPluginPreset('publishing')">Publishing Stack</button>
-                    <button class="mini-btn" onclick="applyHermesPluginPreset('comms')">Comms Stack</button>
-                    <button class="mini-btn" onclick="copyHermesPluginPrompt()">Copy Plugin Prompt</button>
-                    <button class="mini-btn warn" onclick="resetHermesPlugins()">Reset</button>
-                  </div>
-                </div>
-
-                <div class="module-panel">
-                  <h3>File Context</h3>
-                  <input id="hermes-file-input" type="file" multiple hidden onchange="handleHermesFiles(event)" accept=".txt,.md,.html,.json,.csv,.rtf,.pdf,.doc,.docx,.js,.ts,.tsx,.jsx,.css,.yaml,.yml,image/*,video/*">
-                  <div class="hermes-file-drop">
-                    Add files here when the bridge cannot accept a true server upload. Text-like files are read locally and injected into the next Hermes prompt; images, PDFs, docs, and video are carried as a manifest.
-                  </div>
-                  <div class="hermes-panel-actions">
-                    <button class="module-btn primary" onclick="document.getElementById('hermes-file-input')?.click()">Add Files</button>
-                    <button class="module-btn" onclick="copyHermesFileManifest()">Copy Manifest</button>
-                    <button class="module-btn" onclick="clearHermesFiles()">Clear Files</button>
-                  </div>
-                  <div class="hermes-file-list" id="hermes-file-list"></div>
-                  <div class="hermes-pref-grid">
-                    <label><input type="checkbox" id="hermes-pref-include-files" onchange="saveHermesPreferencesFromUi()" checked> Attach in chat</label>
-                    <label><input type="checkbox" id="hermes-pref-history" onchange="saveHermesPreferencesFromUi()" checked> Save history</label>
-                    <label><input type="checkbox" id="hermes-pref-confirm-writes" onchange="saveHermesPreferencesFromUi()" checked> Confirm writes</label>
-                    <label><input type="checkbox" id="hermes-pref-compact" onchange="saveHermesPreferencesFromUi()" checked> Compact prompts</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="hermes-console-grid lower">
-              <div class="module-panel">
-                <h3>Crew Runner</h3>
-                <div class="module-form">
-                  <div class="module-field"><label>Topic</label><input id="hermes-crew-topic" placeholder="Red Rocks weekend music guide"></div>
-                  <div class="module-field"><label>Audience</label><input id="hermes-crew-audience" value="Colorado mountain-town residents and visitors"></div>
-                  <div class="module-form two">
-                    <div class="module-field"><label>Words</label><input id="hermes-crew-words" type="number" min="150" max="2500" value="600"></div>
-                    <div class="module-field"><label>Publication</label><input id="hermes-crew-publication" placeholder="Gambler, Villager, WRC"></div>
-                  </div>
-                  <div class="hermes-checks">
-                    <label><input type="checkbox" id="hermes-output-web" checked> Web</label>
-                    <label><input type="checkbox" id="hermes-output-newsletter" checked> Newsletter</label>
-                    <label><input type="checkbox" id="hermes-output-social" checked> Social</label>
-                    <label><input type="checkbox" id="hermes-output-seo" checked> SEO</label>
-                    <label><input type="checkbox" id="hermes-generate-images"> Images</label>
-                  </div>
-                  <div class="module-actions">
-                    <button class="module-btn primary" onclick="runHermesCrew()">Run Crew</button>
-                    <button class="module-btn" onclick="loadHermesJobs()">Refresh Jobs</button>
-                    <button class="module-btn" onclick="window.open('/console/api/hermes/health','_blank')">Bridge Health</button>
-                  </div>
-                </div>
-
-                <div class="hermes-endpoint-strip">
-                  <button class="mini-btn ok" onclick="navTo('grok')">Grok</button>
-                  <button class="mini-btn" onclick="window.open('/console/api/hermes/health','_blank')">Health</button>
-                  <button class="mini-btn" onclick="window.open('https://admin.conews.press/console/kanban','_blank')">Kanban</button>
-                  <button class="mini-btn" onclick="window.open('/console/api/hermes/models','_blank')">Models</button>
-                </div>
-              </div>
-              <div class="module-panel">
-                <h3>Output</h3>
-                <div class="output-box" id="hermes-output-box">Crew output and logs will appear here. This panel does not grant write access by itself.</div>
-              </div>
-            </div>
-
-            <div class="hermes-console-grid lower">
-              <div class="module-panel">
-                <h3>Jobs</h3>
-                <div class="module-list" id="hermes-job-list">
-                  <div class="module-row"><span class="module-tag">Idle</span><div><div class="module-row-title">No jobs loaded</div><div class="module-row-meta">Click Refresh Jobs or Run Crew.</div></div><span class="module-row-state">Local</span></div>
-                </div>
-              </div>
-              <div class="module-panel">
-                <h3>History</h3>
-                <div class="hermes-history-tools">
-                  <input id="hermes-history-search" placeholder="Search history..." oninput="renderHermesHistory()">
-                  <button class="mini-btn" onclick="exportHermesHistory()">Export</button>
-                  <button class="mini-btn warn" onclick="clearHermesHistory()">Clear</button>
-                </div>
-                <div class="hermes-history-list" id="hermes-history-list"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
   </main>
 </div><!-- /shell -->
 
 <!-- ── Status Bar ──────────────────────────────────────────────────── -->
 <div id="statusbar">
-  <span class="status-left">● LIVE — satcom.5280.menu · unified admin home</span>
+  <span class="status-left">● LIVE — satcom.conews.press · unified admin home</span>
   <div class="status-center">
     <div class="status-dot"><span class="dot" id="dot-gemini"></span> Aiace</div>
     <div class="status-dot"><span class="dot" id="dot-supabase"></span> Supabase</div>
@@ -4379,6 +4112,10 @@ darkToggle.addEventListener('click', () => {
 
 // ── Navigation ─────────────────────────────────────────────────────
 function navTo(section) {
+  if (section === 'brains' || section === 'hermes') {
+    window.location.href = '/hermes';
+    return;
+  }
   const view = document.getElementById('view-' + section);
   if (!view) {
     toast('View not wired yet: ' + section);
@@ -4392,38 +4129,23 @@ function navTo(section) {
     nav.classList.add('active');
     nav.closest('.nav-shelf')?.setAttribute('open', '');
   }
-  if (section === 'brains') {
-    renderHermesOperatorState();
-    renderHermesChat();
-    renderHermesActivity();
-    refreshHermesCrewStatus();
-    loadHermesJobs();
-    setTimeout(() => document.getElementById('hermes-chat-prompt')?.focus(), 80);
-  }
 }
 
 function jumpToHermesPlugins() {
-  navTo('brains');
-  setTimeout(() => {
-    const panel = document.getElementById('hermes-plugin-panel');
-    if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    history.replaceState(null, '', '#plugins');
-  }, 120);
+  window.location.href = '/hermes';
 }
 
 function routeFromHash() {
   const target = (window.location.hash || '').replace('#', '').trim().toLowerCase();
   if (!target) return;
-  if (target === 'plugins' || target === 'plugin-center') {
-    navTo('brains');
-    setTimeout(() => document.getElementById('hermes-plugin-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+  if (target === 'plugins' || target === 'plugin-center' || target === 'hermes' || target === 'brains' || target === 'crew') {
+    window.location.href = '/hermes';
     return;
   }
   const aliases = {
-    hermes: 'brains',
     aileen: 'grok',
-    crew: 'brains',
     adminhq: 'admin',
+    'starting-lineup': 'grok',
     ai: 'ai-studio',
     googleai: 'ai-studio',
     aistudio: 'ai-studio',
@@ -7472,12 +7194,6 @@ async function hydrateEventCard() {
 }
 
 // ── Init ───────────────────────────────────────────────────────────
-loadHermesOperatorState();
-loadHermesChatMessages();
-loadHermesActivity();
-renderHermesOperatorState();
-renderHermesChat();
-renderHermesActivity();
 loadKeys();
 updateStatusDots();
 refreshOwnedAssets();
