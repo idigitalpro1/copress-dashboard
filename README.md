@@ -27,6 +27,7 @@ Nest is the command center for copress.news — a Colorado mountain newspaper ne
 | `/learn` | `learn.html` | ✅ Live | SATCO Academy — 72 flash cards, XP system, 9 levels, 18 badges |
 | `/linear` | `linear.html` | ✅ Live | Linear integration — live issues, cycles, projects, quick-create |
 | `/#ai-studio` | `index.html` | ✅ Live | Google AI Studio project launch board for Watermark Remix, Flerish Studio, Watermark Tracker, VDJ MIDI, MyAppStore, and Live Intelligence |
+| `/hermes` | `hermes.html` | ✅ Live | Hermes local fallback — briefs, Open WebUI, bridge health; Grok/Cursor remains the SATCOM operator brain |
 
 ## Campaign Kit Generator
 
