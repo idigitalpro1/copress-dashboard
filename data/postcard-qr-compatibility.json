@@ -1,0 +1,18 @@
+{
+  "schema": "satcom.postcard_qr_compatibility.v1",
+  "updated": "2026-09-06",
+  "assetPath": "villager-postcard-proofing/assets/subscribe-qr.png",
+  "assetSha256": "9059421b01e8a015bcf4aac41038b40508bb0b1f271fd866447d12328f38add5",
+  "targetUrl": "https://www.thevillager.today/subscribe",
+  "proofingPath": "/villager-postcard-proofing/",
+  "proofingHost": "https://subscribe.thevillager.today",
+  "requiredTargetReferences": [
+    "subscribe-villager/index.html",
+    "villager-postcard-proofing/index.html"
+  ],
+  "requiredRouteFiles": [
+    "index.html",
+    "vercel.json"
+  ],
+  "changeRule": "Do not change the QR image, encoded target, public proofing path, or subscribe host redirect without a separately reviewed postcard migration and physical-mail compatibility plan."
+}

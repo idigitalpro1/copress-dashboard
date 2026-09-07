@@ -1,0 +1,80 @@
+{
+  "schema": "satcom.agent_routing.v1",
+  "updated": "2026-09-06",
+  "purpose": "Authoritative SATCOM ordering for the operator's agent stack. Roles are separated so a coding client is not misrepresented as a model provider.",
+  "primary": [
+    {
+      "id": "grok-bot",
+      "priority": 1,
+      "role": "Primary agent and cloud intelligence lane",
+      "runtime": "Grok Build CLI / xAI",
+      "command": "grok",
+      "requiredConnection": "Authenticated Grok Bot plus a healthy SATCOM MCP handshake"
+    },
+    {
+      "id": "cursor",
+      "priority": 2,
+      "role": "Primary implementation workspace and MCP client",
+      "runtime": "Cursor.app",
+      "configPath": "~/.cursor/mcp.json",
+      "requiredMcpServer": "satcom-receptionist",
+      "requiredTools": [
+        "list_departments",
+        "take_message"
+      ]
+    }
+  ],
+  "fallback": [
+    {
+      "id": "hermes",
+      "priority": 3,
+      "role": "Host-local fallback agent and planning lane",
+      "activationRule": "Use only after the local WebUI or crew bridge passes a health check.",
+      "healthUrls": [
+        "http://127.0.0.1:8786/",
+        "http://127.0.0.1:8793/health"
+      ]
+    },
+    {
+      "id": "ollama",
+      "priority": 4,
+      "role": "Host-local fallback model runtime for Hermes",
+      "activationRule": "Use only after the Ollama model endpoint responds and the requested model is present.",
+      "healthUrl": "http://127.0.0.1:11434/api/tags"
+    }
+  ],
+  "support": [
+    {
+      "id": "xai-api",
+      "role": "Authenticated cloud connection used by Grok Bot",
+      "healthUrl": "https://api.x.ai/v1/language-models",
+      "credentialEnv": "XAI_API_KEY"
+    },
+    {
+      "id": "satcom-receptionist",
+      "role": "Local stdio MCP shared by Cursor and discovered by Grok Bot",
+      "sourcePath": "satcom-receptionist-mcp-server/dist/index.js"
+    },
+    {
+      "id": "stripe-mcp",
+      "role": "Optional provider MCP; separate from SATCOM routing",
+      "activationRule": "Use only after its OAuth handshake succeeds. A Stripe OAuth failure must not mark Grok Bot or the SATCOM receptionist MCP offline."
+    },
+    {
+      "id": "api-vault",
+      "role": "Optional scoped credential broker; never a prerequisite for read-only SATCOM tools",
+      "healthUrl": "http://127.0.0.1:3579/health"
+    }
+  ],
+  "routingRules": [
+    "Start new implementation and operator-agent work with Grok Bot and Cursor.",
+    "Do not claim Hermes or Ollama is available until the operator host passes its local health checks.",
+    "A working xAI inference API does not prove that an xAI Voice agent or phone route is published.",
+    "MCP tools may inspect, prepare, and hand off. External contact, live sends, billing, DNS, deployment, and destructive operations retain their separate approval gates.",
+    "Never expose provider credentials in SATCOM HTML, JSON status files, logs, prompts, or repository history."
+  ],
+  "compatibility": {
+    "postcardQrContract": "/data/postcard-qr-compatibility.json",
+    "rule": "Agent routing changes must not modify the existing postcard QR asset, target URL, proofing paths, or subscribe.thevillager.today root redirect."
+  }
+}

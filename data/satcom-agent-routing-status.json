@@ -1,0 +1,60 @@
+{
+  "schema": "satcom.agent_routing_status.v1",
+  "checkedAt": "2026-09-07T05:16:41.234Z",
+  "scope": "operator-host",
+  "routing": {
+    "primary": [
+      "grok-bot",
+      "cursor"
+    ],
+    "fallback": [
+      "hermes",
+      "ollama"
+    ]
+  },
+  "checks": [
+    {
+      "id": "grok-bot",
+      "role": "primary",
+      "status": "connected",
+      "detail": "grok 1.0.5 (5115b46bc909); SATCOM MCP handshake healthy."
+    },
+    {
+      "id": "cursor",
+      "role": "primary",
+      "status": "connected",
+      "detail": "Cursor has the SATCOM receptionist MCP configured and its command paths are available."
+    },
+    {
+      "id": "xai-api",
+      "role": "support",
+      "status": "connected",
+      "detail": "xAI authenticated successfully."
+    },
+    {
+      "id": "stripe-mcp",
+      "role": "support",
+      "status": "blocked",
+      "detail": "Stripe MCP OAuth authorization is required."
+    },
+    {
+      "id": "hermes",
+      "role": "fallback",
+      "status": "unavailable",
+      "detail": "Hermes WebUI and crew bridge are offline on this host."
+    },
+    {
+      "id": "ollama",
+      "role": "fallback",
+      "status": "unavailable",
+      "detail": "Ollama is offline on this host."
+    },
+    {
+      "id": "api-vault",
+      "role": "support",
+      "status": "unavailable",
+      "detail": "The optional API-vault bridge is offline on this host."
+    }
+  ],
+  "secretsIncluded": false
+}

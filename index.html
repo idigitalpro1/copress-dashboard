@@ -3762,35 +3762,67 @@ body.satcom-gated #satcom-entry-gate {
           <div class="module-workbench-inner">
             <div class="module-heading">
               <div>
-                <div class="module-kicker">Grok Developer GUIs · Not console.x.ai</div>
-                <h2>Open a real Grok workspace — Cursor, Open WebUI, or Hermes.</h2>
-                <p><strong>console.x.ai is API keys and billing only</strong> — not a chat or coding IDE. Grok Build runs inside <strong>Cursor</strong> (this session). Open WebUI is your multi-model hub on this Mac. Hermes WebUI handles deadline editorial locally.</p>
+                <div class="module-kicker">SATCOM agent routing · Verified connections</div>
+                <h2>Grok Bot and Cursor primary. Hermes and Ollama fallback.</h2>
+                <p><strong>Grok Bot</strong> is the primary agent. <strong>Cursor</strong> is the primary implementation and MCP workspace. Hermes and Ollama enter the route only after their local health checks pass.</p>
               </div>
               <div class="module-status">
-                <span class="pill">MCP <strong>Suggest</strong></span>
-                <span class="pill">Grok <strong>Execute</strong></span>
+                <span class="pill" id="agent-status-grok">Grok Bot <strong>Checking</strong></span>
+                <span class="pill" id="agent-status-cursor">Cursor <strong>Checking</strong></span>
+                <span class="pill" id="agent-status-fallback">Fallback <strong>Checking</strong></span>
                 <span class="pill">Secrets <strong>No Echo</strong></span>
                 <span class="pill">Hard Stops <strong>On</strong></span>
               </div>
             </div>
 
             <div class="admin-launch-grid" style="margin-left:0;margin-right:0;">
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-progress);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Connection Snapshot</div>
+                  <span class="admin-launch-tag">Generated Check</span>
+                </div>
+                <div class="admin-launch-desc">Published from a secret-free operator-host check. An unavailable fallback stays visibly offline instead of being treated as ready.</div>
+                <div class="admin-launch-status">
+                  <span id="agent-check-grok" class="warn">Grok Bot checking</span>
+                  <span id="agent-check-cursor" class="warn">Cursor checking</span>
+                  <span id="agent-check-xai" class="warn">xAI API checking</span>
+                  <span id="agent-check-stripe" class="warn">Stripe MCP checking</span>
+                  <span id="agent-check-hermes" class="warn">Hermes checking</span>
+                  <span id="agent-check-ollama" class="warn">Ollama checking</span>
+                  <span id="agent-check-vault" class="warn">API Vault checking</span>
+                </div>
+                <div class="admin-launch-url" id="agent-routing-checked-at">Waiting for status artifact</div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="refreshAgentRoutingStatus()">Refresh status</button>
+                  <a class="admin-launch-action" href="/data/satcom-agent-routing.json" target="_blank" rel="noopener">Routing policy</a>
+                </div>
+              </div>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Grok Build in Cursor</div>
-                  <span class="admin-launch-tag">Primary GUI</span>
+                  <div class="admin-launch-title">Grok Bot</div>
+                  <span class="admin-launch-tag">Primary Agent</span>
                 </div>
-                <div class="admin-launch-desc">The sophisticated Grok Developer interface — agentic coding, repo edits, MCP tools. Opens ~/Codex in Cursor with Grok Build (same lane as this chat).</div>
-                <div class="admin-launch-url">cursor://file/Users/Ace/Codex</div>
+                <div class="admin-launch-desc">Primary SATCOM intelligence lane. Use the installed Grok Bot CLI with its verified SATCOM receptionist MCP connection.</div>
+                <div class="admin-launch-url">grok · MCP: satcom-receptionist</div>
+                <div class="admin-launch-actions">
+                  <button class="admin-launch-action primary" type="button" onclick="copyGrokCliCommand()">Copy Grok command</button>
+                </div>
+              </div>
+              <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
+                <div class="admin-launch-top">
+                  <div class="admin-launch-title">Cursor</div>
+                  <span class="admin-launch-tag">Primary Implementation</span>
+                </div>
+                <div class="admin-launch-desc">Primary coding workspace and MCP client. Cursor is separate from Grok Bot, with the same SATCOM receptionist tools configured for scoped handoff work.</div>
+                <div class="admin-launch-url">Cursor user MCP · satcom-receptionist</div>
                 <div class="admin-launch-actions">
                   <button class="admin-launch-action primary" type="button" onclick="openCursorWorkspace()">Open in Cursor</button>
-                  <button class="admin-launch-action" type="button" onclick="copyGrokCliCommand()">Copy Grok TUI</button>
                 </div>
               </div>
               <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8094/auth" target="_blank" rel="noopener">
                 <div class="admin-launch-top">
                   <div class="admin-launch-title">Open WebUI</div>
-                  <span class="admin-launch-tag">Multi-Model</span>
+                  <span class="admin-launch-tag">Fallback Console</span>
                 </div>
                 <div class="admin-launch-desc">Your local chat hub — Gemini, Perplexity, private LLM, Docker AI, and other API keys you configured. Mac localhost only.</div>
                 <div class="admin-launch-url">http://127.0.0.1:8094/auth</div>
@@ -3798,15 +3830,15 @@ body.satcom-gated #satcom-entry-gate {
               <a class="admin-launch" style="--admin-color:var(--c-hermes);" href="http://127.0.0.1:8786" target="_blank" rel="noopener">
                 <div class="admin-launch-top">
                   <div class="admin-launch-title">Hermes WebUI</div>
-                  <span class="admin-launch-tag">Editorial</span>
+                  <span class="admin-launch-tag">Fallback Agent</span>
                 </div>
                 <div class="admin-launch-desc">Deadline drafting on local Ollama — qwen36-35b-a3b-satcom, hermes3. No cloud wait. Bridge at :8793.</div>
                 <div class="admin-launch-url">http://127.0.0.1:8786</div>
               </a>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Grok TUI (terminal)</div>
-                  <span class="admin-launch-tag">CLI GUI</span>
+                  <div class="admin-launch-title">Grok Bot TUI</div>
+                  <span class="admin-launch-tag">Primary CLI</span>
                 </div>
                 <div class="admin-launch-desc">Terminal UI when Cursor is not open. Run on the Mac: <code>cd ~/Codex && grok</code></div>
                 <div class="admin-launch-actions">
@@ -3840,7 +3872,7 @@ body.satcom-gated #satcom-entry-gate {
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-hermes);">
                 <div class="admin-launch-top">
                   <div class="admin-launch-title">MCP Role</div>
-                  <span class="admin-launch-tag">Read Only</span>
+                  <span class="admin-launch-tag">Scoped Tools</span>
                 </div>
                 <div class="admin-launch-desc">MCP checks status, discovers routes, reads docs, and prepares Kanban handoff metadata. It does not deploy, alter DNS, touch billing, expose secrets, or run destructive shell by default.</div>
                 <div class="admin-launch-status">
@@ -3851,24 +3883,24 @@ body.satcom-gated #satcom-entry-gate {
               </div>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-hermes);">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Retire / Keep</div>
-                  <span class="admin-launch-tag">Policy</span>
+                  <div class="admin-launch-title">Fallback Policy</div>
+                  <span class="admin-launch-tag">Health Gated</span>
                 </div>
-                <div class="admin-launch-desc">Retire same-origin SATCOM Hermes chat, browser-to-Mac Ollama assumptions, and Hermes as the always-on SATCOM brain. Keep SATCOM docs, dashboard links, Grok/Cursor, MCP, and Kanban CLI.</div>
+                <div class="admin-launch-desc">Keep Hermes and Ollama available for recovery, but route to them only when their local health checks pass. Offline fallbacks never display as ready.</div>
                 <div class="admin-launch-status">
-                  <span class="warn">Retire Hermes chat</span>
-                  <span class="ok">Keep Grok first</span>
+                  <span class="ok">Grok Bot first</span>
+                  <span class="warn">Hermes/Ollama health required</span>
                 </div>
               </div>
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-grok);">
                 <div class="admin-launch-top">
-                  <div class="admin-launch-title">Lead Engineers</div>
-                  <span class="admin-launch-tag">Grok + Codex</span>
+                  <div class="admin-launch-title">Primary Operators</div>
+                  <span class="admin-launch-tag">Grok Bot + Cursor</span>
                 </div>
-                <div class="admin-launch-desc">Grok is the lead implementer in Cursor or the Grok TUI. Codex is the lead integrator for MCP checks, server handoffs, deploy hooks, and production verification after approval.</div>
+                <div class="admin-launch-desc">Grok Bot owns the primary agent lane. Cursor owns the primary implementation workspace. Scoped MCP tools carry approved handoffs between them.</div>
                 <div class="admin-launch-status">
-                  <span class="ok">Grok implements</span>
-                  <span class="ok">Codex verifies</span>
+                  <span class="ok">Grok Bot primary</span>
+                  <span class="ok">Cursor primary</span>
                   <span class="warn">SATCOM stages only</span>
                 </div>
                 <div class="admin-launch-actions">
@@ -3880,13 +3912,13 @@ body.satcom-gated #satcom-entry-gate {
               <div class="admin-launch admin-launch-panel" style="--admin-color:var(--c-progress);">
                 <div class="admin-launch-top">
                 <div class="admin-launch-title">Starting Lineup</div>
-                <span class="admin-launch-tag">Primary / Fallback / Backup</span>
+                <span class="admin-launch-tag">Primary / Fallback</span>
               </div>
-                <div class="admin-launch-desc">Start with Cursor running Grok. If Grok is blocked for two minutes, move the same prompt to Hermes/Qwen on this Mac. Use Open WebUI as the model backup. Codex verifies approved integration and deployment work.</div>
+                <div class="admin-launch-desc">Start with Grok Bot. Use Cursor for code and MCP-backed implementation. If the primary lane is blocked, route to Hermes and its Ollama runtime only after both health checks pass.</div>
                 <div class="admin-launch-status">
-                  <span class="ok">Primary Cursor + Grok</span>
-                  <span class="ok">Fallback Hermes</span>
-                  <span class="warn">Backup WebUI</span>
+                  <span class="ok">Primary 1: Grok Bot</span>
+                  <span class="ok">Primary 2: Cursor</span>
+                  <span class="warn">Fallback: Hermes → Ollama</span>
                 </div>
                 <div class="admin-launch-actions">
                   <button class="admin-launch-action primary" type="button" onclick="openCursorWorkspace()">Open Cursor + Grok</button>
@@ -4324,6 +4356,77 @@ darkToggle.addEventListener('click', () => {
 });
 
 // ── Navigation ─────────────────────────────────────────────────────
+function agentStatusLabel(check) {
+  const labels = {
+    connected: 'Connected',
+    unavailable: 'Unavailable',
+    unconfigured: 'Unconfigured',
+    blocked: 'Blocked',
+    'not-run': 'Not checked',
+  };
+  return labels[check?.status] || 'Unknown';
+}
+
+function applyAgentCheck(elementId, check, label) {
+  const element = document.getElementById(elementId);
+  if (!element) return;
+  element.textContent = `${label} ${agentStatusLabel(check)}`;
+  element.classList.remove('ok', 'warn');
+  element.classList.add(check?.status === 'connected' ? 'ok' : 'warn');
+  element.title = check?.detail || 'No check detail is available.';
+}
+
+function setAgentPill(elementId, label) {
+  const strong = document.querySelector(`#${elementId} strong`);
+  if (strong) strong.textContent = label;
+}
+
+async function refreshAgentRoutingStatus() {
+  try {
+    const response = await fetch(`/data/satcom-agent-routing-status.json?ts=${Date.now()}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const status = await response.json();
+    const byId = Object.fromEntries((status.checks || []).map((check) => [check.id, check]));
+
+    applyAgentCheck('agent-check-grok', byId['grok-bot'], 'Grok Bot');
+    applyAgentCheck('agent-check-cursor', byId.cursor, 'Cursor');
+    applyAgentCheck('agent-check-xai', byId['xai-api'], 'xAI API');
+    applyAgentCheck('agent-check-stripe', byId['stripe-mcp'], 'Stripe MCP');
+    applyAgentCheck('agent-check-hermes', byId.hermes, 'Hermes');
+    applyAgentCheck('agent-check-ollama', byId.ollama, 'Ollama');
+    applyAgentCheck('agent-check-vault', byId['api-vault'], 'API Vault');
+
+    setAgentPill('agent-status-grok', agentStatusLabel(byId['grok-bot']));
+    setAgentPill('agent-status-cursor', agentStatusLabel(byId.cursor));
+    const fallbackReady = byId.hermes?.status === 'connected' && byId.ollama?.status === 'connected';
+    setAgentPill('agent-status-fallback', fallbackReady ? 'Ready' : 'Offline');
+
+    const checkedAt = document.getElementById('agent-routing-checked-at');
+    if (checkedAt) checkedAt.textContent = `Last checked ${new Date(status.checkedAt).toLocaleString()} · ${status.scope}`;
+  } catch (error) {
+    const fallbackLabels = {
+      grok: 'Grok Bot',
+      cursor: 'Cursor',
+      xai: 'xAI API',
+      stripe: 'Stripe MCP',
+      hermes: 'Hermes',
+      ollama: 'Ollama',
+      vault: 'API Vault',
+    };
+    Object.entries(fallbackLabels).forEach(([id, label]) => {
+      const element = document.getElementById(`agent-check-${id}`);
+      if (element) {
+        element.textContent = `${label} status unavailable`;
+        element.classList.remove('ok');
+        element.classList.add('warn');
+      }
+    });
+    setAgentPill('agent-status-grok', 'Unknown');
+    setAgentPill('agent-status-cursor', 'Unknown');
+    setAgentPill('agent-status-fallback', 'Unknown');
+  }
+}
+
 function navTo(section) {
   const view = document.getElementById('view-' + section);
   if (!view) {
@@ -4346,6 +4449,7 @@ function navTo(section) {
     loadHermesJobs();
     setTimeout(() => document.getElementById('hermes-chat-prompt')?.focus(), 80);
   }
+  if (section === 'grok') refreshAgentRoutingStatus();
 }
 
 function jumpToHermesPlugins() {
@@ -4750,9 +4854,9 @@ function copyGrokDailyWorkflow() {
     '1. SATCOM: review docs, priorities, dashboard links, and launch points.',
     '2. Kanban CLI/Admin Kanban: move cards and collect assignment metadata.',
     '3. MCP: verify endpoints, docs, route status, and ops state in read-only mode.',
-    '4. Grok/Cursor: implement approved repo changes in /Users/Ace/Codex.',
-    '5. Codex: integrate, verify, and deploy only after approval.',
-    '6. Hermes: optional local briefs or prompt packets only; do not depend on public SATCOM chat.',
+    '4. Grok Bot: primary agent for approved operator and implementation work.',
+    '5. Cursor: primary coding workspace and SATCOM MCP client.',
+    '6. Hermes/Ollama: fallback only after their local health checks pass.',
     '7. Hard stops need explicit operator approval: DNS, billing, M365, secrets, deploys, destructive shell, and live sends.',
     '',
     'Commands:',
@@ -4771,15 +4875,18 @@ function copyGrokDailyWorkflow() {
 
 function leadEngineerRolesText() {
   return [
-    'SATCOM lead-engineer split',
+    'SATCOM primary-agent split',
     '',
-    'Lead implementer: Grok in Cursor or Grok TUI',
+    'Primary agent: Grok Bot',
+    '- Owns the primary intelligence and operator-agent lane.',
+    '- Uses the SATCOM receptionist MCP for scoped handoffs.',
+    '',
+    'Primary implementation workspace: Cursor',
     '- Owns code, debugging, patches, repo edits, and tests.',
-    '- Runs with filesystem and session history in /Users/Ace/Codex.',
+    '- Uses the same SATCOM receptionist MCP in the operator workspace.',
     '',
-    'Lead integrator: Codex',
-    '- Owns MCP checks, server handoffs, deploy hooks, and production verification.',
-    '- Executes deploys or hard-stop actions only after explicit operator approval.',
+    'Fallback: Hermes and Ollama',
+    '- Enter the route only after local health checks pass.',
     '',
     'SATCOM role:',
     '- Cockpit only: priorities, links, Kanban, MCP status, copy handoff, and approval prompts.',
@@ -4797,24 +4904,27 @@ function deadlineFailoverRunbookText() {
     '',
     'Rule: if the active intelligence lane is blocked for more than 2 minutes during a press deadline, switch lanes. Do not spend the deadline repairing the lane.',
     '',
-    'Primary intelligence: Cursor running Grok (implementation + execution)',
-    '- Start here: open -a Cursor /Users/Ace/Codex',
+    'Primary agent: Grok Bot',
     '- Terminal TUI: cd /Users/Ace/Codex && grok',
+    '- Confirm the satcom-receptionist MCP is healthy before relying on tool handoffs.',
     '- NOT console.x.ai — that page is API keys/billing only, not a chat IDE',
     '',
-    'Fallback intelligence: Hermes local (Qwen / deadline recovery)',
+    'Primary implementation workspace: Cursor',
+    '- Start here: open -a Cursor /Users/Ace/Codex',
+    '- Confirm the Cursor user MCP shows satcom-receptionist and its two scoped tools.',
+    '',
+    'Fallback agent: Hermes local (deadline recovery)',
     '- Hermes WebUI: http://127.0.0.1:8786',
     '- Bridge health: http://127.0.0.1:8793/health',
-    '- Models: qwen36-35b-a3b-satcom, hermes3 — private, no cloud wait',
+    '- Use only when WebUI or crew-bridge health passes.',
     '- Public SATCOM cannot execute against Mac-local Ollama; open Hermes WebUI on this Mac.',
     '',
-    'Backup intelligence: Open WebUI + multi-model hub',
-    '- Open WebUI: http://127.0.0.1:8094/auth — Gemini, Perplexity, private LLM, Docker AI keys',
-    '- Hermes history: http://127.0.0.1:9119',
-    '- Do not rely on same-origin SATCOM Hermes chat for deadline execution.',
+    'Fallback runtime: Ollama',
+    '- Health: http://127.0.0.1:11434/api/tags',
+    '- Use only when the endpoint responds and the required model is present.',
     '',
     'Integration (after copy): Codex + MCP',
-    '- MCP checks, deploy hooks, production verification — not first draft.',
+    '- MCP checks, deploy hooks, and production verification retain their own approval gates.',
     '- Check: ~/bin/mcp-status',
     '',
     'Non-intelligence backup: SATCOM docs, Kanban, and runbooks',
@@ -4872,11 +4982,11 @@ function buildGrokOperatorHandoff(operatorRequest = '') {
     '',
     'Context:',
     '- SATCOM is dashboard + Planka/Admin Kanban + Hermes links + admin console.',
-    '- Cursor running Grok is the primary operator brain. Hermes/Qwen is the local fallback; Open WebUI is the backup.',
-    '- Grok is the lead implementer for code, debugging, patches, repo edits, and tests.',
-    '- Codex is the lead integrator for MCP checks, server handoffs, deploy hooks, and production verification after approval.',
+    '- Grok Bot is the primary agent and cloud intelligence lane.',
+    '- Cursor is the primary implementation workspace and MCP client.',
+    '- Hermes is the fallback agent and Ollama is its fallback runtime; use either only after health checks pass.',
     '- SATCOM is only the cockpit: priorities, links, Kanban, MCP status, copy handoff, and approval prompts.',
-    '- Starting lineup: primary Cursor running Grok, fallback Hermes/Qwen, backup Open WebUI. Codex verifies approved integration and deployment work.',
+    '- Starting lineup: Grok Bot first, Cursor second, then health-gated Hermes and Ollama fallbacks.',
     '- MCP is read-only/suggest by default: inspect, plan, route discovery, endpoint checks, docs reads, and Kanban handoff metadata.',
     '- MCP does not deploy, mutate DNS, touch billing, expose secrets, run destructive shell, perform live sends, or change M365 without explicit operator approval.',
     '- Execution happens only after approval through Grok/Cursor, Codex, or POST /api/v1/agent/run.',

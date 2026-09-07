@@ -1,8 +1,8 @@
 {
   "schema": "satcom.agent_context.v1",
-  "updated": "2026-06-30",
+  "updated": "2026-09-06",
   "name": "SATCOM Agent Context Packet",
-  "purpose": "URL-first documentation, prompt, and endpoint map for Hermes and Open WebUI when local filesystem access is unavailable.",
+  "purpose": "URL-first SATCOM context with Grok Bot and Cursor as primary, plus health-gated Hermes and Ollama fallbacks.",
   "publicBaseUrl": "https://satcom.5280.menu",
   "fallbackBaseUrl": "https://copress-dashboard.vercel.app",
   "localRepo": "/Users/Ace/Codex/apps/copress-dashboard",
@@ -12,7 +12,23 @@
     "apiVault": "https://satcom.5280.menu/apistore",
     "agentContextMarkdown": "https://satcom.5280.menu/data/satcom-agent-context.md",
     "agentContextJson": "https://satcom.5280.menu/data/satcom-agent-context.json",
+    "agentRouting": "https://satcom.5280.menu/data/satcom-agent-routing.json",
+    "agentRoutingStatus": "https://satcom.5280.menu/data/satcom-agent-routing-status.json",
+    "postcardQrCompatibility": "https://satcom.5280.menu/data/postcard-qr-compatibility.json",
     "hermesOpenWebuiPrompt": "https://satcom.5280.menu/data/satcom-hermes-openwebui-prompt.md"
+  },
+  "routing": {
+    "primary": [
+      "grok-bot",
+      "cursor"
+    ],
+    "fallback": [
+      "hermes",
+      "ollama"
+    ],
+    "fallbackRule": "Do not activate or show Hermes or Ollama as ready until their local health checks pass.",
+    "mcpServer": "satcom-receptionist",
+    "postcardQrRule": "Do not modify the existing postcard QR asset, destination, proofing path, or subscription host redirect as part of agent routing work."
   },
   "localEndpoints": [
     {

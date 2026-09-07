@@ -1,0 +1,36 @@
+name: SATCOM integration guards
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  routing-and-postcards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate primary and fallback routing contract
+        run: node scripts/check-agent-routing.mjs --static
+      - name: Protect existing postcard QR and public routes
+        run: node scripts/check-postcard-qr-compatibility.mjs
+
+  receptionist-mcp:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: satcom-receptionist-mcp-server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: satcom-receptionist-mcp-server/package-lock.json
+      - run: npm ci
+      - run: npm run build

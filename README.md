@@ -6,6 +6,28 @@
 
 Nest is the command center for copress.news — a Colorado mountain newspaper network covering Black Hawk, Central City, Nederland, Georgetown, and Idaho Springs.
 
+## Primary and fallback agent routing
+
+SATCOM separates the agent from the coding client and does not advertise an offline fallback as ready:
+
+1. **Grok Bot** — primary agent and cloud intelligence lane.
+2. **Cursor** — primary implementation workspace and MCP client.
+3. **Hermes** — health-gated local fallback agent.
+4. **Ollama** — health-gated local model runtime used by Hermes.
+
+The versioned policy is in `data/satcom-agent-routing.json`. A secret-free operator-host snapshot is published from `data/satcom-agent-routing-status.json`; regenerate it with:
+
+```bash
+node scripts/check-agent-routing.mjs --write
+```
+
+CI validates the routing order, builds the SATCOM receptionist MCP server, and runs the postcard QR compatibility guard. The QR guard locks the existing QR asset hash, `https://www.thevillager.today/subscribe` destination, proofing path, and `subscribe.thevillager.today` redirect:
+
+```bash
+node scripts/check-agent-routing.mjs --static
+node scripts/check-postcard-qr-compatibility.mjs
+```
+
 ## Nest / SATCO Brand Lane
 
 - **Nest:** main dashboard title and operator command surface.

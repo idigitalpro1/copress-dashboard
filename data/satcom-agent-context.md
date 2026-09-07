@@ -1,8 +1,28 @@
 # SATCOM Agent Context Packet
 
-Updated: 2026-06-30
+Updated: 2026-09-06
 
-Use this packet when Hermes, Open WebUI, or another local agent cannot read `/Users/Ace/Codex/apps/copress-dashboard` directly. SATCOM should be the URL-first source of truth, with local paths used only when the host folder is mounted.
+Use this packet when Grok Bot, Cursor, Hermes, Open WebUI, or another agent cannot read `/Users/Ace/Codex/apps/copress-dashboard` directly. SATCOM should be the URL-first source of truth, with local paths used only when the host folder is mounted.
+
+## Agent Routing
+
+SATCOM's current order is:
+
+1. Grok Bot — primary agent and cloud intelligence lane.
+2. Cursor — primary implementation workspace and MCP client.
+3. Hermes — local fallback agent, only after WebUI or crew-bridge health passes.
+4. Ollama — local fallback model runtime, only after its model endpoint passes.
+
+Machine policy:
+`https://satcom.5280.menu/data/satcom-agent-routing.json`
+
+Secret-free connection snapshot:
+`https://satcom.5280.menu/data/satcom-agent-routing-status.json`
+
+Postcard QR compatibility contract:
+`https://satcom.5280.menu/data/postcard-qr-compatibility.json`
+
+The QR contract protects the printed postcard destination, current QR asset, proofing route, and subscription-host redirect from unrelated SATCOM changes.
 
 ## Start Here
 
