@@ -1,8 +1,10 @@
+import { buildOperatorPacket } from './operator-routing.mjs';
 document.querySelectorAll('[data-copy]').forEach(button => {
   button.addEventListener('click', async () => {
     const target = document.getElementById(button.dataset.copy);
     const status = document.getElementById('copy-result');
     try {
+      if (!target.textContent.trim()) throw new Error('Prepare a prompt first.');
       await navigator.clipboard.writeText(target.textContent);
       button.textContent = 'Copied';
       status.textContent = 'Copied to clipboard. No agent was started.';
@@ -26,4 +28,27 @@ document.getElementById('check-health').addEventListener('click', async event =>
   } finally {
     button.disabled = false;
   }
+});
+
+let operatorPolicy;
+const form = document.getElementById('operator-form');
+const target = document.getElementById('operator-target');
+const packet = document.getElementById('operator-packet');
+const feedback = document.getElementById('operator-result');
+form.addEventListener('input', () => { packet.textContent = ''; feedback.textContent = ''; });
+target.addEventListener('change', () => {
+  document.getElementById('fallback-fields').hidden = target.value === 'astra';
+  document.getElementById('prior-stopped').checked = false;
+});
+form.addEventListener('submit', async event => {
+  event.preventDefault(); packet.textContent = '';
+  try {
+    if (!operatorPolicy) {
+      const response = await fetch('/data/codex/context.json', {cache:'no-store', signal:AbortSignal.timeout(8000)});
+      if (!response.ok) throw new Error('Routing policy is unavailable.');
+      operatorPolicy = (await response.json()).operatorPolicy;
+    }
+    packet.textContent = buildOperatorPacket(operatorPolicy, {target:target.value, task:document.getElementById('operator-task').value, reason:document.getElementById('fallback-reason').value, priorStopped:document.getElementById('prior-stopped').checked});
+    feedback.textContent = 'Prompt prepared. Copy it into the selected model; no model was started.';
+  } catch(error) { feedback.textContent = error.message; }
 });

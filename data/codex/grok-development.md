@@ -1,4 +1,6 @@
-# Grok — SATCOM and CoNews development
+# Grok Bot — fallback developer
+
+GPT-6 Astra in Codex is primary. Use this prompt only when taking over a stopped primary task. Claude is first fallback, Grok Bot second, Cursor third and Hermes 2.0 fourth. Carry the same task ID, completed work, next action and blocker; do not repeat completed work. The Grok CLI MCP connection does not prove the separate Bot app or paid model execution is available.
 
 Updated September 7, 2026. Paste-ready; no bot has been dispatched.
 
@@ -21,3 +23,7 @@ Verify desktop/mobile navigation, initial article HTML, canonical URLs, original
 ## Use less context
 
 Start with one relevant card from https://satcom.conews.press/kanban or MCP `satcom_board` with a project and small limit. Read only linked source files. Reuse current evidence, keep searches/output bounded, and run focused checks. Use heavier reasoning only for unresolved complexity. Do not delegate. See https://satcom.conews.press/data/codex/token-efficient-development.md.
+
+Mission control remains under development. Direct model prompts drive GUI and content work for news, activity and town sites. Follow Astra recommendations through https://satcom.conews.press/kanban and https://satcom.conews.press/codex; record evidence and a concise next action. The headless-only restriction is specific to the PDF publishing pipeline.
+
+Current host boundary: the publisher is on a remote laptop without a server connection. Do not infer access to Ace, Hermes or production from localhost or public HTTPS.

@@ -64,3 +64,11 @@ Live title, owner, priority and column come from the backend. Acceptance/source 
 The existing admin handler's authentication and durable/concurrent storage require a separate hardening item: its route source can fall back to a local JSON file, and this task's card POST did not require credentials. Do not represent this as a hardened private task backend. Keep cards here free of secrets or personal/customer information.
 
 Read `data/codex/token-efficient-development.md` for compact task packets and bounded context. API keys are configured directly in the intended client, never in board cards or public prompts.
+
+## Astra and direct model prompts — version 1.3
+
+GPT-6 Astra in Codex is primary. Claude is first fallback, then Grok Bot, Cursor and Hermes 2.0. `context.json.operatorPolicy` is the shared policy consumed by `/codex` and the MCP structure/resource. The SATCOM project Codex config selects `gpt-6-astra`; it does not change account credentials or global settings.
+
+Mission control is still under development. Direct prompts support GUI and content work for news, activity and town sites. `/codex#operators` prepares a bounded task packet. Fallback selection requires a recorded reason and confirmation that the previous executor has stopped. It is an operator control, not a distributed lock or automatic failover service. No model inference endpoint, open executor or browser credential store was added. The four MCP tools now expose six reviewed prompts including Astra, Claude and Hermes.
+
+The user is on a remote laptop with no server connection. Local configurations and loopback addresses refer to that laptop. Grok CLI and the separate Grok Bot app are distinct clients. Hermes 2.0 remains blocked until its intended host, version and model are verified. Public service access is not server shell access. PDF-to-WordPress work remains audit-only pending the user's refactoring-sequence approval; no CMS browser automation.
