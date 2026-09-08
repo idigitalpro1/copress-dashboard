@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "board": "satcom-development",
-  "updatedAt": "2026-09-08T04:44:55.534600+00:00",
+  "updatedAt": "2026-09-08T05:25:41.166059+00:00",
   "source": "https://admin.conews.press/console/api/kanban",
   "cards": [
     {
@@ -618,6 +618,96 @@
       "source": "https://satcom.conews.press/data/conews-next-sprint-kanban.json",
       "blocked": true,
       "backendId": "02ea7e09-037f-419e-86d2-c5785c3f4f24"
+    },
+    {
+      "key": "DEV-034",
+      "title": "Configure Astra primary and direct fallback prompts",
+      "project": "SATCOM",
+      "column": "active",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "due": "Next focused development session",
+      "next": "Ship Astra \u2192 Claude \u2192 Grok Bot \u2192 Cursor \u2192 Hermes 2.0 with compact shared task packets.",
+      "acceptance": "Verify hosted routing, MCP prompts and no automatic dispatch.",
+      "evidence": "Astra, Grok and Cursor context configuration prepared; Claude connection in progress.",
+      "source": "https://satcom.conews.press/codex#operators",
+      "blocked": false,
+      "backendId": "d76c7e5d-fcde-4cc7-bea3-79535ef9a6a7"
+    },
+    {
+      "key": "DEV-035",
+      "title": "Repair laptop Claude Desktop Commander and connect SATCOM",
+      "project": "Cursor",
+      "column": "active",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "due": "Next focused development session",
+      "next": "Verify the laptop extension and Claude SATCOM connector; preserve permissions.",
+      "acceptance": "Fresh Cowork/Code connection evidence and SATCOM tools visible.",
+      "evidence": "Desktop extension restarted after shared-pool timeout; no server access implied.",
+      "source": "https://satcom.conews.press/codex#operators",
+      "blocked": false,
+      "backendId": "192e1a3c-ab24-4a07-8dcd-5b0a2e494dc1"
+    },
+    {
+      "key": "DEV-036",
+      "title": "Restore identified Hermes 2.0 server access",
+      "project": "SATCOM",
+      "column": "blocked",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "due": "Next focused development session",
+      "next": "Establish a remote connection to the intended host, verify version/model, then connect SATCOM MCP.",
+      "acceptance": "Verified host identity, version, model access and one read-only SATCOM tool call.",
+      "evidence": "Remote laptop has no server connection; local Hermes absent and bridge unavailable.",
+      "source": "https://satcom.conews.press/codex#operators",
+      "blocked": true,
+      "backendId": "1f661684-a9b6-404a-b750-aafff94e2a51"
+    },
+    {
+      "key": "DEV-037",
+      "title": "Develop news-site GUI and content together",
+      "project": "Network",
+      "column": "backlog",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "due": "Next focused development session",
+      "next": "Use one direct Astra prompt for a concrete menu, hero, article or activity-page improvement.",
+      "acceptance": "Verify the requested desktop/mobile reader journey and preserve content provenance.",
+      "evidence": "Publisher confirms GUI work is as important as content; mission control is under development.",
+      "source": "https://satcom.conews.press/codex#operators",
+      "blocked": false,
+      "backendId": "4fc0acf9-6f51-4d43-8ee2-3388244e197e"
+    },
+    {
+      "key": "DEV-038",
+      "title": "Develop town-site and activity-page reference journeys",
+      "project": "Network",
+      "column": "backlog",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "due": "Next focused development session",
+      "next": "Define the next town/activity view and implement its approved GUI and content flow with shared components.",
+      "acceptance": "A reviewed working reference with real or clearly labeled sample content before expansion.",
+      "evidence": "Town-site GUI development is active scope; bulk expansion still follows quality gates.",
+      "source": "https://satcom.conews.press/codex#operators",
+      "blocked": false,
+      "backendId": "138e2736-4a03-4db2-8b80-9e87c8ae2467"
+    },
+    {
+      "key": "DEV-039",
+      "title": "Review headless PDF publishing refactoring sequence",
+      "project": "Network",
+      "column": "review",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "due": "Next focused development session",
+      "next": "Approve the audit sequence, then identify external extractor and WordPress target before implementation.",
+      "acceptance": "Source-backed schema, layout/continuation checks, stable identities and verified CMS receipts; no pipeline edits before approval.",
+      "evidence": "Repository wrapper defaults date/byline/publication and internal publish status lacks a WordPress receipt in the inspected function.",
+      "source": "https://satcom.conews.press/codex#operators",
+      "blocked": false,
+      "backendId": "e4fe9f4b-9c2e-4be6-816d-f4f53c7008f4"
     }
   ]
 }

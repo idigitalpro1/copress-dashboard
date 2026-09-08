@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "updated": "2026-09-07",
-  "release": "satcom-kanban-2026-09-07",
+  "release": "satcom-astra-routing-2026-09-07",
   "site": "https://satcom.conews.press",
   "name": "SATCOM",
   "purpose": "Publishing operations for the CoNews network",
@@ -178,11 +178,84 @@
     }
   ],
   "boundaries": [
+    "The operator is on a remote laptop without a server connection. Local paths, apps and loopback addresses refer to that laptop, not Ace or a production server. Public HTTPS access does not prove remote shell access.",
+    "SATCOM mission control remains under development. Direct model prompts are the primary workflow. GUI development for news, activity and town sites is as important as content. Headless-only constraints apply to the PDF-to-WordPress pipeline, not publication GUI development.",
     "Work directly; do not delegate or spawn other agents.",
     "Partners in the Community is the primary advertising and sponsorship platform. Directory listings are not verified paying sponsors or outreach permission.",
     "The MCP service supplies public context only. It cannot deploy, retrieve secrets, access subscriber records, send messages or operate telephony.",
     "A health response proves this context service is responding, not that Ace, Hermes, a payment provider or publishing pipeline is connected.",
     "conews.press/codex is a different route from satcom.conews.press/codex. Its September 7 404 is not repaired by this SATCOM release.",
     "Package prices and sales targets in the 2026 plan are proposals until approved. Do not publish them as offers or actual results."
-  ]
+  ],
+  "operatorPolicy": {
+    "updated": "2026-09-07",
+    "primary": "astra",
+    "fallbackOrder": [
+      "claude",
+      "grok",
+      "cursor",
+      "hermes"
+    ],
+    "mode": "operator-controlled handoff",
+    "maxActiveExecutors": 1,
+    "automaticDispatch": false,
+    "rule": "Work directly. Stop or confirm the prior executor has ended before switching. A timeout alone does not prove a job stopped. Carry one task packet and its completed work forward; do not restart the entire task. The operator is on a remote laptop without a server connection; verify the actual host before server work.",
+    "operators": [
+      {
+        "id": "astra",
+        "name": "GPT-6 Astra in Codex",
+        "role": "Primary",
+        "model": "gpt-6-astra",
+        "status": "Configured primary; Codex MCP verified",
+        "availableForHandoff": true,
+        "connection": "Codex SATCOM MCP registered and SDK tool calls verified. Public SATCOM does not invoke a paid model API.",
+        "command": "codex -m gpt-6-astra",
+        "next": "Open the intended repository in Codex, select GPT-6 Astra, and use one current task packet."
+      },
+      {
+        "id": "claude",
+        "name": "Claude",
+        "role": "Fallback 1",
+        "model": null,
+        "status": "Connected \u2014 four SATCOM tools discovered",
+        "availableForHandoff": true,
+        "connection": "Claude native remote connector connected to SATCOM and displayed all four read-only tools on the remote laptop. Desktop Commander startup repair is a separate local check.",
+        "command": null,
+        "next": "Read the Astra prompt and one relevant Kanban card, then continue the approved next step."
+      },
+      {
+        "id": "grok",
+        "name": "Grok Bot",
+        "role": "Fallback 2",
+        "model": null,
+        "status": "Grok CLI MCP verified; Bot app unverified",
+        "availableForHandoff": true,
+        "connection": "Grok CLI 1.0.5 passed SATCOM MCP handshake and discovered four tools. Grok Bot is a separate Cursor application; its launch inspection timed out. No model task was dispatched.",
+        "command": "grok",
+        "next": "Confirm the Grok Bot app is accessible, or use the verified Grok CLI context connection; confirm model access before taking over."
+      },
+      {
+        "id": "cursor",
+        "name": "Cursor",
+        "role": "Fallback 3",
+        "model": null,
+        "status": "MCP configured; native discovery pending",
+        "availableForHandoff": true,
+        "connection": "SATCOM added to the local Cursor MCP configuration; pre-existing servers preserved. OpenAI/Claude models enabled in the picker; custom API key fields empty.",
+        "command": null,
+        "next": "Open the intended repository in Cursor and confirm SATCOM tools in Customize. Use existing authorized model access."
+      },
+      {
+        "id": "hermes",
+        "name": "Hermes 2.0",
+        "role": "Fallback 4",
+        "model": null,
+        "status": "Blocked \u2014 host and version unverified",
+        "availableForHandoff": false,
+        "connection": "SATCOM Hermes health/models proxy timed out; local port 8793 refused connection. No Hermes CLI or installation found on this Mac. Ace is offline.",
+        "command": null,
+        "next": "Restore and identify the intended Hermes host, verify the 2.0 installation and model, then register SATCOM MCP and verify a read-only tool call."
+      }
+    ]
+  }
 }

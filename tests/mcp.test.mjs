@@ -43,7 +43,7 @@ test('resource and all prompts read successfully without dispatch', ()=>connecte
   const resource=await client.readResource({uri:'satcom://context'});
   assert.equal(JSON.parse(resource.contents[0].text).schemaVersion,1);
   await assert.rejects(()=>client.readResource({uri:'file:///etc/passwd'}));
-  const {prompts}=await client.listPrompts();assert.equal(prompts.length,3);
+  const {prompts}=await client.listPrompts();assert.equal(prompts.length,6);
   for(const prompt of prompts) {
     const result=await client.getPrompt({name:prompt.name});
     assert.match(result.messages[0].content.text,/Do not delegate/);

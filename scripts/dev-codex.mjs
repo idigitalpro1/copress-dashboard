@@ -16,7 +16,7 @@ createServer(async (req, res) => {
   if (!target.startsWith(root + '/') || /(?:^|\/)\./.test(file) || file.includes('/node_modules/')) { res.writeHead(403).end(); return; }
   try {
     const body = await readFile(target);
-    const types = { '.html':'text/html', '.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.md':'text/plain' };
+    const types = { '.html':'text/html', '.js':'text/javascript', '.mjs':'text/javascript', '.css':'text/css', '.json':'application/json', '.md':'text/plain' };
     res.writeHead(200, {'Content-Type': types[extname(file)] || 'application/octet-stream'}).end(body);
   } catch { res.writeHead(404).end('Not found'); }
 }).listen(Number(process.env.PORT || 4321), '127.0.0.1', () => console.log('SATCOM preview: http://127.0.0.1:' + (process.env.PORT || 4321)));

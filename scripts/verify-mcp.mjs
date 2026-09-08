@@ -11,6 +11,8 @@ try {
   assert.ok(tools.tools.every(t => t.annotations.readOnlyHint));
   const structure = await client.callTool({ name:'satcom_structure', arguments:{} });
   assert.equal(structure.structuredContent.site, 'https://satcom.conews.press');
+  assert.equal(structure.structuredContent.operatorPolicy.primary, 'astra');
+  assert.deepEqual(structure.structuredContent.operatorPolicy.fallbackOrder, ['claude','grok','cursor','hermes']);
   const priorities = await client.callTool({ name:'satcom_priorities', arguments:{} });
   assert.equal(priorities.structuredContent.priorities.length, 10);
   assert.equal(priorities.structuredContent.commercialPlatform.name, 'Partners in the Community');
@@ -22,9 +24,9 @@ try {
   const resources = await client.listResources();
   assert.equal(resources.resources.length, 1);
   const context = await client.readResource({uri:'satcom://context'});
-  assert.equal(JSON.parse(context.contents[0].text).release, 'satcom-kanban-2026-09-07');
+  assert.equal(JSON.parse(context.contents[0].text).release, 'satcom-astra-routing-2026-09-07');
   const prompts = await client.listPrompts();
-  assert.equal(prompts.prompts.length, 3);
+  assert.equal(prompts.prompts.length, 6);
   for (const p of prompts.prompts) assert.ok((await client.getPrompt({name:p.name})).messages[0].content.text.length > 500);
-  console.log(JSON.stringify({ endpoint, server:client.getServerVersion(), toolNames:tools.tools.map(t=>t.name), resourceCount:resources.resources.length, promptNames:prompts.prompts.map(p=>p.name), toolCallsVerified:4, boardSourceMode:board.structuredContent.sourceMode, resourceReadVerified:true, promptReadsVerified:3, result:'passed' },null,2));
+  console.log(JSON.stringify({ endpoint, server:client.getServerVersion(), toolNames:tools.tools.map(t=>t.name), resourceCount:resources.resources.length, promptNames:prompts.prompts.map(p=>p.name), toolCallsVerified:4, boardSourceMode:board.structuredContent.sourceMode, resourceReadVerified:true, promptReadsVerified:6, result:'passed' },null,2));
 } finally { await client.close(); }
