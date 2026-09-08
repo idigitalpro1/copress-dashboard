@@ -15,6 +15,12 @@ Nest is the command center for copress.news — a Colorado mountain newspaper ne
 
 ---
 
+## September 7 operations upgrade
+
+The publisher-selected SATCOM host is **https://satcom.conews.press**. Open **[/codex](https://satcom.conews.press/codex)** for architecture, ten priorities, MCP setup and new Grok/release/Partners prompts. Partners in the Community is the primary advertising and sponsorship platform. Work directly without delegation.
+
+The new `/mcp` endpoint provides reviewed public context only; it does not activate the local vault, receptionist, delivery or deployment tools. Build with `npm run build`, test with `npm test`, and use `npm run verify:mcp -- https://satcom.conews.press/mcp` for an actual SDK connection check. See [architecture and runbook](docs/SATCOM_ARCHITECTURE.md). Cross-system decisions remain in the private `idigitalpro1/codex` repository.
+
 ## Pages
 
 | Route | File | Status | Description |

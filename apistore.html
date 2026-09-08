@@ -203,8 +203,8 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 
   <div class="sidebar-section" style="margin-top:16px;">MCP Bridge</div>
   <div class="sidebar-item" onclick="showMCP()"><span class="icon">🔌</span> Hermes (local) <span class="count green" id="hermes-status">●</span></div>
-  <div class="sidebar-item" onclick="showMCP()"><span class="icon">🔌</span> Claude Code <span class="count green">●</span></div>
-  <div class="sidebar-item" onclick="showMCP()"><span class="icon">🔌</span> Codex Admin <span class="count green">●</span></div>
+  <div class="sidebar-item" onclick="showMCP()"><span class="icon">🔌</span> Claude Code <span class="count" title="Connection not checked">○</span></div>
+  <div class="sidebar-item" onclick="showMCP()"><span class="icon">🔌</span> Codex Admin <span class="count" title="Connection not checked">○</span></div>
   <div class="sidebar-item" onclick="showMCP()"><span class="icon">🔌</span> n8n / Zapier <span class="count" style="color:var(--muted);">○</span></div>
 </aside>
 
@@ -264,6 +264,8 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 
   <!-- MCP PANEL -->
   <div class="mcp-panel" id="mcp-panel" style="display:none;">
+    <h3>Public operations MCP</h3>
+    <p><a href="/codex#connection" style="color:#eedb9f">Connect to SATCOM at https://satcom.conews.press/mcp</a> for reviewed public structure, priorities and prompts. It cannot access this vault or retrieve keys.</p>
     <h3>⚡ MCP Bridge — Scoped Credential Handoff</h3>
     <p>Point AI tools at the guarded local bridge so they can request one approved credential by service name. macOS uses 127.0.0.1:3579; Open WebUI Docker uses host.docker.internal:3579. Do not dump the full vault into Hermes, chat prompts, Git, or browser session state.</p>
     <div class="mcp-code" id="mcp-code-block">
