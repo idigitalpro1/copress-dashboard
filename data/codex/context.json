@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-09-07",
-  "release": "satcom-astra-routing-2026-09-07",
+  "updated": "2026-09-08",
+  "release": "satcom-admin-handoff-2026-09-08",
   "site": "https://satcom.conews.press",
   "name": "SATCOM",
   "purpose": "Publishing operations for the CoNews network",
@@ -31,6 +31,16 @@
       "layer": "Existing integration boundary",
       "source": "/apistore and /console/api/hermes/*",
       "implementation": "API Vault is browser-local. The Hermes proxy points to codex.conews.press; its upstream health is not asserted by MCP health. Local Ace tools require separate host identity and authorization."
+    },
+    {
+      "layer": "Subscriber campaigns",
+      "source": "https://subs.conews.press/campaigns.html",
+      "implementation": "Independent passcode-protected application. Canonical Google Sheet recipients; private saved PDFs, exact-page reprints, imported source assets and weekly archives. SATCOM exposes design/context links only. Delivery providers are not connected to the subscriber app."
+    },
+    {
+      "layer": "Admin console",
+      "source": "idigitalpro1/Codex-factory \u00b7 apps/codex-admin",
+      "implementation": "Authenticated Next.js console at admin.conews.press/console/en/dashboard. Launches all 11 published SATCOM views; its Kanban route uses the shared SATCOM board. Provider status requires fresh evidence."
     }
   ],
   "routes": [
@@ -133,8 +143,8 @@
       "title": "Protect renewal revenue and reconciliation",
       "owner": "Circulation and finance",
       "due": "September 2026",
-      "status": "Verification work remains",
-      "next": "Preserve printed QR targets and approved prices; use the canonical subscriber Sheet and verified provider events."
+      "status": "Private postcard campaigns migrated; delivery verification remains",
+      "next": "Use the separate Villager/WRC campaigns and original reprints; preserve printed QR destinations. Verify consent, sender, provider receipts and an independent backup copy before enabling delivery."
     },
     {
       "rank": 6,
@@ -149,8 +159,8 @@
       "title": "Make SATCOM and its development entry point dependable",
       "owner": "Operations lead",
       "due": "September 2026",
-      "status": "Context release; integrations remain separate",
-      "next": "Verify /codex and an MCP tool call; replace unverified card metrics with dated provider evidence and explicit unavailable states."
+      "status": "Combined Kanban and Admin directory deployed",
+      "next": "Use the combined SATCOM board and one-card MCP reads. Preserve the verified Admin release; finish Kanban write authorization and durable storage under DEV-024."
     },
     {
       "rank": 8,
@@ -257,5 +267,32 @@
         "next": "Restore and identify the intended Hermes host, verify the 2.0 installation and model, then register SATCOM MCP and verify a read-only tool call."
       }
     ]
+  },
+  "combinedBoard": {
+    "url": "https://satcom.conews.press/kanban",
+    "platforms": [
+      "Admin",
+      "SATCOM"
+    ],
+    "store": "https://admin.conews.press/console/api/kanban",
+    "policy": "Shared IDs; reviewed public context only; starter demo tasks excluded."
+  },
+  "latestRelease": {
+    "date": "2026-09-08",
+    "title": "Admin + SATCOM: one board and a complete dashboard directory",
+    "status": "Deployed and verified",
+    "adminCommit": "5a66383ada546886d30584dee9db4ef9ac579c82",
+    "adminUrl": "https://admin.conews.press/console/en/dashboard",
+    "reviewUrl": "https://github.com/idigitalpro1/Codex-factory/pull/81",
+    "boardUrl": "https://satcom.conews.press/kanban",
+    "dashboardCount": 11,
+    "existingCards": 51,
+    "templateCardsExcluded": 4,
+    "grokPromptUrl": "/data/codex/grok-development.md",
+    "next": "Verify DEV-015 against current source issue metadata; continue the existing preview PR. DEV-014 follows. Preserve printed QR journeys and all private subscriber data.",
+    "checkedAt": "2026-09-08T10:43:32.682551+00:00",
+    "releaseTask": "DEV-044",
+    "adminDeployment": "https://github.com/idigitalpro1/Codex-factory/actions/runs/34215995000",
+    "reviewedCards": 52
   }
 }

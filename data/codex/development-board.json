@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "board": "satcom-development",
-  "updatedAt": "2026-09-08T05:25:41.166059+00:00",
+  "updatedAt": "2026-09-08T10:43:32.680715+00:00",
   "source": "https://admin.conews.press/console/api/kanban",
   "cards": [
     {
@@ -338,7 +338,7 @@
       "key": "DEV-023",
       "title": "Deploy the development Kanban board",
       "project": "SATCOM",
-      "column": "active",
+      "column": "done",
       "priority": "high",
       "owner": "Technical lead",
       "due": "September 2026",
@@ -443,7 +443,7 @@
       "key": "DEV-030",
       "title": "Refresh active Markdown and source-of-truth guidance",
       "project": "Network",
-      "column": "active",
+      "column": "review",
       "priority": "high",
       "owner": "Technical lead",
       "due": "September 2026",
@@ -458,7 +458,7 @@
       "key": "DEV-031",
       "title": "Install token-efficient task rules",
       "project": "Network",
-      "column": "active",
+      "column": "done",
       "priority": "normal",
       "owner": "Technical lead",
       "due": "September 2026",
@@ -623,7 +623,7 @@
       "key": "DEV-034",
       "title": "Configure Astra primary and direct fallback prompts",
       "project": "SATCOM",
-      "column": "active",
+      "column": "done",
       "priority": "high",
       "owner": "Publisher and active developer",
       "due": "Next focused development session",
@@ -708,6 +708,94 @@
       "source": "https://satcom.conews.press/codex#operators",
       "blocked": false,
       "backendId": "e4fe9f4b-9c2e-4be6-816d-f4f53c7008f4"
+    },
+    {
+      "key": "DEV-040",
+      "title": "Migrate private postcard campaigns and reference assets",
+      "column": "done",
+      "priority": "high",
+      "owner": "Codex and circulation",
+      "blocked": false,
+      "next": "Use the saved campaign PDFs and exact-page reprints. Record print and mailing completion manually.",
+      "acceptance": "Existing passcode retained; original QR/PDF hashes preserved; strict overdue Villager 100 without ACC/comps and WRC 50 drafts; 54 private assets; weekly archive and download verified.",
+      "evidence": "September 8: subs.conews.press production release; four PDF campaigns and 54 unique assets verified; no outreach sent.",
+      "project": "Subscriptions",
+      "due": "September 2026",
+      "source": "https://subs.conews.press/campaigns.html",
+      "backendId": "94ad419b-d282-4454-a02b-535cdc86bda1"
+    },
+    {
+      "key": "DEV-041",
+      "title": "Verify and connect renewal email, SMS and voice follow-up",
+      "column": "backlog",
+      "priority": "high",
+      "owner": "Publisher and integration lead",
+      "blocked": true,
+      "next": "Provide the intended MailerLite sender/account, actual SMS provider, and verified 303-830-1800 voice ownership. Verify consent, suppression, webhook receipts and deduplicated retries before live delivery.",
+      "acceptance": "An operator-owned test destination receives authorized content; provider receipts distinguish submitted from delivered; no duplicate send when changing models or reprinting.",
+      "evidence": "Campaign checkbox requests persist, but no provider adapter is connected. Supplied Inkbox and ElevenLabs accounts previously returned no phone numbers; xAI ownership and support mailbox access remain unverified.",
+      "project": "Subscriptions",
+      "due": "September 2026",
+      "source": "https://subs.conews.press/campaigns.html",
+      "backendId": "f5c69527-14db-4b4f-bca8-91303175dfd4"
+    },
+    {
+      "key": "DEV-042",
+      "title": "Retire legacy subscriber assets while preserving printed QR journeys",
+      "column": "review",
+      "priority": "high",
+      "owner": "Publisher and active developer",
+      "blocked": false,
+      "next": "Resolve whether to retire the entire subs.weeklyregistercall.com application or only postcard files. Inventory its storage and public URLs; retain compatible QR and subscription routes.",
+      "acceptance": "Migrated assets verified before removal, rollback recorded, and all known printed QR journeys continue to their intended destination.",
+      "evidence": "The current old production deployment contains Google OAuth and subscription APIs as well as the creative library. No old assets or application have been deleted.",
+      "project": "Subscriptions",
+      "due": "September 2026",
+      "source": "https://subs.conews.press/campaigns.html",
+      "backendId": "69f0a65f-87a6-48f4-9c3e-ae4c31a7388a"
+    },
+    {
+      "key": "DEV-043",
+      "title": "Add independent subscriber backup copy and database restore rehearsal",
+      "column": "backlog",
+      "priority": "normal",
+      "owner": "Operations lead",
+      "blocked": false,
+      "next": "Choose a private independent storage destination, export verified weekly archives there, rehearse a database restore and configure failure notifications.",
+      "acceptance": "A backup survives loss of the primary database and restores Sheet source, campaign data, PDFs and assets with matching checksums.",
+      "evidence": "Monday weekly Vercel archive is configured; initial 17.7 MB archive downloaded and verified. Current archives reside in the same private database.",
+      "project": "Subscriptions",
+      "due": "September 2026",
+      "source": "https://subs.conews.press/campaigns.html",
+      "backendId": "7655788e-7d4d-47b2-83fe-5240c42e2b39"
+    },
+    {
+      "key": "DEV-044",
+      "title": "Combine Admin and SATCOM dashboards and Kanban",
+      "project": "Admin",
+      "column": "done",
+      "priority": "high",
+      "owner": "Codex",
+      "due": "2026-09-08",
+      "next": "Use the combined board and the updated Grok continuation prompt. Continue the existing DEV-015 preview work, then DEV-014; retain DEV-024 security work.",
+      "acceptance": "Admin production home includes all 11 source dashboard launchers; existing card IDs are preserved; legacy Kanban opens SATCOM; current facts are dated; login and QR routes remain intact.",
+      "evidence": "September 8: merged Admin PR #81, commit 5a66383; production pipeline 34215995000 passed; healthy container, authenticated home and 11 launchers verified; all 51 original backend IDs retained.",
+      "source": "https://github.com/idigitalpro1/Codex-factory/pull/81",
+      "blocked": false,
+      "backendId": "9745207b-77e3-4d4b-b288-5bc2af6bc415"
     }
-  ]
+  ],
+  "consolidation": {
+    "canonicalView": "https://satcom.conews.press/kanban",
+    "platforms": [
+      "SATCOM",
+      "Admin"
+    ],
+    "sharedStore": "https://admin.conews.press/console/api/kanban",
+    "auditedAt": "2026-09-08",
+    "reviewedCards": 52,
+    "excludedTemplateTasks": 4,
+    "policy": "One card per existing backend ID. Eight SATCOM PROV sprint cards already share the Admin store. Admin starter demo tasks are not operational work. Public cards remain explicitly reviewed.",
+    "releaseTask": "DEV-044"
+  }
 }
