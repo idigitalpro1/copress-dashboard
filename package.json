@@ -1,0 +1,17 @@
+{
+  "name": "satcom-operations",
+  "private": true,
+  "version": "1.1.0",
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": {
+    "build": "node scripts/build-codex.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "dev": "node scripts/dev-codex.mjs",
+    "verify:mcp": "node scripts/verify-mcp.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "zod": "4.5.4"
+  }
+}

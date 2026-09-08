@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "updated": "2026-09-07",
+  "release": "satcom-codex-2026-09-07",
+  "site": "https://satcom.conews.press",
+  "name": "SATCOM",
+  "purpose": "Publishing operations for the CoNews network",
+  "commercialPlatform": {
+    "name": "Partners in the Community",
+    "role": "Primary advertising and sponsorship platform",
+    "url": "https://thevillager.today/partners",
+    "next": "Approve offers, establish placement inventory and measure fulfillment."
+  },
+  "architecture": [
+    {
+      "layer": "Operator interface",
+      "source": "idigitalpro1/copress-dashboard",
+      "implementation": "Static HTML, CSS and browser JavaScript on the existing Vercel copress-dashboard project."
+    },
+    {
+      "layer": "Operations context MCP",
+      "source": "/mcp",
+      "implementation": "Stateless Streamable HTTP; read-only tools, resources and prompts from an explicit public content allowlist. No credentials or operational records."
+    },
+    {
+      "layer": "Canonical operations documentation",
+      "source": "idigitalpro1/codex",
+      "implementation": "Private repository for cross-system decisions, release evidence, priorities and the 2026 business plan. Public context here is a curated summary, not a replacement."
+    },
+    {
+      "layer": "Existing integration boundary",
+      "source": "/apistore and /console/api/hermes/*",
+      "implementation": "API Vault is browser-local. The Hermes proxy points to codex.conews.press; its upstream health is not asserted by MCP health. Local Ace tools require separate host identity and authorization."
+    }
+  ],
+  "routes": [
+    {
+      "path": "/",
+      "name": "SATCOM dashboard",
+      "scope": "Operator cards and launchers"
+    },
+    {
+      "path": "/codex",
+      "name": "Development and prompts",
+      "scope": "Architecture, priorities, public guidance and MCP connection"
+    },
+    {
+      "path": "/docs",
+      "name": "Documentation hub",
+      "scope": "Browser-local documentation library"
+    },
+    {
+      "path": "/network",
+      "name": "Network HQ",
+      "scope": "Publication and service directory"
+    },
+    {
+      "path": "/newsletter",
+      "name": "Newsletter workbench",
+      "scope": "Preparation; delivery requires a separately configured provider and authorization"
+    },
+    {
+      "path": "/apistore",
+      "name": "API Vault",
+      "scope": "Browser-local credential reference; not a server-side connection"
+    },
+    {
+      "path": "/learn",
+      "name": "SATCO Academy",
+      "scope": "Learning cards"
+    },
+    {
+      "path": "/linear",
+      "name": "Linear workbench",
+      "scope": "Integration depends on its own configured access"
+    },
+    {
+      "path": "/mcp",
+      "name": "Operations MCP",
+      "scope": "Public read-only context; POST"
+    },
+    {
+      "path": "/api/health",
+      "name": "MCP health",
+      "scope": "This service only; does not measure upstream systems"
+    }
+  ],
+  "priorities": [
+    {
+      "rank": 1,
+      "title": "Protect source of truth and traceable releases",
+      "owner": "Technical lead",
+      "due": "Every release",
+      "status": "Ongoing",
+      "next": "Record app commit, deployment, checks and rollback in the canonical operations repository."
+    },
+    {
+      "rank": 2,
+      "title": "Promote Partners in the Community",
+      "owner": "Publisher and commercial lead",
+      "due": "2026-09-18",
+      "status": "Promotion live; commercial model pending",
+      "next": "Approve the offer sheet, verified sponsor records, placement capacity and fulfillment measures."
+    },
+    {
+      "rank": 3,
+      "title": "Verify Villager news discovery and reader journeys",
+      "owner": "Technical lead and editor",
+      "due": "2026-09-14",
+      "status": "Site refinement deployed; indexing unverified",
+      "next": "Use Search Console for indexing evidence; verify archive, events, contact and search journeys."
+    },
+    {
+      "rank": 4,
+      "title": "Make editorial freshness and unique images repeatable",
+      "owner": "Managing editor",
+      "due": "2026-09-25",
+      "status": "Six images backfilled; future workflow pending",
+      "next": "Generate, inspect, persist and credit a story-specific illustration when no unique photo exists. Preserve original dates and real attribution."
+    },
+    {
+      "rank": 5,
+      "title": "Protect renewal revenue and reconciliation",
+      "owner": "Circulation and finance",
+      "due": "September 2026",
+      "status": "Verification work remains",
+      "next": "Preserve printed QR targets and approved prices; use the canonical subscriber Sheet and verified provider events."
+    },
+    {
+      "rank": 6,
+      "title": "Finish the shared platform configuration",
+      "owner": "Technical lead",
+      "due": "September–October 2026",
+      "status": "Host verification required",
+      "next": "Confirm myappstore.biz identity and TLS before proving reusable publishing configuration."
+    },
+    {
+      "rank": 7,
+      "title": "Make SATCOM and its development entry point dependable",
+      "owner": "Operations lead",
+      "due": "September 2026",
+      "status": "Context release; integrations remain separate",
+      "next": "Verify /codex and an MCP tool call; replace unverified card metrics with dated provider evidence and explicit unavailable states."
+    },
+    {
+      "rank": 8,
+      "title": "Prove 5280.menu as the reference implementation",
+      "owner": "Product and technical lead",
+      "due": "October 2026, after shared platform and SATCOM gates",
+      "status": "Gated",
+      "next": "Sign off editorial, reader, sponsorship, permission and reporting journeys."
+    },
+    {
+      "rank": 9,
+      "title": "Deliver a dependable Thursday publishing workflow",
+      "owner": "Editorial and circulation",
+      "due": "September–November 2026",
+      "status": "In progress",
+      "next": "Prove approved web, email, edition, archive and print outputs with provider acceptance for delivery."
+    },
+    {
+      "rank": 10,
+      "title": "Expand only after quality and delivery gates pass",
+      "owner": "Publisher",
+      "due": "November–December 2026 review",
+      "status": "Held behind platform gates",
+      "next": "Stage 13 town sites and eight guide hubs only with editorial ownership, substantive reporting and support capacity."
+    }
+  ],
+  "boundaries": [
+    "Work directly; do not delegate or spawn other agents.",
+    "Partners in the Community is the primary advertising and sponsorship platform. Directory listings are not verified paying sponsors or outreach permission.",
+    "The MCP service supplies public context only. It cannot deploy, retrieve secrets, access subscriber records, send messages or operate telephony.",
+    "A health response proves this context service is responding, not that Ace, Hermes, a payment provider or publishing pipeline is connected.",
+    "conews.press/codex is a different route from satcom.conews.press/codex. Its September 7 404 is not repaired by this SATCOM release.",
+    "Package prices and sales targets in the 2026 plan are proposals until approved. Do not publish them as offers or actual results."
+  ]
+}

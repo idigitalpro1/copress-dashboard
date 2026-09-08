@@ -2,6 +2,15 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "buildCommand": "npm run build",
+  "outputDirectory": ".",
+  "functions": {
+    "api/*.js": { "includeFiles": "data/codex/**" }
+  },
+  "headers": [
+    { "source": "/codex", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
+    { "source": "/data/codex/:path*", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+  ],
   "redirects": [
     {
       "source": "/",
@@ -16,6 +25,7 @@
     }
   ],
   "rewrites": [
+    { "source": "/mcp", "destination": "/api/mcp" },
     {
       "source": "/console/api/hermes/:path*",
       "destination": "https://codex.conews.press/api/v1/platform/hermes/:path*"

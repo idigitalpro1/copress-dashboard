@@ -249,6 +249,7 @@ https://vercel.com/docs
 <!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="sidebar-section">Browse</div>
+  <a class="sidebar-item" href="/codex" style="text-decoration:none;color:inherit">⌘ Codex · Priorities &amp; Prompts</a>
   <div class="sidebar-item active" data-filter="all" onclick="filterSidebar('all',this)">🗝 All Docs <span class="sidebar-count has" id="sc-all">0</span></div>
   <div class="sidebar-item" data-filter="pinned" onclick="filterSidebar('pinned',this)">📌 Pinned <span class="sidebar-count" id="sc-pinned">0</span></div>
   <div class="sidebar-item" data-filter="noted" onclick="filterSidebar('noted',this)">📝 Has Notes <span class="sidebar-count" id="sc-noted">0</span></div>
@@ -431,6 +432,8 @@ function faviconURL(url) {
 
 // ── DEFAULT DOCS (pre-seeded) ─────────────────────────────────────────────
 const DEFAULT_DOCS = [
+  {url:'https://satcom.conews.press/codex',title:'SATCOM Codex — Development & Prompts',cat:'dev',desc:'Current architecture, top ten priorities, reviewed prompts and public read-only MCP connection.',tags:['satcom','codex','grok','priorities','partners'],pinned:true,notes:'Work directly without delegation. Partners in the Community is the primary advertising and sponsorship platform. Private canonical operations records remain in idigitalpro1/codex.'},
+  {url:'https://satcom.conews.press/data/codex/grok-development.md',title:'Grok — CoNews Development Prompt',cat:'mcp',desc:'Reviewed prompt for direct development, Partners promotion and story-specific generated artwork.',tags:['grok','prompt','partners'],pinned:true,notes:'Copying does not dispatch a bot or authorize new production actions.'},
   // SATCOM / SATCO
   {url:'https://NationalIntelligence.com',title:'NationalIntelligence.com Brand / SATCO Academy',cat:'publish',desc:'Internal aerospace-intelligence brand lane for staff training, Daily Quick briefs, and SATCOM operations language.',tags:['satcom','satco','academy','staff','brand'],pinned:true,notes:'Use SATCOM for the command-center title. Use SATCO Academy for staff learning and Daily Quick docs. Do not reuse official government seals as brand marks.'},
   {url:'https://satcom.5280.menu/data/satcom-agent-context.md',title:'SATCOM Agent Context Packet',cat:'mcp',desc:'URL-first context packet for Hermes and Open WebUI when local .md files are not mounted.',tags:['satcom','hermes','open-webui','context','docs'],pinned:true,notes:'Start here when a container cannot read /Users/Ace. Includes source-doc order, local endpoint map, safety hooks, and Open WebUI setup.'},
@@ -446,7 +449,7 @@ const DEFAULT_DOCS = [
   {url:'https://platform.openai.com/docs',title:'OpenAI Platform Docs',cat:'ai',desc:'GPT-4o, Assistants API, fine-tuning, embeddings. Fallback option.',tags:['openai','gpt','optional']},
   {url:'https://lmstudio.ai/docs',title:'LM Studio Docs',cat:'ai',desc:'Local model GUI. OpenAI-compatible API at port 1234. Good for Qwen models.',tags:['local','lmstudio','qwen']},
   // MCP
-  {url:'https://modelcontextprotocol.io/docs',title:'MCP Protocol Docs',cat:'mcp',desc:'Model Context Protocol spec. How to build MCP servers and connect tools to AI.',tags:['mcp','protocol','tools'],pinned:true,notes:'Server must expose: tools, resources, prompts. Transport: stdio or SSE.'},
+  {url:'https://modelcontextprotocol.io/docs',title:'MCP Protocol Docs',cat:'mcp',desc:'Model Context Protocol spec. How to build MCP servers and connect tools to AI.',tags:['mcp','protocol','tools'],pinned:true,notes:'Servers advertise supported tools, resources and prompts. Remote transport: Streamable HTTP; stdio for local subprocesses.'},
   {url:'https://docs.anthropic.com/en/docs/claude-code/mcp',title:'Claude Code MCP Guide',cat:'mcp',desc:'How to add MCP servers to Claude Code via settings.json.',tags:['claude-code','mcp','config'],notes:'Config path: ~/.claude/settings.json → mcpServers object'},
   {url:'https://smithery.ai',title:'Smithery — MCP Registry',cat:'mcp',desc:'Directory of MCP servers. Find pre-built connectors for any service.',tags:['mcp','registry','plugins']},
   // Cloud
