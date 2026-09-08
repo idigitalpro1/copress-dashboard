@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "updated": "2026-09-08",
-  "release": "satcom-subscriber-campaigns-2026-09-08",
+  "release": "satcom-combined-kanban-2026-09-08",
   "site": "https://satcom.conews.press",
   "name": "SATCOM",
   "purpose": "Publishing operations for the CoNews network",
@@ -262,5 +262,14 @@
         "next": "Restore and identify the intended Hermes host, verify the 2.0 installation and model, then register SATCOM MCP and verify a read-only tool call."
       }
     ]
+  },
+  "combinedBoard": {
+    "url": "https://satcom.conews.press/kanban",
+    "platforms": [
+      "Admin",
+      "SATCOM"
+    ],
+    "store": "https://admin.conews.press/console/api/kanban",
+    "policy": "Shared IDs; reviewed public context only; starter demo tasks excluded."
   }
 }

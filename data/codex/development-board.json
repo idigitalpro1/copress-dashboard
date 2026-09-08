@@ -769,5 +769,17 @@
       "source": "https://subs.conews.press/campaigns.html",
       "backendId": "7655788e-7d4d-47b2-83fe-5240c42e2b39"
     }
-  ]
+  ],
+  "consolidation": {
+    "canonicalView": "https://satcom.conews.press/kanban",
+    "platforms": [
+      "SATCOM",
+      "Admin"
+    ],
+    "sharedStore": "https://admin.conews.press/console/api/kanban",
+    "auditedAt": "2026-09-08",
+    "reviewedCards": 51,
+    "excludedTemplateTasks": 4,
+    "policy": "One card per existing backend ID. Eight SATCOM PROV sprint cards already share the Admin store. Admin starter demo tasks are not operational work. Public cards remain explicitly reviewed."
+  }
 }
