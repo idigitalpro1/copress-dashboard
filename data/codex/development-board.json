@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "board": "satcom-development",
-  "updatedAt": "2026-09-08T10:08:11.651908+00:00",
+  "updatedAt": "2026-09-08T10:43:32.680715+00:00",
   "source": "https://admin.conews.press/console/api/kanban",
   "cards": [
     {
@@ -338,7 +338,7 @@
       "key": "DEV-023",
       "title": "Deploy the development Kanban board",
       "project": "SATCOM",
-      "column": "active",
+      "column": "done",
       "priority": "high",
       "owner": "Technical lead",
       "due": "September 2026",
@@ -443,7 +443,7 @@
       "key": "DEV-030",
       "title": "Refresh active Markdown and source-of-truth guidance",
       "project": "Network",
-      "column": "active",
+      "column": "review",
       "priority": "high",
       "owner": "Technical lead",
       "due": "September 2026",
@@ -458,7 +458,7 @@
       "key": "DEV-031",
       "title": "Install token-efficient task rules",
       "project": "Network",
-      "column": "active",
+      "column": "done",
       "priority": "normal",
       "owner": "Technical lead",
       "due": "September 2026",
@@ -623,7 +623,7 @@
       "key": "DEV-034",
       "title": "Configure Astra primary and direct fallback prompts",
       "project": "SATCOM",
-      "column": "active",
+      "column": "done",
       "priority": "high",
       "owner": "Publisher and active developer",
       "due": "Next focused development session",
@@ -745,7 +745,7 @@
       "column": "review",
       "priority": "high",
       "owner": "Publisher and active developer",
-      "blocked": true,
+      "blocked": false,
       "next": "Resolve whether to retire the entire subs.weeklyregistercall.com application or only postcard files. Inventory its storage and public URLs; retain compatible QR and subscription routes.",
       "acceptance": "Migrated assets verified before removal, rollback recorded, and all known printed QR journeys continue to their intended destination.",
       "evidence": "The current old production deployment contains Google OAuth and subscription APIs as well as the creative library. No old assets or application have been deleted.",
@@ -768,6 +768,21 @@
       "due": "September 2026",
       "source": "https://subs.conews.press/campaigns.html",
       "backendId": "7655788e-7d4d-47b2-83fe-5240c42e2b39"
+    },
+    {
+      "key": "DEV-044",
+      "title": "Combine Admin and SATCOM dashboards and Kanban",
+      "project": "Admin",
+      "column": "done",
+      "priority": "high",
+      "owner": "Codex",
+      "due": "2026-09-08",
+      "next": "Use the combined board and the updated Grok continuation prompt. Continue the existing DEV-015 preview work, then DEV-014; retain DEV-024 security work.",
+      "acceptance": "Admin production home includes all 11 source dashboard launchers; existing card IDs are preserved; legacy Kanban opens SATCOM; current facts are dated; login and QR routes remain intact.",
+      "evidence": "September 8: merged Admin PR #81, commit 5a66383; production pipeline 34215995000 passed; healthy container, authenticated home and 11 launchers verified; all 51 original backend IDs retained.",
+      "source": "https://github.com/idigitalpro1/Codex-factory/pull/81",
+      "blocked": false,
+      "backendId": "9745207b-77e3-4d4b-b288-5bc2af6bc415"
     }
   ],
   "consolidation": {
@@ -778,8 +793,9 @@
     ],
     "sharedStore": "https://admin.conews.press/console/api/kanban",
     "auditedAt": "2026-09-08",
-    "reviewedCards": 51,
+    "reviewedCards": 52,
     "excludedTemplateTasks": 4,
-    "policy": "One card per existing backend ID. Eight SATCOM PROV sprint cards already share the Admin store. Admin starter demo tasks are not operational work. Public cards remain explicitly reviewed."
+    "policy": "One card per existing backend ID. Eight SATCOM PROV sprint cards already share the Admin store. Admin starter demo tasks are not operational work. Public cards remain explicitly reviewed.",
+    "releaseTask": "DEV-044"
   }
 }

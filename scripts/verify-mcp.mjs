@@ -1,7 +1,9 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 const endpoint = process.argv[2] || 'http://127.0.0.1:4321/mcp';
+const expectedRelease = JSON.parse(readFileSync(new URL('../data/codex/context.json', import.meta.url), 'utf8')).release;
 const client = new Client({ name: 'satcom-release-verification', version: '1.0.0' });
 try {
   await client.connect(new StreamableHTTPClientTransport(new URL(endpoint)));
@@ -18,15 +20,18 @@ try {
   assert.equal(priorities.structuredContent.commercialPlatform.name, 'Partners in the Community');
   const prompt = await client.callTool({ name:'satcom_prompt', arguments:{name:'grok-development'} });
   assert.match(prompt.structuredContent.text, /Do not delegate/);
+  assert.match(prompt.structuredContent.text, /DEV-015/);
   const board = await client.callTool({name:'satcom_board', arguments:{project:'SATCOM',limit:2}});
   assert.equal(board.structuredContent.cards.length,2);
   assert.ok(['live','snapshot'].includes(board.structuredContent.sourceMode));
   const resources = await client.listResources();
   assert.equal(resources.resources.length, 1);
   const context = await client.readResource({uri:'satcom://context'});
-  assert.equal(JSON.parse(context.contents[0].text).release, 'satcom-astra-routing-2026-09-07');
+  assert.equal(JSON.parse(context.contents[0].text).release, expectedRelease);
+  const subscriber = await client.callTool({name:'satcom_board',arguments:{project:'Subscriptions',key:'DEV-040',limit:1}});
+  assert.equal(subscriber.structuredContent.cards[0].key,'DEV-040');
   const prompts = await client.listPrompts();
   assert.equal(prompts.prompts.length, 6);
   for (const p of prompts.prompts) assert.ok((await client.getPrompt({name:p.name})).messages[0].content.text.length > 500);
-  console.log(JSON.stringify({ endpoint, server:client.getServerVersion(), toolNames:tools.tools.map(t=>t.name), resourceCount:resources.resources.length, promptNames:prompts.prompts.map(p=>p.name), toolCallsVerified:4, boardSourceMode:board.structuredContent.sourceMode, resourceReadVerified:true, promptReadsVerified:6, result:'passed' },null,2));
+  console.log(JSON.stringify({ endpoint, server:client.getServerVersion(), toolNames:tools.tools.map(t=>t.name), resourceCount:resources.resources.length, promptNames:prompts.prompts.map(p=>p.name), toolCallsVerified:5, boardSourceMode:board.structuredContent.sourceMode, resourceReadVerified:true, promptReadsVerified:6, result:'passed' },null,2));
 } finally { await client.close(); }

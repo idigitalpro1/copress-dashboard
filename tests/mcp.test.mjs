@@ -33,6 +33,15 @@ test('tools return structure, ten owners/next actions and primary Partners platf
   assert.ok(result.priorities.every(x=>x.owner && x.due && x.next && x.status));
   assert.equal(result.commercialPlatform.role,'Primary advertising and sponsorship platform');
 }));
+test('agents can request one subscriber card and page beyond the first fifty', ()=>connected(async client=> {
+  const {tools}=await client.listTools();
+  const schema=tools.find(t=>t.name==='satcom_board').inputSchema;
+  assert.ok(schema.properties.project.enum.includes('Admin'));
+  const one=(await client.callTool({name:'satcom_board',arguments:{project:'Subscriptions',key:'DEV-040',limit:1}})).structuredContent;
+  assert.equal(one.total,1);assert.equal(one.cards[0].key,'DEV-040');assert.equal(one.nextOffset,null);
+  const page=(await client.callTool({name:'satcom_board',arguments:{offset:50,limit:1}})).structuredContent;
+  assert.equal(page.offset,50);assert.equal(page.cards.length,1);assert.ok(page.total>50);
+}));
 test('unknown tools and path traversal prompt names cannot access files or execute actions', ()=>connected(async client=> {
   for (const args of [{name:'take_message',arguments:{}},{name:'satcom_prompt',arguments:{name:'../../.env'}},{name:'satcom_prompt',arguments:{name:'https://example.com'}}]) {
     const result=await client.callTool(args); assert.equal(result.isError,true);
