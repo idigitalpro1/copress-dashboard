@@ -17,3 +17,7 @@ Select the highest-priority bounded issue in the current authorized task. Next w
 For every post without a unique original/licensed photo, generate a distinct editorial illustration based on its verified story, inspect it, save responsive sizes, label AI artwork, and use the same representative image in article and social metadata. Do not invent documentary event images or reuse the duplicate default. Six existing Villager posts were backfilled; this is not yet an automatic future-post workflow.
 
 Verify desktop/mobile navigation, initial article HTML, canonical URLs, original news dates, XML and affected conversion paths. Keep Google News eligibility separate from verified indexing. conews.press/codex remains a separate hostname/path issue; do not rewrite unrelated DNS to make it appear fixed.
+
+## Use less context
+
+Start with one relevant card from https://satcom.conews.press/kanban or MCP `satcom_board` with a project and small limit. Read only linked source files. Reuse current evidence, keep searches/output bounded, and run focused checks. Use heavier reasoning only for unresolved complexity. Do not delegate. See https://satcom.conews.press/data/codex/token-efficient-development.md.

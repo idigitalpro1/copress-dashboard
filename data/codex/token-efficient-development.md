@@ -1,0 +1,11 @@
+# Token-efficient development
+
+Use the current task and one relevant SATCOM Kanban card as the working packet. Read SOURCE_OF_TRUTH.md and CURRENT_STATUS.md once, then only the relevant app runbook and files. Work directly; do not delegate or start background agents.
+
+Search filenames before file contents, and symbols before whole files. Batch independent reads. Keep tool output bounded. Reuse verified evidence until a change invalidates it. Do not reread whole repositories or paste full histories into prompts.
+
+Use normal reasoning for routine documentation and narrow fixes. Escalate model/reasoning only for unresolved debugging, architecture, security or other material complexity. A provider API key changes billing, not token efficiency. Do not enable Max context or repeated multi-model reviews by default.
+
+Implement the smallest complete authorized change; preserve unrelated work. Run focused meaningful checks once, expanding only for failures or uncovered risk. Record evidence, blocker and next action on the board. Return a concise change/result/check/blocker report and stop when acceptance passes.
+
+Partners in the Community is the primary advertising and sponsorship platform. Preserve original article URLs/dates, unique-photo or inspected AI-illustration requirements, subscriber source boundaries and delivery authorization. Never trade correctness, access controls or validation for fewer tokens.

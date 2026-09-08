@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "updated": "2026-09-07",
-  "release": "satcom-codex-2026-09-07",
+  "release": "satcom-kanban-2026-09-07",
   "site": "https://satcom.conews.press",
   "name": "SATCOM",
   "purpose": "Publishing operations for the CoNews network",
@@ -45,6 +45,11 @@
       "scope": "Architecture, priorities, public guidance and MCP connection"
     },
     {
+      "path": "/kanban",
+      "name": "Development Kanban",
+      "scope": "Reviewed shared development cards, evidence and next actions"
+    },
+    {
       "path": "/docs",
       "name": "Documentation hub",
       "scope": "Browser-local documentation library"
@@ -83,6 +88,11 @@
       "path": "/api/health",
       "name": "MCP health",
       "scope": "This service only; does not measure upstream systems"
+    },
+    {
+      "path": "/api/development-board",
+      "name": "Reviewed development board API",
+      "scope": "Read-only allowlist from existing Admin Kanban; explicit dated snapshot on upstream failure"
     }
   ],
   "priorities": [
@@ -130,7 +140,7 @@
       "rank": 6,
       "title": "Finish the shared platform configuration",
       "owner": "Technical lead",
-      "due": "September–October 2026",
+      "due": "September\u2013October 2026",
       "status": "Host verification required",
       "next": "Confirm myappstore.biz identity and TLS before proving reusable publishing configuration."
     },
@@ -154,7 +164,7 @@
       "rank": 9,
       "title": "Deliver a dependable Thursday publishing workflow",
       "owner": "Editorial and circulation",
-      "due": "September–November 2026",
+      "due": "September\u2013November 2026",
       "status": "In progress",
       "next": "Prove approved web, email, edition, archive and print outputs with provider acceptance for delivery."
     },
@@ -162,7 +172,7 @@
       "rank": 10,
       "title": "Expand only after quality and delivery gates pass",
       "owner": "Publisher",
-      "due": "November–December 2026 review",
+      "due": "November\u2013December 2026 review",
       "status": "Held behind platform gates",
       "next": "Stage 13 town sites and eight guide hubs only with editorial ownership, substantive reporting and support capacity."
     }

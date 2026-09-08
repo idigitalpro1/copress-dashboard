@@ -13,3 +13,7 @@ Promote Partners in the Community in navigation, the homepage and relevant reade
 Prepare concrete offers for publisher approval before publishing proposed prices. Measure active paid sponsors, booked and collected revenue separately, delivered placements, attributable inquiries and renewals using real source records. Do not invent baselines or treat business-plan scenarios as actuals.
 
 Keep sponsored content visibly labeled and independent news decisions with the editor. Real photos retain their rights and credit. Generate and inspect unique story-specific artwork where required, with visible AI labeling. Stage campaign material through Generate → Review → Approve → Preview → Ready → Prepare Send → Deliver → Confirm → Report. Do not send outreach without explicit recipient/channel authorization; sent status requires provider acceptance.
+
+## Use less context
+
+Start with one relevant card from https://satcom.conews.press/kanban or MCP `satcom_board` with a project and small limit. Read only linked source files. Reuse current evidence, keep searches/output bounded, and run focused checks. Use heavier reasoning only for unresolved complexity. Do not delegate. See https://satcom.conews.press/data/codex/token-efficient-development.md.

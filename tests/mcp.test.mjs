@@ -18,11 +18,11 @@ async function connected(fn) {
   try { await client.connect(new StreamableHTTPClientTransport(new URL(base+'/mcp'))); await fn(client); }
   finally { await client.close(); }
 }
-test('SDK handshake exposes only the three allowlisted read-only tools', ()=>connected(async client=> {
+test('SDK handshake exposes only the four allowlisted read-only tools', ()=>connected(async client=> {
   assert.equal(client.getServerVersion().name,'satcom-operations');
   const {tools}=await client.listTools();
-  assert.deepEqual(tools.map(x=>x.name).sort(),['satcom_priorities','satcom_prompt','satcom_structure']);
-  assert.ok(tools.every(x=>x.annotations.readOnlyHint && !x.annotations.destructiveHint && !x.annotations.openWorldHint));
+  assert.deepEqual(tools.map(x=>x.name).sort(),['satcom_board','satcom_priorities','satcom_prompt','satcom_structure']);
+  assert.ok(tools.every(x=>x.annotations.readOnlyHint && !x.annotations.destructiveHint));
 }));
 test('tools return structure, ten owners/next actions and primary Partners platform', ()=>connected(async client=> {
   const structure=(await client.callTool({name:'satcom_structure',arguments:{}})).structuredContent;
