@@ -1,9 +1,11 @@
 {
   "name": "satcom-operations",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "build": "node scripts/build-codex.mjs",
     "test": "node --test tests/*.test.mjs",

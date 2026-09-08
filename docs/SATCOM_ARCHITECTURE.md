@@ -54,3 +54,13 @@ Keep the existing Vercel project and aliases. Deploy a preview, verify the exact
 Next upgrades should make existing operating cards explicit about unavailable data and last successful provider checks. The legacy root dashboard includes other browser-local/sample behavior; this release does not claim that all of it is live. `conews.press/codex` is a separate origin/path and remains unresolved by this release. The shared-spine and reference-publication gates still precede town expansion.
 
 Official implementation references: [MCP SDK server guide](https://ts.sdk.modelcontextprotocol.io/server) and [Streamable HTTP transport specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
+
+## Development Kanban follow-up
+
+Version 1.2.0 adds `/kanban`, `/api/development-board` and the fourth read-only tool `satcom_board`. Forty-one reviewed items were created in the existing `https://admin.conews.press/console/api/kanban` store and reread successfully. `data/codex/development-board.json` contains the reviewed public definitions, backend IDs and dated release snapshot. Only allowlisted IDs appear publicly; unrelated backend cards are excluded. No mutation proxy was added.
+
+Live title, owner, priority and column come from the backend. Acceptance/source notes remain the reviewed definitions. A failed, invalid or incomplete upstream response displays an explicit dated snapshot rather than claiming a fresh empty board. Use Admin Kanban for card moves; a previously blocked item moved to Active leaves the Blocked lane. Adding new public items requires adding their reviewed definitions/IDs and deploying. Private tasks remain in the private source-of-truth repository.
+
+The existing admin handler's authentication and durable/concurrent storage require a separate hardening item: its route source can fall back to a local JSON file, and this task's card POST did not require credentials. Do not represent this as a hardened private task backend. Keep cards here free of secrets or personal/customer information.
+
+Read `data/codex/token-efficient-development.md` for compact task packets and bounded context. API keys are configured directly in the intended client, never in board cards or public prompts.

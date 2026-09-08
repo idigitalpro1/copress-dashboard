@@ -5,11 +5,38 @@
   "buildCommand": "npm run build",
   "outputDirectory": ".",
   "functions": {
-    "api/*.js": { "includeFiles": "data/codex/**" }
+    "api/*.js": {
+      "includeFiles": "data/codex/**"
+    }
   },
   "headers": [
-    { "source": "/codex", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] },
-    { "source": "/data/codex/:path*", "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }] }
+    {
+      "source": "/codex",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/data/codex/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/kanban",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
   ],
   "redirects": [
     {
@@ -25,7 +52,10 @@
     }
   ],
   "rewrites": [
-    { "source": "/mcp", "destination": "/api/mcp" },
+    {
+      "source": "/mcp",
+      "destination": "/api/mcp"
+    },
     {
       "source": "/console/api/hermes/:path*",
       "destination": "https://codex.conews.press/api/v1/platform/hermes/:path*"

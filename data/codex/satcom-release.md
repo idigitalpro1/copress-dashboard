@@ -13,3 +13,7 @@ Confirm the user-selected host satcom.conews.press maps to Vercel 5280menu/copre
 Read README.md, docs/SATCOM_ARCHITECTURE.md, api/mcp.js, lib/satcom-mcp.js and data/codex/. The MCP allowlist is public architecture, priorities and these reviewed prompts. Do not add arbitrary file reads, URL fetches, credentials, subscriber records or write tools. Private integrations need a separate authenticated design and explicit scope.
 
 Run npm ci, npm run build and npm test. Deploy a preview to the existing project. Verify /, /codex, /docs, /apistore, /network, subscription alias routing and the SDK client handshake, tool/resource/prompt discovery and read-only calls. Verify malformed requests, unknown tools and disallowed Origin behavior. Record the old deployment for rollback. If production release is authorized, deploy/promote the tested artifact and rerun public checks; then update canonical status and evidence.
+
+## Use less context
+
+Start with one relevant card from https://satcom.conews.press/kanban or MCP `satcom_board` with a project and small limit. Read only linked source files. Reuse current evidence, keep searches/output bounded, and run focused checks. Use heavier reasoning only for unresolved complexity. Do not delegate. See https://satcom.conews.press/data/codex/token-efficient-development.md.
