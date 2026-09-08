@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-09-07",
-  "release": "satcom-astra-routing-2026-09-07",
+  "updated": "2026-09-08",
+  "release": "satcom-subscriber-campaigns-2026-09-08",
   "site": "https://satcom.conews.press",
   "name": "SATCOM",
   "purpose": "Publishing operations for the CoNews network",
@@ -31,6 +31,11 @@
       "layer": "Existing integration boundary",
       "source": "/apistore and /console/api/hermes/*",
       "implementation": "API Vault is browser-local. The Hermes proxy points to codex.conews.press; its upstream health is not asserted by MCP health. Local Ace tools require separate host identity and authorization."
+    },
+    {
+      "layer": "Subscriber campaigns",
+      "source": "https://subs.conews.press/campaigns.html",
+      "implementation": "Independent passcode-protected application. Canonical Google Sheet recipients; private saved PDFs, exact-page reprints, imported source assets and weekly archives. SATCOM exposes design/context links only. Delivery providers are not connected to the subscriber app."
     }
   ],
   "routes": [
@@ -133,8 +138,8 @@
       "title": "Protect renewal revenue and reconciliation",
       "owner": "Circulation and finance",
       "due": "September 2026",
-      "status": "Verification work remains",
-      "next": "Preserve printed QR targets and approved prices; use the canonical subscriber Sheet and verified provider events."
+      "status": "Private postcard campaigns migrated; delivery verification remains",
+      "next": "Use the separate Villager/WRC campaigns and original reprints; preserve printed QR destinations. Verify consent, sender, provider receipts and an independent backup copy before enabling delivery."
     },
     {
       "rank": 6,

@@ -17,3 +17,7 @@ Run npm ci, npm run build and npm test. Deploy a preview to the existing project
 ## Use less context
 
 Start with one relevant card from https://satcom.conews.press/kanban or MCP `satcom_board` with a project and small limit. Read only linked source files. Reuse current evidence, keep searches/output bounded, and run focused checks. Use heavier reasoning only for unresolved complexity. Do not delegate. See https://satcom.conews.press/data/codex/token-efficient-development.md.
+
+## Subscriber workflow — September 8, 2026
+
+Open https://subs.conews.press/campaigns.html using the existing passcode. Google Sheet is the live subscriber source; SATCOM holds the design catalog and entry point. Two original PDF batches were preserved and QR-scanned; fresh strictly-overdue Villager 100 (excluding ACC/comps) and WRC 50 drafts are separate campaigns. Private Postcard Data assets are deduplicated by hash. Reprint only selected original pages. Requested-channel checkboxes do not send or prove delivery. Weekly archives are in the same private database; independent disaster recovery and provider integrations still need work. Keep subscriber records and finished cards out of public SATCOM/MCP. Old app retirement requires confirmed scope because its Google sign-in and subscription APIs are separate.
