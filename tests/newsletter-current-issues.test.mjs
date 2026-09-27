@@ -45,4 +45,7 @@ test('newsletter stays review-only and keeps publication-scoped draft versions',
   assert.doesNotMatch(sendBody, /fetch\(|XMLHttpRequest|sendBeacon/);
   assert.match(sendBody, /no newsletter was sent/);
   assert.match(html, /live subscriber delivery remains disconnected/);
+  assert.equal((html.match(/href="\[unsubscribe\]"/g) || []).length, 3);
+  assert.equal((html.match(/href="\[webversion\]"/g) || []).length, 3);
+  assert.doesNotMatch(html, /href="#">Unsubscribe/);
 });

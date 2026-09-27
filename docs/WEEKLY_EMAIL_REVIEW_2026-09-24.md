@@ -39,4 +39,5 @@ Before any external delivery, an operator must confirm:
 
 The current studio cannot perform a subscriber-list send. Browser-local Sendy
 credentials enable configuration persistence only; preview and HTML export remain
-the safe handoff.
+the safe handoff. Exported templates retain Sendy's `[unsubscribe]` and
+`[webversion]` replacement tags; verify both in the one-recipient proof.

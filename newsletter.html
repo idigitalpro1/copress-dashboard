@@ -2862,7 +2862,7 @@ function updatePreview() {
       </div>
       <div class="email-footer">
         ${brand.name} · ${brand.cityLine}<br>
-        <a href="#">Unsubscribe</a> · <a href="#">View in browser</a> · <a href="${brand.site}">${brand.siteLabel}</a>
+        <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a> · <a href="${brand.site}">${brand.siteLabel}</a>
       </div>`;
   } else if (state.template === 'marketing') {
     el.innerHTML = `
@@ -2899,7 +2899,7 @@ function updatePreview() {
         </div>
       </div>
       <div class="email-footer">
-        ${brand.name} · <a href="#">Unsubscribe</a> · <a href="#">View in browser</a>
+        ${brand.name} · <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a>
       </div>`;
   } else if (state.template === 'bulletin') {
     el.innerHTML = `
@@ -2937,7 +2937,7 @@ function updatePreview() {
         </div>
       </div>
       <div class="email-footer">
-        ${brand.name} · ${brand.cityLine} · <a href="#">Unsubscribe</a>
+        ${brand.name} · ${brand.cityLine} · <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a>
       </div>`;
   }
 }
