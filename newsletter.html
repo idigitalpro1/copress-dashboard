@@ -168,6 +168,31 @@
     font: 700 10px 'DM Mono', monospace; letter-spacing: .06em; text-transform: uppercase;
   }
 
+  .source-review-banner {
+    margin-bottom: 18px;
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    background: #fffaf0;
+    padding: 14px 16px;
+    color: var(--navy);
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .source-review-banner strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #8a6800;
+    font: 700 10px 'DM Mono', monospace;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+  .source-review-banner a {
+    color: var(--navy);
+    font-weight: 700;
+    text-decoration-color: var(--gold);
+    text-underline-offset: 2px;
+  }
+
   /* ── STEPS PANEL (left) ── */
   .steps-panel {
     padding: 28px 32px;
@@ -1007,7 +1032,7 @@
   <div class="topbar">
     <div class="topbar-title"><span id="topbar-publication">Weekly Register-Call</span> — Newsletter Studio</div>
     <div class="topbar-actions">
-      <span id="topbar-issue" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">Issue: Aug 20, 2026</span>
+      <span id="topbar-issue" style="font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0.45);">Issue: Sept. 24, 2026</span>
       <button class="btn btn-ghost" data-testid="repeat-newsletter-options" onclick="repeatNewsletterOptions()" title="Reuse the publication, layout, content, lists, and delivery settings from the last prepared newsletter">↻ Repeat Last</button>
       <button class="btn btn-ghost" onclick="saveConfig()">💾 Save Draft</button>
       <button class="btn btn-gold" onclick="goStep(currentStep + 1)">Continue →</button>
@@ -1025,6 +1050,10 @@
           <strong>Campaign handoff loaded</strong>
           <span id="campaign-handoff-text"></span><br>
           <button onclick="goStep(5)">Review Campaign Settings</button>
+        </div>
+        <div class="source-review-banner" id="current-source-banner" role="status" aria-live="polite">
+          <strong>Review-only current source</strong>
+          <span id="current-source-text">Loading the publication-specific Sept. 24 source set…</span>
         </div>
         <div class="step-header">
           <h2>Choose a Template</h2>
@@ -1102,7 +1131,7 @@
                 <div style="font-size:7px;color:#999;letter-spacing:0.1em;">GILPIN & CLEAR CREEK COUNTIES</div>
               </div>
               <div style="display:flex;justify-content:space-between;padding:2px 8px;background:#f0ece4;font-size:7px;color:#999;">
-                <span>VOL. 164</span><span>AUG 20, 2026</span>
+                <span>VOL. 164</span><span>SEP 24, 2026</span>
               </div>
               <div style="padding:6px 8px;">
                 <div style="border-bottom:1px solid #c8a84b;margin-bottom:4px;"><div class="tpl-line" style="background:#c8a84b;height:2px;width:50%;margin:0 0 2px;"></div></div>
@@ -1139,8 +1168,8 @@
           </div>
           <div class="length-opt selected" data-len="full" onclick="selectLength('full', this)">
             <h4>📖 Full Editorial Desk</h4>
-            <p>All newsletter-ready August items; review holds stay excluded.</p>
-            <span class="length-tag" style="background:rgba(192,57,43,0.1);color:var(--red);">All approved stories</span>
+            <p id="full-length-copy">All current, source-verified items; review holds stay excluded.</p>
+            <span class="length-tag" id="full-length-tag" style="background:rgba(192,57,43,0.1);color:var(--red);">All current stories</span>
           </div>
         </div>
         <div class="step-nav-btns">
@@ -1153,7 +1182,7 @@
       <div class="step-section" id="step-3">
         <div class="step-header">
           <h2>Select Stories</h2>
-          <p>45 newsletter cards cover all 47 preserved August source files. Repeated weekly updates are consolidated; raw police, legal and sensitive opinion items are clearly held for review.</p>
+          <p id="story-source-copy">Current publication-specific stories are loaded from the maintained issue source.</p>
         </div>
         <div id="story-list" style="margin-bottom:20px;"></div>
         <div class="step-nav-btns">
@@ -1301,11 +1330,11 @@
         </div>
         <div class="field-group">
           <label class="field-label">Subject Line</label>
-          <input type="text" class="field-input" id="subject-line" value="Weekly Register-Call — August 20, 2026 | Highway 119, Timberline, jobs and late-summer events" oninput="updatePreview()">
+          <input type="text" class="field-input" id="subject-line" value="Weekly Register-Call — Sept. 24 | Briggs Lot, RCI and Floyd Hill" oninput="updatePreview()">
         </div>
         <div class="field-group">
           <label class="field-label">Preview Text (inbox snippet)</label>
-          <input type="text" class="field-input" id="preview-text" value="Highway 119 repair questions, Timberline's proposed ballot request, public-safety guidance, jobs, sports, opinion and the late-summer calendar." oninput="updatePreview()">
+          <input type="text" class="field-input" id="preview-text" value="Black Hawk and Central City clash over Briggs Lot, the Central–RCI court series concludes, and Floyd Hill enters its fourth construction season." oninput="updatePreview()">
         </div>
         <div class="field-row">
           <div class="field-group">
@@ -1314,7 +1343,7 @@
           </div>
           <div class="field-group">
             <label class="field-label">UTM Campaign Tag</label>
-            <input type="text" class="field-input" id="utm-tag" value="wrc-2026-08-20-digital">
+            <input type="text" class="field-input" id="utm-tag" value="wrc-2026-09-24-weekly" oninput="updatePreview()">
           </div>
         </div>
         <div class="field-group">
@@ -1352,17 +1381,17 @@
       <div class="step-section" id="step-6">
         <div class="step-header">
           <h2>Review & Send</h2>
-          <p>Confirm everything before launching</p>
+          <p>Review-only: confirm the issue, links, sender and audience before any external delivery.</p>
         </div>
 
         <div class="review-box">
           <h4>Campaign Summary</h4>
           <div class="review-row"><span class="review-label">Publication</span><span class="review-val" id="rv-publication">Weekly Register-Call</span></div>
-          <div class="review-row"><span class="review-label">Issue Date</span><span class="review-val" id="rv-issue-date">August 20, 2026</span></div>
+          <div class="review-row"><span class="review-label">Issue Date</span><span class="review-val" id="rv-issue-date">September 24, 2026</span></div>
           <div class="review-row"><span class="review-label">Template</span><span class="review-val" id="rv-template">Editorial Broadsheet</span></div>
           <div class="review-row"><span class="review-label">Length</span><span class="review-val" id="rv-length">Full Editorial Desk</span></div>
-          <div class="review-row"><span class="review-label">Stories Selected</span><span class="review-val" id="rv-stories">Loading August desk…</span></div>
-          <div class="review-row"><span class="review-label">Subject</span><span class="review-val" id="rv-subject" style="max-width:240px;text-align:right;font-size:11px;">Weekly Register-Call — August 20</span></div>
+          <div class="review-row"><span class="review-label">Stories Selected</span><span class="review-val" id="rv-stories">Loading current source set…</span></div>
+          <div class="review-row"><span class="review-label">Subject</span><span class="review-val" id="rv-subject" style="max-width:240px;text-align:right;font-size:11px;">Weekly Register-Call — Sept. 24</span></div>
           <div class="review-row"><span class="review-label">Schedule</span><span class="review-val ok" id="rv-schedule">Send Now</span></div>
         </div>
 
@@ -1450,12 +1479,12 @@
 
         <div class="send-actions">
           <button class="send-big-btn" type="button" onclick="sendNewsletter()">
-            🚀 Launch Newsletter
+            Prepare Newsletter (Review Only)
           </button>
         </div>
 
         <div class="sendy-status" id="sendy-status-msg">
-          ⚠ Sendy not configured. Add your URL + API key in Step 4 to send live. Preview mode is active.
+          Review/export only. Live subscriber delivery is disconnected, even when browser-local Sendy credentials are present.
         </div>
 
         <div class="step-nav-btns">
@@ -1499,15 +1528,15 @@ const PUBLICATIONS = {
     businessName: 'Register-Call Business Brief',
     tagline: 'Gilpin & Clear Creek Counties, Colorado',
     flagSub: 'Serving Gilpin & Clear Creek Counties since 1862',
-    site: 'https://weeklyregistercall.com',
-    siteLabel: 'weeklyregistercall.com',
+    site: 'https://registercall.com/',
+    siteLabel: 'registercall.com',
     cityLine: 'Black Hawk, Colorado',
     fromName: 'Weekly Register-Call',
     fromEmail: 'news@weeklyregistercall.com',
     replyTo: 'news@weeklyregistercall.com',
-    subject: 'Weekly Register-Call — August 20, 2026 | Highway 119, Timberline, jobs and late-summer events',
-    preview: 'Highway 119 repair questions, Timberline’s proposed ballot request, public-safety guidance, jobs, sports, opinion and the late-summer calendar.',
-    utm: 'wrc-2026-08-20-digital',
+    subject: 'Weekly Register-Call — Sept. 24 | Briggs Lot, RCI and Floyd Hill',
+    preview: 'Black Hawk and Central City clash over Briggs Lot, the Central–RCI court series concludes, and Floyd Hill enters its fourth construction season.',
+    utm: 'wrc-2026-09-24-weekly',
     audienceLabel: 'WRC',
     adTitle: 'Advertise in the Weekly Register-Call',
     adCopy: 'Reach readers across Colorado’s mountain communities.',
@@ -1522,15 +1551,15 @@ const PUBLICATIONS = {
     businessName: 'The Villager Business Brief',
     tagline: 'Community, civic and business news for the south metro area',
     flagSub: 'Independent community journalism from Villager Media Group',
-    site: 'https://www.thevillager.today',
+    site: 'https://thevillager.today/',
     siteLabel: 'thevillager.today',
     cityLine: 'Greenwood Village, Colorado',
     fromName: 'The Villager',
     fromEmail: 'news@villagerpublishing.com',
     replyTo: 'news@villagerpublishing.com',
-    subject: 'The Villager — Community news, business and events',
-    preview: 'Your Villager briefing for local government, business, schools and community.',
-    utm: 'villager-weekly',
+    subject: 'The Villager — Sept. 24 | Hall of Fame, chalk art, fall nights and county races',
+    preview: 'Bob and Gerri Sweeney thank readers after their Hall of Fame honor, plus South Metro arts, autumn events and county election coverage.',
+    utm: 'villager-2026-09-24-weekly',
     audienceLabel: 'Villager',
     adTitle: 'Advertise in The Villager',
     adCopy: 'Reach engaged south metro households and local decision-makers.',
@@ -1554,16 +1583,9 @@ function getPublication() {
   return PUBLICATIONS[state.publication] || PUBLICATIONS.wrc;
 }
 
-// ── ISSUE DATA (WRC August 6, 13 & 20, 2026 source desk) ──────────────────
-// Forty-seven preserved Word sources are represented by 45 newsletter cards.
-// Repeated jobs, calendar, recreation and Highway 119 updates are consolidated.
-const CURRENT_ISSUE = {
-  label: 'August 20, 2026',
-  shortLabel: 'Aug 20, 2026',
-  fallbackDate: 'Thursday, August 20, 2026',
-};
-const CONTENT_VERSION = 'wrc-2026-08-20-full-source-desk-v1';
-
+// ── PUBLICATION-SCOPED ISSUE DATA ─────────────────────────────────────────
+// These are review-ready source sets. WRC uses the preserved Sept. 24 issue
+// assets; Villager links only to maintained, published article routes.
 function issueStory(id, title, kicker, published, body, options = {}) {
   return {
     id,
@@ -1571,60 +1593,122 @@ function issueStory(id, title, kicker, published, body, options = {}) {
     kicker,
     published,
     body,
-    readmore: 'https://registercall.com/',
     newsletterEligible: options.newsletterEligible !== false,
     selected: options.newsletterEligible !== false,
     ...options,
   };
 }
 
-const STORIES = [
-  issueStory('highway-119-school-project', 'School sewer project advances as Highway 119 repair talks remain unresolved', 'Transportation · Schools', '2026-08-20', 'Drivers waiting for a smoother stretch of Highway 119 near the Gilpin County school campus do not yet have a repair date. The district says it continues to work with ESCO Construction and CDOT on pavement concerns and project closeout.', { byline: 'WRC Staff, adapted from a letter by Superintendent David MacKenzie and earlier WRC reporting', lead: true, reviewNote: 'Seek responses from CDOT and ESCO before straight-news publication.' }),
-  issueStory('black-hawk-jobs', 'Five public-service openings posted in Black Hawk', 'Jobs · Help Wanted', '2026-08-20', 'Black Hawk’s employment materials list openings in emergency communications, fleet, water, maintenance and policing, together with city benefits. Applicants should use the city’s official page for current descriptions and requirements.', { readmore: 'https://www.cityofblackhawk.org/employee-services/page/current-job-openings', reviewNote: 'Consolidates three weekly job-ad files; refresh the official page immediately before publication.' }),
-  issueStory('late-summer-events', 'Late-summer calendar brings festivals, public safety and mountain traditions', 'Events · Community Calendar', '2026-08-20', 'The calendar includes Central City’s Cemetery Crawl and beer festival, the Shelby Allen Memorial Volleyball Tournament, C3 Fest, Fairgrounds Frenzy, First Friday and planned Boxing Central dates.', { reviewNote: 'August 22 was verified for the Cemetery Crawl and Beer Fest; refresh remaining event details before publication.' }),
-  issueStory('rec-center-current-hours', 'Community Center reopens with school-year pool hours', 'Community · Recreation', '2026-08-20', 'After its annual maintenance closure, the Gilpin County Community Center returns to school-year operations. The pool is scheduled for midday closures from noon to 4:30 p.m. on Mondays and Wednesdays.', { reviewNote: 'Consolidates recreation updates from all three source weeks; confirm the live facility calendar.' }),
-  issueStory('when-god-hands-you-a-shovel', 'When God Hands You a Shovel', 'Faith · Column', '2026-08-20', 'James Carnes returns to the story of Gideon, reflecting on how obedience and God’s presence—not personality, stature or talent—shape courage and purpose.', { byline: 'By James Carnes' }),
-  issueStory('timberline-mill-levy', 'Timberline weighs roughly six-mill request to strengthen emergency response', 'Public Safety · Elections', '2026-08-13', 'Timberline Fire Protection District is considering a November request of roughly six mills to support around-the-clock staffing at Station 3, wildfire mitigation and rising capital costs.', { byline: 'Adapted from reporting by Don Ireland', reviewNote: 'Update with adopted ballot language and a household tax-impact table.' }),
-  issueStory('hi-lo-evacuation-alert', 'Hear the Hi-Lo siren? It is time to go', 'Public Safety · Preparedness', '2026-08-13', 'Clear Creek and Jefferson counties are standardizing evacuation language and adding Hi-Lo sirens to patrol vehicles. The alternating tone is reserved for an evacuation order—an immediate threat that requires residents and visitors to leave.', { reviewNote: 'Confirm current alert-registration links before publication.' }),
-  issueStory('ricks-cabaret-ballot', 'Central voters may face another strip-club ballot issue', 'Government · Elections', '2026-08-13', 'A campaign tied to Rick’s Cabaret says it is gathering signatures for another Central City ballot question. Qualification, final ballot text and the city’s response still require confirmation.', { byline: 'By Don Ireland, Senior Reporter', newsletterEligible: false, reviewNote: 'HOLD: legal and election review; verify petition submission, signatures and ballot text, and seek a City response.' }),
-  issueStory('gilpin-tabor-questions', 'Gilpin voters could face two TABOR questions', 'Government · Elections', '2026-08-13', 'Gilpin County commissioners are considering a de-Brucing measure while a separate statewide sporting-goods sales-tax proposal moves through the initiative process.', { byline: 'By Becky Osterwald, Managing Editor', reviewNote: 'Refresh ballot status and final wording before publication.' }),
-  issueStory('commissioners-ballot-wording', 'Commissioners balk at de-Brucing ballot wording', 'Government · Gilpin County', '2026-08-13', 'Gilpin County commissioners delayed final wording for a proposed de-Brucing measure after objecting to language that did not clearly limit how retained revenue would be used.', { byline: 'By Becky Osterwald, Managing Editor', reviewNote: 'Update with the final adopted language.' }),
-  issueStory('transparency-editorial', 'Transparency? Not with Gilpin County', 'Opinion · Editorial', '2026-08-13', 'Managing Editor Becky Osterwald argues that Gilpin County failed to provide reasonable advance notice of a commissioners’ meeting despite Colorado open-meetings notification requirements.', { byline: 'By Becky Osterwald, Managing Editor', newsletterEligible: false, reviewNote: 'HOLD: Opinion lane only; verify current notification policy and offer the county a chance to respond.' }),
-  issueStory('redaction-commentary', 'Here a redaction, there a redaction, everywhere a redaction', 'Opinion · Local Government', '2026-08-13', 'A commentary questions inconsistent redactions in materials prepared for the Gilpin County Board of Equalization and asks what public information should remain visible.', { newsletterEligible: false, reviewNote: 'HOLD: Opinion lane; complete records-law and fairness review.' }),
-  issueStory('fake-court-texts', 'Fake court text messages target Colorado residents', 'Public Safety · Scam Alert', '2026-08-13', 'Colorado residents are being warned about fraudulent texts that claim recipients must appear in district court for a traffic ticket. Recipients should delete the messages and avoid clicking links.', { reviewNote: 'Confirm the warning remains current with the Colorado Judicial Branch.' }),
-  issueStory('gilpin-sports', 'Gilpin fall sports and activities get underway', 'Sports · Schools', '2026-08-13', 'Gilpin County students are back in class and the 2026–27 athletic calendar is beginning, with high-school and middle-school volleyball among the first scheduled contests.', { reviewNote: 'Refresh dates, opponents and start times before sending.' }),
-  issueStory('wildfire-workshop', 'Wildfire preparedness and forest-health workshop set in Dumont', 'Public Safety · Wildfire', '2026-08-13', 'CSU Extension and Clear Creek Fire Authority plan a free workshop on mountain pine beetles, forest ecology, home mitigation, emergency preparation and evacuation.', { reviewNote: 'Confirm event status and venue before sending.' }),
-  issueStory('probate-mistakes', 'About the Law: 10 mistakes that cause probate problems', 'Advice · About the Law', '2026-08-13', 'The column outlines common mistakes personal representatives make after accepting fiduciary responsibility for an estate and explains why beneficiaries’ interests must come first.', { reviewNote: 'General information only; preserve the author disclaimer and avoid presenting it as individual legal advice.' }),
-  issueStory('mighty-because-with-us', 'Mighty only because He is with us', 'Faith · Column', '2026-08-13', 'Pastoral intern James Carnes reflects on Gideon’s weakness, courage and the order of the words “The Lord is with you, mighty man of valor.”', { byline: 'By James Carnes, Pastoral Intern' }),
-  issueStory('baby-boomers-column', 'Generalizing about Baby Boomers', 'Opinion · Humor', '2026-08-13', 'A columnist pushes back on a clickbait list of supposedly laughable Baby Boomer habits and considers how recommendation algorithms turn stereotypes into repeat engagement.', { reviewNote: 'Preserve original byline from the source before publication.' }),
-  issueStory('critics-column', 'There has never been a statue built to a critic', 'Opinion · Commentary', '2026-08-13', 'A commentary contrasts the country’s constant criticism with the visionaries and builders who took risks to create railroads, towns and institutions.', { reviewNote: 'Preserve original byline from the source before publication.' }),
-  issueStory('grandpa-sassy-dog-days', 'Grandpa Sassy: Growling at Dog Days', 'Humor · Grandpa Sassy', '2026-08-13', 'Grandpa Sassy visits the Dog Days fundraiser for Charlie’s Place and finds that some of the sharpest growling at the community event comes from local political figures.', { reviewNote: 'For amusement only; complete names-and-fairness review.' }),
-  issueStory('news-briefs-aug-13', 'Community briefs: clinics, facilities and public information', 'Community · News Briefs', '2026-08-13', 'The weekly brief desk includes the Community Center maintenance closure, fall vaccination clinics and other short public-service notices for Gilpin County readers.', { reviewNote: 'Refresh every date and contact detail before sending.' }),
-  issueStory('recreation-aug-13', 'Soccer, volleyball, Tai Chi and Dog Park Days', 'Community · Recreation', '2026-08-13', 'Gilpin recreation listings include adult and youth soccer, the Shelby Allen Memorial Scholarship Volleyball Tournament, Tai Chi and weekly Dog Park Days.', { reviewNote: 'This source is represented in the consolidated current recreation card; verify current dates if selected.' }),
-  issueStory('looking-back-aug-16', 'Looking Back: Magnolia Road forest fire', 'History · Archives', '2026-08-13', 'The August 16, 1996 archive recounts a campfire-sparked forest fire near Magnolia Road that drew about three dozen firefighters and aerial water support.', { reviewNote: 'Archive copy; complete names and historical-context review.' }),
-  issueStory('black-hawk-blotter', 'Black Hawk police blotter: July 20–August 2', 'Public Safety · Police Blotter', '2026-08-13', 'An edited blotter groups Black Hawk Police Department calls from July 20 through August 2, including traffic, casino and public-safety incidents.', { newsletterEligible: false, reviewNote: 'HOLD: review names, minors, medical details, dispositions and pending cases before digital reuse.' }),
-  issueStory('housing-snapshot', 'Gilpin’s summer housing market is moving faster—even as prices cool', 'Real Estate · Market Watch', '2026-08-13', 'Recent market data shows a lower three-month median sale price and faster average sales than a year earlier. In a small mountain market, countywide numbers are a signal—not a property-specific conclusion.', { reviewNote: 'Do not reuse hard-coded sample listing cards as live inventory.' }),
-  issueStory('colorado-250-150-calendar', '250–150 celebrations continue across the Centennial State', 'Events · Colorado 150', '2026-08-06', 'Colorado’s statehood anniversary celebrations continue with balloon events, county fairs, drone shows and other America 250–Colorado 150 programs around the state.', { byline: 'By Don Ireland, Senior Reporter', reviewNote: 'Remove expired events and refresh remaining organizer details.' }),
-  issueStory('death-certificates', 'About the Law: How many death certificates should be ordered?', 'Advice · About the Law', '2026-08-06', 'The column explains the cost of certified Colorado death certificates and lists estate, property and account matters that may require an original certificate.', { reviewNote: 'General information only; preserve the author disclaimer and verify current state fees.' }),
-  issueStory('master-gardener-and-fen', 'Mountain-hardy bulbs and a tour of the Library Fen', 'Community · CSU Extension', '2026-08-06', 'Gilpin County CSU Extension highlights a Master Gardener bulb fundraiser and a free walking tour of the Library Fen with a local botanist and ecologist.', { reviewNote: 'Remove expired listings and confirm future event details.' }),
-  issueStory('lexus-is-350-review', 'A sports sedan built for the young at heart', 'Motoring · Review', '2026-08-06', 'A week in the 2026 Lexus IS 350 F SPORT AWD finds a low-slung sedan pairing a 311-horsepower V-6, all-wheel drive and mountain-road performance with everyday practicality.', { reviewNote: 'Preserve the original reviewer byline and disclose any manufacturer vehicle arrangement.' }),
-  issueStory('sports-betting-law', 'Colorado law targets addictive sports-betting practices', 'Statehouse · Consumer Protection', '2026-08-06', 'Bipartisan legislation taking effect in August restricts marketing to people under 21 and creates future transactional-data reporting requirements for sports-betting operators.', { reviewNote: 'Verify the enacted bill number and effective-date details before publication.' }),
-  issueStory('central-sob-rules', 'Central council approves gender-neutral rules for sexually oriented businesses', 'Government · Central City', '2026-08-06', 'Central City Council approved changes removing gender-specific language from sexually oriented business rules after questions about how the definitions would apply in other settings.', { reviewNote: 'Link the adopted ordinance and include the city attorney’s final interpretation.' }),
-  issueStory('central-candidates', 'Central City opens candidate petitions for November election', 'Government · Elections', '2026-08-06', 'Central City’s regular election will fill the mayor’s seat and two alderman seats. Candidate-petition deadlines and clerk contact information appear in the official notice.', { reviewNote: 'The source deadline may have passed; retain only as an archive item unless refreshed.' }),
-  issueStory('highway-46-and-119', 'Local highway update: Highway 46 resurfacing and Highway 119 talks', 'Transportation · Roads', '2026-08-06', 'CDOT anticipated Highway 46 resurfacing near the Community Center while the school district continued discussions over Highway 119 pavement affected by its wastewater interconnect project.', { reviewNote: 'Represented by the current Highway 119 lead; refresh Highway 46 status before separate use.' }),
-  issueStory('gaming-fiscal-year', 'Black Hawk gaming surpasses last year while Central slips', 'Business · Gaming', '2026-08-06', 'Source reporting says Central City casino revenue fell in June and finished the fiscal year slightly lower, while Black Hawk ended the year ahead despite a softer June.', { byline: 'By Don Ireland, Senior Reporter', reviewNote: 'Verify figures against final Colorado Division of Gaming tables.' }),
-  issueStory('grandpa-sassy-football', 'Grandpa Sassy: August arrives with football predictions', 'Humor · Grandpa Sassy', '2026-08-06', 'Grandpa Sassy and friends move from restaurant “efficiency experts” and pickle quality to predictions for the approaching Denver Broncos preseason.', { reviewNote: 'For amusement only; verify current schedule references.' }),
-  issueStory('looking-back-aug-9', 'Looking Back: Charges filed in 1996 Gamble Gulch death', 'History · Archives', '2026-08-06', 'The August 9, 1996 archive revisits the filing of a first-degree murder charge after a fatal shooting at a Gamble Gulch home.', { newsletterEligible: false, reviewNote: 'HOLD: archive crime copy requires names, disposition and sensitivity review.' }),
-  issueStory('news-briefs-aug-6', 'Community briefs: Dog Days, Fill the Bus and more', 'Community · News Briefs', '2026-08-06', 'The weekly brief desk highlights the Dog Days fundraiser for Friends of Charlie’s Place, the school-supply Fill the Bus campaign and other short local notices.', { reviewNote: 'Remove expired items and refresh dates before sending.' }),
-  issueStory('recreation-aug-6', 'What’s happening in Gilpin County Parks & Recreation', 'Community · Recreation', '2026-08-06', 'The early-August recreation calendar includes Dog Park Days, the Second Saturday Artisans Market, youth soccer and the co-ed adult soccer league.', { reviewNote: 'This source is represented in the consolidated current recreation card; remove expired items if selected.' }),
-  issueStory('sheriff-report-may', 'Gilpin County sheriff report: May incidents', 'Public Safety · Sheriff Report', '2026-08-06', 'The source report groups May calls involving alleged fraud, counterfeit currency, criminal mischief and other incidents handled by Gilpin County deputies.', { newsletterEligible: false, reviewNote: 'HOLD: review names, addresses, minors, medical details, dispositions and pending cases.' }),
-  issueStory('black-hawk-bulletin-july-13-19', 'Black Hawk police bulletin: July 13–19', 'Public Safety · Source Bulletin', '2026-08-06', 'The raw Black Hawk Police Department bulletin lists calls and incident narratives from July 13 through July 19.', { newsletterEligible: false, reviewNote: 'HOLD: raw agency data; use the edited blotter only after privacy and case-status review.' }),
-  issueStory('black-hawk-bulletin-july-20-aug-2', 'Black Hawk police bulletin: July 20–August 2', 'Public Safety · Source Bulletin', '2026-08-13', 'The raw Black Hawk Police Department bulletin lists calls and incident narratives from July 20 through August 2.', { newsletterEligible: false, reviewNote: 'HOLD: raw agency data; use the edited blotter only after privacy and case-status review.' }),
-  issueStory('graham-rotunda-column', 'From the Sanitary Café to the Capitol Rotunda', 'Opinion · Commentary', '2026-08-06', 'A column reflects on public service, political differences and the meaning of national honors during a televised Capitol Rotunda ceremony.', { newsletterEligible: false, reviewNote: 'HOLD: fact-check every named person, event and date before reuse.' }),
-  issueStory('blue-sky-settlement-notice', 'Contractor settlement notice: Crooks Palace HVAC replacement', 'Legal Notice · Black Hawk', '2026-08-06', 'The City of Black Hawk notice describes final settlement procedures for the Crooks Palace HVAC replacement contract with Blue Sky Plumbing, Heating, Cooling & Electric.', { newsletterEligible: false, reviewNote: 'HOLD: paid/legal notice; preserve exact approved copy and publication schedule.' }),
-  issueStory('lighthouse-settlement-notice', 'Contractor settlement notice: Gregory and Main signal replacement', 'Legal Notice · Black Hawk', '2026-08-06', 'The City of Black Hawk notice describes final settlement procedures for the Gregory and Main Streets signal-replacement contract with Lighthouse Transportation Group.', { newsletterEligible: false, reviewNote: 'HOLD: paid/legal notice; preserve exact approved copy and publication schedule.' }),
-  issueStory('central-ordinance-26-14-notice', 'Legal notice: Central City Ordinance 26-14', 'Legal Notice · Central City', '2026-08-06', 'The official notice records passage of Ordinance 26-14, which amends definitions and rules concerning sexually oriented businesses and nudity in commercial establishments.', { newsletterEligible: false, reviewNote: 'HOLD: paid/legal notice; preserve exact approved copy and publication schedule.' }),
-];
+const WRC_ISSUE_URL = 'https://registercall.com/issues/wrc-2026-09-24.pdf';
+const WRC_FRONTPAGE_URL = 'https://registercall.com/issues/wrc-2026-09-24-frontpage.png';
+
+const PUBLICATION_ISSUES = {
+  wrc: {
+    label: 'September 24, 2026',
+    shortLabel: 'Sept. 24, 2026',
+    fallbackDate: 'Thursday, September 24, 2026',
+    contentVersion: 'wrc-2026-09-24-verified-front-page-v1',
+    fullIssueUrl: WRC_ISSUE_URL,
+    frontPageUrl: WRC_FRONTPAGE_URL,
+    fullIssueLabel: 'Read the full Sept. 24 issue',
+    sourceCopy: 'Exactly three verified Sept. 24 front-page leads are loaded. Every story link and the full-issue CTA opens the preserved issue PDF.',
+    reviewNotice: 'Review only. Source: published Sept. 24 issue PDF and front-page image. Confirm sender, audience and final copy before any delivery.',
+    stories: [
+      issueStory(
+        'wrc-2026-09-24-briggs-lot',
+        'BH: No Briggs Lot, no collaboration',
+        'Government · Black Hawk & Central City',
+        '2026-09-24',
+        'Central City’s new Comprehensive Plan describes future collaboration with Black Hawk, including the free tramway buses. Black Hawk disputes that description and points to unresolved issues between the cities, including the red shuttle service.',
+        { byline: 'Weekly Register-Call staff', readmore: WRC_ISSUE_URL, lead: true }
+      ),
+      issueStory(
+        'wrc-2026-09-24-central-rci',
+        'Despite Central vs. RCI court case, it’s business as usual',
+        'Courts · Central City',
+        '2026-09-24',
+        'Part Three concludes the paper’s account of Central City’s civil case against RCI Hospitality Holdings. A ruling was not expected until November or later, while Main Street activity continued.',
+        { byline: 'By Don Ireland, Senior Reporter', readmore: WRC_ISSUE_URL }
+      ),
+      issueStory(
+        'wrc-2026-09-24-floyd-hill',
+        'Floyd Hill I-70 project enters its fourth construction season',
+        'Transportation · I-70',
+        '2026-09-24',
+        'CDOT reports continued progress at Floyd Hill, including bridge-support piers and work toward a new westbound bridge. Major construction is expected through 2028, with landscaping and cleanup estimated into 2029.',
+        { byline: 'Weekly Register-Call staff, from CDOT project reporting', readmore: WRC_ISSUE_URL }
+      ),
+    ],
+  },
+  villager: {
+    label: 'September 24, 2026',
+    shortLabel: 'Sept. 24, 2026',
+    fallbackDate: 'Thursday, September 24, 2026',
+    contentVersion: 'villager-2026-09-24-current-five-v1',
+    fullIssueUrl: 'https://thevillager.today/',
+    fullIssueLabel: 'Read current Villager coverage',
+    sourceCopy: 'Five maintained Villager stories are loaded: the Sept. 24 Hall of Fame column followed by four current South Metro stories.',
+    reviewNotice: 'Review only. Source: maintained live Villager article routes. Confirm every destination, sender, audience and final copy before any delivery.',
+    stories: [
+      issueStory(
+        'villager-2026-09-24-hall-of-fame',
+        'When the community writes a story back: Bob and Gerri Sweeney thank readers after Hall of Fame honor',
+        'From the Publisher · Hall of Fame',
+        '2026-09-24',
+        'Bob Sweeney reflects on the Colorado Press Association Hall of Fame honor he shares with Gerri—and thanks the family, staff, advertisers, subscribers and readers who keep The Villager in print.',
+        {
+          byline: 'By Bob Sweeney',
+          villagerUrl: 'https://thevillager.today/article/colorado-journalism-hall-of-fame-honors-gerri-bob-sweeney',
+          lead: true,
+        }
+      ),
+      issueStory(
+        'villager-2026-09-17-chalk-art',
+        'Color, Creativity & Community Fill The Streets at SouthGlenn',
+        'Centennial · Arts',
+        '2026-09-17',
+        'Centennial’s Sept. 12 Chalk Art Festival drew nearly 150 artists and about 7,000 visitors to The Streets at SouthGlenn, where People’s, Kids’ and Artist’s Choice winners were named.',
+        { villagerUrl: 'https://thevillager.today/article/centennial-chalk-art-festival-winners-2026' }
+      ),
+      issueStory(
+        'villager-2026-09-17-jack-o-lanterns',
+        'Magic of the Jack O’Lanterns returns to Hudson Gardens',
+        'Lifestyle · Autumn Events',
+        '2026-09-17',
+        'The Hudson Gardens Halloween trail runs on select dates through Nov. 1, with thousands of hand-carved pumpkins, Enchanted Hollow and a synchronized light show.',
+        { villagerUrl: 'https://thevillager.today/article/hudson-gardens-jack-o-lanterns-2026' }
+      ),
+      issueStory(
+        'villager-2026-09-17-district-2',
+        'Arapahoe County District 2: Jessica Campbell and Carl Schuldies',
+        'Government & Elections · District 2',
+        '2026-09-17',
+        'The Villager’s printed commissioner questionnaire presents answers from District 2 incumbent Jessica Campbell and challenger Carl Schuldies.',
+        { villagerUrl: 'https://thevillager.today/article/arapahoe-county-district-2-commissioner-candidates-2026' }
+      ),
+      issueStory(
+        'villager-2026-09-17-district-4',
+        'Arapahoe County District 4: Leslie Summey and Sonda “Sunny” Banka',
+        'Government & Elections · District 4',
+        '2026-09-17',
+        'The Villager’s printed questionnaire presents answers from District 4 incumbent Leslie Summey and challenger Sonda “Sunny” Banka.',
+        { villagerUrl: 'https://thevillager.today/article/arapahoe-county-district-4-commissioner-candidates-2026' }
+      ),
+    ],
+  },
+};
+
+function getIssue(publication = state.publication) {
+  return PUBLICATION_ISSUES[publication] || PUBLICATION_ISSUES.wrc;
+}
+
+function freshIssueStories(publication = state.publication) {
+  return getIssue(publication).stories.map(story => ({ ...story }));
+}
+
+function resetStoriesForPublication(publication = state.publication) {
+  state.stories = rollLatestNewsToTop(freshIssueStories(publication));
+}
 
 function storyPubTime(story) {
   const raw = story && (story.published || story.pubDate || story.date);
@@ -1658,7 +1742,7 @@ function rollLatestNewsToTop(stories) {
   return sorted;
 }
 
-state.stories = rollLatestNewsToTop(STORIES);
+state.stories = rollLatestNewsToTop(freshIssueStories());
 
 // ── STEP NAV ──────────────────────────────────────────────────────────────
 let currentStep = 1;
@@ -1695,6 +1779,7 @@ function savePublicationFields(publication = state.publication) {
 
 function applyPublication(options = {}) {
   const brand = getPublication();
+  const issue = getIssue();
   document.body.dataset.publication = brand.key;
   document.querySelectorAll('.publication-card').forEach(card => {
     card.classList.toggle('selected', card.dataset.publication === brand.key);
@@ -1708,7 +1793,22 @@ function applyPublication(options = {}) {
   const editorialDesc = document.getElementById('list-desc-editorial');
   const paidName = document.getElementById('list-name-paid');
   const paidDesc = document.getElementById('list-desc-paid');
+  const topbarIssue = document.getElementById('topbar-issue');
+  const sourceText = document.getElementById('current-source-text');
+  const storySourceCopy = document.getElementById('story-source-copy');
+  const fullLengthCopy = document.getElementById('full-length-copy');
+  const fullLengthTag = document.getElementById('full-length-tag');
   if (topbar) topbar.textContent = brand.name;
+  if (topbarIssue) topbarIssue.textContent = `Issue: ${issue.shortLabel}`;
+  if (sourceText) {
+    const sourceLinks = state.publication === 'wrc'
+      ? ` <a href="${issue.fullIssueUrl}" target="_blank" rel="noreferrer">Issue PDF</a> · <a href="${issue.frontPageUrl}" target="_blank" rel="noreferrer">Front page</a>`
+      : ` <a href="${issue.fullIssueUrl}" target="_blank" rel="noreferrer">Current site</a>`;
+    sourceText.innerHTML = `${issue.reviewNotice}${sourceLinks}`;
+  }
+  if (storySourceCopy) storySourceCopy.textContent = issue.sourceCopy;
+  if (fullLengthCopy) fullLengthCopy.textContent = issue.sourceCopy;
+  if (fullLengthTag) fullLengthTag.textContent = `All ${issue.stories.length} current stories`;
   if (lengthCopy) lengthCopy.textContent = `How much ${brand.name} content to include`;
   if (listsCopy) listsCopy.textContent = `Choose which ${brand.name} audiences receive this newsletter`;
   if (editorialName) editorialName.textContent = `${brand.audienceLabel} Editorial Subscribers`;
@@ -1748,6 +1848,7 @@ function selectPublication(publication, el) {
   if (!PUBLICATIONS[publication] || publication === state.publication) return;
   savePublicationFields();
   state.publication = publication;
+  resetStoriesForPublication();
   if (el) {
     document.querySelectorAll('.publication-card').forEach(card => card.classList.remove('selected'));
     el.classList.add('selected');
@@ -2153,10 +2254,10 @@ function updateSendyStatus() {
   if (!el) return;
   if (state.sendyUrl && state.sendyKey) {
     el.className = 'sendy-status sendy-ok';
-    el.textContent = '✓ Sendy credentials saved. Preview and export are ready; live delivery requires the SATCOM send endpoint.';
+    el.textContent = 'Sendy credentials are stored in this browser. Preview/export is ready, but live subscriber delivery remains disconnected.';
   } else {
     el.className = 'sendy-status';
-    el.textContent = '⚠ Sendy not configured. Add your URL + API key in Step 4 to send live. Preview mode is active.';
+    el.textContent = 'Review/export only. Sendy is not configured, and live subscriber delivery is disconnected.';
   }
 }
 
@@ -2171,11 +2272,12 @@ function selectSched(sched, el) {
 // ── REVIEW ────────────────────────────────────────────────────────────────
 function updateReview() {
   const brand = getPublication();
+  const issue = getIssue();
   const tplLabels = { editorial: 'Editorial Broadsheet', marketing: 'Business Digest', bulletin: 'Town Bulletin' };
   const lenLabels = { brief: 'Brief (~200 words)', standard: 'Standard (~450 words)', full: 'Full Editorial Desk (all approved stories)' };
   const schedLabels = { now: 'Send Now', today: '9am Today', tomorrow: 'Tomorrow 8am', custom: 'Custom Time' };
   document.getElementById('rv-publication').textContent = brand.name;
-  document.getElementById('rv-issue-date').textContent = CURRENT_ISSUE.label;
+  document.getElementById('rv-issue-date').textContent = issue.label;
   document.getElementById('rv-template').textContent = tplLabels[state.template] || state.template;
   document.getElementById('rv-length').textContent = lenLabels[state.length] || state.length;
   document.getElementById('rv-stories').textContent = state.stories.filter(s => s.selected).length + ' of ' + state.stories.length;
@@ -2492,11 +2594,11 @@ function openPostcardStudio() {
 
 async function sendNewsletter() {
   if (!state.sendyUrl || !state.sendyKey) {
-    showToast('⚠ Sendy not configured — export HTML to send manually', 'red');
+    showToast('Review only — Sendy is not configured and no newsletter was sent', 'red');
     return;
   }
   rememberNewsletterOptions();
-  showToast(`⚠ ${getPublication().name} campaign prepared — live Sendy delivery is not connected yet. Export the HTML to continue.`, 'red');
+  showToast(`${getPublication().name} campaign saved for review — no newsletter was sent`, 'red');
 }
 
 function exportHTML() {
@@ -2508,13 +2610,13 @@ function exportHTML() {
   a.href = URL.createObjectURL(blob);
   a.download = `${brand.key}-newsletter-${new Date().toISOString().slice(0, 10)}.html`;
   a.click();
-  showToast(`📥 ${brand.name} HTML exported — ready to paste into Sendy`, 'gold');
+  showToast(`${brand.name} HTML exported for operator review — no newsletter was sent`, 'gold');
 }
 
 function captureNewsletterOptions() {
   return {
-    version: 3,
-    contentVersion: CONTENT_VERSION,
+    version: 4,
+    contentVersion: getIssue().contentVersion,
     publication: state.publication,
     template: state.template,
     length: state.length,
@@ -2547,8 +2649,8 @@ function readNewsletterOptions(storageKey) {
 function loadDraftConfig() {
   const saved = readNewsletterOptions('nl_state');
   if (!saved) return null;
-  const sameContentVersion = saved.contentVersion === CONTENT_VERSION;
   if (saved.publication && PUBLICATIONS[saved.publication]) state.publication = saved.publication;
+  const sameContentVersion = saved.contentVersion === getIssue().contentVersion;
   if (['editorial', 'marketing', 'bulletin'].includes(saved.template)) state.template = saved.template;
   if (sameContentVersion && ['brief', 'standard', 'full'].includes(saved.length)) state.length = saved.length;
   if (saved.lists && typeof saved.lists === 'object') state.lists = { ...state.lists, ...saved.lists };
@@ -2563,9 +2665,9 @@ function loadDraftConfig() {
 
 function applyNewsletterOptions(saved) {
   if (!saved || typeof saved !== 'object') return false;
-  const sameContentVersion = saved.contentVersion === CONTENT_VERSION;
-
   if (saved.publication && PUBLICATIONS[saved.publication]) state.publication = saved.publication;
+  resetStoriesForPublication();
+  const sameContentVersion = saved.contentVersion === getIssue().contentVersion;
   if (['editorial', 'marketing', 'bulletin'].includes(saved.template)) state.template = saved.template;
   if (sameContentVersion && ['brief', 'standard', 'full'].includes(saved.length)) state.length = saved.length;
   if (['now', 'today', 'tomorrow', 'custom'].includes(saved.schedule)) state.schedule = saved.schedule;
@@ -2698,18 +2800,32 @@ function setDevice(device) {
 function updatePreview() {
   const el = document.getElementById('email-preview');
   const brand = getPublication();
+  const issue = getIssue();
   el.className = 'email-wrap tpl-' + state.template;
   // Selected stories stay newest-first in the email feed
   const selected = rollLatestNewsToTop(state.stories.filter(s => s.selected));
   const lead = selected.find(s => s.lead) || selected[0];
   const rest = selected.filter(s => s !== lead);
   const subject = (document.getElementById('subject-line') || {}).value || brand.name;
-  const date = lead ? (formatPubDate(lead, 'long') || CURRENT_ISSUE.fallbackDate) : CURRENT_ISSUE.fallbackDate;
+  const date = lead ? (formatPubDate(lead, 'long') || issue.fallbackDate) : issue.fallbackDate;
   const restLimit = state.length === 'brief' ? 2 : state.length === 'standard' ? 4 : Infinity;
   const previewRest = rest.slice(0, restLimit);
-  const storyLink = story => state.publication === 'villager'
+  const campaignTag = ((document.getElementById('utm-tag') || {}).value || brand.utm).trim();
+  const campaignLink = url => {
+    try {
+      const target = new URL(url);
+      target.searchParams.set('utm_source', `${brand.key}-newsletter`);
+      target.searchParams.set('utm_medium', 'email');
+      target.searchParams.set('utm_campaign', campaignTag);
+      return target.toString();
+    } catch {
+      return url;
+    }
+  };
+  const storyLink = story => campaignLink(state.publication === 'villager'
     ? (story.villagerUrl || brand.site)
-    : (story.wrcUrl || story.readmore || brand.site);
+    : (story.wrcUrl || story.readmore || issue.fullIssueUrl || brand.site));
+  const fullIssueLink = campaignLink(issue.fullIssueUrl || brand.site);
 
   if (state.template === 'editorial') {
     el.innerHTML = `
@@ -2738,15 +2854,15 @@ function updatePreview() {
             <a class="read-more" href="${storyLink(s)}">Read →</a>
           </div>`).join('')}
         </div>` : ''}
-        ${state.length !== 'brief' ? `
+        ${(issue.fullIssueUrl || state.length !== 'brief') ? `
         <div class="cta-box">
           <p>Stay connected to your community. Full coverage at ${brand.siteLabel}</p>
-          <a class="cta-btn" href="${brand.site}">Read Full Issue →</a>
+          <a class="cta-btn" href="${fullIssueLink}">${issue.fullIssueLabel || 'Read full issue'} →</a>
         </div>` : ''}
       </div>
       <div class="email-footer">
         ${brand.name} · ${brand.cityLine}<br>
-        <a href="#">Unsubscribe</a> · <a href="#">View in browser</a> · <a href="${brand.site}">${brand.siteLabel}</a>
+        <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a> · <a href="${brand.site}">${brand.siteLabel}</a>
       </div>`;
   } else if (state.template === 'marketing') {
     el.innerHTML = `
@@ -2762,14 +2878,19 @@ function updatePreview() {
           <div class="biz-info">
             <h3>${lead.title}</h3>
             <p>${lead.body}</p>
+            <a class="read-more" href="${storyLink(lead)}">Continue reading →</a>
           </div>
         </div>` : ''}
         <div class="news-list">
           ${previewRest.map((s, i) => `
           <div class="news-item">
             <div class="news-num">${String(i+1).padStart(2,'0')}</div>
-            <div><h4>${s.title}</h4>${formatPubDate(s) ? `<div style="font-size:10px;color:#888;margin:2px 0 4px;">${formatPubDate(s)}</div>` : ''}<p>${s.body.substring(0,90)}…</p></div>
+            <div><h4>${s.title}</h4>${formatPubDate(s) ? `<div style="font-size:10px;color:#888;margin:2px 0 4px;">${formatPubDate(s)}</div>` : ''}<p>${s.body.substring(0,90)}…</p><a class="read-more" href="${storyLink(s)}">Read →</a></div>
           </div>`).join('')}
+        </div>
+        <div class="cta-box">
+          <p>Open the maintained source for this issue.</p>
+          <a class="cta-btn" href="${fullIssueLink}">${issue.fullIssueLabel || 'Read current coverage'} →</a>
         </div>
         <div class="ad-block">
           <h3>${brand.adTitle}</h3>
@@ -2778,7 +2899,7 @@ function updatePreview() {
         </div>
       </div>
       <div class="email-footer">
-        ${brand.name} · <a href="#">Unsubscribe</a> · <a href="#">View in browser</a>
+        ${brand.name} · <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a>
       </div>`;
   } else if (state.template === 'bulletin') {
     el.innerHTML = `
@@ -2795,6 +2916,7 @@ function updatePreview() {
             <h3>${lead.title}</h3>
             ${lead.byline ? `<div class="byline">${lead.byline}</div>` : ''}
             <p>${lead.body}</p>
+            <a class="read-more" href="${storyLink(lead)}">Continue reading →</a>
           </div>
         </div>
         <hr class="rule">` : ''}
@@ -2805,12 +2927,17 @@ function updatePreview() {
             <h3>${s.title}</h3>
             ${formatPubDate(s) ? `<div class="byline">${formatPubDate(s)}</div>` : ''}
             <p>${s.body.substring(0,110)}…</p>
+            <a class="read-more" href="${storyLink(s)}">Read →</a>
           </div>
           <hr class="rule">`).join('')}
         </div>
+        <div class="cta-box">
+          <p>Open the maintained source for this issue.</p>
+          <a class="cta-btn" href="${fullIssueLink}">${issue.fullIssueLabel || 'Read current coverage'} →</a>
+        </div>
       </div>
       <div class="email-footer">
-        ${brand.name} · ${brand.cityLine} · <a href="#">Unsubscribe</a>
+        ${brand.name} · ${brand.cityLine} · <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a>
       </div>`;
   }
 }
@@ -2827,6 +2954,7 @@ function showToast(msg, type = 'gold') {
 // ── INIT ──────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   loadDraftConfig();
+  resetStoriesForPublication();
   applyPublication();
   loadSendyConfig();
   loadDraftRecipient();
