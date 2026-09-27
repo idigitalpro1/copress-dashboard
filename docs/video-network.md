@@ -31,7 +31,7 @@ Cards rotate every eight seconds while idle. Rotation pauses during playback, ho
 3. Publish its metadata through the existing editorial system's catalog endpoint, or submit a reviewed change to `data/video-feed.json` for the initial Git-based catalog.
 4. Verify `/api/videos?creator=paul-hill` and the player. Each embedded player refreshes every 30 seconds. A Git-based catalog update requires deployment first; a connected catalog update does not.
 
-Keep originals, consent records, internal notes, contact details and private links outside this public repository. Never store tokens or unpublished confidential records in the catalog: repository history remains visible even when an item is not returned by the API. The raw catalog HTTP path routes through the filtered API.
+Keep originals, consent records, internal notes, contact details and private links outside this public repository. Never store tokens or unpublished confidential records in the catalog: repository history remains visible even when an item is not returned by the API. The raw catalog HTTP path redirects to the filtered API before static-file routing.
 
 An example entry is shown below; these example URLs must be replaced. No sample footage is included in the production feed.
 

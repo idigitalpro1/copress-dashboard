@@ -1,4 +1,7 @@
 const preview = document.getElementById('preview');
+document.getElementById('preview-width').addEventListener('change', event => {
+  preview.style.width = event.target.value;
+});
 function update() {
   const publication = document.getElementById('publication').value;
   const rawTown = document.getElementById('town').value.trim();
