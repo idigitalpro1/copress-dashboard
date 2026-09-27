@@ -6,7 +6,7 @@
   "outputDirectory": ".",
   "functions": {
     "api/*.js": {
-      "includeFiles": "data/codex/**"
+      "includeFiles": "data/{codex/**,video-feed.json}"
     }
   },
   "headers": [
@@ -40,6 +40,11 @@
   ],
   "redirects": [
     {
+      "source": "/data/video-feed.json",
+      "destination": "/api/videos",
+      "permanent": false
+    },
+    {
       "source": "/",
       "has": [
         {
@@ -52,6 +57,10 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/video",
+      "destination": "/video/index.html"
+    },
     {
       "source": "/mcp",
       "destination": "/api/mcp"
