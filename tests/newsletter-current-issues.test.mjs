@@ -17,6 +17,7 @@ test('WRC Sept. 24 uses exactly three verified leads and the preserved issue ass
   assert.match(wrcBlock, /Floyd Hill I-70 project enters its fourth construction season/);
   assert.match(html, /wrc-2026-09-24-weekly/);
   assert.match(html, /site: 'https:\/\/registercall\.com\/'/);
+  assert.doesNotMatch(html, /AUG 20, 2026/);
   assert.match(html, /\$\{issue\.fullIssueLabel \|\| 'Read full issue'\}/);
 });
 
