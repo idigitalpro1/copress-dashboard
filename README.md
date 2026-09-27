@@ -55,6 +55,18 @@ Newsletter Studio keeps one six-step workflow for both publications:
 - `wrc` - Weekly Register-Call masthead, links, sender defaults, subscriber counts and export name.
 - `villager` - The Villager masthead, links, sender defaults, subscriber counts and export name.
 
+The maintained review set is publication-scoped as of Sept. 24, 2026. WRC loads
+exactly three verified front-page leads from the preserved Sept. 24 issue, with
+every story and full-issue CTA routed to the published PDF. Villager loads its
+Sept. 24 Hall of Fame lead plus four maintained South Metro story routes. The
+publication switch replaces the issue label, subject, preview, UTM campaign and
+story collection together so one publication cannot inherit the other’s copy.
+
+Newsletter Studio is preview/export only. Browser-local Sendy configuration does
+not activate subscriber delivery; the SATCOM send endpoint is not connected.
+An operator must separately verify the issue, links, sender and audience before
+any external delivery.
+
 Step 4 includes a browser-local audience manager. Operators can create custom
 subscriber lists, add named/email members to built-in or custom lists, remove
 local additions, and see the updated counts in Review & Send. WRC and Villager
