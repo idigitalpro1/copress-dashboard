@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Video Studio (preview) | SATCOM</title>
+<link rel="stylesheet" href="/video/player.css">
+<link rel="stylesheet" href="/video/studio.css">
+<script src="/video/studio.js" defer></script>
+</head>
+<body>
+<main class="studio-shell">
+  <nav class="studio-nav"><a href="/">← SATCOM</a><span>Video Studio · <strong>preview</strong> · drafts only, nothing is published from here</span><button id="logout" class="ghost" type="button" hidden>Sign out</button></nav>
+  <header class="studio-head">
+    <p class="eyebrow">SATCOM · COLORADO NEWS PRESS · THE VILLAGER · REGISTER-CALL</p>
+    <h1>Video Studio</h1>
+    <p class="muted">Trim, reframe for social, caption and brand clips with Cloudinary. Grok and Gemini draft the copy. Saved work becomes a <em>draft</em> in the SATCOM feed; publishing stays manual.</p>
+  </header>
+
+  <section id="gate" class="card" aria-live="polite">
+    <p id="gate-status">Checking studio access…</p>
+    <form id="login-form" hidden>
+      <label>Studio password<input id="password" type="password" autocomplete="current-password" required minlength="12"></label>
+      <button class="button" type="submit">Enter studio</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="studio" hidden>
+    <ul id="notes" class="notes"></ul>
+    <div class="studio-grid">
+      <section class="card" aria-labelledby="clip-h">
+        <h2 id="clip-h">1 · Clip</h2>
+        <label class="file">Upload a video<input id="upload-video" type="file" accept="video/*"></label>
+        <progress id="upload-progress" max="100" value="0" hidden></progress>
+        <p id="upload-status" class="muted small" role="status"></p>
+        <div class="row"><input id="library-q" placeholder="Search Cloudinary videos" aria-label="Search Cloudinary videos"><button id="library-go" class="ghost" type="button">Search</button></div>
+        <label class="inline"><input id="library-studio" type="checkbox"> Studio uploads only</label>
+        <div id="library" class="thumbs" aria-label="Cloudinary video library"></div>
+      </section>
+
+      <section class="card preview-card" aria-labelledby="prev-h">
+        <h2 id="prev-h">2 · Source &amp; trim</h2>
+        <video id="source-video" controls playsinline preload="metadata"></video>
+        <p id="source-meta" class="muted small">Select or upload a clip.</p>
+        <div class="trim">
+          <label>In (s)<input id="trim-start" type="number" min="0" step="0.1" value="0"></label>
+          <button id="set-in" class="ghost" type="button">Set IN at playhead</button>
+          <label>Out (s)<input id="trim-end" type="number" min="0" step="0.1"></label>
+          <button id="set-out" class="ghost" type="button">Set OUT at playhead</button>
+          <button id="play-sel" class="ghost" type="button">▶ Play selection</button>
+        </div>
+        <p id="trim-info" class="muted small"></p>
+      </section>
+
+      <section class="card tools" aria-labelledby="tools-h">
+        <h2 id="tools-h" class="sr-only">Tools</h2>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="edit">Format &amp; brand</button>
+          <button role="tab" aria-selected="false" data-tab="captions">Captions</button>
+          <button role="tab" aria-selected="false" data-tab="ai">AI assist</button>
+          <button role="tab" aria-selected="false" data-tab="images">Images</button>
+          <button role="tab" aria-selected="false" data-tab="export">Export</button>
+        </div>
+
+        <div class="tab" data-panel="edit">
+          <fieldset><legend>Social formats</legend><div id="formats" class="checks"></div></fieldset>
+          <label>Reframe focus<select id="gravity"><option value="center">Center</option><option value="auto">Auto (AI subject tracking)</option><option value="north">Top</option><option value="south">Bottom</option></select></label>
+          <label>Title preset<select id="brand"></select></label>
+          <label>Corner mark<select id="bug"><option value="wordmark">Text wordmark</option><option value="logo">Uploaded logo</option><option value="none">None</option></select></label>
+          <label class="file small">Upload logo for this title (PNG)<input id="upload-logo" type="file" accept="image/png,image/svg+xml,image/webp"></label>
+          <label>Lower third · name<input id="lower-name" maxlength="80" placeholder="Paul Hill, reporting"></label>
+          <label>Lower third · line 2<input id="lower-title" maxlength="100" placeholder="Idaho Springs · leave blank for the title's web address"></label>
+          <label>Lower third timing<select id="lower-mode"><option value="intro">First 6 seconds</option><option value="always">Whole clip</option><option value="off">Off</option></select></label>
+        </div>
+
+        <div class="tab" data-panel="captions" hidden>
+          <p class="muted small">SRT or WebVTT. Times are from the start of the <strong>original</strong> clip, so re-trimming keeps them in sync.</p>
+          <div class="row"><button id="transcribe-grok" class="ghost" type="button">Auto-transcribe (Grok)</button><button id="transcribe-gemini" class="ghost" type="button">Auto-transcribe (Gemini)</button></div>
+          <p id="transcribe-status" class="muted small" role="status"></p>
+          <textarea id="captions-text" rows="12" spellcheck="true" placeholder="1&#10;00:00:01,000 --> 00:00:03,500&#10;Caption text"></textarea>
+          <label class="inline"><input id="captions-on" type="checkbox"> Burn captions into renders</label>
+          <label>Caption size<input id="captions-size" type="number" min="24" max="120" value="64"></label>
+          <label>Caption position<select id="captions-pos"><option value="auto">Auto (center on vertical)</option><option value="south">Bottom</option><option value="center">Center</option><option value="north">Top</option></select></label>
+        </div>
+
+        <div class="tab" data-panel="ai" hidden>
+          <p class="muted small">Grok reads six frames plus the transcript; Gemini watches a low-res copy (≤4 min window) plus the transcript. Output is draft copy for an editor to verify.</p>
+          <label>Editor notes (who, where, what)<textarea id="ai-notes" rows="3" maxlength="1500"></textarea></label>
+          <div class="row"><button id="ai-grok" class="button" type="button">Ask Grok</button><button id="ai-gemini" class="button alt" type="button">Ask Gemini</button></div>
+          <p id="ai-status" class="muted small" role="status"></p>
+          <div id="ai-result"></div>
+        </div>
+
+        <div class="tab" data-panel="images" hidden>
+          <p class="muted small">Thumbnails, posters and social graphics. Grok Imagine generates or edits; every result is saved to Cloudinary (satcom-studio/images).</p>
+          <label>Mode<select id="img-mode"><option value="generate">Generate from prompt</option><option value="edit-frame">Edit current video frame</option><option value="edit-image">Edit an uploaded / library image</option></select></label>
+          <div id="img-source-row" hidden>
+            <label class="file small">Upload image<input id="upload-image" type="file" accept="image/*"></label>
+            <button id="img-library" class="ghost" type="button">Browse library images</button>
+            <div id="img-library-list" class="thumbs small"></div>
+            <p id="img-source" class="muted small"></p>
+          </div>
+          <label>Prompt<textarea id="img-prompt" rows="3" maxlength="2000" placeholder="Golden-hour wide shot of Idaho Springs main street, editorial photo style"></textarea></label>
+          <div class="row"><label>Aspect<select id="img-aspect"></select></label><label>Resolution<select id="img-res"><option>1k</option><option>1.5k</option><option>2k</option></select></label></div>
+          <label class="inline"><input id="img-brand-style" type="checkbox" checked> Steer toward the selected title's palette</label>
+          <button id="img-run" class="button" type="button">Run Grok Imagine</button>
+          <p id="img-status" class="muted small" role="status"></p>
+          <div id="img-results" class="thumbs"></div>
+          <div id="img-brand-panel" hidden>
+            <h3>Brand selected image</h3>
+            <fieldset><legend>Graphic sizes</legend><div id="img-formats" class="checks"></div></fieldset>
+            <label>Headline<input id="img-headline" maxlength="140"></label>
+            <p class="muted small">Uses the title preset, corner mark and lower third from “Format &amp; brand”.</p>
+            <div class="row"><button id="img-brand-go" class="ghost" type="button">Preview branded graphics</button><button id="img-brand-save" class="ghost" type="button">Save branded copies to Cloudinary</button></div>
+            <div id="img-brand-out" class="outputs"></div>
+          </div>
+        </div>
+
+        <div class="tab" data-panel="export" hidden>
+          <div class="row"><button id="render" class="button" type="button">Render previews</button><button id="prerender" class="ghost" type="button">Pre-render (long clips)</button></div>
+          <p id="render-status" class="muted small" role="status"></p>
+          <div id="outputs" class="outputs"></div>
+          <h3>Save as draft to SATCOM feed</h3>
+          <p class="muted small">Writes a private draft (<code>published:false</code>). The public feed never shows it. Publishing remains a separate, reviewed step.</p>
+          <label>Format for the feed<select id="draft-format"></select></label>
+          <label>Title<input id="draft-title" maxlength="200"></label>
+          <label>Description<textarea id="draft-desc" rows="3" maxlength="1000"></textarea></label>
+          <div class="row"><label>Creator slug<input id="draft-creator" value="paul-hill"></label><label>Credit<input id="draft-credit" value="Paul Hill · Colorado News Press"></label></div>
+          <div class="row"><label>Publications (comma slugs)<input id="draft-pubs"></label><label>Towns (comma slugs)<input id="draft-towns" placeholder="idaho-springs"></label></div>
+          <label>Poster<select id="draft-poster"><option value="frame">Branded video frame</option></select></label>
+          <button id="draft-save" class="button" type="button">Save draft</button>
+          <p id="draft-status" class="muted small" role="status"></p>
+          <pre id="draft-json" class="json" hidden></pre>
+          <h3>Drafts</h3>
+          <button id="draft-refresh" class="ghost" type="button">Refresh drafts</button>
+          <ul id="draft-list" class="draft-list"></ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+</body>
+</html>

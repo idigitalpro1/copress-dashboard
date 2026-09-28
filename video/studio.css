@@ -1,0 +1,42 @@
+.studio-shell{max-width:1480px;margin:auto;padding:24px 20px 60px}
+.studio-nav{display:flex;gap:16px;justify-content:space-between;align-items:center;font-size:12px;margin-bottom:22px;color:var(--muted)}
+.studio-nav a,.studio-shell a{color:var(--accent)}
+.studio-head{display:block;margin:0}
+.studio-head h1{font-size:clamp(30px,4vw,46px);margin:0 0 6px}
+.muted{color:var(--muted)}.small{font-size:12px}.error{color:#ff8a80;font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px;margin-top:18px;min-width:0}
+.card h2{font-size:15px;letter-spacing:.5px;margin:0 0 12px}.card h3{font-size:14px;margin:22px 0 8px}
+.studio-grid{display:grid;grid-template-columns:minmax(240px,300px) minmax(320px,1fr) minmax(340px,460px);gap:18px;align-items:start}
+@media (max-width:1100px){.studio-grid{grid-template-columns:1fr}}
+label{display:grid;gap:6px;font-size:13px;margin:10px 0}
+label.inline{display:flex;align-items:center;gap:8px}label.inline input{width:auto}
+input,select,textarea{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);padding:9px 10px;border-radius:6px;width:100%}
+textarea{font:12px/1.5 ui-monospace,monospace;resize:vertical}
+fieldset{border:1px solid var(--line);border-radius:6px;padding:8px 12px;margin:10px 0}legend{font-size:12px;color:var(--muted)}
+.checks{display:grid;gap:4px}.checks label{display:flex;gap:8px;align-items:center;margin:4px 0}.checks input{width:auto}
+.button,.ghost{font:inherit;font-weight:700;border-radius:6px;padding:9px 14px;cursor:pointer}
+.button{background:var(--accent);color:var(--bg);border:0}.button.alt{background:#8ab4f8}
+.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}.row>label{flex:1;min-width:120px}
+.file input{padding:7px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin-top:10px;max-height:520px;overflow:auto}
+.thumbs.small{max-height:220px}
+.thumb{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:0;color:var(--text);cursor:pointer;text-align:left;font-size:11px;overflow:hidden}
+.thumb img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.thumb span{display:block;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.thumb[aria-pressed=true]{outline:2px solid var(--accent)}
+#source-video{width:100%;max-height:60vh;background:#000;border-radius:8px}
+.trim{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:end}.trim #play-sel{grid-column:1/-1}
+.tabs{display:flex;flex-wrap:wrap;gap:4px;border-bottom:1px solid var(--line);margin-bottom:10px}
+.tabs button{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;padding:8px 10px;cursor:pointer;border-bottom:2px solid transparent}
+.tabs button[aria-selected=true]{color:var(--text);border-color:var(--accent)}
+.notes{list-style:none;padding:12px 16px;margin:18px 0 0;border:1px dashed var(--line);border-radius:8px;font-size:12px;color:var(--muted)}.notes:empty{display:none}
+.outputs{display:grid;gap:14px;margin-top:10px}
+.output{border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--bg)}
+.output video,.output img{width:100%;max-height:420px;object-fit:contain;background:#000;border-radius:6px}
+.output .links{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;margin-top:6px}
+.ai-block{border-top:1px solid var(--line);padding:8px 0}.ai-block h4{margin:4px 0;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.ai-block p{white-space:pre-wrap;margin:4px 0;font-size:13px}.ai-block button{font-size:11px;padding:3px 8px;margin-left:6px}
+.json{background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:10px;font-size:11px;max-height:280px;overflow:auto;white-space:pre-wrap}
+.draft-list{padding-left:18px;font-size:13px}.draft-list button{font-size:11px;padding:2px 8px;margin-left:6px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
