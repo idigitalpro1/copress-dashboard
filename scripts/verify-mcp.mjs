@@ -1,6 +1,8 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+const expectedContext = JSON.parse(readFileSync(new URL('../data/codex/context.json', import.meta.url), 'utf8'));
 const endpoint = process.argv[2] || 'http://127.0.0.1:4321/mcp';
 const client = new Client({ name: 'satcom-release-verification', version: '1.0.0' });
 try {
@@ -15,6 +17,8 @@ try {
   assert.deepEqual(structure.structuredContent.operatorPolicy.fallbackOrder, ['claude','grok','cursor','hermes']);
   const priorities = await client.callTool({ name:'satcom_priorities', arguments:{} });
   assert.equal(priorities.structuredContent.priorities.length, 10);
+  assert.equal(priorities.structuredContent.updated, expectedContext.updated);
+  assert.deepEqual(priorities.structuredContent.priorities, expectedContext.priorities);
   assert.equal(priorities.structuredContent.commercialPlatform.name, 'Partners in the Community');
   const prompt = await client.callTool({ name:'satcom_prompt', arguments:{name:'grok-development'} });
   assert.match(prompt.structuredContent.text, /Do not delegate/);
@@ -24,7 +28,7 @@ try {
   const resources = await client.listResources();
   assert.equal(resources.resources.length, 1);
   const context = await client.readResource({uri:'satcom://context'});
-  assert.equal(JSON.parse(context.contents[0].text).release, 'satcom-astra-routing-2026-09-07');
+  assert.equal(JSON.parse(context.contents[0].text).release, expectedContext.release);
   const prompts = await client.listPrompts();
   assert.equal(prompts.prompts.length, 6);
   for (const p of prompts.prompts) assert.ok((await client.getPrompt({name:p.name})).messages[0].content.text.length > 500);
