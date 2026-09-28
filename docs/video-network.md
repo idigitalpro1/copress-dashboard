@@ -28,7 +28,7 @@ Cards rotate every eight seconds while idle. Rotation pauses during playback, ho
 
 1. Paul uploads originals to the existing editorial Drive handoff. Collaborators review/edit there.
 2. Publish the approved final to your existing video host and obtain a public HTTPS MP4/HLS playback URL or an embeddable YouTube video ID. Drive folder/upload links are not playback URLs.
-3. Prefer the login-protected SATCOM form at `/video/submit` (2026-09-27 exception). That creates a `pending_review` row, texts opted-in reviewers, and keeps `/api/videos` read-only. Reviewers can approve by SMS (`YES K7Q2`) or on `/video/review`. Until Supabase is configured, a reviewed change to `data/video-feed.json` remains the catalog fallback.
+3. Prefer the login-protected SATCOM form at `/video/submit` (2026-09-27 exception). That creates a `pending_review` row, texts opted-in reviewers, and keeps `/api/videos` read-only. Reviewers can approve by SMS (`YES K7Q2`) or on `/video/review` after opening `/video/review-continue`. Until Supabase is configured, a reviewed change to `data/video-feed.json` remains the catalog fallback.
 4. Verify `/api/videos?creator=paul-hill` and the player. Each embedded player refreshes every 30 seconds. A Git-based catalog update requires deployment first; a connected or database catalog update does not.
 
 Keep originals, consent records, internal notes, contact details and private links outside this public repository. Never store tokens or unpublished confidential records in the catalog: repository history remains visible even when an item is not returned by the API. The raw catalog HTTP path redirects to the filtered API before static-file routing.

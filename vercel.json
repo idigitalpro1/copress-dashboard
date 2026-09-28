@@ -58,7 +58,7 @@
   ],
   "rewrites": [
     {
-      "source": "/video/review/continue",
+      "source": "/video/review-continue",
       "destination": "/video/review-continue.html"
     },
     {

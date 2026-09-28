@@ -399,6 +399,7 @@ test('subscription host redirects and other host routes stay untouched', () => {
   ]);
   assert.ok(config.rewrites.some(rule => rule.destination === 'https://codex.conews.press/api/v1/platform/hermes/:path*'));
   assert.ok(config.rewrites.some(rule => rule.source === '/video/review' && rule.destination === '/video/review.html'));
+  assert.ok(config.rewrites.some(rule => rule.source === '/video/review-continue' && rule.destination === '/video/review-continue.html'));
   assert.ok(!JSON.stringify(config).includes('villager-postcard-gallery'));
   assert.ok(!JSON.stringify(config).includes('villager-postcard-proofing'));
 });

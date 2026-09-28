@@ -25,7 +25,7 @@ createServer(async (req, res) => {
   if (pathname === '/api/video-review-login') return videoReviewLogin(req, res);
   if (pathname === '/api/video-review-submit') return videoReviewSubmit(req, res);
   let file = pathname === '/video' || pathname === '/video/' ? '/video/index.html'
-    : pathname === '/video/review/continue' ? '/video/review-continue.html'
+    : pathname === '/video/review-continue' ? '/video/review-continue.html'
     : pathname === '/video/review' ? '/video/review.html'
     : pathname === '/video/submit' ? '/video/submit.html'
     : pathname === '/' ? '/index.html' : pathname;
