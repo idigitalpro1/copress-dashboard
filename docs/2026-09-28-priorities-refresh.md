@@ -12,6 +12,6 @@ Sources reviewed on September 28:
 
 The refresh reports dated release records, not a new live audit of every publication or provider. It records the Villager refresh, Aspen October edition, SATCOM Newsletter Studio, remaining 5280.menu remediation, and email delivery gates. It preserves the distinction between draft preparation and provider-confirmed sending. Private subscriber records, financial details and credentials are not included.
 
-Validation: build, all 29 existing tests, diff whitespace check, and local Chrome inspection of the priority section. Local runtime: Node 24.20.0; package declares Node 22.x. No production deployment, campaign, payment or infrastructure change was performed by this refresh.
+Validation: build, all 29 existing tests, diff whitespace check, and local Chrome inspection of the priority section. All 29 tests also passed on the declared Node 22 runtime (in addition to Node 24.20.0). No production deployment, campaign, payment or infrastructure change was performed by this refresh.
 
 Rollback after any separately authorized release: revert the refresh commit and rebuild `codex.html` from `data/codex/context.json` and `scripts/build-codex.mjs`.
