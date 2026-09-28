@@ -2616,7 +2616,7 @@ body.satcom-gated #satcom-entry-gate {
         </div>
 
 
-        <!-- WRC Subscriber Dashboard -->
+        <!-- Subscriber Campaign Desk -->
         <div class="module-card" onclick="openWrcSubsDashboard()" style="cursor:pointer;--card-color:var(--gold);--card-glow:rgba(200,168,75,.08);">
           <div class="card-dept">
             <span class="card-dept-name">Colorado Mountain Press / Register-Call</span>
@@ -2626,18 +2626,18 @@ body.satcom-gated #satcom-entry-gate {
             <div class="card-icon-row">
               <div class="card-icon">📬</div>
               <div>
-                <div class="card-title">WRC Subscriber Dashboard</div>
-                <div class="card-subtitle">Weekly Register-Call — Subscriber Management</div>
+                <div class="card-title">Subscriber Campaign Desk</div>
+                <div class="card-subtitle">Villager and WRC — separate publication tabs</div>
               </div>
             </div>
             <div class="card-stats">
               <div class="card-stat">
                 <span class="stat-label">Custom Host</span>
-                <span class="stat-value" style="font-size:10px;">subs.weeklyregistercall</span>
+                <span class="stat-value" style="font-size:10px;">subs.conews.press</span>
               </div>
               <div class="card-stat">
-                <span class="stat-label">Working</span>
-                <span class="stat-value ok" style="font-size:10px;">subs.manus.space</span>
+                <span class="stat-label">Source</span>
+                <span class="stat-value ok" style="font-size:10px;">2026 Google Sheet</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Desk</span>
@@ -2645,14 +2645,14 @@ body.satcom-gated #satcom-entry-gate {
               </div>
               <div class="card-stat">
                 <span class="stat-label">Also</span>
-                <span class="stat-value highlight" style="font-size:10px;">Postcards · Billing</span>
+                <span class="stat-value highlight" style="font-size:10px;">Postcards · Reprints</span>
               </div>
             </div>
-            <div class="card-subtitle" style="margin-top:10px;">Subscriber desk — lists, renewals, postcards, campaigns, billing.</div>
+            <div class="card-subtitle" style="margin-top:10px;">Private lists, saved postcard campaigns, damaged-card reprints and weekly archives.</div>
             <div class="card-rule"></div>
             <div class="card-actions">
               <button class="card-btn primary" onclick="event.stopPropagation(); openWrcSubsDashboard()">Open Dashboard</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openWrcSubsManus()">Manus Source</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openSubscriberCampaigns()">Postcards &amp; Reprints</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('marketing')">Campaigns</button>
             </div>
           </div>
@@ -3579,7 +3579,7 @@ body.satcom-gated #satcom-entry-gate {
                   <button class="module-btn" onclick="window.location.href='/ricks-cabaret-campaign-kit/'">Open Rick's Kit</button>
                   <button class="module-btn" onclick="window.location.href='/showcase-prospects/'">Open Showcase Prospects</button>
                   <button class="module-btn" onclick="window.location.href='/240-deer-road-campaign-kit/'">Open Deer Rd Kit</button>
-                  <button class="module-btn" onclick="openWrcSubsDashboard()">Open WRC Subs</button>
+                  <button class="module-btn" onclick="openWrcSubsDashboard()">Open Subscriber Desk</button>
                 </div>
               </div>
               <div class="module-panel">
@@ -3622,13 +3622,13 @@ body.satcom-gated #satcom-entry-gate {
                 </div>
               </div>
               <div class="module-panel">
-                <h3>WRC Subscriber Dashboard</h3>
-                <p>Weekly Register-Call — Subscriber Management. Colorado Mountain Press / Register-Call spine — not Villager Media Group.</p>
-                <p>Subscriber desk — lists, renewals, postcards, campaigns, billing.</p>
-                <p>Primary door is subs.weeklyregistercall.com. That custom host is being rebuilt from Manus; today it is still the Aug 28 Subscriber Sources stub. Use the Manus source until the rebuild lands.</p>
+                <h3>Subscriber Campaign Desk</h3>
+                <p>Villager and WRC — separate publication tabs. Colorado Mountain Press / Register-Call spine — not Villager Media Group.</p>
+                <p>Private lists, saved postcard campaigns, damaged-card reprints and weekly archives.</p>
+                <p>Open subs.conews.press with the existing passcode. SATCOM holds design references; the canonical Google Sheet owns subscriber data. Finished cards and historical source assets stay in the private Subscriber Desk. Email, SMS and voice delivery are not yet connected to that app.</p>
                 <div class="module-actions">
-                  <button class="module-btn primary" onclick="openWrcSubsDashboard()">Open WRC Subs</button>
-                  <button class="module-btn" onclick="openWrcSubsManus()">Manus Source</button>
+                  <button class="module-btn primary" onclick="openWrcSubsDashboard()">Open Subscriber Desk</button>
+                  <button class="module-btn" onclick="openSubscriberCampaigns()">Postcards &amp; Reprints</button>
                 </div>
               </div>
             </div>
@@ -4692,8 +4692,8 @@ const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
 const SATCOM_GATE_KEY = 'satcom_operator_gate_entered_v1';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
-const WRC_SUBS_DASHBOARD_URL = 'https://subs.weeklyregistercall.com';
-const WRC_SUBS_MANUS_URL = 'https://subs.manus.space';
+const WRC_SUBS_DASHBOARD_URL = 'https://subs.conews.press';
+const SUBSCRIBER_CAMPAIGNS_URL = 'https://subs.conews.press/campaigns.html';
 const WEEKLY_PROGRESS_DASHBOARD_URL = 'http://127.0.0.1:8190';
 const WEEKLY_PROGRESS_DASHBOARD_STANDARD_URL = 'http://127.0.0.1:8090';
 const WEEKLY_PROGRESS_API_URL = 'http://127.0.0.1:8080';
@@ -4942,8 +4942,8 @@ function openWrcSubsDashboard() {
   openExternal(WRC_SUBS_DASHBOARD_URL);
 }
 
-function openWrcSubsManus() {
-  openExternal(WRC_SUBS_MANUS_URL);
+function openSubscriberCampaigns() {
+  openExternal(SUBSCRIBER_CAMPAIGNS_URL);
 }
 
 function openPostcardStudio(query = '') {

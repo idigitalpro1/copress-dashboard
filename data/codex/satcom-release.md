@@ -17,3 +17,15 @@ Run npm ci, npm run build and npm test. Deploy a preview to the existing project
 ## Use less context
 
 Start with one relevant card from https://satcom.conews.press/kanban or MCP `satcom_board` with a project and small limit. Read only linked source files. Reuse current evidence, keep searches/output bounded, and run focused checks. Use heavier reasoning only for unresolved complexity. Do not delegate. See https://satcom.conews.press/data/codex/token-efficient-development.md.
+
+## Subscriber workflow — September 8, 2026
+
+Open https://subs.conews.press/campaigns.html using the existing passcode. Google Sheet is the live subscriber source; SATCOM holds the design catalog and entry point. Two original PDF batches were preserved and QR-scanned; fresh strictly-overdue Villager 100 (excluding ACC/comps) and WRC 50 drafts are separate campaigns. Private Postcard Data assets are deduplicated by hash. Reprint only selected original pages. Requested-channel checkboxes do not send or prove delivery. Weekly archives are in the same private database; independent disaster recovery and provider integrations still need work. Keep subscriber records and finished cards out of public SATCOM/MCP. Old app retirement requires confirmed scope because its Google sign-in and subscription APIs are separate.
+
+## Combined board and Admin release — September 8, 2026
+
+Admin PR #81 is merged as 5a66383ada546886d30584dee9db4ef9ac579c82. Production pipeline 34215995000 passed; authenticated Admin home, all 11 dashboard links and the legacy Kanban route were verified. Read /codex for the dated release record. All 51 existing operational cards use the same persisted IDs. Four starter-template tasks are excluded; the public board remains allowlisted. All 11 copress-dashboard views are linked from Admin. Preserve current login, private subscriber records, original QR destinations, and local uncommitted drafts.
+
+Use satcom_board with a stable key and limit 1. Admin and Subscriptions are available project filters; offset/nextOffset lets a client read beyond the first 50 results. The updated Grok prompt is /data/codex/grok-development.md. It continues DEV-015, then DEV-014, within the existing preview-only scope. Do not duplicate completed Admin/SATCOM work.
+
+The combined board now contains the original 51 cards plus completed release card DEV-044 (52 reviewed records).
