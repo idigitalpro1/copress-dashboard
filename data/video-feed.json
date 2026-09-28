@@ -1,4 +1,25 @@
 {
   "version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "paul-hill-rodeo-20260720-01",
+      "title": "Rodeo from the sidelines",
+      "description": "Rodeo footage shared by Paul Hill.",
+      "creator": "paul-hill",
+      "credit": "Paul Hill · Colorado News Press",
+      "publications": [
+        "network"
+      ],
+      "towns": [],
+      "published_at": "2026-09-28T00:00:00Z",
+      "status": "published",
+      "kind": "recorded",
+      "poster_url": "https://res.cloudinary.com/mmtk/image/upload/v1790631632/satcom/paul-hill/paul-hill-rodeo-20260720-01-poster.jpg",
+      "playback": {
+        "type": "mp4",
+        "url": "https://res.cloudinary.com/mmtk/video/upload/v1790631630/satcom/paul-hill/paul-hill-rodeo-20260720-01.mp4"
+      },
+      "captions": []
+    }
+  ]
 }
