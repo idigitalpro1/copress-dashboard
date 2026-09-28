@@ -14,6 +14,10 @@
 
 > Why: cloning admin per site = N codebases to maintain and N outdated dashboards (the current pain). Multi-tenant + deep-link = one surface to maintain, infinite sites.
 
+## Exception — SATCOM video review (2026-09-27)
+
+Publisher decision on 2026-09-27: a small review page on SATCOM (`/video/review`, plus the login-protected `/video/submit` handoff) is an approved, scoped exception to the “one admin” rule above. It is not a second news-site admin and must not grow into a CMS. It only lists pending videos and records approve/reject. The public `/api/videos` feed stays read-only. See `docs/video-network.md`.
+
 ---
 
 ## Architecture (target state)
