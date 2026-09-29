@@ -3,18 +3,20 @@
 Merged to `main` and deployed to Production on Sep 29, 2026 (about 5:03 PM MT), with Patrick Sweeney's approval.
 Merged PRs: #29 (Studio), #32 (Gemini copy client 0.2.0), #33 (review and publish gate). Final merge commit is `26c4b06`.
 
+**Update, Sep 29, 2026 (about 5:30 PM MT):** #36 (review fixes) merged as `f047e63` and the Studio was turned on in Production with Patrick Sweeney's approval (deployment `dpl_8GZYyHDDPCpetYHUd2tSorDsXSB4`). The env table below shows what's set now.
+
 ## What's live
 
 | URL (Production, `copress-dashboard` project) | State now |
 | --- | --- |
 | https://satcom.conews.press/video/studio | 200. The page is served with `noindex`, a strict CSP and `no-referrer`. |
-| https://satcom.conews.press/api/studio | 200 `{"enabled":false}`. Every operation returns 404 until `VIDEO_STUDIO_PASSWORD` is set. |
-| https://satcom.conews.press/video and `/api/videos` | Same as before. The Git catalog is served as-is, and there's no published overlay until Cloudinary env vars are set. |
+| https://satcom.conews.press/api/studio | 200 `{"enabled":true,"authenticated":false}`. Operations need the Studio password sign-in. |
+| https://satcom.conews.press/video and `/api/videos` | Same as before. The Git catalog is served, plus any items published through the Studio's satcom target. |
 
 The same paths work on the other Production aliases (`copress-dashboard.vercel.app`, `satcom.copress.news`, `satcom.5280.menu`, `dev.conews.press`).
 `/subscribe` behavior is unchanged, and so are the subscribe.thevillager.today redirect, other redirects, Stripe, QR routes, DNS and WordPress.
 
-**Production has no Studio env vars.** That means the Studio is off, and nothing can upload, call AI or publish.
+**The Studio is on in Production.** Uploads, renders and the YouTube connect work after sign-in. AI copy stays off until `GEMINI_KEY_COPY` or `XAI_API_KEY` is set in Production. Without Supabase, job, quota and token state uses the in-memory + cookie fallback.
 
 ## Architecture split
 
@@ -25,14 +27,14 @@ The same paths work on the other Production aliases (`copress-dashboard.vercel.a
 
 | Variable | Preview | Production | Notes |
 | --- | --- | --- | --- |
-| `VIDEO_STUDIO_PASSWORD` | set | **missing** | 12+ chars. Required to enable the Studio. |
-| `CLOUDINARY_URL` | set | **missing** | Needed for upload, render, drafts and the published overlay. |
+| `VIDEO_STUDIO_PASSWORD` | set | set | 12+ chars. Required to enable the Studio. One var targeting Preview + Production. |
+| `CLOUDINARY_URL` | set | set | Needed for upload, render, drafts and the published overlay. One var targeting Preview + Production. |
 | `XAI_API_KEY` | set | missing | Optional. Enables Grok copy, speech-to-text and Imagine. |
 | `GEMINI_KEY_COPY` | **missing** | **missing** | Gemini copy and transcription. The Preview `GEMINI_API_KEY` is no longer read. |
-| `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET` | **missing** | **missing** | Google OAuth Web client. |
-| `YOUTUBE_TOKEN_ENC_KEY` | set (branch `cursor/video-studio-publish-0425`) | **missing** | 64 hex chars (`openssl rand -hex 32`). |
-| `YOUTUBE_REDIRECT_URI` | set (same branch) | **missing** | Must exactly match the Google redirect URI. |
-| `YOUTUBE_DAILY_UPLOAD_CAP`, `YOUTUBE_DEFAULT_PRIVACY` | set (same branch) | missing (defaults: 6, `unlisted`) | Optional. |
+| `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET` | set (all branches) | set | Google OAuth Web client. |
+| `YOUTUBE_TOKEN_ENC_KEY` | set (branch `cursor/video-studio-publish-0425`) | set (its own key) | 64 hex chars (`openssl rand -hex 32`). If you change it, reconnect the channel. |
+| `YOUTUBE_REDIRECT_URI` | set (same branch) | set (`https://satcom.conews.press/api/studio/youtube-callback`) | Must exactly match the Google redirect URI. |
+| `YOUTUBE_DAILY_UPLOAD_CAP`, `YOUTUBE_DEFAULT_PRIVACY` | set (same branch) | set (6, `unlisted`) | Optional. |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | **missing** | **missing** | Optional durable store. Apply the migrations first. |
 
 If `SUPABASE_URL` is set before the migrations are applied, Studio boot stays up and reports `store.reason: migrations_not_applied` (in-memory + cookie fallback). Do not apply migrations from this repo.
@@ -80,9 +82,13 @@ Addressed on a later branch: OAuth `SameSite=Lax` + signed state; cookie token f
 
 ## Rollback
 
+**Studio go-live (#36 + Production env vars):** the Production deployment before it is **`dpl_G1WrVFCYoKgg8q6m4SuipAfZkdtv`** (commit `bd07c73`, copress-dashboard-lac1wohhk-5280menu.vercel.app). A rollback doesn't remove env vars. To turn the Studio off quickly, take Production off the `VIDEO_STUDIO_PASSWORD` targets and redeploy.
+
+**Original release (#29/#32/#33):**
+
 The Production deployment before this merge is **`dpl_BRf8CMMLZv7NuCGcMMWHczZMm4sr`** (commit `cfa3e37`, copress-dashboard-jlfh8drpf-5280menu.vercel.app).
 To roll back:
 1. In Vercel, open copress-dashboard → Deployments, find that deployment, then choose **Instant Rollback** (or run `vercel rollback dpl_BRf8CMMLZv7NuCGcMMWHczZMm4sr`).
 2. Instant rollback turns off auto-promotion of new `main` pushes. Re-enable it by promoting a new deployment, or revert the three merge commits on `main` (`26c4b06`, `6a429e8`, `13fe8d5`) in a PR.
 
-No env vars, domains or DNS were changed by this release.
+The original release didn't change any env vars, domains or DNS. The go-live only added the Production env vars listed above. Domains, DNS, redirects, `/subscribe`, Stripe and QR routes were not changed.
