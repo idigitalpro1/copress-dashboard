@@ -47,7 +47,7 @@ test('password gate, secure session cookie and CSRF header are enforced', async 
   assert.equal((await call(handler, { body: { op: 'login', password: PASSWORD }, header: false })).statusCode, 403);
   const res = await call(handler, { body: { op: 'login', password: PASSWORD }, ip: '198.51.100.2' });
   const setCookie = res.headers['Set-Cookie'];
-  assert.match(setCookie, /HttpOnly/); assert.match(setCookie, /SameSite=Strict/); assert.match(setCookie, /Secure/); assert.match(setCookie, /Path=\/api\/studio/);
+  assert.match(setCookie, /HttpOnly/); assert.match(setCookie, /SameSite=Lax/); assert.match(setCookie, /Secure/); assert.match(setCookie, /Path=\/api\/studio/);
   const cookie = setCookie.split(';')[0];
   const status = await call(handler, { method: 'GET', cookie });
   assert.equal(status.json.authenticated, true);

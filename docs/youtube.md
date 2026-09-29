@@ -59,7 +59,7 @@ Preview URLs change per deployment. Prefer a stable Preview alias, or update the
 1. Sign in to `/video/studio` with `VIDEO_STUDIO_PASSWORD`.
 2. Open **Review & publish** → **Connect YouTube channel**.
 3. Google will ask you to grant the two scopes to the channel that should receive uploads.
-4. On success you return to the Studio with `?youtube=connected`. The refresh token is encrypted with `YOUTUBE_TOKEN_ENC_KEY` and stored server-side (memory until you apply the Supabase migration; then `youtube_oauth_tokens`).
+4. On success you return to the Studio with `?youtube=connected`. The refresh token is encrypted with `YOUTUBE_TOKEN_ENC_KEY` and stored server-side. Without Supabase it is also written to a signed HttpOnly `satcom_yt` cookie so the Studio function can see it after Google's redirect. After you apply the Supabase migration it lives in `youtube_oauth_tokens`.
 5. Tokens never go to the browser.
 
 Use the Google account that already has permission on the destination YouTube channel. Brand accounts: pick that channel on the Google account picker.
