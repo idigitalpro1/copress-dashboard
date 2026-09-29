@@ -58,6 +58,7 @@ export function secretValues(env) {
     'GEMINI_API_KEY_VIDEO', 'GEMINI_API_KEY_COPY', 'GEMINI_API_KEY_SUSAN', 'GEMINI_API_KEY',
     'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_SECRET_KEY', 'CLOUDINARY_API_SECRET',
     'XAI_API_KEY', 'VIDEO_STUDIO_PASSWORD', 'CRON_SECRET',
+    'YOUTUBE_CLIENT_SECRET', 'YOUTUBE_TOKEN_ENC_KEY',
   ];
   return names.map(name => read(env, name)).filter(Boolean);
 }

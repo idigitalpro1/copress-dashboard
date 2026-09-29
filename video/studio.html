@@ -11,7 +11,7 @@
 </head>
 <body>
 <main class="studio-shell">
-  <nav class="studio-nav"><a href="/">← SATCOM</a><span>Video Studio · <strong>preview</strong> · drafts only, nothing is published from here</span><button id="logout" class="ghost" type="button" hidden>Sign out</button></nav>
+  <nav class="studio-nav"><a href="/">← SATCOM</a><span>Video Studio · <strong>preview</strong> · publish is gated; do not merge</span><button id="logout" class="ghost" type="button" hidden>Sign out</button></nav>
   <header class="studio-head">
     <p class="eyebrow">SATCOM · COLORADO NEWS PRESS · THE VILLAGER · REGISTER-CALL</p>
     <h1>Video Studio</h1>
@@ -67,6 +67,7 @@
           <button role="tab" aria-selected="false" data-tab="ai">AI assist</button>
           <button role="tab" aria-selected="false" data-tab="images">Images</button>
           <button role="tab" aria-selected="false" data-tab="export">Export</button>
+          <button role="tab" aria-selected="false" data-tab="publish">Publish</button>
         </div>
 
         <div class="tab" data-panel="edit">
@@ -141,9 +142,71 @@
           <h3>Drafts</h3>
           <button id="draft-refresh" class="ghost" type="button">Refresh drafts</button>
           <ul id="draft-list" class="draft-list"></ul>
+          <p class="muted small">Use <strong>Review &amp; publish</strong> below for the gated YouTube + satcom.conews.press/video approval. This tab only saves private drafts.</p>
+        </div>
+
+        <div class="tab" data-panel="publish" hidden>
+          <p class="muted small">Scroll to the review gate. Publishing stays off until YouTube OAuth env vars are set and the channel is connected. Omni clips always send YouTube’s altered/synthetic disclosure.</p>
+          <a class="button" href="#publish-card">Open review gate</a>
         </div>
       </section>
     </div>
+
+    <section id="publish-card" class="card" aria-labelledby="pub-h">
+      <h2 id="pub-h">Review &amp; publish</h2>
+      <p class="muted small">One approval sends the clip to YouTube and to <code>satcom.conews.press/video</code>. Drafts stay private until this gate passes. Preview only — do not merge; nothing auto-posts.</p>
+      <p id="publish-banner" class="callout" role="status">Checking publish connection…</p>
+      <p id="publish-quota" class="muted small"></p>
+      <div class="row">
+        <button id="youtube-connect" class="button" type="button" disabled>Connect YouTube channel</button>
+        <button id="youtube-disconnect" class="ghost" type="button" disabled>Disconnect</button>
+      </div>
+      <div class="pair">
+        <figure>
+          <figcaption>Source</figcaption>
+          <video id="pub-source" controls playsinline preload="metadata"></video>
+          <p id="pub-source-meta" class="muted small">Select a clip to compare.</p>
+        </figure>
+        <figure>
+          <figcaption>Draft</figcaption>
+          <video id="pub-draft" controls playsinline preload="metadata"></video>
+          <p id="pub-draft-meta" class="muted small">Generated or studio draft.</p>
+        </figure>
+      </div>
+      <p id="pub-disclosure" class="disclosure" hidden></p>
+      <div class="publish-fields">
+        <label>Title<input id="pub-title" maxlength="200"></label>
+        <label>Description<textarea id="pub-desc" rows="4" maxlength="1000"></textarea></label>
+        <label>Tags (comma)<input id="pub-tags" maxlength="400"></label>
+        <label>Captions (SRT / WebVTT)<textarea id="pub-captions" rows="6" maxlength="40000"></textarea></label>
+        <div class="row">
+          <label>Name on screen / credit<input id="pub-name" maxlength="120" placeholder="Paul Hill"></label>
+          <label>Date<input id="pub-date" type="date" required></label>
+        </div>
+        <fieldset>
+          <legend>AI-written fields — mark each as reviewed</legend>
+          <label class="inline"><input id="rev-title" type="checkbox"> Title reviewed</label>
+          <label class="inline"><input id="rev-desc" type="checkbox"> Description reviewed</label>
+          <label class="inline"><input id="rev-captions" type="checkbox"> Captions reviewed</label>
+          <label class="inline"><input id="rev-tags" type="checkbox"> Tags reviewed</label>
+        </fieldset>
+        <label class="inline"><input id="pub-synthetic" type="checkbox"> YouTube altered / synthetic content disclosure (<code>status.containsSyntheticMedia</code>)</label>
+        <label class="inline"><input id="pub-consent" type="checkbox"> I confirm people on screen consented, music rights are cleared, and Paul Hill has OK’d this publish.</label>
+        <label>YouTube privacy after approval
+          <select id="pub-privacy">
+            <option value="unlisted">unlisted (default — not auto-posted)</option>
+            <option value="private">private</option>
+            <option value="public">public (explicit only)</option>
+          </select>
+        </label>
+        <div class="row">
+          <button id="pub-approve" class="button" type="button" disabled>Approve and publish</button>
+          <button id="pub-refresh-jobs" class="ghost" type="button" disabled>Refresh jobs</button>
+        </div>
+        <p id="pub-status" class="muted small" role="status"></p>
+        <ul id="pub-jobs" class="draft-list"></ul>
+      </div>
+    </section>
   </div>
 </main>
 </body>

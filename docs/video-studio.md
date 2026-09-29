@@ -1,6 +1,6 @@
 # SATCOM Video Studio (preview)
 
-`/video/studio` is an operator-only editing studio for turning clips into branded social cuts, captions, thumbnails and SATCOM feed **drafts**. It does not publish anything. The public `/video` player, `/api/videos`, subscribe, Stripe and QR routes are unchanged.
+`/video/studio` is an operator-only editing studio for turning clips into branded social cuts, captions, thumbnails and SATCOM feed **drafts**. Public publishing is a separate reviewed gate (YouTube + satcom.conews.press/video) and stays off until YouTube OAuth env vars are set. The public `/video` player, subscribe, Stripe and QR routes are unchanged.
 
 ## Access
 
@@ -22,6 +22,12 @@ The studio is **disabled by default**. The repository has no server-side admin s
 | `GEMINI_MODEL` | optional | Copy-model override; must be `gemini-3.5-flash` or `gemini-3.8-flash` |
 | `VIDEO_STUDIO_UPLOAD_TYPE` | optional | `authenticated` (default) keeps raw uploads off public URLs; `upload` stores them as public |
 | `VIDEO_STUDIO_LANGUAGE` | optional | Speech-to-text language hint, default `en` |
+| `YOUTUBE_CLIENT_ID` | yes for publish | OAuth Web client. See [youtube.md](youtube.md) |
+| `YOUTUBE_CLIENT_SECRET` | yes for publish | Server only |
+| `YOUTUBE_TOKEN_ENC_KEY` | yes for publish | 64 hex chars (32-byte AES key) |
+| `YOUTUBE_REDIRECT_URI` | recommended | Must match the Google authorized redirect URI |
+| `YOUTUBE_DAILY_UPLOAD_CAP` | optional | Default 6 |
+| `YOUTUBE_DEFAULT_PRIVACY` | optional | `unlisted` (default) or `private` |
 
 When AI keys are missing, the related buttons are disabled and the studio explains why. Captions can still be typed or pasted as SRT/WebVTT. None of these values reach the browser. The browser receives only per-upload signatures and signed Cloudinary URLs.
 
@@ -38,14 +44,24 @@ When AI keys are missing, the related buttons are disabled and the studio explai
 
 All video processing is done by Cloudinary transformations; no server FFmpeg.
 
-## Publishing (manual)
+## Publishing (reviewed gate)
 
-Publishing remains a reviewed step: copy the draft JSON, set `status` to `published`, remove `published:false` and the studio-only fields if desired, and add it through the normal catalog path in `docs/video-network.md` (PR to `data/video-feed.json` or the connected catalog). Signed Cloudinary playback URLs do not expire, so the draft's MP4 URL works as a public playback URL once published. Anyone holding the URL can also view it before then.
+A **Review & publish** gate lives in the Studio. It is **disabled / not connected** unless `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET` and `YOUTUBE_TOKEN_ENC_KEY` are set (Preview only). With those missing, the Studio still builds and shows the gate.
+
+One approval creates two idempotent jobs: **YouTube** and **satcom.conews.press/video**. See [youtube.md](youtube.md) for the OAuth client, consent screen, one-time channel connect, and quota-increase request Patrick must do himself.
+
+- Side-by-side players: source (sidecar original under `satcom/paul-hill/originals` when present) and the draft.
+- Title, description, captions and tags each need an explicit **reviewed** checkbox. Name and date are required. A rights/consent checkbox covers people on screen, music, and Paul Hill's OK.
+- Omni / `ai-generated` / `gemini-omni` clips always set YouTube `status.containsSyntheticMedia = true` and append a visible AI disclosure line. The reviewer cannot turn that off.
+- Default YouTube privacy is `unlisted` (or `private`). Never auto-post. Daily cap default 6; further uploads show **queued until tomorrow**.
+- Public Cloudinary playback URLs are derived **only at approve time**. Private drafts stay private.
+- Unpublish: YouTube → private or delete; satcom → remove from the published overlay (not from Git history of `data/video-feed.json`).
+- SQL files under `supabase/migrations/` are not applied by this PR.
 
 ## Limits and stubs
 
 - Cloudinary renders on first request. Clips larger than the account's on-the-fly limit (about 40 to 100 MB depending on plan) need **Pre-render**.
 - `g_auto` video cropping and Cloudinary text/subtitle layers use transformation quota. Fonts are Arial and Georgia. Custom brand fonts would need to be uploaded to Cloudinary.
 - Drafts live in Cloudinary. They are not merged into the repository catalog or into the Supabase store proposed in PR #27; that bridge is a follow-up.
-- The Google Cloud "ACE Video Ed" pipeline (Gemini analysis plus a 15-second FFmpeg highlight) is not deployed. The studio covers the same flow with the shared Gemini module (`packages/satcom-gemini`, workload `copy`) plus Cloudinary trims. Omni generation runs on Patrick's server. This studio **lists and opens** private drafts under `satcom/generated/` (alongside `satcom/paul-hill/originals`). See [gemini.md](gemini.md). Preview only; do not merge; nothing is published.
+- The Google Cloud "ACE Video Ed" pipeline (Gemini analysis plus a 15-second FFmpeg highlight) is not deployed. The studio covers the same flow with the shared Gemini module (`packages/satcom-gemini`, workload `copy`) plus Cloudinary trims. Omni generation runs on Patrick's server. This studio **lists and opens** private drafts under `satcom/generated/` (alongside `satcom/paul-hill/originals`). See [gemini.md](gemini.md). Preview only; do not merge.
 - Login throttling is in-memory per function instance. Put Vercel deployment protection or a firewall rule in front for stronger protection.
