@@ -1,0 +1,138 @@
+{
+  "version": "0.2.0",
+  "updated": "2026-09-29",
+  "verified": {
+    "date": "2026-09-29",
+    "models": "https://ai.google.dev/gemini-api/docs/models",
+    "pricing": "https://ai.google.dev/gemini-api/docs/pricing",
+    "deprecations": "https://ai.google.dev/gemini-api/docs/deprecations"
+  },
+  "denied": {
+    "gemini-omni-flash-preview": {
+      "reason": "Deprecated; shutdown 2026-09-30. Do not call.",
+      "replacement": "gemini-omni-1.1-flash",
+      "shutdown": "2026-09-30"
+    }
+  },
+  "retry": {
+    "maxRetries": 3,
+    "copyBackoffSeconds": [0.5, 1, 2],
+    "note": "Retries only on HTTP 429 and 5xx. Short backoff so a Vercel 60s function can finish. This Vercel module calls generateContent for copy (and health isolation tests) only. Omni video generation runs on Patrick's server."
+  },
+  "workloads": {
+    "video": {
+      "keyEnv": "GEMINI_KEY_VIDEO",
+      "fallbackKeyEnv": null,
+      "ownedBy": "patrick-server",
+      "thisRepoCalls": false,
+      "defaultModel": "gemini-omni-1.1-flash",
+      "allowedModels": ["gemini-omni-1.1-flash"],
+      "optionalModels": ["veo-3.1-generate-preview", "veo-3.1-fast-generate-preview"],
+      "optionalNote": "Veo 3.1 ids are on the Gemini API but are not the default. This Vercel app does not call Omni; Patrick's server owns generation. Sidecar.model must still be an allowed or optional id.",
+      "api": "interactions",
+      "logPhi": false,
+      "budget": {
+        "dailyUsd": 15,
+        "monthlyUsd": 100,
+        "maxPerMinute": 4
+      },
+      "circuit": {
+        "failureThreshold": 5,
+        "resetMs": 120000
+      }
+    },
+    "copy": {
+      "keyEnv": "GEMINI_KEY_COPY",
+      "fallbackKeyEnv": null,
+      "thisRepoCalls": true,
+      "defaultModel": "gemini-3.5-flash",
+      "allowedModels": ["gemini-3.5-flash", "gemini-3.8-flash"],
+      "copyModelNote": "Pinned gemini-3.5-flash to preserve SATCOM Video Studio captions/copy behavior (verified still listed 2026-09-29). gemini-3.8-flash is the current recommended Flash and is allow-listed for an explicit upgrade; do not invent ids or use -latest aliases.",
+      "api": "generateContent",
+      "logPhi": false,
+      "budget": {
+        "dailyUsd": 5,
+        "monthlyUsd": 40,
+        "maxPerMinute": 20
+      },
+      "circuit": {
+        "failureThreshold": 8,
+        "resetMs": 60000
+      }
+    },
+    "health": {
+      "keyEnv": "GEMINI_KEY_HEALTH",
+      "fallbackKeyEnv": null,
+      "thisRepoCalls": false,
+      "defaultModel": "gemini-3.5-flash",
+      "allowedModels": ["gemini-3.5-flash", "gemini-3.8-flash"],
+      "api": "generateContent",
+      "logPhi": false,
+      "noPhi": true,
+      "note": "Health IQ (formerly ask_susan). Isolated key, budget and circuit. This Vercel app does not call it. Log counts and dollars only — never prompt or response text. No fallback to GEMINI_KEY_VIDEO or GEMINI_KEY_COPY.",
+      "budget": {
+        "dailyUsd": 8,
+        "monthlyUsd": 60,
+        "maxPerMinute": 30
+      },
+      "circuit": {
+        "failureThreshold": 5,
+        "resetMs": 60000
+      }
+    }
+  },
+  "pricing": {
+    "gemini-omni-1.1-flash": {
+      "inputPer1MUsd": 1.5,
+      "outputTextPer1MUsd": 9.0,
+      "outputVideoPer1MUsd": 17.5,
+      "videoTokensPerSecond720p": 5792,
+      "approxUsdPerSecond720p": 0.1,
+      "paidTierOnly": true,
+      "note": "Paid tier only. Used by Patrick's Omni queue, not by this Vercel module. 1080p is upscaled; estimate at the 720p token rate."
+    },
+    "gemini-3.5-flash": {
+      "inputPer1MUsd": 1.5,
+      "outputPer1MUsd": 9.0
+    },
+    "gemini-3.8-flash": {
+      "inputPer1MUsd": 0.75,
+      "outputPer1MUsd": 3.75,
+      "promotionalThrough": "2026-12-31",
+      "afterPromoInputPer1MUsd": 1.5,
+      "afterPromoOutputPer1MUsd": 7.5,
+      "note": "Standard paid prices through 2026-12-31, then $1.50 / $7.50 per 1M tokens."
+    },
+    "veo-3.1-generate-preview": {
+      "usdPerSecond": { "720p": 0.4, "1080p": 0.4, "4k": 0.6 },
+      "note": "Optional on Patrick's server. Not the default video path."
+    },
+    "veo-3.1-fast-generate-preview": {
+      "usdPerSecond": { "720p": 0.1, "1080p": 0.12, "4k": 0.3 },
+      "note": "Optional on Patrick's server. Not the default video path."
+    }
+  },
+  "billingAccount": {
+    "recommendedHardCapUsdPerMonth": 150,
+    "recommendedPerProjectCapsUsd": {
+      "video": 100,
+      "copy": 40,
+      "health": 60
+    },
+    "note": "Patrick's Gemini consumer / Google AI Studio subscription does not cover Gemini API charges. Set a hard cap on the Google Cloud billing account and per-project budgets. In-app daily/monthly caps are a second line of defense only and cannot stop a leaked key."
+  },
+  "handoff": {
+    "cloudinaryFolder": "satcom/generated",
+    "originalsFolder": "satcom/paul-hill/originals",
+    "type": "private",
+    "published": false,
+    "videoTags": ["satcom-generated", "ai-generated", "gemini-omni", "draft"],
+    "sidecarTags": ["satcom-generated", "ai-generated", "sidecar", "draft"],
+    "sidecarPublicIdSuffix": "-sidecar",
+    "sidecarFields": ["model", "prompt", "resolution", "duration", "aspect", "timestamp", "synthid_note"],
+    "defaultResolution": "1080p",
+    "nativeDefault": "720p",
+    "upscaled": true,
+    "synthidNote": "This video was generated by Google Gemini Omni Flash. All Google AI generated videos carry an invisible SynthID watermark for provenance. Label it as AI-generated wherever it is used."
+  }
+}

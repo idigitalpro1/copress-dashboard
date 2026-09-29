@@ -59,13 +59,13 @@ function renderSetup() {
     'upload-video': f.cloudinary, 'library-go': f.cloudinary, 'upload-logo': f.cloudinary, render: f.cloudinary, prerender: f.cloudinary,
     'draft-save': f.drafts, 'draft-refresh': f.drafts, 'transcribe-grok': f.transcribe && f.grok, 'transcribe-gemini': f.transcribe && f.gemini,
     'ai-grok': f.assist && f.grok, 'ai-gemini': f.assist && f.gemini, 'img-run': f.images, 'upload-image': f.cloudinary, 'img-library': f.cloudinary,
-    'img-brand-go': f.cloudinary, 'img-brand-save': f.cloudinary,
+    'img-brand-go': f.cloudinary, 'img-brand-save': f.cloudinary, 'generated-refresh': f.generated || f.cloudinary,
   };
   for (const [id, on] of Object.entries(toggles)) { $(id).disabled = !on; if (!on) $(id).title = 'Disabled: see the configuration notes at the top.'; }
   if (!f.images) setStatus('img-status', 'Grok image tools are disabled: set XAI_API_KEY (and Cloudinary) on the server.');
-  if (!f.assist) setStatus('ai-status', 'AI assist is disabled: set XAI_API_KEY and/or GEMINI_API_KEY (and Cloudinary) on the server.');
+  if (!f.assist) setStatus('ai-status', 'AI assist is disabled: set XAI_API_KEY and/or GEMINI_KEY_COPY (and Cloudinary) on the server.');
   if (!f.transcribe) setStatus('transcribe-status', 'Auto-transcription is disabled without an AI key; type or paste captions instead.');
-  if (f.cloudinary) loadLibrary();
+  if (f.cloudinary) { loadLibrary(); loadGenerated(); }
 }
 
 function syncBrandDefaults() {
@@ -81,6 +81,24 @@ async function loadLibrary() {
     $('library').replaceChildren(...(items.length ? items.map(item => el('button', { class: 'thumb', type: 'button', 'aria-pressed': 'false', onclick: e => selectSource(item, e.currentTarget) },
       el('img', { src: item.thumb_url, alt: '', loading: 'lazy' }), el('span', {}, `${item.title} · ${Math.round(item.duration || 0)}s`))) : [el('p', { class: 'muted small' }, 'No videos found.')]));
   } catch (e) { $('library').replaceChildren(el('p', { class: 'error' }, e.message)); }
+}
+
+async function loadGenerated() {
+  $('generated').replaceChildren(el('p', { class: 'muted small' }, 'Loading generated clips…'));
+  try {
+    const { items, note } = await api('generated-list');
+    setStatus('generated-status', note || '');
+    $('generated').replaceChildren(...(items.length ? items.map(item => el('button', { class: 'thumb', type: 'button', 'aria-pressed': 'false', onclick: e => openGenerated(item, e.currentTarget) },
+      el('img', { src: item.thumb_url, alt: '', loading: 'lazy' }), el('span', {}, `${item.title} · ${Math.round(item.duration || 0)}s · private draft`))) : [el('p', { class: 'muted small' }, 'No generated drafts yet. Patrick\'s queue uploads to satcom/generated/.')]));
+  } catch (e) { $('generated').replaceChildren(el('p', { class: 'error' }, e.message)); }
+}
+
+async function openGenerated(item, button) {
+  const detail = await api('generated-get', { public_id: item.public_id }).catch(() => item);
+  const sidecar = detail.sidecar || {};
+  const meta = [sidecar.model, sidecar.resolution, sidecar.aspect, sidecar.duration ? `${sidecar.duration}s` : ''].filter(Boolean).join(' · ');
+  setStatus('generated-status', `${detail.note || 'Opened private draft.'}${meta ? ' ' + meta : ''}${sidecar.synthid_note ? ' ' + sidecar.synthid_note : ''}`);
+  await selectSource({ ...item, ...detail, type: 'private' }, button);
 }
 
 async function selectSource(item, button) {
@@ -160,6 +178,7 @@ function wire() {
     document.querySelectorAll('.tab').forEach(p => { p.hidden = p.dataset.panel !== tab.dataset.tab; });
   }));
   $('library-go').addEventListener('click', loadLibrary);
+  $('generated-refresh').addEventListener('click', loadGenerated);
   $('brand').addEventListener('change', syncBrandDefaults);
   $('upload-video').addEventListener('change', async e => {
     const file = e.target.files[0]; if (!file) return;

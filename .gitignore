@@ -3,3 +3,5 @@
 node_modules/
 .env*
 video/vendor/
+__pycache__/
+*.pyc

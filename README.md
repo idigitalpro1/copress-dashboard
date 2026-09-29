@@ -23,6 +23,22 @@ The development board is **[/kanban](https://satcom.conews.press/kanban)**. It r
 
 The new `/mcp` endpoint provides reviewed public context only; it does not activate the local vault, receptionist, delivery or deployment tools. Build with `npm run build`, test with `npm test`, and use `npm run verify:mcp -- https://satcom.conews.press/mcp` for an actual SDK connection check. See [architecture and runbook](docs/SATCOM_ARCHITECTURE.md). Cross-system decisions remain in the private `idigitalpro1/codex` repository.
 
+## Shared Gemini client (0.2.0, preview only — do not merge)
+
+Stacked on the Video Studio preview. **Does not publish**, does not touch `/subscribe`, Stripe, checkout, postcard QR routes, WordPress or DNS. Patrick owns Python, isolated keys, the Omni queue and `publish_gate` on his server. This repo keeps the Vercel/Studio copy client and lists private Cloudinary drafts under `satcom/generated/`. Full operator notes: [docs/gemini.md](docs/gemini.md) and [packages/satcom-gemini/README.md](packages/satcom-gemini/README.md).
+
+Preview env only (Patrick sets these; this PR does not change Vercel/DNS):
+
+| Variable | Purpose |
+| --- | --- |
+| `GEMINI_KEY_COPY` | Studio captions / titles (required for Gemini assist). **No `GEMINI_API_KEY` fallback.** |
+| `GEMINI_KEY_VIDEO` | Not used by this Vercel app. Patrick's Omni queue. |
+| `GEMINI_KEY_HEALTH` | Not used by this Vercel app. Isolated health (formerly ask_susan) key in the registry. |
+| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Optional copy usage log + circuit (apply `supabase/migrations/` yourself; not applied here). No `video_jobs` table. |
+
+Recommended Google Cloud **billing-account hard cap: $150/month**. Consumer Gemini subscriptions do not cover API charges. In-app caps cannot stop a leaked key.
+
+
 ## Pages
 
 | Route | File | Status | Description |
