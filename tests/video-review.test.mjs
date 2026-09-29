@@ -580,6 +580,18 @@ test('Twilio webhook accepts a valid signature and rejects unsigned or invalid o
   assert.equal(body.twilioRequest.Body, PAUL_CONFIRMATION);
   assert.equal(JSON.stringify(body).includes('twilio-token'), false);
   assert.equal(logs.length > 0, true);
+  const unconfigured = createSmsWebhookHandler({
+    store: null,
+    env,
+    clock: () => now,
+    sms: createSmsAdapter({ env, logger: { info() {}, error() {} } }),
+  });
+  const deniedUnconfigured = response();
+  await unconfigured(incoming('POST', '/api/video-review-sms', {
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: twilioForm(params),
+  }), deniedUnconfigured);
+  assert.equal(deniedUnconfigured.statusCode, 403);
 });
 
 test('Twilio signatures can use the request host when SATCOM_VIDEO_PUBLIC_URL is unset', async () => {
