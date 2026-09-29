@@ -1,0 +1,34 @@
+{
+  "name": "@satcom/gemini",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared Gemini client for SATCOM Video Studio, Omni news clips, and Health IQ Ask Susan. Share the module, not the key.",
+  "exports": {
+    ".": "./index.js",
+    "./registry": "./registry/models.json"
+  },
+  "files": [
+    "index.js",
+    "version.js",
+    "keys.js",
+    "registry.js",
+    "redact.js",
+    "http.js",
+    "limits.js",
+    "cost.js",
+    "store.js",
+    "generate.js",
+    "omni.js",
+    "jobs.js",
+    "client.js",
+    "registry/models.json",
+    "VERSION",
+    "CHANGELOG.md",
+    "README.md",
+    "python/satcom_gemini.py"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
+}

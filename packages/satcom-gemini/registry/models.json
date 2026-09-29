@@ -1,0 +1,144 @@
+{
+  "version": "0.1.0",
+  "updated": "2026-09-29",
+  "verified": {
+    "date": "2026-09-29",
+    "models": "https://ai.google.dev/gemini-api/docs/models",
+    "pricing": "https://ai.google.dev/gemini-api/docs/pricing",
+    "deprecations": "https://ai.google.dev/gemini-api/docs/deprecations",
+    "omni": "https://ai.google.dev/gemini-api/docs/omni",
+    "interactions": "https://ai.google.dev/api/interactions-api",
+    "background": "https://ai.google.dev/gemini-api/docs/background-execution"
+  },
+  "denied": {
+    "gemini-omni-flash-preview": {
+      "reason": "Deprecated; shutdown 2026-09-30. Do not call.",
+      "replacement": "gemini-omni-1.1-flash",
+      "shutdown": "2026-09-30"
+    }
+  },
+  "retry": {
+    "maxRetries": 3,
+    "copyBackoffSeconds": [0.5, 1, 2],
+    "videoBackoffSeconds": [10, 20, 40],
+    "note": "Retries only on HTTP 429 and 5xx. Copy/ask_susan use short backoff so a Vercel 60s function can finish. Video uses the verified news_video.py schedule."
+  },
+  "workloads": {
+    "video": {
+      "keyEnv": "GEMINI_API_KEY_VIDEO",
+      "fallbackKeyEnv": "GEMINI_API_KEY",
+      "defaultModel": "gemini-omni-1.1-flash",
+      "allowedModels": ["gemini-omni-1.1-flash"],
+      "optionalModels": ["veo-3.1-generate-preview", "veo-3.1-fast-generate-preview"],
+      "optionalNote": "Veo 3.1 ids are on the Gemini API but are not the default. Omni GA handles extension and first/last-frame interpolation. Callers must pass an optional id explicitly; the client never auto-selects Veo.",
+      "api": "interactions",
+      "logPhi": false,
+      "budget": {
+        "dailyUsd": 15,
+        "monthlyUsd": 100,
+        "maxConcurrent": 2,
+        "maxPerMinute": 4
+      },
+      "circuit": {
+        "failureThreshold": 5,
+        "resetMs": 120000
+      }
+    },
+    "copy": {
+      "keyEnv": "GEMINI_API_KEY_COPY",
+      "fallbackKeyEnv": "GEMINI_API_KEY",
+      "defaultModel": "gemini-3.5-flash",
+      "allowedModels": ["gemini-3.5-flash", "gemini-3.8-flash"],
+      "copyModelNote": "Pinned gemini-3.5-flash to preserve SATCOM Video Studio captions/copy behavior (verified still listed 2026-09-29). gemini-3.8-flash is the current recommended Flash and is allow-listed for an explicit upgrade; do not invent ids or use -latest aliases.",
+      "api": "generateContent",
+      "logPhi": false,
+      "budget": {
+        "dailyUsd": 5,
+        "monthlyUsd": 40,
+        "maxConcurrent": 4,
+        "maxPerMinute": 20
+      },
+      "circuit": {
+        "failureThreshold": 8,
+        "resetMs": 60000
+      }
+    },
+    "ask_susan": {
+      "keyEnv": "GEMINI_API_KEY_SUSAN",
+      "fallbackKeyEnv": null,
+      "defaultModel": "gemini-3.5-flash",
+      "allowedModels": ["gemini-3.5-flash", "gemini-3.8-flash"],
+      "api": "generateContent",
+      "logPhi": false,
+      "noPhi": true,
+      "note": "Health IQ Ask Susan is a separate repo (idigitalpro1/HealthIQ) and is migrated LAST. This workload exists so keys, budgets and logs stay isolated. Never fall back to the video or copy key. Log counts and dollars only — never prompt or response text.",
+      "budget": {
+        "dailyUsd": 8,
+        "monthlyUsd": 60,
+        "maxConcurrent": 4,
+        "maxPerMinute": 30
+      },
+      "circuit": {
+        "failureThreshold": 5,
+        "resetMs": 60000
+      }
+    }
+  },
+  "pricing": {
+    "gemini-omni-1.1-flash": {
+      "inputPer1MUsd": 1.5,
+      "outputTextPer1MUsd": 9.0,
+      "outputVideoPer1MUsd": 17.5,
+      "videoTokensPerSecond720p": 5792,
+      "approxUsdPerSecond720p": 0.1,
+      "paidTierOnly": true,
+      "note": "Paid tier only. 1080p and 4k are upscaled; the pricing page does not list a separate 1080p rate. Estimate 1080p at the 720p token rate."
+    },
+    "gemini-3.5-flash": {
+      "inputPer1MUsd": 1.5,
+      "outputPer1MUsd": 9.0
+    },
+    "gemini-3.8-flash": {
+      "inputPer1MUsd": 0.75,
+      "outputPer1MUsd": 3.75,
+      "promotionalThrough": "2026-12-31",
+      "afterPromoInputPer1MUsd": 1.5,
+      "afterPromoOutputPer1MUsd": 7.5,
+      "note": "Standard paid prices through 2026-12-31, then $1.50 / $7.50 per 1M tokens."
+    },
+    "veo-3.1-generate-preview": {
+      "usdPerSecond": { "720p": 0.4, "1080p": 0.4, "4k": 0.6 },
+      "note": "Optional. Not the default video path."
+    },
+    "veo-3.1-fast-generate-preview": {
+      "usdPerSecond": { "720p": 0.1, "1080p": 0.12, "4k": 0.3 },
+      "note": "Optional. Not the default video path."
+    }
+  },
+  "billingAccount": {
+    "recommendedHardCapUsdPerMonth": 150,
+    "recommendedPerProjectCapsUsd": {
+      "video": 100,
+      "copy": 40,
+      "ask_susan": 60
+    },
+    "note": "Patrick's Gemini consumer / Google AI Studio subscription does not cover Gemini API charges. Set a hard cap on the Google Cloud billing account and per-project budgets. In-app daily/monthly caps are a second line of defense only and cannot stop a leaked key."
+  },
+  "omni": {
+    "apiBase": "https://generativelanguage.googleapis.com/v1beta",
+    "apiRevision": "2026-05-20",
+    "resolutionPath": "response_format.resolution",
+    "resolutionPathAlt": "generation_config.video_config.resolution",
+    "resolutionSwitch": "Docs disagree: the API reference puts resolution on VideoResponseFormat (response_format.resolution); the changelog mentions generation_config.video_config. Switch omni.resolutionPath to the alt value if a live call rejects the reference path. Do not send both.",
+    "defaultResolution": "1080p",
+    "nativeDefault": "720p",
+    "upscaled": true,
+    "aspectRatios": ["16:9", "9:16"],
+    "targetSeconds": 8,
+    "delivery": "uri",
+    "pollIntervalSeconds": 10,
+    "cloudinaryFolder": "satcom/generated",
+    "originalsFolder": "satcom/paul-hill/originals",
+    "synthidNote": "This video was generated by Google Gemini Omni Flash. All Google AI generated videos carry an invisible SynthID watermark for provenance. Label it as AI-generated wherever it is used."
+  }
+}

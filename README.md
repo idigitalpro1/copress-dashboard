@@ -23,6 +23,23 @@ The development board is **[/kanban](https://satcom.conews.press/kanban)**. It r
 
 The new `/mcp` endpoint provides reviewed public context only; it does not activate the local vault, receptionist, delivery or deployment tools. Build with `npm run build`, test with `npm test`, and use `npm run verify:mcp -- https://satcom.conews.press/mcp` for an actual SDK connection check. See [architecture and runbook](docs/SATCOM_ARCHITECTURE.md). Cross-system decisions remain in the private `idigitalpro1/codex` repository.
 
+## Shared Gemini client (Phase A, preview only — do not merge)
+
+Stacked on the Video Studio preview. **Does not publish**, does not touch `/subscribe`, Stripe, checkout, postcard QR routes, WordPress or DNS. Full operator notes (env vars, billing caps, Omni jobs, Health IQ isolation): [docs/gemini.md](docs/gemini.md) and [packages/satcom-gemini/README.md](packages/satcom-gemini/README.md).
+
+Preview env only (Patrick sets these; this PR does not change Vercel/DNS):
+
+| Variable | Purpose |
+| --- | --- |
+| `GEMINI_API_KEY_VIDEO` | Omni clips (own GCP project if possible) |
+| `GEMINI_API_KEY_COPY` | Studio captions / titles |
+| `GEMINI_API_KEY_SUSAN` | Ask Susan later — **no fallback**, not used in this phase |
+| `GEMINI_API_KEY` | Fallback for **video and copy only** |
+| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Usage log + `video_jobs` (apply `supabase/migrations/` yourself; not applied here) |
+| `CRON_SECRET` | `GET /api/gemini/poll` |
+
+Recommended Google Cloud **billing-account hard cap: $150/month**. Consumer Gemini subscriptions do not cover API charges. In-app caps cannot stop a leaked key.
+
 ## Pages
 
 | Route | File | Status | Description |
