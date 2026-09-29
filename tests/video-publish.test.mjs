@@ -580,7 +580,7 @@ test('Studio boot drains YouTube jobs queued by the daily cap', async () => {
   const queued = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed, title: 'Second clip' } });
   assert.equal(queued.json.jobs.find(j => j.target === 'youtube').status, 'queued');
   assert.equal(youtubeUploads.length, 1);
-  now = NOW + 24 * 3600 * 1000 + 1000;
+  now = Date.parse('2026-09-30T00:00:01Z');
   const status = await call(handler, { method: 'GET', cookie });
   assert.equal(status.statusCode, 200, status.body);
   assert.equal(youtubeUploads.length, 2);
