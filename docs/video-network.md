@@ -58,7 +58,7 @@ An example entry is shown below; these example URLs must be replaced. No sample 
 
 Use `publications: ["network"]` for all publications, or explicit publication slugs for selective distribution. Town filtering requires a matching town slug. For HLS set `playback.type` to `hls`; the provider must allow cross-origin access to playlists, segments and keys. Caption files and caption-enabled MP4s must also allow cross-origin access. For YouTube use `{"type":"youtube","video_id":"YOUR_11_CHAR_ID"}` with a real 11-character ID; enable embedding at the provider.
 
-Operators can prepare branded social cuts, captions, thumbnails and draft entries in the password-protected [Video Studio](video-studio.md) (`/video/studio`, disabled unless configured). Studio drafts never appear in the public feed until published through the steps above.
+Operators can prepare branded social cuts, captions, thumbnails and draft entries in the password-protected [Video Studio](video-studio.md) (`/video/studio`, disabled unless configured). Studio drafts never appear in the public feed until an editor passes the Review & publish gate (or a reviewed Git catalog change). Approved clips get a public Cloudinary delivery only at publish time; `/api/videos` merges that overlay with this Git catalog. YouTube is a separate target. See [youtube.md](youtube.md).
 
 ## Connect an updating catalog
 

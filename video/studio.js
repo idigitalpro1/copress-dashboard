@@ -1,7 +1,7 @@
 // SATCOM Video Studio (preview). All credentials stay on the server; the browser only
 // receives short-lived upload signatures and signed Cloudinary delivery URLs.
 const $ = id => document.getElementById(id);
-const state = { status: null, source: null, image: null, outputs: [], brandedImages: [], cues: [] };
+const state = { status: null, source: null, image: null, outputs: [], brandedImages: [], cues: [], sidecar: null, assetTags: [], publishVersion: null };
 const CHUNK = 20 * 1024 * 1024;
 
 async function api(op, payload = {}) {
@@ -60,12 +60,15 @@ function renderSetup() {
     'draft-save': f.drafts, 'draft-refresh': f.drafts, 'transcribe-grok': f.transcribe && f.grok, 'transcribe-gemini': f.transcribe && f.gemini,
     'ai-grok': f.assist && f.grok, 'ai-gemini': f.assist && f.gemini, 'img-run': f.images, 'upload-image': f.cloudinary, 'img-library': f.cloudinary,
     'img-brand-go': f.cloudinary, 'img-brand-save': f.cloudinary, 'generated-refresh': f.generated || f.cloudinary,
+    'youtube-connect': f.youtube && !f.youtube_connected, 'youtube-disconnect': f.youtube_connected,
+    'pub-approve': f.publish && f.youtube_connected, 'pub-refresh-jobs': f.cloudinary,
   };
   for (const [id, on] of Object.entries(toggles)) { $(id).disabled = !on; if (!on) $(id).title = 'Disabled: see the configuration notes at the top.'; }
   if (!f.images) setStatus('img-status', 'Grok image tools are disabled: set XAI_API_KEY (and Cloudinary) on the server.');
   if (!f.assist) setStatus('ai-status', 'AI assist is disabled: set XAI_API_KEY and/or GEMINI_KEY_COPY (and Cloudinary) on the server.');
   if (!f.transcribe) setStatus('transcribe-status', 'Auto-transcription is disabled without an AI key; type or paste captions instead.');
   if (f.cloudinary) { loadLibrary(); loadGenerated(); }
+  setupPublish();
 }
 
 function syncBrandDefaults() {
@@ -96,14 +99,17 @@ async function loadGenerated() {
 async function openGenerated(item, button) {
   const detail = await api('generated-get', { public_id: item.public_id }).catch(() => item);
   const sidecar = detail.sidecar || {};
+  state.sidecar = sidecar;
+  state.assetTags = detail.tags || item.tags || ['satcom-generated', 'ai-generated', 'gemini-omni', 'draft'];
   const meta = [sidecar.model, sidecar.resolution, sidecar.aspect, sidecar.duration ? `${sidecar.duration}s` : ''].filter(Boolean).join(' · ');
   setStatus('generated-status', `${detail.note || 'Opened private draft.'}${meta ? ' ' + meta : ''}${sidecar.synthid_note ? ' ' + sidecar.synthid_note : ''}`);
   await selectSource({ ...item, ...detail, type: 'private' }, button);
 }
 
 async function selectSource(item, button) {
-  document.querySelectorAll('#library .thumb').forEach(t => t.setAttribute('aria-pressed', 'false'));
+  document.querySelectorAll('#library .thumb, #generated .thumb').forEach(t => t.setAttribute('aria-pressed', 'false'));
   button?.setAttribute('aria-pressed', 'true');
+  if (!item.sidecar && !String(item.public_id || '').startsWith('satcom/generated/')) { state.sidecar = null; state.assetTags = item.tags || []; }
   state.source = { public_id: item.public_id, type: item.type, duration: item.duration, width: item.width, height: item.height };
   const preview = item.preview_url || (await api('source', { source: state.source })).preview_url;
   $('source-video').src = preview;
@@ -111,6 +117,8 @@ async function selectSource(item, button) {
   $('source-meta').textContent = `${item.public_id} · ${item.width || '?'}×${item.height || '?'} · ${item.duration ? item.duration.toFixed(1) + 's' : 'duration unknown'} · ${item.type}`;
   state.outputs = []; $('outputs').replaceChildren();
   updateTrimInfo();
+  syncPublishFromDraft();
+  loadPublishPreview();
 }
 
 async function uploadFile(file, kind, extra = {}) {
@@ -256,6 +264,32 @@ function wire() {
     } catch (err) { setStatus('draft-status', err.message, true); }
   }));
   $('draft-refresh').addEventListener('click', loadDrafts);
+  $('youtube-connect').addEventListener('click', e => busy(e.currentTarget, async () => {
+    try {
+      const r = await api('youtube-oauth-start');
+      location.href = r.url;
+    } catch (err) { setStatus('pub-status', err.message, true); }
+  }));
+  $('youtube-disconnect').addEventListener('click', e => busy(e.currentTarget, async () => {
+    try { await api('youtube-disconnect'); setStatus('pub-status', 'YouTube disconnected.'); await boot(); }
+    catch (err) { setStatus('pub-status', err.message, true); }
+  }));
+  $('pub-approve').addEventListener('click', e => busy(e.currentTarget, async () => {
+    try {
+      requireSource();
+      setStatus('pub-status', 'Submitting review…');
+      const r = await api('publish-approve', publishBody());
+      state.publishVersion = r.version;
+      const queued = (r.jobs || []).find(j => j.status === 'queued');
+      setStatus('pub-status', queued ? `YouTube ${queued.error || 'queued until tomorrow'}.` : 'Publish jobs updated.');
+      renderJobs(r.jobs || []);
+    } catch (err) { setStatus('pub-status', err.message, true); }
+  }));
+  $('pub-refresh-jobs').addEventListener('click', loadJobs);
+  $('pub-synthetic').addEventListener('click', e => {
+    const tags = state.assetTags || [];
+    if (tags.includes('ai-generated') || tags.includes('gemini-omni')) { e.preventDefault(); e.currentTarget.checked = true; }
+  });
 
   // images
   $('img-mode').addEventListener('change', () => { $('img-source-row').hidden = $('img-mode').value !== 'edit-image'; });
@@ -328,8 +362,8 @@ function renderAssist(r) {
   state.social = r.social; state.hashtags = r.hashtags;
   const use = (label, fn) => el('button', { class: 'ghost', type: 'button', onclick: fn }, label);
   const blocks = [];
-  if (r.titles.length) blocks.push(el('div', { class: 'ai-block' }, el('h4', {}, 'Titles'), ...r.titles.map(t => el('p', {}, t, use('Use', () => { $('draft-title').value = t; })))));
-  if (r.description) blocks.push(el('div', { class: 'ai-block' }, el('h4', {}, 'Description'), el('p', {}, r.description, use('Use', () => { $('draft-desc').value = r.description; }))));
+  if (r.titles.length) blocks.push(el('div', { class: 'ai-block' }, el('h4', {}, 'Titles'), ...r.titles.map(t => el('p', {}, t, use('Use', () => { $('draft-title').value = t; $('pub-title').value = t; })))));
+  if (r.description) blocks.push(el('div', { class: 'ai-block' }, el('h4', {}, 'Description'), el('p', {}, r.description, use('Use', () => { $('draft-desc').value = r.description; $('pub-desc').value = r.description; }))));
   if (r.caption_hook) blocks.push(el('div', { class: 'ai-block' }, el('h4', {}, 'On-screen hook'), el('p', {}, r.caption_hook, use('Use as lower third', () => { $('lower-title').value = r.caption_hook.slice(0, 100); }), use('Use as graphic headline', () => { $('img-headline').value = r.caption_hook; }))));
   if (r.highlight) blocks.push(el('div', { class: 'ai-block' }, el('h4', {}, 'Suggested highlight'), el('p', {}, `${r.highlight.start}s → ${r.highlight.end}s · ${r.highlight.reason}`,
     use('Apply trim', () => { $('trim-start').value = r.highlight.start; $('trim-end').value = r.highlight.end; updateTrimInfo(); }))));
@@ -348,3 +382,147 @@ async function loadDrafts() {
 
 wire();
 boot();
+
+function youtubeQueryNote() {
+  const q = new URLSearchParams(location.search).get('youtube');
+  if (!q) return;
+  const messages = {
+    connected: 'YouTube channel connected.',
+    denied: 'YouTube access was denied.',
+    error: 'YouTube connect failed.',
+    signin: 'Sign in to the studio, then connect YouTube again.',
+    norefresh: 'Google did not return a refresh token. Reconnect with consent.',
+    disabled: 'YouTube env vars are not set on this deployment.',
+  };
+  setStatus('pub-status', messages[q] || q, q !== 'connected');
+}
+
+function setupPublish() {
+  const p = state.status.publish || {};
+  const f = state.status.features;
+  const banner = $('publish-banner');
+  if (!f.publish) {
+    banner.textContent = 'Publishing is not connected. Set YOUTUBE_CLIENT_ID, YOUTUBE_CLIENT_SECRET and YOUTUBE_TOKEN_ENC_KEY on the Preview project, then connect the channel. The review gate stays visible and disabled. See docs/youtube.md.';
+    banner.classList.remove('ready');
+  } else if (!f.youtube_connected) {
+    banner.textContent = p.notes?.find(n => n.includes('channel')) || 'YouTube env is set. Connect the channel (one-time) before approving a publish.';
+    banner.classList.remove('ready');
+  } else {
+    banner.textContent = `YouTube connected${p.channel_title ? ' · ' + p.channel_title : ''}. satcom.conews.press/video ${f.satcom ? 'ready' : 'needs Cloudinary'}.`;
+    banner.classList.add('ready');
+  }
+  const q = p.quota || { used: 0, cap: 6, remaining: 6 };
+  $('publish-quota').textContent = q.queued_until
+    ? `YouTube quota ${q.used}/${q.cap} today. Further uploads are queued until tomorrow (${q.queued_until}).`
+    : `YouTube quota ${q.used}/${q.cap} today (${q.remaining} remaining). Default privacy: ${p.default_privacy || 'unlisted'}.`;
+  $('pub-privacy').value = p.default_privacy || 'unlisted';
+  if (!$('pub-name').value) $('pub-name').value = $('draft-credit').value || 'Paul Hill';
+  if (!$('pub-date').value) $('pub-date').value = new Date().toISOString().slice(0, 10);
+  youtubeQueryNote();
+  applySyntheticLock();
+}
+
+function syncPublishFromDraft() {
+  if (!$('pub-title').value) $('pub-title').value = $('draft-title').value;
+  if (!$('pub-desc').value) $('pub-desc').value = $('draft-desc').value;
+  $('pub-captions').value = $('captions-text').value;
+  if (state.hashtags?.length && !$('pub-tags').value) $('pub-tags').value = state.hashtags.join(', ');
+  applySyntheticLock();
+}
+
+function applySyntheticLock() {
+  const tags = state.assetTags || [];
+  const model = state.sidecar?.model || '';
+  const synthetic = tags.includes('ai-generated') || tags.includes('gemini-omni') || /omni|veo/i.test(model);
+  const box = $('pub-synthetic');
+  const line = $('pub-disclosure');
+  const text = state.status?.publish?.ai_disclosure_line || 'This video includes AI-generated (synthetic) content.';
+  if (synthetic) {
+    box.checked = true;
+    box.disabled = true;
+    box.title = 'Locked on for Omni / AI-generated clips.';
+    line.hidden = false;
+    line.textContent = `${text} YouTube status.containsSyntheticMedia will be true. This cannot be turned off for this clip.`;
+    if ($('pub-desc').value && !String($('pub-desc').value).includes('AI-generated')) {
+      /* reviewer still controls copy; server appends the line on approve */
+    }
+  } else {
+    box.disabled = !(state.status?.features?.publish && state.status?.features?.youtube_connected);
+    box.title = '';
+    line.hidden = true;
+  }
+}
+
+async function loadPublishPreview() {
+  if (!state.source || !state.status?.features?.cloudinary) return;
+  try {
+    const r = await api('publish-preview', { source: state.source, sidecar: state.sidecar || {}, asset_tags: state.assetTags, draft: state.source });
+    $('pub-source').src = r.source.preview_url;
+    $('pub-source-meta').textContent = `${r.source.note} ${r.source.public_id}`;
+    $('pub-draft').src = r.draft.preview_url;
+    $('pub-draft-meta').textContent = `${r.draft.kind} · ${r.draft.public_id}`;
+    if (r.synthetic) { state.assetTags = state.assetTags.length ? state.assetTags : ['ai-generated']; applySyntheticLock(); }
+  } catch (e) { $('pub-source-meta').textContent = e.message; }
+}
+
+function publishBody() {
+  const split = v => v.split(',').map(s => s.trim()).filter(Boolean);
+  const consent = $('pub-consent').checked;
+  return {
+    source: state.source,
+    sidecar: state.sidecar || {},
+    asset_tags: state.assetTags,
+    title: $('pub-title').value,
+    description: $('pub-desc').value,
+    tags: split($('pub-tags').value),
+    captions: $('pub-captions').value,
+    credit_name: $('pub-name').value,
+    shoot_date: $('pub-date').value,
+    review: { title: $('rev-title').checked, description: $('rev-desc').checked, captions: $('rev-captions').checked, tags: $('rev-tags').checked },
+    consent: { people: consent, music: consent, paul_hill: consent },
+    contains_synthetic_media: $('pub-synthetic').checked,
+    youtube_privacy: $('pub-privacy').value,
+    version: state.publishVersion,
+  };
+}
+
+function renderJobs(jobs) {
+  $('pub-jobs').replaceChildren(...(jobs.length ? jobs.map(j => {
+    const li = el('li', {}, `${j.target}: ${j.status}${j.error ? ' — ' + j.error : ''}${j.youtube_video_id ? ' · yt ' + j.youtube_video_id : ''}${j.satcom_entry_id ? ' · ' + j.satcom_entry_id : ''}${j.run_after ? ' · queued until ' + j.run_after : ''}`);
+    if (j.status === 'failed' || j.status === 'queued') {
+      li.append(el('button', { class: 'ghost', type: 'button', onclick: () => retryJob(j.target) }, 'Retry'));
+    }
+    if (j.status === 'succeeded') {
+      li.append(el('button', { class: 'ghost', type: 'button', onclick: () => unpublishJob(j.target, 'private') }, j.target === 'youtube' ? 'Unpublish (private)' : 'Remove from feed'));
+      if (j.target === 'youtube') li.append(el('button', { class: 'ghost', type: 'button', onclick: () => unpublishJob(j.target, 'delete') }, 'Delete on YouTube'));
+    }
+    return li;
+  }) : [el('li', { class: 'muted' }, 'No publish jobs yet.')]));
+}
+
+async function retryJob(target) {
+  try {
+    requireSource();
+    setStatus('pub-status', `Retrying ${target}…`);
+    const r = await api('publish-retry', { ...publishBody(), target, version: state.publishVersion });
+    setStatus('pub-status', `${target}: ${r.job.status}${r.job.error ? ' — ' + r.job.error : ''}`);
+    loadJobs();
+  } catch (e) { setStatus('pub-status', e.message, true); }
+}
+
+async function unpublishJob(target, mode) {
+  try {
+    requireSource();
+    const r = await api('publish-unpublish', { ...publishBody(), target, mode, version: state.publishVersion });
+    setStatus('pub-status', `${target} ${r.job.status}`);
+    loadJobs();
+  } catch (e) { setStatus('pub-status', e.message, true); }
+}
+
+async function loadJobs() {
+  if (!state.source) return;
+  try {
+    const r = await api('publish-jobs', { public_id: state.source.public_id });
+    renderJobs(r.jobs || []);
+  } catch (e) { $('pub-jobs').replaceChildren(el('li', { class: 'error' }, e.message)); }
+}

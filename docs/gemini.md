@@ -1,8 +1,10 @@
 # Shared Gemini client (0.2.0, preview only — do not merge)
 
-Vercel / SATCOM Video Studio side only. **Nothing in this phase publishes publicly or to YouTube.** Subscribe, Stripe, checkout, postcard QR routes, WordPress and DNS are unchanged. This PR does not change Vercel project settings or apply SQL to a live Supabase project.
+Vercel / SATCOM Video Studio side only. Subscribe, Stripe, checkout, postcard QR routes, WordPress and DNS are unchanged. This PR does not change Vercel project settings or apply SQL to a live Supabase project.
 
-Stacked on draft PR #29 (`cursor/video-studio-preview`). Preview env only.
+Omni **generation** is still out of this repo. **Reviewed publishing** (YouTube + satcom.conews.press/video) is a stacked preview on this branch; see [youtube.md](youtube.md) and [video-studio.md](video-studio.md). Do not merge.
+
+Stacked on draft PR #32 (`cursor/gemini-shared-client-86da`), which is stacked on draft PR #29 (`cursor/video-studio-preview`). Preview env only. This publish PR must not be merged.
 
 Patrick Sweeney owns, on his own server:
 
