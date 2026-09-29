@@ -35,7 +35,7 @@ The same paths work on the other Production aliases (`copress-dashboard.vercel.a
 | `YOUTUBE_DAILY_UPLOAD_CAP`, `YOUTUBE_DEFAULT_PRIVACY` | set (same branch) | missing (defaults: 6, `unlisted`) | Optional. |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | **missing** | **missing** | Optional durable store. Apply the migrations first. |
 
-Warning: setting `SUPABASE_URL` before the migrations are applied makes Studio boot return 503 (see Known issues).
+If `SUPABASE_URL` is set before the migrations are applied, Studio boot stays up and reports `store.reason: migrations_not_applied` (in-memory + cookie fallback). Do not apply migrations from this repo.
 
 ## Review and publish gate rules
 
@@ -74,16 +74,9 @@ Full checklist: [youtube.md](youtube.md).
 
 Apply these to a Preview project first. Without them, job, quota and token state is kept in per-instance memory.
 
-## Known issues (open bot review findings on #33; fix before enabling publish)
+## Review fixes (PR follow-up on #33)
 
-- **The YouTube connect flow can't finish.** The session cookie is `SameSite=Strict`, so the browser doesn't send it on Google's cross-site redirect back. The callback then lands on `?youtube=signin`.
-- **Tokens saved by the callback aren't visible to the Studio.** Without Supabase, the tokens live in the callback process's memory, not the Studio handler's.
-- With `SUPABASE_URL` set and the migrations unapplied, Studio boot returns 503.
-- Failed uploads still count against the daily cap.
-- Re-approving an unpublished video can insert a second YouTube video. A timeout mid-upload can also double-post.
-- Jobs queued by the cap only run when someone clicks Retry.
-- The catalog overlay is rewritten without an etag, so a stale read can drop clips.
-- `tests/video-publish.test.mjs` ("published overlay merges…") fails on `main` because it assumes the Git catalog is empty. It now contains the rodeo clip. This is a test-only failure; `npm run build` passes.
+Addressed on a later branch: OAuth `SameSite=Lax` + signed state; cookie token fallback; graceful `migrations_not_applied`; quota counts only successful uploads; YouTube idempotency (existing video id + in-flight lock); queue drain on Studio boot; catalog writes merge store-published items and refuse a failed overlay read; catalog merge test uses an injected fixture.
 
 ## Rollback
 

@@ -7,7 +7,7 @@
 The studio is **disabled by default**. The repository has no server-side admin session yet (the SATCOM operator gate in `index.html` is client-side only), so the studio uses its own env password:
 
 - `VIDEO_STUDIO_PASSWORD` must be at least 12 characters. When it is missing or shorter, `/api/studio` returns `enabled:false`, and every operation returns 404.
-- Signing in sets an HttpOnly, `SameSite=Strict`, `Secure` (on Vercel) cookie scoped to `/api/studio` for 12 hours. It is signed with a key derived from the password, so changing the password signs everyone out.
+- Signing in sets an HttpOnly, `SameSite=Lax`, `Secure` (on Vercel) cookie scoped to `/api/studio` for 12 hours. Lax is required so the cookie is sent on Google's top-level OAuth redirect. It is signed with a key derived from the password, so changing the password signs everyone out. The YouTube callback also accepts a signed OAuth `state` issued after login (CSRF), so connect can finish even if a browser omits the cookie.
 - Every POST must send `X-Studio-Request: 1`. The endpoint never grants CORS, so other sites cannot call it.
 - Login attempts are throttled per instance (10 per 15 minutes per IP), with a 250 ms delay on every attempt.
 

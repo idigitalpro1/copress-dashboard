@@ -4,7 +4,7 @@ import { createStudioHandler } from '../lib/video-studio/handler.js';
 import { createPublishMemoryStore } from '../lib/video-studio/publish/store.js';
 import { saveTokens } from '../lib/video-studio/publish/youtube.js';
 import { evaluateGate, isSyntheticClip, withAiDisclosure, originalFromSidecar } from '../lib/video-studio/publish/gate.js';
-import { idempotencyKey } from '../lib/video-studio/publish/ids.js';
+import { idempotencyKey, contentVersion } from '../lib/video-studio/publish/ids.js';
 import { encryptJson, decryptJson } from '../lib/video-studio/publish/crypto.js';
 import { sanitizeAuditMetadata } from '../lib/video-studio/publish/audit.js';
 import { mergeCatalogs } from '../lib/video-studio/publish/overlay.js';
@@ -68,7 +68,7 @@ const reviewed = {
   source,
 };
 
-function mockFetch({ youtubeUploads = [], cloudinaryUploads = [], failSatcom = false, youtubeId = 'dQw4w9wgXcQ' } = {}) {
+function mockFetch({ youtubeUploads = [], cloudinaryUploads = [], catalogs = [], failSatcom = false, failYoutube = false, youtubeId = 'dQw4w9wgXcQ' } = {}) {
   return async (url, options = {}) => {
     const u = String(url);
     const method = (options.method || 'GET').toUpperCase();
@@ -88,14 +88,24 @@ function mockFetch({ youtubeUploads = [], cloudinaryUploads = [], failSatcom = f
     }
     if (u.includes('api.cloudinary.com') && u.includes('/raw/upload')) {
       cloudinaryUploads.push({ kind: 'raw', url: u });
+      const form = options.body;
+      if (form && typeof form.get === 'function' && String(form.get('public_id') || '').includes('catalog')) {
+        const file = form.get('file');
+        const text = file && typeof file.text === 'function' ? await file.text() : '';
+        if (text) {
+          try { catalogs.push(JSON.parse(text)); } catch { /* ignore */ }
+        }
+      }
       return Response.json({ public_id: 'satcom-studio/published/catalog', type: 'upload' });
     }
     if (u.startsWith('https://www.googleapis.com/upload/youtube/v3/videos') && method === 'POST') {
+      if (failYoutube) return new Response('denied', { status: 403 });
       const resource = JSON.parse(options.body);
       youtubeUploads.push(resource);
       return new Response('', { status: 200, headers: { Location: 'https://www.googleapis.com/upload/youtube/v3/videos?upload_id=session1' } });
     }
     if (u.startsWith('https://www.googleapis.com/upload/youtube/v3/videos?upload_id=') && method === 'PUT') {
+      if (failYoutube) return new Response('denied', { status: 500 });
       const last = youtubeUploads[youtubeUploads.length - 1];
       return Response.json({
         id: youtubeId,
@@ -367,13 +377,31 @@ test('published overlay merges into the public catalog without exposing drafts',
       playback: { type: 'mp4', url: 'https://res.cloudinary.com/satcomtest/video/upload/satcom/published/x.mp4' },
     }],
   };
-  const merged = mergeCatalogs({ version: 1, items: [] }, overlay);
+  const fixture = {
+    version: 1,
+    items: [{
+      id: 'unreleased-draft-clip',
+      title: 'Not public',
+      description: 'A studio draft.',
+      creator: 'paul-hill',
+      credit: 'Paul Hill',
+      publications: ['network'],
+      towns: [],
+      published_at: '2026-09-29T12:00:00.000Z',
+      status: 'draft',
+      published: false,
+      kind: 'recorded',
+      playback: { type: 'mp4', url: 'https://res.cloudinary.com/satcomtest/video/upload/satcom/drafts/hidden.mp4' },
+    }],
+  };
+  const merged = mergeCatalogs(fixture, overlay);
   const videos = publicCatalog(merged, NOW + 1000);
   assert.equal(videos.length, 1);
   assert.equal(videos[0].id, 'genesee-evening-20260929-clip');
   const env = { VIDEO_PUBLISHED_CATALOG_URL: 'https://res.cloudinary.com/satcomtest/raw/upload/satcom-studio/published/catalog.json' };
   const result = await readCatalog({
     env,
+    catalog: { version: 1, items: [] },
     fetchImpl: async (url) => {
       assert.equal(String(url), env.VIDEO_PUBLISHED_CATALOG_URL);
       return Response.json(overlay);
@@ -381,4 +409,205 @@ test('published overlay merges into the public catalog without exposing drafts',
   });
   assert.equal(result.source, 'catalog+published');
   assert.equal(result.catalog.items[0].id, 'genesee-evening-20260929-clip');
+});
+
+test('OAuth callback finishes without a session cookie when the signed state is valid', async () => {
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, VERCEL: '1', ...YT };
+  const session = issueSession(env, NOW);
+  const cb = createYoutubeCallbackHandler({ getEnv: () => env, fetchImpl: mockFetch(), clock: () => NOW, store: publishStore });
+  const res = response();
+  await cb({
+    method: 'GET',
+    url: `/api/studio/youtube-callback?code=abc&state=${encodeURIComponent(signOauthState(env, NOW, session))}`,
+    headers: {},
+  }, res);
+  assert.equal(res.statusCode, 302);
+  assert.equal(res.headers.Location, '/video/studio?youtube=connected');
+  assert.match(String(res.headers['Set-Cookie']), /satcom_yt=/);
+  assert.match(String(res.headers['Set-Cookie']), /SameSite=Lax/);
+});
+
+test('YouTube tokens saved by the callback are visible to a different Studio store via cookie', async () => {
+  const callbackStore = createPublishMemoryStore();
+  const studioStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, VERCEL: '1', ...CLOUD, ...YT };
+  const session = issueSession(env, NOW);
+  const cb = createYoutubeCallbackHandler({ getEnv: () => env, fetchImpl: mockFetch(), clock: () => NOW, store: callbackStore });
+  const res = response();
+  await cb({
+    method: 'GET',
+    url: `/api/studio/youtube-callback?code=abc&state=${encodeURIComponent(signOauthState(env, NOW, session))}`,
+    headers: {},
+  }, res);
+  const tokenCookie = String(res.headers['Set-Cookie']).split(';')[0];
+  const handler = createStudioHandler({ getEnv: () => env, fetchImpl: mockFetch(), clock: () => NOW, publishStore: studioStore });
+  const cookie = await login(handler, '203.0.113.88');
+  const status = await call(handler, { method: 'GET', cookie: `${cookie}; ${tokenCookie}` });
+  assert.equal(status.statusCode, 200, status.body);
+  assert.equal(status.json.publish.youtube_connected, true);
+  assert.equal(status.json.publish.channel_title, 'Colorado News Press');
+});
+
+test('Studio boot degrades when Supabase publish tables are missing', async () => {
+  const fetchImpl = async (url, options) => {
+    if (String(url).includes('/rest/v1/')) {
+      return new Response(JSON.stringify({
+        code: 'PGRST205',
+        message: "Could not find the table 'public.youtube_upload_quota' in the schema cache",
+      }), { status: 404 });
+    }
+    return mockFetch()(url, options);
+  };
+  const handler = createStudioHandler({
+    getEnv: () => ({
+      VIDEO_STUDIO_PASSWORD: PASSWORD,
+      ...CLOUD,
+      SUPABASE_URL: 'https://example.supabase.co',
+      SUPABASE_SERVICE_ROLE_KEY: 'service-role-test-key',
+    }),
+    fetchImpl,
+    clock: () => NOW,
+  });
+  const cookie = await login(handler, '203.0.113.89');
+  const status = await call(handler, { method: 'GET', cookie });
+  assert.equal(status.statusCode, 200, status.body);
+  assert.equal(status.json.authenticated, true);
+  assert.equal(status.json.publish.store.reason, 'migrations_not_applied');
+  assert.match(status.json.publish.notes.join(' '), /migrations not applied/i);
+});
+
+test('failed YouTube uploads do not consume the daily cap', async () => {
+  const youtubeUploads = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT, YOUTUBE_DAILY_UPLOAD_CAP: '1' };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const failHandler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads, failYoutube: true }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const cookie = await login(failHandler, '203.0.113.90');
+  const failed = await call(failHandler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(failed.statusCode, 200, failed.body);
+  assert.equal(failed.json.jobs.find(j => j.target === 'youtube').status, 'failed');
+  assert.equal((await publishStore.getQuota('2026-09-29')).upload_count, 0);
+  const okHandler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const retry = await call(okHandler, { cookie, body: { op: 'publish-retry', ...reviewed, target: 'youtube', version: failed.json.version } });
+  assert.equal(retry.statusCode, 200, retry.body);
+  assert.equal(retry.json.job.status, 'succeeded');
+  assert.equal((await publishStore.getQuota('2026-09-29')).upload_count, 1);
+});
+
+test('re-approve restores an unpublished YouTube video instead of uploading again', async () => {
+  const youtubeUploads = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const handler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const cookie = await login(handler, '203.0.113.91');
+  const first = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(first.statusCode, 200, first.body);
+  const version = first.json.version;
+  await call(handler, { cookie, body: { op: 'publish-unpublish', ...reviewed, target: 'youtube', mode: 'private', version } });
+  const inserts = youtubeUploads.filter(u => u.snippet).length;
+  const second = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed, version } });
+  assert.equal(second.statusCode, 200, second.body);
+  assert.equal(second.json.jobs.find(j => j.target === 'youtube').status, 'succeeded');
+  assert.equal(youtubeUploads.filter(u => u.snippet).length, inserts);
+  assert.ok(youtubeUploads.some(u => u.update?.status?.privacyStatus === 'unlisted'));
+});
+
+test('in-flight YouTube jobs are not uploaded a second time', async () => {
+  const youtubeUploads = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const gate = evaluateGate(reviewed, { sidecar });
+  const version = contentVersion({
+    public_id: source.public_id,
+    title: gate.title,
+    description: gate.description,
+    shoot_date: gate.shoot_date,
+    credit_name: gate.credit_name,
+  });
+  await publishStore.upsertJob({
+    idempotency_key: idempotencyKey(source.public_id, version, 'youtube'),
+    asset_public_id: source.public_id,
+    version,
+    target: 'youtube',
+    status: 'uploading',
+    updated_at_ms: NOW,
+  });
+  const handler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const cookie = await login(handler, '203.0.113.92');
+  const res = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(res.statusCode, 200, res.body);
+  assert.equal(res.json.jobs.find(j => j.target === 'youtube').status, 'uploading');
+  assert.equal(youtubeUploads.length, 0);
+});
+
+test('Studio boot drains YouTube jobs queued by the daily cap', async () => {
+  const youtubeUploads = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT, YOUTUBE_DAILY_UPLOAD_CAP: '1' };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  let now = NOW;
+  const handler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads }),
+    clock: () => now,
+    publishStore,
+  });
+  const cookie = await login(handler, '203.0.113.93');
+  await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  const queued = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed, title: 'Second clip' } });
+  assert.equal(queued.json.jobs.find(j => j.target === 'youtube').status, 'queued');
+  assert.equal(youtubeUploads.length, 1);
+  now = NOW + 24 * 3600 * 1000 + 1000;
+  const status = await call(handler, { method: 'GET', cookie });
+  assert.equal(status.statusCode, 200, status.body);
+  assert.equal(youtubeUploads.length, 2);
+  assert.ok((status.json.publish.drained || []).some(j => j.target === 'youtube' && j.status === 'succeeded'));
+});
+
+test('satcom catalog writes keep earlier clips when the CDN overlay 404s', async () => {
+  const catalogs = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const handler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ catalogs }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const cookie = await login(handler, '203.0.113.94');
+  const first = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(first.statusCode, 200, first.body);
+  const second = await call(handler, {
+    cookie,
+    body: { op: 'publish-approve', ...reviewed, title: 'Idaho Springs morning', source: { ...source, public_id: 'satcom/generated/idaho-morning' } },
+  });
+  assert.equal(second.statusCode, 200, second.body);
+  const last = catalogs.at(-1);
+  assert.ok(last);
+  assert.equal(last.items.length, 2);
+  assert.equal(new Set(last.items.map(i => i.id)).size, 2);
 });
