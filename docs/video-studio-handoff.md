@@ -1,0 +1,95 @@
+# SATCOM Video Studio: production handoff
+
+Merged to `main` and deployed to Production on Sep 29, 2026 (about 5:03 PM MT), with Patrick Sweeney's approval.
+Merged PRs: #29 (Studio), #32 (Gemini copy client 0.2.0), #33 (review and publish gate). Final merge commit is `26c4b06`.
+
+## What's live
+
+| URL (Production, `copress-dashboard` project) | State now |
+| --- | --- |
+| https://satcom.conews.press/video/studio | 200. The page is served with `noindex`, a strict CSP and `no-referrer`. |
+| https://satcom.conews.press/api/studio | 200 `{"enabled":false}`. Every operation returns 404 until `VIDEO_STUDIO_PASSWORD` is set. |
+| https://satcom.conews.press/video and `/api/videos` | Same as before. The Git catalog is served as-is, and there's no published overlay until Cloudinary env vars are set. |
+
+The same paths work on the other Production aliases (`copress-dashboard.vercel.app`, `satcom.copress.news`, `satcom.5280.menu`, `dev.conews.press`).
+`/subscribe` behavior is unchanged, and so are the subscribe.thevillager.today redirect, other redirects, Stripe, QR routes, DNS and WordPress.
+
+**Production has no Studio env vars.** That means the Studio is off, and nothing can upload, call AI or publish.
+
+## Architecture split
+
+- **This repo (Vercel):** Studio UI and `/api/studio`. It handles Cloudinary edit, render and export; the Grok and Gemini *copy* features (captions, titles; key `GEMINI_KEY_COPY` only, with no `GEMINI_API_KEY` fallback); listing and opening generated drafts; the review and publish gate; YouTube OAuth and upload; and the satcom `/video` published overlay.
+- **Patrick's server:** the Python Gemini client, the isolated `GEMINI_KEY_VIDEO` and `GEMINI_KEY_HEALTH` keys, the async **Gemini Omni video queue** and `publish_gate`. Finished clips are uploaded as **private** Cloudinary assets to `satcom/generated/` with a `{public_id}-sidecar` JSON, following the handoff contract in [gemini.md](gemini.md#handoff-contract-patricks-queue--studio). The Studio only lists and opens them.
+
+## Env vars
+
+| Variable | Preview | Production | Notes |
+| --- | --- | --- | --- |
+| `VIDEO_STUDIO_PASSWORD` | set | **missing** | 12+ chars. Required to enable the Studio. |
+| `CLOUDINARY_URL` | set | **missing** | Needed for upload, render, drafts and the published overlay. |
+| `XAI_API_KEY` | set | missing | Optional. Enables Grok copy, speech-to-text and Imagine. |
+| `GEMINI_KEY_COPY` | **missing** | **missing** | Gemini copy and transcription. The Preview `GEMINI_API_KEY` is no longer read. |
+| `YOUTUBE_CLIENT_ID` / `YOUTUBE_CLIENT_SECRET` | **missing** | **missing** | Google OAuth Web client. |
+| `YOUTUBE_TOKEN_ENC_KEY` | set (branch `cursor/video-studio-publish-0425`) | **missing** | 64 hex chars (`openssl rand -hex 32`). |
+| `YOUTUBE_REDIRECT_URI` | set (same branch) | **missing** | Must exactly match the Google redirect URI. |
+| `YOUTUBE_DAILY_UPLOAD_CAP`, `YOUTUBE_DEFAULT_PRIVACY` | set (same branch) | missing (defaults: 6, `unlisted`) | Optional. |
+| `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | **missing** | **missing** | Optional durable store. Apply the migrations first. |
+
+Warning: setting `SUPABASE_URL` before the migrations are applied makes Studio boot return 503 (see Known issues).
+
+## Review and publish gate rules
+
+- Nothing publishes automatically. One editor approval creates two idempotent jobs, **YouTube** and **satcom.conews.press/video**, keyed by `sha256(public_id|version|target)`.
+- Approval is blocked until all of these are true:
+  - Title, description, captions and tags are each ticked as reviewed.
+  - The reviewer name and date are filled in.
+  - The rights/consent box is ticked (people on screen, music, Paul Hill's OK).
+- Omni or AI-generated clips always send YouTube `containsSyntheticMedia=true` plus a visible AI disclosure line. The reviewer can't turn this off.
+- YouTube uploads default to `unlisted` (or `private`) and never `public`. The daily cap defaults to 6; anything past the cap shows "queued until tomorrow".
+- Only a failed target is retried; a target that succeeded never posts twice. Unpublishing sets YouTube to private or deletes the video, and removes the entry from the satcom overlay.
+- The satcom target creates a public Cloudinary copy only at approval time and writes `satcom-studio/published/catalog.json`, which is merged into `/api/videos`. Drafts stay private.
+
+## YouTube setup (Patrick)
+
+Full checklist: [youtube.md](youtube.md).
+1. In Google Cloud:
+   - Enable YouTube Data API v3.
+   - Set up the OAuth consent screen: External, Testing, with yourself as a test user.
+   - Add the scopes `youtube.upload` and `youtube.force-ssl`.
+2. Create an OAuth client of type **Web application** with these authorized redirect URIs:
+   - Preview: `https://copress-dashboard-git-cursor-video-studio-publish-0425-5280menu.vercel.app/api/studio/youtube-callback`
+   - Production: `https://satcom.conews.press/api/studio/youtube-callback`
+3. Set the client ID and secret (plus the other vars above) in Vercel, starting with Preview. Set `YOUTUBE_REDIRECT_URI` per environment.
+4. Connect the channel once: sign in at `/video/studio`, then go to Review & publish → Connect YouTube channel.
+5. File a quota increase. The default 10,000 units/day covers about 6 uploads. Suggested wording is in youtube.md.
+
+## Unapplied Supabase migrations (repo only)
+
+- `supabase/migrations/20260929120000_gemini_usage.sql`
+- `supabase/migrations/20260929120100_gemini_circuit.sql`
+- `supabase/migrations/20260929200000_video_publish_jobs.sql`
+- `supabase/migrations/20260929200100_youtube_oauth_and_quota.sql`
+- `supabase/migrations/20260929200200_video_publish_reviews_and_audit.sql`
+- `supabase/migrations/20260929200300_video_feed_published.sql`
+
+Apply these to a Preview project first. Without them, job, quota and token state is kept in per-instance memory.
+
+## Known issues (open bot review findings on #33; fix before enabling publish)
+
+- **The YouTube connect flow can't finish.** The session cookie is `SameSite=Strict`, so the browser doesn't send it on Google's cross-site redirect back. The callback then lands on `?youtube=signin`.
+- **Tokens saved by the callback aren't visible to the Studio.** Without Supabase, the tokens live in the callback process's memory, not the Studio handler's.
+- With `SUPABASE_URL` set and the migrations unapplied, Studio boot returns 503.
+- Failed uploads still count against the daily cap.
+- Re-approving an unpublished video can insert a second YouTube video. A timeout mid-upload can also double-post.
+- Jobs queued by the cap only run when someone clicks Retry.
+- The catalog overlay is rewritten without an etag, so a stale read can drop clips.
+- `tests/video-publish.test.mjs` ("published overlay merges…") fails on `main` because it assumes the Git catalog is empty. It now contains the rodeo clip. This is a test-only failure; `npm run build` passes.
+
+## Rollback
+
+The Production deployment before this merge is **`dpl_BRf8CMMLZv7NuCGcMMWHczZMm4sr`** (commit `cfa3e37`, copress-dashboard-jlfh8drpf-5280menu.vercel.app).
+To roll back:
+1. In Vercel, open copress-dashboard → Deployments, find that deployment, then choose **Instant Rollback** (or run `vercel rollback dpl_BRf8CMMLZv7NuCGcMMWHczZMm4sr`).
+2. Instant rollback turns off auto-promotion of new `main` pushes. Re-enable it by promoting a new deployment, or revert the three merge commits on `main` (`26c4b06`, `6a429e8`, `13fe8d5`) in a PR.
+
+No env vars, domains or DNS were changed by this release.
