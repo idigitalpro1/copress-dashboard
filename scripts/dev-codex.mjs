@@ -5,6 +5,7 @@ import mcp from '../api/mcp.js';
 import health from '../api/health.js';
 import board from '../api/development-board.js';
 import videos from '../api/videos.js';
+import studio from '../api/studio/index.js';
 const root = resolve(new URL('..', import.meta.url).pathname);
 createServer(async (req, res) => {
   const pathname = new URL(req.url, 'http://localhost').pathname;
@@ -12,6 +13,7 @@ createServer(async (req, res) => {
   if (pathname === '/api/health') return health(req, res);
   if (pathname === '/api/development-board') return board(req, res);
   if (pathname === '/api/videos' || pathname === '/data/video-feed.json') return videos(req, res);
+  if (pathname === '/api/studio') return studio(req, res);
   let file = pathname === '/video' || pathname === '/video/' ? '/video/index.html' : pathname === '/' ? '/index.html' : pathname;
   if (!extname(file)) file += '.html';
   const target = resolve(root, '.' + file);
