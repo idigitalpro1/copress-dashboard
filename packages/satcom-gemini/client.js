@@ -1,7 +1,5 @@
 import { loadRegistry } from './registry.js';
 import { generateContent } from './generate.js';
-import { startInteraction, getInteraction, downloadVideoBytes, buildOmniPayload } from './omni.js';
-import { submitVideoJob, pollVideoJobs, advanceJob } from './jobs.js';
 import { createStore } from './store.js';
 import { VERSION } from './version.js';
 
@@ -26,13 +24,6 @@ export function createGeminiClient({
     sleep,
     registry: resolvedRegistry,
     generateContent: opts => generateContent(client, opts),
-    startInteraction: opts => startInteraction(client, opts),
-    getInteraction: (id, opts) => getInteraction(client, id, opts),
-    downloadVideoBytes: (video, opts) => downloadVideoBytes(client, video, opts),
-    buildOmniPayload: opts => buildOmniPayload({ registry: resolvedRegistry, ...opts }),
-    submitVideoJob: input => submitVideoJob(client, input),
-    pollVideoJobs: opts => pollVideoJobs(client, opts),
-    advanceJob: (job, opts) => advanceJob(client, job, opts),
   };
   return client;
 }

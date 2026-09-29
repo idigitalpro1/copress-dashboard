@@ -38,6 +38,11 @@
         <div class="row"><input id="library-q" placeholder="Search Cloudinary videos" aria-label="Search Cloudinary videos"><button id="library-go" class="ghost" type="button">Search</button></div>
         <label class="inline"><input id="library-studio" type="checkbox"> Studio uploads only</label>
         <div id="library" class="thumbs" aria-label="Cloudinary video library"></div>
+        <h3 class="muted">Generated clips (Patrick's queue)</h3>
+        <p class="muted small">Private Cloudinary drafts under <code>satcom/generated/</code>, next to <code>satcom/paul-hill/originals</code>. This studio lists and opens them; it does not generate.</p>
+        <div class="row"><button id="generated-refresh" class="ghost" type="button">Refresh generated clips</button></div>
+        <p id="generated-status" class="muted small" role="status"></p>
+        <div id="generated" class="thumbs" aria-label="Generated Omni drafts"></div>
       </section>
 
       <section class="card preview-card" aria-labelledby="prev-h">

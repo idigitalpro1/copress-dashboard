@@ -1,22 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import {
   VERSION, loadRegistry, resolveModel, ModelDeniedError, selectKey, KeyIsolationError,
-  redact, createGeminiClient, createMemoryStore, sanitizeUsageRow, applyResolution,
-  BudgetExceededError, CircuitOpenError, failClosedModel,
+  redact, createGeminiClient, createMemoryStore, sanitizeUsageRow, handoffContract,
+  BudgetExceededError, CircuitOpenError, failClosedModel, WorkloadNotServedError,
 } from '../packages/satcom-gemini/index.js';
 import { createStudioHandler } from '../lib/video-studio/handler.js';
-import { createGeminiPollHandler } from '../lib/gemini-poll.js';
+import { existsSync } from 'node:fs';
 
 const PASSWORD = 'correct horse battery staple';
 const CLOUD = { CLOUDINARY_URL: 'cloudinary://111222333:cloud-secret-value@satcomtest' };
 const NOW = Date.parse('2026-09-29T20:00:00Z');
 const VIDEO_KEY = 'AIzaSyVideoKeyOnlyxxxxxxxxxxxVIDEO';
 const COPY_KEY = 'AIzaSyCopyKeyOnlyxxxxxxxxxxxxxCOPY';
-const SUSAN_KEY = 'AIzaSySusanKeyOnlyxxxxxxxxxxxSUSAN';
+const HEALTH_KEY = 'AIzaSyHealthKeyOnlyxxxxxxxxxxHLTH';
 const FALLBACK_KEY = 'AIzaSyFallbackKeyOnlyxxxxxxxFALL';
 
 const jsonResponse = (body, status = 200, headers = {}) =>
@@ -27,26 +25,37 @@ function response() {
 }
 
 test('package version matches VERSION file and registry', () => {
+  assert.equal(VERSION, '0.2.0');
   assert.equal(VERSION, readFileSync(new URL('../packages/satcom-gemini/VERSION', import.meta.url), 'utf8').trim());
   assert.equal(loadRegistry().version, VERSION);
 });
 
-test('key selection is isolated per workload and never crosses keys', () => {
+test('Python twin and Omni queue files are gone', () => {
+  assert.equal(existsSync(new URL('../packages/satcom-gemini/python/satcom_gemini.py', import.meta.url)), false);
+  assert.equal(existsSync(new URL('../packages/satcom-gemini/omni.js', import.meta.url)), false);
+  assert.equal(existsSync(new URL('../packages/satcom-gemini/jobs.js', import.meta.url)), false);
+  assert.equal(existsSync(new URL('../api/gemini/poll.js', import.meta.url)), false);
+  assert.equal(existsSync(new URL('../lib/gemini-poll.js', import.meta.url)), false);
+  assert.equal(existsSync(new URL('../supabase/migrations/20260929120200_video_jobs.sql', import.meta.url)), false);
+  const vercel = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+  assert.equal(vercel.crons, undefined);
+});
+
+test('key selection uses GEMINI_KEY_* with no GEMINI_API_KEY fallback', () => {
   const registry = loadRegistry();
-  const env = { GEMINI_API_KEY_VIDEO: VIDEO_KEY, GEMINI_API_KEY_COPY: COPY_KEY, GEMINI_API_KEY_SUSAN: SUSAN_KEY, GEMINI_API_KEY: FALLBACK_KEY };
-  assert.equal(selectKey(env, registry, 'video').source, 'GEMINI_API_KEY_VIDEO');
-  assert.equal(selectKey(env, registry, 'copy').source, 'GEMINI_API_KEY_COPY');
-  assert.equal(selectKey(env, registry, 'ask_susan').source, 'GEMINI_API_KEY_SUSAN');
+  const env = { GEMINI_KEY_VIDEO: VIDEO_KEY, GEMINI_KEY_COPY: COPY_KEY, GEMINI_KEY_HEALTH: HEALTH_KEY, GEMINI_API_KEY: FALLBACK_KEY };
+  assert.equal(selectKey(env, registry, 'video').source, 'GEMINI_KEY_VIDEO');
+  assert.equal(selectKey(env, registry, 'copy').source, 'GEMINI_KEY_COPY');
+  assert.equal(selectKey(env, registry, 'health').source, 'GEMINI_KEY_HEALTH');
   assert.equal(selectKey(env, registry, 'video').key, VIDEO_KEY);
   assert.notEqual(selectKey(env, registry, 'copy').key, VIDEO_KEY);
-  assert.notEqual(selectKey(env, registry, 'ask_susan').key, VIDEO_KEY);
-  assert.notEqual(selectKey(env, registry, 'ask_susan').key, COPY_KEY);
-  assert.throws(() => selectKey({ GEMINI_API_KEY_VIDEO: VIDEO_KEY, GEMINI_API_KEY: FALLBACK_KEY }, registry, 'ask_susan'), KeyIsolationError);
-  assert.throws(() => selectKey({ GEMINI_API_KEY_SUSAN: SUSAN_KEY }, registry, 'video'), KeyIsolationError);
-  assert.throws(() => selectKey({ GEMINI_API_KEY_SUSAN: SUSAN_KEY }, registry, 'copy'), KeyIsolationError);
-  const fallback = selectKey({ GEMINI_API_KEY: FALLBACK_KEY }, registry, 'copy');
-  assert.equal(fallback.fallback, true);
-  assert.equal(fallback.source, 'GEMINI_API_KEY');
+  assert.notEqual(selectKey(env, registry, 'health').key, VIDEO_KEY);
+  assert.notEqual(selectKey(env, registry, 'health').key, COPY_KEY);
+  assert.throws(() => selectKey({ GEMINI_KEY_VIDEO: VIDEO_KEY, GEMINI_API_KEY: FALLBACK_KEY }, registry, 'health'), KeyIsolationError);
+  assert.throws(() => selectKey({ GEMINI_KEY_HEALTH: HEALTH_KEY }, registry, 'video'), KeyIsolationError);
+  assert.throws(() => selectKey({ GEMINI_KEY_HEALTH: HEALTH_KEY }, registry, 'copy'), KeyIsolationError);
+  assert.throws(() => selectKey({ GEMINI_API_KEY: FALLBACK_KEY }, registry, 'copy'), KeyIsolationError);
+  assert.throws(() => selectKey({ GEMINI_API_KEY_COPY: COPY_KEY }, registry, 'copy'), KeyIsolationError);
 });
 
 test('fail-closed model ids: pin Omni 1.1, deny preview, reject unknown and implicit Veo', () => {
@@ -60,6 +69,15 @@ test('fail-closed model ids: pin Omni 1.1, deny preview, reject unknown and impl
   assert.equal(resolveModel(registry, 'video').optional, false);
 });
 
+test('this Vercel module refuses Omni generateContent', async () => {
+  const client = createGeminiClient({
+    env: { GEMINI_KEY_VIDEO: VIDEO_KEY, GEMINI_KEY_COPY: COPY_KEY },
+    store: createMemoryStore(), clock: () => NOW, sleep: async () => {},
+    fetchImpl: async () => { throw new Error('Gemini must not be called for video'); },
+  });
+  await assert.rejects(() => client.generateContent({ workload: 'video', parts: [{ text: 'clip' }] }), WorkloadNotServedError);
+});
+
 test('retries only on 429/5xx with backoff, and redacts keys', async () => {
   const waits = [];
   const calls = [];
@@ -69,7 +87,7 @@ test('retries only on 429/5xx with backoff, and redacts keys', async () => {
     return jsonResponse({ candidates: [{ content: { parts: [{ text: '{"ok":true}' }] } }], usageMetadata: { promptTokenCount: 8, candidatesTokenCount: 2 } });
   };
   const client = createGeminiClient({
-    env: { GEMINI_API_KEY_COPY: COPY_KEY },
+    env: { GEMINI_KEY_COPY: COPY_KEY },
     fetchImpl,
     store: createMemoryStore(),
     clock: () => NOW,
@@ -81,7 +99,7 @@ test('retries only on 429/5xx with backoff, and redacts keys', async () => {
   assert.deepEqual(waits, [1000, 1000]);
   assert.ok(calls.every(c => c.key === COPY_KEY));
   const failing = createGeminiClient({
-    env: { GEMINI_API_KEY_COPY: COPY_KEY },
+    env: { GEMINI_KEY_COPY: COPY_KEY },
     fetchImpl: async () => jsonResponse({ error: `leaked ${COPY_KEY}` }, 400),
     store: createMemoryStore(), clock: () => NOW, sleep: async () => {},
   });
@@ -92,57 +110,57 @@ test('retries only on 429/5xx with backoff, and redacts keys', async () => {
   });
 });
 
-test('circuit breaker is per-workload so video cannot open Ask Susan', async () => {
+test('circuit breaker is per-workload so copy cannot open health', async () => {
   const registry = structuredClone(loadRegistry());
   registry.workloads.copy.circuit.failureThreshold = 2;
   registry.retry.maxRetries = 0;
   const store = createMemoryStore();
-  let copyCalls = 0, susanCalls = 0;
+  let copyCalls = 0, healthCalls = 0;
   const copy = createGeminiClient({
-    env: { GEMINI_API_KEY_COPY: COPY_KEY, GEMINI_API_KEY_SUSAN: SUSAN_KEY },
+    env: { GEMINI_KEY_COPY: COPY_KEY, GEMINI_KEY_HEALTH: HEALTH_KEY },
     registry, store, clock: () => NOW, sleep: async () => {},
     fetchImpl: async () => { copyCalls += 1; return jsonResponse({}, 500); },
   });
   await assert.rejects(() => copy.generateContent({ workload: 'copy', parts: [{ text: 'a' }] }));
   await assert.rejects(() => copy.generateContent({ workload: 'copy', parts: [{ text: 'b' }] }));
   await assert.rejects(() => copy.generateContent({ workload: 'copy', parts: [{ text: 'c' }] }), CircuitOpenError);
-  const susan = createGeminiClient({
-    env: { GEMINI_API_KEY_COPY: COPY_KEY, GEMINI_API_KEY_SUSAN: SUSAN_KEY },
+  const health = createGeminiClient({
+    env: { GEMINI_KEY_COPY: COPY_KEY, GEMINI_KEY_HEALTH: HEALTH_KEY },
     registry, store, clock: () => NOW, sleep: async () => {},
     fetchImpl: async () => {
-      susanCalls += 1;
+      healthCalls += 1;
       return jsonResponse({ candidates: [{ content: { parts: [{ text: 'ok' }] } }] });
     },
   });
-  const ok = await susan.generateContent({ workload: 'ask_susan', parts: [{ text: 'symptom check' }] });
+  const ok = await health.generateContent({ workload: 'health', parts: [{ text: 'symptom check' }] });
   assert.equal(ok.text, 'ok');
   assert.equal(copyCalls, 2);
-  assert.equal(susanCalls, 1);
+  assert.equal(healthCalls, 1);
 });
 
 test('budget cap blocks a workload without charging the others', async () => {
   const store = createMemoryStore();
-  await store.insertUsage({ workload: 'video', model: 'gemini-omni-1.1-flash', estimated_usd: 20, status: 'ok', created_at_ms: NOW - 1000 });
-  const client = createGeminiClient({
-    env: { GEMINI_API_KEY_VIDEO: VIDEO_KEY, GEMINI_API_KEY_COPY: COPY_KEY },
+  await store.insertUsage({ workload: 'copy', model: 'gemini-3.5-flash', estimated_usd: 20, status: 'ok', created_at_ms: NOW - 1000 });
+  const copy = createGeminiClient({
+    env: { GEMINI_KEY_COPY: COPY_KEY, GEMINI_KEY_HEALTH: HEALTH_KEY },
     store, clock: () => NOW, sleep: async () => {},
     fetchImpl: async () => { throw new Error('Gemini must not be called after the budget cap'); },
   });
-  await assert.rejects(() => client.startInteraction({ payload: client.buildOmniPayload({ prompt: 'clip' }) }), BudgetExceededError);
-  const copy = createGeminiClient({
-    env: { GEMINI_API_KEY_COPY: COPY_KEY },
+  await assert.rejects(() => copy.generateContent({ workload: 'copy', parts: [{ text: 'title' }] }), BudgetExceededError);
+  const health = createGeminiClient({
+    env: { GEMINI_KEY_HEALTH: HEALTH_KEY },
     store, clock: () => NOW, sleep: async () => {},
-    fetchImpl: async () => jsonResponse({ candidates: [{ content: { parts: [{ text: '{"t":1}' }] } }], usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 } }),
+    fetchImpl: async () => jsonResponse({ candidates: [{ content: { parts: [{ text: 'ok' }] } }], usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 } }),
   });
-  const out = await copy.generateContent({ workload: 'copy', parts: [{ text: 'title' }] });
-  assert.equal(out.model, 'gemini-3.5-flash');
+  const out = await health.generateContent({ workload: 'health', parts: [{ text: 'check' }] });
+  assert.equal(out.text, 'ok');
 });
 
-test('ask_susan usage log holds counts and dollars only — never prompt or response text', async () => {
+test('health usage log holds counts and dollars only — never prompt or response text', async () => {
   const store = createMemoryStore();
   const secret = 'patient reports chest pain and takes lisinopril';
   const client = createGeminiClient({
-    env: { GEMINI_API_KEY_SUSAN: SUSAN_KEY },
+    env: { GEMINI_KEY_HEALTH: HEALTH_KEY },
     store, clock: () => NOW, sleep: async () => {},
     fetchImpl: async (_url, options) => {
       assert.match(options.body, /chest pain/);
@@ -153,89 +171,34 @@ test('ask_susan usage log holds counts and dollars only — never prompt or resp
       });
     },
   });
-  await client.generateContent({ workload: 'ask_susan', parts: [{ text: secret }] });
+  await client.generateContent({ workload: 'health', parts: [{ text: secret }] });
   const row = store._usage[0];
   const dumped = JSON.stringify(row);
-  assert.equal(row.workload, 'ask_susan');
+  assert.equal(row.workload, 'health');
   assert.equal(row.input_tokens, 40);
   assert.ok(row.estimated_usd > 0);
   assert.doesNotMatch(dumped, /chest pain|lisinopril|angina|Possible/);
   assert.deepEqual(row.metadata, {});
   const sneaky = sanitizeUsageRow({
-    workload: 'ask_susan', model: 'gemini-3.5-flash', status: 'ok',
+    workload: 'health', model: 'gemini-3.5-flash', status: 'ok',
     metadata: { prompt: secret, response: 'do not store', input_tokens: 1 },
   }, { noPhi: true });
   assert.doesNotMatch(JSON.stringify(sneaky), /chest pain|do not store/);
 });
 
-test('Omni job submit/poll state machine never publishes and uploads a private draft', async () => {
-  const store = createMemoryStore();
-  const uploads = [];
-  let phase = 0;
-  const fetchImpl = async (url, options) => {
-    const u = String(url);
-    const key = options.headers['x-goog-api-key'];
-    assert.equal(key, VIDEO_KEY);
-    assert.doesNotMatch(u, /key=/);
-    if (u.endsWith('/interactions') && options.method === 'POST') {
-      const body = JSON.parse(options.body);
-      assert.equal(body.model, 'gemini-omni-1.1-flash');
-      assert.equal(body.background, true);
-      assert.equal(body.response_format.resolution, '1080p');
-      assert.equal(body.response_format.type, 'video');
-      assert.equal(body.response_format.delivery, 'uri');
-      return jsonResponse({ id: 'int_1', status: 'in_progress', model: 'gemini-omni-1.1-flash' });
-    }
-    if (u.endsWith('/interactions/int_1')) {
-      phase += 1;
-      if (phase === 1) return jsonResponse({ id: 'int_1', status: 'in_progress' });
-      return jsonResponse({
-        id: 'int_1', status: 'completed', model: 'gemini-omni-1.1-flash',
-        steps: [{ type: 'model_output', content: [{ type: 'video', data: Buffer.from('mp4bytes').toString('base64') }] }],
-        usage: { input_tokens: 100, output_tokens: 46336 },
-      });
-    }
-    throw new Error('unexpected ' + u);
-  };
-  const client = createGeminiClient({
-    env: { GEMINI_API_KEY_VIDEO: VIDEO_KEY },
-    fetchImpl, store, clock: () => NOW, sleep: async () => {},
-  });
-  const { job } = await client.submitVideoJob({
-    brand: 'cnp', headline: 'Genesee evening update',
-    script: 'A short look at tonight\'s community calendar. Check the site for times and locations.',
-  });
-  assert.equal(job.status, 'running');
-  assert.equal(job.interaction_id, 'int_1');
-  const mid = await client.pollVideoJobs({ upload: async () => { throw new Error('too early'); } });
-  assert.equal(mid[0].status, 'running');
-  const done = await client.pollVideoJobs({
-    upload: async payload => { uploads.push(payload); },
-  });
-  assert.equal(done[0].status, 'completed');
-  assert.equal(done[0].sidecar.published, false);
-  assert.equal(done[0].sidecar.ai_generated, true);
-  assert.match(done[0].sidecar.synthid_note, /SynthID/);
-  assert.equal(done[0].sidecar.requested.resolution, '1080p');
-  assert.match(done[0].cloudinary_public_id, /^satcom\/generated\//);
-  assert.equal(uploads.length, 1);
-  assert.equal(uploads[0].bytes.toString(), 'mp4bytes');
+test('handoff contract pins folder, tags and sidecar fields for Patrick\'s queue', () => {
+  const handoff = handoffContract();
+  assert.equal(handoff.cloudinaryFolder, 'satcom/generated');
+  assert.equal(handoff.originalsFolder, 'satcom/paul-hill/originals');
+  assert.equal(handoff.type, 'private');
+  assert.equal(handoff.published, false);
+  assert.ok(handoff.videoTags.includes('satcom-generated'));
+  assert.deepEqual(handoff.sidecarFields, ['model', 'prompt', 'resolution', 'duration', 'aspect', 'timestamp', 'synthid_note']);
+  assert.match(handoff.synthidNote, /SynthID/);
 });
 
-test('resolution path switch is a single registry field', () => {
-  const registry = structuredClone(loadRegistry());
-  const payload = { response_format: { type: 'video' } };
-  applyResolution(payload, registry, '1080p');
-  assert.equal(payload.response_format.resolution, '1080p');
-  registry.omni.resolutionPath = 'generation_config.video_config.resolution';
-  const alt = { response_format: { type: 'video' } };
-  applyResolution(alt, registry, '1080p');
-  assert.equal(alt.generation_config.video_config.resolution, '1080p');
-  assert.equal(alt.response_format.resolution, undefined);
-});
-
-test('Video Studio Gemini assist uses the copy workload key', async () => {
-  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, GEMINI_API_KEY_COPY: COPY_KEY, GEMINI_API_KEY_VIDEO: VIDEO_KEY, ...CLOUD };
+test('Video Studio Gemini assist uses GEMINI_KEY_COPY', async () => {
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, GEMINI_KEY_COPY: COPY_KEY, GEMINI_KEY_VIDEO: VIDEO_KEY, ...CLOUD };
   const calls = [];
   const fetchImpl = async (url, options = {}) => {
     const u = String(url); calls.push(u);
@@ -264,54 +227,72 @@ test('Video Studio Gemini assist uses the copy workload key', async () => {
   assert.ok(calls.some(c => c.includes('generateContent')));
 });
 
-test('cron poller requires CRON_SECRET on Vercel and does not publish', async () => {
-  const denied = createGeminiPollHandler({ getEnv: () => ({ VERCEL: '1' }), clock: () => NOW });
-  const res = response();
-  await denied({ method: 'GET', headers: {} }, res);
-  assert.equal(res.statusCode, 401);
-  const store = createMemoryStore();
-  const ok = createGeminiPollHandler({
-    getEnv: () => ({ CRON_SECRET: 'cron-secret', GEMINI_API_KEY_VIDEO: VIDEO_KEY }),
-    fetchImpl: async () => { throw new Error('no jobs'); },
-    store, clock: () => NOW, sleep: async () => {},
-  });
-  const polled = response();
-  await ok({ method: 'GET', headers: { authorization: 'Bearer cron-secret' } }, polled);
-  assert.equal(polled.statusCode, 200, polled.body);
-  assert.equal(polled.json.published, undefined);
-  assert.match(polled.json.note, /Nothing published|Private/);
+test('Studio lists and opens private generated clips under satcom/generated/', async () => {
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD };
+  const sidecar = {
+    model: 'gemini-omni-1.1-flash',
+    prompt: 'Genesee evening update',
+    resolution: '1080p',
+    duration: 8,
+    aspect: '16:9',
+    timestamp: '2026-09-29T20:00:00.000Z',
+    synthid_note: 'This video was generated by Google Gemini Omni Flash. SynthID watermark.',
+  };
+  const fetchImpl = async (url) => {
+    const u = String(url);
+    if (u.includes('/resources/search')) {
+      return jsonResponse({
+        resources: [{
+          public_id: 'satcom/generated/genesee-evening',
+          type: 'private',
+          created_at: '2026-09-29T20:00:00Z',
+          width: 1920, height: 1080, duration: 8, bytes: 1200,
+          context: { caption: 'Genesee evening update' },
+          tags: ['satcom-generated', 'ai-generated', 'gemini-omni', 'draft'],
+        }],
+      });
+    }
+    if (u.includes('/raw/download') && u.includes('genesee-evening-sidecar')) {
+      return new Response(JSON.stringify(sidecar), { status: 200 });
+    }
+    throw new Error('unexpected ' + u);
+  };
+  const handler = createStudioHandler({ getEnv: () => env, fetchImpl, clock: () => NOW, store: createMemoryStore(), sleep: async () => {} });
+  const login = response();
+  await handler({ method: 'POST', url: '/api/studio', body: { op: 'login', password: PASSWORD }, headers: { 'x-studio-request': '1', 'x-forwarded-for': '198.51.100.41' } }, login);
+  const cookie = login.headers['Set-Cookie'].split(';')[0];
+  const list = response();
+  await handler({
+    method: 'POST', url: '/api/studio',
+    headers: { 'x-studio-request': '1', cookie, 'x-forwarded-for': '198.51.100.41' },
+    body: { op: 'generated-list' },
+  }, list);
+  assert.equal(list.statusCode, 200, list.body);
+  assert.equal(list.json.items[0].public_id, 'satcom/generated/genesee-evening');
+  assert.equal(list.json.items[0].type, 'private');
+  assert.equal(list.json.published, false);
+  assert.match(list.json.items[0].preview_url, /\/video\/private\//);
+  const opened = response();
+  await handler({
+    method: 'POST', url: '/api/studio',
+    headers: { 'x-studio-request': '1', cookie, 'x-forwarded-for': '198.51.100.41' },
+    body: { op: 'generated-get', public_id: 'satcom/generated/genesee-evening' },
+  }, opened);
+  assert.equal(opened.statusCode, 200, opened.body);
+  assert.equal(opened.json.sidecar.model, 'gemini-omni-1.1-flash');
+  assert.equal(opened.json.sidecar_ok, true);
+  assert.match(opened.json.sidecar.synthid_note, /SynthID/);
+  const denied = response();
+  await handler({
+    method: 'POST', url: '/api/studio',
+    headers: { 'x-studio-request': '1', cookie, 'x-forwarded-for': '198.51.100.41' },
+    body: { op: 'generated-get', public_id: 'satcom-studio/sources/clip' },
+  }, denied);
+  assert.equal(denied.statusCode, 400);
 });
 
 test('redact strips Gemini keys from arbitrary error strings', () => {
-  const env = { GEMINI_API_KEY_VIDEO: VIDEO_KEY, GEMINI_API_KEY: FALLBACK_KEY };
+  const env = { GEMINI_KEY_VIDEO: VIDEO_KEY, GEMINI_API_KEY: FALLBACK_KEY };
   assert.equal(redact(`https://x?key=${VIDEO_KEY}`, env).includes(VIDEO_KEY), false);
   assert.match(redact(`x-goog-api-key: ${FALLBACK_KEY}`, env), /x-goog-api-key: \*\*\*/);
-});
-
-test('Python twin reads the same registry and fail-closes the preview model', () => {
-  const script = `
-import json, sys
-sys.path.insert(0, ${JSON.stringify(fileURLToPath(new URL('../packages/satcom-gemini/python', import.meta.url)))})
-from satcom_gemini import load_registry, resolve_model, select_key, version
-reg = load_registry()
-assert version() == ${JSON.stringify(VERSION)}
-assert resolve_model(reg, 'video') == 'gemini-omni-1.1-flash'
-try:
-    resolve_model(reg, 'video', 'gemini-omni-flash-preview')
-    raise SystemExit('should have denied preview model')
-except Exception as e:
-    assert 'denied' in str(e).lower() or 'preview' in str(e).lower()
-env = {'GEMINI_API_KEY': 'f'}
-try:
-    select_key(env, reg, 'ask_susan')
-    raise SystemExit('ask_susan must not use GEMINI_API_KEY')
-except Exception:
-    pass
-key, source, fallback = select_key({'GEMINI_API_KEY_SUSAN': 's', 'GEMINI_API_KEY': 'f'}, reg, 'ask_susan')
-assert source == 'GEMINI_API_KEY_SUSAN' and not fallback
-print('ok')
-`;
-  const run = spawnSync('python3', ['-c', script], { encoding: 'utf8' });
-  assert.equal(run.status, 0, run.stderr || run.stdout);
-  assert.match(run.stdout, /ok/);
 });

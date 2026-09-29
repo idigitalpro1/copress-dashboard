@@ -8,16 +8,16 @@ function retryable(status) {
 
 function backoffSeconds(registry, workload, attempt, retryAfter) {
   const spec = registry.retry || {};
-  const table = workload === 'video' ? spec.videoBackoffSeconds : spec.copyBackoffSeconds;
+  const table = spec.copyBackoffSeconds;
   const seconds = Number(table?.[attempt - 1]) || 2 ** attempt;
   const header = retryAfter && /^\d+$/.test(String(retryAfter)) ? Number(retryAfter) : 0;
   return Math.max(seconds, header);
 }
 
 export async function geminiFetch({
-  fetchImpl, env, registry, workload, key, method, url, body, stream = false,
+  fetchImpl, env, registry, workload, key, method, url, body,
   timeoutMs = 55000, sleep = defaultSleep, signal,
-}) {
+} = {}) {
   const maxRetries = Number.isFinite(Number(registry.retry?.maxRetries))
     ? Number(registry.retry.maxRetries)
     : 3;
@@ -25,7 +25,7 @@ export async function geminiFetch({
   while (true) {
     let response;
     try {
-      const headers = { 'x-goog-api-key': key, 'Api-Revision': registry.omni?.apiRevision || '2026-05-20' };
+      const headers = { 'x-goog-api-key': key };
       if (body !== undefined) headers['Content-Type'] = 'application/json';
       response = await fetchImpl(url, {
         method,

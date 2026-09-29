@@ -63,3 +63,11 @@ export function resolveModel(registry, workload, requested) {
 export function failClosedModel(registry, workload, requested) {
   return resolveModel(registry, workload, requested).model;
 }
+
+export function handoffContract(registry) {
+  const resolved = registry || loadRegistry();
+  if (!resolved.handoff?.cloudinaryFolder) {
+    throw new ModelDeniedError('Gemini registry is missing the Patrick-server Cloudinary handoff contract.');
+  }
+  return resolved.handoff;
+}

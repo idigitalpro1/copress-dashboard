@@ -1,58 +1,41 @@
-# @satcom/gemini 0.1.0
+# @satcom/gemini 0.2.0
 
-Shared Gemini client for SATCOM Video Studio (copy/captions), Omni news clips, and — later, in a **separate** repo — Health IQ Ask Susan. **Share this module, not the API key.**
+Vercel / SATCOM Video Studio Gemini **copy** client. **Share this module, not the API key.**
 
-This package is preview-only. It does not publish to YouTube, the public `/api/videos` feed, WordPress, or any postcard QR route.
+Patrick Sweeney owns the Python client, the three isolated keys on his server, the async Omni generation queue, and `publish_gate`. This package does not duplicate that work. It does not publish to YouTube, the public `/api/videos` feed, WordPress, or any postcard QR route.
 
 ## Pin a specific version
 
 The module is versioned with semver (`VERSION`, `package.json`, `CHANGELOG.md`). Other projects should pin a **git commit or tag**, not `main`.
 
-**This repo (JavaScript):**
-
 ```js
-// copress-dashboard at a known commit
 import { createGeminiClient } from '../packages/satcom-gemini/index.js';
 ```
 
-**Another Node repo (Health IQ is last; do not migrate it in this phase):**
-
-```bash
-# subtree or copy at a pinned SHA
-git subtree add --prefix vendor/satcom-gemini \
-  https://github.com/idigitalpro1/copress-dashboard.git \
-  <commit-sha> --squash
-# then only keep packages/satcom-gemini/
-```
-
-Or copy `packages/satcom-gemini/` at the tagged version (`v0.1.0` / this commit) and do not edit `registry/models.json` locally except to bump the pin in a reviewed PR.
-
-**Python (news_video.py):**
-
-```python
-from satcom_gemini import load_registry, resolve_model, select_key, redact
-registry = load_registry()  # same registry/models.json
-model = resolve_model(registry, "video")          # gemini-omni-1.1-flash
-key, source, fallback = select_key(os.environ, registry, "video")
-```
-
-Keep `news_video.py` pointed at this registry so Omni cannot drift back to `gemini-omni-flash-preview`.
-
 ## Workloads and keys
 
-| Workload | Primary env | Fallback | Default model |
+| Workload | Env | This repo calls Gemini? | Default model |
 | --- | --- | --- | --- |
-| `video` | `GEMINI_API_KEY_VIDEO` | `GEMINI_API_KEY` | `gemini-omni-1.1-flash` |
-| `copy` | `GEMINI_API_KEY_COPY` | `GEMINI_API_KEY` | `gemini-3.5-flash` |
-| `ask_susan` | `GEMINI_API_KEY_SUSAN` | **none** | `gemini-3.5-flash` |
+| `copy` | `GEMINI_KEY_COPY` | yes (`generateContent`) | `gemini-3.5-flash` |
+| `video` | `GEMINI_KEY_VIDEO` | **no** — Patrick's server | `gemini-omni-1.1-flash` (sidecar fail-closed) |
+| `health` | `GEMINI_KEY_HEALTH` | no (isolation tests only) | `gemini-3.5-flash` |
 
-Ask Susan must never use the video key or vice versa. Ideally each key comes from a separate GCP project.
+Never fall back across workloads. **`GEMINI_API_KEY` is not read.** Video Studio Gemini assist on this stacked preview needs `GEMINI_KEY_COPY`. The earlier Video Studio preview (PR #29) used `GEMINI_API_KEY`; that name is no longer a fallback so a missing `GEMINI_KEY_COPY` disables Gemini copy/transcription rather than silently using a shared key.
 
-`GEMINI_API_KEY` fallback is **only** for video and copy, for local/preview convenience. It is not used for `ask_susan`.
+Health (formerly Ask Susan) must never use the video key or vice versa. Ideally each key comes from a separate GCP project.
+
+## What this repo does not do
+
+- Call the Omni Interactions API
+- Queue, poll, or download generated video
+- Run a Vercel cron poller
+- Ship a Python twin of this client
+
+Finished clips arrive as **private** Cloudinary assets under `satcom/generated/`. The Studio lists and opens them. See [docs/gemini.md](../../docs/gemini.md) for the handoff contract (folder, tags, sidecar JSON).
 
 ## Env vars (Preview only — do not set production)
 
-See [docs/gemini.md](../../docs/gemini.md) for the full list, recommended billing hard caps, Omni job routes, and the Cloud Run vs cron tradeoff.
+See [docs/gemini.md](../../docs/gemini.md) for the full list, recommended billing hard caps, and the Cloudinary handoff.
 
 ## Tests
 

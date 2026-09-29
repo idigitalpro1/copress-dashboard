@@ -18,9 +18,7 @@ The studio is **disabled by default**. The repository has no server-side admin s
 | `VIDEO_STUDIO_PASSWORD` | yes (enables the studio) | Operator password, 12+ characters |
 | `CLOUDINARY_URL` **or** `CLOUDINARY_CLOUD_NAME` + `CLOUDINARY_API_KEY` + `CLOUDINARY_API_SECRET` | yes for editing | Signed uploads, signed delivery URLs, renders, captions, drafts, image storage |
 | `XAI_API_KEY` | optional | Grok copy (`XAI_MODEL`, default `grok-4.7`), Grok speech-to-text captions, Grok Imagine image generate/edit (`XAI_IMAGE_MODEL`, default `grok-imagine-image-2.0`) |
-| `GEMINI_API_KEY_COPY` | optional | Preferred Gemini key for studio analysis, titles and transcription (`workload=copy`). Default model `gemini-3.5-flash` from the shared registry |
-| `GEMINI_API_KEY` | optional | Documented fallback for copy (and Omni video) only — never used for Ask Susan |
-| `GEMINI_API_KEY_VIDEO` | optional | Omni clip generation (`op: omni-submit`). Pin `gemini-omni-1.1-flash`. See [gemini.md](gemini.md) |
+| `GEMINI_KEY_COPY` | optional | Gemini key for studio analysis, titles and transcription (`workload=copy`). Default model `gemini-3.5-flash`. **No `GEMINI_API_KEY` fallback.** |
 | `GEMINI_MODEL` | optional | Copy-model override; must be `gemini-3.5-flash` or `gemini-3.8-flash` |
 | `VIDEO_STUDIO_UPLOAD_TYPE` | optional | `authenticated` (default) keeps raw uploads off public URLs; `upload` stores them as public |
 | `VIDEO_STUDIO_LANGUAGE` | optional | Speech-to-text language hint, default `en` |
@@ -49,5 +47,5 @@ Publishing remains a reviewed step: copy the draft JSON, set `status` to `publis
 - Cloudinary renders on first request. Clips larger than the account's on-the-fly limit (about 40 to 100 MB depending on plan) need **Pre-render**.
 - `g_auto` video cropping and Cloudinary text/subtitle layers use transformation quota. Fonts are Arial and Georgia. Custom brand fonts would need to be uploaded to Cloudinary.
 - Drafts live in Cloudinary. They are not merged into the repository catalog or into the Supabase store proposed in PR #27; that bridge is a follow-up.
-- The Google Cloud "ACE Video Ed" pipeline (Gemini analysis plus a 15-second FFmpeg highlight) is not deployed. The studio covers the same flow with the shared Gemini module (`packages/satcom-gemini`, workload `copy`) plus Cloudinary trims. Omni generation is async (`omni-submit` / cron poller) and stores **private** drafts under `satcom/generated/`. See [gemini.md](gemini.md). Preview only; do not merge; nothing is published.
+- The Google Cloud "ACE Video Ed" pipeline (Gemini analysis plus a 15-second FFmpeg highlight) is not deployed. The studio covers the same flow with the shared Gemini module (`packages/satcom-gemini`, workload `copy`) plus Cloudinary trims. Omni generation runs on Patrick's server. This studio **lists and opens** private drafts under `satcom/generated/` (alongside `satcom/paul-hill/originals`). See [gemini.md](gemini.md). Preview only; do not merge; nothing is published.
 - Login throttling is in-memory per function instance. Put Vercel deployment protection or a firewall rule in front for stronger protection.

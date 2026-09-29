@@ -25,12 +25,3 @@ export function usageFromGenerateContent(data) {
     totalTokens: Number(meta.totalTokenCount) || 0,
   };
 }
-
-export function usageFromInteraction(data) {
-  const usage = data?.usage || {};
-  return {
-    inputTokens: Number(usage.input_tokens ?? usage.promptTokenCount) || 0,
-    outputTokens: Number(usage.output_tokens ?? usage.candidatesTokenCount) || 0,
-    totalTokens: Number(usage.total_tokens ?? usage.totalTokenCount) || 0,
-  };
-}

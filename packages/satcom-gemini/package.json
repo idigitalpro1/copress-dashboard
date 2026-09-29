@@ -1,9 +1,9 @@
 {
   "name": "@satcom/gemini",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Shared Gemini client for SATCOM Video Studio, Omni news clips, and Health IQ Ask Susan. Share the module, not the key.",
+  "description": "Vercel/Studio Gemini copy client for SATCOM. Isolated keys, usage log, budgets and circuit breaker. Video generation is owned by Patrick's server.",
   "exports": {
     ".": "./index.js",
     "./registry": "./registry/models.json"
@@ -19,14 +19,11 @@
     "cost.js",
     "store.js",
     "generate.js",
-    "omni.js",
-    "jobs.js",
     "client.js",
     "registry/models.json",
     "VERSION",
     "CHANGELOG.md",
-    "README.md",
-    "python/satcom_gemini.py"
+    "README.md"
   ],
   "engines": {
     "node": ">=22"

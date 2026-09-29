@@ -46,10 +46,6 @@ export async function assertLimits(store, registry, workload, { now = Date.now()
   if (recent >= (spec.budget?.maxPerMinute || 20)) {
     throw new RateLimitedError(`Gemini ${workload} rate limit (${spec.budget.maxPerMinute}/min) reached.`);
   }
-  const concurrent = await store.countActiveJobs?.() || 0;
-  if (workload === 'video' && spec.budget?.maxConcurrent && concurrent >= spec.budget.maxConcurrent) {
-    throw new RateLimitedError(`Gemini video already has ${concurrent} active jobs (cap ${spec.budget.maxConcurrent}).`);
-  }
   const dayUsd = await store.sumUsage(workload, now - DAY);
   const monthUsd = await store.sumUsage(workload, now - MONTH);
   if (dayUsd + estimatedUsd > spec.budget.dailyUsd) {

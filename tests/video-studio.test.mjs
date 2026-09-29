@@ -66,11 +66,11 @@ test('AI and image features are disabled with a note when keys are missing', asy
   const cookie = await login(handler, '198.51.100.3');
   const status = (await call(handler, { method: 'GET', cookie })).json;
   assert.ok(status.notes.some(n => n.includes('XAI_API_KEY')));
-  assert.ok(status.notes.some(n => n.includes('GEMINI_API_KEY')));
+  assert.ok(status.notes.some(n => n.includes('GEMINI_KEY_COPY')));
   for (const body of [{ op: 'assist', provider: 'grok', source }, { op: 'transcribe', source }, { op: 'image-generate', prompt: 'A mountain town' }]) {
     const res = await call(handler, { body, cookie });
     assert.equal(res.statusCode, 503);
-    assert.match(res.json.error, /XAI_API_KEY|GEMINI_API_KEY|AI/);
+    assert.match(res.json.error, /XAI_API_KEY|GEMINI_KEY_COPY|AI/);
   }
 });
 
@@ -104,12 +104,22 @@ test('render builds signed Cloudinary URLs for trim, social crop, captions and b
   assert.match(srtUpload.form.get('signature'), /^[a-f0-9]{40}$/);
 });
 
+test('private generated sources under satcom/generated/ can be opened as studio clips', async () => {
+  const handler = handlerWith({ VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD });
+  const cookie = await login(handler, '198.51.100.8');
+  const res = await call(handler, { cookie, body: { op: 'render', source: { public_id: 'satcom/generated/clip', type: 'private', duration: 8 }, edit: { start: 0, end: 8, formats: ['16:9'] } } });
+  assert.equal(res.statusCode, 200, res.body);
+  assert.match(res.json.outputs[0].mp4_url, /\/video\/private\//);
+  assert.doesNotMatch(res.body, /cloud-secret-value/);
+});
+
 test('invalid inputs fail closed', async () => {
   const handler = handlerWith({ VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD });
   const cookie = await login(handler, '198.51.100.5');
   for (const bad of [
     { op: 'render', source: { public_id: '../etc/passwd', type: 'upload' } },
     { op: 'render', source: { public_id: 'ok', type: 'private' } },
+    { op: 'render', source: { public_id: 'satcom/generated/clip', type: 'private' }, edit: { start: 30, end: 10 } },
     { op: 'render', source: { ...source }, edit: { start: 30, end: 10 } },
     { op: 'render', source, edit: { formats: ['4:3'] } },
     { op: 'nope' },

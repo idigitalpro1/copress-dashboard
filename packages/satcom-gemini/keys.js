@@ -1,4 +1,4 @@
-export const WORKLOADS = ['video', 'copy', 'ask_susan'];
+export const WORKLOADS = ['video', 'copy', 'health'];
 
 export class KeyIsolationError extends Error {
   constructor(message) {
@@ -22,23 +22,15 @@ export function keyEnvName(registry, workload) {
 }
 
 /**
- * Pick the API key for one workload. Never falls back across workloads.
- * A plain GEMINI_API_KEY is allowed only when the workload lists it as fallback
- * (video and copy). ask_susan has no fallback.
+ * Pick the API key for one workload. Never falls back across workloads
+ * and never falls back to a plain GEMINI_API_KEY.
  */
 export function selectKey(env, registry, workload) {
   const spec = registry.workloads[workload];
   if (!spec) throw new KeyIsolationError(`Unknown Gemini workload '${workload}'.`);
   const primary = read(env, spec.keyEnv);
   if (primary) return { key: primary, source: spec.keyEnv, fallback: false };
-  if (spec.fallbackKeyEnv) {
-    const fallback = read(env, spec.fallbackKeyEnv);
-    if (fallback) return { key: fallback, source: spec.fallbackKeyEnv, fallback: true };
-  }
-  const hint = spec.fallbackKeyEnv
-    ? `${spec.keyEnv} (or ${spec.fallbackKeyEnv} fallback)`
-    : spec.keyEnv;
-  throw new KeyIsolationError(`${hint} is not set. No Gemini call made for workload '${workload}'.`);
+  throw new KeyIsolationError(`${spec.keyEnv} is not set. No Gemini call made for workload '${workload}'.`);
 }
 
 export function hasWorkloadKey(env, registry, workload) {
@@ -53,15 +45,16 @@ export function hasWorkloadKey(env, registry, workload) {
 
 export function describeKeyPolicy() {
   return {
-    video: { primary: 'GEMINI_API_KEY_VIDEO', fallback: 'GEMINI_API_KEY' },
-    copy: { primary: 'GEMINI_API_KEY_COPY', fallback: 'GEMINI_API_KEY' },
-    ask_susan: { primary: 'GEMINI_API_KEY_SUSAN', fallback: null },
-    rule: 'Never fall back across workloads. Ask Susan must never use the video key or vice versa.',
+    video: { primary: 'GEMINI_KEY_VIDEO', fallback: null, ownedBy: 'patrick-server' },
+    copy: { primary: 'GEMINI_KEY_COPY', fallback: null },
+    health: { primary: 'GEMINI_KEY_HEALTH', fallback: null },
+    rule: 'Never fall back across workloads. Health must never use the video key or vice versa. No GEMINI_API_KEY fallback.',
   };
 }
 
 export function secretValues(env) {
   const names = [
+    'GEMINI_KEY_VIDEO', 'GEMINI_KEY_COPY', 'GEMINI_KEY_HEALTH',
     'GEMINI_API_KEY_VIDEO', 'GEMINI_API_KEY_COPY', 'GEMINI_API_KEY_SUSAN', 'GEMINI_API_KEY',
     'SUPABASE_SERVICE_ROLE_KEY', 'SUPABASE_SECRET_KEY', 'CLOUDINARY_API_SECRET',
     'XAI_API_KEY', 'VIDEO_STUDIO_PASSWORD', 'CRON_SECRET',
