@@ -105,7 +105,7 @@ export const PromptCard: React.FC<PromptCardProps> = ({
               onChange={(e) => onMapKey(prompt.id, e.target.value || null)}
               className="bg-slate-900 border border-slate-800 rounded-lg px-2 py-1 text-[11px] text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500 max-w-[160px] truncate"
             >
-              <option value="">(Default Fallback)</option>
+              <option value="">(No mapped key)</option>
               {keys.map((k) => (
                 <option key={k.id} value={k.id}>
                   {k.label} ({k.maskedKey.slice(-4)})
@@ -113,6 +113,7 @@ export const PromptCard: React.FC<PromptCardProps> = ({
               ))}
             </select>
           </div>
+          <p className="text-[11px] text-slate-400">Choose a key that passed Test Connection here or explicitly in the sandbox. Set a model for that provider in Edit or the sandbox.</p>
 
           <div className="flex items-center justify-between pt-1 border-t border-slate-800/40 text-[11px]">
             <span className="text-slate-400 flex items-center gap-1">

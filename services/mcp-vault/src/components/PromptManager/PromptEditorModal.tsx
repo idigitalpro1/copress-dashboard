@@ -64,7 +64,7 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
       setUserTemplate('Analyze the provided raw newspaper OCR text and extract all metadata.');
       setTargetFormat('json');
       setRecommendedModel('gemini-3.8-flash');
-      setMappedKeyId(keys[0]?.id || null);
+      setMappedKeyId(null);
       setTemperature(0.2);
       setVersionNotes('Initial version baseline.');
       setBumpVersion(false);
@@ -234,13 +234,14 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                   onChange={(e) => setMappedKeyId(e.target.value || null)}
                   className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                 >
-                  <option value="">(Default Key Fallback)</option>
+                  <option value="">(No mapped key — choose explicitly)</option>
                   {keys.map((k) => (
                     <option key={k.id} value={k.id}>
                       {k.label} ({k.maskedKey.slice(-4)})
                     </option>
                   ))}
                 </select>
+                <p className="mt-1 text-[11px] text-slate-500">Execution requires a key that passed Test Connection and a model for that provider. Choose the key here or explicitly in the sandbox.</p>
               </div>
 
               {/* Recommended Model */}
