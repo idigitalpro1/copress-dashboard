@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { z } from 'zod';
 import { decryptApiKey, NewsflowError, requireNewsflowConfig } from './crypto.js';
 
 export interface VaultKeyItem {
@@ -95,19 +96,75 @@ export interface SecurityLogItem {
   metadata?: Record<string, any>;
 }
 
+const identifier = z.string().min(1).max(200).regex(/^[A-Za-z0-9._-]+$/);
+const isoDate = z.string().datetime();
+const boundedText = (max: number) => z.string().max(max).refine(value => !value.includes('\0'));
+const providerSchema = z.enum(['gemini', 'openai', 'anthropic', 'custom']);
+const versionSchema = z.object({ version: boundedText(32), systemPrompt: boundedText(30000), userTemplate: boundedText(30000),
+  notes: boundedText(2000), createdAt: isoDate, author: boundedText(100) });
+const keySchema = z.object({
+  id: identifier, label: boundedText(120), provider: providerSchema, maskedKey: boundedText(100),
+  encryptedData: z.string().max(32826).regex(/^[a-f0-9]{24}:[a-f0-9]{32}:(?:[a-f0-9]{2}){8,16384}$/i),
+  envVarName: z.string().regex(/^[A-Z][A-Z0-9_]{1,63}$/).optional(),
+  status: z.enum(['active', 'invalid', 'revoked', 'untested']), validationMessage: boundedText(1000),
+  lastValidatedAt: isoDate.optional(), latencyMs: z.number().finite().nonnegative().max(3600000).optional(),
+  isDefault: z.boolean(), usageCount: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER), createdAt: isoDate, updatedAt: isoDate,
+});
+const promptSchema = z.object({
+  id: identifier, title: boundedText(200), description: boundedText(2000),
+  category: z.enum(['headline-byline', 'column-layout', 'wire-normalizer', 'sports-scores', 'caption-parser', 'custom']),
+  currentVersion: boundedText(32), systemPrompt: boundedText(30000), userTemplate: boundedText(30000),
+  targetFormat: z.enum(['json', 'markdown', 'text']), recommendedModel: boundedText(100), mappedKeyId: identifier.nullable(),
+  temperature: z.number().finite().min(0).max(2), tags: z.array(boundedText(60)).max(20),
+  createdAt: isoDate, updatedAt: isoDate, versions: z.array(versionSchema).max(100),
+});
+const logSchema = z.object({
+  id: identifier, timestamp: isoDate,
+  action: z.enum(['VALIDATION_ATTEMPT', 'VALIDATION_SUCCESS', 'VALIDATION_FAILED', 'KEY_ROTATED', 'KEY_REVOKED', 'KEY_REACTIVATED',
+    'KEY_CREATED', 'KEY_DELETED', 'ENV_IMPORTED', 'DEFAULT_SET', 'PROMPT_EXECUTED', 'PROMPT_EXECUTION_FAILED',
+    'validation', 'rotation', 'revocation', 'reactivation', 'creation', 'deletion', 'import', 'set_default']),
+  trigger: z.enum(['manual', 'automated']), status: z.enum(['success', 'warning', 'failure', 'info']), actor: boundedText(120), details: boundedText(2000),
+  keyId: identifier.optional(), keyLabel: boundedText(120).optional(), provider: providerSchema.optional(),
+  maskedKey: z.string().transform(() => '••••••••••••').optional(), latencyMs: z.number().finite().nonnegative().max(3600000).optional(),
+});
+const schemas = { 'keys.json': z.array(keySchema).max(2000), 'prompts.json': z.array(promptSchema).max(2000), 'security_logs.json': z.array(logSchema).max(500) };
+function validatedRows(filename: string, data: unknown): any[] {
+  const schema = schemas[filename as keyof typeof schemas];
+  const result = schema?.safeParse(data);
+  if (!result?.success || new Set(result.data.map(item => item.id)).size !== result.data.length) throw new Error();
+  return result.data;
+}
+function owned(stat: fs.Stats) { return typeof process.getuid !== 'function' || stat.uid === process.getuid(); }
+function privateFile(stat: fs.Stats) {
+  return stat.isFile() && owned(stat) && stat.nlink === 1 && (stat.mode & 0o7777) === 0o600 && stat.size <= 16 * 1024 * 1024;
+}
+function sameFile(left: fs.Stats, right: fs.Stats) {
+  return left.dev === right.dev && left.ino === right.ino && left.size === right.size && left.mtimeMs === right.mtimeMs && left.ctimeMs === right.ctimeMs;
+}
+
 function directory() {
   const dir = requireNewsflowConfig().dataDir;
   try {
     const webRoot = path.resolve(fileURLToPath(new URL('../../../', import.meta.url)));
     const requested = path.resolve(dir);
     if (requested === path.parse(requested).root || requested === webRoot || requested.startsWith(webRoot + path.sep)) throw new Error();
+    // Resolve the existing ancestor before creating anything through an alias into the website.
+    let ancestor = requested;
+    const missing: string[] = [];
+    while (!fs.existsSync(ancestor)) {
+      missing.unshift(path.basename(ancestor));
+      const parent = path.dirname(ancestor);
+      if (parent === ancestor) throw new Error();
+      ancestor = parent;
+    }
+    const prospective = path.resolve(fs.realpathSync(ancestor), ...missing);
+    if (prospective === webRoot || prospective.startsWith(webRoot + path.sep)) throw new Error();
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
     const stat = fs.lstatSync(dir);
-    if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error();
+    if (!stat.isDirectory() || stat.isSymbolicLink() || !owned(stat) || (stat.mode & 0o7777) !== 0o700) throw new Error();
     const resolved = fs.realpathSync(dir);
     if (resolved === webRoot || resolved.startsWith(webRoot + path.sep)) throw new Error();
-    fs.chmodSync(dir, 0o700);
-    return dir;
+    return resolved;
   } catch { throw new NewsflowError('Private vault storage is unavailable.', 503); }
 }
 
@@ -115,14 +172,22 @@ function readArray<T>(filename: string, empty: () => T[] = () => []): T[] {
   const target = path.join(directory(), filename);
   let fd: number | undefined;
   try {
-    try { if (!fs.lstatSync(target).isFile()) throw new Error(); }
+    let before: fs.Stats;
+    try { before = fs.lstatSync(target); if (!privateFile(before)) throw new Error(); }
     catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return empty(); throw error; }
     fd = fs.openSync(target, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
     const stat = fs.fstatSync(fd);
-    if (!stat.isFile() || stat.size > 16 * 1024 * 1024) throw new Error();
-    const data = JSON.parse(fs.readFileSync(fd, 'utf8'));
-    if (!Array.isArray(data) || data.length > 2000 || data.some(item => !item || typeof item !== 'object' || typeof item.id !== 'string')) throw new Error();
-    return data;
+    if (!privateFile(stat) || !sameFile(before, stat)) throw new Error();
+    // Allocate from the checked size; an externally growing file cannot cause an unbounded read.
+    const bytes = Buffer.alloc(stat.size);
+    let offset = 0;
+    while (offset < bytes.length) {
+      const count = fs.readSync(fd, bytes, offset, bytes.length - offset, offset);
+      if (!count) throw new Error();
+      offset += count;
+    }
+    if (!sameFile(stat, fs.fstatSync(fd)) || !sameFile(stat, fs.lstatSync(target))) throw new Error();
+    return validatedRows(filename, JSON.parse(bytes.toString('utf8')));
   } catch { throw new NewsflowError('Stored vault data could not be read. No data was reset.', 503); }
   finally { if (fd !== undefined) fs.closeSync(fd); }
 }
@@ -134,14 +199,20 @@ function writeArray(filename: string, rows: unknown[]) {
   const temporary = path.join(dir, '.' + filename + '.' + crypto.randomUUID() + '.tmp');
   let fd: number | undefined;
   try {
-    try { if (!fs.lstatSync(target).isFile()) throw new Error(); }
+    let before: fs.Stats | undefined;
+    try { before = fs.lstatSync(target); if (!privateFile(before)) throw new Error(); }
     catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
-    const content = JSON.stringify(rows);
+    // Validate existing contents even for clear/delete operations. Corruption is never silently reset.
+    if (before) readArray(filename);
+    const content = JSON.stringify(validatedRows(filename, rows));
     if (Buffer.byteLength(content) > 16 * 1024 * 1024) throw new Error();
     fd = fs.openSync(temporary, fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_WRONLY | fs.constants.O_NOFOLLOW, 0o600);
     fs.writeFileSync(fd, content, 'utf8');
     fs.fsyncSync(fd);
     fs.closeSync(fd); fd = undefined;
+    let current: fs.Stats | undefined;
+    try { current = fs.lstatSync(target); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+    if (before ? !current || !privateFile(current) || !sameFile(before, current) : current !== undefined) throw new Error();
     fs.renameSync(temporary, target);
     // Rename is the commit point. A directory-sync failure must not falsely report rollback.
     try {

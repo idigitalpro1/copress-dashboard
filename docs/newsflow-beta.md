@@ -16,7 +16,7 @@ The beta uses SATCOM's existing HTTP listener on **127.0.0.1:4321**. The Express
 | `/sse` and `/message` | Legacy HTTP+SSE compatibility | Beta bearer token on both routes |
 | `/mcp` and `/api/mcp` | Existing public SATCOM context | Four public read-only SATCOM tools |
 
-Vault and prompt paths were checked against SATCOM's existing routes. The new handler owns only the listed private namespaces. Responses use `Cache-Control: no-store`. Foreign browser origins are rejected. Requests from native clients without an Origin header can authenticate using the bearer token.
+Vault and prompt paths were checked against SATCOM's existing routes. The new handler owns only the listed private namespaces. Responses use `Cache-Control: no-store`. Foreign browser origins are rejected. Requests from native clients without an Origin header can authenticate using the bearer token. Loopback Host headers must identify `localhost`, `127.0.0.1`, or `[::1]` with the listener's exact port; the local dashboard rejects other hosts before serving pages or APIs. Forwarding headers do not establish trust.
 
 ## Install and run locally
 
@@ -36,7 +36,7 @@ node scripts/setup-newsflow.mjs /Users/IT/Documents/ChatGPT/AWS/.satcom-newsflow
 node --env-file=/Users/IT/Documents/ChatGPT/AWS/.satcom-newsflow-beta/newsflow.env scripts/dev-codex.mjs
 ```
 
-Open `http://127.0.0.1:4321/newsflow/`. Enter the configured `NEWSFLOW_MCP_TOKEN` in the sign-in field. Read/copy that value privately on your machine; do not paste it into chat. The browser holds it only in memory and clears it on disconnect or reload. The starter configuration leaves external model execution disabled. No provider keys are generated or provisioned by this helper.
+Open `http://127.0.0.1:4321/newsflow/`. Enter the configured `NEWSFLOW_MCP_TOKEN` in the sign-in field. Read/copy that value privately on your machine; do not paste it into chat. The browser holds it only in memory and clears it on disconnect, page exit/reload, or 15 minutes without user interaction. Background requests do not extend that idle period. The starter configuration leaves external model execution disabled. No provider keys are generated or provisioned by this helper.
 
 | Setting | Requirement |
 | --- | --- |
@@ -47,7 +47,19 @@ Open `http://127.0.0.1:4321/newsflow/`. Enter the configured `NEWSFLOW_MCP_TOKEN
 | `NEWSFLOW_ALLOWED_ORIGINS` | Exact browser origin URLs; local 4321 origins are allowed |
 | `NEWSFLOW_ALLOW_EXECUTION` | `1` only when the operator enables paid model execution |
 
-Back up the encrypted data and its encryption key securely. Losing or replacing the master key makes the stored credentials unreadable. Corrupt storage is reported without replacing it with an empty vault. The local JSON store is intended for one server process, not a multi-instance deployment.
+Back up the encrypted data and its encryption key securely. Losing or replacing the master key makes the stored credentials unreadable. Use a directory owned by the server user with mode `700` and files with mode `600`; shared directories, symlinks, hard links, and corrupt files fail closed. The server does not change permissions on an arbitrary existing directory. Stored records have bounded schemas, and unexpected fields are excluded from API/audit output. Existing file contents are checked before replacement, including clear/delete operations. The local JSON store is intended for one server process, not a multi-instance deployment.
+
+## Hardening and request limits
+
+The REST and MCP guards share constant-time bearer checks and a bounded authentication-failure budget. More than 20 failures from one socket address or 60 total failures in a minute returns `429` with `Retry-After`. A correct bearer remains usable after an unauthenticated failure flood. Duplicate authentication, Host, Origin, media-type, encoding, and Accept headers are rejected.
+
+REST permits 300 authenticated requests and 60 mutations per minute, with at most 32 in flight. MCP permits 240 requests per minute, with at most eight HTTP operations and eight pending legacy requests per session. Legacy SSE has a maximum of 20 sessions, a ten-minute idle expiry, and a thirty-minute absolute lifetime. The existing provider budget remains shared by REST and MCP: 60 provider calls per minute and at most three concurrent calls. These limits bound a single operator process; they do not replace provider billing controls.
+
+JSON requests must use UTF-8 `application/json` without compression. REST bodies are limited to 512 KiB; MCP bodies to 256 KiB. Both reject overly deep or complex JSON and unsafe object properties. These checks also apply when a parent Express application has already parsed the body. MCP clients must send the transport's appropriate Accept types, and stalled MCP body uploads time out after ten seconds. The local listener also limits header size and upload time.
+
+The browser sends credentials only to the same origin, refuses redirects, and aborts pending work on disconnect or idle expiry. API requests have a 90-second client deadline. An abort or timeout cannot undo a mutation or paid provider call that the server already accepted: refresh and check the saved state before retrying. Secret inputs are cleared on modal close, and pasted `.env` text moves directly into a masked review.
+
+Local and hosted NewsFlow pages use a Content Security Policy, deny framing, suppress referrers, and disable unrelated device capabilities. Server source folders and build/configuration files are blocked by the local static server; hosted source paths redirect into the disabled private handler. Public SATCOM MCP remains separate and retains its four read-only tools.
 
 ## Key and file import
 
@@ -79,7 +91,7 @@ The local endpoint actually implements **Streamable HTTP**. `/sse` plus `/messag
 | `newsflow_get_prompt` | One stored prompt |
 | `execute_newspaper_pipeline` | One to three mapped prompt stages; draft output, no publishing |
 
-Execution requires `NEWSFLOW_ALLOW_EXECUTION=1` and an explicitly selected or mapped validated key. The pipeline passes each stage's output to the next stage. It never falls back to an environment key or first/default key. Provider errors are redacted; pricing is not guessed from stale upstream estimates.
+Execution requires `NEWSFLOW_ALLOW_EXECUTION=1` and an explicitly selected or mapped validated key. The pipeline passes each stage's output to the next stage. It checks the transport's cancellation/disconnect signal before dispatching each stage, so cancellation stops later provider calls; an already accepted call can still complete and incur usage. Legacy paid pipeline requests must use a nonzero number or nonempty string request ID because SDK 1.30 does not cancel falsy IDs; initialization can still use ID `0`. A pending paid request keeps its capacity slot until it settles. The pipeline never falls back to an environment key or first/default key. Provider errors are redacted; pricing is not guessed from stale upstream estimates.
 
 Project configuration is used for trusted projects. Open this **beta checkout** in Codex, supply `NEWSFLOW_MCP_TOKEN` to that Codex host's environment, start the local server, and refresh/restart the MCP connection. A successful SDK handshake proves the endpoint and tool registry; editing TOML alone does not add tools to an already-running chat. See [official Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli).
 

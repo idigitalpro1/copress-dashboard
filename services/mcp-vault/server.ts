@@ -1,11 +1,12 @@
 import express from 'express';
 import crypto from 'node:crypto';
-import { encryptApiKey, decryptApiKey, maskKey, NewsflowError, requireNewsflowConfig } from './server/crypto.js';
+import { encryptApiKey, decryptApiKey, maskKey, NewsflowError } from './server/crypto.js';
 import { getAllKeys, saveAllKeys, findKeyById, getAllPrompts, saveAllPrompts,
   getAllSecurityLogs, clearSecurityLogs, recordSecurityEvent, safeKeyMetadata, type VaultKeyItem, type SystemPromptItem } from './server/storage.js';
 import { validateApiKey, type Provider } from './server/providers.js';
 import { importKeysFromEnv } from './server/env-importer.js';
 import { executePromptRequest } from './server/execution.js';
+import { authorizeNewsflowRequest, assertBoundedJson, assertJsonMediaType } from './server/http-security.js';
 
 const providers = new Set(['gemini', 'openai', 'anthropic', 'custom']);
 const categories = new Set(['headline-byline', 'column-layout', 'wire-normalizer', 'sports-scores', 'caption-parser', 'custom']);
@@ -16,7 +17,7 @@ function text(value: unknown, max: number, fallback = '') {
   return value;
 }
 function rawKey(value: unknown) {
-  if (typeof value !== 'string' || value.length < 8 || value.length > 16384 || /[\s\u0000-\u001f\u007f]/.test(value)) throw new NewsflowError('Provide one complete credential of a supported length.');
+  if (typeof value !== 'string' || value.length < 8 || Buffer.byteLength(value) > 16384 || /[\s\u0000-\u001f\u007f]/.test(value)) throw new NewsflowError('Provide one complete credential of a supported length.');
   return value;
 }
 function provider(value: unknown): Provider {
@@ -63,24 +64,54 @@ function promptFields(body: any, existing?: SystemPromptItem) {
 export function createNewsflowApp() {
   const app = express();
   app.disable('x-powered-by');
+  app.set('trust proxy', false);
   // Authentication and explicit origin policy precede all body parsing and storage.
   app.use((req, res, next) => {
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('Referrer-Policy', 'no-referrer');
     try {
-      const config = requireNewsflowConfig();
-      const supplied = /^Bearer ([^\s]+)$/.exec(req.get('authorization') || '')?.[1] || '';
-      const digest = (value: string) => crypto.createHash('sha256').update(value).digest();
-      if (!supplied || supplied.length > 4096 || !crypto.timingSafeEqual(digest(supplied), digest(config.token))) throw new NewsflowError('Authentication is required.', 401);
-      const origin = req.get('origin');
-      if (origin && !config.allowedOrigins.includes(origin)) throw new NewsflowError('This origin is not permitted.', 403);
+      authorizeNewsflowRequest(req);
+      if (req.originalUrl.length > 2048) throw new NewsflowError('The request URL exceeds the supported limit.', 414);
       next();
     } catch (error) { next(error); }
   });
-  const json = express.json({ limit: '512kb', strict: true });
+  const json = express.json({ limit: '512kb', strict: true, inflate: false });
+  let activeRequests = 0;
+  let requestWindow = Date.now();
+  let requestCount = 0;
+  let mutationCount = 0;
   app.use((req, res, next) => {
     if (/^\/api\/newsflow\/mcp(?:\/|$)/.test(req.path) || req.path === '/message' || req.path === '/sse') return next();
-    return json(req, res, next);
+    const now = Date.now();
+    if (now - requestWindow >= 60000) { requestWindow = now; requestCount = 0; mutationCount = 0; }
+    const mutates = !['GET', 'HEAD', 'OPTIONS'].includes(req.method);
+    if (requestCount >= 300 || (mutates && mutationCount >= 60)) {
+      res.setHeader('Retry-After', String(Math.max(1, Math.ceil((requestWindow + 60000 - now) / 1000))));
+      return next(new NewsflowError('The authenticated request limit has been reached. Try again shortly.', 429));
+    }
+    requestCount++; if (mutates) mutationCount++;
+    if (activeRequests >= 32) { res.setHeader('Retry-After', '1'); return next(new NewsflowError('The request capacity is temporarily full.', 429)); }
+    activeRequests++;
+    let released = false;
+    const release = () => { if (!released) { released = true; activeRequests--; } };
+    res.once('finish', release); res.once('close', release);
+    try {
+      const parsedBodyPresent = req.body != null && (typeof req.body !== 'object' || Array.isArray(req.body) || Object.keys(req.body).length > 0);
+      const hasBody = req.headers['transfer-encoding'] !== undefined || Number(req.headers['content-length'] || 0) > 0 || parsedBodyPresent;
+      if (hasBody && (req.method === 'GET' || req.method === 'HEAD')) throw new NewsflowError('A request body is not supported for this method.');
+      if (hasBody) assertJsonMediaType(req);
+      if (req.headers['content-encoding'] && req.headers['content-encoding'] !== 'identity') throw new NewsflowError('Compressed request bodies are not supported.', 415);
+      return json(req, res, error => {
+        if (error) return next(error);
+        try {
+          req.body ??= {};
+          if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) throw new NewsflowError('The request body must be a JSON object.');
+          assertBoundedJson(req.body, { maxBytes: 512 * 1024, maxDepth: 24, maxNodes: 10000 });
+          next();
+        } catch (error) { next(error); }
+      });
+    } catch (error) { next(error); }
   });
   const route = (handler: (req: any, res: any) => unknown) => (req: any, res: any, next: any) => {
     try { Promise.resolve(handler(req, res)).catch(next); } catch (error) { next(error); }
@@ -241,8 +272,12 @@ export function createNewsflowApp() {
   ] })));
   app.use((error: any, _req: any, res: any, next: any) => {
     if (res.headersSent) return next(error);
-    const code = error instanceof NewsflowError ? error.statusCode : error?.type === 'entity.too.large' ? 413 : error instanceof SyntaxError ? 400 : 500;
-    res.status(code).json({ error: error instanceof NewsflowError ? error.message : code === 413 ? 'Request body exceeds the supported limit.' : code === 400 ? 'The request body is invalid.' : 'The requested operation could not be completed.' });
+    const code = error instanceof NewsflowError ? error.statusCode : error?.type === 'entity.too.large' ? 413
+      : error?.status === 415 ? 415 : error instanceof SyntaxError || error?.status === 400 ? 400 : 500;
+    if (code === 401) res.setHeader('WWW-Authenticate', 'Bearer realm="newsflow"');
+    if (code === 429 && Number.isFinite(error.retryAfterSeconds)) res.setHeader('Retry-After', String(Math.max(1, Math.ceil(error.retryAfterSeconds))));
+    res.status(code).json({ error: error instanceof NewsflowError ? error.message : code === 413 ? 'Request body exceeds the supported limit.'
+      : code === 415 ? 'The request media type is unsupported.' : code === 400 ? 'The request body is invalid.' : 'The requested operation could not be completed.' });
   });
   return app;
 }

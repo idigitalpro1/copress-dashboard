@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:net';
+import http from 'node:http';
 import { once } from 'node:events';
 import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -88,7 +89,45 @@ test('Vercel cannot silently use temporary disk storage for the private vault', 
   try {
     const response = await fetch(fixture.url + '/api/vault/keys', { headers: { Authorization: `Bearer ${token}` } });
     assert.equal(response.status, 503);
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+    assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
     assert.match((await response.json()).error, /persistent/);
     assert.equal((await fetch(fixture.url + '/api/health')).status, 200);
+  } finally { await fixture.close(); }
+});
+
+test('local dashboard rejects rebound hosts and source files while preserving public assets and secure NewsFlow headers', async () => {
+  const fixture = await serverFixture();
+  try {
+    const hostile = await new Promise((resolve, reject) => {
+      const req = http.get(fixture.url + '/newsflow/', { headers: { Host: 'rebound.attacker.invalid' } }, res => {
+        res.resume(); res.once('end', () => resolve(res.statusCode));
+      });
+      req.once('error', reject);
+    });
+    assert.equal(hostile, 403);
+    for (const route of ['/scripts/dev-codex.mjs', '/lib/mcp.js', '/package.json', '/package-lock.json', '/vercel.json', '/api/newsflow.js', '/services/mcp-vault/server/crypto.ts', '/%73cripts/dev-codex.mjs', '/.env']) {
+      const response = await fetch(fixture.url + route);
+      assert.equal(response.status, 403, route);
+      await response.body.cancel();
+    }
+    assert.equal((await fetch(fixture.url + '/apikeys', { method: 'POST' })).status, 405);
+    const page = await fetch(fixture.url + '/newsflow/');
+    assert.equal(page.status, 200);
+    assert.match(page.headers.get('content-security-policy'), /script-src 'self'/);
+    assert.match(page.headers.get('content-security-policy'), /frame-ancestors 'none'/);
+    assert.equal(page.headers.get('cache-control'), 'no-store');
+    assert.equal(page.headers.get('referrer-policy'), 'no-referrer');
+    assert.equal(page.headers.get('x-content-type-options'), 'nosniff');
+    assert.equal(page.headers.get('x-frame-options'), 'DENY');
+    const html = await page.text();
+    const asset = /src="([^\"]+\.js)"/.exec(html)?.[1];
+    assert.ok(asset, 'the built UI has a script asset');
+    const assetResponse = await fetch(fixture.url + asset);
+    assert.equal(assetResponse.status, 200);
+    assert.equal(assetResponse.headers.get('x-content-type-options'), 'nosniff');
+    await assetResponse.body.cancel();
+    const head = await fetch(fixture.url + '/newsflow/', { method: 'HEAD' });
+    assert.equal(head.status, 200); assert.equal(await head.text(), '');
   } finally { await fixture.close(); }
 });

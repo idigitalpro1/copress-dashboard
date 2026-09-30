@@ -6,7 +6,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { createNewsflowApp } from '../services/mcp-vault/server.ts';
 import { encryptApiKey, decryptApiKey, requireNewsflowConfig } from '../services/mcp-vault/server/crypto.ts';
-import { getAllKeys, saveAllKeys, getAllPrompts, getAllSecurityLogs, saveAllSecurityLogs } from '../services/mcp-vault/server/storage.ts';
+import { getAllKeys, saveAllKeys, getAllPrompts, saveAllPrompts, getAllSecurityLogs, saveAllSecurityLogs, clearSecurityLogs } from '../services/mcp-vault/server/storage.ts';
 import { importKeysFromEnv } from '../services/mcp-vault/server/env-importer.ts';
 import { validateApiKey, executeLlmPrompt } from '../services/mcp-vault/server/providers.ts';
 import { executePromptRequest } from '../services/mcp-vault/server/execution.ts';
@@ -306,4 +306,150 @@ test('Anthropic execution without a model uses the supported Sonnet 4.6 fallback
   assert.equal(sent.options.redirect, 'error');
   assert.equal(result.modelUsed, 'claude-sonnet-4-6');
   assert.equal(result.output, 'Offline draft.');
+});
+
+test('private storage refuses permissive directories and files without changing permissions', () => {
+  fs.chmodSync(dataDir, 0o750);
+  assert.throws(getAllKeys, /Private vault storage is unavailable/);
+  assert.equal(fs.statSync(dataDir).mode & 0o777, 0o750);
+  fs.chmodSync(dataDir, 0o700); saveAllKeys([keyFixture()]);
+  const file = path.join(dataDir, 'keys.json'); const previous = fs.readFileSync(file, 'utf8');
+  fs.chmodSync(file, 0o644);
+  assert.throws(getAllKeys, /could not be read/);
+  assert.throws(() => saveAllKeys([]), /could not be saved/);
+  assert.equal(fs.statSync(file).mode & 0o777, 0o644);
+  assert.equal(fs.readFileSync(file, 'utf8'), previous);
+});
+
+test('private storage checks symlinked website ancestors before creating a missing directory', () => {
+  const alias = path.join(dataDir, 'website-alias');
+  fs.symlinkSync(process.cwd(), alias);
+  const directoryName = 'private-vault-test-' + path.basename(dataDir);
+  process.env.NEWSFLOW_DATA_DIR = path.join(alias, directoryName);
+  assert.throws(getAllKeys, /Private vault storage is unavailable/);
+  assert.equal(fs.existsSync(path.join(process.cwd(), directoryName)), false);
+});
+
+test('private storage refuses hard links and detects a file growing during its bounded read', () => {
+  saveAllKeys([keyFixture()]); const file = path.join(dataDir, 'keys.json');
+  const link = path.join(dataDir, 'linked-copy.json'); fs.linkSync(file, link);
+  assert.throws(getAllKeys, /could not be read/); assert.throws(() => saveAllKeys([]), /could not be saved/);
+  fs.unlinkSync(link);
+  const originalRead = fs.readSync; let changed = false;
+  fs.readSync = function (...args) {
+    if (!changed) { changed = true; fs.appendFileSync(file, ' '); }
+    return originalRead.apply(this, args);
+  };
+  try { assert.throws(getAllKeys, /could not be read/); }
+  finally { fs.readSync = originalRead; }
+  assert.equal(changed, true);
+  assert.equal(getAllKeys().length, 1);
+});
+
+test('storage clear and replacement never reset corrupt data, and invalid schemas fail closed', () => {
+  const logsFile = path.join(dataDir, 'security_logs.json'); fs.writeFileSync(logsFile, '{invalid', { mode: 0o600 });
+  assert.throws(clearSecurityLogs, /could not be saved/); assert.equal(fs.readFileSync(logsFile, 'utf8'), '{invalid');
+  saveAllKeys([keyFixture()]); const file = path.join(dataDir, 'keys.json'); const previous = fs.readFileSync(file, 'utf8');
+  assert.throws(() => saveAllKeys([keyFixture(), keyFixture()]), /could not be saved/);
+  assert.throws(() => saveAllKeys([keyFixture({ usageCount: -1 })]), /could not be saved/);
+  assert.equal(fs.readFileSync(file, 'utf8'), previous);
+  fs.writeFileSync(file, JSON.stringify([{ ...keyFixture(), status: 'active', encryptedData: 'malformed-ciphertext' }]));
+  assert.throws(getAllKeys, /could not be read/);
+  assert.throws(() => saveAllKeys([]), /could not be saved/);
+});
+
+test('stored prompt and audit responses project known fields and discard unexpected metadata', async () => {
+  const prompts = getAllPrompts();
+  saveAllPrompts([{ ...prompts[0], unexpected: 'FAKE_PRIVATE_FIELD' }]);
+  const promptFile = path.join(dataDir, 'prompts.json');
+  const loaded = JSON.parse(fs.readFileSync(promptFile, 'utf8'));
+  loaded[0].unexpected = 'FAKE_PRIVATE_FIELD'; fs.writeFileSync(promptFile, JSON.stringify(loaded));
+  assert.equal((await request('/api/prompts')).text.includes('FAKE_PRIVATE_FIELD'), false);
+  saveAllSecurityLogs([{ id: 'log-projected', timestamp: '2026-09-30T00:00:00.000Z', action: 'KEY_CREATED', trigger: 'manual', status: 'success',
+    actor: 'Authenticated operator', details: 'Credential saved.', metadata: { input: 'FAKE_PRIVATE_FIELD' }, maskedKey: 'FAKE_PRIVATE_FIELD' }]);
+  const response = await request('/api/vault/audit-logs');
+  assert.equal(response.status, 200); assert.equal(response.text.includes('FAKE_PRIVATE_FIELD'), false);
+  assert.equal(response.json.logs[0].maskedKey, '••••••••••••');
+});
+
+test('REST rejects unsafe hosts, forged forwarding headers, and oversized request URLs', async () => {
+  assert.equal((await request('/api/vault/keys', { headers: { host: 'attacker.example' } })).status, 403);
+  assert.equal((await request('/api/vault/keys', { headers: { host: `localhost:${basePort + 1}`, 'x-forwarded-host': `127.0.0.1:${basePort}` } })).status, 403);
+  assert.equal((await request('/api/vault/keys', { headers: { host: 'attacker.example', 'x-forwarded-host': `127.0.0.1:${basePort}`, 'x-forwarded-for': '127.0.0.1' } })).status, 403);
+  assert.equal((await request('/api/vault/keys?' + 'x'.repeat(2050))).status, 414);
+  assert.equal((await request('/api/vault/keys', { headers: { host: `localhost:${basePort}` } })).status, 200);
+});
+
+test('REST bodies require bounded UTF8 JSON objects and do not accept compressed or prototype-shaped data', async () => {
+  const url = '/api/vault/validate-and-save'; const options = { method: 'POST' };
+  for (const headers of [{ 'content-type': 'text/plain' }, { 'content-type': 'application/json; charset=iso-8859-1' }, { 'content-type': 'application/json', 'content-encoding': 'gzip' }]) {
+    const response = await request(url, { ...options, headers, body: '{}' });
+    assert.equal(response.status, 415);
+  }
+  for (const body of ['[]', '{"__proto__":{"polluted":true}}', '{"nested":{"constructor":{"prototype":{"polluted":true}}}}', '{invalid']) {
+    assert.equal((await request(url, { ...options, body })).status, 400);
+  }
+  let nested = {}; for (let i = 0; i < 30; i++) nested = { nested };
+  assert.equal((await request(url, { ...options, body: nested })).status, 400);
+  assert.equal((await request(url, { ...options, body: { ignored: 'x'.repeat(512 * 1024) } })).status, 413);
+  assert.equal((await request('/api/vault/keys', { body: '{}', headers: { 'content-length': '2' } })).status, 400);
+  assert.equal({}.polluted, undefined); assert.deepEqual(getAllKeys(), []);
+});
+
+test('REST constrains already parsed parent bodies while allowing an empty middleware stub', async () => {
+  await new Promise(resolve => server.close(resolve));
+  const app = createNewsflowApp();
+  server = http.createServer((req, res) => {
+    req.body = req.url.includes('empty-stub') ? {} : { injectedByParent: true };
+    app(req, res);
+  });
+  await new Promise((resolve, reject) => { server.once('error', reject); server.listen(0, '127.0.0.1', resolve); });
+  basePort = server.address().port;
+  assert.equal((await request('/api/vault/keys')).status, 400);
+  assert.equal((await request('/api/vault/import-selected-env', { method: 'POST' })).status, 415);
+  assert.equal((await request('/api/vault/keys?empty-stub=1')).status, 200);
+});
+
+test('env import rejects ambiguous selectors, mixed sources, oversized values, and confirmation coercion before writing', async () => {
+  const entry = { envVarName: 'EDITORIAL_TOKEN', value: secret, provider: 'custom' };
+  for (const body of [
+    { entries: [entry], envContent: 'EDITORIAL_TOKEN=' + secret, confirm: true },
+    { entries: [entry], selectedEnvNames: ['MISSING_TOKEN'], confirm: true },
+    { entries: [entry], selectedEnvNames: ['EDITORIAL_TOKEN', 'EDITORIAL_TOKEN'], confirm: true },
+    { entries: [entry], providerOverrides: ['custom'], confirm: true },
+    { entries: [entry], confirm: 'true' },
+    { entries: [{ ...entry, value: 'é'.repeat(9000) }], confirm: true },
+    { envContent: 'x'.repeat(256 * 1024 + 1), confirm: true },
+  ]) {
+    const result = await request('/api/vault/import-env', { method: 'POST', body });
+    assert.equal(result.status, 400); assert.equal(result.text.includes(secret), false);
+  }
+  assert.deepEqual(getAllKeys(), []);
+});
+
+test('configuration and crypto apply byte and collection bounds before use', () => {
+  process.env.NEWSFLOW_ALLOWED_ORIGINS = Array.from({ length: 33 }, () => 'https://example.test').join(',');
+  assert.throws(requireNewsflowConfig, /allowed-origin configuration/);
+  delete process.env.NEWSFLOW_ALLOWED_ORIGINS;
+  assert.throws(() => encryptApiKey('é'.repeat(9000)), /unsupported length/);
+  assert.throws(() => decryptApiKey('a'.repeat(40000)), /could not be authenticated/);
+});
+
+test('authenticated REST mutation and total request budgets are bounded independently', async () => {
+  for (let i = 0; i < 60; i++) {
+    assert.equal((await request('/api/vault/import-selected-env', { method: 'POST', body: {} })).status, 410);
+  }
+  const blockedWrite = await request('/api/vault/import-selected-env', { method: 'POST', body: {} });
+  assert.equal(blockedWrite.status, 429); assert.ok(Number(blockedWrite.headers['retry-after']) > 0);
+  for (let i = 0; i < 240; i++) assert.equal((await request('/api/vault/environment-status')).status, 200);
+  const blockedRead = await request('/api/vault/environment-status');
+  assert.equal(blockedRead.status, 429); assert.ok(Number(blockedRead.headers['retry-after']) > 0);
+  assert.deepEqual(fs.readdirSync(dataDir), []);
+});
+
+test('failed-auth abuse receives Retry-After while the valid operator remains usable', async () => {
+  let response;
+  for (let i = 0; i < 21; i++) response = await request('/api/vault/keys', { auth: false, headers: { 'x-forwarded-for': `198.51.100.${i}` } });
+  assert.equal(response.status, 429); assert.ok(Number(response.headers['retry-after']) > 0);
+  assert.equal((await request('/api/vault/keys')).status, 200);
 });

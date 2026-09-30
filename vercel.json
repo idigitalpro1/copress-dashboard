@@ -61,6 +61,22 @@
       "source": "/newsflow/:path*",
       "headers": [
         {
+          "key": "Cache-Control",
+          "value": "no-store"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        },
+        {
           "key": "X-Robots-Tag",
           "value": "noindex, nofollow"
         },
@@ -94,6 +110,41 @@
     },
     {
       "source": "/services/:path*",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/scripts/:path*",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/lib/:path*",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/tests/:path*",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/packages/:path*",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/package.json",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/package-lock.json",
+      "destination": "/api/newsflow",
+      "permanent": false
+    },
+    {
+      "source": "/vercel.json",
       "destination": "/api/newsflow",
       "permanent": false
     }

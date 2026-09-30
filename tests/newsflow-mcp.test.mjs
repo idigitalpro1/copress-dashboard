@@ -1,6 +1,6 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { createServer } from 'node:http';
+import { createServer, request as httpRequest } from 'node:http';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -101,6 +101,205 @@ async function rawSse(url = base + '/sse', requestHeaders = headers) {
   assert.ok(endpoint?.startsWith('/message?sessionId='));
   return { response, endpoint, async close() { controller.abort(); await reader.cancel().catch(() => {}); } };
 }
+
+async function fixture(options, fn, preparse = false) {
+  const app = express();
+  if (preparse) app.use(express.json({ limit: '512kb' }));
+  const mounted = mountNewsflowMcp(app, options);
+  const httpServer = createServer(app);
+  await listen(httpServer);
+  const url = `http://127.0.0.1:${httpServer.address().port}`;
+  try { return await fn(url); }
+  finally { await mounted.close(); httpServer.closeAllConnections(); await new Promise(resolve => httpServer.close(resolve)); }
+}
+
+function rawRequest(url, { method = 'POST', headers: requestHeaders = jsonHeaders, body = JSON.stringify(initialization) } = {}) {
+  return new Promise((resolve, reject) => {
+    const request = httpRequest(url, { method, headers: requestHeaders }, response => {
+      let text = '';
+      response.setEncoding('utf8'); response.on('data', chunk => { text += chunk; });
+      response.on('end', () => resolve({ status: response.statusCode, headers: response.headers, text }));
+    });
+    request.on('error', reject);
+    request.end(body);
+  });
+}
+
+test('DNS rebinding authorities and duplicate security headers are rejected before stream allocation', async () => {
+  const port = new URL(base).port;
+  for (const host of ['rebound.invalid:' + port, 'localhost.evil:' + port, '127.1:' + port, 'localhost.:' + port, 'localhost:1', 'user@localhost:' + port]) {
+    const response = await rawRequest(base + '/sse', { method: 'GET', headers: { ...headers, Host: host, Accept: 'text/event-stream' }, body: '' });
+    assert.equal(response.status, 403, host);
+  }
+  const duplicateAuth = await rawRequest(base + '/api/newsflow/mcp', { headers: [
+    'Host', '127.0.0.1:' + port, 'Authorization', `Bearer ${token}`, 'Authorization', `Bearer ${token}`,
+    'Content-Type', 'application/json', 'Accept', 'application/json, text/event-stream',
+  ] });
+  assert.equal(duplicateAuth.status, 400);
+  const duplicateHost = await rawRequest(base + '/sse', { method: 'GET', headers: [
+    'Host', '127.0.0.1:' + port, 'Host', 'rebound.invalid:' + port,
+    'Authorization', `Bearer ${token}`, 'Accept', 'text/event-stream',
+  ], body: '' });
+  assert.ok([400, 403].includes(duplicateHost.status));
+  const trusted = await rawSse(base + '/sse', { ...headers, Host: 'localhost:' + port });
+  assert.equal(trusted.response.status, 200);
+  await trusted.close();
+});
+
+test('bounded failed-auth budgets ignore forwarding headers and never lock out valid credentials', async () => {
+  const { createNewsflowRequestAuthorizer } = await import('../services/mcp-vault/server/http-security.ts');
+  const authorize = createNewsflowRequestAuthorizer({ maxFailuresPerAddress: 1, maxFailuresTotal: 3, maxTrackedAddresses: 1 });
+  const mock = (authorization, address, forwarded = '') => ({ headers: { authorization, host: 'localhost:4321', 'x-forwarded-for': forwarded },
+    rawHeaders: ['Authorization', authorization, 'Host', 'localhost:4321'], socket: { localPort: 4321, remoteAddress: address } });
+  assert.throws(() => authorize(mock('Bearer invalid', '127.0.0.1', 'fake1')), error => error.statusCode === 401);
+  assert.throws(() => authorize(mock('Bearer invalid', '127.0.0.1', 'fake2')), error => error.statusCode === 429 && error.retryAfterSeconds > 0);
+  assert.throws(() => authorize(mock('Bearer invalid', 'different-peer')), error => error.statusCode === 401);
+  assert.throws(() => authorize(mock('Bearer invalid', 'third-peer')), error => error.statusCode === 429);
+  const valid = mock(`Bearer ${token}`, '127.0.0.1');
+  const authorized = authorize(valid);
+  assert.equal(authorized.bearerDigest.length, 32);
+  assert.equal(authorize(valid), authorized, 'REST and MCP reuse the same successful request authorization');
+});
+
+test('MCP accepts UTF-8 JSON and rejects compression, unsupported media parameters and disabled Accept ranges', async () => {
+  for (const extra of [
+    { 'Content-Type': 'application/json; charset=iso-8859-1' },
+    { 'Content-Type': 'application/json; charset=utf-16' },
+    { 'Content-Type': 'application/json; unknown=true' },
+    { 'Content-Encoding': 'gzip' }, { 'Content-Encoding': 'br' },
+  ]) {
+    const response = await fetch(base + '/api/newsflow/mcp', { method: 'POST', headers: { ...jsonHeaders, ...extra }, body: JSON.stringify(initialization) });
+    assert.equal(response.status, 415);
+  }
+  const valid = await fetch(base + '/api/newsflow/mcp', { method: 'POST', headers: { ...jsonHeaders, 'Content-Type': 'application/json; charset="UTF-8"' }, body: JSON.stringify(initialization) });
+  assert.equal(valid.status, 200);
+  for (const accept of ['application/json', 'application/json;q=0, text/event-stream', 'application/json, text/event-stream;q=0']) {
+    assert.equal((await fetch(base + '/api/newsflow/mcp', { method: 'POST', headers: { ...jsonHeaders, Accept: accept }, body: JSON.stringify(initialization) })).status, 406);
+  }
+  assert.equal((await fetch(base + '/sse', { headers: { ...headers, Accept: 'application/json' } })).status, 406);
+});
+
+test('JSON limits cover chunked and pre-parsed requests, deep/numerous nodes and prototype-shaped data', async () => {
+  let nested = {};
+  for (let depth = 0; depth < 30; depth++) nested = { child: nested };
+  const bodies = [
+    JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'ping', params: { nested } }),
+    JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'ping', params: { nodes: Array(10001).fill(0) } }),
+    '{"jsonrpc":"2.0","id":1,"method":"ping","params":{"__proto__":{"private":"fake-marker"}}}',
+    JSON.stringify({ jsonrpc: '2.0', id: 'x'.repeat(129), method: 'ping' }),
+  ];
+  for (const body of bodies) {
+    const response = await rawRequest(base + '/api/newsflow/mcp', { body });
+    assert.equal(response.status, 400);
+    assert.ok(!response.text.includes('fake-marker'));
+  }
+  const large = JSON.stringify({ jsonrpc: '2.0', id: 1, method: 'ping', params: { ignored: 'x'.repeat(270000) } });
+  assert.equal((await rawRequest(base + '/api/newsflow/mcp', { body: large })).status, 413);
+  await fixture({}, async url => {
+    assert.equal((await rawRequest(url + '/api/newsflow/mcp', { body: large })).status, 413);
+  }, true);
+});
+
+test('authenticated MCP request budgets reset and reject excess work without allocating a session', () => fixture({ maxRequestsPerWindow: 2, requestWindowMs: 40 }, async url => {
+  for (let index = 0; index < 2; index++) assert.equal((await rawRequest(url + '/api/newsflow/mcp')).status, 200);
+  const limited = await rawRequest(url + '/api/newsflow/mcp');
+  assert.equal(limited.status, 429); assert.equal(limited.headers['retry-after'], '1');
+  await new Promise(resolve => setTimeout(resolve, 60));
+  assert.equal((await rawRequest(url + '/api/newsflow/mcp')).status, 200);
+}));
+
+test('a stalled upload cannot hold all MCP request slots indefinitely', () => fixture({ maxConcurrentRequests: 1, bodyReadTimeoutMs: 80 }, async url => {
+  let upload;
+  const timedOut = new Promise((resolve, reject) => {
+    upload = httpRequest(url + '/api/newsflow/mcp', { method: 'POST', headers: jsonHeaders }, response => {
+      response.resume(); response.on('end', () => resolve(response.statusCode));
+    });
+    upload.on('error', reject);
+    upload.write('{"jsonrpc":"2.0"');
+  });
+  await new Promise(resolve => setTimeout(resolve, 20));
+  assert.equal((await rawRequest(url + '/api/newsflow/mcp')).status, 429);
+  assert.equal(await timedOut, 408);
+  upload.destroy();
+  await new Promise(resolve => setTimeout(resolve, 10));
+  assert.equal((await rawRequest(url + '/api/newsflow/mcp')).status, 200);
+}));
+
+test('legacy absolute lifetime expires even when valid messages keep the stream active', () => fixture({ legacySessionTtlMs: 100, legacySessionMaxAgeMs: 120 }, async url => {
+  const stream = await rawSse(url + '/sse');
+  try {
+    assert.equal((await rawRequest(url + stream.endpoint)).status, 202);
+    for (let index = 0; index < 3; index++) {
+      await new Promise(resolve => setTimeout(resolve, 25));
+      assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) })).status, 202);
+    }
+    await new Promise(resolve => setTimeout(resolve, 70));
+    assert.equal((await rawRequest(url + stream.endpoint)).status, 404);
+  } finally { await stream.close(); }
+}));
+
+test('legacy outstanding request limits reject concurrent and duplicate IDs then release the slot', async () => {
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  let finishProvider;
+  let startedProvider;
+  const started = new Promise(resolve => { startedProvider = resolve; });
+  providerResponder = () => { startedProvider(); return new Promise(resolve => { finishProvider = resolve; }); };
+  providerRequests = [];
+  try {
+    await fixture({ maxPendingLegacyRequests: 1 }, async url => {
+      const stream = await rawSse(url + '/sse');
+      try {
+        assert.equal((await rawRequest(url + stream.endpoint)).status, 202);
+        const call = { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'execute_newspaper_pipeline', arguments: { promptIds: ['fake-normalize'], inputText: 'Synthetic OCR.' } } };
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify(call) })).status, 202);
+        await started;
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify(call) })).status, 409);
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', id: 3, method: 'ping' }) })).status, 429);
+        finishProvider(new Response(JSON.stringify({ choices: [{ message: { content: 'Synthetic draft.' } }] }), { status: 200 }));
+        await new Promise(resolve => setTimeout(resolve, 30));
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', id: 4, method: 'ping' }) })).status, 202);
+        assert.equal(providerRequests.length, 1);
+      } finally { finishProvider?.(new Response('{}')); await stream.close(); }
+    });
+  } finally { providerResponder = undefined; process.env.NEWSFLOW_ALLOW_EXECUTION = '0'; }
+});
+
+test('legacy cancellations are validated, keep in-flight IDs reserved and prevent later provider stages', async () => {
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  let finishProvider;
+  let providerStarted;
+  const started = new Promise(resolve => { providerStarted = resolve; });
+  providerResponder = () => { providerStarted(); return new Promise(resolve => { finishProvider = resolve; }); };
+  providerRequests = [];
+  try {
+    await fixture({ maxPendingLegacyRequests: 1 }, async url => {
+      const stream = await rawSse(url + '/sse');
+      try {
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ ...initialization, id: 0 }) })).status, 202);
+        const call = { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name: 'execute_newspaper_pipeline', arguments: { promptIds: ['fake-normalize', 'fake-headline'], inputText: 'Synthetic OCR.' } } };
+        for (const id of [0, '']) {
+          assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ ...call, id }) })).status, 400);
+        }
+        assert.equal(providerRequests.length, 0);
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify(call) })).status, 202);
+        await started;
+        const cancel = requestId => ({ jsonrpc: '2.0', method: 'notifications/cancelled', params: { requestId } });
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ ...cancel(2), params: { requestId: 2, reason: 42 } }) })).status, 400);
+        for (const requestId of [0, 99, '2']) {
+          assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify(cancel(requestId)) })).status, 202);
+          assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', id: 3, method: 'ping' }) })).status, 429);
+        }
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', method: 'notifications/cancelled', params: { requestId: 2 } }) })).status, 202);
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify(call) })).status, 409);
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', id: 3, method: 'ping' }) })).status, 429);
+        finishProvider(new Response(JSON.stringify({ choices: [{ message: { content: 'Synthetic draft.' } }] }), { status: 200 }));
+        await new Promise(resolve => setTimeout(resolve, 30));
+        assert.equal(providerRequests.length, 1);
+        assert.equal((await rawRequest(url + stream.endpoint, { body: JSON.stringify({ jsonrpc: '2.0', id: 3, method: 'ping' }) })).status, 202);
+      } finally { finishProvider?.(new Response('{}')); await stream.close(); }
+    });
+  } finally { providerResponder = undefined; process.env.NEWSFLOW_ALLOW_EXECUTION = '0'; }
+});
 
 test('SDK stateless handshake exposes exactly four scoped tools and safe annotations', () => connected(async client => {
   assert.equal(client.getServerVersion().name, 'newsflow-vault');

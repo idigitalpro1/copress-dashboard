@@ -21,9 +21,15 @@ export const ImportEnvModal: React.FC<Props> = ({ isOpen, onClose, onKeysImporte
   const generation = useRef(0);
   const closeButton = useRef<HTMLButtonElement>(null);
   const busyRef = useRef(busy);
-  const closeRef = useRef(onClose);
+  const close = () => {
+    if (busyRef.current) return;
+    generation.current++;
+    setRawText(''); setEntries([]); setIssues([]); setSummary([]); setError('');
+    onClose();
+  };
+  const closeRef = useRef(close);
   busyRef.current = busy;
-  closeRef.current = onClose;
+  closeRef.current = close;
 
   useEffect(() => {
     closeButton.current?.focus();
@@ -85,11 +91,11 @@ export const ImportEnvModal: React.FC<Props> = ({ isOpen, onClose, onKeysImporte
   if (!isOpen) return null;
   return <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
     <section role="dialog" aria-modal="true" aria-labelledby="env-import-title" className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl shadow-xl flex flex-col max-h-[90vh]">
-      <div className="p-5 border-b border-slate-800 flex items-start justify-between gap-3"><div><h2 id="env-import-title" className="font-semibold">Secure .env import</h2><p className="text-xs text-slate-400 mt-1">Preview locally, resolve providers, then import only the selected credentials into this beta vault.</p></div><button ref={closeButton} type="button" onClick={onClose} disabled={busy} aria-label="Close import" className="p-1.5 rounded-lg hover:bg-slate-800 disabled:opacity-50"><X className="w-4 h-4" /></button></div>
+      <div className="p-5 border-b border-slate-800 flex items-start justify-between gap-3"><div><h2 id="env-import-title" className="font-semibold">Secure .env import</h2><p className="text-xs text-slate-400 mt-1">Preview locally, resolve providers, then import only the selected credentials into this beta vault.</p></div><button ref={closeButton} type="button" onClick={close} disabled={busy} aria-label="Close import" className="p-1.5 rounded-lg hover:bg-slate-800 disabled:opacity-50"><X className="w-4 h-4" /></button></div>
       <div className="p-5 space-y-4 overflow-y-auto">
         <p className="text-xs text-slate-400 flex gap-2"><Shield className="w-4 h-4 text-emerald-400 shrink-0" />File contents stay in page memory during review. Confirmed entries are sent to the authenticated server and encrypted as untested cards. No server environment is scanned.</p>
         <label className="flex items-center justify-center gap-2 p-3 rounded-xl border border-emerald-800 text-sm text-emerald-200 bg-emerald-950/40 cursor-pointer"><Upload className="w-4 h-4" />Choose .env text file<input type="file" accept=".env,.txt,text/plain" onChange={readFile} disabled={busy} className="sr-only" /></label>
-        {!reviewed && !completed && <><label htmlFor="raw-env" className="text-xs text-slate-300 block">Or paste .env contents for local review</label><textarea id="raw-env" value={rawText} onChange={event => setRawText(event.target.value)} disabled={busy} rows={5} autoComplete="off" autoCapitalize="off" autoCorrect="off" spellCheck={false} className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono" placeholder="One NAME=value assignment per line" /><button type="button" onClick={() => preview(rawText)} disabled={!rawText.trim() || busy} className="px-4 py-2 bg-slate-800 rounded-xl text-xs disabled:opacity-50">Preview locally</button></>}
+        {!reviewed && !completed && <><label htmlFor="raw-env" className="text-xs text-slate-300 block">Or paste .env contents for masked local review</label><input id="raw-env" type="password" value={rawText} onChange={event => setRawText(event.target.value)} onPaste={event => { event.preventDefault(); preview(event.clipboardData.getData('text')); }} disabled={busy} autoComplete="new-password" autoCapitalize="off" autoCorrect="off" spellCheck={false} className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-xs font-mono" placeholder="Paste .env contents — preview stays masked" /><button type="button" onClick={() => preview(rawText)} disabled={!rawText.trim() || busy} className="px-4 py-2 bg-slate-800 rounded-xl text-xs disabled:opacity-50">Preview locally</button></>}
         {reviewed && <>
           <p className="text-xs text-slate-300">{entries.length} credentials found · {skipped} empty or configuration entries skipped. Duplicate names and unsupported syntax are excluded.</p>
           <div className="space-y-2">{entries.map(entry => <div key={entry.sourceKey} className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
@@ -102,7 +108,7 @@ export const ImportEnvModal: React.FC<Props> = ({ isOpen, onClose, onKeysImporte
         {error && <p role="alert" className="p-3 rounded-xl text-xs bg-rose-950/40 border border-rose-800 text-rose-200">{error}</p>}
         {completed && <div role="status" className="p-3 rounded-xl border border-emerald-800 bg-emerald-950/40 text-xs space-y-2"><p className="flex gap-2 text-emerald-200"><CheckCircle className="w-4 h-4" />Import completed at {completed}. {summary.length} cards saved.</p>{summary.map(item => <p key={item.envVarName} className="font-mono text-slate-300">{item.envVarName} · {item.maskedKey} · {item.status}</p>)}</div>}
       </div>
-      <div className="p-4 border-t border-slate-800 flex justify-between gap-3 items-center"><button type="button" onClick={onClose} disabled={busy} className="text-xs text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-800 disabled:opacity-50">{completed ? 'Done' : 'Cancel'}</button>{reviewed && <button type="button" onClick={importSelected} disabled={busy || !entries.some(entry => entry.selected) || entries.some(entry => entry.selected && !entry.provider)} className="px-4 py-2 rounded-xl text-sm bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 flex gap-2 items-center">{busy && <Loader2 className="w-4 h-4 animate-spin" />}{busy ? 'Saving…' : `Confirm import (${entries.filter(entry => entry.selected).length})`}</button>}</div>
+      <div className="p-4 border-t border-slate-800 flex justify-between gap-3 items-center"><button type="button" onClick={close} disabled={busy} className="text-xs text-slate-300 px-3 py-2 rounded-lg hover:bg-slate-800 disabled:opacity-50">{completed ? 'Done' : 'Cancel'}</button>{reviewed && <button type="button" onClick={importSelected} disabled={busy || !entries.some(entry => entry.selected) || entries.some(entry => entry.selected && !entry.provider)} className="px-4 py-2 rounded-xl text-sm bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 flex gap-2 items-center">{busy && <Loader2 className="w-4 h-4 animate-spin" />}{busy ? 'Saving…' : `Confirm import (${entries.filter(entry => entry.selected).length})`}</button>}</div>
     </section>
   </div>;
 };
