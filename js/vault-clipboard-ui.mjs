@@ -1,4 +1,5 @@
 import { parseCredential, planCredentialImport } from './vault-clipboard.mjs';
+import { setupEnvImport } from './vault-env-ui.mjs';
 
 const input = document.getElementById('clipboard-value');
 const message = document.getElementById('clipboard-message');
@@ -13,6 +14,7 @@ const menuHome = document.createComment('Clipboard menu home');
 menu.before(menuHome);
 let pending = null;
 let busy = false;
+let clipboardGeneration = 0;
 const choices = new Map();
 
 // Only non-secret metadata is used to build the provider picker.
@@ -57,8 +59,24 @@ function revealCard(id) {
   card?.focus({ preventScroll: true });
 }
 
+function confirmCompletion({ imported, duplicates, savedAt }) {
+  const completed = document.getElementById('credential-complete');
+  document.getElementById('credential-complete-summary').textContent = `${imported} key${imported === 1 ? '' : 's'} saved. ${duplicates} already saved; no duplicate cards created.`;
+  const time = document.getElementById('credential-complete-time');
+  time.dateTime = savedAt;
+  time.textContent = formatVaultTime(savedAt);
+  completed.showModal();
+}
+document.getElementById('credential-complete-dismiss').addEventListener('click', () => document.getElementById('credential-complete').close());
+const cancelEnvRead = setupEnvImport({ choices, closeIntake, revealCard, status, confirmCompletion });
+function cancelReads() {
+  clipboardGeneration++;
+  cancelEnvRead();
+}
+
 function saveCredential(credential) {
-  const plan = planCredentialImport(apis, credential, 'clipboard-' + crypto.randomUUID());
+  const savedAt = new Date().toISOString();
+  const plan = planCredentialImport(apis, credential, 'clipboard-' + crypto.randomUUID(), savedAt);
   const previous = apis;
   try {
     if (!plan.duplicate) {
@@ -80,6 +98,7 @@ function saveCredential(credential) {
     : `${credential.name} saved to ${credential.envKey}. The full key is masked; connection not tested.`;
   status(text);
   showToast(plan.duplicate ? '✓ Existing key card found' : `✓ ${credential.name} card saved`, 'green');
+  confirmCompletion({ imported: plan.duplicate ? 0 : 1, duplicates: plan.duplicate ? 1 : 0, savedAt });
 }
 
 function chooseProvider(credential) {
@@ -111,12 +130,15 @@ function ingest(text) {
 async function fromClipboard() {
   if (busy) return;
   busy = true;
+  const request = ++clipboardGeneration;
   closeMenu();
   try {
     if (!navigator.clipboard?.readText) throw new Error('unavailable');
     const text = await navigator.clipboard.readText();
+    if (request !== clipboardGeneration) return;
     ingest(text);
   } catch {
+    if (request !== clipboardGeneration) return;
     status('Right-click the masked field and choose Paste, or press ⌘V / Ctrl+V. The key will be matched locally.');
     input.scrollIntoView({ block: 'center' });
     input.focus();
@@ -125,7 +147,8 @@ async function fromClipboard() {
 
 document.getElementById('clipboard-create').addEventListener('click', fromClipboard);
 document.getElementById('clipboard-menu-add').addEventListener('click', openNewKeyCard);
-document.getElementById('clipboard-dialog-dismiss').addEventListener('click', closeIntake);
+document.getElementById('clipboard-dialog-dismiss').addEventListener('click', () => { cancelReads(); closeIntake(); });
+addDialog.addEventListener('cancel', cancelReads);
 addDialog.addEventListener('close', () => { if (!addDialog.open) restoreIntake(); });
 document.getElementById('clipboard-context-create').addEventListener('click', fromClipboard);
 document.getElementById('clipboard-submit').addEventListener('click', () => ingest(input.value));
@@ -137,6 +160,7 @@ input.addEventListener('paste', event => {
 
 // Keep the browser's native paste menu inside editable fields.
 document.addEventListener('contextmenu', event => {
+  if (document.getElementById('env-import-dialog').open || document.getElementById('credential-complete').open || dialog.open) return;
   if (event.target.closest('input, textarea, select, [contenteditable="true"], a')) return;
   event.preventDefault();
   menu.hidden = false;
@@ -145,7 +169,7 @@ document.addEventListener('contextmenu', event => {
   document.getElementById('clipboard-context-create').focus();
 });
 document.addEventListener('click', event => { if (!menu.contains(event.target)) closeMenu(); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape') closeMenu(); });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeMenu(); cancelReads(); } });
 window.addEventListener('scroll', closeMenu, true);
 
 // Pasting into an existing key field also uses matching, avoiding wrong-field saves.

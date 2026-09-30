@@ -70,12 +70,12 @@ export function parseCredential(text) {
   return { name: 'Imported API key', cat: 'infra', envKey: 'CUSTOM_API_KEY', value, ambiguous: true, evidence: 'Provider cannot be determined from this key alone' };
 }
 
-export function planCredentialImport(apis, credential, id) {
+export function planCredentialImport(apis, credential, id, savedAt = new Date().toISOString()) {
   const duplicate = apis.find(api => api.values?.[credential.envKey] === credential.value);
   if (duplicate) return { apis, id: duplicate.id, duplicate: true };
   const target = apis.find(api => api.fields.some(f => f.key === credential.envKey) && !api.values?.[credential.envKey]);
   if (target) return {
-    apis: apis.map(api => api === target ? { ...api, values: { ...api.values, [credential.envKey]: credential.value } } : api),
+    apis: apis.map(api => api === target ? { ...api, values: { ...api.values, [credential.envKey]: credential.value }, savedAt } : api),
     id: target.id, duplicate: false,
   };
   const existing = apis.some(api => api.fields.some(f => f.key === credential.envKey) && api.values?.[credential.envKey]);
@@ -84,7 +84,7 @@ export function planCredentialImport(apis, credential, id) {
     icon: '🔑', color: '#888', desc: 'Saved on this browser. Provider connection has not been tested.',
     fields: [{ label: 'API Key / Token', key: credential.envKey, ph: 'API key' }],
     required: 'optional', inject: [], values: { [credential.envKey]: credential.value },
-    custom: true, clipboardImported: true,
+    custom: true, clipboardImported: true, savedAt,
   };
   return { apis: [...apis, card], id, duplicate: false };
 }
