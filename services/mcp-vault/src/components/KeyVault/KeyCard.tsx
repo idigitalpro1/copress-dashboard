@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { VaultKey, ValidationResponse } from '../../types';
 import { api } from '../../services/api';
+import { KEY_SETUP_LINKS } from './KeySetupLinks';
+import { formatTimestamp } from '../../services/time';
 
 interface KeyCardProps {
   keyItem: VaultKey;
@@ -61,8 +63,9 @@ export const KeyCard: React.FC<KeyCardProps> = ({
 
   const handleSetDefault = async () => {
     try {
-      await api.setDefaultKey(keyItem.id);
-      onUpdate({ ...keyItem, isDefault: true });
+      const result = await api.setDefaultKey(keyItem.id);
+      const updated = result.keys.find(key => key.id === keyItem.id);
+      if (updated) onUpdate(updated);
     } catch (err: any) {
       alert(`Could not set default: ${err.message}`);
     }
@@ -83,9 +86,10 @@ export const KeyCard: React.FC<KeyCardProps> = ({
   };
 
   const copyMasked = () => {
-    navigator.clipboard.writeText(keyItem.maskedKey);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    navigator.clipboard.writeText(keyItem.maskedKey).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => setCopied(false));
   };
 
   // Provider Styling and Badge Config
@@ -121,8 +125,8 @@ export const KeyCard: React.FC<KeyCardProps> = ({
       case 'custom':
       default:
         return {
-          title: 'Custom Gateway',
-          sub: keyItem.customEndpointUrl || 'Custom Endpoint',
+          title: 'Other Credential',
+          sub: 'Provider requests disabled for custom credentials',
           border: 'border-cyan-500/30 hover:border-cyan-500/60',
           gradient: 'from-cyan-600 to-slate-700',
           pillBg: 'bg-cyan-950/70 border-cyan-800 text-cyan-300',
@@ -132,6 +136,7 @@ export const KeyCard: React.FC<KeyCardProps> = ({
   };
 
   const info = getProviderInfo();
+  const setup = KEY_SETUP_LINKS[keyItem.provider as keyof typeof KEY_SETUP_LINKS];
 
   return (
     <div
@@ -171,7 +176,7 @@ export const KeyCard: React.FC<KeyCardProps> = ({
             {keyItem.status === 'active' && (
               <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-300 border border-emerald-800">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Active</span>
+                <span>Tested active</span>
                 {keyItem.latencyMs !== undefined && (
                   <span className="text-[10px] text-emerald-400/80 font-mono ml-0.5">
                     {keyItem.latencyMs}ms
@@ -185,10 +190,11 @@ export const KeyCard: React.FC<KeyCardProps> = ({
                 <span>Invalid</span>
               </span>
             )}
+            {keyItem.status === 'untested' && <span className="inline-flex px-2.5 py-1 rounded-full text-xs bg-slate-800 border border-slate-700 text-slate-300">Untested</span>}
             {keyItem.status === 'revoked' && (
               <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-950/80 text-amber-300 border border-amber-800">
                 <ShieldX className="w-3 h-3 text-amber-400" />
-                <span>Revoked</span>
+                <span>Disabled card</span>
               </span>
             )}
           </div>
@@ -223,6 +229,12 @@ export const KeyCard: React.FC<KeyCardProps> = ({
           <span className="text-slate-500 font-medium">Diagnostic: </span>
           {keyItem.validationMessage}
         </div>
+        <dl className="text-[11px] text-slate-400 space-y-1 mb-3">
+          {(keyItem.envVarName || keyItem.sourceEnvVar) && <div><dt className="inline text-slate-500">Source name: </dt><dd className="inline font-mono break-all">{keyItem.envVarName || keyItem.sourceEnvVar}</dd></div>}
+          <div><dt className="inline text-slate-500">Card saved: </dt><dd className="inline"><time dateTime={keyItem.updatedAt || keyItem.createdAt}>{formatTimestamp(keyItem.updatedAt || keyItem.createdAt)}</time></dd></div>
+          {keyItem.lastValidatedAt && <div><dt className="inline text-slate-500">Last tested: </dt><dd className="inline"><time dateTime={keyItem.lastValidatedAt}>{formatTimestamp(keyItem.lastValidatedAt)}</time></dd></div>}
+        </dl>
+        {setup && <a href={setup.href} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-300 hover:underline inline-flex gap-1 items-center mb-3">Acquire a key<ExternalLink className="w-3 h-3" /></a>}
       </div>
 
       {/* Action Toggles & Controls */}
@@ -241,7 +253,8 @@ export const KeyCard: React.FC<KeyCardProps> = ({
           {/* Re-test / Ping Button */}
           <button
             type="button"
-            disabled={isPinging}
+            disabled={isPinging || keyItem.status === 'revoked' || keyItem.provider === 'custom'}
+            title={keyItem.provider === 'custom' ? 'Custom provider requests are disabled in this beta' : 'Contact the provider to test this key'}
             onClick={handlePing}
             className="flex items-center justify-center space-x-1.5 text-xs text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 px-2.5 py-1.5 rounded-lg border border-slate-700/60 transition-colors disabled:opacity-50"
           >
@@ -265,7 +278,7 @@ export const KeyCard: React.FC<KeyCardProps> = ({
             }`}
           >
             <Power className="w-3 h-3" />
-            <span>{keyItem.status === 'revoked' ? 'Re-activate' : 'Revoke'}</span>
+            <span>{keyItem.status === 'revoked' ? 'Enable Card' : 'Disable Card'}</span>
           </button>
 
           {/* Set Default or Delete */}
@@ -295,7 +308,7 @@ export const KeyCard: React.FC<KeyCardProps> = ({
         <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1">
           <span className="flex items-center gap-1 font-mono">
             <Clock className="w-3 h-3" />
-            {new Date(keyItem.createdAt).toLocaleDateString()}
+            {formatTimestamp(keyItem.createdAt)}
           </span>
           <span className="font-mono">Used: {keyItem.usageCount}x</span>
           {!keyItem.isDefault && (

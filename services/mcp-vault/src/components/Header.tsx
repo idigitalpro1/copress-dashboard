@@ -31,11 +31,11 @@ export const Header: React.FC<HeaderProps> = ({
                   NewsFlow Orchestrator
                 </span>
                 <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-slate-800 text-slate-400 border border-slate-700/60">
-                  Newsroom v2.4
+                  SATCOM beta
                 </span>
               </div>
               <p className="text-xs text-slate-400 hidden sm:block">
-                Automated Newspaper PDF-to-Text Pipeline & Key Vault
+                Newsroom prompts and secure API key management
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="hidden lg:flex items-center space-x-2 text-xs text-slate-300 bg-emerald-950/40 border border-emerald-800/50 px-3 py-1.5 rounded-full">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span className="font-medium text-emerald-300">AES-256-GCM Vault</span>
-            <span className="text-[10px] text-emerald-500/80 uppercase font-mono">Hardware Tag</span>
+            <span className="text-[10px] text-emerald-500/80 uppercase font-mono">Authenticated</span>
           </div>
         </div>
       </div>

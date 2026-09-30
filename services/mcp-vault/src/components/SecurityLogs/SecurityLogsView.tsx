@@ -43,6 +43,7 @@ export const SecurityLogsView: React.FC<SecurityLogsViewProps> = () => {
     avgLatency: 0,
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [actionFilter, setActionFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -52,6 +53,7 @@ export const SecurityLogsView: React.FC<SecurityLogsViewProps> = () => {
 
   const fetchLogs = async () => {
     setIsLoading(true);
+    setLoadError('');
     try {
       const res = await api.getAuditLogs({
         action: actionFilter,
@@ -71,7 +73,7 @@ export const SecurityLogsView: React.FC<SecurityLogsViewProps> = () => {
         }
       );
     } catch (err: any) {
-      console.error('Failed to load security logs:', err);
+      setLoadError(err instanceof Error ? err.message : 'Unable to load the beta audit logs.');
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +91,7 @@ export const SecurityLogsView: React.FC<SecurityLogsViewProps> = () => {
   const handleClearLogs = async () => {
     if (
       !window.confirm(
-        'Are you sure you want to reset the security audit log? An audit reset record will be preserved for compliance.'
+        'Reset the beta audit log? Existing audit records will be removed.'
       )
     ) {
       return;
@@ -308,6 +310,7 @@ export const SecurityLogsView: React.FC<SecurityLogsViewProps> = () => {
 
   return (
     <div className="space-y-6">
+      {loadError && <p role="alert" className="p-3 rounded-xl text-xs text-rose-200 bg-rose-950/40 border border-rose-800">{loadError}</p>}
       {/* Top Auditing KPI Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {/* Total Audit Events */}
@@ -375,7 +378,7 @@ export const SecurityLogsView: React.FC<SecurityLogsViewProps> = () => {
             <Clock className="w-5 h-5" />
           </div>
           <div>
-            <div className="text-xl font-bold text-emerald-300">{stats.avgLatency}ms</div>
+            <div className="text-xl font-bold text-emerald-300">{stats.avgLatency == null ? 'Not measured' : `${stats.avgLatency}ms`}</div>
             <div className="text-xs text-slate-400 font-medium">Avg Ping Latency</div>
           </div>
         </div>

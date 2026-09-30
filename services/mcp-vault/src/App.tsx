@@ -1,8 +1,4 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
+/** @license SPDX-License-Identifier: Apache-2.0 */
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { KeyVaultView } from './components/KeyVault/KeyVaultView';
@@ -10,157 +6,100 @@ import { PromptManagerView } from './components/PromptManager/PromptManagerView'
 import { DualPaneSandbox } from './components/Sandbox/DualPaneSandbox';
 import { SecurityLogsView } from './components/SecurityLogs/SecurityLogsView';
 import { VaultKey, SystemPrompt } from './types';
-import { api } from './services/api';
-import { ShieldCheck, Sparkles, Key, AlertCircle, RefreshCw } from 'lucide-react';
+import { api, setAccessToken, clearAccessToken, onAuthenticationFailure } from './services/api';
+import { ShieldCheck, Lock, AlertCircle, RefreshCw, LogOut } from 'lucide-react';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'vault' | 'prompts' | 'sandbox' | 'logs'>('vault');
   const [keys, setKeys] = useState<VaultKey[]>([]);
   const [prompts, setPrompts] = useState<SystemPrompt[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [connected, setConnected] = useState(false);
+  const [tokenInput, setTokenInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const [sandboxSelectedPrompt, setSandboxSelectedPrompt] = useState<SystemPrompt | null>(null);
-  const [envStatus, setEnvStatus] = useState<{
-    hasEnvGeminiKey: boolean;
-    hasMasterKey: boolean;
-    encryptionAlgorithm: string;
-  } | null>(null);
+  const [envStatus, setEnvStatus] = useState<{ hasMasterKey: boolean; encryptionAlgorithm: string; executionEnabled: boolean } | null>(null);
+
+  const resetConnection = () => {
+    clearAccessToken();
+    setConnected(false);
+    setTokenInput('');
+    setKeys([]);
+    setPrompts([]);
+    setSandboxSelectedPrompt(null);
+    setEnvStatus(null);
+  };
+
+  useEffect(() => onAuthenticationFailure(() => {
+    resetConnection();
+    setError('The access token was rejected. Enter the beta token again.');
+  }), []);
 
   const loadData = async () => {
     setIsLoading(true);
+    setError('');
     try {
       const [keysRes, promptsRes, envRes] = await Promise.all([
-        api.getKeys(),
-        api.getPrompts(),
-        api.getEnvStatus().catch(() => null),
+        api.getKeys(), api.getPrompts(), api.getEnvStatus(),
       ]);
       setKeys(keysRes.keys || []);
       setPrompts(promptsRes.prompts || []);
-      if (envRes) setEnvStatus(envRes);
+      setEnvStatus(envRes);
+      setConnected(true);
     } catch (err) {
-      console.error('Failed to load application data:', err);
+      resetConnection();
+      setError(err instanceof Error ? err.message : 'Unable to connect to the beta vault.');
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const handleTestPromptInSandbox = (prompt: SystemPrompt) => {
-    setSandboxSelectedPrompt(prompt);
-    setActiveTab('sandbox');
+  const connect = async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      setAccessToken(tokenInput);
+      setTokenInput('');
+      await loadData();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Enter the beta access token.');
+    }
   };
 
-  const activeKeysCount = keys.filter((k) => k.status === 'active').length;
-
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-900 selection:text-white">
-      {/* Top Header */}
-      <Header
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        keyCount={keys.length}
-        activeKeyCount={activeKeysCount}
-        promptCount={prompts.length}
-      />
-
-      {/* Main Content Area */}
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+      {connected && <Header activeTab={activeTab} setActiveTab={setActiveTab} keyCount={keys.length} activeKeyCount={keys.filter(key => key.status === 'active').length} promptCount={prompts.length} />}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Security & System Architecture Status Banner */}
-        <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-indigo-950/40 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 shrink-0">
-              <ShieldCheck className="w-4 h-4" />
-            </div>
+        <div className="mb-6 p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <ShieldCheck className="w-5 h-5 text-indigo-400 shrink-0 mt-1" />
             <div>
-              <div className="flex items-center space-x-2">
-                <span className="text-xs font-semibold text-slate-200">
-                  Zero-Plaintext Server Proxy Architecture Active
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-800/80 text-emerald-300">
-                  AES-256-GCM
-                </span>
-              </div>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                Keys are validated exclusively via backend proxy ping routes and encrypted at rest before persistence.
-              </p>
+              <h1 className="font-semibold text-slate-100">SATCOM · NewsFlow Beta</h1>
+              <p className="text-xs text-slate-400 mt-1">This authenticated server vault saves keys with AES-256-GCM encryption. Saving creates an untested card; use Test Connection when you choose to contact its provider.</p>
+              <p className="text-xs text-slate-400 mt-1">Your <a href="/apikeys" className="text-indigo-300 underline">SATCOM browser key cards</a> are a separate store. Keys are never copied from them automatically.</p>
             </div>
           </div>
-
-          <div className="flex items-center space-x-3 text-xs text-slate-400 font-mono">
-            {envStatus?.hasEnvGeminiKey && (
-              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-indigo-950/60 border border-indigo-800/60 text-indigo-300">
-                <Sparkles className="w-3 h-3 text-indigo-400" />
-                <span>AI Studio Key Connected</span>
-              </span>
-            )}
-            <button
-              onClick={loadData}
-              title="Reload all state"
-              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
-            >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            </button>
-          </div>
+          {connected && <div className="flex gap-2 shrink-0">
+            <button type="button" onClick={loadData} disabled={isLoading} aria-label="Refresh beta data" className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700"><RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} /></button>
+            <button type="button" onClick={resetConnection} className="flex items-center gap-2 text-xs p-2 rounded-lg bg-slate-800 hover:bg-slate-700"><LogOut className="w-4 h-4" />Disconnect</button>
+          </div>}
         </div>
-
-        {/* Tab Views */}
-        {isLoading ? (
-          <div className="py-24 text-center">
-            <div className="w-10 h-10 border-2 border-indigo-500/20 border-t-indigo-500 rounded-full animate-spin mx-auto mb-3" />
-            <p className="text-xs text-slate-400 font-mono">
-              Loading NewsFlow Orchestrator Vault & Prompts...
-            </p>
-          </div>
-        ) : (
-          <>
-            {activeTab === 'vault' && (
-              <KeyVaultView
-                keys={keys}
-                onKeysChange={setKeys}
-                onRefresh={loadData}
-                onNavigateToLogs={() => setActiveTab('logs')}
-              />
-            )}
-
-            {activeTab === 'prompts' && (
-              <PromptManagerView
-                prompts={prompts}
-                keys={keys}
-                onPromptsChange={setPrompts}
-                onSelectPromptForSandbox={handleTestPromptInSandbox}
-              />
-            )}
-
-            {activeTab === 'sandbox' && (
-              <DualPaneSandbox
-                prompts={prompts}
-                keys={keys}
-                initialSelectedPrompt={sandboxSelectedPrompt}
-              />
-            )}
-
-            {activeTab === 'logs' && (
-              <SecurityLogsView onRefreshKeys={loadData} />
-            )}
-          </>
-        )}
+        {error && <p role="alert" className="mb-4 p-3 rounded-xl text-sm bg-rose-950/40 border border-rose-800 text-rose-200 flex gap-2"><AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />{error}</p>}
+        {!connected ? <form onSubmit={connect} className="max-w-lg mx-auto my-12 p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <Lock className="w-8 h-8 text-indigo-400" />
+          <h2 className="text-lg font-semibold">Connect to the beta vault</h2>
+          <p className="text-sm text-slate-400">Enter the access token configured for this beta server. It stays in memory for this page and is cleared when you disconnect or refresh.</p>
+          <label htmlFor="newsflow-token" className="block text-sm text-slate-300">Beta access token</label>
+          <input id="newsflow-token" name="newsflow-token" type="password" autoComplete="new-password" autoCapitalize="off" autoCorrect="off" spellCheck={false} value={tokenInput} onChange={event => setTokenInput(event.target.value)} disabled={isLoading} className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <button type="submit" disabled={!tokenInput.trim() || isLoading} className="w-full p-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 font-medium">{isLoading ? 'Connecting…' : 'Connect'}</button>
+          <a href="/" className="inline-block text-xs underline text-slate-400">Return to SATCOM</a>
+        </form> : isLoading ? <p className="py-20 text-center text-slate-400">Loading beta vault and prompts…</p> : <>
+          {activeTab === 'vault' && <KeyVaultView keys={keys} onKeysChange={setKeys} onRefresh={loadData} onNavigateToLogs={() => setActiveTab('logs')} />}
+          {activeTab === 'prompts' && <PromptManagerView prompts={prompts} keys={keys} onPromptsChange={setPrompts} onSelectPromptForSandbox={prompt => { setSandboxSelectedPrompt(prompt); setActiveTab('sandbox'); }} />}
+          {activeTab === 'sandbox' && <DualPaneSandbox prompts={prompts} keys={keys} initialSelectedPrompt={sandboxSelectedPrompt} executionEnabled={envStatus?.executionEnabled === true} />}
+          {activeTab === 'logs' && <SecurityLogsView onRefreshKeys={loadData} />}
+        </>}
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-4 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold text-slate-400">NewsFlow Orchestrator</span>
-            <span>•</span>
-            <span>Automated Newspaper Publishing Infrastructure</span>
-          </div>
-          <div className="font-mono text-[11px] text-slate-500">
-            Encrypted with AES-256-GCM • Proxy Validation • Versioned Extraction Prompts
-          </div>
-        </div>
-      </footer>
+      <footer className="border-t border-slate-900 py-4 text-center text-xs text-slate-500">NewsFlow beta · Encrypted server vault · Versioned prompts · Provider calls require explicit actions</footer>
     </div>
   );
 }

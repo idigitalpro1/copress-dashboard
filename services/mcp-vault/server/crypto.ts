@@ -1,98 +1,45 @@
-import crypto from 'crypto';
-import fs from 'fs';
-import path from 'path';
+import crypto from 'node:crypto';
+import path from 'node:path';
 
-// Master key storage file for AES-256-GCM
-const KEY_FILE = path.resolve(process.cwd(), '.vault_master.key');
-
-function getMasterKey(): Buffer {
-  if (process.env.VAULT_MASTER_KEY) {
-    return crypto.createHash('sha256').update(process.env.VAULT_MASTER_KEY).digest();
-  }
-
-  try {
-    if (fs.existsSync(KEY_FILE)) {
-      const keyHex = fs.readFileSync(KEY_FILE, 'utf-8').trim();
-      if (keyHex.length === 64) {
-        return Buffer.from(keyHex, 'hex');
-      }
-    }
-  } catch (err) {
-    console.warn('Could not read existing vault master key file, generating new key:', err);
-  }
-
-  // Generate a cryptographically secure 256-bit key
-  const newKey = crypto.randomBytes(32);
-  try {
-    fs.writeFileSync(KEY_FILE, newKey.toString('hex'), { mode: 0o600 });
-  } catch (err) {
-    console.warn('Failed to write master key to file:', err);
-  }
-  return newKey;
+export class NewsflowError extends Error {
+  constructor(message: string, public statusCode = 400) { super(message); }
 }
 
-const MASTER_KEY = getMasterKey();
-
-export interface EncryptedPayload {
-  ivHex: string;
-  tagHex: string;
-  ciphertextHex: string;
+export function requireNewsflowConfig() {
+  const token = process.env.NEWSFLOW_MCP_TOKEN || '';
+  const hex = process.env.NEWSFLOW_MASTER_KEY || '';
+  const dataDir = process.env.NEWSFLOW_DATA_DIR || '';
+  if (process.env.NEWSFLOW_BETA_ENABLED !== '1' || !/^[!-~]{32,4096}$/.test(token) || !/^[a-f0-9]{64}$/i.test(hex) || !path.isAbsolute(dataDir)) {
+    throw new NewsflowError('NewsFlow beta is disabled or its required private configuration is incomplete.', 503);
+  }
+  const allowedOrigins = ['http://localhost:4321', 'http://127.0.0.1:4321'];
+  for (const origin of (process.env.NEWSFLOW_ALLOWED_ORIGINS || '').split(',').map(value => value.trim()).filter(Boolean)) {
+    try {
+      const url = new URL(origin);
+      if (!['http:', 'https:'].includes(url.protocol) || url.origin !== origin || url.username || url.password) throw new Error();
+      allowedOrigins.push(origin);
+    } catch { throw new NewsflowError('NewsFlow allowed-origin configuration is invalid.', 503); }
+  }
+  return { token, masterKey: Buffer.from(hex, 'hex'), dataDir, allowedOrigins };
 }
 
-/**
- * Encrypts a plaintext string using AES-256-GCM.
- * Never stores or transmits plaintext keys outside the secure proxy lifecycle.
- */
 export function encryptApiKey(plaintext: string): string {
-  if (!plaintext) {
-    throw new Error('Cannot encrypt empty plaintext');
-  }
-  const iv = crypto.randomBytes(12); // Standard 96-bit IV for AES-GCM
-  const cipher = crypto.createCipheriv('aes-256-gcm', MASTER_KEY, iv);
-
-  let encrypted = cipher.update(plaintext, 'utf8', 'hex');
-  encrypted += cipher.final('hex');
-  const tag = cipher.getAuthTag();
-
-  // Return compact serializable string format: iv:tag:ciphertext
-  return `${iv.toString('hex')}:${tag.toString('hex')}:${encrypted}`;
+  if (typeof plaintext !== 'string' || plaintext.length < 8 || plaintext.length > 16384) throw new NewsflowError('The credential has an unsupported length.');
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv('aes-256-gcm', requireNewsflowConfig().masterKey, iv);
+  const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
+  return `${iv.toString('hex')}:${cipher.getAuthTag().toString('hex')}:${encrypted.toString('hex')}`;
 }
 
-/**
- * Decrypts an encrypted string using AES-256-GCM.
- * Validates the authentication tag to ensure data integrity at rest.
- */
-export function decryptApiKey(encryptedPayload: string): string {
-  if (!encryptedPayload || !encryptedPayload.includes(':')) {
-    throw new Error('Invalid encrypted payload format');
-  }
-
-  const parts = encryptedPayload.split(':');
-  if (parts.length !== 3) {
-    throw new Error('Malformed encrypted payload structure');
-  }
-
-  const [ivHex, tagHex, ciphertextHex] = parts;
-  const iv = Buffer.from(ivHex, 'hex');
-  const tag = Buffer.from(tagHex, 'hex');
-  const decipher = crypto.createDecipheriv('aes-256-gcm', MASTER_KEY, iv);
-
-  decipher.setAuthTag(tag);
-  let decrypted = decipher.update(ciphertextHex, 'hex', 'utf8');
-  decrypted += decipher.final('utf8');
-  return decrypted;
+export function decryptApiKey(payload: string): string {
+  const key = requireNewsflowConfig().masterKey;
+  try {
+    if (typeof payload !== 'string' || !/^[a-f0-9]{24}:[a-f0-9]{32}:(?:[a-f0-9]{2})+$/i.test(payload)) throw new Error();
+    const [iv, tag, encrypted] = payload.split(':');
+    const decipher = crypto.createDecipheriv('aes-256-gcm', key, Buffer.from(iv, 'hex'));
+    decipher.setAuthTag(Buffer.from(tag, 'hex'));
+    return Buffer.concat([decipher.update(Buffer.from(encrypted, 'hex')), decipher.final()]).toString('utf8');
+  } catch { throw new NewsflowError('The stored credential could not be authenticated. No data was reset.', 503); }
 }
 
-/**
- * Masks an API key for safe UI display (e.g., ••••••••••••••••••••4x8A)
- */
-export function maskKey(rawKey: string): string {
-  if (!rawKey) return '••••••••••••';
-  const trimmed = rawKey.trim();
-  if (trimmed.length <= 6) {
-    return '••••' + trimmed.slice(-2);
-  }
-  const last4 = trimmed.slice(-4);
-  const prefixLength = Math.min(trimmed.length - 4, 18);
-  return '•'.repeat(prefixLength) + last4;
-}
+export function maskKey(_rawKey: string): string { return '••••••••••••'; }

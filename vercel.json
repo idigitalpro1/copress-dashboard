@@ -56,6 +56,23 @@
           "value": "noindex, nofollow"
         }
       ]
+    },
+    {
+      "source": "/newsflow/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+        }
+      ]
     }
   ],
   "redirects": [
@@ -73,6 +90,11 @@
         }
       ],
       "destination": "/subscribe-villager/",
+      "permanent": false
+    },
+    {
+      "source": "/services/:path*",
+      "destination": "/api/newsflow",
       "permanent": false
     }
   ],
@@ -96,6 +118,30 @@
     {
       "source": "/console/api/hermes/:path*",
       "destination": "https://codex.conews.press/api/v1/platform/hermes/:path*"
+    },
+    {
+      "source": "/newsflow",
+      "destination": "/newsflow/index.html"
+    },
+    {
+      "source": "/api/vault/:path*",
+      "destination": "/api/newsflow"
+    },
+    {
+      "source": "/api/prompts/:path*",
+      "destination": "/api/newsflow"
+    },
+    {
+      "source": "/api/newsflow/:path*",
+      "destination": "/api/newsflow"
+    },
+    {
+      "source": "/sse",
+      "destination": "/api/newsflow"
+    },
+    {
+      "source": "/message",
+      "destination": "/api/newsflow"
     }
   ]
 }

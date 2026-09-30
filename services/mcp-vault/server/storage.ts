@@ -1,7 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import crypto from 'crypto';
-import { encryptApiKey, decryptApiKey, maskKey } from './crypto.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
+import { decryptApiKey, NewsflowError, requireNewsflowConfig } from './crypto.js';
 
 export interface VaultKeyItem {
   id: string;
@@ -9,6 +10,7 @@ export interface VaultKeyItem {
   provider: 'gemini' | 'openai' | 'anthropic' | 'custom';
   maskedKey: string;
   encryptedData: string;
+  envVarName?: string;
   customEndpointUrl?: string;
   customHeader?: string;
   status: 'active' | 'invalid' | 'revoked' | 'untested';
@@ -59,6 +61,8 @@ export type SecurityActionType =
   | 'KEY_DELETED'
   | 'ENV_IMPORTED'
   | 'DEFAULT_SET'
+  | 'PROMPT_EXECUTED'
+  | 'PROMPT_EXECUTION_FAILED'
   // Legacy aliases for backward compatibility
   | 'validation'
   | 'rotation'
@@ -91,117 +95,90 @@ export interface SecurityLogItem {
   metadata?: Record<string, any>;
 }
 
-const DATA_DIR = path.resolve(process.cwd(), '.vault_data');
-const KEYS_FILE = path.join(DATA_DIR, 'keys.json');
-const PROMPTS_FILE = path.join(DATA_DIR, 'prompts.json');
-const SECURITY_LOGS_FILE = path.join(DATA_DIR, 'security_logs.json');
+function directory() {
+  const dir = requireNewsflowConfig().dataDir;
+  try {
+    const webRoot = path.resolve(fileURLToPath(new URL('../../../', import.meta.url)));
+    const requested = path.resolve(dir);
+    if (requested === path.parse(requested).root || requested === webRoot || requested.startsWith(webRoot + path.sep)) throw new Error();
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true, mode: 0o700 });
+    const stat = fs.lstatSync(dir);
+    if (!stat.isDirectory() || stat.isSymbolicLink()) throw new Error();
+    const resolved = fs.realpathSync(dir);
+    if (resolved === webRoot || resolved.startsWith(webRoot + path.sep)) throw new Error();
+    fs.chmodSync(dir, 0o700);
+    return dir;
+  } catch { throw new NewsflowError('Private vault storage is unavailable.', 503); }
+}
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true, mode: 0o700 });
+function readArray<T>(filename: string, empty: () => T[] = () => []): T[] {
+  const target = path.join(directory(), filename);
+  let fd: number | undefined;
+  try {
+    try { if (!fs.lstatSync(target).isFile()) throw new Error(); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') return empty(); throw error; }
+    fd = fs.openSync(target, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW);
+    const stat = fs.fstatSync(fd);
+    if (!stat.isFile() || stat.size > 16 * 1024 * 1024) throw new Error();
+    const data = JSON.parse(fs.readFileSync(fd, 'utf8'));
+    if (!Array.isArray(data) || data.length > 2000 || data.some(item => !item || typeof item !== 'object' || typeof item.id !== 'string')) throw new Error();
+    return data;
+  } catch { throw new NewsflowError('Stored vault data could not be read. No data was reset.', 503); }
+  finally { if (fd !== undefined) fs.closeSync(fd); }
+}
+
+function writeArray(filename: string, rows: unknown[]) {
+  if (!Array.isArray(rows) || rows.length > 2000) throw new NewsflowError('Vault storage limits exceeded.');
+  const dir = directory();
+  const target = path.join(dir, filename);
+  const temporary = path.join(dir, '.' + filename + '.' + crypto.randomUUID() + '.tmp');
+  let fd: number | undefined;
+  try {
+    try { if (!fs.lstatSync(target).isFile()) throw new Error(); }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+    const content = JSON.stringify(rows);
+    if (Buffer.byteLength(content) > 16 * 1024 * 1024) throw new Error();
+    fd = fs.openSync(temporary, fs.constants.O_CREAT | fs.constants.O_EXCL | fs.constants.O_WRONLY | fs.constants.O_NOFOLLOW, 0o600);
+    fs.writeFileSync(fd, content, 'utf8');
+    fs.fsyncSync(fd);
+    fs.closeSync(fd); fd = undefined;
+    fs.renameSync(temporary, target);
+    // Rename is the commit point. A directory-sync failure must not falsely report rollback.
+    try {
+      const dirFd = fs.openSync(dir, fs.constants.O_RDONLY);
+      try { fs.fsyncSync(dirFd); } finally { fs.closeSync(dirFd); }
+    } catch { /* The complete new file has already been committed atomically. */ }
+  } catch { throw new NewsflowError('Vault data could not be saved.', 503); }
+  finally {
+    if (fd !== undefined) fs.closeSync(fd);
+    try { fs.unlinkSync(temporary); } catch { /* The committed temporary file no longer exists. */ }
   }
 }
 
-// -------------------------------- KEYS STORAGE --------------------------------
-
-export function getAllKeys(includeDecrypted = false): (VaultKeyItem & { rawKey?: string })[] {
-  ensureDataDir();
-  if (!fs.existsSync(KEYS_FILE)) {
-    return initializeDefaultKeys();
-  }
-  try {
-    const raw = fs.readFileSync(KEYS_FILE, 'utf-8');
-    const keys: VaultKeyItem[] = JSON.parse(raw);
-    if (includeDecrypted) {
-      return keys.map((k) => {
-        try {
-          return { ...k, rawKey: decryptApiKey(k.encryptedData) };
-        } catch {
-          return { ...k, rawKey: '' };
-        }
-      });
+export function getAllKeys(): VaultKeyItem[] {
+  const keys = readArray<VaultKeyItem>('keys.json');
+  for (const key of keys) {
+    if (typeof key.encryptedData !== 'string' || !['gemini', 'openai', 'anthropic', 'custom'].includes(key.provider)
+      || typeof key.label !== 'string' || !['active', 'invalid', 'untested', 'revoked'].includes(key.status)) {
+      throw new NewsflowError('Stored vault metadata is invalid. No data was reset.', 503);
     }
-    return keys;
-  } catch (err) {
-    console.error('Failed to read keys file:', err);
-    return [];
   }
-}
-
-export function saveAllKeys(keys: VaultKeyItem[]): void {
-  ensureDataDir();
-  fs.writeFileSync(KEYS_FILE, JSON.stringify(keys, null, 2), { mode: 0o600 });
-}
-
-export function findKeyById(id: string): VaultKeyItem | undefined {
-  const keys = getAllKeys();
-  return keys.find((k) => k.id === id);
-}
-
-export function getDecryptedKeyById(id: string): string | null {
-  const key = findKeyById(id);
-  if (!key) return null;
-  try {
-    return decryptApiKey(key.encryptedData);
-  } catch (err) {
-    console.error(`Failed to decrypt key ${id}:`, err);
-    return null;
-  }
-}
-
-function initializeDefaultKeys(): VaultKeyItem[] {
-  const keys: VaultKeyItem[] = [];
-
-  // Check if system GEMINI_API_KEY is available in environment
-  const sysGeminiKey = process.env.GEMINI_API_KEY;
-  if (sysGeminiKey && sysGeminiKey !== 'MY_GEMINI_API_KEY') {
-    const encrypted = encryptApiKey(sysGeminiKey);
-    keys.push({
-      id: 'key-sys-gemini-env',
-      label: 'Google Gemini Studio Default',
-      provider: 'gemini',
-      maskedKey: maskKey(sysGeminiKey),
-      encryptedData: encrypted,
-      status: 'active',
-      validationMessage: 'Auto-provisioned from environment secret',
-      lastValidatedAt: new Date().toISOString(),
-      latencyMs: 142,
-      isDefault: true,
-      usageCount: 0,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-  }
-
-  saveAllKeys(keys);
   return keys;
 }
-
-// -------------------------------- PROMPTS STORAGE --------------------------------
-
-export function getAllPrompts(): SystemPromptItem[] {
-  ensureDataDir();
-  if (!fs.existsSync(PROMPTS_FILE)) {
-    return initializeDefaultPrompts();
-  }
-  try {
-    const raw = fs.readFileSync(PROMPTS_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error('Failed to read prompts file:', err);
-    return [];
-  }
+export function saveAllKeys(keys: VaultKeyItem[]) { writeArray('keys.json', keys); }
+export function findKeyById(id: string) { return getAllKeys().find(key => key.id === id); }
+export function getDecryptedKeyById(id: string): string | null {
+  const key = findKeyById(id);
+  return key ? decryptApiKey(key.encryptedData) : null;
 }
-
-export function saveAllPrompts(prompts: SystemPromptItem[]): void {
-  ensureDataDir();
-  fs.writeFileSync(PROMPTS_FILE, JSON.stringify(prompts, null, 2), { mode: 0o600 });
+export function safeKeyMetadata(key: VaultKeyItem) {
+  return { id: key.id, label: key.label, provider: key.provider, maskedKey: '••••••••••••', status: key.status,
+    validationMessage: key.validationMessage, lastValidatedAt: key.lastValidatedAt, latencyMs: key.latencyMs,
+    isDefault: key.isDefault, usageCount: key.usageCount, createdAt: key.createdAt, updatedAt: key.updatedAt, envVarName: key.envVarName };
 }
-
-export function findPromptById(id: string): SystemPromptItem | undefined {
-  const prompts = getAllPrompts();
-  return prompts.find((p) => p.id === id);
-}
+export function getAllPrompts(): SystemPromptItem[] { return readArray('prompts.json', initializeDefaultPrompts); }
+export function saveAllPrompts(prompts: SystemPromptItem[]) { writeArray('prompts.json', prompts); }
+export function findPromptById(id: string) { return getAllPrompts().find(prompt => prompt.id === id); }
 
 function initializeDefaultPrompts(): SystemPromptItem[] {
   const defaultPrompts: SystemPromptItem[] = [
@@ -213,7 +190,7 @@ function initializeDefaultPrompts(): SystemPromptItem[] {
       currentVersion: '1.2.0',
       targetFormat: 'json',
       recommendedModel: 'gemini-3.8-flash',
-      mappedKeyId: 'key-sys-gemini-env',
+      mappedKeyId: null,
       temperature: 0.1,
       tags: ['Extraction', 'AP Style', 'Metadata', 'JSON'],
       createdAt: '2026-09-15T10:00:00.000Z',
@@ -283,7 +260,7 @@ Respond strictly in valid JSON format matching this schema without markdown code
       currentVersion: '1.1.0',
       targetFormat: 'markdown',
       recommendedModel: 'gemini-3.8-flash',
-      mappedKeyId: 'key-sys-gemini-env',
+      mappedKeyId: null,
       temperature: 0.15,
       tags: ['Layout', 'OCR Cleanup', 'Jump Lines', 'De-hyphenation'],
       createdAt: '2026-09-18T11:20:00.000Z',
@@ -343,7 +320,7 @@ Your task:
       currentVersion: '1.0.0',
       targetFormat: 'markdown',
       recommendedModel: 'gemini-3.8-flash',
-      mappedKeyId: 'key-sys-gemini-env',
+      mappedKeyId: null,
       temperature: 0.2,
       tags: ['Wire Service', 'Syndication', 'AP/Reuters', 'Editorial'],
       createdAt: '2026-09-20T09:00:00.000Z',
@@ -389,7 +366,7 @@ Perform the following operations:
       currentVersion: '1.0.0',
       targetFormat: 'json',
       recommendedModel: 'gemini-3.8-flash',
-      mappedKeyId: 'key-sys-gemini-env',
+      mappedKeyId: null,
       temperature: 0.1,
       tags: ['Sports Agate', 'Box Scores', 'Tabular Parsing', 'JSON'],
       createdAt: '2026-09-24T15:30:00.000Z',
@@ -435,7 +412,7 @@ Return strict JSON only.`,
       currentVersion: '1.0.0',
       targetFormat: 'json',
       recommendedModel: 'gemini-3.8-flash',
-      mappedKeyId: 'key-sys-gemini-env',
+      mappedKeyId: null,
       temperature: 0.1,
       tags: ['Photojournalism', 'Cutlines', 'Attribution', 'Metadata'],
       createdAt: '2026-09-25T13:00:00.000Z',
@@ -465,167 +442,24 @@ Return strictly formatted JSON.`,
     },
   ];
 
-  saveAllPrompts(defaultPrompts);
   return defaultPrompts;
 }
 
-// -------------------------------- SECURITY AUDIT LOGS STORAGE --------------------------------
-
-export function getAllSecurityLogs(): SecurityLogItem[] {
-  ensureDataDir();
-  if (!fs.existsSync(SECURITY_LOGS_FILE)) {
-    return initializeDefaultSecurityLogs();
-  }
-  try {
-    const raw = fs.readFileSync(SECURITY_LOGS_FILE, 'utf-8');
-    return JSON.parse(raw);
-  } catch (err) {
-    console.error('Failed to read security logs file:', err);
-    return [];
-  }
-}
-
-export function saveAllSecurityLogs(logs: SecurityLogItem[]): void {
-  ensureDataDir();
-  fs.writeFileSync(SECURITY_LOGS_FILE, JSON.stringify(logs, null, 2), { mode: 0o600 });
-}
-
-export function addSecurityLogEntry(
-  entry: Omit<SecurityLogItem, 'id' | 'timestamp' | 'trigger'> & {
-    timestamp?: string;
-    trigger?: SecurityTrigger;
-  }
-): SecurityLogItem {
-  const logs = getAllSecurityLogs();
-
-  // Zero-Leak defense: Ensure maskedKey is only masked (never raw material)
-  let safeMasked = entry.maskedKey;
-  if (safeMasked) {
-    if (!safeMasked.includes('••') && !safeMasked.includes('**')) {
-      safeMasked = `••••${safeMasked.slice(-4)}`;
-    }
-  }
-
-  // Zero-Leak defense: sanitize metadata to ensure no raw secrets or tokens are stored
-  let safeMetadata: Record<string, any> | undefined = undefined;
-  if (entry.metadata) {
-    safeMetadata = {};
-    for (const [k, v] of Object.entries(entry.metadata)) {
-      const lower = k.toLowerCase();
-      if (
-        lower.includes('key') ||
-        lower.includes('secret') ||
-        lower.includes('token') ||
-        lower.includes('auth') ||
-        lower.includes('cipher') ||
-        lower.includes('encrypted') ||
-        lower.includes('pass')
-      ) {
-        continue;
-      }
-      safeMetadata[k] = v;
-    }
-  }
-
-  const determinedTrigger: SecurityTrigger =
-    entry.trigger ||
-    (entry.actor?.toLowerCase().includes('auto') ||
-    entry.actor?.toLowerCase().includes('system') ||
-    entry.actor?.toLowerCase().includes('cron')
-      ? 'automated'
-      : 'manual');
-
-  const newLog: SecurityLogItem = {
-    id: `log-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
-    timestamp: entry.timestamp || new Date().toISOString(),
-    action: entry.action,
-    trigger: determinedTrigger,
-    keyId: entry.keyId,
-    keyLabel: entry.keyLabel,
-    provider: entry.provider,
-    maskedKey: safeMasked,
-    status: entry.status,
-    actor: entry.actor || 'System Service',
-    details: entry.details,
-    latencyMs: entry.latencyMs,
-    ip: entry.ip,
-    origin: entry.origin,
-    metadata: safeMetadata,
+export function getAllSecurityLogs(): SecurityLogItem[] { return readArray('security_logs.json'); }
+export function saveAllSecurityLogs(logs: SecurityLogItem[]) { writeArray('security_logs.json', logs.slice(0, 500)); }
+export function addSecurityLogEntry(entry: Pick<SecurityLogItem, 'action' | 'status'> & Partial<SecurityLogItem>): SecurityLogItem {
+  const item: SecurityLogItem = {
+    id: 'log-' + crypto.randomUUID(), timestamp: new Date().toISOString(), action: entry.action,
+    status: entry.status, trigger: 'manual', actor: 'Authenticated operator',
+    details: 'An authenticated vault operation completed.',
+    ...(typeof entry.keyId === 'string' && /^key-[a-z0-9-]+$/.test(entry.keyId) ? { keyId: entry.keyId } : {}),
   };
-
-  // Keep most recent 500 logs to prevent unbounded growth while keeping thorough audit history
-  logs.unshift(newLog);
-  if (logs.length > 500) {
-    logs.length = 500;
-  }
-  saveAllSecurityLogs(logs);
-  return newLog;
+  saveAllSecurityLogs([item, ...getAllSecurityLogs()]);
+  return item;
 }
+export function clearSecurityLogs() { saveAllSecurityLogs([]); }
 
-export function clearSecurityLogs(): void {
-  ensureDataDir();
-  const resetLogs: SecurityLogItem[] = [
-    {
-      id: `log-audit-reset-${Date.now()}`,
-      timestamp: new Date().toISOString(),
-      action: 'VALIDATION_ATTEMPT',
-      trigger: 'manual',
-      status: 'info',
-      actor: 'Audit Administrator',
-      details: 'Audit log table reset and re-initialized.',
-    },
-  ];
-  saveAllSecurityLogs(resetLogs);
+export function recordSecurityEvent(action: SecurityActionType, status: SecurityStatus, keyId?: string) {
+  // Audit is separate from the credential transaction; failure cannot undo an acknowledged save.
+  try { addSecurityLogEntry({ action, status, keyId }); return true; } catch { return false; }
 }
-
-function initializeDefaultSecurityLogs(): SecurityLogItem[] {
-  const initialLogs: SecurityLogItem[] = [
-    {
-      id: 'log-init-01',
-      timestamp: new Date(Date.now() - 3600000 * 2).toISOString(),
-      action: 'KEY_CREATED',
-      trigger: 'automated',
-      keyId: 'key-sys-gemini-env',
-      keyLabel: 'Google Gemini Studio Default',
-      provider: 'gemini',
-      maskedKey: '••••••••••••••••••2DE4',
-      status: 'success',
-      actor: 'System Service',
-      details: 'Auto-provisioned default Gemini API key from environment secret with AES-256-GCM encryption.',
-      latencyMs: 142,
-      metadata: { source: 'process.env', algorithm: 'AES-256-GCM' },
-    },
-    {
-      id: 'log-init-02',
-      timestamp: new Date(Date.now() - 3600000 * 1.5).toISOString(),
-      action: 'VALIDATION_SUCCESS',
-      trigger: 'automated',
-      keyId: 'key-sys-gemini-env',
-      keyLabel: 'Google Gemini Studio Default',
-      provider: 'gemini',
-      maskedKey: '••••••••••••••••••2DE4',
-      status: 'success',
-      actor: 'Proxy Validator',
-      details: 'Baseline endpoint health verification verified active against Gemini models catalog.',
-      latencyMs: 118,
-      metadata: { endpoint: 'v1beta/models' },
-    },
-    {
-      id: 'log-init-03',
-      timestamp: new Date(Date.now() - 3600000).toISOString(),
-      action: 'DEFAULT_SET',
-      trigger: 'automated',
-      keyId: 'key-sys-gemini-env',
-      keyLabel: 'Google Gemini Studio Default',
-      provider: 'gemini',
-      maskedKey: '••••••••••••••••••2DE4',
-      status: 'info',
-      actor: 'Vault Policy Engine',
-      details: 'Designated Google Gemini Studio Default as primary fallback orchestrator key.',
-    },
-  ];
-
-  saveAllSecurityLogs(initialLogs);
-  return initialLogs;
-}
-

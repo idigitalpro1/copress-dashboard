@@ -32,12 +32,14 @@ interface DualPaneSandboxProps {
   prompts: SystemPrompt[];
   keys: VaultKey[];
   initialSelectedPrompt?: SystemPrompt | null;
+  executionEnabled: boolean;
 }
 
 export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
   prompts,
   keys,
   initialSelectedPrompt,
+  executionEnabled,
 }) => {
   const [selectedPromptId, setSelectedPromptId] = useState<string>('');
   const [selectedKeyId, setSelectedKeyId] = useState<string>('');
@@ -65,7 +67,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
         setRawInputText(data.samples[0].content);
         setSelectedSampleId(data.samples[0].id);
       }
-    }).catch(console.error);
+    }).catch(() => setErrorMsg('Unable to load the beta sample texts.'));
   }, []);
 
   // Update selected prompt if initialSelectedPrompt changes
@@ -75,20 +77,20 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
       setOutputFormat(initialSelectedPrompt.targetFormat);
       setSelectedModel(initialSelectedPrompt.recommendedModel);
       setTemperature(initialSelectedPrompt.temperature);
-      if (initialSelectedPrompt.mappedKeyId) {
-        setSelectedKeyId(initialSelectedPrompt.mappedKeyId);
-      }
+      setSelectedKeyId(initialSelectedPrompt.mappedKeyId || '');
     } else if (prompts.length > 0 && !selectedPromptId) {
       const first = prompts[0];
       setSelectedPromptId(first.id);
       setOutputFormat(first.targetFormat);
       setSelectedModel(first.recommendedModel);
       setTemperature(first.temperature);
-      if (first.mappedKeyId) setSelectedKeyId(first.mappedKeyId);
+      setSelectedKeyId(first.mappedKeyId || '');
     }
   }, [initialSelectedPrompt, prompts]);
 
   const activePrompt = prompts.find((p) => p.id === selectedPromptId);
+  const executionKey = keys.find(key => key.id === (selectedKeyId || activePrompt?.mappedKeyId));
+  const readyKey = executionKey?.status === 'active' && executionKey.provider !== 'custom';
 
   // When changing prompt from dropdown
   const handleSelectPrompt = (id: string) => {
@@ -98,7 +100,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
       setOutputFormat(p.targetFormat);
       setSelectedModel(p.recommendedModel);
       setTemperature(p.temperature);
-      if (p.mappedKeyId) setSelectedKeyId(p.mappedKeyId);
+      setSelectedKeyId(p.mappedKeyId || '');
     }
   };
 
@@ -126,6 +128,8 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
   };
 
   const handleExecute = async () => {
+    if (!executionEnabled) { setErrorMsg('Provider execution is disabled for this beta server.'); return; }
+    if (!readyKey) { setErrorMsg('Choose a tested active key or map the selected prompt to one.'); return; }
     if (!rawInputText.trim()) {
       setErrorMsg('Please provide raw newspaper PDF extracted text.');
       return;
@@ -185,6 +189,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
 
   return (
     <div className="space-y-4">
+      <p className="text-xs p-3 rounded-xl bg-amber-950/30 border border-amber-800 text-amber-200">{executionEnabled ? 'Run Extraction sends the chosen text to the selected provider and may incur charges. Review the input, key, and model before running.' : 'Provider execution is disabled for this beta. Prompt editing and sample review remain available. The beta server operator must enable execution before a provider can be called.'}</p>
       {/* Control Banner: Prompt Selector, Key Selector, Model & Settings */}
       <div className="bg-slate-900/90 rounded-2xl border border-slate-800 p-4 shadow-xl">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3 items-center">
@@ -218,9 +223,9 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
               onChange={(e) => setSelectedKeyId(e.target.value)}
               className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
-              <option value="">(Auto-Select Default Active Key)</option>
+              <option value="">(Use selected prompt’s mapped key)</option>
               {keys.map((k) => (
-                <option key={k.id} value={k.id}>
+                <option key={k.id} value={k.id} disabled={k.status !== 'active' || k.provider === 'custom'}>
                   {k.label} [{k.maskedKey.slice(-4)}] - {k.status.toUpperCase()}
                 </option>
               ))}
@@ -240,7 +245,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
             >
               <option value="gemini-3.8-flash">gemini-3.8-flash (Ultra-Fast Newsroom)</option>
               <option value="gemini-3.1-pro-preview">gemini-3.1-pro-preview (Deep Reasoning)</option>
-              <option value="claude-3-5-sonnet-20241022">claude-3-5-sonnet-20241022</option>
+              <option value="claude-sonnet-4-6">claude-sonnet-4-6</option>
               <option value="gpt-4o-mini">gpt-4o-mini</option>
               <option value="gpt-4o">gpt-4o</option>
             </select>
@@ -260,7 +265,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
 
             <button
               type="button"
-              disabled={isExecuting || !rawInputText.trim()}
+              disabled={!executionEnabled || !readyKey || isExecuting || !rawInputText.trim()}
               onClick={handleExecute}
               className="flex-1 flex items-center justify-center space-x-2 bg-gradient-to-r from-emerald-600 via-teal-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 disabled:opacity-50 text-white text-xs font-semibold py-2 px-4 rounded-xl shadow-lg shadow-emerald-600/20 transition-all cursor-pointer"
             >
@@ -449,7 +454,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
                     Routing Prompt to Proxy...
                   </h4>
                   <p className="text-xs text-slate-400 font-mono mt-1">
-                    Decrypted key in memory & calling {selectedModel}
+                    Calling {selectedModel}
                   </p>
                 </div>
               </div>
@@ -579,7 +584,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
 
               <div className="flex items-center space-x-1.5">
                 <Coins className="w-3.5 h-3.5 text-amber-400" />
-                <span>${executionResult.estimatedCostUsd}</span>
+                <span>{executionResult.estimatedCostUsd == null ? 'Cost unavailable — check provider billing' : `$${executionResult.estimatedCostUsd}`}</span>
               </div>
             </div>
           )}

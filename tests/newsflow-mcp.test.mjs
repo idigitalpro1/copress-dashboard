@@ -1,0 +1,343 @@
+import { test, before, after } from 'node:test';
+import assert from 'node:assert/strict';
+import { createServer } from 'node:http';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import express from 'express';
+import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { SSEClientTransport } from '@modelcontextprotocol/sdk/client/sse.js';
+import publicMcp from '../api/mcp.js';
+
+const token = 'newsflow-test-bearer-never-a-real-secret-0123456789';
+const fakeKey = 'sk-fake-newsflow-test-provider-credential-never-real-0123456789';
+const headers = { Authorization: `Bearer ${token}` };
+const jsonHeaders = { ...headers, 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' };
+const initialization = { jsonrpc: '2.0', id: 1, method: 'initialize', params: {
+  protocolVersion: '2025-03-26', capabilities: {}, clientInfo: { name: 'newsflow-test', version: '1.0.0' },
+} };
+let server, base, dataDir, mount, mountNewsflowMcp, storage, originalFetch;
+let providerResponder;
+let providerRequests = [];
+const savedEnv = {};
+const configuredNames = ['NEWSFLOW_BETA_ENABLED', 'NEWSFLOW_MCP_TOKEN', 'NEWSFLOW_MASTER_KEY', 'NEWSFLOW_DATA_DIR', 'NEWSFLOW_ALLOWED_ORIGINS', 'NEWSFLOW_ALLOW_EXECUTION'];
+
+function listen(httpServer) {
+  return new Promise((resolve, reject) => {
+    httpServer.once('error', reject);
+    httpServer.listen(0, '127.0.0.1', () => { httpServer.off('error', reject); resolve(); });
+  });
+}
+
+function prompt(id, overrides = {}) {
+  return { id, title: `Fake editorial ${id}`, description: 'Synthetic test fixture.', category: 'custom',
+    currentVersion: '1.0.0', systemPrompt: `Editorial stage ${id}.`, userTemplate: 'Work on this draft.',
+    targetFormat: 'text', recommendedModel: 'gpt-4o-mini', mappedKeyId: 'fake-key-1', temperature: 0.1,
+    tags: ['test'], createdAt: '2026-09-29T00:00:00.000Z', updatedAt: '2026-09-29T00:00:00.000Z', versions: [], ...overrides };
+}
+
+before(async () => {
+  for (const name of configuredNames) savedEnv[name] = process.env[name];
+  dataDir = mkdtempSync(path.join(tmpdir(), 'satcom-newsflow-mcp-test-'));
+  Object.assign(process.env, { NEWSFLOW_BETA_ENABLED: '1', NEWSFLOW_MCP_TOKEN: token,
+    NEWSFLOW_MASTER_KEY: '42'.repeat(32), NEWSFLOW_DATA_DIR: dataDir,
+    NEWSFLOW_ALLOWED_ORIGINS: 'https://editor.test', NEWSFLOW_ALLOW_EXECUTION: '0' });
+  ({ mountNewsflowMcp } = await import('../services/mcp-vault/server/mcp.ts'));
+  storage = await import('../services/mcp-vault/server/storage.ts');
+  const { encryptApiKey } = await import('../services/mcp-vault/server/crypto.ts');
+  storage.saveAllKeys([{ id: 'fake-key-1', label: 'Fake test provider', provider: 'openai',
+    maskedKey: '••••', encryptedData: encryptApiKey(fakeKey), status: 'active', validationMessage: 'Fixture only',
+    isDefault: true, usageCount: 0, createdAt: '2026-09-29T00:00:00.000Z', updatedAt: '2026-09-29T00:00:00.000Z' }]);
+  storage.saveAllPrompts([prompt('fake-normalize'), prompt('fake-headline'), prompt('fake-unmapped', { mappedKeyId: null })]);
+  const app = express();
+  mount = mountNewsflowMcp(app, { maxLegacySessions: 2, legacySessionTtlMs: 5_000 });
+  app.all('/mcp', publicMcp);
+  server = createServer(app);
+  await listen(server);
+  base = `http://127.0.0.1:${server.address().port}`;
+  originalFetch = globalThis.fetch;
+  globalThis.fetch = async (input, init) => {
+    const url = new URL(input instanceof Request ? input.url : input);
+    if (url.origin === base || (url.hostname === '127.0.0.1' && url.protocol === 'http:')) return originalFetch(input, init);
+    if (url.href === 'https://api.openai.com/v1/chat/completions' && providerResponder) {
+      providerRequests.push(JSON.parse(init.body));
+      return providerResponder(providerRequests.length);
+    }
+    throw new Error('Tests prohibit real external provider calls.');
+  };
+});
+
+after(async () => {
+  globalThis.fetch = originalFetch;
+  await mount?.close();
+  server?.closeAllConnections();
+  if (server) await new Promise(resolve => server.close(resolve));
+  for (const name of configuredNames) {
+    if (savedEnv[name] === undefined) delete process.env[name]; else process.env[name] = savedEnv[name];
+  }
+  if (dataDir) rmSync(dataDir, { recursive: true, force: true });
+});
+
+async function connected(fn, { legacy = false, publicEndpoint = false } = {}) {
+  const client = new Client({ name: 'newsflow-test', version: '1.0.0' });
+  const transport = legacy
+    ? new SSEClientTransport(new URL(base + '/sse'), { requestInit: { headers } })
+    : new StreamableHTTPClientTransport(new URL(base + (publicEndpoint ? '/mcp' : '/api/newsflow/mcp')), {
+      requestInit: { headers: publicEndpoint ? {} : headers },
+    });
+  try { await client.connect(transport); return await fn(client); }
+  finally { await client.close(); }
+}
+
+async function rawSse(url = base + '/sse', requestHeaders = headers) {
+  const controller = new AbortController();
+  const response = await fetch(url, { headers: requestHeaders, signal: controller.signal });
+  if (response.status !== 200) return { response, close() { controller.abort(); } };
+  const reader = response.body.getReader();
+  const first = await reader.read();
+  const text = new TextDecoder().decode(first.value);
+  const endpoint = /data: (\S+)/.exec(text)?.[1];
+  assert.ok(endpoint?.startsWith('/message?sessionId='));
+  return { response, endpoint, async close() { controller.abort(); await reader.cancel().catch(() => {}); } };
+}
+
+test('SDK stateless handshake exposes exactly four scoped tools and safe annotations', () => connected(async client => {
+  assert.equal(client.getServerVersion().name, 'newsflow-vault');
+  const { tools } = await client.listTools();
+  assert.deepEqual(tools.map(tool => tool.name).sort(), [
+    'execute_newspaper_pipeline', 'newsflow_get_prompt', 'newsflow_list_prompts', 'newsflow_vault_status',
+  ]);
+  for (const tool of tools) {
+    assert.equal(tool.annotations.destructiveHint, false);
+    assert.equal(tool.annotations.readOnlyHint, tool.name !== 'execute_newspaper_pipeline');
+    assert.equal(tool.annotations.openWorldHint, tool.name === 'execute_newspaper_pipeline');
+  }
+}));
+
+test('vault metadata is fully masked and prompt tools read saved fake content', () => connected(async client => {
+  const status = await client.callTool({ name: 'newsflow_vault_status', arguments: {} });
+  assert.equal(status.structuredContent.total, 1);
+  assert.equal(status.structuredContent.keys[0].maskedKey, '••••••••••••');
+  assert.equal(status.structuredContent.executionEnabled, false);
+  const serialized = JSON.stringify(status);
+  assert.ok(!serialized.includes(fakeKey));
+  assert.ok(!serialized.includes('encryptedData'));
+  assert.ok(!serialized.includes(storage.getAllKeys()[0].encryptedData));
+  const list = await client.callTool({ name: 'newsflow_list_prompts', arguments: { limit: 1, offset: 1 } });
+  assert.equal(list.structuredContent.total, 3);
+  assert.equal(list.structuredContent.prompts[0].id, 'fake-headline');
+  assert.ok(!JSON.stringify(list).includes('Editorial stage'));
+  const read = await client.callTool({ name: 'newsflow_get_prompt', arguments: { promptId: 'fake-normalize' } });
+  assert.equal(read.structuredContent.prompt.systemPrompt, 'Editorial stage fake-normalize.');
+  assert.equal((await client.callTool({ name: 'newsflow_get_prompt', arguments: { promptId: '../../.env' } })).isError, true);
+}));
+
+test('bearer authentication precedes method/body responses and origin checks', async () => {
+  for (const endpoint of ['/api/newsflow/mcp', '/sse', '/message']) {
+    assert.equal((await fetch(base + endpoint)).status, 401);
+    assert.equal((await fetch(base + endpoint, { method: 'POST', headers: { Authorization: 'Bearer wrong', 'Content-Type': 'application/json' }, body: '{' })).status, 401);
+    assert.equal((await fetch(base + endpoint, { headers: { ...headers, Origin: 'https://foreign.test' } })).status, 403);
+  }
+  for (const origin of ['http://localhost:4321', 'http://127.0.0.1:4321', 'https://editor.test']) {
+    const response = await fetch(base + '/api/newsflow/mcp', { method: 'POST', headers: { ...jsonHeaders, Origin: origin }, body: JSON.stringify(initialization) });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('mcp-session-id'), null);
+    assert.equal(response.headers.get('cache-control'), 'no-store');
+  }
+  assert.equal((await fetch(base + '/api/newsflow/mcp', { headers: { ...headers, Origin: 'https://editor.test.evil' } })).status, 403);
+});
+
+test('missing beta configuration fails closed and creates no legacy stream', async () => {
+  const original = process.env.NEWSFLOW_BETA_ENABLED;
+  process.env.NEWSFLOW_BETA_ENABLED = '0';
+  try {
+    for (const endpoint of ['/api/newsflow/mcp', '/sse', '/message']) assert.equal((await fetch(base + endpoint, { headers })).status, 503);
+  } finally { process.env.NEWSFLOW_BETA_ENABLED = original; }
+  process.env.NEWSFLOW_MCP_TOKEN = 'too-short';
+  try { assert.equal((await fetch(base + '/sse', { headers })).status, 503); }
+  finally { process.env.NEWSFLOW_MCP_TOKEN = token; }
+});
+
+test('authenticated stateless GET returns 405; malformed messages never echo input', async () => {
+  const get = await fetch(base + '/api/newsflow/mcp', { headers });
+  assert.equal(get.status, 405);
+  assert.equal(get.headers.get('allow'), 'POST');
+  assert.equal((await fetch(base + '/api/newsflow/mcp', { method: 'POST', headers, body: '{}' })).status, 415);
+  for (const body of ['{"secret":"private-test-marker"', '{"jsonrpc":"2.0","private":"private-test-marker"}']) {
+    const response = await fetch(base + '/api/newsflow/mcp', { method: 'POST', headers: jsonHeaders, body });
+    assert.equal(response.status, 400);
+    assert.ok(!(await response.text()).includes('private-test-marker'));
+  }
+});
+
+test('disabled execution returns a safe tool error without contacting a provider', () => connected(async client => {
+  providerRequests = [];
+  const response = await client.callTool({ name: 'execute_newspaper_pipeline', arguments: { promptIds: ['fake-normalize'], inputText: 'Synthetic newspaper draft.' } });
+  assert.equal(response.isError, true);
+  assert.match(response.content[0].text, /disabled/);
+  assert.equal(providerRequests.length, 0);
+}));
+
+test('pipeline bounds and every selected prompt/key are validated before provider calls', async () => {
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  providerRequests = [];
+  try {
+    await connected(async client => {
+      for (const args of [
+        { promptIds: ['fake-normalize', 'fake-normalize'], inputText: 'Draft' },
+        { promptIds: ['fake-normalize', 'missing'], inputText: 'Draft' },
+        { promptIds: ['fake-normalize', 'fake-unmapped'], inputText: 'Draft' },
+        { promptIds: ['fake-normalize', 'fake-headline', 'fake-unmapped', 'fourth'], inputText: 'Draft' },
+        { promptIds: ['fake-normalize'], inputText: 'x'.repeat(100001) },
+      ]) assert.equal((await client.callTool({ name: 'execute_newspaper_pipeline', arguments: args })).isError, true);
+      assert.equal(providerRequests.length, 0);
+    });
+  } finally { process.env.NEWSFLOW_ALLOW_EXECUTION = '0'; }
+});
+
+test('enabled pipeline calls only the mocked provider sequentially and returns drafts', async () => {
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  providerRequests = [];
+  providerResponder = stage => new Response(JSON.stringify({ choices: [{ message: { content: `Synthetic draft stage ${stage}` } }], usage: { prompt_tokens: 10, completion_tokens: 5 } }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  try {
+    await connected(async client => {
+      const response = await client.callTool({ name: 'execute_newspaper_pipeline', arguments: { promptIds: ['fake-normalize', 'fake-headline'], inputText: 'Original synthetic OCR.', temperature: 0.3 } });
+      assert.equal(response.isError, undefined);
+      assert.equal(response.structuredContent.draftOnly, true);
+      assert.equal(response.structuredContent.stages.length, 2);
+      assert.equal(response.structuredContent.finalOutput, 'Synthetic draft stage 2');
+      assert.match(providerRequests[0].messages[1].content, /Original synthetic OCR/);
+      assert.match(providerRequests[1].messages[1].content, /Synthetic draft stage 1/);
+      assert.equal(providerRequests[1].temperature, 0.3);
+      assert.ok(!JSON.stringify(response).includes(fakeKey));
+    });
+  } finally { process.env.NEWSFLOW_ALLOW_EXECUTION = '0'; providerResponder = undefined; }
+});
+
+test('a model override incompatible with a later provider makes no provider call', async () => {
+  const originalKeys = storage.getAllKeys();
+  const originalPrompts = storage.getAllPrompts();
+  storage.saveAllKeys([...originalKeys, { ...originalKeys[0], id: 'fake-gemini-key', provider: 'gemini' }]);
+  storage.saveAllPrompts([...originalPrompts, prompt('fake-gemini-stage', { mappedKeyId: 'fake-gemini-key', recommendedModel: 'gemini-3.5-flash' })]);
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  providerRequests = [];
+  try {
+    await connected(async client => {
+      const response = await client.callTool({ name: 'execute_newspaper_pipeline', arguments: {
+        promptIds: ['fake-normalize', 'fake-gemini-stage'], inputText: 'Synthetic OCR.', model: 'gpt-4o-mini',
+      } });
+      assert.equal(response.isError, true);
+      assert.match(response.content[0].text, /compatible/);
+      assert.equal(providerRequests.length, 0);
+    });
+  } finally {
+    storage.saveAllKeys(originalKeys); storage.saveAllPrompts(originalPrompts);
+    process.env.NEWSFLOW_ALLOW_EXECUTION = '0';
+  }
+});
+
+test('an oversized intermediate draft stops before the next provider request', async () => {
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  providerRequests = [];
+  providerResponder = () => new Response(JSON.stringify({ choices: [{ message: { content: 'x'.repeat(100001) } }] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+  try {
+    await connected(async client => {
+      const response = await client.callTool({ name: 'execute_newspaper_pipeline', arguments: { promptIds: ['fake-normalize', 'fake-headline'], inputText: 'Synthetic OCR.' } });
+      assert.equal(response.isError, true);
+      assert.match(response.content[0].text, /intermediate draft/);
+      assert.equal(providerRequests.length, 1);
+    });
+  } finally { process.env.NEWSFLOW_ALLOW_EXECUTION = '0'; providerResponder = undefined; }
+});
+
+test('provider failures are safe errors without echoed credentials or draft input', async () => {
+  process.env.NEWSFLOW_ALLOW_EXECUTION = '1';
+  providerRequests = [];
+  providerResponder = () => new Response(JSON.stringify({ error: { message: `${fakeKey} private-draft-marker` } }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+  try {
+    await connected(async client => {
+      const response = await client.callTool({ name: 'execute_newspaper_pipeline', arguments: { promptIds: ['fake-normalize', 'fake-headline'], inputText: 'private-draft-marker' } });
+      assert.equal(response.isError, true);
+      assert.ok(!JSON.stringify(response).includes(fakeKey));
+      assert.ok(!JSON.stringify(response).includes('private-draft-marker'));
+      assert.equal(providerRequests.length, 1);
+    });
+  } finally { process.env.NEWSFLOW_ALLOW_EXECUTION = '0'; providerResponder = undefined; }
+});
+
+test('legacy SDK initializes and reads fake prompt under the same bearer', () => connected(async client => {
+  assert.equal((await client.listTools()).tools.length, 4);
+  const response = await client.callTool({ name: 'newsflow_get_prompt', arguments: { promptId: 'fake-headline' } });
+  assert.equal(response.structuredContent.prompt.id, 'fake-headline');
+}, { legacy: true }));
+
+test('legacy messages require an authenticated, existing session bound to bearer and origin', async () => {
+  const stream = await rawSse();
+  try {
+    assert.equal((await fetch(base + stream.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(initialization) })).status, 401);
+    assert.equal((await fetch(base + '/message?sessionId=unknown', { method: 'POST', headers: jsonHeaders, body: JSON.stringify(initialization) })).status, 404);
+    assert.equal((await fetch(base + stream.endpoint, { method: 'POST', headers: { ...jsonHeaders, Origin: 'https://editor.test' }, body: JSON.stringify(initialization) })).status, 403);
+    const rotated = 'rotated-fake-newsflow-bearer-token-abcdefghijklmnopqrstuvwxyz';
+    process.env.NEWSFLOW_MCP_TOKEN = rotated;
+    try {
+      assert.equal((await fetch(base + stream.endpoint, { method: 'POST', headers: jsonHeaders, body: JSON.stringify(initialization) })).status, 401);
+      assert.equal((await fetch(base + stream.endpoint, { method: 'POST', headers: { ...jsonHeaders, Authorization: `Bearer ${rotated}` }, body: JSON.stringify(initialization) })).status, 403);
+    } finally { process.env.NEWSFLOW_MCP_TOKEN = token; }
+    const invalid = await fetch(base + stream.endpoint, { method: 'POST', headers: jsonHeaders, body: JSON.stringify({ private: 'private-test-marker' }) });
+    assert.equal(invalid.status, 400);
+    assert.ok(!(await invalid.text()).includes('private-test-marker'));
+    assert.equal((await fetch(base + stream.endpoint, { method: 'POST', headers: jsonHeaders, body: JSON.stringify(initialization) })).status, 202);
+  } finally { await stream.close(); }
+});
+
+test('legacy session capacity is bounded and closing a stream frees its slot', async () => {
+  await new Promise(resolve => setTimeout(resolve, 20));
+  const head = await fetch(base + '/sse', { method: 'HEAD', headers, signal: AbortSignal.timeout(1000) });
+  assert.equal(head.status, 405);
+  assert.equal(head.headers.get('allow'), 'GET');
+  const first = await rawSse();
+  const second = await rawSse();
+  try {
+    assert.equal(first.response.status, 200);
+    assert.equal(second.response.status, 200);
+    const overflow = await rawSse();
+    assert.equal(overflow.response.status, 429);
+    await overflow.close();
+    await first.close();
+    await new Promise(resolve => setTimeout(resolve, 20));
+    const replacement = await rawSse();
+    assert.equal(replacement.response.status, 200);
+    await replacement.close();
+    assert.equal((await fetch(base + first.endpoint, { method: 'POST', headers: jsonHeaders, body: JSON.stringify(initialization) })).status, 404);
+  } finally { await first.close(); await second.close(); }
+});
+
+test('legacy idle expiry closes the stream and rejects its old session', async () => {
+  const app = express();
+  const shortMount = mountNewsflowMcp(app, { maxLegacySessions: 1, legacySessionTtlMs: 40 });
+  const shortServer = createServer(app);
+  await listen(shortServer);
+  const shortBase = `http://127.0.0.1:${shortServer.address().port}`;
+  const stream = await rawSse(shortBase + '/sse');
+  try {
+    await new Promise(resolve => setTimeout(resolve, 80));
+    assert.equal((await fetch(shortBase + stream.endpoint, { method: 'POST', headers: jsonHeaders, body: JSON.stringify(initialization) })).status, 404);
+    const replacement = await rawSse(shortBase + '/sse');
+    assert.equal(replacement.response.status, 200);
+    await replacement.close();
+  } finally {
+    await stream.close();
+    await shortMount.close();
+    shortServer.closeAllConnections();
+    await new Promise(resolve => shortServer.close(resolve));
+  }
+});
+
+test('SATCOM public MCP still has only its four read-only tools without NewsFlow auth', () => connected(async client => {
+  const { tools } = await client.listTools();
+  assert.equal(client.getServerVersion().name, 'satcom-operations');
+  assert.deepEqual(tools.map(tool => tool.name).sort(), ['satcom_board', 'satcom_priorities', 'satcom_prompt', 'satcom_structure']);
+  assert.ok(tools.every(tool => tool.annotations.readOnlyHint === true));
+  assert.ok(tools.every(tool => tool.name !== 'execute_newspaper_pipeline'));
+}, { publicEndpoint: true }));

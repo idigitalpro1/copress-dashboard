@@ -4,328 +4,129 @@ import {
   ValidationResponse,
   NewspaperSample,
   ExecutionResultData,
-  EnvCandidate,
   SecurityLogItem,
   SecurityLogStats,
 } from '../types';
 
+// Authentication lives only in this module. Refreshing or disconnecting clears it.
+let accessToken = '';
+let authGeneration = 0;
+const authListeners = new Set<() => void>();
+
+export function setAccessToken(token: string) {
+  const normalized = token.trim();
+  if (!normalized || normalized.length > 4096 || /[\r\n]/.test(normalized)) {
+    throw new Error('Enter a valid beta access token.');
+  }
+  accessToken = normalized;
+  authGeneration++;
+}
+
+export function clearAccessToken() {
+  accessToken = '';
+  authGeneration++;
+}
+
+export function onAuthenticationFailure(listener: () => void) {
+  authListeners.add(listener);
+  return () => { authListeners.delete(listener); };
+}
+
+async function authenticatedFetch(path: string, init: RequestInit = {}) {
+  if (!accessToken) throw new Error('Connect to the beta vault first.');
+  const generation = authGeneration;
+  const headers = new Headers(init.headers);
+  headers.set('Authorization', `Bearer ${accessToken}`);
+  let response: Response;
+  try {
+    response = await fetch(path, {
+      ...init, headers, credentials: 'omit', cache: 'no-store', referrerPolicy: 'no-referrer',
+    });
+  } catch {
+    throw new Error('Unable to reach the beta server. Check that it is running and try again.');
+  }
+  if (generation !== authGeneration) throw new Error('The beta connection changed. Connect again.');
+  if (response.status === 401) {
+    clearAccessToken();
+    authListeners.forEach(listener => listener());
+    throw new Error('The access token was rejected. Connect again with the configured beta token.');
+  }
+  // Provider errors are not reflected into the page: they can contain request secrets.
+  if (!response.ok) {
+    if (response.status === 403) throw new Error('This action is disabled or forbidden. Check the beta server configuration.');
+    if (response.status === 409) throw new Error('This action conflicts with the current vault state. Refresh and try again.');
+    if (response.status === 413) throw new Error('The request is too large. Use a smaller input.');
+    if (response.status === 503) throw new Error('The beta vault is unavailable. Check its private storage and encryption configuration.');
+    throw new Error('The request could not be completed. Review your input and try again.');
+  }
+  return {
+    ok: true,
+    async json() {
+      let data: unknown;
+      try { data = await response.json(); }
+      catch { throw new Error('The beta server returned an unreadable response. Try again.'); }
+      if (generation !== authGeneration) throw new Error('The beta connection changed. Connect again.');
+      return data as any;
+    },
+  };
+}
+
+async function request<T>(path: string, method = 'GET', body?: unknown): Promise<T> {
+  const response = await authenticatedFetch(path, {
+    method,
+    ...(body === undefined ? {} : { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }),
+  });
+  return response.json();
+}
+
+type LogFilters = { action?: string; status?: string; trigger?: string; search?: string; limit?: number };
+type LogResult = { success: boolean; logs: SecurityLogItem[]; stats: SecurityLogStats };
+type SavedKey = { key: VaultKey; validation?: ValidationResponse; message?: string };
+const keyPath = (action: string, id: string) => `/api/vault/${action}/${encodeURIComponent(id)}`;
+const promptPath = (id: string, action = '') => `/api/prompts/${encodeURIComponent(id)}${action ? `/${action}` : ''}`;
+
 export const api = {
-  // Vault Keys
-  async getKeys(): Promise<{ keys: VaultKey[] }> {
-    const res = await fetch('/api/vault/keys');
-    if (!res.ok) throw new Error('Failed to fetch keys');
-    return res.json();
-  },
-
-  async testKey(data: {
-    rawKey: string;
-    providerHint?: string;
-    customEndpointUrl?: string;
-    customHeader?: string;
-  }): Promise<{ validation: ValidationResponse; maskedKey: string }> {
-    const res = await fetch('/api/vault/test-key', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Key validation failed');
-    }
-    return res.json();
-  },
-
-  async validateAndSaveKey(data: {
-    rawKey: string;
-    providerHint?: string;
-    label?: string;
-    customEndpointUrl?: string;
-    customHeader?: string;
-    allowInvalidSave?: boolean;
-  }): Promise<{ key: VaultKey; validation: ValidationResponse; message: string }> {
-    const res = await fetch('/api/vault/validate-and-save', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const result = await res.json();
-    if (!res.ok) {
-      const msg = result.validation?.message || result.error || 'Failed to validate and save key';
-      throw new Error(msg);
-    }
-    return result;
-  },
-
-  async pingKey(id: string): Promise<{ key: VaultKey; validation: ValidationResponse }> {
-    const res = await fetch(`/api/vault/ping/${id}`, { method: 'POST' });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to ping key');
-    }
-    return res.json();
-  },
-
-  async rotateKey(
-    id: string,
-    newRawKey: string,
-    allowInvalidSave = false
-  ): Promise<{ key: VaultKey; validation: ValidationResponse }> {
-    const res = await fetch(`/api/vault/rotate/${id}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ newRawKey, allowInvalidSave }),
-    });
-    const result = await res.json();
-    if (!res.ok) {
-      throw new Error(result.error || 'Failed to rotate key');
-    }
-    return result;
-  },
-
-  async toggleRevokeKey(id: string): Promise<{ key: VaultKey }> {
-    const res = await fetch(`/api/vault/revoke/${id}`, { method: 'POST' });
-    if (!res.ok) throw new Error('Failed to toggle key status');
-    return res.json();
-  },
-
-  async deleteKey(id: string): Promise<void> {
-    const res = await fetch(`/api/vault/keys/${id}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error('Failed to delete key');
-  },
-
-  async setDefaultKey(id: string): Promise<{ keys: VaultKey[] }> {
-    const res = await fetch(`/api/vault/set-default/${id}`, { method: 'POST' });
-    if (!res.ok) throw new Error('Failed to set default key');
-    return res.json();
-  },
-
-  async fetchAndValidateEnvCandidates(): Promise<{
-    success: boolean;
-    candidates: EnvCandidate[];
-    newCandidatesCount: number;
-    totalFound: number;
-  }> {
-    const res = await fetch('/api/vault/env-candidates');
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to fetch environment candidates');
-    }
-    return res.json();
-  },
-
-  async importSelectedEnvKeys(selectedKeys: { envVarName: string; label?: string; isDefault?: boolean }[]): Promise<{
-    success: boolean;
-    importResult: {
-      importedCount: number;
-      importedKeys: VaultKey[];
-      errors: string[];
-    };
-    keys: VaultKey[];
-  }> {
-    const res = await fetch('/api/vault/import-selected-env', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ selectedKeys }),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to import selected environment keys');
-    }
-    return res.json();
-  },
-
-  async importKeysFromEnv(envContent?: string): Promise<{
-    success: boolean;
-    importResult: {
-      totalFound: number;
-      imported: {
-        keyId: string;
-        envVarName: string;
-        provider: string;
-        maskedKey: string;
-        status: string;
-        validationMessage: string;
-      }[];
-      skipped: {
-        envVarName: string;
-        reason: string;
-      }[];
-      errors: string[];
-    };
-    keys: VaultKey[];
-  }> {
-    const res = await fetch('/api/vault/import-env', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ envContent }),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to import keys from .env');
-    }
-    return res.json();
-  },
-
-  async getEnvStatus(): Promise<{
-    hasEnvGeminiKey: boolean;
-    hasMasterKey: boolean;
-    encryptionAlgorithm: string;
-    detectedKeys?: EnvCandidate[];
-    newCandidatesCount?: number;
-    totalFound?: number;
-  }> {
-    const res = await fetch('/api/vault/environment-status');
-    if (!res.ok) throw new Error('Failed to check environment status');
-    return res.json();
-  },
-
-  // Security Audit Logs
-  async getSecurityLogs(params?: {
-    action?: string;
-    status?: string;
-    trigger?: string;
-    search?: string;
-    limit?: number;
-  }): Promise<{
-    success: boolean;
-    logs: SecurityLogItem[];
-    stats: SecurityLogStats;
-  }> {
+  getKeys: () => request<{ keys: VaultKey[] }>('/api/vault/keys'),
+  validateAndSaveKey: (data: { rawKey: string; providerHint?: string; label?: string; sourceEnvVar?: string }) =>
+    request<SavedKey>('/api/vault/validate-and-save', 'POST', data),
+  pingKey: (id: string) => request<{ key: VaultKey; validation: ValidationResponse }>(keyPath('ping', id), 'POST'),
+  rotateKey: (id: string, newRawKey: string) => request<SavedKey>(keyPath('rotate', id), 'POST', { newRawKey }),
+  toggleRevokeKey: (id: string) => request<{ key: VaultKey }>(keyPath('revoke', id), 'POST'),
+  async deleteKey(id: string) { await authenticatedFetch(keyPath('keys', id), { method: 'DELETE' }); },
+  setDefaultKey: (id: string) => request<{ keys: VaultKey[] }>(keyPath('set-default', id), 'POST'),
+  importKeysFromEnv: (entries: { envVarName: string; value: string; provider: string }[]) =>
+    request<{
+      success: boolean;
+      importResult: {
+        totalFound: number;
+        imported: { keyId: string; envVarName: string; provider: string; maskedKey: string; status: string; validationMessage: string }[];
+        skipped: { envVarName: string; reason: string }[];
+        errors: string[];
+      };
+      keys: VaultKey[];
+    }>('/api/vault/import-env', 'POST', { entries, confirm: true }),
+  getEnvStatus: () => request<{ hasEnvGeminiKey: boolean; hasMasterKey: boolean; encryptionAlgorithm: string; executionEnabled: boolean }>('/api/vault/environment-status'),
+  getSecurityLogs(params?: LogFilters): Promise<LogResult> {
     const query = new URLSearchParams();
     if (params?.action && params.action !== 'all') query.set('action', params.action);
     if (params?.status && params.status !== 'all') query.set('status', params.status);
     if (params?.trigger && params.trigger !== 'all') query.set('trigger', params.trigger);
     if (params?.search) query.set('search', params.search);
     if (params?.limit) query.set('limit', String(params.limit));
-
-    const qs = query.toString();
-    const res = await fetch(`/api/vault/audit-logs${qs ? `?${qs}` : ''}`);
-    if (!res.ok) throw new Error('Failed to fetch security audit logs');
-    return res.json();
+    const suffix = query.toString();
+    return request<LogResult>(`/api/vault/audit-logs${suffix ? `?${suffix}` : ''}`);
   },
-
-  async getAuditLogs(params?: {
-    action?: string;
-    status?: string;
-    trigger?: string;
-    search?: string;
-    limit?: number;
-  }): Promise<{
-    success: boolean;
-    logs: SecurityLogItem[];
-    stats: SecurityLogStats;
-  }> {
-    return this.getSecurityLogs(params);
-  },
-
-  async clearSecurityLogs(): Promise<{ success: boolean; logs: SecurityLogItem[] }> {
-    const res = await fetch('/api/vault/security-logs/clear', { method: 'POST' });
-    if (!res.ok) throw new Error('Failed to reset security logs');
-    return res.json();
-  },
-
-  // Prompts
-  async getPrompts(): Promise<{ prompts: SystemPrompt[] }> {
-    const res = await fetch('/api/prompts');
-    if (!res.ok) throw new Error('Failed to fetch prompts');
-    return res.json();
-  },
-
-  async createPrompt(promptData: Partial<SystemPrompt> & { author?: string; initialNotes?: string }): Promise<{ prompt: SystemPrompt }> {
-    const res = await fetch('/api/prompts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(promptData),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to create prompt');
-    }
-    return res.json();
-  },
-
-  async updatePrompt(
-    id: string,
-    updates: Partial<SystemPrompt> & { versionNotes?: string; author?: string; bumpVersion?: boolean }
-  ): Promise<{ prompt: SystemPrompt }> {
-    const res = await fetch(`/api/prompts/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(updates),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to update prompt');
-    }
-    return res.json();
-  },
-
-  async restorePromptVersion(
-    id: string,
-    targetVersion: string,
-    notes?: string
-  ): Promise<{ prompt: SystemPrompt }> {
-    const res = await fetch(`/api/prompts/${id}/restore-version`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ targetVersion, notes }),
-    });
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Failed to restore prompt version');
-    }
-    return res.json();
-  },
-
-  async mapPromptKey(
-    id: string,
-    mappedKeyId: string | null,
-    recommendedModel?: string
-  ): Promise<{ prompt: SystemPrompt }> {
-    const res = await fetch(`/api/prompts/${id}/map-key`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ mappedKeyId, recommendedModel }),
-    });
-    if (!res.ok) throw new Error('Failed to update prompt key mapping');
-    return res.json();
-  },
-
-  async deletePrompt(id: string): Promise<void> {
-    const res = await fetch(`/api/prompts/${id}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error('Failed to delete prompt');
-  },
-
-  // Sandbox Execution & Samples
-  async getSamples(): Promise<{ samples: NewspaperSample[] }> {
-    const res = await fetch('/api/samples');
-    if (!res.ok) throw new Error('Failed to fetch samples');
-    return res.json();
-  },
-
-  async executePrompt(params: {
-    promptId?: string;
-    systemPrompt?: string;
-    userTemplate?: string;
-    inputText: string;
-    keyId?: string;
-    modelOverride?: string;
-    temperature?: number;
-    outputFormat?: 'json' | 'markdown' | 'text';
-  }): Promise<{
-    success: boolean;
-    result: ExecutionResultData;
-    keyUsed: { id: string; label: string; provider: string; maskedKey: string };
-  }> {
-    const res = await fetch('/api/prompts/execute', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(params),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Prompt execution failed');
-    }
-    return data;
-  },
+  getAuditLogs(params?: LogFilters): Promise<LogResult> { return this.getSecurityLogs(params); },
+  clearSecurityLogs: () => request<{ success: boolean; logs: SecurityLogItem[] }>('/api/vault/security-logs/clear', 'POST'),
+  getPrompts: () => request<{ prompts: SystemPrompt[] }>('/api/prompts'),
+  createPrompt: (data: Partial<SystemPrompt> & { author?: string; initialNotes?: string }) => request<{ prompt: SystemPrompt }>('/api/prompts', 'POST', data),
+  updatePrompt: (id: string, data: Partial<SystemPrompt> & { versionNotes?: string; author?: string; bumpVersion?: boolean }) => request<{ prompt: SystemPrompt }>(promptPath(id), 'PUT', data),
+  restorePromptVersion: (id: string, targetVersion: string, notes?: string) => request<{ prompt: SystemPrompt }>(promptPath(id, 'restore-version'), 'POST', { targetVersion, notes }),
+  mapPromptKey: (id: string, mappedKeyId: string | null, recommendedModel?: string) => request<{ prompt: SystemPrompt }>(promptPath(id, 'map-key'), 'POST', { mappedKeyId, recommendedModel }),
+  async deletePrompt(id: string) { await authenticatedFetch(promptPath(id), { method: 'DELETE' }); },
+  getSamples: () => request<{ samples: NewspaperSample[] }>('/api/newsflow/samples'),
+  executePrompt: (params: {
+    promptId?: string; systemPrompt?: string; userTemplate?: string; inputText: string; keyId?: string;
+    modelOverride?: string; temperature?: number; outputFormat?: 'json' | 'markdown' | 'text';
+  }) => request<{ success: boolean; result: ExecutionResultData; keyUsed: { id: string; label: string; provider: string; maskedKey: string } }>('/api/prompts/execute', 'POST', params),
 };

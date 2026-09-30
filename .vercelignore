@@ -3,3 +3,6 @@
 .git/
 node_modules/
 tests/
+.newsflow-data/
+**/.vault_data/
+**/.vault_master.key

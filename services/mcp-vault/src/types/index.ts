@@ -17,6 +17,9 @@ export interface VaultKey {
   usageCount: number;
   createdAt: string;
   updatedAt: string;
+  sourceEnvVar?: string;
+  envVarName?: string;
+  source?: string;
 }
 
 export interface PromptVersion {
@@ -81,7 +84,7 @@ export interface ExecutionResultData {
   provider: string;
   promptTokens: number;
   completionTokens: number;
-  estimatedCostUsd: number;
+  estimatedCostUsd: number | null;
   timestamp: string;
   structuredData?: any;
 }
@@ -149,7 +152,7 @@ export interface SecurityLogStats {
   rotations: number;
   revocations: number;
   failures: number;
-  avgLatency: number;
+  avgLatency: number | null;
 }
 
 

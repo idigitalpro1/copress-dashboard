@@ -255,7 +255,7 @@ export const PromptEditorModal: React.FC<PromptEditorModalProps> = ({
                 >
                   <option value="gemini-3.8-flash">gemini-3.8-flash (Recommended)</option>
                   <option value="gemini-3.1-pro-preview">gemini-3.1-pro-preview (Reasoning)</option>
-                  <option value="claude-3-5-sonnet-20241022">claude-3-5-sonnet-20241022</option>
+                  <option value="claude-sonnet-4-6">claude-sonnet-4-6</option>
                   <option value="gpt-4o-mini">gpt-4o-mini</option>
                   <option value="gpt-4o">gpt-4o</option>
                 </select>

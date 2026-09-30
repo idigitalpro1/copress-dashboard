@@ -3,7 +3,7 @@ import { parseCredential, planCredentialImport } from './vault-clipboard.mjs';
 const MAX_FILE_BYTES = 256 * 1024;
 const MAX_CREDENTIALS = 200;
 const MAX_DIAGNOSTICS = 100;
-const credentialName = /(?:KEY|TOKEN|SECRET|PASSWORD)$/i;
+const credentialName = /(?:KEY|TOKEN|SECRET|PASSWORD)$|^GEMINI_KEY_(?:COPY|VIDEO|HEALTH)$/i;
 const forbiddenNames = new Set(['__proto__', 'constructor', 'prototype']);
 const supportedCredentialName = /^[A-Z][A-Z0-9_]{1,63}$/;
 

@@ -27,6 +27,9 @@ for (const api of DEFAULT_APIS) {
 for (const [name, cat, envKey] of [
   ['xAI / Grok', 'ai', 'XAI_API_KEY'], ['Anthropic', 'ai', 'ANTHROPIC_API_KEY'],
   ['GitHub', 'infra', 'GITHUB_TOKEN'], ['Stripe', 'payments', 'STRIPE_RESTRICTED_KEY'],
+  ['Gemini / Studio copy', 'ai', 'GEMINI_KEY_COPY'],
+  ['Gemini / video server', 'ai', 'GEMINI_KEY_VIDEO'],
+  ['Gemini / health server', 'ai', 'GEMINI_KEY_HEALTH'],
 ]) choices.set(envKey, { name, cat, envKey, label: name + ' — API key / token' });
 
 function status(text) { message.textContent = text; }
