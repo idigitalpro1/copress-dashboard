@@ -174,6 +174,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 #credential-match::backdrop{background:#0a1628aa;}
 #credential-match p{font-size:13px;line-height:1.6;margin:10px 0;}
 #credential-match label{display:block;margin:14px 0 6px;}
+#clipboard-add-dialog{margin:auto;border:1px solid var(--gold);border-radius:10px;padding:18px;width:680px;max-width:94vw;}
+#clipboard-add-dialog::backdrop{background:#0a1628aa;}
+#clipboard-add-dialog .clipboard-intake{margin:12px 0 0;}
+.clipboard-dialog-close{display:block;margin-left:auto;}
 .api-card:focus{outline:3px solid var(--gold);outline-offset:3px;}
 @media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:18px}.topnav{height:auto;padding:12px;flex-wrap:wrap;gap:10px}.topnav-right{flex-wrap:wrap}.product-banner{flex-wrap:wrap}.stat-row{grid-template-columns:repeat(2,1fr)}.category-tabs{overflow:auto}.api-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
@@ -190,7 +194,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
     <a class="btn btn-gold" href="https://satcom.5280.menu/#admin" style="text-decoration:none;">⌘ Admin HQ</a>
     <span class="badge" id="vault-status">🔒 Vault: Local Only</span>
     <button class="btn btn-ghost" onclick="exportVault()">📤 Local Export</button>
-    <button class="btn btn-gold" onclick="openAddModal()">+ Add API Key</button>
+    <button class="btn btn-gold" type="button" id="clipboard-menu-add">+ New Key Card</button>
   </div>
 </nav>
 
@@ -437,6 +441,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 </div>
 
 <div class="toast" id="toast"></div>
+<dialog id="clipboard-add-dialog" aria-labelledby="clipboard-heading">
+  <button class="icon-btn clipboard-dialog-close" type="button" id="clipboard-dialog-dismiss">Close</button>
+</dialog>
 <div id="vault-context-menu" role="menu" hidden>
   <button class="btn btn-gold" type="button" id="clipboard-context-create" role="menuitem">📋 Paste &amp; Create Card</button>
 </div>
