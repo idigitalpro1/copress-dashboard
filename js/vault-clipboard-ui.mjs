@@ -5,6 +5,12 @@ const message = document.getElementById('clipboard-message');
 const menu = document.getElementById('vault-context-menu');
 const dialog = document.getElementById('credential-match');
 const provider = document.getElementById('credential-provider');
+const addDialog = document.getElementById('clipboard-add-dialog');
+const intake = document.getElementById('clipboard-intake');
+const intakeHome = document.createComment('Clipboard intake home');
+intake.before(intakeHome);
+const menuHome = document.createComment('Clipboard menu home');
+menu.before(menuHome);
 let pending = null;
 let busy = false;
 const choices = new Map();
@@ -24,6 +30,22 @@ for (const [name, cat, envKey] of [
 function status(text) { message.textContent = text; }
 function closeMenu() { menu.hidden = true; }
 function clearPending() { pending = null; input.value = ''; }
+function restoreIntake() {
+  closeMenu();
+  intakeHome.after(intake);
+  menuHome.after(menu);
+  input.value = '';
+}
+function closeIntake() {
+  if (addDialog.open) addDialog.close();
+  restoreIntake();
+}
+function openNewKeyCard() {
+  closeMenu();
+  addDialog.append(intake, menu);
+  addDialog.showModal();
+  input.focus();
+}
 function revealCard(id) {
   currentCat = 'all';
   document.querySelectorAll('.cat-tab, .sidebar-item').forEach(el => el.classList.remove('active'));
@@ -50,6 +72,7 @@ function saveCredential(credential) {
     return;
   }
   clearPending();
+  closeIntake();
   dialog.close();
   revealCard(plan.id);
   const text = plan.duplicate
@@ -60,6 +83,7 @@ function saveCredential(credential) {
 }
 
 function chooseProvider(credential) {
+  closeIntake();
   pending = credential;
   provider.replaceChildren();
   provider.add(new Option('Choose the provider / key type…', ''));
@@ -100,6 +124,9 @@ async function fromClipboard() {
 }
 
 document.getElementById('clipboard-create').addEventListener('click', fromClipboard);
+document.getElementById('clipboard-menu-add').addEventListener('click', openNewKeyCard);
+document.getElementById('clipboard-dialog-dismiss').addEventListener('click', closeIntake);
+addDialog.addEventListener('close', () => { if (!addDialog.open) restoreIntake(); });
 document.getElementById('clipboard-context-create').addEventListener('click', fromClipboard);
 document.getElementById('clipboard-submit').addEventListener('click', () => ingest(input.value));
 input.addEventListener('keydown', event => { if (event.key === 'Enter') ingest(input.value); });
