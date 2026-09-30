@@ -15,6 +15,9 @@ const providers = [
 const labels = {
   OPENAI_API_KEY: ['OpenAI', 'ai'], ANTHROPIC_API_KEY: ['Anthropic', 'ai'],
   XAI_API_KEY: ['xAI / Grok', 'ai'], GOOGLE_AGENT_API_KEY: ['Aiace / Gemini', 'ai'],
+  GEMINI_KEY_COPY: ['Gemini / Studio copy', 'ai'],
+  GEMINI_KEY_VIDEO: ['Gemini / video server', 'ai'],
+  GEMINI_KEY_HEALTH: ['Gemini / health server', 'ai'],
   GOOGLE_PLACES_KEY: ['Google Places', 'maps'], GOOGLE_API_KEY: ['Google API key', 'infra'],
   APIFY_API_TOKEN: ['Apify', 'scraping'], AIRTABLE_API_KEY: ['Airtable', 'data'],
   SUPABASE_ANON_KEY: ['Supabase', 'data'], SUPABASE_SERVICE_KEY: ['Supabase', 'data'],

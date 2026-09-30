@@ -2,6 +2,10 @@
 .DS_Store
 node_modules/
 .env*
+!.env.example
+.newsflow-data/
+services/mcp-vault/build/
+newsflow/
 video/vendor/
 __pycache__/
 *.pyc

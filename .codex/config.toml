@@ -1,3 +1,12 @@
 # SATCOM project default; existing account and permission settings remain in force.
-model = "gpt-6-astra"
+model = "gpt-6.1-sol"
 model_reasoning_effort = "medium"
+
+# Private beta; start SATCOM locally with its NewsFlow environment configured.
+# The bearer token is supplied by the host environment, never stored here.
+[mcp_servers.newsflow-beta]
+url = "http://127.0.0.1:4321/api/newsflow/mcp"
+bearer_token_env_var = "NEWSFLOW_MCP_TOKEN"
+required = false
+enabled_tools = ["newsflow_vault_status", "newsflow_list_prompts", "newsflow_get_prompt", "execute_newspaper_pipeline"]
+tool_timeout_sec = 210

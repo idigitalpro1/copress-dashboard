@@ -5,6 +5,16 @@ import { parseEnvFile, planEnvImport } from '../js/vault-env.mjs';
 const fake = 'FICTIONAL_CREDENTIAL_0123456789';
 const timestamp = '2026-09-30T12:34:56.000Z';
 
+test('isolated Gemini workload names import without aliases or mixing workload keys', () => {
+  const names = ['GEMINI_KEY_COPY', 'GEMINI_KEY_VIDEO', 'GEMINI_KEY_HEALTH'];
+  const parsed = parseEnvFile(names.map((name, index) => `${name}=${fake}-${index}`).join('\n'));
+  assert.deepEqual(parsed.issues, []);
+  assert.equal(parsed.skipped, 0);
+  assert.deepEqual(parsed.entries.map(entry => entry.credential.envKey), names);
+  assert.ok(parsed.entries.every(entry => !entry.credential.ambiguous));
+  assert.equal(parseEnvFile(`MODEL_KEY_SELECTOR=${fake}`).entries.length, 0);
+});
+
 function credential(line) {
   const parsed = parseEnvFile(line);
   assert.equal(parsed.issues.length, 0);
