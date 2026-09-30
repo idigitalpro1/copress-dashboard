@@ -1,0 +1,6 @@
+{
+  "name": "NewsFlow Orchestrator - Vault & Prompt Manager",
+  "description": "Automated news publishing infrastructure with AES-256 encrypted API key vault, intelligent regex intake lane, versioned PDF extraction prompts, and dual-pane LLM sandbox.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
