@@ -79,7 +79,7 @@
   "rewrites": [
     {
       "source": "/apikeys",
-      "destination": "/apistore.html"
+      "destination": "/apistore"
     },
     {
       "source": "/video/studio",
