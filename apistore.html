@@ -162,6 +162,20 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 .product-banner h3{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:4px;}
 .product-banner p{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
 .product-banner .cta{flex-shrink:0;}
+.clipboard-intake{padding:20px;border:2px solid var(--gold);border-radius:8px;background:#fff;margin-bottom:24px;}
+.clipboard-intake h2{font-size:18px;margin-bottom:6px;}
+.clipboard-intake p{color:#526078;font-size:12px;line-height:1.6;}
+.clipboard-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;}
+.clipboard-controls input{flex:1;min-width:180px;}
+.clipboard-message{margin-top:10px;min-height:20px;}
+#vault-context-menu{position:fixed;z-index:500;padding:6px;border:1px solid var(--gold);border-radius:6px;background:var(--navy);box-shadow:0 8px 30px #0004;}
+#vault-context-menu[hidden]{display:none;}
+#credential-match{margin:auto;border:1px solid var(--gold);border-radius:10px;padding:24px;width:460px;max-width:94vw;}
+#credential-match::backdrop{background:#0a1628aa;}
+#credential-match p{font-size:13px;line-height:1.6;margin:10px 0;}
+#credential-match label{display:block;margin:14px 0 6px;}
+.api-card:focus{outline:3px solid var(--gold);outline-offset:3px;}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:18px}.topnav{height:auto;padding:12px;flex-wrap:wrap;gap:10px}.topnav-right{flex-wrap:wrap}.product-banner{flex-wrap:wrap}.stat-row{grid-template-columns:repeat(2,1fr)}.category-tabs{overflow:auto}.api-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -224,6 +238,17 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
   </div>
 
   <!-- STATS -->
+  <section class="clipboard-intake" id="clipboard-intake" aria-labelledby="clipboard-heading">
+    <h2 id="clipboard-heading">Paste a key. Get the right card.</h2>
+    <p>Right-click this page and choose <strong>Paste &amp; Create Card</strong>, or paste below. Local matching reads provider names and key formats. Everything stays in this browser.</p>
+    <div class="clipboard-controls">
+      <button class="btn btn-gold" type="button" id="clipboard-create">📋 Paste &amp; Create Card</button>
+      <input class="field-input" id="clipboard-value" type="password" aria-label="Paste a complete API key or NAME=value" placeholder="Or right-click here → Paste" autocomplete="off" spellcheck="false">
+      <button class="btn btn-green" type="button" id="clipboard-submit">Match &amp; Save</button>
+    </div>
+    <p class="clipboard-message" id="clipboard-message" role="status" aria-live="polite">A saved key is masked. Saving does not test or connect the provider.</p>
+  </section>
+
   <div class="stat-row">
     <div class="stat-card highlight">
       <div class="label">Total Keys</div>
@@ -231,7 +256,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
       <div class="sub">stored in vault</div>
     </div>
     <div class="stat-card">
-      <div class="label">Active</div>
+      <div class="label">Saved</div>
       <div class="value" id="stat-active" style="color:var(--green)">0</div>
       <div class="sub"><span class="dot dot-green"></span>configured</div>
     </div>
@@ -412,6 +437,21 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 </div>
 
 <div class="toast" id="toast"></div>
+<div id="vault-context-menu" role="menu" hidden>
+  <button class="btn btn-gold" type="button" id="clipboard-context-create" role="menuitem">📋 Paste &amp; Create Card</button>
+</div>
+<dialog id="credential-match" aria-labelledby="credential-match-title">
+  <h2 id="credential-match-title">Choose where this key belongs</h2>
+  <p id="credential-match-reason"></p>
+  <p>The complete key is held privately until you save. Existing keys are preserved.</p>
+  <label for="credential-provider">Provider and key type</label>
+  <select id="credential-provider" class="field-input"></select>
+  <div class="clipboard-controls">
+    <button type="button" class="btn btn-gold" id="credential-confirm">Save matched card</button>
+    <button type="button" class="icon-btn" id="credential-cancel">Cancel</button>
+  </div>
+</dialog>
+<script type="module" src="/js/vault-clipboard-ui.mjs"></script>
 
 <script>
 // ── DEFAULT API REGISTRY ──────────────────────────────────────────────────
@@ -472,7 +512,7 @@ function normalizeCustomApi(saved) {
     .filter(Boolean)
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
-  const isXai = /xai|grok/i.test(`${rawName} ${saved.id || ''}`);
+  const isXai = !saved.clipboardImported && /xai|grok/i.test(`${rawName} ${saved.id || ''}`);
   const values = { ...(saved.values || {}) };
   const savedFields = Array.isArray(saved.fields) ? saved.fields : [];
   const legacyKey = savedFields.find(field => !/url/i.test(field.key || ''))?.key
@@ -510,6 +550,7 @@ function normalizeCustomApi(saved) {
     inject: Array.isArray(saved.inject) ? saved.inject : [],
     values,
     custom: true,
+    clipboardImported: Boolean(saved.clipboardImported),
   };
 }
 
@@ -592,6 +633,7 @@ function saveVault() {
       inject: a.inject || [],
       values: a.values || {},
       custom: true,
+      clipboardImported: Boolean(a.clipboardImported),
     };
   });
   localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(data));
@@ -600,8 +642,7 @@ function saveVault() {
 
 function hasKey(api) {
   if (!api.values) return false;
-  const firstField = api.fields[0];
-  return !!(api.values[firstField.key] && api.values[firstField.key].trim());
+  return api.fields.some(field => typeof api.values[field.key] === 'string' && api.values[field.key].trim());
 }
 
 function escapeHtml(value) {
@@ -621,10 +662,10 @@ function renderGrid(cat = 'all') {
     const active = hasKey(api);
     const reqLabel = { required: '🔴 Required', optional: '🟡 Optional', hardwired: '⚡ Hard-wired' }[api.required] || api.required;
     const statusClass = active ? 'ok' : (api.required === 'optional' ? 'optional' : 'missing');
-    const statusText = active ? '● Active' : (api.required === 'optional' ? '○ Optional' : '✕ Missing');
+    const statusText = active ? '● Saved' : (api.required === 'optional' ? '○ Optional' : '✕ Missing');
 
     return `
-    <div class="api-card ${active ? 'active-key' : (api.required !== 'optional' ? 'missing-key' : '')}" id="card-${api.id}">
+    <div class="api-card ${active ? 'active-key' : (api.required !== 'optional' ? 'missing-key' : '')}" id="card-${api.id}" tabindex="-1">
       <div class="api-card-header">
         <div class="api-logo" style="background:${escapeHtml(api.color)}20;">${escapeHtml(api.icon)}</div>
         <div class="api-meta">
@@ -695,7 +736,7 @@ function updateKey(apiId, fieldKey, val) {
     const statusEl = card.querySelector('.api-status');
     if (statusEl) {
       statusEl.className = 'api-status ' + (isActive ? 'ok' : (api.required==='optional'?'optional':'missing'));
-      statusEl.textContent = isActive ? '● Active' : (api.required==='optional'?'○ Optional':'✕ Missing');
+      statusEl.textContent = isActive ? '● Saved' : (api.required==='optional'?'○ Optional':'✕ Missing');
     }
   }
   showToast(`✓ ${api.name} key saved`, 'green');
