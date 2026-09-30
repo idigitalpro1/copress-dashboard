@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useReducer, useRef } from 'react';
 import {
   Play,
   Copy,
   Check,
   Download,
-  RotateCcw,
   Sparkles,
   Cpu,
   Key,
@@ -17,16 +16,15 @@ import {
   AlertCircle,
   FileCode,
   Loader2,
-  ChevronDown,
   Upload,
 } from 'lucide-react';
 import {
   SystemPrompt,
   VaultKey,
   NewspaperSample,
-  ExecutionResultData,
 } from '../../types';
 import { api } from '../../services/api';
+import { initialSandboxRunState, sandboxExportDetails, sandboxRunReducer } from './runState';
 
 interface DualPaneSandboxProps {
   prompts: SystemPrompt[];
@@ -51,13 +49,22 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
   const [samples, setSamples] = useState<NewspaperSample[]>([]);
   const [selectedSampleId, setSelectedSampleId] = useState<string>('');
 
-  const [isExecuting, setIsExecuting] = useState(false);
-  const [executionResult, setExecutionResult] = useState<ExecutionResultData | null>(null);
-  const [usedKeyInfo, setUsedKeyInfo] = useState<{ label: string; maskedKey: string; provider: string } | null>(null);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [runState, dispatchRun] = useReducer(sandboxRunReducer, initialSandboxRunState);
+  const nextRunId = useRef(0);
+  const mounted = useRef(true);
+  const isExecuting = runState.pendingRun !== null;
+  const executionResult = runState.completedRun?.result ?? null;
+  const errorMsg = runState.error;
+  const copied = runState.copied;
 
   const [activeRightTab, setActiveRightTab] = useState<'formatted' | 'raw'>('formatted');
-  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
+
+  const invalidateResult = () => dispatchRun({ type: 'invalidate' });
 
   // Load samples on mount
   useEffect(() => {
@@ -67,7 +74,9 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
         setRawInputText(data.samples[0].content);
         setSelectedSampleId(data.samples[0].id);
       }
-    }).catch(() => setErrorMsg('Unable to load the beta sample texts.'));
+    }).catch(() => {
+      if (mounted.current) dispatchRun({ type: 'validation-error', error: 'Unable to load the beta sample texts.' });
+    });
   }, []);
 
   // Update selected prompt if initialSelectedPrompt changes
@@ -92,8 +101,23 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
   const executionKey = keys.find(key => key.id === (selectedKeyId || activePrompt?.mappedKeyId));
   const readyKey = executionKey?.status === 'active' && executionKey.provider !== 'custom';
 
+  // Prop changes (including a rotated/revoked key or edited prompt) also invalidate output.
+  // Layout timing clears it before paint; reducer revisions reject late in-flight responses.
+  useLayoutEffect(() => {
+    invalidateResult();
+  }, [rawInputText, selectedPromptId, selectedKeyId, selectedModel, temperature, outputFormat,
+    executionEnabled, activePrompt?.systemPrompt, activePrompt?.userTemplate,
+    activePrompt?.currentVersion, activePrompt?.mappedKeyId, activePrompt?.updatedAt,
+    executionKey?.id, executionKey?.provider, executionKey?.status, executionKey?.updatedAt,
+    executionKey?.maskedKey]);
+
+  useEffect(() => {
+    if (runState.completedRun?.result.structuredData) setActiveRightTab('formatted');
+  }, [runState.completedRun]);
+
   // When changing prompt from dropdown
   const handleSelectPrompt = (id: string) => {
+    invalidateResult();
     setSelectedPromptId(id);
     const p = prompts.find((item) => item.id === id);
     if (p) {
@@ -105,6 +129,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
   };
 
   const handleSelectSample = (sampleId: string) => {
+    invalidateResult();
     setSelectedSampleId(sampleId);
     const s = samples.find((item) => item.id === sampleId);
     if (s) {
@@ -118,7 +143,8 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
       const reader = new FileReader();
       reader.onload = (event) => {
         const text = event.target?.result as string;
-        if (text) {
+        if (text && mounted.current) {
+          invalidateResult();
           setRawInputText(text);
           setSelectedSampleId('');
         }
@@ -128,15 +154,16 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
   };
 
   const handleExecute = async () => {
-    if (!executionEnabled) { setErrorMsg('Provider execution is disabled for this beta server.'); return; }
-    if (!readyKey) { setErrorMsg('Choose a tested active key or map the selected prompt to one.'); return; }
+    if (isExecuting) return;
+    if (!executionEnabled) { dispatchRun({ type: 'validation-error', error: 'Provider execution is disabled for this beta server.' }); return; }
+    if (!readyKey) { dispatchRun({ type: 'validation-error', error: 'Choose a tested active key or map the selected prompt to one.' }); return; }
     if (!rawInputText.trim()) {
-      setErrorMsg('Please provide raw newspaper PDF extracted text.');
+      dispatchRun({ type: 'validation-error', error: 'Please provide raw newspaper PDF extracted text.' });
       return;
     }
 
-    setIsExecuting(true);
-    setErrorMsg(null);
+    const id = ++nextRunId.current;
+    dispatchRun({ type: 'start', id, model: selectedModel, outputFormat });
 
     try {
       const res = await api.executePrompt({
@@ -150,36 +177,36 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
         outputFormat,
       });
 
-      setExecutionResult(res.result);
-      setUsedKeyInfo(res.keyUsed);
-      if (res.result.structuredData) {
-        setActiveRightTab('formatted');
-      }
+      if (mounted.current) dispatchRun({ type: 'success', id, result: res.result });
     } catch (err: any) {
-      setErrorMsg(err.message || 'Execution error during proxy generation');
-    } finally {
-      setIsExecuting(false);
+      if (mounted.current) dispatchRun({ type: 'failure', id, error: err.message || 'Execution error during proxy generation' });
     }
   };
 
   const copyOutput = () => {
-    if (executionResult?.output) {
-      navigator.clipboard.writeText(executionResult.output);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    const completed = runState.completedRun;
+    if (completed?.result.output) {
+      navigator.clipboard.writeText(completed.result.output).then(() => {
+        if (!mounted.current) return;
+        dispatchRun({ type: 'copy', id: completed.id, copied: true });
+        setTimeout(() => {
+          if (mounted.current) dispatchRun({ type: 'copy', id: completed.id, copied: false });
+        }, 2000);
+      }).catch(() => {});
     }
   };
 
   const downloadOutput = () => {
-    if (!executionResult?.output) return;
-    const isJson = outputFormat === 'json';
-    const blob = new Blob([executionResult.output], {
-      type: isJson ? 'application/json' : 'text/markdown',
+    const completed = runState.completedRun;
+    if (!completed?.result.output) return;
+    const details = sandboxExportDetails(completed.outputFormat);
+    const blob = new Blob([completed.result.output], {
+      type: details.mimeType,
     });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `newsflow-extract-${Date.now()}.${isJson ? 'json' : 'md'}`;
+    a.download = `newsflow-extract-${Date.now()}.${details.extension}`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -220,7 +247,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
             </label>
             <select
               value={selectedKeyId}
-              onChange={(e) => setSelectedKeyId(e.target.value)}
+              onChange={(e) => { invalidateResult(); setSelectedKeyId(e.target.value); }}
               className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               <option value="">(Use selected prompt’s mapped key)</option>
@@ -240,7 +267,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
             </label>
             <select
               value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
+              onChange={(e) => { invalidateResult(); setSelectedModel(e.target.value); }}
               className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-100 font-medium focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
             >
               <option value="gemini-3.8-flash">gemini-3.8-flash (Ultra-Fast Newsroom)</option>
@@ -255,7 +282,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
           <div className="flex items-center space-x-2 pt-1 sm:pt-4">
             <select
               value={outputFormat}
-              onChange={(e) => setOutputFormat(e.target.value as any)}
+              onChange={(e) => { invalidateResult(); setOutputFormat(e.target.value as any); }}
               className="bg-slate-950 border border-slate-700 rounded-xl px-2.5 py-2 text-xs text-slate-300 font-medium focus:outline-none"
             >
               <option value="json">JSON</option>
@@ -362,6 +389,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
             <textarea
               value={rawInputText}
               onChange={(e) => {
+                invalidateResult();
                 setRawInputText(e.target.value);
                 setSelectedSampleId('');
               }}
@@ -377,7 +405,7 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
             </span>
             <button
               type="button"
-              onClick={() => setRawInputText('')}
+              onClick={() => { invalidateResult(); setRawInputText(''); setSelectedSampleId(''); }}
               className="hover:text-slate-300 transition-colors"
             >
               Clear Text
@@ -454,8 +482,11 @@ export const DualPaneSandbox: React.FC<DualPaneSandboxProps> = ({
                     Routing Prompt to Proxy...
                   </h4>
                   <p className="text-xs text-slate-400 font-mono mt-1">
-                    Calling {selectedModel}
+                    Calling {runState.pendingRun?.model}
                   </p>
+                  {runState.pendingRun?.revision !== runState.revision && (
+                    <p className="text-xs text-amber-300 mt-2 max-w-xs">Inputs or settings changed. This run’s output will be discarded when it finishes; provider charges may still apply.</p>
+                  )}
                 </div>
               </div>
             ) : executionResult ? (
