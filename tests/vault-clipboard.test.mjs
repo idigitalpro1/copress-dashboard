@@ -296,7 +296,8 @@ test('a separately imported xAI key survives the real save/load normalization wi
   vault.storage.set('api_vault', JSON.stringify([original]));
   vault.load();
   const credential = parseCredential('xai-' + fakeValue);
-  const plan = planCredentialImport(vault.getApis(), credential, 'clipboard-persistence-test');
+  const savedAt = '2026-09-30T05:45:00.000Z';
+  const plan = planCredentialImport(vault.getApis(), credential, 'clipboard-persistence-test', savedAt);
   vault.setApis(plan.apis);
   vault.save();
   const persisted = JSON.parse(vault.storage.get('api_vault'));
@@ -309,6 +310,40 @@ test('a separately imported xAI key survives the real save/load normalization wi
   assert.equal(imported.values.XAI_API_KEY, credential.value);
   assert.equal(imported.fields[0].key, 'XAI_API_KEY');
   assert.equal(imported.clipboardImported, true);
+  assert.equal(imported.savedAt, savedAt);
   assert.equal(reloaded.find(api => api.id === 'xai-grok').values.XAI_API_KEY, original.values.XAI_API_KEY);
   assert.equal(reloaded.filter(api => api.values.XAI_API_KEY).length, 2);
+});
+
+test('saved completion time survives the real default card save/load without inventing times for old cards', () => {
+  const vault = createVaultHarness();
+  vault.load();
+  assert.equal(vault.getApis().find(api => api.id === 'openai').savedAt, '');
+  const savedAt = '2026-09-30T05:45:01.000Z';
+  const credential = parseCredential('sk-proj-' + fakeValue);
+  const plan = planCredentialImport(vault.getApis(), credential, 'unused', savedAt);
+  vault.setApis(plan.apis);
+  vault.save();
+  vault.load();
+  const card = vault.getApis().find(api => api.id === 'openai');
+  assert.equal(card.savedAt, savedAt);
+  assert.equal(card.values.OPENAI_API_KEY, credential.value);
+  const duplicate = planCredentialImport(vault.getApis(), credential, 'unused', '2026-10-01T00:00:00.000Z');
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(duplicate.apis.find(api => api.id === 'openai').savedAt, savedAt);
+});
+
+test('reviewed imports preserve credential names containing URL across real save/load', () => {
+  const vault = createVaultHarness();
+  vault.load();
+  const credential = parseCredential(JSON.stringify({ URLSCAN_API_KEY: fakeValue }));
+  const plan = planCredentialImport(vault.getApis(), credential, 'clipboard-urlscan-test', '2026-09-30T05:45:01.000Z');
+  vault.setApis(plan.apis);
+  vault.save();
+  vault.load();
+  const card = vault.getApis().find(api => api.id === plan.id);
+  assert.equal(card.fields.length, 1);
+  assert.equal(card.fields[0].key, 'URLSCAN_API_KEY');
+  assert.equal(card.values.URLSCAN_API_KEY, fakeValue);
+  assert.equal(card.savedAt, '2026-09-30T05:45:01.000Z');
 });
