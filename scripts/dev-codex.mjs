@@ -14,7 +14,7 @@ createServer(async (req, res) => {
   if (pathname === '/api/development-board') return board(req, res);
   if (pathname === '/api/videos' || pathname === '/data/video-feed.json') return videos(req, res);
   if (pathname === '/api/studio') return studio(req, res);
-  let file = pathname === '/video' || pathname === '/video/' ? '/video/index.html' : pathname === '/' ? '/index.html' : pathname;
+  let file = pathname === '/apikeys' ? '/apistore.html' : pathname === '/video' || pathname === '/video/' ? '/video/index.html' : pathname === '/' ? '/index.html' : pathname;
   if (!extname(file)) file += '.html';
   const target = resolve(root, '.' + file);
   if (!target.startsWith(root + '/') || /(?:^|\/)\./.test(file) || file.includes('/node_modules/')) { res.writeHead(403).end(); return; }

@@ -78,6 +78,10 @@
   ],
   "rewrites": [
     {
+      "source": "/apikeys",
+      "destination": "/apistore.html"
+    },
+    {
       "source": "/video/studio",
       "destination": "/video/studio.html"
     },
