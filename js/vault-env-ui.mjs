@@ -76,6 +76,7 @@ export function setupEnvImport({ choices, closeIntake, revealCard, status, confi
       issues.append(item);
     }
     updateSelection();
+    status('Review ready. No keys have been saved.');
     closeIntake();
     dialog.showModal();
   }
@@ -133,9 +134,14 @@ export function setupEnvImport({ choices, closeIntake, revealCard, status, confi
     confirmCompletion(plan);
   });
 
-  document.getElementById('env-import-cancel').addEventListener('click', () => dialog.close());
+  document.getElementById('env-import-cancel').addEventListener('click', () => {
+    status('Import cancelled. No keys were saved.');
+    dialog.close();
+  });
+  dialog.addEventListener('cancel', () => status('Import cancelled. No keys were saved.'));
   dialog.addEventListener('close', () => { if (!dialog.open) clearPreview(); });
   return function cancelRead() {
+    if (reading) status('Import cancelled. No keys were saved.');
     generation++;
     reading = false;
     open.disabled = false;

@@ -139,7 +139,7 @@ test('an obsolete read rejection cannot report an error after cancellation', asy
   h.cancelRead();
   read.reject(new Error('Fictional read error'));
   await loading;
-  assert.deepEqual(h.statuses, ['Reading .env locally. No keys have been saved.']);
+  assert.deepEqual(h.statuses, ['Reading .env locally. No keys have been saved.', 'Import cancelled. No keys were saved.']);
   assert.equal(h.get('env-import-open').disabled, false);
   assert.equal(h.get('env-import-dialog').showCount, 0);
   assert.equal(h.saveCalls, 0);
@@ -180,6 +180,7 @@ test('canceling review clears its pending rows and prevents subsequent saving', 
   const h = createHarness(t);
   await h.load('XAI_API_KEY=' + fakeValue);
   await h.get('env-import-cancel').click();
+  assert.equal(h.statuses.at(-1), 'Import cancelled. No keys were saved.');
   assert.equal(h.get('env-import-dialog').open, false);
   assert.equal(h.get('env-import-rows').children.length, 0);
   assert.equal(h.get('env-import-save').disabled, true);
