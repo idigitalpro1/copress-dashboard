@@ -60,6 +60,7 @@ function renderSetup() {
     'draft-save': f.drafts, 'draft-refresh': f.drafts, 'transcribe-grok': f.transcribe && f.grok, 'transcribe-gemini': f.transcribe && f.gemini,
     'ai-grok': f.assist && f.grok, 'ai-gemini': f.assist && f.gemini, 'img-run': f.images, 'upload-image': f.cloudinary, 'img-library': f.cloudinary,
     'img-brand-go': f.cloudinary, 'img-brand-save': f.cloudinary, 'generated-refresh': f.generated || f.cloudinary,
+    'creator-refresh': f.cloudinary,
     'youtube-connect': f.youtube && !f.youtube_connected, 'youtube-disconnect': f.youtube_connected,
     'pub-approve': f.publish && f.youtube_connected, 'pub-refresh-jobs': f.cloudinary,
   };
@@ -67,7 +68,7 @@ function renderSetup() {
   if (!f.images) setStatus('img-status', 'Grok image tools are disabled: set XAI_API_KEY (and Cloudinary) on the server.');
   if (!f.assist) setStatus('ai-status', 'AI assist is disabled: set XAI_API_KEY and/or GEMINI_KEY_COPY (and Cloudinary) on the server.');
   if (!f.transcribe) setStatus('transcribe-status', 'Auto-transcription is disabled without an AI key; type or paste captions instead.');
-  if (f.cloudinary) { loadLibrary(); loadGenerated(); }
+  if (f.cloudinary) { loadLibrary(); loadGenerated(); loadCreatorUploads(); }
   setupPublish();
 }
 
@@ -96,6 +97,23 @@ async function loadGenerated() {
   } catch (e) { $('generated').replaceChildren(el('p', { class: 'error' }, e.message)); }
 }
 
+async function loadCreatorUploads() {
+  $('creator-uploads').replaceChildren(el('p', { class: 'muted small' }, 'Loading creator uploads…'));
+  try {
+    const { items, note } = await api('creator-uploads');
+    setStatus('creator-status', note || '');
+    $('creator-uploads').replaceChildren(...(items.length ? items.map(item => el('button', { class: 'thumb', type: 'button', 'aria-pressed': 'false', onclick: e => openCreatorUpload(item, e.currentTarget) },
+      el('img', { src: item.thumb_url, alt: '', loading: 'lazy' }), el('span', {}, `${item.title} · ${Math.round(item.duration || 0)}s · ${item.creator || 'creator'} · draft`))) : [el('p', { class: 'muted small' }, 'No creator uploads yet. Paul\'s phone link lands in satcom/paul-hill/incoming.')]));
+  } catch (e) { $('creator-uploads').replaceChildren(el('p', { class: 'error' }, e.message)); }
+}
+
+async function openCreatorUpload(item, button) {
+  state.sidecar = null;
+  state.assetTags = item.tags || ['draft', 'creator-upload'];
+  setStatus('creator-status', `${item.creator ? item.creator + ' · ' : ''}Private creator upload. Review before publishing.`);
+  await selectSource({ ...item, type: 'private' }, button);
+}
+
 async function openGenerated(item, button) {
   const detail = await api('generated-get', { public_id: item.public_id }).catch(() => item);
   const sidecar = detail.sidecar || {};
@@ -107,7 +125,7 @@ async function openGenerated(item, button) {
 }
 
 async function selectSource(item, button) {
-  document.querySelectorAll('#library .thumb, #generated .thumb').forEach(t => t.setAttribute('aria-pressed', 'false'));
+  document.querySelectorAll('#library .thumb, #generated .thumb, #creator-uploads .thumb').forEach(t => t.setAttribute('aria-pressed', 'false'));
   button?.setAttribute('aria-pressed', 'true');
   if (!item.sidecar && !String(item.public_id || '').startsWith('satcom/generated/')) { state.sidecar = null; state.assetTags = item.tags || []; }
   state.source = { public_id: item.public_id, type: item.type, duration: item.duration, width: item.width, height: item.height };
@@ -187,6 +205,7 @@ function wire() {
   }));
   $('library-go').addEventListener('click', loadLibrary);
   $('generated-refresh').addEventListener('click', loadGenerated);
+  $('creator-refresh').addEventListener('click', loadCreatorUploads);
   $('brand').addEventListener('change', syncBrandDefaults);
   $('upload-video').addEventListener('change', async e => {
     const file = e.target.files[0]; if (!file) return;

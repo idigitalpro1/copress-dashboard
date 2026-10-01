@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Unavailable | SATCOM</title>
+<link rel="stylesheet" href="/video/player.css">
+<link rel="stylesheet" href="/video/upload.css">
+<script src="/video/upload.js" defer></script>
+</head>
+<body>
+<main class="upload-shell">
+  <p class="eyebrow">SATCOM</p>
+  <section id="dead-end" class="card" hidden>
+    <h1>This link is not available</h1>
+    <p class="muted">If you were sent here to share a clip, ask Patrick for a new link.</p>
+  </section>
+  <section id="gate" class="card" aria-live="polite">
+    <p id="boot-status">Checking this link…</p>
+  </section>
+  <section id="form" class="card" hidden>
+    <h1>Send a clip to Patrick</h1>
+    <p class="lede">Hi <strong id="creator-name"></strong>. Pick one or more videos from your camera roll. They stay private. Patrick reviews them in Video Studio before anything is published.</p>
+    <form id="upload-form">
+      <label class="picker">
+        <span>Choose videos</span>
+        <input id="files" type="file" accept="video/mp4,video/quicktime,video/webm,video/*" multiple>
+      </label>
+      <p id="file-summary" class="muted small" role="status"></p>
+      <div id="clip-fields"></div>
+      <button id="send" class="button" type="submit" disabled>Send to Patrick</button>
+    </form>
+    <div id="queue" class="queue" aria-live="polite"></div>
+    <p id="form-error" class="error" role="alert"></p>
+  </section>
+  <section id="done" class="card confirm" hidden>
+    <h1>Received — Patrick will review</h1>
+    <p id="done-detail" class="lede"></p>
+    <p class="muted">Nothing is published to YouTube or the SATCOM player until Patrick approves it.</p>
+    <button id="send-more" class="ghost" type="button">Send another clip</button>
+  </section>
+</main>
+</body>
+</html>
