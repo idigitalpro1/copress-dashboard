@@ -36,6 +36,7 @@ The same paths work on the other Production aliases (`copress-dashboard.vercel.a
 | `YOUTUBE_REDIRECT_URI` | set (same branch) | set (`https://satcom.conews.press/api/studio/youtube-callback`) | Must exactly match the Google redirect URI. |
 | `YOUTUBE_DAILY_UPLOAD_CAP`, `YOUTUBE_DEFAULT_PRIVACY` | set (same branch) | set (6, `unlisted`) | Optional. |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | **missing** | **missing** | Optional durable store. Apply the migrations first. |
+| `CREATOR_UPLOAD_TOKENS` | unset | unset | Optional. Empty means no creator upload links. See [creator-upload.md](creator-upload.md). |
 
 If `SUPABASE_URL` is set before the migrations are applied, Studio boot stays up and reports `store.reason: migrations_not_applied` (in-memory + cookie fallback). Do not apply migrations from this repo.
 
@@ -74,6 +75,7 @@ Full checklist: [youtube.md](youtube.md).
 - `supabase/migrations/20260929200200_video_publish_reviews_and_audit.sql`
 - `supabase/migrations/20260929200300_video_feed_published.sql`
 - `supabase/migrations/20261001030000_youtube_quota_units_pool.sql`
+- `supabase/migrations/20261001080000_creator_upload_tokens.sql`
 
 Apply these to a Preview project first. Without them, job, quota and token state is kept in per-instance memory.
 

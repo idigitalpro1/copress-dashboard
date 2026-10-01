@@ -22,6 +22,7 @@ The studio is **disabled by default**. The repository has no server-side admin s
 | `GEMINI_MODEL` | optional | Copy-model override; must be `gemini-3.5-flash` or `gemini-3.8-flash` |
 | `VIDEO_STUDIO_UPLOAD_TYPE` | optional | `authenticated` (default) keeps raw uploads off public URLs; `upload` stores them as public |
 | `VIDEO_STUDIO_LANGUAGE` | optional | Speech-to-text language hint, default `en` |
+| `CREATOR_UPLOAD_TOKENS` | optional | Paul Hill (and later creators) phone-upload links. Empty means no valid tokens. See [creator-upload.md](creator-upload.md) |
 | `YOUTUBE_CLIENT_ID` | yes for publish | OAuth Web client. See [youtube.md](youtube.md) |
 | `YOUTUBE_CLIENT_SECRET` | yes for publish | Server only |
 | `YOUTUBE_TOKEN_ENC_KEY` | yes for publish | 64 hex chars (32-byte AES key) |
@@ -63,5 +64,5 @@ One approval creates two idempotent jobs: **YouTube** and **satcom.conews.press/
 - Cloudinary renders on first request. Clips larger than the account's on-the-fly limit (about 40 to 100 MB depending on plan) need **Pre-render**.
 - `g_auto` video cropping and Cloudinary text/subtitle layers use transformation quota. Fonts are Arial and Georgia. Custom brand fonts would need to be uploaded to Cloudinary.
 - Drafts live in Cloudinary. They are not merged into the repository catalog or into the Supabase store proposed in PR #27; that bridge is a follow-up.
-- The Google Cloud "ACE Video Ed" pipeline (Gemini analysis plus a 15-second FFmpeg highlight) is not deployed. The studio covers the same flow with the shared Gemini module (`packages/satcom-gemini`, workload `copy`) plus Cloudinary trims. Omni generation runs on Patrick's server. This studio **lists and opens** private drafts under `satcom/generated/` (alongside `satcom/paul-hill/originals`). See [gemini.md](gemini.md). Preview only; do not merge.
+- The Google Cloud "ACE Video Ed" pipeline (Gemini analysis plus a 15-second FFmpeg highlight) is not deployed. The studio covers the same flow with the shared Gemini module (`packages/satcom-gemini`, workload `copy`) plus Cloudinary trims. Omni generation runs on Patrick's server. This studio **lists and opens** private drafts under `satcom/generated/` (alongside `satcom/paul-hill/originals`) and creator phone uploads under `satcom/<creator>/incoming`. See [gemini.md](gemini.md) and [creator-upload.md](creator-upload.md).
 - Login throttling is in-memory per function instance. Put Vercel deployment protection or a firewall rule in front for stronger protection.
