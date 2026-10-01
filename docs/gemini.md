@@ -2,7 +2,7 @@
 
 Vercel / SATCOM Video Studio side only. Subscribe, Stripe, checkout, postcard QR routes, WordPress and DNS are unchanged. This PR does not change Vercel project settings or apply SQL to a live Supabase project.
 
-Omni **generation** is still out of this repo. **Reviewed publishing** (YouTube + satcom.conews.press/video) is a stacked preview on this branch; see [youtube.md](youtube.md) and [video-studio.md](video-studio.md). Do not merge.
+Omni **generation** is still out of this repo. **Reviewed publishing** (YouTube + satcom.conews.press/video) is a stacked preview on this branch; see [youtube.md](youtube.md) and [video-studio.md](video-studio.md). YouTube quota accounting follows the [Google calculator](https://developers.google.com/youtube/v3/determine_quota_cost) update of **2026-09-15**: `videos.insert` has its own 100/day bucket (1 unit/call); the 10,000-unit pool is for other endpoints. The Studio's `YOUTUBE_DAILY_UPLOAD_CAP=6` is an editorial cap, not a Google limit. Do not merge.
 
 Stacked on draft PR #32 (`cursor/gemini-shared-client-86da`), which is stacked on draft PR #29 (`cursor/video-studio-preview`). Preview env only. This publish PR must not be merged.
 

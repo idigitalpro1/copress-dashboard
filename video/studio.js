@@ -412,9 +412,13 @@ function setupPublish() {
     banner.classList.add('ready');
   }
   const q = p.quota || { used: 0, cap: 6, remaining: 6 };
+  const units = q.units;
+  const unitsNote = units
+    ? ` Other API calls ${units.used}/${units.limit} units (separate 10,000-unit pool).`
+    : '';
   $('publish-quota').textContent = q.queued_until
-    ? `YouTube quota ${q.used}/${q.cap} today. Further uploads are queued until tomorrow (${q.queued_until}).`
-    : `YouTube quota ${q.used}/${q.cap} today (${q.remaining} remaining). Default privacy: ${p.default_privacy || 'unlisted'}.`;
+    ? `Editorial upload cap ${q.used}/${q.cap} today (our limit, not Google's). Further uploads are queued until tomorrow (${q.queued_until}).${unitsNote}`
+    : `Editorial upload cap ${q.used}/${q.cap} today (${q.remaining} remaining). This is our daily limit, not a Google quota. Default privacy: ${p.default_privacy || 'unlisted'}.${unitsNote}`;
   $('pub-privacy').value = p.default_privacy || 'unlisted';
   if (!$('pub-name').value) $('pub-name').value = $('draft-credit').value || 'Paul Hill';
   if (!$('pub-date').value) $('pub-date').value = new Date().toISOString().slice(0, 10);
