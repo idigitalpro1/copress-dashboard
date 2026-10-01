@@ -25,7 +25,7 @@ The new `/mcp` endpoint provides reviewed public context only; it does not activ
 
 ## Shared Gemini client (0.2.0, preview only — do not merge)
 
-Stacked on the Video Studio preview. **Does not publish**, does not touch `/subscribe`, Stripe, checkout, postcard QR routes, WordPress or DNS. Patrick owns Python, isolated keys, the Omni queue and `publish_gate` on his server. This repo keeps the Vercel/Studio copy client and lists private Cloudinary drafts under `satcom/generated/`. Full operator notes: [docs/gemini.md](docs/gemini.md) and [packages/satcom-gemini/README.md](packages/satcom-gemini/README.md).
+Stacked on the Video Studio preview. **Does not publish**, does not touch `/subscribe`, Stripe, checkout, postcard QR routes, WordPress or DNS. Patrick owns Python, isolated keys, the Omni queue and `publish_gate` on his server. This repo keeps the Vercel/Studio copy client and lists private Cloudinary drafts under `satcom/generated/`. Studio YouTube quota follows the [Google calculator](https://developers.google.com/youtube/v3/determine_quota_cost) update of **2026-09-15** (`videos.insert` has its own 100/day bucket; `YOUTUBE_DAILY_UPLOAD_CAP=6` is an editorial cap, not a Google limit). Full operator notes: [docs/youtube.md](docs/youtube.md), [docs/gemini.md](docs/gemini.md) and [packages/satcom-gemini/README.md](packages/satcom-gemini/README.md).
 
 Preview env only (Patrick sets these; this PR does not change Vercel/DNS):
 
