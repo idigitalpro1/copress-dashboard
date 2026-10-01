@@ -138,11 +138,11 @@
     },
     {
       "source": "/video/upload",
-      "destination": "/video/creator-upload.html"
+      "destination": "/video/creator-upload"
     },
     {
       "source": "/video/upload/:token",
-      "destination": "/video/creator-upload.html"
+      "destination": "/video/creator-upload"
     },
     {
       "source": "/video",
