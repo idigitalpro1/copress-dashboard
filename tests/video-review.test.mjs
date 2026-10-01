@@ -7,7 +7,14 @@ import { normalizePhone } from '../lib/video-review/phones.js';
 import { verifyInkboxSignature, verifyTwilioSignature } from '../lib/video-review/signatures.js';
 import { applyDecision, canDecide, nextStatusForDecision } from '../lib/video-review/transitions.js';
 import { createMemoryStore } from '../lib/video-review/store.js';
-import { createSmsAdapter } from '../lib/video-review/sms.js';
+import {
+  buildTwilioMessageRequest,
+  createSmsAdapter,
+  publicTwilioRequest,
+  smsProviderName,
+} from '../lib/video-review/sms.js';
+import { clipReceivedText } from '../lib/video-review/creators.js';
+import { helpText } from '../lib/video-review/messages.js';
 import {
   consumeMagicLink,
   decidePendingVideo,
@@ -123,8 +130,15 @@ test('review replies parse YES/NO codes, reasons, and keywords', () => {
   assert.deepEqual(parseReviewReply('REJECT K7Q2'), { type: 'decision', decision: 'reject', code: 'K7Q2', reason: null });
   assert.deepEqual(parseReviewReply('YES'), { type: 'decision', decision: 'approve', code: null, reason: null });
   assert.deepEqual(parseReviewReply('STOP'), { type: 'stop' });
+  assert.deepEqual(parseReviewReply('STOPALL'), { type: 'stop' });
+  assert.deepEqual(parseReviewReply('UNSUBSCRIBE'), { type: 'stop' });
+  assert.deepEqual(parseReviewReply('CANCEL'), { type: 'stop' });
+  assert.deepEqual(parseReviewReply('END'), { type: 'stop' });
+  assert.deepEqual(parseReviewReply('QUIT'), { type: 'stop' });
   assert.deepEqual(parseReviewReply('HELP'), { type: 'help' });
+  assert.deepEqual(parseReviewReply('INFO'), { type: 'help' });
   assert.deepEqual(parseReviewReply('START'), { type: 'start' });
+  assert.deepEqual(parseReviewReply('UNSTOP'), { type: 'start' });
   assert.equal(parseReviewReply('SHIP IT').type, 'unknown');
 });
 
@@ -151,6 +165,8 @@ test('Twilio signatures hash the configured public URL and sorted params', () =>
   const signature = createHmac('sha1', 'twilio-token').update(data, 'utf8').digest('base64');
   assert.equal(verifyTwilioSignature({ authToken: 'twilio-token', url, params, signature }), true);
   assert.equal(verifyTwilioSignature({ authToken: 'twilio-token', url, params: { ...params, Body: 'NO' }, signature }), false);
+  assert.equal(verifyTwilioSignature({ authToken: 'twilio-token', url, params, signature: '' }), false);
+  assert.equal(verifyTwilioSignature({ authToken: 'twilio-token', url, params, signature: undefined }), false);
 });
 
 test('pending videos transition only once and expired codes fail closed', () => {
@@ -352,7 +368,7 @@ test('webhook rejects bad signatures and the public video API stays read-only', 
   });
   const denied = response();
   await handler(incoming('POST', '/api/video-review-sms', { headers: { 'content-type': 'application/json' }, body: '{"event_type":"text.received"}' }), denied);
-  assert.equal(denied.statusCode, 401);
+  assert.equal(denied.statusCode, 403);
   const publicApi = createVideoHandler(async () => ({ catalog: { version: 1, items: [] }, source: 'catalog' }), () => now);
   const write = response();
   await publicApi({ method: 'POST', url: '/api/videos' }, write);
@@ -402,4 +418,298 @@ test('subscription host redirects and other host routes stay untouched', () => {
   assert.ok(config.rewrites.some(rule => rule.source === '/video/review-continue' && rule.destination === '/video/review-continue.html'));
   assert.ok(!JSON.stringify(config).includes('villager-postcard-gallery'));
   assert.ok(!JSON.stringify(config).includes('villager-postcard-proofing'));
+});
+
+const PAUL_CONFIRMATION = [
+  "Received! Colorado News Press Video Desk has your clips and they're in review now. Thanks, Paul.",
+  'Your video page: https://satcom.5280.menu/video/embed?creator=paul-hill',
+  'SATCOM video: https://satcom.conews.press/video',
+].join('\n');
+
+function twilioEnv(overrides = {}) {
+  return {
+    SATCOM_VIDEO_PUBLIC_URL: 'https://satcom.5280.menu',
+    SATCOM_VIDEO_SESSION_SECRET: 'test-session-secret-32-bytes-minimum',
+    SATCOM_VIDEO_SMS_PROVIDER: 'twilio',
+    SMS_DRY_RUN: 'true',
+    TWILIO_ACCOUNT_SID: 'ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    TWILIO_AUTH_TOKEN: 'twilio-token',
+    TWILIO_FROM_NUMBER: '+15555550720',
+    SATCOM_VIDEO_CREATORS: JSON.stringify({ '+15555550123': { slug: 'paul-hill', name: 'Paul' } }),
+    ...overrides,
+  };
+}
+
+function twilioSignature(url, params, token = 'twilio-token') {
+  const data = url + Object.keys(params).sort().map(key => key + String(params[key] ?? '')).join('');
+  return createHmac('sha1', token).update(data, 'utf8').digest('base64');
+}
+
+function twilioForm(params) {
+  return new URLSearchParams(params).toString();
+}
+
+test('Twilio is the default provider and SMS_PROVIDER is an alias', () => {
+  assert.equal(smsProviderName({}), 'twilio');
+  assert.equal(smsProviderName({ SMS_PROVIDER: 'twilio' }), 'twilio');
+  assert.equal(smsProviderName({ SATCOM_VIDEO_SMS_PROVIDER: 'inkbox' }), 'inkbox');
+  assert.equal(smsProviderName({ SATCOM_VIDEO_SMS_PROVIDER: 'inkbox', SMS_PROVIDER: 'twilio' }), 'inkbox');
+});
+
+test('Twilio dry-run builds the Messages API request and never calls Twilio', async () => {
+  const logs = [];
+  let calls = 0;
+  const sms = createSmsAdapter({
+    env: twilioEnv(),
+    fetchImpl: async () => { calls += 1; return new Response('nope', { status: 500 }); },
+    logger: { info: (_event, payload) => logs.push(payload), error() {} },
+  });
+  const result = await sms.send({
+    to: '+15555550123',
+    body: PAUL_CONFIRMATION,
+  });
+  assert.equal(sms.dryRun, true);
+  assert.equal(result.dryRun, true);
+  assert.equal(calls, 0);
+  assert.equal(result.request.url, 'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Messages.json');
+  assert.equal(result.request.method, 'POST');
+  assert.equal(result.request.To, '+15555550123');
+  assert.equal(result.request.From, '+15555550720');
+  assert.equal(result.request.Body, PAUL_CONFIRMATION);
+  assert.equal(logs[0].twilioRequest.url, result.request.url);
+  assert.equal(JSON.stringify(logs).includes('twilio-token'), false);
+  assert.equal(JSON.stringify(result).includes('twilio-token'), false);
+});
+
+test('Twilio from-number and API-key aliases still produce the same request URL', () => {
+  const phoneAlias = buildTwilioMessageRequest(twilioEnv({
+    TWILIO_FROM_NUMBER: '',
+    TWILIO_PHONE_NUMBER: '+15555550720',
+  }), { to: '+15555550123', body: 'hi' });
+  assert.equal(phoneAlias.form.From, '+15555550720');
+  const apiKey = buildTwilioMessageRequest(twilioEnv({
+    TWILIO_API_KEY_SID: 'SKaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    TWILIO_API_KEY_SECRET: 'api-secret',
+  }), { to: '+15555550123', body: 'hi' });
+  assert.equal(apiKey.url, phoneAlias.url);
+  assert.match(apiKey.headers.Authorization, /^Basic /);
+  const published = publicTwilioRequest(apiKey);
+  assert.equal(JSON.stringify(published).includes('api-secret'), false);
+  const messaging = publicTwilioRequest(buildTwilioMessageRequest(twilioEnv({
+    TWILIO_MESSAGING_SERVICE_SID: 'MGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+  }), { to: '+15555550123', body: 'hi' }));
+  assert.equal(messaging.MessagingServiceSid, 'MGaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+  assert.equal(messaging.From, undefined);
+});
+
+test('Paul Hill MMS video lands in pending_review with the exact confirmation text', async () => {
+  const store = createMemoryStore({ now: () => now });
+  const sms = recordingSms();
+  const mediaUrl = 'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Messages/MM1/Media/ME1';
+  const result = await handleInboundSms({
+    store, sms, env: twilioEnv(), headers: {}, now,
+    rawBody: JSON.stringify({
+      provider: 'twilio',
+      messageId: 'MMaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      from: '+15555550123',
+      to: '+15555550720',
+      body: '',
+      media: [{ url: mediaUrl, contentType: 'video/mp4' }],
+    }),
+  });
+  assert.equal(result.status, 200);
+  assert.equal(result.body.handled, 'mms_received');
+  assert.equal(result.body.status, 'pending_review');
+  assert.equal(result.body.confirmation, PAUL_CONFIRMATION);
+  assert.equal(clipReceivedText({ name: 'Paul', slug: 'paul-hill' }), PAUL_CONFIRMATION);
+  const video = await store.getVideoById(result.body.id);
+  assert.equal(video.status, 'pending_review');
+  assert.equal(video.creator, 'paul-hill');
+  assert.equal(video.playback.url, mediaUrl);
+  assert.equal(sms.sent.at(-1).body, PAUL_CONFIRMATION);
+});
+
+test('Twilio webhook accepts a valid signature and rejects unsigned or invalid ones with 403', async () => {
+  const store = createMemoryStore({ now: () => now });
+  const env = twilioEnv();
+  const logs = [];
+  const handler = createSmsWebhookHandler({
+    store,
+    env,
+    clock: () => now,
+    sms: createSmsAdapter({ env, logger: { info: (_e, p) => logs.push(p), error() {} }, fetchImpl: async () => { throw new Error('network'); } }),
+  });
+  const params = {
+    From: '+15555550123',
+    To: '+15555550720',
+    Body: '',
+    MessageSid: 'MMbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+    NumMedia: '1',
+    MediaUrl0: 'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Messages/MM2/Media/ME2',
+    MediaContentType0: 'video/mp4',
+  };
+  const url = 'https://satcom.5280.menu/api/video-review-sms';
+  const unsigned = response();
+  await handler(incoming('POST', '/api/video-review-sms', {
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: twilioForm(params),
+  }), unsigned);
+  assert.equal(unsigned.statusCode, 403);
+  const invalid = response();
+  await handler(incoming('POST', '/api/video-review-sms', {
+    headers: { 'content-type': 'application/x-www-form-urlencoded', 'x-twilio-signature': 'not-valid' },
+    body: twilioForm(params),
+  }), invalid);
+  assert.equal(invalid.statusCode, 403);
+  const ok = response();
+  await handler(incoming('POST', '/api/video-review-sms', {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'x-twilio-signature': twilioSignature(url, params),
+    },
+    body: twilioForm(params),
+  }), ok);
+  assert.equal(ok.statusCode, 200);
+  const body = JSON.parse(ok.body);
+  assert.equal(body.handled, 'mms_received');
+  assert.equal(body.confirmation, PAUL_CONFIRMATION);
+  assert.equal(body.dryRun, true);
+  assert.equal(body.twilioRequest.url, 'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Messages.json');
+  assert.equal(body.twilioRequest.To, '+15555550123');
+  assert.equal(body.twilioRequest.From, '+15555550720');
+  assert.equal(body.twilioRequest.Body, PAUL_CONFIRMATION);
+  assert.equal(JSON.stringify(body).includes('twilio-token'), false);
+  assert.equal(logs.length > 0, true);
+  const unconfigured = createSmsWebhookHandler({
+    store: null,
+    env,
+    clock: () => now,
+    sms: createSmsAdapter({ env, logger: { info() {}, error() {} } }),
+  });
+  const deniedUnconfigured = response();
+  await unconfigured(incoming('POST', '/api/video-review-sms', {
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: twilioForm(params),
+  }), deniedUnconfigured);
+  assert.equal(deniedUnconfigured.statusCode, 403);
+  const ephemeral = createSmsWebhookHandler({
+    store: null,
+    env,
+    clock: () => now,
+    sms: createSmsAdapter({ env, logger: { info() {}, error() {} }, fetchImpl: async () => { throw new Error('network'); } }),
+  });
+  const preview = response();
+  await ephemeral(incoming('POST', '/api/video-review-sms', {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'x-twilio-signature': twilioSignature(url, params),
+    },
+    body: twilioForm(params),
+  }), preview);
+  assert.equal(preview.statusCode, 200);
+  const previewBody = JSON.parse(preview.body);
+  assert.equal(previewBody.handled, 'mms_received');
+  assert.equal(previewBody.confirmation, PAUL_CONFIRMATION);
+  assert.equal(previewBody.ephemeralStore, true);
+  assert.equal(previewBody.dryRun, true);
+  assert.equal(previewBody.twilioRequest.To, '+15555550123');
+  assert.equal(previewBody.twilioRequest.From, '+15555550720');
+  assert.equal(previewBody.twilioRequest.Body, PAUL_CONFIRMATION);
+  const liveBlocked = createSmsWebhookHandler({
+    store: null,
+    env: twilioEnv({ SMS_DRY_RUN: 'false' }),
+    clock: () => now,
+    sms: createSmsAdapter({ env: twilioEnv({ SMS_DRY_RUN: 'false' }), logger: { info() {}, error() {} } }),
+  });
+  const blocked = response();
+  await liveBlocked(incoming('POST', '/api/video-review-sms', {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'x-twilio-signature': twilioSignature(url, params),
+    },
+    body: twilioForm(params),
+  }), blocked);
+  assert.equal(blocked.statusCode, 503);
+});
+
+test('Twilio signatures can use the request host when SATCOM_VIDEO_PUBLIC_URL is unset', async () => {
+  const store = createMemoryStore({ now: () => now });
+  const env = twilioEnv({ SATCOM_VIDEO_PUBLIC_URL: '' });
+  const sms = createSmsAdapter({ env, logger: { info() {}, error() {} } });
+  const params = {
+    From: '+15555550123',
+    To: '+15555550720',
+    Body: 'HELP',
+    MessageSid: 'SMcccccccccccccccccccccccccccccccc',
+    NumMedia: '0',
+  };
+  const url = 'https://preview.example.test/api/video-review-sms';
+  const headers = {
+    host: 'preview.example.test',
+    'x-forwarded-proto': 'https',
+    'x-twilio-signature': twilioSignature(url, params),
+  };
+  const result = await handleInboundSms({
+    store, sms, env, headers, now,
+    rawBody: twilioForm(params),
+  });
+  assert.equal(result.status, 200);
+  assert.equal(result.body.handled, 'help');
+  assert.equal(result.body.twilioRequest.Body, helpText());
+});
+
+test('Twilio STOP, START, and HELP update opt-out state and skip a second reply when Advanced Opt-Out is on', async () => {
+  const store = createMemoryStore({ now: () => now });
+  await store.addReviewer({ id: 'rev-1', phone_e164: '+15555550123', opted_in: true });
+  const env = twilioEnv();
+  const sms = recordingSms();
+  sms.name = 'twilio';
+  const help = await handleInboundSms({
+    store, sms, env, headers: {}, now,
+    rawBody: JSON.stringify({ provider: 'twilio', messageId: 'h1', from: '+15555550123', to: '+15555550720', body: 'HELP', media: [] }),
+  });
+  assert.equal(help.body.handled, 'help');
+  assert.equal(sms.sent.at(-1).body, helpText());
+  const stopped = await handleInboundSms({
+    store, sms, env, headers: {}, now,
+    rawBody: JSON.stringify({ provider: 'twilio', messageId: 'h2', from: '+15555550123', to: '+15555550720', body: 'STOPALL', media: [] }),
+  });
+  assert.equal(stopped.body.handled, 'stop');
+  assert.equal((await store.getSmsOptOut('+15555550123')).opted_out, true);
+  assert.equal((await store.getReviewerByPhone('+15555550123')).opted_in, false);
+  const before = sms.sent.length;
+  const skipped = await handleInboundSms({
+    store, sms, env: twilioEnv({ TWILIO_ADVANCED_OPT_OUT: 'true' }), headers: {}, now,
+    rawBody: JSON.stringify({ provider: 'twilio', messageId: 'h3', from: '+15555550123', to: '+15555550720', body: 'HELP', media: [] }),
+  });
+  assert.equal(skipped.body.handled, 'help');
+  assert.equal(skipped.body.skippedReply, true);
+  assert.equal(sms.sent.length, before);
+  const started = await handleInboundSms({
+    store, sms, env, headers: {}, now,
+    rawBody: JSON.stringify({ provider: 'twilio', messageId: 'h4', from: '+15555550123', to: '+15555550720', body: 'START', media: [] }),
+  });
+  assert.equal(started.body.handled, 'start');
+  assert.equal((await store.getSmsOptOut('+15555550123')).opted_out, false);
+});
+
+test('opted-out numbers do not receive MMS confirmation texts', async () => {
+  const store = createMemoryStore({ now: () => now });
+  await store.setSmsOptOut('+15555550123', true, now);
+  const sms = recordingSms();
+  const result = await handleInboundSms({
+    store, sms, env: twilioEnv(), headers: {}, now,
+    rawBody: JSON.stringify({
+      provider: 'twilio',
+      messageId: 'MMffffffffffffffffffffffffffffffff',
+      from: '+15555550123',
+      to: '+15555550720',
+      body: '',
+      media: [{ url: 'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Messages/MM3/Media/ME3', contentType: 'video/3gpp' }],
+    }),
+  });
+  assert.equal(result.body.handled, 'mms_received');
+  assert.equal(result.body.suppressed, true);
+  assert.equal(sms.sent.length, 0);
+  assert.equal((await store.getVideoById(result.body.id)).status, 'pending_review');
 });
