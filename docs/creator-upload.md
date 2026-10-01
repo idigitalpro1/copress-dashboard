@@ -12,7 +12,7 @@ Production format:
 https://satcom.conews.press/video/upload/<token>
 ```
 
-`<token>` is 32–128 URL-safe characters (`A–Z a–z 0–9 _ -`). Paul does not sign in. An invalid or revoked token shows “This link is not available” and nothing else.
+`<token>` is 32–128 URL-safe characters (`A–Z a–z 0–9 _ -`). Paul does not sign in. An invalid or revoked token shows “This link is not available” and nothing else. The HTML file is `video/creator-upload.html` so Vercel `cleanUrls` does not collide with `/video/upload/<token>`.
 
 ## Create or revoke a token
 

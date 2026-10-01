@@ -190,9 +190,10 @@ test('rewrites add the token path without changing redirects', () => {
     ['/data/video-feed.json', '/api/videos'],
     ['/', '/subscribe-villager/'],
   ]);
-  assert.ok(vercel.rewrites.some(r => r.source === '/video/upload/:token' && r.destination === '/video/upload.html'));
+  assert.ok(vercel.rewrites.some(r => r.source === '/video/upload/:token' && r.destination === '/video/creator-upload.html'));
+  assert.ok(vercel.rewrites.some(r => r.source === '/video/upload' && r.destination === '/video/creator-upload.html'));
   assert.ok(vercel.rewrites.some(r => r.source === '/video/studio' && r.destination === '/video/studio.html'));
-  const html = readFileSync(new URL('../video/upload.html', import.meta.url), 'utf8');
+  const html = readFileSync(new URL('../video/creator-upload.html', import.meta.url), 'utf8');
   assert.match(html, /Received — Patrick will review/);
   assert.match(html, /noindex/);
   assert.match(readFileSync(new URL('../video/upload.js', import.meta.url), 'utf8'), /signed\.upload_url/);
