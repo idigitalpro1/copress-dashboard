@@ -592,6 +592,44 @@ test('Twilio webhook accepts a valid signature and rejects unsigned or invalid o
     body: twilioForm(params),
   }), deniedUnconfigured);
   assert.equal(deniedUnconfigured.statusCode, 403);
+  const ephemeral = createSmsWebhookHandler({
+    store: null,
+    env,
+    clock: () => now,
+    sms: createSmsAdapter({ env, logger: { info() {}, error() {} }, fetchImpl: async () => { throw new Error('network'); } }),
+  });
+  const preview = response();
+  await ephemeral(incoming('POST', '/api/video-review-sms', {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'x-twilio-signature': twilioSignature(url, params),
+    },
+    body: twilioForm(params),
+  }), preview);
+  assert.equal(preview.statusCode, 200);
+  const previewBody = JSON.parse(preview.body);
+  assert.equal(previewBody.handled, 'mms_received');
+  assert.equal(previewBody.confirmation, PAUL_CONFIRMATION);
+  assert.equal(previewBody.ephemeralStore, true);
+  assert.equal(previewBody.dryRun, true);
+  assert.equal(previewBody.twilioRequest.To, '+15555550123');
+  assert.equal(previewBody.twilioRequest.From, '+15555550720');
+  assert.equal(previewBody.twilioRequest.Body, PAUL_CONFIRMATION);
+  const liveBlocked = createSmsWebhookHandler({
+    store: null,
+    env: twilioEnv({ SMS_DRY_RUN: 'false' }),
+    clock: () => now,
+    sms: createSmsAdapter({ env: twilioEnv({ SMS_DRY_RUN: 'false' }), logger: { info() {}, error() {} } }),
+  });
+  const blocked = response();
+  await liveBlocked(incoming('POST', '/api/video-review-sms', {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded',
+      'x-twilio-signature': twilioSignature(url, params),
+    },
+    body: twilioForm(params),
+  }), blocked);
+  assert.equal(blocked.statusCode, 503);
 });
 
 test('Twilio signatures can use the request host when SATCOM_VIDEO_PUBLIC_URL is unset', async () => {

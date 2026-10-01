@@ -97,6 +97,8 @@ If Twilio Advanced Opt-Out is enabled on the Messaging Service or number, set `T
 
 The Inkbox adapter remains in source (`SATCOM_VIDEO_SMS_PROVIDER=inkbox`). Inkbox has no SATCOM phone number, so Twilio is the working path.
 
+On a dry-run preview without Supabase, a valid signed webhook is handled in an ephemeral in-memory store for that request only. The JSON response includes `ephemeralStore: true` plus the redacted Twilio request. Nothing is persisted and Twilio is not called. Set `SMS_DRY_RUN=false` only after Supabase and live send are authorized.
+
 For a real live camera broadcast, send the camera/encoder to the chosen streaming provider. Add the provider's HLS playback URL or YouTube live video ID with `kind: "live"`. A connected catalog should refresh `live_confirmed_at` with the current ISO timestamp only while its provider confirms the broadcast is active. The LIVE badge expires after two minutes without this heartbeat; a persistent channel URL alone is labeled status unconfirmed. Ingest keys must stay with the encoder/provider, never in this feed.
 
 ## API contract
