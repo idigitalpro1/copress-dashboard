@@ -374,10 +374,12 @@ test('configured Supabase catalog publishes only published rows and falls back t
   });
   assert.equal(result.source, 'catalog+satcom-video-db');
   assert.match(request, /status=eq.published/);
-  assert.equal(result.catalog.items[0].status, 'published');
+  assert.equal(result.catalog.items.find(item => item.id === 'field-report')?.status, 'published');
+  assert.ok(result.catalog.items.some(item => item.id === 'paul-hill-rodeo-20260720-01'));
   const fallback = await readCatalog({ env: {} });
   assert.equal(fallback.source, 'catalog');
-  assert.deepEqual(fallback.catalog.items, []);
+  assert.ok(fallback.catalog.items.some(item => item.id === 'paul-hill-rodeo-20260720-01'));
+  assert.ok(!fallback.catalog.items.some(item => item.id === 'field-report'));
 });
 
 test('dashboard publish also notifies reviewers', async () => {
