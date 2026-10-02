@@ -1446,6 +1446,8 @@ body::before {
 }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: #1e2d42; }
 .dot.live { background: #27ae60; box-shadow: 0 0 5px rgba(39,174,96,.5); animation: led-pulse 2.4s ease-in-out infinite; }
+.dot.stored { background: #c8a84b; }
+.dot.unavailable { background: #e67e22; }
 .status-right {
   font-family: 'DM Mono', monospace; font-size: 10px;
   color: rgba(255,255,255,.2);
@@ -2591,7 +2593,7 @@ body.satcom-gated #satcom-entry-gate {
             <div class="card-stats">
               <div class="card-stat">
                 <span class="stat-label">Subscribers</span>
-                <span class="stat-value highlight" id="live-subscribers">847</span>
+                <span class="stat-value highlight" id="live-subscribers" title="Owner: Operations lead · not checked">—</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Last Sent</span>
@@ -2867,7 +2869,7 @@ body.satcom-gated #satcom-entry-gate {
         <div class="module-card" data-target="accounting" style="--card-color:var(--c-accounting);--card-glow:rgba(127,140,141,.05);">
           <div class="card-dept">
             <span class="card-dept-name">Accounting</span>
-            <span class="card-led ok"></span>
+            <span class="card-led" id="accounting-led"></span>
           </div>
           <div class="card-body">
             <div class="card-icon-row">
@@ -2880,7 +2882,7 @@ body.satcom-gated #satcom-entry-gate {
             <div class="card-stats">
               <div class="card-stat">
                 <span class="stat-label">Invoice App</span>
-                <span class="stat-value ok" style="font-size:11px;">Live</span>
+                <span class="stat-value" id="invoice-app-status" style="font-size:11px;">Unchecked</span>
               </div>
               <div class="card-stat">
                 <span class="stat-label">Assistant</span>
@@ -2892,7 +2894,7 @@ body.satcom-gated #satcom-entry-gate {
               </div>
               <div class="card-stat">
                 <span class="stat-label">QBO</span>
-                <span class="stat-value" id="invoice-manager-status" style="font-size:11px;">Sync</span>
+                <span class="stat-value" id="invoice-manager-status" style="font-size:11px;">Unchecked</span>
               </div>
             </div>
             <div class="card-rule"></div>
@@ -3537,7 +3539,7 @@ body.satcom-gated #satcom-entry-gate {
                 <h2>Campaign kit generator.</h2>
                 <p>Turn one sales brief into ad copy, newsletter copy, social captions, and a print-ready handoff.</p>
               </div>
-              <div class="module-status"><span class="pill">Subscribers <strong id="marketing-module-subs">847</strong></span><span class="pill">Sendy <strong id="marketing-module-sendy">Check</strong></span></div>
+              <div class="module-status"><span class="pill">Owner <strong id="marketing-operating-owner">Operations lead</strong></span><span class="pill">Subscribers <strong id="marketing-module-subs">—</strong></span><span class="pill">Sendy <strong id="marketing-module-sendy">Unchecked</strong></span><span class="pill">Last check <strong id="sendy-checked-at">—</strong></span></div>
             </div>
             <div class="module-grid-2">
               <div class="module-panel">
@@ -3649,10 +3651,12 @@ body.satcom-gated #satcom-entry-gate {
                 <p>Launch the upgraded Weekly Register-Call billing app for sequential invoice numbers, custom ad sizes, Publisher's Affidavits, QuickBooks sync, and the billing assistant.</p>
               </div>
               <div class="module-status">
-                <span class="pill">App <strong>Live</strong></span>
+                <span class="pill">Owner <strong>Operations lead</strong></span>
+                <span class="pill">App <strong id="invoice-app-pill">Unchecked</strong></span>
                 <span class="pill">Custom <strong>Manual</strong></span>
-                <span class="pill">QBO <strong>Status</strong></span>
-                <span class="pill">Stripe <strong id="accounting-module-stripe">Check</strong></span>
+                <span class="pill">QBO <strong id="invoice-manager-pill">Unchecked</strong></span>
+                <span class="pill">Stripe <strong id="accounting-module-stripe">Unchecked</strong></span>
+                <span class="pill">Last check <strong id="stripe-checked-at">—</strong></span>
               </div>
             </div>
             <div class="module-grid-2">
@@ -4358,6 +4362,7 @@ body.satcom-gated #satcom-entry-gate {
 <!-- ── Toast Container ─────────────────────────────────────────────── -->
 <div id="toast-container"></div>
 
+<script src="/operating-status.js"></script>
 <script>
 // ── Date ───────────────────────────────────────────────────────────
 function updateDate() {
@@ -5023,6 +5028,33 @@ function toggleShow(id, btn) {
 
 // ── API Keys ───────────────────────────────────────────────────────
 const KEY_PREFIX = 'copress_api_';
+let sendyCheck = null;
+let supabaseCheck = null;
+
+function operatingApi() {
+  return window.SATCOM_OPERATING || {
+    OWNER: 'Operations lead',
+    integrationLabel: () => 'Unchecked',
+    dotClass: () => '',
+    subscriberText: () => '—',
+    formatCheckedAt: () => '—',
+    dotTitle: () => 'Not checked',
+  };
+}
+
+function hasStoredKey(name) {
+  const names = Array.isArray(name) ? name : [name];
+  return names.some(item => !!localStorage.getItem(KEY_PREFIX + item));
+}
+
+function applyStatusDot(id, input) {
+  const dot = document.getElementById(id);
+  if (!dot) return;
+  const state = operatingApi().dotClass(input);
+  dot.classList.remove('live', 'stored', 'unavailable');
+  if (state) dot.classList.add(state);
+  dot.title = operatingApi().dotTitle(state);
+}
 
 function saveKeys() {
   document.querySelectorAll('.api-field input').forEach(input => {
@@ -5044,21 +5076,10 @@ function loadKeys() {
 }
 
 function updateStatusDots() {
-  const checks = {
-    'dot-gemini':   [KEY_PREFIX + 'google_agent_api_key', KEY_PREFIX + 'gemini_key'],
-    'dot-supabase': KEY_PREFIX + 'supabase_anon',
-    'dot-sendy':    KEY_PREFIX + 'sendy_key',
-    'dot-stripe':   KEY_PREFIX + 'stripe_secret',
-  };
-  Object.entries(checks).forEach(([dotId, key]) => {
-    const dot = document.getElementById(dotId);
-    const hasValue = Array.isArray(key)
-      ? key.some(k => !!localStorage.getItem(k))
-      : !!localStorage.getItem(key);
-    if (dot) dot.classList.toggle('live', hasValue);
-  });
-  const invoiceManagerEl = document.getElementById('invoice-manager-status');
-  if (invoiceManagerEl) invoiceManagerEl.textContent = 'Live';
+  applyStatusDot('dot-gemini', { stored: hasStoredKey(['google_agent_api_key', 'gemini_key']) });
+  applyStatusDot('dot-supabase', { stored: hasStoredKey('supabase_anon'), check: supabaseCheck });
+  applyStatusDot('dot-sendy', { stored: hasStoredKey('sendy_key'), check: sendyCheck });
+  applyStatusDot('dot-stripe', { stored: hasStoredKey('stripe_secret') });
 }
 
 function readVaultValue(...names) {
@@ -5115,7 +5136,11 @@ async function loadSendySubscriberCount() {
   const uniqueListIds = [...new Set(listIds)];
 
   if (!sendyUrl || !apiKey || uniqueListIds.length === 0) {
+    sendyCheck = null;
+    setText('live-subscribers', '—');
     setLed('marketing-led', apiKey ? 'warn' : '');
+    refreshModuleStatus();
+    updateStatusDots();
     return;
   }
 
@@ -5134,22 +5159,29 @@ async function loadSendySubscriberCount() {
       if (!Number.isFinite(count)) throw new Error('Sendy count was not numeric');
       total += count;
     }
-    setText('live-subscribers', formatNumber(total));
+    sendyCheck = { ok: true, checkedAt: new Date().toISOString(), count: total };
+    setText('live-subscribers', operatingApi().subscriberText(total));
     setLed('marketing-led', 'ok');
   } catch (err) {
     console.warn('Sendy count unavailable', err);
+    sendyCheck = { ok: false, checkedAt: new Date().toISOString() };
+    setText('live-subscribers', '—');
     setLed('marketing-led', 'warn');
   }
+  refreshModuleStatus();
+  updateStatusDots();
 }
 
 async function loadSupabaseArticleCounts() {
   const supabaseUrl = readVaultValue('supabase_url', 'SUPABASE_URL').replace(/\/+$/, '');
   const anonKey = readVaultValue('supabase_anon', 'SUPABASE_ANON_KEY');
   if (!supabaseUrl || !anonKey) {
-    setLed('editorial-led', 'warn');
+    supabaseCheck = null;
+    setLed('editorial-led', anonKey ? 'warn' : '');
     setText('editorial-module-source', 'Local');
     editorialRemoteStories = [];
     renderEditorialStories();
+    updateStatusDots();
     return;
   }
 
@@ -5182,14 +5214,17 @@ async function loadSupabaseArticleCounts() {
     editorialRemoteStories = posts.slice(0, 12).map(normalizeSupabaseStory);
     setText('editorial-module-source', 'Supabase');
     renderEditorialStories();
+    supabaseCheck = { ok: true, checkedAt: new Date().toISOString() };
     setLed('editorial-led', 'ok');
   } catch (err) {
     console.warn('Supabase articles unavailable', err);
+    supabaseCheck = { ok: false, checkedAt: new Date().toISOString() };
     editorialRemoteStories = [];
     setText('editorial-module-source', 'Local');
     renderEditorialStories();
     setLed('editorial-led', 'warn');
   }
+  updateStatusDots();
 }
 
 function loadLiveDashboardData() {
@@ -6254,9 +6289,29 @@ document.getElementById('stationery-template-file')?.addEventListener('change', 
 });
 
 function refreshModuleStatus() {
-  setText('marketing-module-subs', document.getElementById('live-subscribers')?.textContent || '—');
-  setText('marketing-module-sendy', localStorage.getItem(KEY_PREFIX + 'sendy_key') ? 'Ready' : 'Missing');
-  setText('accounting-module-stripe', localStorage.getItem(KEY_PREFIX + 'stripe_secret') ? 'Ready' : 'Missing');
+  const operating = operatingApi();
+  const subscribers = sendyCheck?.ok ? operating.subscriberText(sendyCheck.count) : '—';
+  setText('marketing-module-subs', subscribers);
+  setText('live-subscribers', subscribers);
+  const subscribersEl = document.getElementById('live-subscribers');
+  if (subscribersEl) {
+    const checked = operating.formatCheckedAt(sendyCheck?.checkedAt);
+    subscribersEl.title = `Owner: ${operating.OWNER} · ${sendyCheck ? `checked ${checked}` : 'not checked'}`;
+  }
+  setText('marketing-operating-owner', operating.OWNER);
+  setText('marketing-module-sendy', operating.integrationLabel({
+    stored: hasStoredKey('sendy_key'),
+    check: sendyCheck,
+  }));
+  setText('sendy-checked-at', operating.formatCheckedAt(sendyCheck?.checkedAt));
+  setText('accounting-module-stripe', operating.integrationLabel({
+    stored: hasStoredKey('stripe_secret'),
+  }));
+  setText('stripe-checked-at', '—');
+  setText('invoice-manager-status', 'Unchecked');
+  setText('invoice-manager-pill', 'Unchecked');
+  setText('invoice-app-status', 'Unchecked');
+  setText('invoice-app-pill', 'Unchecked');
 }
 
 // ── Hermes Crew Console ───────────────────────────────────────────

@@ -51,7 +51,7 @@ For local development, `npm run dev` serves `http://127.0.0.1:4321`; run `npm ru
 
 Keep the existing Vercel project and aliases. Deploy a preview, verify the exact artifact, record rollback, and promote only within the user's release authorization. Check the subscriber alias after release. Store exact commits, deployment IDs and verification results in the private canonical operations release record.
 
-Next upgrades should make existing operating cards explicit about unavailable data and last successful provider checks. The legacy root dashboard includes other browser-local/sample behavior; this release does not claim that all of it is live. `conews.press/codex` is a separate origin/path and remains unresolved by this release. The shared-spine and reference-publication gates still precede town expansion.
+Marketing and accounting operating cards no longer treat a browser-stored key or the old 847 subscriber placeholder as ready. Sendy and Supabase turn green only after a provider response; Stripe and the invoice app stay unchecked until a real check exists. Owner is Operations lead, and the last check time is shown. Other legacy cards can still contain sample copy. The legacy root dashboard includes other browser-local/sample behavior; this release does not claim that all of it is live. `conews.press/codex` is a separate origin/path and remains unresolved by this release. The shared-spine and reference-publication gates still precede town expansion.
 
 Official implementation references: [MCP SDK server guide](https://ts.sdk.modelcontextprotocol.io/server) and [Streamable HTTP transport specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports).
 
