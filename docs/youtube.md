@@ -14,7 +14,7 @@ Set these on the Vercel Preview project yourself. Do not paste secrets into chat
 | `YOUTUBE_CLIENT_SECRET` | yes | OAuth 2.0 Web client secret (**server only**) |
 | `YOUTUBE_TOKEN_ENC_KEY` | yes | 32-byte AES-256-GCM key as **64 hex characters**. Encrypts the refresh token at rest |
 | `YOUTUBE_REDIRECT_URI` | recommended | Must match the Google Cloud authorized redirect URI exactly. Example: `https://<preview-host>/api/studio/youtube-callback` |
-| `YOUTUBE_DAILY_UPLOAD_CAP` | optional | Default **6** (YouTube default quota ≈ 6 uploads/day at 1,600 units each) |
+| `YOUTUBE_DAILY_UPLOAD_CAP` | optional | Default **6**. This is an **editorial cap we chose**, not a Google limit. Google's default `videos.insert` bucket is 100 calls/day (see quota section). |
 | `YOUTUBE_DEFAULT_PRIVACY` | optional | `unlisted` (default) or `private`. Never defaults to `public` |
 
 Also required for the satcom.conews.press/video target: existing Cloudinary studio vars. Optional durable store: `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` after you apply the SQL files in `supabase/migrations/` to a **Preview** project (not production).
@@ -27,7 +27,7 @@ If none of the YouTube trio is set, the Studio still builds. The review gate ren
 
 1. Open [Google Cloud Console](https://console.cloud.google.com/) in the GCP project you want for SATCOM YouTube (keep it off the Gemini video project if you want quota isolation).
 2. Enable **YouTube Data API v3** (APIs & Services → Library).
-3. Note the project number; you will need it for the quota form.
+3. Note the project number; you will need it only if you later file a quota-extension request (not required for the editorial 6/day cadence).
 
 ### 2. OAuth consent screen
 
@@ -64,13 +64,25 @@ Preview URLs change per deployment. Prefer a stable Preview alias, or update the
 
 Use the Google account that already has permission on the destination YouTube channel. Brand accounts: pick that channel on the Google account picker.
 
-### 5. File the YouTube API quota increase
+### 5. YouTube Data API quota (updated 2026-09-15)
 
-Default YouTube Data API quota is **10,000 units/day**. `videos.insert` costs **1,600 units**, so the Studio caps uploads at **6/day** and surfaces **queued until tomorrow** when the cap is hit.
+Google updated the [YouTube Data API quota calculator](https://developers.google.com/youtube/v3/determine_quota_cost) on **2026-09-15**. The old figure of **1,600 units per `videos.insert`** (which made the default 10,000-unit quota fit only ~6 uploads/day) is **obsolete**.
 
-When you need more, use [YouTube Data API quota extension](https://support.google.com/youtube/contact/yt_api_form) (or APIs & Services → YouTube Data API v3 → Quotas → request increase). Suggested justification (edit names/URLs before sending):
+Projects that enable the YouTube Data API now have **three separate daily buckets** (reset at midnight Pacific Time):
 
-> Colorado News Press / SATCOM (satcom.conews.press) publishes short local news clips from reporter Paul Hill for community newspapers in the Clear Creek County, Colorado area (The Villager, Weekly Register-Call). We upload only editor-approved finished reports — typically a few short MP4s per day, not a user-generated platform. Each upload is a manual Studio approval (never a bot or cron). We request an increase from 10,000 to 50,000 units/day so we can publish roughly 20 reviewed clips/day during heavy local news weeks (elections, wildfire, high school sports) without hitting the default ~6 uploads/day ceiling. We set `status.containsSyntheticMedia=true` on any Gemini Omni / AI-generated cut and keep default privacy unlisted until an editor flips it. No live streaming from this client. Project: [GCP project id]. Redirect: [preview host]/api/studio/youtube-callback.
+| Bucket | Default daily limit | Cost | What the Studio uses it for |
+| --- | --- | --- | --- |
+| `videos.insert` | **100 calls** | 1 unit per call | Resumable uploads |
+| `search.list` | **100 calls** | 1 unit per call | Not used by the Studio |
+| All other endpoints | **10,000 units** | per method (`videos.update` 50, `videos.delete` 50, `thumbnails.set` 50, `playlistItems.insert` 50, `channels.list` 1, …) | Privacy updates, deletes, channel summary on connect |
+
+`YOUTUBE_DAILY_UPLOAD_CAP` defaults to **6**. That is an **editorial cap we chose**, not a Google limit. Google's default `videos.insert` bucket already allows 100 uploads/day. The Studio queues further uploads until tomorrow when **our** cap is hit.
+
+A quota-extension request is **not required** to publish more than ~6 clips/day under Google's default allocation. File an increase only if you need more than 100 `videos.insert` calls/day or more than 10,000 units/day for other methods.
+
+When you do need more, use [YouTube Data API quota extension](https://support.google.com/youtube/contact/yt_api_form) (or APIs & Services → YouTube Data API v3 → Quotas → request increase). Suggested justification (edit names/URLs before sending):
+
+> Colorado News Press / SATCOM (satcom.conews.press) publishes short local news clips from reporter Paul Hill for community newspapers in the Clear Creek County, Colorado area (The Villager, Weekly Register-Call). We upload only editor-approved finished reports — typically a few short MP4s per day, not a user-generated platform. Each upload is a manual Studio approval (never a bot or cron). We request an increase of the videos.insert daily bucket so we can publish roughly 20 reviewed clips/day during heavy local news weeks (elections, wildfire, high school sports). The 10,000-unit pool for other endpoints is enough for our privacy updates and deletes. We set `status.containsSyntheticMedia=true` on any Gemini Omni / AI-generated cut and keep default privacy unlisted until an editor flips it. No live streaming from this client. Project: [GCP project id]. Redirect: [preview host]/api/studio/youtube-callback.
 
 Keep the request factual. Do not claim production scale you do not have.
 

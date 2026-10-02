@@ -20,6 +20,7 @@ comment on table public.youtube_oauth_tokens is
 create table if not exists public.youtube_upload_quota (
   day date primary key,
   upload_count integer not null default 0,
+  units_used integer not null default 0,
   cap integer,
   updated_at timestamptz not null default now()
 );
@@ -27,4 +28,4 @@ create table if not exists public.youtube_upload_quota (
 alter table public.youtube_upload_quota enable row level security;
 
 comment on table public.youtube_upload_quota is
-  'UTC daily YouTube upload count for the Studio cap (default 6).';
+  'UTC daily Studio YouTube accounting. upload_count is videos.insert (own Google bucket, 100/day default, 1 unit/call as of 2026-09-15). units_used is the 10,000-unit pool for all other endpoints. YOUTUBE_DAILY_UPLOAD_CAP default 6 is an editorial cap, not a Google limit. Source: https://developers.google.com/youtube/v3/determine_quota_cost';

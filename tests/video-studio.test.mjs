@@ -113,6 +113,15 @@ test('private generated sources under satcom/generated/ can be opened as studio 
   assert.doesNotMatch(res.body, /cloud-secret-value/);
 });
 
+test('private creator uploads under satcom/paul-hill/incoming can be opened as studio clips', async () => {
+  const handler = handlerWith({ VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD });
+  const cookie = await login(handler, '198.51.100.18');
+  const res = await call(handler, { cookie, body: { op: 'render', source: { public_id: 'satcom/paul-hill/incoming/idaho-morning', type: 'private', duration: 12 }, edit: { start: 0, end: 8, formats: ['9:16'] } } });
+  assert.equal(res.statusCode, 200, res.body);
+  assert.match(res.json.outputs[0].mp4_url, /\/video\/private\//);
+  assert.doesNotMatch(res.body, /cloud-secret-value/);
+});
+
 test('invalid inputs fail closed', async () => {
   const handler = handlerWith({ VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD });
   const cookie = await login(handler, '198.51.100.5');

@@ -36,6 +36,7 @@ The same paths work on the other Production aliases (`copress-dashboard.vercel.a
 | `YOUTUBE_REDIRECT_URI` | set (same branch) | set (`https://satcom.conews.press/api/studio/youtube-callback`) | Must exactly match the Google redirect URI. |
 | `YOUTUBE_DAILY_UPLOAD_CAP`, `YOUTUBE_DEFAULT_PRIVACY` | set (same branch) | set (6, `unlisted`) | Optional. |
 | `SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | **missing** | **missing** | Optional durable store. Apply the migrations first. |
+| `CREATOR_UPLOAD_TOKENS` | unset | unset | Optional. Empty means no creator upload links. See [creator-upload.md](creator-upload.md). |
 
 If `SUPABASE_URL` is set before the migrations are applied, Studio boot stays up and reports `store.reason: migrations_not_applied` (in-memory + cookie fallback). Do not apply migrations from this repo.
 
@@ -47,7 +48,7 @@ If `SUPABASE_URL` is set before the migrations are applied, Studio boot stays up
   - The reviewer name and date are filled in.
   - The rights/consent box is ticked (people on screen, music, Paul Hill's OK).
 - Omni or AI-generated clips always send YouTube `containsSyntheticMedia=true` plus a visible AI disclosure line. The reviewer can't turn this off.
-- YouTube uploads default to `unlisted` (or `private`) and never `public`. The daily cap defaults to 6; anything past the cap shows "queued until tomorrow".
+- YouTube uploads default to `unlisted` (or `private`) and never `public`. The daily **editorial** cap defaults to 6 (our choice, not a Google limit); anything past the cap shows "queued until tomorrow". Google's default `videos.insert` bucket is 100 calls/day as of the [quota calculator](https://developers.google.com/youtube/v3/determine_quota_cost) update on 2026-09-15.
 - Only a failed target is retried; a target that succeeded never posts twice. Unpublishing sets YouTube to private or deletes the video, and removes the entry from the satcom overlay.
 - The satcom target creates a public Cloudinary copy only at approval time and writes `satcom-studio/published/catalog.json`, which is merged into `/api/videos`. Drafts stay private.
 
@@ -63,7 +64,7 @@ Full checklist: [youtube.md](youtube.md).
    - Production: `https://satcom.conews.press/api/studio/youtube-callback`
 3. Set the client ID and secret (plus the other vars above) in Vercel, starting with Preview. Set `YOUTUBE_REDIRECT_URI` per environment.
 4. Connect the channel once: sign in at `/video/studio`, then go to Review & publish → Connect YouTube channel.
-5. File a quota increase. The default 10,000 units/day covers about 6 uploads. Suggested wording is in youtube.md.
+5. A quota increase is **not required** for the editorial 6/day cap. Google's default (quota calculator, **2026-09-15**) is 100 `videos.insert` calls/day in their own bucket, plus 10,000 units/day for other endpoints. The old 1,600 units/upload figure is obsolete. See [youtube.md](youtube.md) if you later need more than 100 uploads/day.
 
 ## Unapplied Supabase migrations (repo only)
 
@@ -73,6 +74,8 @@ Full checklist: [youtube.md](youtube.md).
 - `supabase/migrations/20260929200100_youtube_oauth_and_quota.sql`
 - `supabase/migrations/20260929200200_video_publish_reviews_and_audit.sql`
 - `supabase/migrations/20260929200300_video_feed_published.sql`
+- `supabase/migrations/20261001030000_youtube_quota_units_pool.sql`
+- `supabase/migrations/20261001080000_creator_upload_tokens.sql`
 
 Apply these to a Preview project first. Without them, job, quota and token state is kept in per-instance memory.
 

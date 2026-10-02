@@ -304,6 +304,13 @@ test('YouTube daily cap queues until tomorrow', async () => {
   assert.equal(youtubeUploads.length, 1);
   const status = await call(handler, { method: 'GET', cookie });
   assert.match(status.json.publish.quota.queued_until || '', /2026-09-30/);
+  assert.equal(status.json.publish.quota.editorial, true);
+  assert.equal(status.json.publish.quota.editorial_cap, 1);
+  assert.equal(status.json.publish.quota.insert.limit, 100);
+  assert.equal(status.json.publish.quota.units.limit, 10_000);
+  assert.equal(status.json.publish.quota.doc.updated, '2026-09-15');
+  assert.equal((await publishStore.getQuota('2026-09-29')).upload_count, 1);
+  assert.equal((await publishStore.getQuota('2026-09-29')).units_used, 0);
 });
 
 test('unpublish sets YouTube private and removes the satcom overlay item', async () => {
@@ -330,6 +337,9 @@ test('unpublish sets YouTube private and removes the satcom overlay item', async
   assert.equal(sat.json.job.status, 'unpublished');
   const del = await call(handler, { cookie, body: { op: 'publish-unpublish', ...reviewed, target: 'youtube', mode: 'delete', version } });
   assert.equal(del.statusCode, 200, del.body);
+  const quota = await publishStore.getQuota('2026-09-29');
+  assert.equal(quota.upload_count, 1, 'videos.insert stays on the upload bucket');
+  assert.equal(quota.units_used, 100, 'videos.update + videos.delete charge the 10,000-unit pool');
 });
 
 test('OAuth start lists the required scopes and callback stores an encrypted refresh token', async () => {
@@ -358,6 +368,8 @@ test('OAuth start lists the required scopes and callback stores an encrypted ref
   assert.ok(stored.encrypted_payload);
   assert.doesNotMatch(stored.encrypted_payload, /1\/\/refresh|ya29/);
   assert.equal(stored.channel_title, 'Colorado News Press');
+  assert.equal((await publishStore.getQuota('2026-09-29')).units_used, 1, 'channels.list charges the units pool');
+  assert.equal((await publishStore.getQuota('2026-09-29')).upload_count, 0);
 });
 
 test('published overlay merges into the public catalog without exposing drafts', async () => {
@@ -585,6 +597,31 @@ test('Studio boot drains YouTube jobs queued by the daily cap', async () => {
   assert.equal(status.statusCode, 200, status.body);
   assert.equal(youtubeUploads.length, 2);
   assert.ok((status.json.publish.drained || []).some(j => j.target === 'youtube' && j.status === 'succeeded'));
+});
+
+test('exhausted units pool blocks YouTube privacy updates without consuming an upload', async () => {
+  const youtubeUploads = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const handler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const cookie = await login(handler, '203.0.113.95');
+  const first = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(first.statusCode, 200, first.body);
+  await publishStore.incrementUnits('2026-09-29', 10_000);
+  const blocked = await call(handler, {
+    cookie,
+    body: { op: 'publish-unpublish', ...reviewed, target: 'youtube', mode: 'private', version: first.json.version },
+  });
+  assert.equal(blocked.statusCode, 429, blocked.body);
+  assert.match(blocked.json.error, /units pool is exhausted/i);
+  assert.equal(youtubeUploads.filter(u => u.update).length, 0);
+  assert.equal((await publishStore.getQuota('2026-09-29')).upload_count, 1);
 });
 
 test('satcom catalog writes keep earlier clips when the CDN overlay 404s', async () => {
