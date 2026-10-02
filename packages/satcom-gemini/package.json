@@ -1,0 +1,31 @@
+{
+  "name": "@satcom/gemini",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Vercel/Studio Gemini copy client for SATCOM. Isolated keys, usage log, budgets and circuit breaker. Video generation is owned by Patrick's server.",
+  "exports": {
+    ".": "./index.js",
+    "./registry": "./registry/models.json"
+  },
+  "files": [
+    "index.js",
+    "version.js",
+    "keys.js",
+    "registry.js",
+    "redact.js",
+    "http.js",
+    "limits.js",
+    "cost.js",
+    "store.js",
+    "generate.js",
+    "client.js",
+    "registry/models.json",
+    "VERSION",
+    "CHANGELOG.md",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22"
+  }
+}

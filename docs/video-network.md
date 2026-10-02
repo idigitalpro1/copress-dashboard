@@ -28,8 +28,8 @@ Cards rotate every eight seconds while idle. Rotation pauses during playback, ho
 
 1. Paul uploads originals to the existing editorial Drive handoff. Collaborators review/edit there.
 2. Publish the approved final to your existing video host and obtain a public HTTPS MP4/HLS playback URL or an embeddable YouTube video ID. Drive folder/upload links are not playback URLs.
-3. Prefer the login-protected SATCOM form at `/video/submit` (2026-09-27 exception). That creates a `pending_review` row, texts opted-in reviewers, and keeps `/api/videos` read-only. Reviewers can approve by SMS (`YES K7Q2`) or on `/video/review` after opening `/video/review-continue`. Until Supabase is configured, a reviewed change to `data/video-feed.json` remains the catalog fallback.
-4. Verify `/api/videos?creator=paul-hill` and the player. Each embedded player refreshes every 30 seconds. A Git-based catalog update requires deployment first; a connected or database catalog update does not.
+3. Two preview publication paths now exist. Video Studio (`/video/studio`) is on `main` and uses the Review & publish gate plus a Cloudinary overlay. This branch adds SMS/magic-link review at `/video/submit` and `/video/review` (2026-09-27 exception). The publisher has not chosen one exclusive gate. `/api/videos` stays read-only and, when configured, merges Git/connected/Google feed + Studio overlay + SMS-approved `satcom_video` rows.
+4. Verify `/api/videos?creator=paul-hill` and the player. Each embedded player refreshes every 30 seconds. A Git-based catalog update requires deployment first; a connected, overlay, or database catalog update does not.
 
 Keep originals, consent records, internal notes, contact details and private links outside this public repository. Never store tokens or unpublished confidential records in the catalog: repository history remains visible even when an item is not returned by the API. The raw catalog HTTP path redirects to the filtered API before static-file routing.
 
@@ -58,6 +58,8 @@ An example entry is shown below; these example URLs must be replaced. No sample 
 
 Use `publications: ["network"]` for all publications, or explicit publication slugs for selective distribution. Town filtering requires a matching town slug. For HLS set `playback.type` to `hls`; the provider must allow cross-origin access to playlists, segments and keys. Caption files and caption-enabled MP4s must also allow cross-origin access. For YouTube use `{"type":"youtube","video_id":"YOUR_11_CHAR_ID"}` with a real 11-character ID; enable embedding at the provider.
 
+Operators can prepare branded social cuts, captions, thumbnails and draft entries in the password-protected [Video Studio](video-studio.md) (`/video/studio`, disabled unless configured). Studio drafts never appear in the public feed until an editor passes the Review & publish gate (or a reviewed Git catalog change). Approved clips get a public Cloudinary delivery only at publish time; `/api/videos` merges that overlay with this Git catalog. YouTube is a separate target. See [youtube.md](youtube.md).
+
 ## Connect an updating catalog
 
 Configure server environment variables on the existing SATCOM project. This repository is public: never commit secrets, reviewer phone numbers, or personal data.
@@ -82,7 +84,7 @@ Configure server environment variables on the existing SATCOM project. This repo
 | `INKBOX_API_BASE_URL` | Optional, default `https://inkbox.ai/api/v1` |
 | `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_FROM_NUMBER` | Twilio fallback adapter |
 
-These values are never accepted from a browser query or returned to visitors. When the Supabase pair is set, published `satcom_video.videos` rows feed `/api/videos`. If they are unset, `VIDEO_FEED_URL` is used when present; otherwise the reviewed repository catalog is the fallback. No public write API is created. The 2026-09-27 SATCOM review page is a scoped exception to the one-admin rule, not a second editorial admin.
+These values are never accepted from a browser query or returned to visitors. The public feed still starts from the Git catalog, `VIDEO_FEED_URL` / Google Video Ed, and the Studio published overlay. When the Supabase pair is set, published `satcom_video.videos` rows are merged on top (same id wins). If they are unset, those SMS-approved rows are simply absent. No public write API is created. The 2026-09-27 SATCOM review page is a scoped exception to the one-admin rule, not a second editorial admin. Which gate is canonical when Studio and SMS are both live is still a publisher decision.
 
 Apply `supabase/migrations/20260927120000_satcom_video.sql` manually to the chosen project. Do not insert reviewer phones in git. After a reviewer row exists, that person texts `START` to the SATCOM video number to opt in, `STOP` to opt out, and `HELP` for instructions. Point the Inkbox `text.received` subscription (and optional Twilio webhook) at `/api/video-review-sms`.
 

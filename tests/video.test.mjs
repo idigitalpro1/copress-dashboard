@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { publicCatalog, feedQuery, readCatalog } from '../lib/video-feed.js';
+import { publicCatalog, feedQuery, readCatalog, googleVideoCatalog } from '../lib/video-feed.js';
 import { createVideoHandler } from '../api/videos.js';
 
 const now = Date.parse('2026-09-27T02:00:00Z');
@@ -10,6 +10,21 @@ const clip = overrides => ({
   published_at: '2026-09-26T18:00:00Z', playback: { type: 'mp4', url: 'https://media.example.org/report.mp4' }, ...overrides,
 });
 const catalog = items => ({ version: 1, items });
+const googleClip = overrides => ({id:'field-report',title:'Approved highlight',clip_url:'https://storage.googleapis.com/5280-menu-video-pipeline-bucket/clips/field-report.mp4',created_at:'2026-09-26T18:00:00Z',...overrides});
+test('Google approved feed preserves known credits and strips private fields', () => {
+  const result=googleVideoCatalog({items:[googleClip({drive_id:'private',notes:'secret'})]},catalog([clip({})]));
+  const videos=publicCatalog(result,now);
+  assert.equal(videos[0].creator,'paul-hill');
+  assert.equal(videos[0].credit,'Paul Hill');
+  assert.equal(videos[0].playback.url,googleClip().clip_url);
+  assert.doesNotMatch(JSON.stringify(videos),/private|secret|drive_id/);
+  assert.deepEqual(googleVideoCatalog({items:[]}).items,[]);
+});
+test('Google adapter refuses drafts, private paths and malformed publication metadata', () => {
+  for(const changes of [{status:'draft'},{published:false},{clip_url:'https://storage.googleapis.com/5280-menu-video-pipeline-bucket/drafts/x.mp4'},{clip_url:'https://other.example/x.mp4'},{created_at:'invalid'},{clip_url:googleClip().clip_url+'?token=secret'}]) {
+    assert.throws(()=>googleVideoCatalog({items:[googleClip(changes)]}));
+  }
+});
 function response() {
   return { headers: {}, statusCode: 0, body: undefined, setHeader(k,v) { this.headers[k] = v; }, end(v) { this.body = v; } };
 }

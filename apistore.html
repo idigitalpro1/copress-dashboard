@@ -94,6 +94,8 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 
 .key-field{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
 .key-label{font-size:10px;color:var(--muted);width:80px;flex-shrink:0;font-weight:500;}
+.key-acquire{display:block;margin-top:4px;color:#8a6800;line-height:1.4;text-decoration:underline;}
+.key-acquire[hidden]{display:none;}
 .key-input-wrap{flex:1;position:relative;}
 .key-input{width:100%;padding:7px 32px 7px 10px;border:1.5px solid var(--border);border-radius:4px;font-family:'DM Mono',monospace;font-size:11px;background:var(--paper);color:var(--text);transition:border-color 0.15s;}
 .key-input:focus{outline:none;border-color:var(--gold);background:#fff;}
@@ -162,6 +164,36 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 .product-banner h3{font-family:'Playfair Display',serif;font-size:18px;color:#fff;margin-bottom:4px;}
 .product-banner p{font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;}
 .product-banner .cta{flex-shrink:0;}
+.clipboard-intake{padding:20px;border:2px solid var(--gold);border-radius:8px;background:#fff;margin-bottom:24px;}
+.clipboard-intake h2{font-size:18px;margin-bottom:6px;}
+.clipboard-intake p{color:#526078;font-size:12px;line-height:1.6;}
+.clipboard-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;}
+.clipboard-controls input{flex:1;min-width:180px;}
+.clipboard-message{margin-top:10px;min-height:20px;}
+#vault-context-menu{position:fixed;z-index:500;padding:6px;border:1px solid var(--gold);border-radius:6px;background:var(--navy);box-shadow:0 8px 30px #0004;}
+#vault-context-menu[hidden]{display:none;}
+#credential-match{margin:auto;border:1px solid var(--gold);border-radius:10px;padding:24px;width:460px;max-width:94vw;}
+#credential-match::backdrop{background:#0a1628aa;}
+#credential-match p{font-size:13px;line-height:1.6;margin:10px 0;}
+#credential-match label{display:block;margin:14px 0 6px;}
+#clipboard-add-dialog{margin:auto;border:1px solid var(--gold);border-radius:10px;padding:18px;width:680px;max-width:94vw;}
+#clipboard-add-dialog::backdrop{background:#0a1628aa;}
+#clipboard-add-dialog .clipboard-intake{margin:12px 0 0;}
+.clipboard-dialog-close{display:block;margin-left:auto;}
+.card-saved-time{display:block;margin-top:12px;color:var(--muted);font-size:11px;}
+#env-import-dialog,#credential-complete{margin:auto;border:1px solid var(--gold);border-radius:10px;padding:24px;max-width:94vw;}
+#env-import-dialog{width:760px;max-height:85vh;overflow:auto;}
+#credential-complete{width:480px;}
+#env-import-dialog::backdrop,#credential-complete::backdrop{background:#0a1628aa;}
+#env-import-dialog p,#credential-complete p{font-size:13px;line-height:1.6;margin:10px 0;}
+.env-import-row{padding:12px 0;border-top:1px solid var(--border);display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;}
+.env-import-row label{font-size:13px;overflow-wrap:anywhere;}
+.env-import-row select{margin-top:6px;width:100%;}
+.env-import-meta{display:block;font-size:11px;color:var(--muted);margin-top:4px;}
+#env-import-issues{font-size:12px;color:var(--muted);line-height:1.6;}
+#env-import-save:disabled{opacity:.5;cursor:not-allowed;}
+.api-card:focus{outline:3px solid var(--gold);outline-offset:3px;}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.sidebar{display:none}.main{padding:18px}.topnav{height:auto;padding:12px;flex-wrap:wrap;gap:10px}.topnav-right{flex-wrap:wrap}.product-banner{flex-wrap:wrap}.stat-row{grid-template-columns:repeat(2,1fr)}.category-tabs{overflow:auto}.api-grid{grid-template-columns:minmax(0,1fr)}}
 </style>
 </head>
 <body>
@@ -176,7 +208,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
     <a class="btn btn-gold" href="https://satcom.5280.menu/#admin" style="text-decoration:none;">⌘ Admin HQ</a>
     <span class="badge" id="vault-status">🔒 Vault: Local Only</span>
     <button class="btn btn-ghost" onclick="exportVault()">📤 Local Export</button>
-    <button class="btn btn-gold" onclick="openAddModal()">+ Add API Key</button>
+    <button class="btn btn-gold" type="button" id="clipboard-menu-add">+ New Key Card</button>
   </div>
 </nav>
 
@@ -224,6 +256,19 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
   </div>
 
   <!-- STATS -->
+  <section class="clipboard-intake" id="clipboard-intake" aria-labelledby="clipboard-heading">
+    <h2 id="clipboard-heading">Paste a key. Get the right card.</h2>
+    <p>Right-click this page and choose <strong>Paste &amp; Create Card</strong>, or paste below. Local matching reads provider names and key formats. Everything stays in this browser.</p>
+    <div class="clipboard-controls">
+      <button class="btn btn-gold" type="button" id="clipboard-create">📋 Paste &amp; Create Card</button>
+      <input class="field-input" id="clipboard-value" type="password" aria-label="Paste a complete API key or NAME=value" placeholder="Or right-click here → Paste" autocomplete="off" spellcheck="false">
+      <button class="btn btn-green" type="button" id="clipboard-submit">Match &amp; Save</button>
+      <button class="btn btn-gold" type="button" id="env-import-open">Import .env File</button>
+      <input type="file" id="env-import-file" hidden aria-label="Select .env file for local import">
+    </div>
+    <p class="clipboard-message" id="clipboard-message" role="status" aria-live="polite">A saved key is masked. Saving does not test or connect the provider.</p>
+  </section>
+
   <div class="stat-row">
     <div class="stat-card highlight">
       <div class="label">Total Keys</div>
@@ -231,7 +276,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
       <div class="sub">stored in vault</div>
     </div>
     <div class="stat-card">
-      <div class="label">Active</div>
+      <div class="label">Saved</div>
       <div class="value" id="stat-active" style="color:var(--green)">0</div>
       <div class="sub"><span class="dot dot-green"></span>configured</div>
     </div>
@@ -412,6 +457,43 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--warm-white);col
 </div>
 
 <div class="toast" id="toast"></div>
+<dialog id="clipboard-add-dialog" aria-labelledby="clipboard-heading">
+  <button class="icon-btn clipboard-dialog-close" type="button" id="clipboard-dialog-dismiss">Close</button>
+</dialog>
+<div id="vault-context-menu" role="menu" hidden>
+  <button class="btn btn-gold" type="button" id="clipboard-context-create" role="menuitem">📋 Paste &amp; Create Card</button>
+</div>
+<dialog id="credential-match" aria-labelledby="credential-match-title">
+  <h2 id="credential-match-title">Choose where this key belongs</h2>
+  <p id="credential-match-reason"></p>
+  <p>The complete key is held privately until you save. Existing keys are preserved.</p>
+  <label for="credential-provider">Provider and key type</label>
+  <select id="credential-provider" class="field-input"></select>
+  <div class="clipboard-controls">
+    <button type="button" class="btn btn-gold" id="credential-confirm">Save matched card</button>
+    <button type="button" class="icon-btn" id="credential-cancel">Cancel</button>
+  </div>
+</dialog>
+<dialog id="env-import-dialog" aria-labelledby="env-import-title">
+  <h2 id="env-import-title">Review .env key cards</h2>
+  <p>File contents are read in this browser and never uploaded. Values stay masked. Choose the keys and matches to save; existing keys are preserved.</p>
+  <p>This browser-local vault is not encrypted storage. Import only on a trusted device.</p>
+  <p id="env-import-summary" role="status" aria-live="polite"></p>
+  <div id="env-import-rows"></div>
+  <ul id="env-import-issues"></ul>
+  <div class="clipboard-controls">
+    <button type="button" class="btn btn-green" id="env-import-save" disabled>Import selected keys</button>
+    <button type="button" class="icon-btn" id="env-import-cancel">Cancel</button>
+  </div>
+</dialog>
+<dialog id="credential-complete" aria-labelledby="credential-complete-title">
+  <h2 id="credential-complete-title">Key cards saved</h2>
+  <p id="credential-complete-summary"></p>
+  <p>Completed: <time id="credential-complete-time"></time></p>
+  <p>The full keys are masked in this browser. Provider connections have not been tested.</p>
+  <button type="button" class="btn btn-gold" id="credential-complete-dismiss">Done</button>
+</dialog>
+<script type="module" src="/js/vault-clipboard-ui.mjs"></script>
 
 <script>
 // ── DEFAULT API REGISTRY ──────────────────────────────────────────────────
@@ -444,6 +526,32 @@ const VAULT_DEDUPE_BACKUP_KEY = 'api_vault_backup_before_dedupe_v1';
 let apis = [];
 let currentCat = 'all';
 
+// Fixed official destinations; no credential or file content is included in links.
+const KEY_SETUP_LINKS = {
+  GOOGLE_AGENT_API_KEY: ['https://aistudio.google.com/apikey', 'Get API key'],
+  OPENAI_API_KEY: ['https://platform.openai.com/api-keys', 'Get API key'],
+  ANTHROPIC_API_KEY: ['https://platform.claude.com/settings/keys', 'Get API key'],
+  XAI_API_KEY: ['https://console.x.ai/team/default/api-keys', 'Get API key'],
+  OLLAMA_BASE_URL: ['https://docs.ollama.com/quickstart', 'Local setup'],
+  OLLAMA_API_KEY: ['https://ollama.com/settings/keys', 'Get cloud key'],
+  SUPABASE_ANON_KEY: ['https://supabase.com/dashboard/project/_/settings/api-keys', 'Get API key'],
+  SUPABASE_SERVICE_KEY: ['https://supabase.com/dashboard/project/_/settings/api-keys', 'Get API key'],
+  AIRTABLE_API_KEY: ['https://airtable.com/create/tokens', 'Create token'],
+  SENDY_API_KEY: ['https://www.sendy.co/api', 'Find key in Settings'],
+  TWILIO_TOKEN: ['https://www.twilio.com/docs/iam/api-keys/keys-in-console', 'Find Auth Token'],
+  STRIPE_SECRET_KEY: ['https://dashboard.stripe.com/apikeys', 'Get API key'],
+  STRIPE_PUB_KEY: ['https://dashboard.stripe.com/apikeys', 'Get API key'],
+  STRIPE_RESTRICTED_KEY: ['https://dashboard.stripe.com/apikeys', 'Create restricted key'],
+  STRIPE_WEBHOOK_SECRET: ['https://dashboard.stripe.com/webhooks', 'Get signing secret'],
+  GOOGLE_PLACES_KEY: ['https://console.cloud.google.com/apis/credentials', 'Get API key'],
+  GOOGLE_API_KEY: ['https://console.cloud.google.com/apis/credentials', 'Get API key'],
+  MAPBOX_TOKEN: ['https://console.mapbox.com/account/access-tokens/', 'Create token'],
+  APIFY_API_TOKEN: ['https://console.apify.com/settings/integrations', 'Get API token'],
+  CF_API_TOKEN: ['https://dash.cloudflare.com/profile/api-tokens/', 'Create API token'],
+  VERCEL_TOKEN: ['https://vercel.com/account/settings/tokens', 'Create token'],
+  GITHUB_TOKEN: ['https://github.com/settings/personal-access-tokens/new', 'Create token'],
+};
+
 function slugifyId(value) {
   return String(value || 'custom-api')
     .toLowerCase()
@@ -466,15 +574,38 @@ function inferEnvKey(name) {
   return `${normalizeEnvKey(name, 'CUSTOM')}_API_KEY`;
 }
 
+function normalizeSavedAt(value) {
+  return typeof value === 'string' && Number.isFinite(Date.parse(value)) ? new Date(value).toISOString() : '';
+}
+
+function formatVaultTime(value) {
+  return new Date(value).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'long' });
+}
+
 function normalizeCustomApi(saved) {
   const rawName = saved.name || String(saved.id || 'Custom API')
     .split(/[-_]+/)
     .filter(Boolean)
     .map(part => part.charAt(0).toUpperCase() + part.slice(1))
     .join(' ');
-  const isXai = /xai|grok/i.test(`${rawName} ${saved.id || ''}`);
+  const isXai = !saved.clipboardImported && /xai|grok/i.test(`${rawName} ${saved.id || ''}`);
   const values = { ...(saved.values || {}) };
   const savedFields = Array.isArray(saved.fields) ? saved.fields : [];
+  if (saved.clipboardImported) {
+    // Reviewed imports retain their literal names; URLSCAN_API_KEY is a key,
+    // not a legacy Base URL field.
+    const fields = savedFields.filter(field => /^[A-Z][A-Z0-9_]{1,63}$/.test(field.key)).map(field => ({
+      key: field.key, label: typeof field.label === 'string' ? field.label : 'API Key',
+      ph: typeof field.ph === 'string' ? field.ph : 'API key',
+    }));
+    if (fields.length) return {
+      id: slugifyId(saved.id || rawName), name: rawName, cat: saved.cat || 'infra',
+      icon: saved.icon || '🔑', color: saved.color || '#888',
+      desc: saved.desc || 'Saved on this browser. Provider connection has not been tested.',
+      fields, required: saved.required || 'optional', inject: Array.isArray(saved.inject) ? saved.inject : [],
+      values, custom: true, clipboardImported: true, savedAt: normalizeSavedAt(saved.savedAt),
+    };
+  }
   const legacyKey = savedFields.find(field => !/url/i.test(field.key || ''))?.key
     || Object.keys(values).find(key => !/url/i.test(key));
   const legacyUrlKey = savedFields.find(field => /url/i.test(field.key || ''))?.key
@@ -510,6 +641,8 @@ function normalizeCustomApi(saved) {
     inject: Array.isArray(saved.inject) ? saved.inject : [],
     values,
     custom: true,
+    clipboardImported: Boolean(saved.clipboardImported),
+    savedAt: normalizeSavedAt(saved.savedAt),
   };
 }
 
@@ -559,7 +692,7 @@ function loadVault() {
     // Merge defaults with saved keys
     apis = DEFAULT_APIS.map(def => {
       const saved_entry = saved.find(s => s.id === def.id) || {};
-      return { ...def, values: saved_entry.values || {} };
+      return { ...def, values: saved_entry.values || {}, savedAt: normalizeSavedAt(saved_entry.savedAt) };
     });
     // Normalize and merge legacy custom entries that resolve to the same service.
     const customResult = mergeCustomApis(saved.filter(s => !DEFAULT_APIS.find(d => d.id === s.id)));
@@ -578,7 +711,7 @@ function loadVault() {
 function saveVault() {
   const data = apis.map(a => {
     if (DEFAULT_APIS.some(def => def.id === a.id)) {
-      return { id: a.id, values: a.values || {} };
+      return { id: a.id, values: a.values || {}, savedAt: normalizeSavedAt(a.savedAt) };
     }
     return {
       id: a.id,
@@ -592,6 +725,8 @@ function saveVault() {
       inject: a.inject || [],
       values: a.values || {},
       custom: true,
+      clipboardImported: Boolean(a.clipboardImported),
+      savedAt: normalizeSavedAt(a.savedAt),
     };
   });
   localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(data));
@@ -600,8 +735,11 @@ function saveVault() {
 
 function hasKey(api) {
   if (!api.values) return false;
-  const firstField = api.fields[0];
-  return !!(api.values[firstField.key] && api.values[firstField.key].trim());
+  return api.fields.some(field => hasFieldValue(api, field.key));
+}
+
+function hasFieldValue(api, key) {
+  return typeof api.values?.[key] === 'string' && Boolean(api.values[key].trim());
 }
 
 function escapeHtml(value) {
@@ -621,10 +759,10 @@ function renderGrid(cat = 'all') {
     const active = hasKey(api);
     const reqLabel = { required: '🔴 Required', optional: '🟡 Optional', hardwired: '⚡ Hard-wired' }[api.required] || api.required;
     const statusClass = active ? 'ok' : (api.required === 'optional' ? 'optional' : 'missing');
-    const statusText = active ? '● Active' : (api.required === 'optional' ? '○ Optional' : '✕ Missing');
+    const statusText = active ? '● Saved' : (api.required === 'optional' ? '○ Optional' : '✕ Missing');
 
     return `
-    <div class="api-card ${active ? 'active-key' : (api.required !== 'optional' ? 'missing-key' : '')}" id="card-${api.id}">
+    <div class="api-card ${active ? 'active-key' : (api.required !== 'optional' ? 'missing-key' : '')}" id="card-${api.id}" tabindex="-1">
       <div class="api-card-header">
         <div class="api-logo" style="background:${escapeHtml(api.color)}20;">${escapeHtml(api.icon)}</div>
         <div class="api-meta">
@@ -637,7 +775,7 @@ function renderGrid(cat = 'all') {
         <div class="api-desc">${escapeHtml(api.desc)}</div>
         ${api.fields.map(f => `
         <div class="key-field">
-          <div class="key-label">${escapeHtml(f.label)}</div>
+          <div class="key-label">${escapeHtml(f.label)}${KEY_SETUP_LINKS[f.key] ? `<a class="key-acquire" href="${KEY_SETUP_LINKS[f.key][0]}" target="_blank" rel="noopener noreferrer" ${hasFieldValue(api, f.key) ? 'hidden' : ''}>${KEY_SETUP_LINKS[f.key][1]} ↗</a>` : ''}</div>
           <div class="key-input-wrap">
             <input type="password" class="key-input ${api.values && api.values[f.key] ? 'filled' : ''}"
               id="inp-${escapeHtml(api.id)}-${escapeHtml(f.key)}"
@@ -647,6 +785,7 @@ function renderGrid(cat = 'all') {
             <button class="eye-btn" onclick="toggleEye('inp-${api.id}-${f.key}',this)">👁</button>
           </div>
         </div>`).join('')}
+        <time class="card-saved-time" ${api.savedAt ? `datetime="${escapeHtml(api.savedAt)}"` : 'hidden'}>${api.savedAt ? `Saved ${escapeHtml(formatVaultTime(api.savedAt))}` : ''}</time>
       </div>
       <div class="api-card-footer">
         <div class="injected-badges">
@@ -683,19 +822,28 @@ function updateKey(apiId, fieldKey, val) {
   if (!api) return;
   if (!api.values) api.values = {};
   api.values[fieldKey] = val;
+  api.savedAt = hasKey(api) ? new Date().toISOString() : '';
   saveVault();
   // Update card styling
   const input = document.getElementById(`inp-${apiId}-${fieldKey}`);
   if (input) input.classList.toggle('filled', !!val.trim());
+  const acquire = input?.closest('.key-field')?.querySelector('.key-acquire');
+  if (acquire) acquire.hidden = Boolean(val.trim());
   const card = document.getElementById(`card-${apiId}`);
   if (card) {
+    const savedTime = card.querySelector('.card-saved-time');
+    if (savedTime) {
+      savedTime.hidden = !api.savedAt;
+      savedTime.dateTime = api.savedAt;
+      savedTime.textContent = api.savedAt ? `Saved ${formatVaultTime(api.savedAt)}` : '';
+    }
     const isActive = hasKey(api);
     card.classList.toggle('active-key', isActive);
     card.classList.toggle('missing-key', !isActive && api.required !== 'optional');
     const statusEl = card.querySelector('.api-status');
     if (statusEl) {
       statusEl.className = 'api-status ' + (isActive ? 'ok' : (api.required==='optional'?'optional':'missing'));
-      statusEl.textContent = isActive ? '● Active' : (api.required==='optional'?'○ Optional':'✕ Missing');
+      statusEl.textContent = isActive ? '● Saved' : (api.required==='optional'?'○ Optional':'✕ Missing');
     }
   }
   showToast(`✓ ${api.name} key saved`, 'green');
@@ -798,6 +946,7 @@ function saveNewKey() {
     inject: inject.includes('all') ? ['editorial','shoplocal','marketing','newsletter','accounting','citysites'] : inject,
     values: { [envKey]: document.getElementById('new-key').value },
     custom: true,
+    savedAt: new Date().toISOString(),
   };
   if (document.getElementById('new-url').value) {
     const urlKey = envKey.replace(/_API_KEY$/, '') + '_BASE_URL';

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "updated": "2026-09-07",
-  "release": "satcom-astra-routing-2026-09-07",
+  "updated": "2026-09-28",
+  "release": "satcom-priorities-evidence-2026-09-28",
   "site": "https://satcom.conews.press",
   "name": "SATCOM",
   "purpose": "Publishing operations for the CoNews network",
@@ -101,90 +101,140 @@
       "title": "Protect source of truth and traceable releases",
       "owner": "Technical lead",
       "due": "Every release",
-      "status": "Ongoing",
-      "next": "Record app commit, deployment, checks and rollback in the canonical operations repository."
+      "status": "Ongoing; September 27 releases recorded",
+      "next": "Keep each app commit, review, deployment, validation and rollback in the canonical operations repository. Preserve the distinction between preview, live release and delivery.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "Canonical status",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/CURRENT_STATUS.md"
+      }
     },
     {
       "rank": 2,
       "title": "Promote Partners in the Community",
       "owner": "Publisher and commercial lead",
-      "due": "2026-09-18",
-      "status": "Promotion live; commercial model pending",
-      "next": "Approve the offer sheet, verified sponsor records, placement capacity and fulfillment measures."
+      "due": "Original target: 2026-09-18; completion unverified",
+      "status": "Promotion released September 7; commercial approval unverified",
+      "next": "Confirm the approved offer sheet, verified paying sponsors, placement capacity and fulfillment measures. Directory listings are not paid-sponsor evidence.",
+      "evidence": {
+        "date": "2026-09-07",
+        "label": "Approved priority plan",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/TOP_10_DEVELOPMENT_PRIORITIES.md"
+      }
     },
     {
       "rank": 3,
       "title": "Verify Villager news discovery and reader journeys",
       "owner": "Technical lead and editor",
-      "due": "2026-09-14",
-      "status": "Site refinement deployed; indexing unverified",
-      "next": "Use Search Console for indexing evidence; verify archive, events, contact and search journeys."
+      "due": "Original target: 2026-09-14; indexing follow-up open",
+      "status": "September 27 editorial release recorded; indexing unverified",
+      "next": "Verify Search Console indexing and archive, events, contact and search journeys. Review the temporary Hall of Fame homepage priority before it expires October 5.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "Villager release record",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/ops/2026-09-27-villager-sept-24-hof-owner-share.md"
+      }
     },
     {
       "rank": 4,
       "title": "Make editorial freshness and unique images repeatable",
       "owner": "Managing editor",
-      "due": "2026-09-25",
-      "status": "Six images backfilled; future workflow pending",
-      "next": "Generate, inspect, persist and credit a story-specific illustration when no unique photo exists. Preserve original dates and real attribution."
+      "due": "Original target: 2026-09-25; repeatable workflow unverified",
+      "status": "Aspen October edition released; recurring image workflow unverified",
+      "next": "Confirm or replace inherited Aspen media rights. Keep original dates and attribution; generate, inspect, persist and label a story-specific illustration when no unique licensed photo exists.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "Multisite release review",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/ops/2026-09-27-multisite-release-review.md"
+      }
     },
     {
       "rank": 5,
       "title": "Protect renewal revenue and reconciliation",
       "owner": "Circulation and finance",
       "due": "September 2026",
-      "status": "Verification work remains",
-      "next": "Preserve printed QR targets and approved prices; use the canonical subscriber Sheet and verified provider events."
+      "status": "Reconciliation and fulfillment evidence still required",
+      "next": "Keep printed QR destinations and approved prices stable. Verify the canonical subscriber Sheet, provider events and fulfillment before claiming a paid renewal, synchronization or mailing.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "Renewal and distribution gates",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/ops/2026-09-27-multisite-release-review.md"
+      }
     },
     {
       "rank": 6,
       "title": "Finish the shared platform configuration",
       "owner": "Technical lead",
-      "due": "September\u2013October 2026",
-      "status": "Host verification required",
-      "next": "Confirm myappstore.biz identity and TLS before proving reusable publishing configuration."
+      "due": "September–October 2026",
+      "status": "Vercel restoration recorded September 12; platform proof open",
+      "next": "Recheck myappstore.biz identity and TLS against the restored Vercel hosting record, then prove reusable publishing configuration. The earlier TLS failure is historical evidence.",
+      "evidence": {
+        "date": "2026-09-12",
+        "label": "Hosting restoration record",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/AWS_DARK_FALLBACKS.md"
+      }
     },
     {
       "rank": 7,
       "title": "Make SATCOM and its development entry point dependable",
       "owner": "Operations lead",
       "due": "September 2026",
-      "status": "Context release; integrations remain separate",
-      "next": "Verify /codex and an MCP tool call; replace unverified card metrics with dated provider evidence and explicit unavailable states."
+      "status": "Newsletter Studio released; board and metrics remain limited",
+      "next": "Refresh dated board evidence and event data; replace default marketing counts with provider-backed records. Verify /codex and an MCP call separately from upstream services.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "SATCOM release and limitations",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/ops/2026-09-27-multisite-release-review.md"
+      }
     },
     {
       "rank": 8,
       "title": "Prove 5280.menu as the reference implementation",
       "owner": "Product and technical lead",
       "due": "October 2026, after shared platform and SATCOM gates",
-      "status": "Gated",
-      "next": "Sign off editorial, reader, sponsorship, permission and reporting journeys."
+      "status": "September 27 review: remediation required; expansion gated",
+      "next": "Prepare a rollback-backed 5280.menu release from current main: refresh stale news, restore missing discovery and reader routes, and verify the complete release manifest before deployment.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "5280.menu remediation record",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/ops/2026-09-27-multisite-release-review.md"
+      }
     },
     {
       "rank": 9,
       "title": "Deliver a dependable Thursday publishing workflow",
       "owner": "Editorial and circulation",
-      "due": "September\u2013November 2026",
-      "status": "In progress",
-      "next": "Prove approved web, email, edition, archive and print outputs with provider acceptance for delivery."
+      "due": "September–November 2026",
+      "status": "September 24 issue and email drafts ready; no campaign sent",
+      "next": "Verify the live Sendy endpoint, exact opted-in lists, suppression state and sender identities. Review one proof per publication, obtain final campaign approval, then record provider acceptance separately from inbox delivery.",
+      "evidence": {
+        "date": "2026-09-27",
+        "label": "Weekly distribution review",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/ops/2026-09-27-multisite-release-review.md"
+      }
     },
     {
       "rank": 10,
       "title": "Expand only after quality and delivery gates pass",
       "owner": "Publisher",
-      "due": "November\u2013December 2026 review",
-      "status": "Held behind platform gates",
-      "next": "Stage 13 town sites and eight guide hubs only with editorial ownership, substantive reporting and support capacity."
+      "due": "November–December 2026 review",
+      "status": "Held behind platform, editorial and delivery gates",
+      "next": "Keep the 13 town sites and eight guide hubs staged until reference-site checks, editorial ownership, substantive reporting, viable inventory and support capacity are demonstrated.",
+      "evidence": {
+        "date": "2026-09-07",
+        "label": "Expansion gates",
+        "url": "https://github.com/idigitalpro1/codex/blob/main/TOP_10_DEVELOPMENT_PRIORITIES.md"
+      }
     }
   ],
   "boundaries": [
-    "The operator is on a remote laptop without a server connection. Local paths, apps and loopback addresses refer to that laptop, not Ace or a production server. Public HTTPS access does not prove remote shell access.",
+    "Verify the actual operator host and authorized connection before server work. Local paths and loopback addresses identify that host; public HTTPS access does not prove remote shell access.",
     "SATCOM mission control remains under development. Direct model prompts are the primary workflow. GUI development for news, activity and town sites is as important as content. Headless-only constraints apply to the PDF-to-WordPress pipeline, not publication GUI development.",
     "Work directly; do not delegate or spawn other agents.",
     "Partners in the Community is the primary advertising and sponsorship platform. Directory listings are not verified paying sponsors or outreach permission.",
     "The MCP service supplies public context only. It cannot deploy, retrieve secrets, access subscriber records, send messages or operate telephony.",
     "A health response proves this context service is responding, not that Ace, Hermes, a payment provider or publishing pipeline is connected.",
-    "conews.press/codex is a different route from satcom.conews.press/codex. Its September 7 404 is not repaired by this SATCOM release.",
+    "conews.press/codex is a different route from satcom.conews.press/codex. Its recorded September 7 failure has not been rechecked by this priorities refresh.",
     "Package prices and sales targets in the 2026 plan are proposals until approved. Do not publish them as offers or actual results."
   ],
   "operatorPolicy": {
@@ -217,7 +267,7 @@
         "name": "Claude",
         "role": "Fallback 1",
         "model": null,
-        "status": "Connected \u2014 four SATCOM tools discovered",
+        "status": "Connected — four SATCOM tools discovered",
         "availableForHandoff": true,
         "connection": "Claude native remote connector connected to SATCOM and displayed all four read-only tools on the remote laptop. Desktop Commander startup repair is a separate local check.",
         "command": null,
@@ -250,7 +300,7 @@
         "name": "Hermes 2.0",
         "role": "Fallback 4",
         "model": null,
-        "status": "Blocked \u2014 host and version unverified",
+        "status": "Blocked — host and version unverified",
         "availableForHandoff": false,
         "connection": "SATCOM Hermes health/models proxy timed out; local port 8793 refused connection. No Hermes CLI or installation found on this Mac. Ace is offline.",
         "command": null,

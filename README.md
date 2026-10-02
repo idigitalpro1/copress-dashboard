@@ -34,6 +34,23 @@ Scoped 2026-09-27 exception to the one-admin rule: `/video/submit` (login) and `
 3. Inkbox webhook URL: `https://<host>/api/video-review-sms` for `text.received`, signed with the identity signing key (`X-Inkbox-Signature`). Twilio fallback uses the same path.
 4. Reviewer opt-in: after the allowlist row exists, text `START` to the SATCOM video number. `STOP` opts out. `HELP` returns instructions. Review texts include `/video/review-continue?token=…`. Android link previews do not consume the token; tapping Continue does.
 
+This preview now sits on current `main`, which already has Video Studio, the Google Video Ed feed, and the creator-upload page. SMS review is an additional notify/approve path, not a replacement. Patrick still needs to say which gate is canonical when both are configured.
+
+## Shared Gemini client (0.2.0, preview only — do not merge)
+
+Stacked on the Video Studio preview. **Does not publish**, does not touch `/subscribe`, Stripe, checkout, postcard QR routes, WordPress or DNS. Patrick owns Python, isolated keys, the Omni queue and `publish_gate` on his server. This repo keeps the Vercel/Studio copy client and lists private Cloudinary drafts under `satcom/generated/`. Studio YouTube quota follows the [Google calculator](https://developers.google.com/youtube/v3/determine_quota_cost) update of **2026-09-15** (`videos.insert` has its own 100/day bucket; `YOUTUBE_DAILY_UPLOAD_CAP=6` is an editorial cap, not a Google limit). Full operator notes: [docs/youtube.md](docs/youtube.md), [docs/gemini.md](docs/gemini.md) and [packages/satcom-gemini/README.md](packages/satcom-gemini/README.md).
+
+Preview env only (Patrick sets these; this PR does not change Vercel/DNS):
+
+| Variable | Purpose |
+| --- | --- |
+| `GEMINI_KEY_COPY` | Studio captions / titles (required for Gemini assist). **No `GEMINI_API_KEY` fallback.** |
+| `GEMINI_KEY_VIDEO` | Not used by this Vercel app. Patrick's Omni queue. |
+| `GEMINI_KEY_HEALTH` | Not used by this Vercel app. Isolated health (formerly ask_susan) key in the registry. |
+| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Optional copy usage log + circuit (apply `supabase/migrations/` yourself; not applied here). No `video_jobs` table. |
+
+Recommended Google Cloud **billing-account hard cap: $150/month**. Consumer Gemini subscriptions do not cover API charges. In-app caps cannot stop a leaked key.
+
 ## Pages
 
 | Route | File | Status | Description |

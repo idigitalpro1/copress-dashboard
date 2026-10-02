@@ -18,6 +18,8 @@
 
 Publisher decision on 2026-09-27: a small review page on SATCOM (`/video/review`, plus the login-protected `/video/submit` handoff) is an approved, scoped exception to the “one admin” rule above. It is not a second news-site admin and must not grow into a CMS. It only lists pending videos and records approve/reject. The public `/api/videos` feed stays read-only. See `docs/video-network.md`.
 
+As of 2026-10-02 this SMS path sits beside Video Studio’s Review & publish gate on `main`. That is a remaining publisher decision, not a second news admin. Canonical locks remain in the private `idigitalpro1/codex` repository.
+
 ---
 
 ## Architecture (target state)

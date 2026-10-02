@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Video Desk | SATCOM</title>
+<link rel="stylesheet" href="/video/player.css">
+<link rel="stylesheet" href="/video/studio.css">
+<style>
+.desk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.desk-grid .card{display:flex;flex-direction:column;gap:8px}
+.desk-grid .card p{margin:0}
+.desk-grid .card .button,.desk-grid .card .ghost{align-self:flex-start;text-decoration:none;margin-top:auto}
+.tag{align-self:flex-start;display:inline-block;font-size:11px;font-weight:700;letter-spacing:.4px;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tag.live{color:var(--accent);border-color:var(--accent)}
+.studio-shell .desk-grid a.button{color:var(--bg)}
+.flow{margin:0;padding-left:20px;line-height:1.7}
+</style>
+</head>
+<body>
+<main class="studio-shell">
+  <nav class="studio-nav"><a href="/">← SATCOM</a><span>Video Desk · operator hub</span></nav>
+  <header class="studio-head">
+    <p class="eyebrow">SATCOM · COLORADO NEWS PRESS · THE VILLAGER · REGISTER-CALL</p>
+    <h1>Video Desk</h1>
+    <p class="muted">One place to start: intake from Paul Hill, Omni and uploads; edit; review; publish. The publish gate stays human. Each video is published by a person.</p>
+  </header>
+
+  <section class="desk-grid" aria-label="Desk tools">
+    <article class="card">
+      <span class="tag live">Live</span>
+      <h2>Studio: edit, queue and publish</h2>
+      <p class="muted">Trim, reframe, caption and brand clips. Review checkboxes, AI label, rights/consent, an editorial queue of 6 uploads a day (our cap, not a YouTube limit), retry and unpublish.</p>
+      <a class="button" href="/video/studio">Open Studio</a>
+    </article>
+    <article class="card">
+      <span class="tag live">Live</span>
+      <h2>Omni and generated drafts</h2>
+      <p class="muted">Gemini Omni clips from Patrick's server land as private drafts in Cloudinary <code>satcom/generated</code>. Open them from the Studio's generated list. They are always labeled AI-generated.</p>
+      <a class="ghost" href="/video/studio">Open generated drafts in Studio</a>
+    </article>
+    <article class="card">
+      <span class="tag live">Live</span>
+      <h2>Public video network</h2>
+      <p class="muted">What readers see at satcom.conews.press/video. It shows published items only.</p>
+      <a class="ghost" href="/video">View /video</a>
+    </article>
+    <article class="card">
+      <span class="tag">Planned</span>
+      <h2>Edit suite (Google Cloud)</h2>
+      <p class="muted">A browser editor plus FFmpeg/MLT render jobs on Cloud Run, behind Google sign-in. It is being built by the video swarm, and a link will appear here once a preview exists.</p>
+    </article>
+    <article class="card">
+      <span class="tag">Planned</span>
+      <h2>Creator review</h2>
+      <p class="muted">Paul Hill's SMS review flow. Preview only until approved.</p>
+    </article>
+    <article class="card">
+      <span class="tag">Reference</span>
+      <h2>Plan, owners and API caps</h2>
+      <p class="muted">Desk layout, automatic vs human steps, cost table and who owns what. It lives in the codex source of truth.</p>
+      <a class="ghost" href="https://github.com/idigitalpro1/codex/blob/main/VIDEO_DESK_PLAN.md" rel="noopener">VIDEO_DESK_PLAN.md</a>
+    </article>
+  </section>
+
+  <section class="card" aria-label="Desk flow">
+    <h2>Flow</h2>
+    <ol class="flow">
+      <li><strong>Intake</strong>: Paul Hill clips, Omni drafts, operator uploads (automatic registration)</li>
+      <li><strong>Process</strong>: transcode, transcript/captions, AI titles, descriptions and thumbnail candidates, AI label, rights pre-check (automatic drafts)</li>
+      <li><strong>Review</strong>: an editor checks captions, copy, rights/consent and the AI label (human)</li>
+      <li><strong>Publish</strong>: YouTube (unlisted first), satcom.conews.press/video, social drafts (human publish gate)</li>
+    </ol>
+  </section>
+</main>
+</body>
+</html>

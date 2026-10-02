@@ -372,7 +372,7 @@ test('configured Supabase catalog publishes only published rows and falls back t
       return new Response(JSON.stringify([pendingClip({ status: 'published', published_at: '2026-09-26T18:00:00Z' })]));
     },
   });
-  assert.equal(result.source, 'satcom-video-db');
+  assert.equal(result.source, 'catalog+satcom-video-db');
   assert.match(request, /status=eq.published/);
   assert.equal(result.catalog.items[0].status, 'published');
   const fallback = await readCatalog({ env: {} });
@@ -400,6 +400,8 @@ test('subscription host redirects and other host routes stay untouched', () => {
   assert.ok(config.rewrites.some(rule => rule.destination === 'https://codex.conews.press/api/v1/platform/hermes/:path*'));
   assert.ok(config.rewrites.some(rule => rule.source === '/video/review' && rule.destination === '/video/review.html'));
   assert.ok(config.rewrites.some(rule => rule.source === '/video/review-continue' && rule.destination === '/video/review-continue.html'));
+  assert.ok(config.rewrites.some(rule => rule.source === '/video/studio' && rule.destination === '/video/studio.html'));
+  assert.ok(config.rewrites.some(rule => rule.source === '/video/upload' && rule.destination === '/video/creator-upload'));
   assert.ok(!JSON.stringify(config).includes('villager-postcard-gallery'));
   assert.ok(!JSON.stringify(config).includes('villager-postcard-proofing'));
 });
