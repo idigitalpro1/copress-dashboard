@@ -2876,7 +2876,7 @@ body.satcom-gated #satcom-entry-gate {
               <div class="card-icon">📒</div>
               <div>
                 <div class="card-title">Accounting</div>
-                <div class="card-subtitle">Invoice Manager · QuickBooks · Stripe</div>
+                <div class="card-subtitle">Billing · QuickBooks · Stripe</div>
               </div>
             </div>
             <div class="card-stats">
@@ -2899,10 +2899,10 @@ body.satcom-gated #satcom-entry-gate {
             </div>
             <div class="card-rule"></div>
             <div class="card-actions">
-              <button class="card-btn primary" onclick="event.stopPropagation(); openInvoiceManager('/invoices/new')">New Invoice</button>
+              <button class="card-btn primary" onclick="event.stopPropagation(); openBillingApp('/invoices/new')">New Invoice</button>
               <button class="card-btn" onclick="event.stopPropagation(); window.location.href='/briefing'">Monday Briefing</button>
               <button class="card-btn" onclick="event.stopPropagation(); navTo('accounting')">Accounting</button>
-              <button class="card-btn" onclick="event.stopPropagation(); openInvoiceManager('/assistant')">Assistant</button>
+              <button class="card-btn" onclick="event.stopPropagation(); openBillingApp('/assistant')">Assistant</button>
             </div>
           </div>
         </div>
@@ -3253,7 +3253,7 @@ body.satcom-gated #satcom-entry-gate {
           <div class="quick-pill" onclick="toast('Opening campaign builder…')">📣 New Campaign <span class="pill-kbd">⌘3</span></div>
           <div class="quick-pill" onclick="window.location.href='/newsletter'">📧 Email Blast <span class="pill-kbd">⌘4</span></div>
           <div class="quick-pill" onclick="openPostcardStudio()">▤ Postcard Studio</div>
-          <div class="quick-pill" onclick="openInvoiceManager('/invoices/new')">📒 Create Invoice <span class="pill-kbd">⌘5</span></div>
+          <div class="quick-pill" onclick="openBillingApp('/invoices/new')">📒 Create Invoice <span class="pill-kbd">⌘5</span></div>
           <div class="quick-pill" onclick="toast('Exporting weekly PDF…')">📄 Weekly PDF <span class="pill-kbd">⌘6</span></div>
           <div class="quick-pill" onclick="window.location.href='/docs'">📚 Docs Hub <span class="pill-kbd">⌘7</span></div>
           <div class="quick-pill" onclick="window.location.href='/apistore'">🔑 API Vault <span class="pill-kbd">⌘8</span></div>
@@ -3647,8 +3647,8 @@ body.satcom-gated #satcom-entry-gate {
             <div class="module-heading">
               <div>
                 <div class="module-kicker">Sprint 2 · Accounting</div>
-                <h2>Invoice manager bridge.</h2>
-                <p>Launch the upgraded Weekly Register-Call billing app for sequential invoice numbers, custom ad sizes, Publisher's Affidavits, QuickBooks sync, and the billing assistant.</p>
+                <h2>Billing app bridge.</h2>
+                <p>Canonical billing / QuickBooks / Stripe admin is <strong>billing.conews.press</strong>. The WRC invoice PDF / client manager stays at invoicemanager.weeklyregistercall.com (separate Clerk app).</p>
               </div>
               <div class="module-status">
                 <span class="pill">Owner <strong>Operations lead</strong></span>
@@ -3661,15 +3661,16 @@ body.satcom-gated #satcom-entry-gate {
             </div>
             <div class="module-grid-2">
               <div class="module-panel">
-                <h3>Invoice Manager Launches</h3>
-                <p>Use the dedicated app for final invoice creation and mutations. SATCOM only stages handoff text and opens the upgraded routes.</p>
+                <h3>Billing App Launches</h3>
+                <p>Open <code>billing.conews.press</code> for QB/Stripe admin and billing mutations. SATCOM only stages handoff text. Use Invoice Manager below for WRC PDF/client work.</p>
                 <div class="invoice-launch-grid">
-                  <button class="module-btn primary" onclick="openInvoiceManager('/invoices/new')">New Invoice</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/')">Dashboard</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/assistant')">Assistant</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/sync-status')">Sync Status</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/recurring')">Recurring</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/payments')">Payments</button>
+                  <button class="module-btn primary" onclick="openBillingApp('/invoices/new')">New Invoice</button>
+                  <button class="module-btn" onclick="openBillingApp('/')">Dashboard</button>
+                  <button class="module-btn" onclick="openBillingApp('/assistant')">Assistant</button>
+                  <button class="module-btn" onclick="openBillingApp('/sync-status')">Sync Status</button>
+                  <button class="module-btn" onclick="openBillingApp('/recurring')">Recurring</button>
+                  <button class="module-btn" onclick="openBillingApp('/payments')">Payments</button>
+                  <button class="module-btn" onclick="openInvoiceManager('/')">WRC Invoice Manager</button>
                 </div>
               </div>
               <div class="module-panel">
@@ -3692,13 +3693,13 @@ body.satcom-gated #satcom-entry-gate {
                 <div class="module-field"><label>Line item</label><input id="invoice-line" placeholder="Display ad, subscription, legal notice..."></div>
                 <div class="module-actions">
                   <button class="module-btn primary" onclick="stageInvoice()">Stage Invoice</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/invoices/batch')">Batch</button>
-                  <button class="module-btn" onclick="openInvoiceManager('/stripe-create-invoice')">Stripe Invoice</button>
+                  <button class="module-btn" onclick="openBillingApp('/invoices/batch')">Batch</button>
+                  <button class="module-btn" onclick="openBillingApp('/stripe-create-invoice')">Stripe Invoice</button>
                 </div>
               </div>
               <div class="module-panel">
                 <h3>Accounting Handoff</h3>
-                <div class="output-box" id="invoice-output">No invoice staged. Stripe keys stay in localStorage; invoicemanager.weeklyregistercall.com remains the source for final billing.</div>
+                <div class="output-box" id="invoice-output">No invoice staged. Stripe keys stay in localStorage; billing.conews.press is the canonical billing app. invoicemanager.weeklyregistercall.com is the WRC invoice PDF/client manager only.</div>
               </div>
             </div>
           </div>
@@ -4696,6 +4697,7 @@ const M365_ACCOUNT_SWITCH_URL =
 const AZURE_APP_REGISTRATION_URL = 'https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade';
 const M365_AZURE_CALLBACK_URL = 'https://admin.conews.press/console/api/auth/callback/azure-ad';
 const SATCOM_GATE_KEY = 'satcom_operator_gate_entered_v1';
+const BILLING_APP_BASE_URL = 'https://billing.conews.press';
 const INVOICE_MANAGER_BASE_URL = 'https://invoicemanager.weeklyregistercall.com';
 const WRC_SUBS_DASHBOARD_URL = 'https://subs.weeklyregistercall.com';
 const WRC_SUBS_MANUS_URL = 'https://subs.manus.space';
@@ -4938,7 +4940,13 @@ async function refreshOwnedAssets() {
   }
 }
 
+function openBillingApp(path = '/') {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  openExternal(`${BILLING_APP_BASE_URL}${cleanPath}`);
+}
+
 function openInvoiceManager(path = '/') {
+  // WRC invoice PDF / client manager only — not the live billing/QB/Stripe admin app.
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
   openExternal(`${INVOICE_MANAGER_BASE_URL}${cleanPath}`);
 }
@@ -6179,7 +6187,7 @@ function stageInvoice() {
   const amount = document.getElementById('invoice-amount').value.trim() || '0.00';
   const line = document.getElementById('invoice-line').value.trim() || 'Manual line item';
   document.getElementById('invoice-output').textContent =
-    `Invoice staged\nCustomer: ${customer}\nAmount: $${amount}\nLine item: ${line}\n\nNext: open ${INVOICE_MANAGER_BASE_URL}/invoices/new for final invoice creation, custom ad sizes, PDF/email, and QuickBooks sync.`;
+    `Invoice staged\nCustomer: ${customer}\nAmount: $${amount}\nLine item: ${line}\n\nNext: open ${BILLING_APP_BASE_URL}/invoices/new for final billing/QB/Stripe work. Use ${INVOICE_MANAGER_BASE_URL} only for WRC invoice PDF/client manager.`;
   toast('Invoice staged');
 }
 

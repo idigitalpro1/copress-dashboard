@@ -127,7 +127,7 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. Nest only
 
 **Revenue section**
 - Marketing Hub 🚧 — campaign builder, Sendy integration
-- Accounting — bridge to upgraded invoice manager, Stripe, QuickBooks, invoices, and billing assistant
+- Accounting — bridge to canonical billing app (`billing.conews.press`) for Stripe/QuickBooks/admin; WRC invoice PDF/client manager stays at `invoicemanager.weeklyregistercall.com`
 
 **Tools section**
 - Network HQ → `/network`
@@ -154,7 +154,7 @@ Microsoft 365/Azure credentials stay server-side in the admin backend. Nest only
 | Newsletter Studio | `/newsletter` | Email designer, Sendy lane, and campaign handoff |
 | API Vault | `/apistore` | Local key store, scoped MCP injection, and .env export |
 | AI Studio Projects | `/#ai-studio`, `/data/google-ai-studio-projects.json` | Launch/import map for Google AI Studio projects and Vercel readiness |
-| Accounting | `data-view=accounting`, `https://invoicemanager.weeklyregistercall.com` | Invoice-manager bridge and local handoff |
+| Accounting | `data-view=accounting`, `https://billing.conews.press` | Canonical billing / QB / Stripe admin; WRC invoice PDF/client manager: `https://invoicemanager.weeklyregistercall.com` |
 | Docs Hub | `/docs` | Documentation center |
 | Stationery | `data-view=stationery` | Browser-local file template card |
 | Colorado Gambler | `data-view=directory` | Gambling vertical and casino directory loader |
@@ -591,14 +591,14 @@ These views are in `index.html` as `<div id="view-...">` sections. The JS view-s
 <div id="view-directory">   <!-- Directory import staging and review lanes -->
 <div id="view-cities">      <!-- Five-town readiness board -->
 <div id="view-marketing">   <!-- Campaign brief to copy kit generator -->
-<div id="view-accounting">  <!-- Invoice-manager launch bridge and local billing handoff -->
+<div id="view-accounting">  <!-- Billing app (billing.conews.press) + WRC invoice-manager handoff -->
 ```
 
 Current behavior is intentionally browser-local:
 - Editorial queue stores local drafts in `localStorage.copress_editorial_queue_v1` when Supabase credentials are missing.
 - When `SUPABASE_URL` and `SUPABASE_ANON_KEY` are available, Editorial shows the 12 most recent `public_posts` rows and keeps the local queue as fallback.
 - Directory import and invoice staging create operator handoff text in-page.
-- Accounting launches the upgraded invoice manager at `https://invoicemanager.weeklyregistercall.com` for final billing work. The bridge exposes the recent invoice-manager upgrades: sequential invoice numbering, custom/non-priced display ad size, restored edit/duplicate/detail controls, run dates, Publisher's Affidavit copy and attachments, PDF/email sending, QuickBooks sync status, recurring invoices, payments, batch invoicing, and the Billing Assistant route.
+- Accounting launches the canonical billing app at `https://billing.conews.press` for QuickBooks sync, Stripe invoices, payments, recurring billing, batch invoicing, and the Billing Assistant. The separate WRC invoice PDF/client manager remains at `https://invoicemanager.weeklyregistercall.com` (Clerk). Do not treat `billing.registercall.com` or `billing.weeklyregistercall.com` as live billing destinations until those hosts redirect to `billing.conews.press`.
 - Marketing campaign generation stores the latest kit in `localStorage.copress_campaign_handoff` and exposes a `Send to Newsletter Studio` link to `/newsletter?campaign=latest`; Newsletter Studio auto-loads that copy into the marketing template and shows a handoff banner.
 - Marketing campaign kits follow the showcase pattern from `showcase.registercall.com/billsmobile`: branding first, industry pattern, invoice-manager item mapping, send options, follow-up/drip sequence, and newsletter/digital/print subscriber-list options.
 - Marketing Hub includes a `Nightlife / Steakhouse` pattern for Rick's-style corridor campaigns: premium late-night hospitality, VIP groups, reservation CTAs, Black Hawk / Central City audience targeting, and a three-touch launch/feature/weekend reminder drip.
@@ -612,7 +612,7 @@ Current behavior is intentionally browser-local:
 - Directory campaign kits are stored in `localStorage.copress_directory_campaign_kit` and include templates for Editorial Outreach, You're Invited, We'd Like Your Opinion, Claim Your Listing, Shop Local Welcome, Civic Partner Thank You, and Sponsor Prospect.
 - Marketing Hub now links into the same shared intake engine instead of duplicating intake logic. Records carry `sourceTag` values such as `shoplocal`, `marketing-hub`, `editorial-outreach`, or `civic-scan`.
 - Demo duplicate detection checks the staged batch plus a simulated main directory index (`MAIN_DIRECTORY_DB`); the same contract can be swapped to a real Supabase/main database lookup later.
-- Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `invoicemanager-wrc`, Supabase, Stripe, Sendy).
+- Final publishing, billing, and external writes still belong to the dedicated backend tools (`newsletter`, `billing.conews.press`, `invoicemanager-wrc` for WRC PDFs/clients, Supabase, Stripe, Sendy).
 
 Directory importer scaling pattern:
 1. Replace `makeSeedBusinesses(...)` with a real source fetch or parser.

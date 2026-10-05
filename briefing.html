@@ -71,8 +71,9 @@ body{background:var(--bg);color:#ccc;font-family:'Libre Baskerville',Georgia,ser
           <div class="stat-row"><span class="stat-lbl">Published (7d)</span><span class="stat-val" id="ov-pub">—</span></div>
           <button class="btn" id="btn-build" onclick="buildBriefing()">Build Preview</button>
           <button class="btn outline" onclick="exportHTML()">Export HTML</button>
-          <button class="btn outline" onclick="openInvoiceManagerReports()">Send via Invoice Manager</button>
-          <p class="status" id="status">Loads financial data from Invoice Manager when available. Editorial and subscriber counts use API Vault keys.</p>
+          <button class="btn outline" onclick="openBillingApp()">Open Billing App</button>
+          <button class="btn outline" onclick="openInvoiceManagerReports()">WRC Invoice Manager Reports</button>
+          <p class="status" id="status">Canonical billing/QB/Stripe admin: billing.conews.press. WRC invoice PDF/client reports: invoicemanager.weeklyregistercall.com. Editorial and subscriber counts use API Vault keys.</p>
         </div>
       </div>
       <div class="panel">
@@ -111,6 +112,7 @@ body{background:var(--bg);color:#ccc;font-family:'Libre Baskerville',Georgia,ser
   </div>
 </div>
 <script>
+const BILLING_APP = 'https://billing.conews.press';
 const INVOICE_MANAGER = 'https://invoicemanager.weeklyregistercall.com';
 let latestHTML = '';
 
@@ -317,7 +319,12 @@ function exportHTML() {
   a.click();
 }
 
+function openBillingApp() {
+  window.open(BILLING_APP + '/', '_blank');
+}
+
 function openInvoiceManagerReports() {
+  // WRC invoice PDF / client manager reports — not the live billing admin app.
   window.open(INVOICE_MANAGER + '/reports', '_blank');
 }
 
