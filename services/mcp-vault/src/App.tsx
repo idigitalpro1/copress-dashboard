@@ -116,7 +116,7 @@ export default function App() {
           <h2 className="text-lg font-semibold">Connect to the beta vault</h2>
           <p className="text-sm text-slate-400">Enter the access token configured for this beta server. It stays in memory for this page and is cleared when you disconnect, leave, refresh, or stop interacting for 15 minutes.</p>
           <label htmlFor="newsflow-token" className="block text-sm text-slate-300">Beta access token</label>
-          <input id="newsflow-token" name="newsflow-token" type="password" autoComplete="new-password" autoCapitalize="off" autoCorrect="off" spellCheck={false} value={tokenInput} onChange={event => setTokenInput(event.target.value)} disabled={isLoading} className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+          <input id="newsflow-token" name="newsflow-token" type="password" autoComplete="current-password" autoCapitalize="off" autoCorrect="off" spellCheck={false} value={tokenInput} onChange={event => setTokenInput(event.target.value)} disabled={isLoading} className="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           <button type="submit" disabled={!tokenInput.trim() || isLoading} className="w-full p-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 font-medium">{isLoading ? 'Connecting…' : 'Connect'}</button>
           <a href="/" className="inline-block text-xs underline text-slate-400">Return to SATCOM</a>
         </form> : isLoading ? <p className="py-20 text-center text-slate-400">Loading beta vault and prompts…</p> : <>
