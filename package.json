@@ -13,7 +13,9 @@
     "verify:mcp": "node scripts/verify-mcp.mjs"
   },
   "dependencies": {
+    "@clerk/backend": "^3.22.0",
     "@modelcontextprotocol/sdk": "1.30.0",
+    "@vercel/functions": "^3.9.11",
     "hls.js": "1.7.3",
     "zod": "4.5.4"
   }

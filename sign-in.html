@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Sign in — SATCOM</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#0b1020;color:#e8ecf5;font-family:system-ui,-apple-system,Segoe UI,sans-serif;padding:24px}
+  .brand{font-weight:700;letter-spacing:.02em;font-size:20px}
+  .brand span{color:#8fb4ff}
+  p{margin:0;color:#aab3c8;font-size:14px;text-align:center;max-width:440px}
+  #forbidden-actions{display:flex;gap:10px;align-items:center}
+  #forbidden-actions[hidden]{display:none}
+  button{background:#4f6bff;color:#fff;border:0;border-radius:8px;padding:8px 14px;font-size:13px;cursor:pointer}
+  a{color:#8fb4ff}
+</style>
+</head>
+<body>
+  <div class="brand">SATCOM <span>operator sign-in</span></div>
+  <p>Sign in with your approved account (same login as billing and the invoice manager).</p>
+  <p id="clerk-status" role="status">Loading sign-in…</p>
+  <div id="sign-in"></div>
+  <div id="forbidden-actions" hidden><div id="forbidden-user"></div><button id="sign-out" type="button">Sign out</button></div>
+  <p><a href="/codex">Public SATCOM / Codex</a></p>
+  <script src="/js/clerk-auth.js" data-clerk-mode="signin" defer></script>
+</body>
+</html>
