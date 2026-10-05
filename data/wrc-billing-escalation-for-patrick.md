@@ -23,10 +23,12 @@ Please make sure Patrick sees this:
 
 ## Surfaces To Check
 
-- Invoice manager: `invoicemanager.weeklyregistercall.com`
+- Canonical billing app (QB / Stripe admin): `https://billing.conews.press`
+- WRC invoice PDF / client manager (separate Clerk app): `invoicemanager.weeklyregistercall.com`
 - Admin billing surface: `admin.conews.press/console/en/invoice-list`
 - QuickBooks / WRC company access
 - Invoice email sender and payment-link generation path
+- Stale hosts (do not use as live billing until fixed): `billing.registercall.com`, `billing.weeklyregistercall.com`
 
 ## Active Contact / Accounting Context
 
@@ -52,8 +54,10 @@ Please make sure Patrick sees this:
 - Backend OAuth launch reaches Intuit for the app named `RegisterCall Billing`.
 - Intuit blocks the connect flow before approval with:
   - `The redirect_uri query parameter value is invalid. Make sure it is listed in the Redirect URIs section on your app's keys tab and matches it exactly.`
-- Exact redirect URI currently sent by the backend:
+- Exact redirect URI currently sent by the backend (legacy — do not rely on):
   - `https://billing.weeklyregistercall.com/api/v1/quickbooks/oauth/callback`
+- Canonical redirect URI (set this in Intuit; stop relying on billing.weeklyregistercall.com / billing.registercall.com until those hosts are fixed):
+  - `https://billing.conews.press/api/v1/quickbooks/oauth/callback`
 - Required operator fix:
   - Sign into Intuit App Center / Intuit Developer with the account that owns the `RegisterCall Billing` app. The QuickBooks company login alone is not enough for this setting.
-  - In that Intuit Developer app, add the exact URI above to the production Redirect URIs allowlist, then retry the QuickBooks connect flow for Weekly Register-Call.
+  - In that Intuit Developer app, add the canonical URI above to the production Redirect URIs allowlist, remove or stop relying on the legacy billing.*.registercall / weeklyregistercall callbacks until those hosts redirect or proxy correctly, then retry the QuickBooks connect flow for Weekly Register-Call.
