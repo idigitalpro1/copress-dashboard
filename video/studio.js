@@ -1,14 +1,18 @@
 // SATCOM Video Studio (preview). All credentials stay on the server; the browser only
 // receives short-lived upload signatures and signed Cloudinary delivery URLs.
 const $ = id => document.getElementById(id);
-const state = { status: null, source: null, image: null, outputs: [], brandedImages: [], cues: [], sidecar: null, assetTags: [], publishVersion: null };
+const WS_KEY = 'satcom-studio-workspace';
+const queryWorkspace = new URLSearchParams(location.search).get('workspace');
+const state = { status: null, source: null, image: null, outputs: [], brandedImages: [], cues: [], sidecar: null, assetTags: [], publishVersion: null,
+  workspace: queryWorkspace || localStorage.getItem(WS_KEY) || 'my-properties' };
 const CHUNK = 20 * 1024 * 1024;
 
 async function api(op, payload = {}) {
   const response = await fetch('/api/studio', {
     method: 'POST', credentials: 'same-origin',
     headers: { 'Content-Type': 'application/json', 'X-Studio-Request': '1' },
-    body: JSON.stringify({ op, ...payload }),
+    // Every call is scoped to the active workspace; the server re-checks asset ownership.
+    body: JSON.stringify({ op, workspace: state.workspace, ...payload }),
   });
   let body = {};
   try { body = await response.json(); } catch { /* ignore */ }
@@ -36,17 +40,49 @@ function showGate(needLogin, message) {
 
 async function boot() {
   let status;
-  try { status = await (await fetch('/api/studio', { credentials: 'same-origin' })).json(); }
-  catch { return showGate(false, 'The studio API is unavailable.'); }
+  try {
+    const r = await fetch(`/api/studio?workspace=${encodeURIComponent(state.workspace)}`, { credentials: 'same-origin' });
+    // A stale/unknown saved workspace falls back to My properties instead of locking the page.
+    status = r.status === 400 ? await (await fetch('/api/studio', { credentials: 'same-origin' })).json() : await r.json();
+  } catch { return showGate(false, 'The studio API is unavailable.'); }
   if (!status.enabled) return showGate(false, status.note || 'Video Studio is disabled.');
   if (!status.authenticated) return showGate(true);
   state.status = status;
+  state.workspace = status.workspace || 'my-properties';
+  localStorage.setItem(WS_KEY, state.workspace);
   $('gate').hidden = true; $('studio').hidden = false; $('logout').hidden = false;
   renderSetup();
 }
 
+function currentWorkspace() { return (state.status?.workspaces || []).find(w => w.id === state.workspace) || { id: state.workspace, label: state.workspace, kind: 'own' }; }
+
+function renderWorkspaces() {
+  const list = state.status.workspaces || [];
+  const select = $('workspace');
+  select.replaceChildren(...list.map(w => el('option', { value: w.id, ...(w.id === state.workspace ? { selected: '' } : {}) },
+    `${w.label}${w.kind === 'client' ? ' (client)' : ''}${w.youtube_connected ? ' · YouTube connected' : ''}`)));
+  select.value = state.workspace;
+  const w = currentWorkspace();
+  $('workspace-note').textContent = `${w.description || ''} Uploads, review queue, publish queue and YouTube channel here are separate from the other workspaces.`;
+  document.querySelectorAll('[data-ws-name]').forEach(n => { n.textContent = w.label; });
+  // Client workspaces start from the client's creator/credit so drafts are never filed under the wrong name.
+  if (w.default_creator) { $('draft-creator').value = w.default_creator; $('draft-credit').value = w.default_credit || ''; $('pub-name').value = ''; }
+  $('url-desk-link').href = `/video/url-desk?workspace=${encodeURIComponent(state.workspace)}`;
+}
+
+function resetForWorkspace() {
+  // Clear anything tied to the previous workspace before loading the new one.
+  Object.assign(state, { source: null, image: null, outputs: [], brandedImages: [], cues: [], sidecar: null, assetTags: [], publishVersion: null, social: {}, hashtags: [] });
+  $('source-video').removeAttribute('src'); $('source-video').load();
+  $('source-meta').textContent = 'Select or upload a clip.';
+  for (const id of ['pub-title', 'pub-desc', 'pub-tags', 'pub-captions', 'draft-title', 'draft-desc', 'captions-text']) $(id).value = '';
+  for (const id of ['rev-title', 'rev-desc', 'rev-captions', 'rev-tags', 'pub-consent']) $(id).checked = false;
+  $('pub-jobs').replaceChildren(); $('draft-list').replaceChildren(); $('suggest-result').replaceChildren(); setStatus('suggest-status', '');
+}
+
 function renderSetup() {
   const s = state.status;
+  renderWorkspaces();
   $('notes').replaceChildren(...s.notes.map(n => el('li', {}, n)));
   $('formats').replaceChildren(...Object.entries(s.video_formats).map(([id, f], i) => el('label', {}, el('input', { type: 'checkbox', value: id, ...(i === 0 ? { checked: '' } : {}) }), f.label)));
   $('img-formats').replaceChildren(...Object.entries(s.image_formats).map(([id, f], i) => el('label', {}, el('input', { type: 'checkbox', value: id, ...(i === 0 ? { checked: '' } : {}) }), f.label)));
@@ -63,12 +99,16 @@ function renderSetup() {
     'creator-refresh': f.cloudinary,
     'youtube-connect': f.youtube && !f.youtube_connected, 'youtube-disconnect': f.youtube_connected,
     'pub-approve': f.publish && f.youtube_connected, 'pub-refresh-jobs': f.cloudinary,
+    'suggest-all': f.suggest, 'suggest-title': f.suggest, 'suggest-description': f.suggest, 'suggest-tags': f.suggest,
+    'queue-refresh': f.publish || f.cloudinary,
   };
   for (const [id, on] of Object.entries(toggles)) { $(id).disabled = !on; if (!on) $(id).title = 'Disabled: see the configuration notes at the top.'; }
   if (!f.images) setStatus('img-status', 'Grok image tools are disabled: set XAI_API_KEY (and Cloudinary) on the server.');
   if (!f.assist) setStatus('ai-status', 'AI assist is disabled: set XAI_API_KEY and/or GEMINI_KEY_COPY (and Cloudinary) on the server.');
   if (!f.transcribe) setStatus('transcribe-status', 'Auto-transcription is disabled without an AI key; type or paste captions instead.');
-  if (f.cloudinary) { loadLibrary(); loadGenerated(); loadCreatorUploads(); }
+  if (!f.suggest) setStatus('suggest-status', 'AI suggestions are disabled: set GEMINI_KEY_COPY on the server. You can still type every field.');
+  if (f.cloudinary) { loadLibrary(); loadGenerated(); loadCreatorUploads(); loadDrafts(); }
+  loadPublishQueue();
   setupPublish();
 }
 
@@ -199,6 +239,14 @@ function wire() {
     catch (err) { setStatus('login-error', err.message, true); }
   });
   $('logout').addEventListener('click', async () => { await api('logout').catch(() => {}); showGate(true); });
+  $('workspace').addEventListener('change', async e => {
+    state.workspace = e.target.value; localStorage.setItem(WS_KEY, state.workspace);
+    resetForWorkspace();
+    history.replaceState(null, '', location.pathname);
+    await boot();
+  });
+  for (const field of ['all', 'title', 'description', 'tags']) $(`suggest-${field}`).addEventListener('click', e => busy(e.currentTarget, () => suggestFields(field)));
+  $('queue-refresh').addEventListener('click', loadPublishQueue);
   document.querySelectorAll('[role=tab]').forEach(tab => tab.addEventListener('click', () => {
     document.querySelectorAll('[role=tab]').forEach(t => t.setAttribute('aria-selected', String(t === tab)));
     document.querySelectorAll('.tab').forEach(p => { p.hidden = p.dataset.panel !== tab.dataset.tab; });
@@ -302,6 +350,7 @@ function wire() {
       const queued = (r.jobs || []).find(j => j.status === 'queued');
       setStatus('pub-status', queued ? `YouTube ${queued.error || 'queued until tomorrow'}.` : 'Publish jobs updated.');
       renderJobs(r.jobs || []);
+      loadPublishQueue();
     } catch (err) { setStatus('pub-status', err.message, true); }
   }));
   $('pub-refresh-jobs').addEventListener('click', loadJobs);
@@ -394,9 +443,38 @@ function renderAssist(r) {
 async function loadDrafts() {
   try {
     const { drafts } = await api('draft-list');
-    $('draft-list').replaceChildren(...(drafts.length ? drafts.map(d => el('li', {}, `${d.title || d.id} · ${d.format} · ${new Date(d.created_at).toLocaleString()}`,
-      el('button', { class: 'ghost', type: 'button', onclick: async () => { const r = await api('draft-get', { id: d.id }); $('draft-json').hidden = false; $('draft-json').textContent = JSON.stringify(r.draft, null, 2); } }, 'View JSON'))) : [el('li', { class: 'muted' }, 'No drafts yet.')]));
+    $('draft-list').replaceChildren(...(drafts.length ? drafts.map(d => el('li', {}, `${d.title || d.id} · ${d.kind === 'url-script' ? 'URL script' : d.format} · ${new Date(d.created_at).toLocaleString()}`,
+      el('button', { class: 'ghost', type: 'button', onclick: async () => { const r = await api('draft-get', { id: d.id, kind: d.kind }); $('draft-json').hidden = false; $('draft-json').textContent = JSON.stringify(r.draft, null, 2); } }, 'View JSON'))) : [el('li', { class: 'muted' }, 'No drafts in this workspace yet.')]));
   } catch (err) { $('draft-list').replaceChildren(el('li', { class: 'error' }, err.message)); }
+}
+
+// Publish queue for the active workspace (all clips, not just the selected one).
+async function loadPublishQueue() {
+  try {
+    const { jobs } = await api('publish-queue');
+    $('queue-list').replaceChildren(...(jobs.length ? jobs.map(j => el('li', {}, `${j.target} · ${j.status} · ${j.asset_public_id.split('/').pop()}${j.error ? ' — ' + j.error : ''}`)) : [el('li', { class: 'muted' }, 'Nothing queued or published in this workspace.')]));
+  } catch (err) { $('queue-list').replaceChildren(el('li', { class: 'error' }, err.message)); }
+}
+
+// ---------- AI field help (title / description / tags) ----------
+// Suggestions are text only. Accepting one fills the field and CLEARS its "reviewed" box so a
+// human still has to read it; nothing is saved or published from here.
+async function suggestFields(field) {
+  setStatus('suggest-status', 'Asking Gemini…'); $('suggest-result').replaceChildren();
+  try {
+    const r = await api('suggest-fields', {
+      field, source: state.source || undefined, brand: $('brand').value,
+      notes: $('ai-notes').value, transcript: $('pub-captions').value || $('captions-text').value,
+      current: { title: $('pub-title').value, description: $('pub-desc').value, tags: $('pub-tags').value },
+    });
+    const accept = (inputId, reviewId, value) => { $(inputId).value = value; $(reviewId).checked = false; setStatus('suggest-status', 'Filled. Read it, edit if needed, then tick its reviewed box.'); $(inputId).focus(); };
+    const rows = [];
+    for (const title of r.titles || []) rows.push(el('li', {}, el('span', {}, title), el('button', { class: 'ghost', type: 'button', onclick: () => accept('pub-title', 'rev-title', title) }, 'Use title')));
+    if (r.description) rows.push(el('li', {}, el('span', {}, r.description), el('button', { class: 'ghost', type: 'button', onclick: () => accept('pub-desc', 'rev-desc', r.description) }, 'Use description')));
+    if (r.tags?.length) rows.push(el('li', {}, el('span', {}, r.tags.join(', ')), el('button', { class: 'ghost', type: 'button', onclick: () => accept('pub-tags', 'rev-tags', r.tags.join(', ')) }, 'Use tags')));
+    $('suggest-result').replaceChildren(...(rows.length ? rows : [el('li', { class: 'muted' }, 'No suggestion came back. Try again.')]));
+    setStatus('suggest-status', r.note);
+  } catch (err) { setStatus('suggest-status', err.message, true); }
 }
 
 wire();

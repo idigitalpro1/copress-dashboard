@@ -28,6 +28,13 @@
   </section>
 
   <div id="studio" hidden>
+    <section id="workspace-bar" class="card">
+      <label>Workspace
+        <select id="workspace" aria-describedby="workspace-note"><option value="my-properties">My properties</option></select>
+      </label>
+      <p id="workspace-note" class="muted small"></p>
+      <p class="muted small"><a id="url-desk-link" href="/video/url-desk">URL-to-video desk (admin)</a> drafts a script, title, description and tags from a pasted URL into <strong data-ws-name>this workspace</strong>'s review queue.</p>
+    </section>
     <ul id="notes" class="notes"></ul>
     <div class="studio-grid">
       <section class="card" aria-labelledby="clip-h">
@@ -179,7 +186,22 @@
         </figure>
       </div>
       <p id="pub-disclosure" class="disclosure" hidden></p>
+      <h3>Publish queue · <span data-ws-name>this workspace</span></h3>
+      <div class="row"><button id="queue-refresh" class="ghost" type="button">Refresh queue</button></div>
+      <ul id="queue-list" class="draft-list"></ul>
       <div class="publish-fields">
+        <fieldset id="suggest-box">
+          <legend>AI field help (Gemini)</legend>
+          <p class="muted small">Suggests a YouTube title, description and tags from the filename, your AI-assist notes, the captions and the workspace. Text only: nothing is saved or published. <strong>Use</strong> fills the field and clears its reviewed box so you still read it.</p>
+          <div class="row">
+            <button id="suggest-all" class="button alt" type="button" disabled>Suggest all</button>
+            <button id="suggest-title" class="ghost" type="button" disabled>Title</button>
+            <button id="suggest-description" class="ghost" type="button" disabled>Description</button>
+            <button id="suggest-tags" class="ghost" type="button" disabled>Tags</button>
+          </div>
+          <p id="suggest-status" class="muted small" role="status"></p>
+          <ul id="suggest-result" class="draft-list"></ul>
+        </fieldset>
         <label>Title<input id="pub-title" maxlength="200"></label>
         <label>Description<textarea id="pub-desc" rows="4" maxlength="1000"></textarea></label>
         <label>Tags (comma)<input id="pub-tags" maxlength="400"></label>
