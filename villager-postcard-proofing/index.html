@@ -1422,10 +1422,6 @@
         <span>Current version</span>
         <strong id="current-version-label">Regular Renewal</strong>
       </div>
-      <div class="status">
-        <span>Subscriber DB</span>
-        <strong><a href="https://www.thevillager.today/admin/master-subscribers" target="_blank" rel="noopener noreferrer">Read-only live link</a></strong>
-      </div>
     </section>
 
     <section class="workbench">
@@ -1697,7 +1693,7 @@
           <div class="quote-data" aria-label="Inline mailing quote data">
             <div class="quote-data-row">
               <span>Mailing data URL</span>
-              <code id="mailing-data-inline">https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070</code>
+              <code id="mailing-data-inline">2026 subscriber Sheet (private; open from signed-in Google Drive)</code>
             </div>
             <div class="quote-data-row">
               <span>Stamps.com URL</span>
@@ -1862,7 +1858,6 @@
             </div>
           </div>
           <div class="quote-links">
-            <a class="btn" id="mailing-sheet-link" href="https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070" target="_blank" rel="noopener noreferrer">Open 2026 Sheet</a>
             <a class="btn" id="stamps-link" href="https://www.stamps.com/" target="_blank" rel="noopener noreferrer">Open Stamps.com</a>
             <button class="btn primary" type="button" id="generate-quote">Generate Quote</button>
             <button class="btn" type="button" id="copy-generated-quote">Copy Quote</button>
@@ -1950,7 +1945,8 @@ Please include setup fees, postage estimate, proof timing, and ship/mail date.</
     const canonicalProofUrl = 'https://subscribe.thevillager.today/villager-postcard-proofing/';
     const subscribeUrl = 'https://www.thevillager.today/subscribe';
     const subscriberDbUrl = 'https://www.thevillager.today/admin/master-subscribers';
-    const mailingSheetUrl = 'https://docs.google.com/spreadsheets/d/1_olwOyL5ROx8W699vlRg1LpEipNXxjmE_43J_250dQo/edit?gid=564287070#gid=564287070';
+    // The subscriber Sheet link is intentionally not published on this public page (Audit C1, codex #58).
+    const mailingSheetRef = '2026 subscriber Sheet (private; open from signed-in Google Drive)';
     const stampsComUrl = 'https://www.stamps.com/';
     const stampsImportHelpNote = 'Stamps.com Help Center: search for Import Orders from a CSV or TXT File - Online (Web).';
     const stampsDeveloperUrl = 'https://developer.stamps.com/';
@@ -2212,7 +2208,7 @@ Requested changes:`;
     }
 
     function selectedMailingUrl() {
-      if (mailingSource.value === '2026 Subscriber Sheet') return mailingSheetUrl;
+      if (mailingSource.value === '2026 Subscriber Sheet') return mailingSheetRef;
       if (mailingSource.value === 'Live Subscriber Admin') return subscriberDbUrl;
       return 'Printer-managed mailing list; confirm CSV/upload requirements.';
     }
