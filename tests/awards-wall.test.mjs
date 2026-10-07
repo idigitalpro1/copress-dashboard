@@ -60,6 +60,28 @@ test('award counts agree across the numeral, headline, tally and shelves', () =>
   }
 });
 
+test('review fixes stay fixed: search form, icons, static no-JS page, forced colors', () => {
+  // Enter in the search pill must reach the form's submit handler, not a card that shares its attribute.
+  assert.equal(count(/data-search/g), 1, 'only the search form carries data-search');
+  assert.match(html, /input\.form\.addEventListener\('submit'/);
+  // The medal faces must not reuse the icons' .back layer class.
+  assert.doesNotMatch(html, /^\.back \{/m);
+  assert.match(html, /\.face--back \{ transform: rotateY\(180deg\)/);
+  // Decorative loops run only after JS confirms motion, so the no-JS page is static.
+  assert.doesNotMatch(html, /data-motion="auto"\]/);
+  for (const loop of ['.spin', '.star::before', '.plaque::after']) {
+    assert.ok(html.includes(`html[data-motion="on"] ${loop} { animation:`), loop);
+  }
+  // Pseudo-elements are ignored inside :is(), so they must not be listed there.
+  assert.doesNotMatch(html, /:is\([^)]*::/);
+  // Forced colors: the UA maps text and focus colours on glass; only the medals opt out.
+  const forced = html.split('@media (forced-colors: active) {')[1].split('\n}')[0];
+  assert.doesNotMatch(forced.split('\n').find(l => l.trim().startsWith('.glass {')), /forced-color-adjust/);
+  assert.match(forced, /\.dg-search:focus-within \{ outline: 3px solid Highlight/);
+  // Every star starts spinning at once, at a staggered angle.
+  for (const [, d] of html.matchAll(/--d:(-?[\d.]+)s/g)) assert.ok(parseFloat(d) <= 0, `delay ${d}`);
+});
+
 test('awards wall stays clear of subscribe, QR and payment routing (LOCK-003)', () => {
   assert.doesNotMatch(html, /\/subscribe|stripe|checkout|qr/i);
 });

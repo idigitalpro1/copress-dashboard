@@ -12,6 +12,15 @@
 <link rel="icon" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/apple-touch-icon.png">
 <link rel="preload" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/fredoka-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(() => {
+  const r = document.documentElement;
+  r.classList.replace('no-js', 'js');
+  const on = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  r.dataset.motion = on ? 'on' : 'off';
+  if (on) { r.classList.add('motion-pending'); setTimeout(() => r.classList.remove('motion-pending'), 2500); }
+})();
+</script>
 <style>
 /* =====================================================================
    Awards wall · Depth + Glass (LOCK-021) · spec: docs/brand/depth-glass-standard.md
@@ -50,14 +59,15 @@
   --display: "DG Display", ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", system-ui, sans-serif;
   --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* Room the floating dock needs at the bottom (two rows on phones, one row from 600px) */
-  --dock-space: 176px;
+  --dock-space: 176px;   /* measured by JS; this is the no-JS fallback */
+  --hero-dock: 176px;
   /* Medal metals */
   --gold-1: #fff1b8; --gold-2: #f2c447; --gold-3: #9c6a0e; --gold-edge: #6b4708; --gold-ink: #2b1d02;
   --silv-1: #ffffff; --silv-2: #d6dce8; --silv-3: #7f889c; --silv-edge: #555d70; --silv-ink: #1b2131;
   --bron-1: #ffd2a8; --bron-2: #d98a4b; --bron-3: #7c3f15; --bron-edge: #55290b; --bron-ink: #2e1405;
   --star: polygon(50% 0%, 61.2% 34.5%, 97.6% 34.5%, 68.2% 55.9%, 79.4% 90.5%, 50% 69.1%, 20.6% 90.5%, 31.8% 55.9%, 2.4% 34.5%, 38.8% 34.5%);
 }
-@media (min-width: 600px) { :root { --dock-space: 120px; } }
+@media (min-width: 660px) { :root { --dock-space: 120px; --hero-dock: 120px; } }
 *, *::before, *::after { box-sizing: border-box; }
 html { background: var(--dg-sky-3); scroll-padding-top: 16px; scroll-padding-bottom: var(--dock-space); }
 body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1rem/1.55 var(--body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
@@ -89,7 +99,7 @@ body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1
 .dg-type { display: flex; flex-direction: column; align-items: center; gap: 6px; transform-origin: 50% 0; pointer-events: none; }
 .dg-eyebrow {
   margin: 0; text-align: center; max-width: min(48ch, 92vw); text-wrap: balance;
-  font: 600 clamp(13px, 1.9svh, 17px)/1.3 var(--body); letter-spacing: .02em;
+  font: 600 clamp(15px, 2.1svh, 28px)/1.3 var(--body); letter-spacing: .02em;
   color: rgb(255 255 255 / .92); text-shadow: 0 1px 2px rgb(8 12 40 / .45);
 }
 .dg-display {
@@ -108,7 +118,7 @@ body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1
 /* Layer 3: the Hall of Fame plaque, rendered from the original. It covers about the bottom
    quarter of the numerals, never more than 40%. */
 .dg-subject {
-  --pl-h: clamp(230px, calc(var(--H) - var(--dock-space) - 96px - var(--fs) * .62), 440px);
+  --pl-h: clamp(230px, calc(var(--H) - var(--hero-dock) - 96px - var(--fs) * .62), 440px);
   position: relative; z-index: 1;
   margin-top: calc(var(--fs) * -.24);
   width: min(calc(var(--pl-h) * .8), 86vw);
@@ -219,8 +229,8 @@ body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1
 .face { display: grid; place-items: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; color: var(--mink); }
 .face::before { content: ""; position: absolute; inset: 0; clip-path: var(--star); background: radial-gradient(circle at 34% 26%, rgb(255 255 255 / .85) 0 6%, transparent 26%), conic-gradient(from 210deg at 50% 55%, var(--m2), var(--m1), var(--m2) 30%, var(--m3) 52%, var(--m2) 70%, var(--m1) 86%, var(--m2)); }
 .face::after { content: ""; position: absolute; inset: 15%; clip-path: var(--star); background: linear-gradient(165deg, var(--m1), var(--m2) 40%, var(--m3)); opacity: .55; }
-.front { transform: translateZ(6px); }
-.back { transform: rotateY(180deg) translateZ(6px); }
+.face--front { transform: translateZ(6px); }
+.face--back { transform: rotateY(180deg) translateZ(6px); }
 .rk, .mono { position: relative; z-index: 1; margin-top: 12%; font: 700 calc(var(--s) * .27)/1 var(--display); font-stretch: 75%; font-variation-settings: "wdth" 75; text-shadow: 0 1px 0 rgb(255 255 255 / .45); }
 .rk small { font-size: .5em; vertical-align: .55em; margin-left: 1px; }
 .mono { font-size: calc(var(--s) * .2); letter-spacing: .02em; }
@@ -251,14 +261,14 @@ body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1
 .dg-tabbar { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; height: 62px; padding: 5px; border-radius: var(--dg-r-capsule); }
 .dg-tabbar__lens { position: absolute; top: 5px; bottom: 5px; left: 0; width: var(--lens-w, 25%); translate: var(--lens-x, 5px) 0; border-radius: var(--dg-r-capsule); background: rgb(255 255 255 / .16); box-shadow: inset 0 1px 0 rgb(255 255 255 / .45), var(--dg-elev-1); transition: translate .45s var(--dg-spring), width .45s var(--dg-spring); }
 .no-js .dg-tabbar__lens { display: none; }
-.dg-tab { position: relative; z-index: 1; display: grid; place-items: center; align-content: center; gap: 2px; min-width: 44px; border-radius: var(--dg-r-capsule); color: rgb(255 255 255 / .82); text-decoration: none; font: 600 12px/1 var(--body); white-space: nowrap; padding-inline: 4px; }
+.dg-tab { position: relative; z-index: 1; display: grid; place-items: center; align-content: center; gap: 2px; min-width: 44px; border-radius: var(--dg-r-capsule); color: rgb(255 255 255 / .82); text-decoration: none; font: 600 12px/1.05 var(--body); text-align: center; padding-inline: 4px; }
 .dg-tab[aria-current="page"] { color: #fff; }
 :is(.glass-btn, .dg-tab):focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
 @container dg-dock (min-width: 600px) {
   .dg-dock { flex-direction: row; justify-content: center; align-items: center; gap: 12px; }
   .dg-dock__row { display: contents; }
-  .dg-tabbar { order: 1; width: min(400px, 58cqw); }
+  .dg-tabbar { order: 1; width: min(400px, 58cqw); flex-shrink: 0; }
   .dg-search { order: 2; flex: 0 1 260px; }
   .dg-dock [data-action="motion"] { order: 3; }
 }
@@ -281,15 +291,15 @@ body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1
 @keyframes sway { 0%, 100% { transform: rotateY(-4deg) translateY(0); } 50% { transform: rotateY(4deg) translateY(-6px); } }
 @keyframes sheen { 0%, 55% { transform: translateX(-60%); } 85%, 100% { transform: translateX(60%); } }
 
+html.motion-pending :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { opacity: 0; }
 html.is-ready .dg-display { animation: dg-unfold var(--dg-reveal) var(--dg-ease) .12s backwards; }
 html.is-ready .dg-eyebrow { animation: dg-drop 700ms var(--dg-ease) .05s backwards; }
 html.is-ready .dg-subject { animation: dg-rise var(--dg-reveal) var(--dg-ease) backwards; }
 html.is-ready .dg-dock { animation: dg-float 800ms var(--dg-spring) .6s backwards; }
-html:is([data-motion="on"], [data-motion="auto"]) .spin { animation: spin 7.5s linear infinite; animation-delay: var(--d); }
-html:is([data-motion="on"], [data-motion="auto"]) .star::before { animation: pulse 3.6s ease-in-out infinite; animation-delay: var(--d); }
-html:is([data-motion="on"], [data-motion="auto"]) .plaque::after { animation: sheen 7s ease-in-out infinite 1.2s; }
+html[data-motion="on"] .spin { animation: spin 7.5s linear infinite; animation-delay: var(--d); }
+html[data-motion="on"] .star::before { animation: pulse 3.6s ease-in-out infinite; animation-delay: var(--d); }
+html[data-motion="on"] .plaque::after { animation: sheen 7s ease-in-out infinite 1.2s; }
 html[data-motion="on"] .plaque { animation: sway 10s ease-in-out infinite; }
-html:is([data-motion="on"], [data-motion="auto"]) .dg-card:hover .spin { animation-duration: 1.4s; }
 html[data-motion="on"] :is(.dg-bg, .dg-type, .dg-subject) { will-change: transform; }
 html[data-motion="on"] .dg-bg { transform: translate3d(calc(var(--mx) * -6px), calc(var(--sy) * .5px + var(--my) * -4px), 0); }
 html[data-motion="on"] .dg-type { transform: translate3d(calc(var(--mx) * 10px), calc(var(--sy) * .35px + var(--my) * 6px), 0) scaleY(calc(1 + var(--p) * .18)); }
@@ -297,7 +307,8 @@ html[data-motion="on"] .dg-subject { translate: calc(var(--mx) * 18px) calc(var(
 html[data-motion="off"] .plaque-tilt { transform: rotateY(-7deg) rotateX(3deg); }
 html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { animation: none; }
 @media (prefers-reduced-motion: reduce) {
-  html:not([data-motion="on"]) :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock, .spin, .star::before, .plaque, .plaque::after) { animation: none !important; }
+  html:not([data-motion="on"]) :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock, .spin, .plaque) { animation: none !important; }
+  html:not([data-motion="on"]) .star::before, html:not([data-motion="on"]) .plaque::after { animation: none !important; }
   html:not([data-motion="on"]) .plaque-tilt { transform: rotateY(-7deg) rotateX(3deg); }
   .dg-tabbar__lens, .glass-btn { transition: none; }
   .glass-btn:active { transform: none; }
@@ -308,15 +319,22 @@ html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { a
   .glass, .glass--regular, .has-refraction .glass--lens { background: rgb(20 26 60 / .94); -webkit-backdrop-filter: none; backdrop-filter: none; }
   .glass::before { display: none; }
   .dg-display { -webkit-text-fill-color: #fff; color: #fff; background: none; }
+  .glass-btn[aria-pressed="true"] { background: rgb(64 76 150); }
 }
 @media (prefers-contrast: more) {
   .glass, .glass--regular { background: rgb(10 14 40 / .9); border-color: #fff; }
   .glass::before, .glass::after { display: none; }
   .dg-display { -webkit-text-fill-color: #fff; color: #fff; background: none; filter: none; }
   .dg-tab, .cat, .place, .shelf-head p, .source { color: #fff; }
+  .glass-btn[aria-pressed="true"] { background: rgb(64 76 150); }
 }
 @media (forced-colors: active) {
-  .glass { border: 2px solid ButtonText; background: ButtonFace; color: ButtonText; forced-color-adjust: none; }
+  .glass { border: 2px solid ButtonText; background: ButtonFace; color: ButtonText; }
+  .star { forced-color-adjust: none; }
+  :is(.glass-btn, .dg-tab):focus-visible { outline-color: Highlight; }
+  .dg-search:focus-within { outline: 3px solid Highlight; outline-offset: 3px; }
+  .dg-search input::placeholder { color: GrayText; }
+  .glass-btn[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; }
   .glass::before, .glass::after, .dg-tabbar__lens { display: none; }
   .dg-tab[aria-current="page"] { outline: 2px solid Highlight; }
   .dg-display, .foil { -webkit-text-fill-color: CanvasText; color: CanvasText; forced-color-adjust: none; }
@@ -416,26 +434,26 @@ html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { a
     <section class="shelf" id="villager" aria-labelledby="h-villager">
       <div class="shelf-head"><h2 id="h-villager">The Villager</h2><p>6 awards · 4 first place</p></div>
       <ul class="dg-grid" role="list">
-        <li class="dg-card glass glass--regular" data-pub="villager" data-search="best advertising special section colorado gives day susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:0.00s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">1<small>st</small></span></b><b class="face back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Advertising Special Section</h3><p class="entry">“Colorado Gives Day”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="villager" data-search="best news media/house ad promotion villager quarterly review susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:6.37s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">1<small>st</small></span></b><b class="face back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best News Media/House Ad Promotion</h3><p class="entry">“Villager Quarterly Review”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="villager" data-search="best print ad joshua tree susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:5.24s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">1<small>st</small></span></b><b class="face back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Joshua Tree”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="villager" data-search="best sports column writing prime&#x27;s scoop comes with messages for all denny dressman 1st editorial"><div class="star gold" aria-hidden="true" style="--d:4.11s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">1<small>st</small></span></b><b class="face back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Sports Column Writing</h3><p class="entry">“Prime&#x27;s scoop comes with messages for all”</p><p class="who">Denny Dressman</p><p class="place">1st place · Editorial</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="villager" data-search="best cover design celebrate spring tom mctighe, susan sweeney lanam 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:2.98s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">2<small>nd</small></span></b><b class="face back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Cover Design</h3><p class="entry">“Celebrate Spring”</p><p class="who">Tom McTighe, Susan Sweeney Lanam</p><p class="place">2nd place · Photo and Design</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="villager" data-search="best page design man &amp; woman of the year 2024 the villager 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:1.85s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">2<small>nd</small></span></b><b class="face back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Page Design</h3><p class="entry">“Man &amp; Woman of the Year 2024”</p><p class="who">The Villager</p><p class="place">2nd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best advertising special section colorado gives day susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:-0.00s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Advertising Special Section</h3><p class="entry">“Colorado Gives Day”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best news media/house ad promotion villager quarterly review susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:-1.13s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best News Media/House Ad Promotion</h3><p class="entry">“Villager Quarterly Review”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best print ad joshua tree susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:-2.26s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Joshua Tree”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best sports column writing prime&#x27;s scoop comes with messages for all denny dressman 1st editorial"><div class="star gold" aria-hidden="true" style="--d:-3.39s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Sports Column Writing</h3><p class="entry">“Prime&#x27;s scoop comes with messages for all”</p><p class="who">Denny Dressman</p><p class="place">1st place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best cover design celebrate spring tom mctighe, susan sweeney lanam 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:-4.52s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Cover Design</h3><p class="entry">“Celebrate Spring”</p><p class="who">Tom McTighe, Susan Sweeney Lanam</p><p class="place">2nd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best page design man &amp; woman of the year 2024 the villager 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:-5.65s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Page Design</h3><p class="entry">“Man &amp; Woman of the Year 2024”</p><p class="who">The Villager</p><p class="place">2nd place · Photo and Design</p></div></li>
       </ul>
     </section>
     <section class="shelf" id="wrc" aria-labelledby="h-wrc">
       <div class="shelf-head"><h2 id="h-wrc">Weekly Register-Call</h2><p>9 awards · 1 first place</p></div>
       <ul class="dg-grid" role="list">
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best opinion writing  becky osterwald 1st editorial"><div class="star gold" aria-hidden="true" style="--d:0.72s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">1<small>st</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Opinion Writing</h3><p class="who">Becky Osterwald</p><p class="place">1st place · Editorial</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best humorous column writing from steak-out to coop code don ireland 2nd editorial"><div class="star silver" aria-hidden="true" style="--d:7.09s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">2<small>nd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Humorous Column Writing</h3><p class="entry">“From steak-out to coop code”</p><p class="who">Don Ireland</p><p class="place">2nd place · Editorial</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best print ad lan-yap cafe becky osterwald 2nd advertising"><div class="star silver" aria-hidden="true" style="--d:5.96s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">2<small>nd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Lan-Yap cafe”</p><p class="who">Becky Osterwald</p><p class="place">2nd place · Advertising</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best sports photograph split second survival becky osterwald 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:4.83s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">2<small>nd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Sports Photograph</h3><p class="entry">“Split Second Survival”</p><p class="who">Becky Osterwald</p><p class="place">2nd place · Photo and Design</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best business news/feature story less driving, more tail-wagging becky osterwald 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:3.70s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">3<small>rd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Business News/Feature Story</h3><p class="entry">“Less driving, more tail-wagging”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Editorial</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best informational graphic why that statute exists staff 3rd photo and design"><div class="star bronze" aria-hidden="true" style="--d:2.57s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">3<small>rd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Informational Graphic</h3><p class="entry">“Why that statute exists”</p><p class="who">Staff</p><p class="place">3rd place · Photo and Design</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best politics reporting no kings protest becky osterwald 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:1.44s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">3<small>rd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Politics Reporting</h3><p class="entry">“No Kings Protest”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Editorial</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best print ad dostal alley becky osterwald 3rd advertising"><div class="star bronze" aria-hidden="true" style="--d:0.31s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">3<small>rd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Dostal Alley”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Advertising</p></div></li>
-        <li class="dg-card glass glass--regular" data-pub="wrc" data-search="best series or sustained coverage strip club don ireland 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:6.68s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face front"><span class="rk">3<small>rd</small></span></b><b class="face back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Series or Sustained Coverage</h3><p class="entry">“Strip Club”</p><p class="who">Don Ireland</p><p class="place">3rd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best opinion writing  becky osterwald 1st editorial"><div class="star gold" aria-hidden="true" style="--d:-6.78s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Opinion Writing</h3><p class="who">Becky Osterwald</p><p class="place">1st place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best humorous column writing from steak-out to coop code don ireland 2nd editorial"><div class="star silver" aria-hidden="true" style="--d:-0.41s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Humorous Column Writing</h3><p class="entry">“From steak-out to coop code”</p><p class="who">Don Ireland</p><p class="place">2nd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best print ad lan-yap cafe becky osterwald 2nd advertising"><div class="star silver" aria-hidden="true" style="--d:-1.54s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Lan-Yap cafe”</p><p class="who">Becky Osterwald</p><p class="place">2nd place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best sports photograph split second survival becky osterwald 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:-2.67s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Sports Photograph</h3><p class="entry">“Split Second Survival”</p><p class="who">Becky Osterwald</p><p class="place">2nd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best business news/feature story less driving, more tail-wagging becky osterwald 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:-3.80s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Business News/Feature Story</h3><p class="entry">“Less driving, more tail-wagging”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best informational graphic why that statute exists staff 3rd photo and design"><div class="star bronze" aria-hidden="true" style="--d:-4.93s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Informational Graphic</h3><p class="entry">“Why that statute exists”</p><p class="who">Staff</p><p class="place">3rd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best politics reporting no kings protest becky osterwald 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:-6.06s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Politics Reporting</h3><p class="entry">“No Kings Protest”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best print ad dostal alley becky osterwald 3rd advertising"><div class="star bronze" aria-hidden="true" style="--d:-7.19s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Dostal Alley”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best series or sustained coverage strip club don ireland 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:-0.82s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Series or Sustained Coverage</h3><p class="entry">“Strip Club”</p><p class="who">Don Ireland</p><p class="place">3rd place · Editorial</p></div></li>
       </ul>
     </section>
 
@@ -493,7 +511,7 @@ html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { a
     const q = input.value.trim().toLowerCase();
     let shown = 0;
     for (const c of cards) {
-      const ok = (show === 'all' || c.dataset.pub === show) && (!q || c.dataset.search.includes(q));
+      const ok = (show === 'all' || c.dataset.pub === show) && (!q || c.dataset.text.includes(q));
       c.hidden = !ok; if (ok) shown++;
     }
     for (const s of shelves) s.hidden = !s.querySelector('.dg-card:not([hidden])');
@@ -510,12 +528,24 @@ html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { a
     tabs.forEach(x => x.removeAttribute('aria-current'));
     t.setAttribute('aria-current', 'page');
     show = t.dataset.show; apply(); placeLens();
-    const target = document.querySelector(t.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: motion ? 'smooth' : 'auto', block: 'start' });
+    const dest = document.querySelector(t.getAttribute('href'));
+    const to = dest && dest.hidden ? (empty.hidden ? document.getElementById('awards') : empty) : dest;
+    if (to) to.scrollIntoView({ behavior: motion ? 'smooth' : 'auto', block: to === empty ? 'center' : 'start' });
   }));
   new ResizeObserver(placeLens).observe(tabbar);
+  const ui = document.querySelector('.dg-ui');
+  const fitDock = () => root.style.setProperty('--dock-space', (ui.offsetHeight - 12) + 'px');  // minus the 28px scrim padding, plus 16px
+  new ResizeObserver(fitDock).observe(ui);
+
+  // 16: hovering a card spins its star faster without jumping to a new angle.
+  for (const c of cards) {
+    const spin = c.querySelector('.spin');
+    const rate = n => spin.getAnimations().forEach(a => a.updatePlaybackRate(n));
+    c.addEventListener('pointerenter', () => rate(5));
+    c.addEventListener('pointerleave', () => rate(1));
+  }
   input.addEventListener('input', apply);
-  document.querySelector('[data-search]').addEventListener('submit', e => { e.preventDefault(); apply(); input.blur(); });
+  input.form.addEventListener('submit', e => { e.preventDefault(); apply(); input.blur(); });
 
   // Refraction only where backdrop-filter:url() renders (Chromium today).
   const chromium = !!(navigator.userAgentData && navigator.userAgentData.brands.some(b => /Chromium/.test(b.brand)));
@@ -532,6 +562,7 @@ html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { a
     root.dataset.motion = on ? 'on' : 'off';
     motionBtn.setAttribute('aria-pressed', String(on));
     motionBtn.setAttribute('aria-label', on ? 'Turn motion off' : 'Turn motion on');
+    if (!on) root.classList.remove('is-ready', 'motion-pending');
     if (on) loop(); else { cancelAnimationFrame(raf); raf = 0; vars.forEach(v => { hero.style.setProperty(v, 0); root.style.setProperty(v, 0); }); }
   }
   function loop() {
@@ -566,11 +597,17 @@ html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { a
   setMotion(!reduce.matches);
 
   // Center-down reveal, once, after the display face has loaded.
-  if (motion) {
+  if (motion && root.classList.contains('motion-pending')) {
     let done = false;
-    const reveal = () => { if (!done) { done = true; root.classList.add('is-ready'); } };
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(reveal, reveal);
+    const reveal = () => {
+      if (done) return; done = true;
+      root.classList.add('is-ready'); root.classList.remove('motion-pending');
+      setTimeout(() => root.classList.remove('is-ready'), 1600);
+    };
+    (document.fonts ? document.fonts.load('600 100px "DG Display"') : Promise.resolve()).then(reveal, reveal);
     setTimeout(reveal, 1200);
+  } else {
+    root.classList.remove('motion-pending');
   }
   apply();
   status.textContent = '';
