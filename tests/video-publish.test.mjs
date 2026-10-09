@@ -389,6 +389,7 @@ test('published overlay merges into the public catalog without exposing drafts',
       playback: { type: 'mp4', url: 'https://res.cloudinary.com/satcomtest/video/upload/satcom/published/x.mp4' },
     }],
   };
+  const emptyCatalog = { version: 1, items: [] };
   const fixture = {
     version: 1,
     items: [{
@@ -410,17 +411,20 @@ test('published overlay merges into the public catalog without exposing drafts',
   const videos = publicCatalog(merged, NOW + 1000);
   assert.equal(videos.length, 1);
   assert.equal(videos[0].id, 'genesee-evening-20260929-clip');
+  assert.ok(!videos.some(v => v.id === 'paul-hill-rodeo-20260720-01'), 'must not read data/video-feed.json');
   const env = { VIDEO_PUBLISHED_CATALOG_URL: 'https://res.cloudinary.com/satcomtest/raw/upload/satcom-studio/published/catalog.json' };
   const result = await readCatalog({
     env,
-    catalog: { version: 1, items: [] },
+    catalog: emptyCatalog,
     fetchImpl: async (url) => {
       assert.equal(String(url), env.VIDEO_PUBLISHED_CATALOG_URL);
       return Response.json(overlay);
     },
   });
   assert.equal(result.source, 'catalog+published');
-  assert.equal(result.catalog.items[0].id, 'genesee-evening-20260929-clip');
+  assert.deepEqual(result.catalog.items.map(i => i.id), ['genesee-evening-20260929-clip']);
+  assert.ok(!result.catalog.items.some(i => i.id === 'paul-hill-rodeo-20260720-01'));
+  assert.ok(!result.catalog.items.some(i => i.id === 'unreleased-draft-clip'));
 });
 
 test('OAuth callback finishes without a session cookie when the signed state is valid', async () => {
@@ -539,6 +543,73 @@ test('re-approve restores an unpublished YouTube video instead of uploading agai
   assert.equal(second.json.jobs.find(j => j.target === 'youtube').status, 'succeeded');
   assert.equal(youtubeUploads.filter(u => u.snippet).length, inserts);
   assert.ok(youtubeUploads.some(u => u.update?.status?.privacyStatus === 'unlisted'));
+});
+
+test('a timed-out YouTube PUT does not start a second insert on retry', async () => {
+  const inserts = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const fetchImpl = async (url, options = {}) => {
+    const u = String(url);
+    const method = (options.method || 'GET').toUpperCase();
+    if (u.startsWith('https://www.googleapis.com/upload/youtube/v3/videos') && method === 'POST' && !u.includes('upload_id=')) {
+      inserts.push(JSON.parse(options.body));
+      return new Response('', { status: 200, headers: { Location: 'https://www.googleapis.com/upload/youtube/v3/videos?upload_id=session-timeout' } });
+    }
+    if (u.includes('upload_id=session-timeout') && method === 'PUT') {
+      throw Object.assign(new Error('The operation was aborted due to timeout'), { name: 'TimeoutError' });
+    }
+    return mockFetch()(url, options);
+  };
+  const handler = createStudioHandler({ getEnv: () => env, fetchImpl, clock: () => NOW, publishStore });
+  const cookie = await login(handler, '203.0.113.95');
+  const first = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(first.statusCode, 200, first.body);
+  assert.equal(first.json.jobs.find(j => j.target === 'youtube').status, 'failed');
+  assert.equal(inserts.length, 1);
+  const retry = await call(handler, { cookie, body: { op: 'publish-retry', ...reviewed, target: 'youtube', version: first.json.version } });
+  assert.equal(retry.statusCode, 200, retry.body);
+  assert.equal(inserts.length, 1, 'retry must not start a second YouTube insert after an unconfirmed PUT');
+  const again = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed, version: first.json.version } });
+  assert.equal(again.statusCode, 200, again.body);
+  assert.equal(inserts.length, 1, 're-approve must not start a second YouTube insert');
+});
+
+test('a YouTube video id persisted before success is reused instead of inserted again', async () => {
+  const youtubeUploads = [];
+  const publishStore = createPublishMemoryStore();
+  const env = { VIDEO_STUDIO_PASSWORD: PASSWORD, ...CLOUD, ...YT };
+  await saveTokens(env, publishStore, { refresh_token: '1//refresh', access_token: 'ya29.access', expiry_ms: NOW + 3_600_000 });
+  const gate = evaluateGate(reviewed, { sidecar });
+  const version = contentVersion({
+    public_id: source.public_id,
+    title: gate.title,
+    description: gate.description,
+    shoot_date: gate.shoot_date,
+    credit_name: gate.credit_name,
+  });
+  await publishStore.upsertJob({
+    idempotency_key: idempotencyKey(source.public_id, version, 'youtube'),
+    asset_public_id: source.public_id,
+    version,
+    target: 'youtube',
+    status: 'uploading',
+    youtube_video_id: 'dQw4w9wgXcQ',
+    updated_at_ms: NOW,
+  });
+  const handler = createStudioHandler({
+    getEnv: () => env,
+    fetchImpl: mockFetch({ youtubeUploads }),
+    clock: () => NOW,
+    publishStore,
+  });
+  const cookie = await login(handler, '203.0.113.96');
+  const res = await call(handler, { cookie, body: { op: 'publish-approve', ...reviewed } });
+  assert.equal(res.statusCode, 200, res.body);
+  assert.equal(res.json.jobs.find(j => j.target === 'youtube').status, 'succeeded');
+  assert.equal(res.json.jobs.find(j => j.target === 'youtube').youtube_video_id, 'dQw4w9wgXcQ');
+  assert.equal(youtubeUploads.filter(u => u.snippet).length, 0);
 });
 
 test('in-flight YouTube jobs are not uploaded a second time', async () => {
