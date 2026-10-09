@@ -1,0 +1,33 @@
+WRC DAILY NEWSLETTER BRIEFING - 2026-10-09
+Prepared for Gerri
+Reporting period: October 1-9, 2026
+
+EXECUTIVE SUMMARY
+The public Weekly Register-Call archive has advanced through the October 1 issue. The Villager continues to feature Bob and Gerri Sweeney's Hall of Fame thank-you. Finance, subscriber, SEO, calendar and CRM data remain unavailable because authorized account access was not present.
+
+FINANCIALS
+Unavailable, not zero. Invoice Manager opens a Clerk sign-in page in development mode. Invoices, collections, receivables, overdue balances and the $495 draft were not verified.
+
+SUBSCRIBERS
+Unavailable, not zero. Subscriber Manager requires Google Workspace sign-in. Totals, additions, cancellations, renewals and renewal rate were not verified. Keep Version 123 as the Villager proof baseline and approve a distinct follow-up card. Use QR subscription response plus printer presort, indicia and mail-drop; mailing shells are unnecessary.
+
+SEO / TOP 20 / CALENDAR
+Unavailable, not zero. GA4, Search Console, CRM and internal calendar connectors were not accessible. No metrics, prospect rankings or dates were invented.
+
+NEWS AND SPORTS
+Verified change: WRC's public archive is live through October 1. Confirm fresh local scores, school schedules and outdoor events before publication. The Villager still leads with Hall of Fame and September community reporting.
+
+HOT NEWS
+Use postmaster@weeklyregistercall.com for community-board intake. Same-day outreach requires staff approval, lawful permission, sender identification and STOP/UNSUBSCRIBE handling.
+
+AILEEN
+Aileen is a virtual AI executive assistant, not a human employee. Direct line: 877-357-8499. Outside-call transfer testing was not verified.
+
+NEXT ACTIONS
+1. Authorize the production Clerk account.
+2. Restore approved Workspace access for Subscriber Manager.
+3. Approve the distinct Villager follow-up card and renewal sequence.
+4. Reconnect analytics, calendar and CRM sources.
+5. Confirm current editorial and sports assignments.
+
+No credentials, private subscriber details or fabricated figures are included.
