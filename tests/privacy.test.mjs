@@ -39,6 +39,9 @@ test('/privacy is served by cleanUrls from privacy.html without a new rewrite', 
   ]);
   assert.deepEqual(vercel.rewrites.map(r => [r.source, r.destination]), [
     ['/apikeys', '/apistore'],
+    ['/video/review-continue', '/video/review-continue.html'],
+    ['/video/review', '/video/review.html'],
+    ['/video/submit', '/video/submit.html'],
     ['/video/studio', '/video/studio.html'],
     ['/video/upload', '/video/creator-upload'],
     ['/video/upload/:token', '/video/creator-upload'],

@@ -25,3 +25,19 @@ The five hardest locks (a summary; the YAML is authoritative):
 4. No secrets in chat, issues, PRs, logs, or git. Use secret stores only.
 5. No private medical information in public places, group chats, or repos.
 <!-- /LOCKED-DECISIONS-BOOT -->
+
+## Cloud agents: advise vs execute
+
+This is operator working guidance for this public repo. It is **not** a second copy of the locks. The execute document and canonical decisions stay in `idigitalpro1/codex` (`LOCKED_DECISIONS.yaml` and related execute notes). If that private file cannot be read, say so and do not guess a lock. Do not duplicate the YAML here.
+
+On GitHub issues:
+
+- **Advise**: classify the issue, cite evidence, and name the remaining publisher decision. Do not close or invent a lock from chat.
+- **Execute**: only the documented, additive change named in the issue or PR when it does not choose a production path or touch a locked surface.
+
+On merge conflicts:
+
+- **Execute** only simple additive conflicts: keep both routes, docs sections, and env tables when they do not choose a production path.
+- **Advise / stop** when intents conflict: two review gates, two catalog sources of truth, or any change to `/subscribe`, Stripe, QR, DNS, or prices.
+- Previews only. Do not merge to production unless Patrick says **Merge**.
+- Record evidence and the remaining publisher decision on the PR. Do not invent a second source of truth here.

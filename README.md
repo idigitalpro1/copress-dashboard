@@ -23,6 +23,19 @@ The development board is **[/kanban](https://satcom.conews.press/kanban)**. It r
 
 The new `/mcp` endpoint provides reviewed public context only; it does not activate the local vault, receptionist, delivery or deployment tools. Build with `npm run build`, test with `npm test`, and use `npm run verify:mcp -- https://satcom.conews.press/mcp` for an actual SDK connection check. See [architecture and runbook](docs/SATCOM_ARCHITECTURE.md). Cross-system decisions remain in the private `idigitalpro1/codex` repository.
 
+## SATCOM video SMS review
+
+Scoped 2026-09-27 exception to the one-admin rule: `/video/submit` (login) and `/video/review` (magic-link session). The public `/api/videos` feed stays read-only. **Do not merge this to production until the publisher says Merge.** `SMS_DRY_RUN` defaults on, so preview and tests log instead of sending.
+
+**Manual setup (publisher):**
+
+1. Apply `supabase/migrations/20260927120000_satcom_video.sql` to the chosen Supabase project. Do not store reviewer phone numbers in this repo. Insert the reviewer allowlist row in SQL on the live database.
+2. Set the env vars documented in [docs/video-network.md](docs/video-network.md) on the Vercel project. Keep `SMS_DRY_RUN` unset or `true` until live SMS is authorized.
+3. Inkbox webhook URL: `https://<host>/api/video-review-sms` for `text.received`, signed with the identity signing key (`X-Inkbox-Signature`). Twilio fallback uses the same path.
+4. Reviewer opt-in: after the allowlist row exists, text `START` to the SATCOM video number. `STOP` opts out. `HELP` returns instructions. Review texts include `/video/review-continue?token=…`. Android link previews do not consume the token; tapping Continue does.
+
+This preview now sits on current `main`, which already has Video Studio, the Google Video Ed feed, and the creator-upload page. SMS review is an additional notify/approve path, not a replacement. Patrick still needs to say which gate is canonical when both are configured.
+
 ## Shared Gemini client (0.2.0, preview only — do not merge)
 
 Stacked on the Video Studio preview. **Does not publish**, does not touch `/subscribe`, Stripe, checkout, postcard QR routes, WordPress or DNS. Patrick owns Python, isolated keys, the Omni queue and `publish_gate` on his server. This repo keeps the Vercel/Studio copy client and lists private Cloudinary drafts under `satcom/generated/`. Studio YouTube quota follows the [Google calculator](https://developers.google.com/youtube/v3/determine_quota_cost) update of **2026-09-15** (`videos.insert` has its own 100/day bucket; `YOUTUBE_DAILY_UPLOAD_CAP=6` is an editorial cap, not a Google limit). Full operator notes: [docs/youtube.md](docs/youtube.md), [docs/gemini.md](docs/gemini.md) and [packages/satcom-gemini/README.md](packages/satcom-gemini/README.md).
@@ -37,7 +50,6 @@ Preview env only (Patrick sets these; this PR does not change Vercel/DNS):
 | `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Optional copy usage log + circuit (apply `supabase/migrations/` yourself; not applied here). No `video_jobs` table. |
 
 Recommended Google Cloud **billing-account hard cap: $150/month**. Consumer Gemini subscriptions do not cover API charges. In-app caps cannot stop a leaked key.
-
 
 ## Pages
 
