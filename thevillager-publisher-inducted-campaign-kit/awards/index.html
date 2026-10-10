@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="en" class="no-js" data-motion="auto">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#1a2170">
+<meta name="robots" content="noindex">
+<title>Villager &amp; Register-Call Awards</title>
+<meta name="description" content="Bob and Gerri Sweeney's 2026 Colorado Press Association Hall of Fame induction and the fifteen 2025 Better News Contest awards won by The Villager and the Weekly Register-Call.">
+<link rel="icon" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/apple-touch-icon.png">
+<link rel="preload" href="/thevillager-publisher-inducted-campaign-kit/awards/assets/fredoka-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+(() => {
+  const r = document.documentElement;
+  r.classList.replace('no-js', 'js');
+  const on = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+  r.dataset.motion = on ? 'on' : 'off';
+  if (on) { r.classList.add('motion-pending'); setTimeout(() => r.classList.remove('motion-pending'), 2500); }
+})();
+</script>
+<style>
+/* =====================================================================
+   Awards wall · Depth + Glass (LOCK-021) · spec: docs/brand/depth-glass-standard.md
+   Layer order: stage plate → giant glass "16" → Hall of Fame plaque (the subject)
+   → floating glass dock. Below: two shelves of spinning medal stars.
+   ===================================================================== */
+@font-face {
+  font-family: "DG Display";
+  src: url("/thevillager-publisher-inducted-campaign-kit/awards/assets/fredoka-latin-var.woff2") format("woff2");
+  font-weight: 300 700;
+  font-stretch: 75% 125%;
+  font-display: swap;
+}
+:root {
+  color-scheme: dark;
+  /* Plate: stage blue sampled from the convention photos, settling into the page colour */
+  --dg-sky-1: #2b3196; --dg-sky-2: #1a2170; --dg-sky-3: #0d1230;
+  --dg-ink: #fff;
+  /* Glass materials (spec §5) */
+  --dg-clear-bg: rgb(255 255 255 / .12);
+  --dg-clear-filter: blur(14px) saturate(190%) brightness(1.08);
+  --dg-regular-bg: rgb(14 18 44 / .54);
+  --dg-regular-filter: blur(26px) saturate(170%) brightness(.74);
+  --dg-glass-border: rgb(255 255 255 / .22);
+  --dg-rim: inset 0 1px 0 rgb(255 255 255 / .55), inset 0 -1px 0 rgb(255 255 255 / .10),
+            inset 1px 0 0 rgb(255 255 255 / .10), inset -1px 0 0 rgb(255 255 255 / .05);
+  /* Depth (spec §6) */
+  --dg-r-capsule: 999px; --dg-r-panel: 28px; --dg-r-card: 22px; --dg-r-chip: 14px;
+  --dg-elev-1: 0 1px 2px rgb(0 0 0 / .18), 0 4px 12px rgb(0 0 0 / .12);
+  --dg-elev-2: 0 2px 6px rgb(0 0 0 / .18), 0 12px 32px rgb(0 0 0 / .22);
+  --dg-elev-3: 0 4px 10px rgb(0 0 0 / .2), 0 24px 60px rgb(0 0 0 / .32);
+  --dg-ease: cubic-bezier(.2, .8, .2, 1);
+  --dg-spring: cubic-bezier(.34, 1.36, .64, 1);
+  --dg-reveal: 1100ms;
+  --dg-inset: 12px;
+  --display: "DG Display", ui-rounded, "SF Pro Rounded", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Room the floating dock needs at the bottom (two rows on phones, one row from 600px) */
+  --dock-space: 176px;   /* measured by JS; this is the no-JS fallback */
+  --hero-dock: 176px;
+  /* Medal metals */
+  --gold-1: #fff1b8; --gold-2: #f2c447; --gold-3: #9c6a0e; --gold-edge: #6b4708; --gold-ink: #2b1d02;
+  --silv-1: #ffffff; --silv-2: #d6dce8; --silv-3: #7f889c; --silv-edge: #555d70; --silv-ink: #1b2131;
+  --bron-1: #ffd2a8; --bron-2: #d98a4b; --bron-3: #7c3f15; --bron-edge: #55290b; --bron-ink: #2e1405;
+  --star: polygon(50% 0%, 61.2% 34.5%, 97.6% 34.5%, 68.2% 55.9%, 79.4% 90.5%, 50% 69.1%, 20.6% 90.5%, 31.8% 55.9%, 2.4% 34.5%, 38.8% 34.5%);
+}
+@media (min-width: 660px) { :root { --dock-space: 120px; --hero-dock: 120px; } }
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--dg-sky-3); scroll-padding-top: 16px; scroll-padding-bottom: var(--dock-space); }
+body { margin: 0; background: var(--dg-sky-3); color: var(--dg-ink); font: 400 1rem/1.55 var(--body); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.dg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.no-js .js-only { display: none !important; }
+
+/* ---------- Hero: plate, display type, subject ---------- */
+.dg-hero {
+  --sy: 0; --p: 0; --mx: 0; --my: 0; --gx: 0; --gy: 0;      /* written by JS */
+  --H: max(100svh, 600px);
+  --fs: min(46svh, 62vw, 470px);                          /* display numeral size */
+  position: relative; height: var(--H); overflow: hidden; isolation: isolate;
+  container: dg-hero / inline-size;
+}
+.dg-bg {
+  position: absolute; inset: -8% -4% -4%; z-index: 0;
+  background:
+    radial-gradient(60% 46% at 50% 8%, rgb(160 170 255 / .30), transparent 70%),
+    radial-gradient(45% 40% at 8% 38%, rgb(70 110 255 / .22), transparent 70%),
+    radial-gradient(45% 40% at 94% 46%, rgb(140 80 230 / .22), transparent 70%),
+    linear-gradient(180deg, var(--dg-sky-1) 0%, var(--dg-sky-2) 46%, var(--dg-sky-3) 92%);
+}
+.dg-stage {
+  position: relative; z-index: 1; height: 100%;
+  display: flex; flex-direction: column; align-items: center;
+  padding: calc(env(safe-area-inset-top) + clamp(20px, 4.5svh, 44px)) 16px 0;
+}
+.dg-type { display: flex; flex-direction: column; align-items: center; gap: 6px; transform-origin: 50% 0; pointer-events: none; }
+.dg-eyebrow {
+  margin: 0; text-align: center; max-width: min(48ch, 92vw); text-wrap: balance;
+  font: 600 clamp(15px, 2.1svh, 28px)/1.3 var(--body); letter-spacing: .02em;
+  color: rgb(255 255 255 / .92); text-shadow: 0 1px 2px rgb(8 12 40 / .45);
+}
+.dg-display {
+  display: block; margin: 0;
+  font-family: var(--display); font-weight: 600; font-stretch: 75%; font-variation-settings: "wdth" 75;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs); line-height: .78; letter-spacing: -.015em; white-space: nowrap;
+  color: rgb(255 255 255 / .72);
+  background: linear-gradient(180deg, rgb(255 255 255 / .95) 0%, rgb(255 255 255 / .74) 45%, rgb(255 255 255 / .52) 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 10px 30px rgb(8 12 40 / .28));
+  transform: scaleY(1.12); transform-origin: 50% 100%;
+  padding-top: .06em; user-select: none;
+}
+
+/* Layer 3: the Hall of Fame plaque, rendered from the original. It covers about the bottom
+   quarter of the numerals, never more than 40%. */
+.dg-subject {
+  --pl-h: clamp(230px, calc(var(--H) - var(--hero-dock) - 96px - var(--fs) * .62), 440px);
+  position: relative; z-index: 1;
+  margin-top: calc(var(--fs) * -.24);
+  width: min(calc(var(--pl-h) * .8), 86vw);
+  perspective: 1100px;
+}
+.plaque-tilt { transform-style: preserve-3d; transform: rotateY(calc(-7deg + var(--mx) * 10deg)) rotateX(calc(3deg - var(--my) * 6deg)); }
+.plaque {
+  container-type: inline-size;
+  position: relative; aspect-ratio: 4 / 5; overflow: hidden;
+  border-radius: 2.6%/2.1%;
+  padding: 7.5% 8% 8%;
+  display: grid; grid-template-rows: auto auto auto 1fr auto;
+  background:
+    radial-gradient(120% 70% at 18% 0%, rgb(255 255 255 / .10), transparent 55%),
+    linear-gradient(152deg, #202026, #09090b 58%, #141418);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / .22), inset 0 0 0 1px rgb(255 255 255 / .07), inset 0 -2px 0 rgb(0 0 0 / .5),
+    0 2px 0 #2a2a30, 0 4px 0 #0c0c0e,
+    var(--dg-elev-3), 0 40px 90px rgb(10 6 40 / .6);
+}
+.plaque::after {
+  content: ""; position: absolute; inset: -40% -60%; pointer-events: none;
+  background: linear-gradient(105deg, transparent 42%, rgb(255 255 255 / .15) 49%, rgb(255 236 170 / .09) 52%, transparent 58%);
+  transform: translateX(-60%);
+}
+.foil {
+  background: linear-gradient(180deg, #fff3c4 0%, #f2c447 42%, #c98f1c 72%, #f7dc87 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+}
+.pl-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 4cqw; }
+.pl-org { padding-top: 3cqw; font: 700 3.7cqw/1.2 var(--body); letter-spacing: .06em; text-transform: uppercase; color: rgb(255 255 255 / .86); }
+.pl-org span { display: block; color: #8fb8ff; }
+.pl-year { display: grid; grid-template-columns: auto auto; align-items: end; column-gap: .6cqw; line-height: .82; font-family: var(--display); font-weight: 650; font-stretch: 75%; font-variation-settings: "wdth" 75; }
+.pl-year .sm { font-size: 7.4cqw; }
+.pl-year .big { font-size: 17cqw; grid-row: 1; grid-column: 2; }
+.pl-year .ind { grid-row: 2; grid-column: 2; font: 600 4.2cqw/1.25 var(--body); letter-spacing: .02em; }
+.pl-year .stack { grid-row: 1 / span 2; display: grid; align-content: end; line-height: .9; padding-bottom: .4cqw; }
+.pl-hof { margin-top: 5cqw; font: 600 6.6cqw/1.2 var(--body); }
+.pl-rule { height: max(2px, .7cqw); width: 60%; margin-top: 1.8cqw; border-radius: 2px; background: linear-gradient(90deg, #f2c447, rgb(242 196 71 / .12)); }
+.laurel { width: 74%; justify-self: center; align-self: center; filter: drop-shadow(0 2px 5px rgb(0 0 0 / .55)); }
+.pl-names { text-align: center; font: 800 8.4cqw/1.12 var(--body); letter-spacing: .05em; text-transform: uppercase; }
+
+/* ---------- Glass materials (spec §5) ---------- */
+.glass {
+  position: relative; isolation: isolate; color: #fff;
+  border: 1px solid var(--dg-glass-border);
+  background: var(--dg-clear-bg);
+  -webkit-backdrop-filter: var(--dg-clear-filter); backdrop-filter: var(--dg-clear-filter);
+  box-shadow: var(--dg-rim), var(--dg-elev-2);
+}
+.glass--regular { background: var(--dg-regular-bg); -webkit-backdrop-filter: var(--dg-regular-filter); backdrop-filter: var(--dg-regular-filter); }
+.glass::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: -1;
+  background: radial-gradient(130% 90% at calc(30% + var(--gx, 0) * 35%) calc(-10% + var(--gy, 0) * 25%), rgb(255 255 255 / .32), rgb(255 255 255 / 0) 55%);
+  mix-blend-mode: soft-light;
+}
+.glass::after {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; pointer-events: none; padding: 1px;
+  background: linear-gradient(calc(135deg + var(--gx, 0) * 50deg), rgb(255 255 255 / .7), rgb(255 255 255 / 0) 32%, rgb(255 255 255 / 0) 68%, rgb(255 255 255 / .35));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+}
+.has-refraction .glass--lens { -webkit-backdrop-filter: url(#dg-refract) var(--dg-regular-filter); backdrop-filter: url(#dg-refract) var(--dg-regular-filter); }
+.ic { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ic .back { fill: currentColor; fill-opacity: .28; stroke: none; }
+
+/* ---------- Content below the hero ---------- */
+.dg-main { max-width: 1120px; margin: 0 auto; padding: clamp(36px, 6vw, 64px) 16px calc(var(--dock-space) + env(safe-area-inset-bottom)); }
+.intro { max-width: 660px; margin: 0 auto; text-align: center; }
+.intro h1 { margin: 0; font: 650 clamp(36px, 7.4vw, 60px)/1 var(--display); font-stretch: 75%; font-variation-settings: "wdth" 75; letter-spacing: .005em; text-wrap: balance; }
+.intro p { margin: 14px auto 0; max-width: 56ch; color: rgb(255 255 255 / .82); text-wrap: pretty; }
+.tally { list-style: none; padding: 0; margin: 24px auto 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.tally li { display: flex; align-items: center; gap: 8px; min-height: 40px; padding: 6px 14px 6px 10px; border-radius: var(--dg-r-chip); box-shadow: var(--dg-rim), var(--dg-elev-1); font: 600 14px/1 var(--body); font-variant-numeric: tabular-nums; }
+.tally b { font: 650 20px/1 var(--display); font-stretch: 75%; font-variation-settings: "wdth" 75; }
+.tally .dot { width: 15px; height: 15px; clip-path: var(--star); }
+.tally .gold .dot { background: linear-gradient(160deg, var(--gold-1), var(--gold-2), var(--gold-3)); }
+.tally .silver .dot { background: linear-gradient(160deg, var(--silv-1), var(--silv-2), var(--silv-3)); }
+.tally .bronze .dot { background: linear-gradient(160deg, var(--bron-1), var(--bron-2), var(--bron-3)); }
+.tally .hof .dot { clip-path: none; border-radius: 3px; background: linear-gradient(160deg, #3a3a40, #0b0b0d); box-shadow: inset 0 0 0 1.5px var(--gold-2); }
+
+.shelf { margin-top: clamp(44px, 7vw, 72px); }
+.shelf-head { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 16px; padding-bottom: 10px; border-bottom: 1px solid rgb(255 255 255 / .14); }
+.shelf-head h2 { margin: 0; font: 650 clamp(26px, 4.4vw, 38px)/1.05 var(--display); font-stretch: 75%; font-variation-settings: "wdth" 75; letter-spacing: .01em; }
+.shelf-head p { margin: 0; font-size: 14px; color: rgb(255 255 255 / .74); font-variant-numeric: tabular-nums; }
+.dg-grid { list-style: none; padding: 0; margin: 20px 0 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 268px), 1fr)); gap: 16px; }
+.dg-card { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; padding: 14px 18px 14px 10px; border-radius: var(--dg-r-card); }
+.dg-card[hidden], .shelf[hidden] { display: none; }
+.meta { min-width: 0; }
+.cat { margin: 0; font: 700 12px/1.3 var(--body); letter-spacing: .1em; text-transform: uppercase; color: rgb(255 255 255 / .8); }
+.entry { margin: 5px 0 0; font: 600 19px/1.15 var(--display); font-stretch: 75%; font-variation-settings: "wdth" 75; letter-spacing: .01em; text-wrap: balance; }
+.who { margin: 6px 0 0; font-size: 14px; line-height: 1.35; }
+.place { margin: 6px 0 0; font-size: 12.5px; color: rgb(255 255 255 / .74); letter-spacing: .02em; }
+.dg-empty { margin: 40px auto 0; text-align: center; color: rgb(255 255 255 / .82); }
+.source { margin: clamp(44px, 6vw, 60px) auto 0; max-width: 64ch; text-align: center; font-size: 13px; color: rgb(255 255 255 / .74); }
+
+/* ---------- Spinning medal stars: stacked star layers give a metal edge as they turn ---------- */
+.star { --s: clamp(92px, 24vw, 108px); position: relative; width: var(--s); height: var(--s); flex: none; perspective: 520px; }
+.star::before { content: ""; position: absolute; inset: -18%; border-radius: 50%; background: radial-gradient(circle, var(--glow), transparent 62%); opacity: .5; }
+.spin { position: absolute; inset: 0; transform-style: preserve-3d; transform: rotateY(-22deg) rotateZ(-4deg); }
+.spin > * { position: absolute; inset: 0; clip-path: var(--star); }
+.spin i { background: linear-gradient(180deg, var(--m3), var(--edge)); }
+.spin i:nth-child(1) { transform: translateZ(-5px); } .spin i:nth-child(2) { transform: translateZ(-4px); }
+.spin i:nth-child(3) { transform: translateZ(-3px); } .spin i:nth-child(4) { transform: translateZ(-2px); }
+.spin i:nth-child(5) { transform: translateZ(-1px); } .spin i:nth-child(6) { transform: translateZ(0); }
+.spin i:nth-child(7) { transform: translateZ(1px); }  .spin i:nth-child(8) { transform: translateZ(2px); }
+.spin i:nth-child(9) { transform: translateZ(3px); }  .spin i:nth-child(10) { transform: translateZ(4px); }
+.spin i:nth-child(11) { transform: translateZ(5px); }
+.face { display: grid; place-items: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; color: var(--mink); }
+.face::before { content: ""; position: absolute; inset: 0; clip-path: var(--star); background: radial-gradient(circle at 34% 26%, rgb(255 255 255 / .85) 0 6%, transparent 26%), conic-gradient(from 210deg at 50% 55%, var(--m2), var(--m1), var(--m2) 30%, var(--m3) 52%, var(--m2) 70%, var(--m1) 86%, var(--m2)); }
+.face::after { content: ""; position: absolute; inset: 15%; clip-path: var(--star); background: linear-gradient(165deg, var(--m1), var(--m2) 40%, var(--m3)); opacity: .55; }
+.face--front { transform: translateZ(6px); }
+.face--back { transform: rotateY(180deg) translateZ(6px); }
+.rk, .mono { position: relative; z-index: 1; margin-top: 12%; font: 700 calc(var(--s) * .27)/1 var(--display); font-stretch: 75%; font-variation-settings: "wdth" 75; text-shadow: 0 1px 0 rgb(255 255 255 / .45); }
+.rk small { font-size: .5em; vertical-align: .55em; margin-left: 1px; }
+.mono { font-size: calc(var(--s) * .2); letter-spacing: .02em; }
+.gold { --m1: var(--gold-1); --m2: var(--gold-2); --m3: var(--gold-3); --edge: var(--gold-edge); --mink: var(--gold-ink); --glow: rgb(242 196 71 / .55); }
+.silver { --m1: var(--silv-1); --m2: var(--silv-2); --m3: var(--silv-3); --edge: var(--silv-edge); --mink: var(--silv-ink); --glow: rgb(214 220 232 / .45); }
+.bronze { --m1: var(--bron-1); --m2: var(--bron-2); --m3: var(--bron-3); --edge: var(--bron-edge); --mink: var(--bron-ink); --glow: rgb(217 138 75 / .5); }
+
+/* ---------- Floating dock: search, motion, tab bar (no anchored header or footer) ---------- */
+.dg-ui {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; pointer-events: none;
+  padding: 28px calc(var(--dg-inset) + env(safe-area-inset-right)) calc(var(--dg-inset) + 4px + env(safe-area-inset-bottom)) calc(var(--dg-inset) + env(safe-area-inset-left));
+  background: linear-gradient(to top, rgb(5 8 25 / .55), transparent);
+}
+.dg-dock-c { container: dg-dock / inline-size; }
+.dg-dock { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.dg-dock__row { display: flex; gap: 10px; align-items: center; }
+.dg-ui :is(form, button, nav) { pointer-events: auto; }
+.glass-btn { display: inline-grid; place-items: center; flex: none; width: 52px; height: 52px; padding: 0; border-radius: var(--dg-r-capsule); cursor: pointer; transition: transform .2s var(--dg-spring), background-color .2s; -webkit-tap-highlight-color: transparent; }
+.glass-btn:active { transform: scale(.92); }
+.glass-btn[aria-pressed="true"] { background: rgb(255 255 255 / .3); }
+.dg-search { flex: 1; min-width: 0; height: 52px; margin: 0; display: flex; align-items: center; gap: 8px; padding: 0 16px; border-radius: var(--dg-r-capsule); }
+.dg-search svg { flex: none; width: 20px; height: 20px; }
+.dg-search input { flex: 1; min-width: 0; height: 40px; border: 0; background: transparent; color: #fff; font: 500 16px/1 var(--body); border-radius: var(--dg-r-chip); }
+.dg-search input::placeholder { color: rgb(255 255 255 / .78); }
+.dg-search input:focus { outline: none; }
+.dg-search input::-webkit-search-cancel-button { filter: invert(1); }
+.dg-search:focus-within { box-shadow: var(--dg-rim), var(--dg-elev-3), 0 0 0 3px rgb(255 255 255 / .9); }
+.dg-tabbar { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; height: 62px; padding: 5px; border-radius: var(--dg-r-capsule); }
+.dg-tabbar__lens { position: absolute; top: 5px; bottom: 5px; left: 0; width: var(--lens-w, 25%); translate: var(--lens-x, 5px) 0; border-radius: var(--dg-r-capsule); background: rgb(255 255 255 / .16); box-shadow: inset 0 1px 0 rgb(255 255 255 / .45), var(--dg-elev-1); transition: translate .45s var(--dg-spring), width .45s var(--dg-spring); }
+.no-js .dg-tabbar__lens { display: none; }
+.dg-tab { position: relative; z-index: 1; display: grid; place-items: center; align-content: center; gap: 2px; min-width: 44px; border-radius: var(--dg-r-capsule); color: rgb(255 255 255 / .82); text-decoration: none; font: 600 12px/1.05 var(--body); text-align: center; padding-inline: 4px; }
+.dg-tab[aria-current="page"] { color: #fff; }
+:is(.glass-btn, .dg-tab):focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+@container dg-dock (min-width: 600px) {
+  .dg-dock { flex-direction: row; justify-content: center; align-items: center; gap: 12px; }
+  .dg-dock__row { display: contents; }
+  .dg-tabbar { order: 1; width: min(400px, 58cqw); flex-shrink: 0; }
+  .dg-search { order: 2; flex: 0 1 260px; }
+  .dg-dock [data-action="motion"] { order: 3; }
+}
+@container dg-dock (min-width: 1000px) { .dg-search { flex-basis: 300px; } }
+@container dg-dock (min-width: 1560px) { .dg-tabbar { width: 440px; } }
+@media (min-width: 600px) { .dg-ui { --dg-inset: 20px; } }
+@media (min-width: 1024px) { .dg-ui { --dg-inset: 28px; } }
+@media (min-width: 1600px) { .dg-ui { --dg-inset: 40px; } }
+@media (horizontal-viewport-segments: 2) { .dg-dock-c { width: calc(env(viewport-segment-right 0 0) - 40px); } }
+@media (vertical-viewport-segments: 2) { .dg-ui { padding-top: 20px; } }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .glass { background: rgb(20 26 60 / .78); } }
+
+/* ---------- Motion: on unless the device asks for reduced motion; the dock toggle overrides ---------- */
+@keyframes dg-unfold { from { clip-path: inset(50% 0 50% 0); transform: translateY(-8%) scaleY(.82); opacity: .2; } 60% { opacity: 1; } to { clip-path: inset(0 0 0 0); transform: scaleY(1.12); } }
+@keyframes dg-drop { from { opacity: 0; transform: translateY(-10px); } }
+@keyframes dg-rise { from { opacity: 0; transform: translateY(5%); } }
+@keyframes dg-float { from { opacity: 0; transform: translateY(22px) scale(.96); } }
+@keyframes spin { from { transform: rotateY(0deg) rotateZ(-4deg); } to { transform: rotateY(360deg) rotateZ(-4deg); } }
+@keyframes pulse { 0%, 100% { opacity: .35; transform: scale(.92); } 50% { opacity: .7; transform: scale(1.04); } }
+@keyframes sway { 0%, 100% { transform: rotateY(-4deg) translateY(0); } 50% { transform: rotateY(4deg) translateY(-6px); } }
+@keyframes sheen { 0%, 55% { transform: translateX(-60%); } 85%, 100% { transform: translateX(60%); } }
+
+html.motion-pending :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { opacity: 0; }
+html.is-ready .dg-display { animation: dg-unfold var(--dg-reveal) var(--dg-ease) .12s backwards; }
+html.is-ready .dg-eyebrow { animation: dg-drop 700ms var(--dg-ease) .05s backwards; }
+html.is-ready .dg-subject { animation: dg-rise var(--dg-reveal) var(--dg-ease) backwards; }
+html.is-ready .dg-dock { animation: dg-float 800ms var(--dg-spring) .6s backwards; }
+html[data-motion="on"] .spin { animation: spin 7.5s linear infinite; animation-delay: var(--d); }
+html[data-motion="on"] .star::before { animation: pulse 3.6s ease-in-out infinite; animation-delay: var(--d); }
+html[data-motion="on"] .plaque::after { animation: sheen 7s ease-in-out infinite 1.2s; }
+html[data-motion="on"] .plaque { animation: sway 10s ease-in-out infinite; }
+html[data-motion="on"] :is(.dg-bg, .dg-type, .dg-subject) { will-change: transform; }
+html[data-motion="on"] .dg-bg { transform: translate3d(calc(var(--mx) * -6px), calc(var(--sy) * .5px + var(--my) * -4px), 0); }
+html[data-motion="on"] .dg-type { transform: translate3d(calc(var(--mx) * 10px), calc(var(--sy) * .35px + var(--my) * 6px), 0) scaleY(calc(1 + var(--p) * .18)); }
+html[data-motion="on"] .dg-subject { translate: calc(var(--mx) * 18px) calc(var(--sy) * .06px + var(--my) * 10px); }
+html[data-motion="off"] .plaque-tilt { transform: rotateY(-7deg) rotateX(3deg); }
+html[data-motion="off"] :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock) { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="on"]) :is(.dg-display, .dg-eyebrow, .dg-subject, .dg-dock, .spin, .plaque) { animation: none !important; }
+  html:not([data-motion="on"]) .star::before, html:not([data-motion="on"]) .plaque::after { animation: none !important; }
+  html:not([data-motion="on"]) .plaque-tilt { transform: rotateY(-7deg) rotateX(3deg); }
+  .dg-tabbar__lens, .glass-btn { transition: none; }
+  .glass-btn:active { transform: none; }
+}
+
+/* ---------- Accessibility fallbacks (spec §5, §11) ---------- */
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .glass--regular, .has-refraction .glass--lens { background: rgb(20 26 60 / .94); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .glass::before { display: none; }
+  .dg-display { -webkit-text-fill-color: #fff; color: #fff; background: none; }
+  .glass-btn[aria-pressed="true"] { background: rgb(64 76 150); }
+}
+@media (prefers-contrast: more) {
+  .glass, .glass--regular { background: rgb(10 14 40 / .9); border-color: #fff; }
+  .glass::before, .glass::after { display: none; }
+  .dg-display { -webkit-text-fill-color: #fff; color: #fff; background: none; filter: none; }
+  .dg-tab, .cat, .place, .shelf-head p, .source { color: #fff; }
+  .glass-btn[aria-pressed="true"] { background: rgb(64 76 150); }
+}
+@media (forced-colors: active) {
+  .glass { border: 2px solid ButtonText; background: ButtonFace; color: ButtonText; }
+  .star { forced-color-adjust: none; }
+  :is(.glass-btn, .dg-tab):focus-visible { outline-color: Highlight; }
+  .dg-search:focus-within { outline: 3px solid Highlight; outline-offset: 3px; }
+  .dg-search input::placeholder { color: GrayText; }
+  .glass-btn[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; }
+  .glass::before, .glass::after, .dg-tabbar__lens { display: none; }
+  .dg-tab[aria-current="page"] { outline: 2px solid Highlight; }
+  .dg-display, .foil { -webkit-text-fill-color: CanvasText; color: CanvasText; forced-color-adjust: none; }
+}
+</style>
+</head>
+<body>
+
+<svg class="dg-defs" aria-hidden="true" focusable="false">
+  <filter id="dg-refract" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB" primitiveUnits="objectBoundingBox">
+    <feImage result="map" preserveAspectRatio="none" x="0" y="0" width="1" height="1"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' preserveAspectRatio='none'%3E%3ClinearGradient id='x'%3E%3Cstop offset='0' stop-color='rgb(0,128,128)'/%3E%3Cstop offset='.16' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='.84' stop-color='rgb(128,128,128)'/%3E%3Cstop offset='1' stop-color='rgb(255,128,128)'/%3E%3C/linearGradient%3E%3ClinearGradient id='y' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='rgb(0,0,0)' stop-opacity='1'/%3E%3Cstop offset='.22' stop-color='rgb(0,0,0)' stop-opacity='0'/%3E%3Cstop offset='.78' stop-color='rgb(0,0,0)' stop-opacity='0'/%3E%3Cstop offset='1' stop-color='rgb(0,255,0)' stop-opacity='1'/%3E%3C/linearGradient%3E%3Crect width='100' height='100' fill='url(%23x)'/%3E%3C/svg%3E"/>
+    <feDisplacementMap in="SourceGraphic" in2="map" scale=".1" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <linearGradient id="lg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff1b8"/><stop offset=".45" stop-color="#f2c447"/><stop offset=".8" stop-color="#b9821a"/><stop offset="1" stop-color="#f6d77a"/>
+  </linearGradient>
+</svg>
+
+<header class="dg-hero" id="top">
+  <div class="dg-bg" aria-hidden="true"></div>
+  <div class="dg-stage">
+    <div class="dg-type" aria-hidden="true">
+      <p class="dg-eyebrow">Colorado Press Association · August 29, 2026</p>
+      <span class="dg-display">16</span>
+    </div>
+    <div class="dg-subject" id="hall-of-fame">
+      <div class="plaque-tilt">
+        <div class="plaque" role="img" aria-label="Hall of Fame plaque: Colorado Press Association, 2026 inductee, Bob and Gerri Sweeney">
+          <div class="pl-top" aria-hidden="true">
+            <span class="pl-org">Colorado Press<span>Association</span></span>
+            <span class="pl-year foil"><span class="stack"><span class="sm">2</span><span class="sm">0</span></span><span class="big">26</span><span class="ind">Inductee</span></span>
+          </div>
+          <div class="pl-hof foil" aria-hidden="true">Hall of Fame</div>
+          <div class="pl-rule" aria-hidden="true"></div>
+          <svg class="laurel" viewBox="0 0 220 154" aria-hidden="true">
+            <path d="M101.0 146.0 L97.0 144.8 L93.1 143.4 L89.3 141.8 L85.7 139.9 L82.3 137.9 L79.0 135.6 L75.9 133.1 L73.0 130.5 L70.2 127.7 L67.5 124.7 L65.1 121.6 L62.8 118.3 L60.6 114.9 L58.6 111.4 L56.8 107.8 L55.1 104.0 L53.6 100.2 L52.3 96.3 L51.1 92.3 L50.1 88.2 L49.3 84.1 L48.6 80.0 L48.1 75.8 L47.8 71.6 L47.6 67.3 L47.6 63.1 L47.8 58.8 L48.2 54.6 L48.7 50.3 L49.4 46.2 L50.3 42.0 L51.3 37.9 L52.5 33.9 L53.9 29.9 L55.5 26.0 L57.2 22.2 L59.2 18.5 L61.3 14.9 L63.5 11.4 L66.0 8.0" fill="none" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(88.6 141.4) rotate(-113.0) scale(1.12)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(88.6 141.4) rotate(-193.0) scale(1.12)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(74.7 132.1) rotate(-97.9) scale(1.07)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(74.7 132.1) rotate(-177.9) scale(1.07)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(63.7 119.7) rotate(-84.4) scale(1.01)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(63.7 119.7) rotate(-164.4) scale(1.01)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(55.4 104.8) rotate(-72.7) scale(0.96)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(55.4 104.8) rotate(-152.7) scale(0.96)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(50.1 88.2) rotate(-62.2) scale(0.90)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(50.1 88.2) rotate(-142.2) scale(0.90)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(47.7 70.7) rotate(-52.4) scale(0.85)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(47.7 70.7) rotate(-132.4) scale(0.85)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(48.4 52.9) rotate(-42.7) scale(0.79)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(48.4 52.9) rotate(-122.7) scale(0.79)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(52.0 35.5) rotate(-32.5) scale(0.74)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(52.0 35.5) rotate(-112.5) scale(0.74)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(58.8 19.2) rotate(-21.2) scale(0.68)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(58.8 19.2) rotate(-101.2) scale(0.68)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(66.0 8.0) rotate(-54.1) scale(.8)"/>
+            <path d="M119.0 146.0 L123.0 144.8 L126.9 143.4 L130.7 141.8 L134.3 139.9 L137.7 137.9 L141.0 135.6 L144.1 133.1 L147.0 130.5 L149.8 127.7 L152.5 124.7 L154.9 121.6 L157.2 118.3 L159.4 114.9 L161.4 111.4 L163.2 107.8 L164.9 104.0 L166.4 100.2 L167.7 96.3 L168.9 92.3 L169.9 88.2 L170.7 84.1 L171.4 80.0 L171.9 75.8 L172.2 71.6 L172.4 67.3 L172.4 63.1 L172.2 58.8 L171.8 54.6 L171.3 50.3 L170.6 46.2 L169.7 42.0 L168.7 37.9 L167.5 33.9 L166.1 29.9 L164.5 26.0 L162.8 22.2 L160.8 18.5 L158.7 14.9 L156.5 11.4 L154.0 8.0" fill="none" stroke="url(#lg)" stroke-width="2.4" stroke-linecap="round"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(131.4 141.4) rotate(13.0) scale(1.12)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(131.4 141.4) rotate(-67.0) scale(1.12)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(145.3 132.1) rotate(-2.1) scale(1.07)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(145.3 132.1) rotate(-82.1) scale(1.07)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(156.3 119.7) rotate(-15.6) scale(1.01)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(156.3 119.7) rotate(-95.6) scale(1.01)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(164.6 104.8) rotate(-27.3) scale(0.96)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(164.6 104.8) rotate(-107.3) scale(0.96)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(169.9 88.2) rotate(-37.8) scale(0.90)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(169.9 88.2) rotate(-117.8) scale(0.90)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(172.3 70.7) rotate(-47.6) scale(0.85)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(172.3 70.7) rotate(-127.6) scale(0.85)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(171.6 52.9) rotate(-57.3) scale(0.79)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(171.6 52.9) rotate(-137.3) scale(0.79)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(168.0 35.5) rotate(-67.5) scale(0.74)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(168.0 35.5) rotate(-147.5) scale(0.74)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(161.2 19.2) rotate(-78.8) scale(0.68)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(161.2 19.2) rotate(-158.8) scale(0.68)"/>
+            <path d="M0 0Q7 -4.6 15 0Q7 4.6 0 0Z" fill="url(#lg)" transform="translate(154.0 8.0) rotate(-125.9) scale(.8)"/>
+          </svg>
+          <div class="pl-names foil" aria-hidden="true">Bob &amp; Gerri<br>Sweeney</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="dg-main" id="awards">
+  <div class="intro">
+    <h1>Sixteen honors, one night</h1>
+    <p>Bob and Gerri Sweeney went into the Colorado Press Association Hall of Fame, and The Villager and the Weekly Register-Call brought home fifteen awards in the 2025 Better News Contest.</p>
+    <ul class="tally" aria-label="Award totals">
+      <li class="glass glass--regular gold"><span class="dot" aria-hidden="true"></span><b>5</b> first place</li>
+      <li class="glass glass--regular silver"><span class="dot" aria-hidden="true"></span><b>5</b> second place</li>
+      <li class="glass glass--regular bronze"><span class="dot" aria-hidden="true"></span><b>5</b> third place</li>
+      <li class="glass glass--regular hof"><span class="dot" aria-hidden="true"></span><b>1</b> Hall of Fame</li>
+    </ul>
+  </div>
+
+    <section class="shelf" id="villager" aria-labelledby="h-villager">
+      <div class="shelf-head"><h2 id="h-villager">The Villager</h2><p>6 awards · 4 first place</p></div>
+      <ul class="dg-grid" role="list">
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best advertising special section colorado gives day susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:-0.00s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Advertising Special Section</h3><p class="entry">“Colorado Gives Day”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best news media/house ad promotion villager quarterly review susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:-1.13s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best News Media/House Ad Promotion</h3><p class="entry">“Villager Quarterly Review”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best print ad joshua tree susan sweeney lanam, tom mctighe 1st advertising"><div class="star gold" aria-hidden="true" style="--d:-2.26s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Joshua Tree”</p><p class="who">Susan Sweeney Lanam, Tom McTighe</p><p class="place">1st place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best sports column writing prime&#x27;s scoop comes with messages for all denny dressman 1st editorial"><div class="star gold" aria-hidden="true" style="--d:-3.39s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Sports Column Writing</h3><p class="entry">“Prime&#x27;s scoop comes with messages for all”</p><p class="who">Denny Dressman</p><p class="place">1st place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best cover design celebrate spring tom mctighe, susan sweeney lanam 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:-4.52s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Cover Design</h3><p class="entry">“Celebrate Spring”</p><p class="who">Tom McTighe, Susan Sweeney Lanam</p><p class="place">2nd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="villager" data-text="best page design man &amp; woman of the year 2024 the villager 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:-5.65s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">V</span></b></div></div><div class="meta"><h3 class="cat">Best Page Design</h3><p class="entry">“Man &amp; Woman of the Year 2024”</p><p class="who">The Villager</p><p class="place">2nd place · Photo and Design</p></div></li>
+      </ul>
+    </section>
+    <section class="shelf" id="wrc" aria-labelledby="h-wrc">
+      <div class="shelf-head"><h2 id="h-wrc">Weekly Register-Call</h2><p>9 awards · 1 first place</p></div>
+      <ul class="dg-grid" role="list">
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best opinion writing  becky osterwald 1st editorial"><div class="star gold" aria-hidden="true" style="--d:-6.78s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">1<small>st</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Opinion Writing</h3><p class="who">Becky Osterwald</p><p class="place">1st place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best humorous column writing from steak-out to coop code don ireland 2nd editorial"><div class="star silver" aria-hidden="true" style="--d:-0.41s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Humorous Column Writing</h3><p class="entry">“From steak-out to coop code”</p><p class="who">Don Ireland</p><p class="place">2nd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best print ad lan-yap cafe becky osterwald 2nd advertising"><div class="star silver" aria-hidden="true" style="--d:-1.54s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Lan-Yap cafe”</p><p class="who">Becky Osterwald</p><p class="place">2nd place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best sports photograph split second survival becky osterwald 2nd photo and design"><div class="star silver" aria-hidden="true" style="--d:-2.67s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">2<small>nd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Sports Photograph</h3><p class="entry">“Split Second Survival”</p><p class="who">Becky Osterwald</p><p class="place">2nd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best business news/feature story less driving, more tail-wagging becky osterwald 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:-3.80s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Business News/Feature Story</h3><p class="entry">“Less driving, more tail-wagging”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best informational graphic why that statute exists staff 3rd photo and design"><div class="star bronze" aria-hidden="true" style="--d:-4.93s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Informational Graphic</h3><p class="entry">“Why that statute exists”</p><p class="who">Staff</p><p class="place">3rd place · Photo and Design</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best politics reporting no kings protest becky osterwald 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:-6.06s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Politics Reporting</h3><p class="entry">“No Kings Protest”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Editorial</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best print ad dostal alley becky osterwald 3rd advertising"><div class="star bronze" aria-hidden="true" style="--d:-7.19s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Print Ad</h3><p class="entry">“Dostal Alley”</p><p class="who">Becky Osterwald</p><p class="place">3rd place · Advertising</p></div></li>
+        <li class="dg-card glass glass--regular" data-pub="wrc" data-text="best series or sustained coverage strip club don ireland 3rd editorial"><div class="star bronze" aria-hidden="true" style="--d:-0.82s"><div class="spin"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><b class="face face--front"><span class="rk">3<small>rd</small></span></b><b class="face face--back"><span class="mono">WRC</span></b></div></div><div class="meta"><h3 class="cat">Best Series or Sustained Coverage</h3><p class="entry">“Strip Club”</p><p class="who">Don Ireland</p><p class="place">3rd place · Editorial</p></div></li>
+      </ul>
+    </section>
+
+  <p class="dg-empty" id="empty" hidden>No award matches that search.</p>
+  <p class="sr-only" id="status" role="status" aria-live="polite"></p>
+
+  <p class="source">From the certificates presented at the Colorado Press Association Annual Convention on August 29, 2026: the 2025 Better News Contest, Class 1. The Hall of Fame plaque is a digital rendering of the original. Display face: Fredoka (SIL Open Font License), self-hosted.</p>
+</main>
+
+<div class="dg-ui">
+  <div class="dg-dock-c">
+    <div class="dg-dock">
+      <div class="dg-dock__row">
+        <form class="dg-search glass glass--regular glass--lens js-only" role="search" action="#" data-search>
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle class="back" cx="10.5" cy="10.5" r="6.5"/><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg>
+          <label class="sr-only" for="dg-q">Search the awards</label>
+          <input id="dg-q" type="search" name="q" placeholder="Search names, titles" autocomplete="off" enterkeyhint="search">
+        </form>
+        <button class="glass glass-btn js-only" type="button" data-action="motion" aria-pressed="true" aria-label="Turn motion off">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="back" d="m12 7 1.5 3.3 3.5.4-2.6 2.4.7 3.5L12 14.9l-3.1 1.7.7-3.5L7 10.7l3.5-.4z"/><path d="M4.5 12a7.5 7.5 0 0 1 13.2-4.9M19.5 12a7.5 7.5 0 0 1-13.2 4.9"/><path d="M18 3.6v3.7h-3.7M6 20.4v-3.7h3.7"/></svg>
+        </button>
+      </div>
+      <nav class="dg-tabbar glass glass--regular glass--lens" aria-label="Primary">
+        <span class="dg-tabbar__lens" aria-hidden="true"></span>
+        <a class="dg-tab" href="#top" data-show="all" aria-current="page">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle class="back" cx="12" cy="10" r="4.2"/><path d="M8.2 20.5C5 18.8 3.6 15.6 3.9 12.2c.2-2 .9-3.8 2.1-5.3M15.8 20.5c3.2-1.7 4.6-4.9 4.3-8.3-.2-2-.9-3.8-2.1-5.3"/><path d="M5.2 15.6 3 15m2.6-4.6-2.2-.9m15.4 6.1L21 15m-2.6-4.6 2.2-.9"/><circle cx="12" cy="10" r="4.2"/></svg>Hall of Fame</a>
+        <a class="dg-tab" href="#awards" data-show="all">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="back" d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/><path d="m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></svg>All awards</a>
+        <a class="dg-tab" href="#villager" data-show="villager">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path class="back" d="M3.5 20v-8l5-4.5 5 4.5V20z"/><path d="M3.5 20v-8l5-4.5 5 4.5V20M13.5 20v-6l3.5-3.2 3.5 3.2V20M2.5 20h19M7 20v-4h3v4"/></svg>Villager</a>
+        <a class="dg-tab" href="#wrc" data-show="wrc">
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect class="back" x="4" y="4.5" width="13" height="15" rx="2"/><path d="M17 8.5h2.5V18a1.5 1.5 0 0 1-3 0V6.5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2V18a1.5 1.5 0 0 0 1.5 1.5H18"/><path d="M7.5 8.5h6M7.5 12h6M7.5 15.5h4"/></svg>Register-Call</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  root.classList.replace('no-js', 'js');
+  const hero = document.querySelector('.dg-hero');
+  const cards = [...document.querySelectorAll('.dg-card')];
+  const shelves = [...document.querySelectorAll('.shelf')];
+  const status = document.getElementById('status');
+  const empty = document.getElementById('empty');
+  const input = document.getElementById('dg-q');
+  const tabbar = document.querySelector('.dg-tabbar');
+  const tabs = [...tabbar.querySelectorAll('.dg-tab')];
+  const motionBtn = document.querySelector('[data-action="motion"]');
+  let show = 'all';
+
+  // Filters: the tab bar picks a paper, the search pill narrows by text.
+  function apply() {
+    const q = input.value.trim().toLowerCase();
+    let shown = 0;
+    for (const c of cards) {
+      const ok = (show === 'all' || c.dataset.pub === show) && (!q || c.dataset.text.includes(q));
+      c.hidden = !ok; if (ok) shown++;
+    }
+    for (const s of shelves) s.hidden = !s.querySelector('.dg-card:not([hidden])');
+    empty.hidden = shown > 0;
+    status.textContent = `Showing ${shown} of ${cards.length} awards`;
+  }
+  function placeLens() {
+    const cur = tabbar.querySelector('[aria-current="page"]');
+    tabbar.style.setProperty('--lens-x', cur.offsetLeft + 'px');
+    tabbar.style.setProperty('--lens-w', cur.offsetWidth + 'px');
+  }
+  tabs.forEach(t => t.addEventListener('click', e => {
+    e.preventDefault();
+    tabs.forEach(x => x.removeAttribute('aria-current'));
+    t.setAttribute('aria-current', 'page');
+    show = t.dataset.show; apply(); placeLens();
+    const dest = document.querySelector(t.getAttribute('href'));
+    const to = dest && dest.hidden ? (empty.hidden ? document.getElementById('awards') : empty) : dest;
+    if (to) to.scrollIntoView({ behavior: motion ? 'smooth' : 'auto', block: to === empty ? 'center' : 'start' });
+  }));
+  new ResizeObserver(placeLens).observe(tabbar);
+  const ui = document.querySelector('.dg-ui');
+  const fitDock = () => root.style.setProperty('--dock-space', (ui.offsetHeight - 12) + 'px');  // minus the 28px scrim padding, plus 16px
+  new ResizeObserver(fitDock).observe(ui);
+
+  // 16: hovering a card spins its star faster without jumping to a new angle.
+  for (const c of cards) {
+    const spin = c.querySelector('.spin');
+    const rate = n => spin.getAnimations().forEach(a => a.updatePlaybackRate(n));
+    c.addEventListener('pointerenter', () => rate(5));
+    c.addEventListener('pointerleave', () => rate(1));
+  }
+  input.addEventListener('input', apply);
+  input.form.addEventListener('submit', e => { e.preventDefault(); apply(); input.blur(); });
+
+  // Refraction only where backdrop-filter:url() renders (Chromium today).
+  const chromium = !!(navigator.userAgentData && navigator.userAgentData.brands.some(b => /Chromium/.test(b.brand)));
+  if (chromium && !matchMedia('(prefers-reduced-transparency: reduce)').matches) root.classList.add('has-refraction');
+
+  // Motion: reveal once, then scroll and pointer parallax plus moving glass reflections.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+  let motion = false, inView = true, raf = 0;
+  const target = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
+  const vars = ['--sy', '--p', '--mx', '--my', '--gx', '--gy'];
+  function setMotion(on) {
+    motion = on;
+    root.dataset.motion = on ? 'on' : 'off';
+    motionBtn.setAttribute('aria-pressed', String(on));
+    motionBtn.setAttribute('aria-label', on ? 'Turn motion off' : 'Turn motion on');
+    if (!on) root.classList.remove('is-ready', 'motion-pending');
+    if (on) loop(); else { cancelAnimationFrame(raf); raf = 0; vars.forEach(v => { hero.style.setProperty(v, 0); root.style.setProperty(v, 0); }); }
+  }
+  function loop() {
+    if (raf || !motion || !inView) return;
+    const step = () => {
+      raf = 0;
+      if (!motion || !inView) return;
+      const r = hero.getBoundingClientRect();
+      const sy = Math.min(Math.max(-r.top, 0), r.height);
+      const p = sy / r.height;
+      cur.x += (target.x - cur.x) * 0.08;
+      cur.y += (target.y - cur.y) * 0.08;
+      hero.style.setProperty('--sy', sy.toFixed(1));
+      hero.style.setProperty('--p', p.toFixed(4));
+      hero.style.setProperty('--mx', cur.x.toFixed(4));
+      hero.style.setProperty('--my', cur.y.toFixed(4));
+      root.style.setProperty('--gx', (cur.x + p * 1.2).toFixed(4));
+      root.style.setProperty('--gy', (cur.y + p * 2).toFixed(4));
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+  }
+  addEventListener('pointermove', e => {
+    if (!finePointer.matches) return;
+    target.x = (e.clientX / innerWidth) * 2 - 1;
+    target.y = (e.clientY / innerHeight) * 2 - 1;
+  }, { passive: true });
+  document.addEventListener('pointerleave', () => { target.x = 0; target.y = 0; });
+  new IntersectionObserver(([en]) => { inView = en.isIntersecting; if (inView) loop(); }).observe(hero);
+  motionBtn.addEventListener('click', () => setMotion(!motion));
+  reduce.addEventListener?.('change', () => setMotion(!reduce.matches));
+  setMotion(!reduce.matches);
+
+  // Center-down reveal, once, after the display face has loaded.
+  if (motion && root.classList.contains('motion-pending')) {
+    let done = false;
+    const reveal = () => {
+      if (done) return; done = true;
+      root.classList.add('is-ready'); root.classList.remove('motion-pending');
+      setTimeout(() => root.classList.remove('is-ready'), 1600);
+    };
+    (document.fonts ? document.fonts.load('600 100px "DG Display"') : Promise.resolve()).then(reveal, reveal);
+    setTimeout(reveal, 1200);
+  } else {
+    root.classList.remove('motion-pending');
+  }
+  apply();
+  status.textContent = '';
+})();
+</script>
+</body>
+</html>
