@@ -2748,13 +2748,17 @@ function maybeLoadCampaignHandoff() {
 
 function applyCampaignHandoff(options = {}) {
   const rawHandoff = readCampaignHandoff();
-  const handoff = rawHandoff && SubscriptionCampaigns.normalizeHandoff(rawHandoff, state.publication);
+  let handoff;
+  try { handoff = rawHandoff && SubscriptionCampaigns.normalizeHandoff(rawHandoff, state.publication); }
+  catch { showToast('Campaign publication/offer mapping is unavailable — choose a supported offer in Marketing Hub', 'red'); return; }
   if (!handoff) {
     showToast('No campaign handoff found', 'red');
     return;
   }
   if (handoff.publication && PUBLICATIONS[handoff.publication]) {
     savePublicationFields();
+    // Clear the previous publication's offer before applyPublication renders.
+    state.stories = [];
     state.publication = handoff.publication;
     applyPublication();
   }
@@ -2766,7 +2770,9 @@ function applyCampaignHandoff(options = {}) {
     byline: 'Campaign Kit',
     kicker: handoff.kicker,
     campaignType: handoff.campaignType,
+    offerId: handoff.offerId,
     ctaLabel: handoff.ctaLabel,
+    draftBlockers: handoff.blockers || [],
     villagerUrl: handoff.villagerUrl,
     wrcUrl: handoff.wrcUrl,
     published: handoff.published || new Date().toISOString().slice(0, 10),
@@ -2876,10 +2882,11 @@ function updatePreview() {
     el.innerHTML = `
       <div class="email-header">
         <h1>${subscription ? brand.name + ' · Subscription Invitation' : brand.businessName}</h1>
-        <div class="issue-badge">${lead ? (formatPubDate(lead) || 'Current Issue') : 'Current Issue'}</div>
+        <div class="issue-badge">${subscription ? 'Draft subscription campaign' : (lead ? (formatPubDate(lead) || 'Current Issue') : 'Current Issue')}</div>
       </div>
       <div class="hero-strip">📰 ${brand.tagline}</div>
       <div class="email-body">
+        ${subscription ? `<div role="note" style="padding:12px;border:1px solid #aa7700;background:#fff5da;color:#352400"><strong>DRAFT · Operator review required</strong><p>${escapeHtml((lead.draftBlockers || []).join('; '))}</p></div>` : ''}
         ${lead ? `
         <div class="biz-feature">
           <div class="biz-icon">🏛</div>

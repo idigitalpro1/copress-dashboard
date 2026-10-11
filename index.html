@@ -3572,14 +3572,15 @@ body.satcom-gated #satcom-entry-gate {
                   <div class="module-field"><label for="subscription-publication">Publication</label><select id="subscription-publication" onchange="refreshSubscriptionDraft()"><option value="villager">The Villager</option><option value="wrc">Weekly Register-Call</option></select></div>
                 </div>
                 <div class="module-form">
+                  <div class="module-field"><label for="subscription-offer">Subscription product / offer</label><select id="subscription-offer" onchange="refreshSubscriptionDraft()"></select></div>
                   <div class="module-field"><label for="subscription-channel">Delivery option</label><select id="subscription-channel" onchange="refreshSubscriptionDraft()"><option value="email">Email · live-text subscription button</option><option value="picture-text">Picture-text · vertical QR artwork + clickable URL</option><option value="qr">Dedicated QR · existing subscription destination</option></select></div>
                   <label><input type="checkbox" id="subscription-consent" onchange="refreshSubscriptionDraft()"> Channel opt-in has been verified for the intended contact</label>
                 </div>
                 <p>Link selection does not create a subscriber, verify payment or enroll anyone in a drip program. Contact details and consent evidence must be captured by an approved enrollment service.</p>
                 <button class="module-btn" disabled title="No connected enrollment adapter">Enroll in SATCOM / HubSpot drip · unavailable</button>
-                <p>Postcards: 4×6 inches, bleed pending. Picture messages: vertical artwork with the exact subscription QR and accompanying clickable URL. Sports artwork remains blocked until an approved photo is supplied.</p>
+                <p>Postcards: 4×6 inches, bleed pending. Picture messages: vertical artwork with the selected product checkout QR and clickable URL. Existing printed QR doors stay frozen; generic draft QR art is not a product-specific asset. Sports artwork remains blocked until an approved photo is supplied.</p>
                 <div class="output-box" id="subscription-draft-status" role="status">Choose a concept and publication to review its draft requirements.</div>
-                <div id="subscription-channel-preview" hidden><strong>Draft channel preview</strong><p id="subscription-channel-copy"></p><a id="subscription-channel-url" target="_blank" rel="noopener"></a><p>Artwork unavailable for review: no inspected vertical image or dedicated QR asset is attached. This link does not enroll a contact.</p></div>
+                <div id="subscription-channel-preview" hidden><strong>Draft product/channel preview</strong><p id="subscription-channel-copy"></p><a id="subscription-channel-url" target="_blank" rel="noopener"></a><p>Artwork unavailable for review: no inspected vertical image or dedicated QR asset is attached. This link does not enroll a contact.</p></div>
                 <div class="module-actions"><button class="module-btn primary" onclick="openSubscriptionDraft()">Preview selected option</button><button class="module-btn" onclick="exportSubscriptionDraft()">Export draft specification</button></div>
                 <p>The canonical 2026 Google Sheet and Campaign_Log remain authoritative. Stripe-to-Sheet is manual. Invoice Manager remains the financial engine; CoNews retains navigation and authentication.</p>
               </div>
@@ -4421,6 +4422,7 @@ function navTo(section) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   view.classList.add('active');
+  if (section === 'marketing') refreshSubscriptionDraft();
   const nav = document.querySelector('[data-view="' + section + '"]');
   if (nav) {
     nav.classList.add('active');
@@ -4446,7 +4448,7 @@ function jumpToHermesPlugins() {
 }
 
 function routeFromHash() {
-  const target = (window.location.hash || '').replace('#', '').trim().toLowerCase();
+  const target = (window.location.hash || new URLSearchParams(window.location.search).get('view') || '').replace('#', '').trim().toLowerCase();
   if (!target) return;
   if (target === 'conversion') {
     navTo('marketing');
@@ -6190,10 +6192,19 @@ function refreshSubscriptionDraft() {
   [...select.options].forEach(option => { option.disabled = !concept.publications.includes(option.value); });
   if (!concept.publications.includes(select.value)) select.value = concept.publications[0];
   document.getElementById('subscription-channel-preview').hidden = true;
-  const draft = SubscriptionCampaigns.createDraft(key, select.value);
+  const offerSelect = document.getElementById('subscription-offer');
+  const offers = SubscriptionCampaigns.offers.filter(item => item.publication === select.value);
+  const previousOffer = offerSelect.value;
+  offerSelect.replaceChildren(...offers.map(offer => {
+    const option = document.createElement('option');
+    option.value = offer.id; option.textContent = offer.name + ' · ' + offer.priceLabel;
+    return option;
+  }));
+  if (offers.some(item => item.id === previousOffer)) offerSelect.value = previousOffer;
+  const draft = SubscriptionCampaigns.createDraft(key, select.value, undefined, offerSelect.value);
   draft.conversion = SubscriptionCampaigns.conversionHandoff(draft, document.getElementById('subscription-channel').value, document.getElementById('subscription-consent').checked);
   document.getElementById('subscription-draft-status').textContent =
-    'DRAFT · ' + draft.title + '\nSubscription URL: ' + draft.readmore + '\nReview blockers:\n' + draft.conversion.blockers.join('\n') + '\nEnrollment: unavailable · no contact enrolled · paid status unverified';
+    'DRAFT · ' + draft.title + '\nOffer: ' + draft.offer.name + ' · ' + draft.offer.priceLabel + '\nProduct checkout (source-mapped): ' + draft.readmore + '\nFrozen printed QR door: ' + draft.subscribePage + '\nReview blockers:\n' + draft.conversion.blockers.join('\n') + '\nEnrollment: unavailable · no contact enrolled · paid status unverified';
   return draft;
 }
 function openSubscriptionDraft() {
