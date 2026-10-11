@@ -3565,6 +3565,25 @@ body.satcom-gated #satcom-entry-gate {
                 <div class="output-box" id="campaign-intake-output">Choose an intake source to begin.</div>
               </div>
               <div class="module-panel">
+                <h3 id="subscription-conversion">Quick subscription conversion · draft review</h3>
+                <p>Use the shared newsletter workflow. Artwork from READY_TO_REVIEW.zip awaits local inspection. No Sendy or SMS delivery is connected here.</p>
+                <div class="module-form">
+                  <div class="module-field"><label for="subscription-concept">Concept</label><select id="subscription-concept" onchange="refreshSubscriptionDraft()"><option value="villager-hall-of-fame">Villager publisher Hall of Fame</option><option value="villager-high-school-sports">Villager high-school sports · photo pending</option><option value="villager-wrc-pairing">Villager/WRC brand pairing · unapproved</option></select></div>
+                  <div class="module-field"><label for="subscription-publication">Publication</label><select id="subscription-publication" onchange="refreshSubscriptionDraft()"><option value="villager">The Villager</option><option value="wrc">Weekly Register-Call</option></select></div>
+                </div>
+                <div class="module-form">
+                  <div class="module-field"><label for="subscription-channel">Delivery option</label><select id="subscription-channel" onchange="refreshSubscriptionDraft()"><option value="email">Email · live-text subscription button</option><option value="picture-text">Picture-text · vertical QR artwork + clickable URL</option><option value="qr">Dedicated QR · existing subscription destination</option></select></div>
+                  <label><input type="checkbox" id="subscription-consent" onchange="refreshSubscriptionDraft()"> Channel opt-in has been verified for the intended contact</label>
+                </div>
+                <p>Link selection does not create a subscriber, verify payment or enroll anyone in a drip program. Contact details and consent evidence must be captured by an approved enrollment service.</p>
+                <button class="module-btn" disabled title="No connected enrollment adapter">Enroll in SATCOM / HubSpot drip · unavailable</button>
+                <p>Postcards: 4×6 inches, bleed pending. Picture messages: vertical artwork with the exact subscription QR and accompanying clickable URL. Sports artwork remains blocked until an approved photo is supplied.</p>
+                <div class="output-box" id="subscription-draft-status" role="status">Choose a concept and publication to review its draft requirements.</div>
+                <div id="subscription-channel-preview" hidden><strong>Draft channel preview</strong><p id="subscription-channel-copy"></p><a id="subscription-channel-url" target="_blank" rel="noopener"></a><p>Artwork unavailable for review: no inspected vertical image or dedicated QR asset is attached. This link does not enroll a contact.</p></div>
+                <div class="module-actions"><button class="module-btn primary" onclick="openSubscriptionDraft()">Preview selected option</button><button class="module-btn" onclick="exportSubscriptionDraft()">Export draft specification</button></div>
+                <p>The canonical 2026 Google Sheet and Campaign_Log remain authoritative. Stripe-to-Sheet is manual. Invoice Manager remains the financial engine; CoNews retains navigation and authentication.</p>
+              </div>
+              <div class="module-panel">
                 <h3>Campaign Brief</h3>
                 <div class="module-form">
                   <div class="module-field"><label>Business / offer</label><input id="campaign-title" placeholder="Mother's Day brunch at..."></div>
@@ -4363,6 +4382,7 @@ body.satcom-gated #satcom-entry-gate {
 <!-- ── Toast Container ─────────────────────────────────────────────── -->
 <div id="toast-container"></div>
 
+<script src="/js/subscription-campaigns.js"></script>
 <script src="/operating-status.js"></script>
 <script>
 // ── Date ───────────────────────────────────────────────────────────
@@ -4428,6 +4448,12 @@ function jumpToHermesPlugins() {
 function routeFromHash() {
   const target = (window.location.hash || '').replace('#', '').trim().toLowerCase();
   if (!target) return;
+  if (target === 'conversion') {
+    navTo('marketing');
+    refreshSubscriptionDraft();
+    document.getElementById('subscription-conversion').scrollIntoView({ block: 'start' });
+    return;
+  }
   if (target === 'plugins' || target === 'plugin-center') {
     navTo('brains');
     setTimeout(() => document.getElementById('hermes-plugin-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
@@ -6155,6 +6181,43 @@ function generateCampaignKit() {
   const link = document.getElementById('campaign-newsletter-link');
   if (link) link.disabled = false;
   toast('Campaign kit generated');
+}
+
+function refreshSubscriptionDraft() {
+  const key = document.getElementById('subscription-concept').value;
+  const select = document.getElementById('subscription-publication');
+  const concept = SubscriptionCampaigns.concepts.find(item => item.key === key);
+  [...select.options].forEach(option => { option.disabled = !concept.publications.includes(option.value); });
+  if (!concept.publications.includes(select.value)) select.value = concept.publications[0];
+  document.getElementById('subscription-channel-preview').hidden = true;
+  const draft = SubscriptionCampaigns.createDraft(key, select.value);
+  draft.conversion = SubscriptionCampaigns.conversionHandoff(draft, document.getElementById('subscription-channel').value, document.getElementById('subscription-consent').checked);
+  document.getElementById('subscription-draft-status').textContent =
+    'DRAFT · ' + draft.title + '\nSubscription URL: ' + draft.readmore + '\nReview blockers:\n' + draft.conversion.blockers.join('\n') + '\nEnrollment: unavailable · no contact enrolled · paid status unverified';
+  return draft;
+}
+function openSubscriptionDraft() {
+  const draft = refreshSubscriptionDraft();
+  if (draft.conversion.channel !== 'email') {
+    document.getElementById('subscription-channel-preview').hidden = false;
+    document.getElementById('subscription-channel-copy').textContent = draft.pictureMessage.copy;
+    const link = document.getElementById('subscription-channel-url');
+    link.href = draft.readmore;
+    link.textContent = draft.readmore;
+    toast('Draft preview only; artwork unavailable. No message sent or enrollment performed.');
+    return;
+  }
+  localStorage.setItem('copress_campaign_handoff', JSON.stringify(draft));
+  window.location.href = '/newsletter?campaign=latest';
+}
+function exportSubscriptionDraft() {
+  const draft = refreshSubscriptionDraft();
+  const url = URL.createObjectURL(new Blob([JSON.stringify(draft, null, 2)], { type: 'application/json' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = draft.concept + '-' + draft.publication + '-draft.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 function sendCampaignToNewsletter() {

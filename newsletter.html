@@ -1516,6 +1516,7 @@
 
 <div class="toast" id="toast"></div>
 
+<script src="/js/subscription-campaigns.js"></script>
 <script>
 // ── STATE ──────────────────────────────────────────────────────────────────
 const PUBLICATIONS = {
@@ -2740,13 +2741,14 @@ function maybeLoadCampaignHandoff() {
   const banner = document.getElementById('campaign-handoff-banner');
   const text = document.getElementById('campaign-handoff-text');
   if (!banner || !text) return;
-  text.textContent = `${handoff.title || 'Latest campaign kit'} is loaded into the marketing template.`;
+  text.textContent = `${handoff.title || 'Latest campaign kit'} · Draft preview only. ${(handoff.blockers || []).join('; ')}`;
   banner.style.display = 'block';
   showToast('Campaign copy loaded into Newsletter Studio', 'green');
 }
 
 function applyCampaignHandoff(options = {}) {
-  const handoff = readCampaignHandoff();
+  const rawHandoff = readCampaignHandoff();
+  const handoff = rawHandoff && SubscriptionCampaigns.normalizeHandoff(rawHandoff, state.publication);
   if (!handoff) {
     showToast('No campaign handoff found', 'red');
     return;
@@ -2760,18 +2762,22 @@ function applyCampaignHandoff(options = {}) {
   state.length = 'brief';
   state.stories = rollLatestNewsToTop([{
     id: 'campaign-handoff',
-    title: handoff.title || 'Local campaign',
+    title: escapeHtml(handoff.title || 'Local campaign'),
     byline: 'Campaign Kit',
-    kicker: 'Sponsored Message',
+    kicker: handoff.kicker,
+    campaignType: handoff.campaignType,
+    ctaLabel: handoff.ctaLabel,
+    villagerUrl: handoff.villagerUrl,
+    wrcUrl: handoff.wrcUrl,
     published: handoff.published || new Date().toISOString().slice(0, 10),
     lead: true,
-    body: handoff.output || handoff.brief || '',
+    body: escapeHtml(handoff.output || handoff.brief || ''),
     readmore: handoff.readmore || getPublication().site,
     selected: true,
   }]);
   const subject = document.getElementById('subject-line');
   const preview = document.getElementById('preview-text');
-  if (subject) subject.value = `${handoff.title || 'Local campaign'} for mountain readers`;
+  if (subject) subject.value = handoff.subject;
   if (preview) preview.value = handoff.brief || `A ${getPublication().name} campaign message for local readers.`;
   document.querySelectorAll('.template-card').forEach(c => c.classList.toggle('selected', c.dataset.tpl === 'marketing'));
   document.querySelectorAll('.length-card').forEach(c => c.classList.toggle('selected', c.dataset.len === 'brief'));
@@ -2822,9 +2828,11 @@ function updatePreview() {
       return url;
     }
   };
-  const storyLink = story => campaignLink(state.publication === 'villager'
-    ? (story.villagerUrl || brand.site)
-    : (story.wrcUrl || story.readmore || issue.fullIssueUrl || brand.site));
+  const storyLink = story => {
+    const url = SubscriptionCampaigns.storyUrl(story, state.publication, issue.fullIssueUrl || brand.site);
+    return story.campaignType === 'subscription' ? url : campaignLink(url);
+  };
+  const subscription = lead?.campaignType === 'subscription';
   const fullIssueLink = campaignLink(issue.fullIssueUrl || brand.site);
 
   if (state.template === 'editorial') {
@@ -2841,7 +2849,7 @@ function updatePreview() {
           <div class="kicker">${lead.kicker}${formatPubDate(lead) ? ' · ' + formatPubDate(lead) : ''}</div>
           <h2>${lead.title}</h2>
           <p>${lead.body}</p>
-          <a class="read-more" href="${storyLink(lead)}">Continue reading →</a>
+          <a class="read-more" href="${storyLink(lead)}">${lead.ctaLabel || 'Continue reading'} →</a>
         </div>
         <div class="divider"></div>` : ''}
         ${previewRest.length ? `
@@ -2867,7 +2875,7 @@ function updatePreview() {
   } else if (state.template === 'marketing') {
     el.innerHTML = `
       <div class="email-header">
-        <h1>${brand.businessName}</h1>
+        <h1>${subscription ? brand.name + ' · Subscription Invitation' : brand.businessName}</h1>
         <div class="issue-badge">${lead ? (formatPubDate(lead) || 'Current Issue') : 'Current Issue'}</div>
       </div>
       <div class="hero-strip">📰 ${brand.tagline}</div>
@@ -2876,9 +2884,10 @@ function updatePreview() {
         <div class="biz-feature">
           <div class="biz-icon">🏛</div>
           <div class="biz-info">
+            <div class="kicker">${lead.kicker}</div>
             <h3>${lead.title}</h3>
             <p>${lead.body}</p>
-            <a class="read-more" href="${storyLink(lead)}">Continue reading →</a>
+            <a class="read-more" href="${storyLink(lead)}">${lead.ctaLabel || 'Continue reading'} →</a>
           </div>
         </div>` : ''}
         <div class="news-list">
@@ -2889,14 +2898,14 @@ function updatePreview() {
           </div>`).join('')}
         </div>
         <div class="cta-box">
-          <p>Open the maintained source for this issue.</p>
-          <a class="cta-btn" href="${fullIssueLink}">${issue.fullIssueLabel || 'Read current coverage'} →</a>
+          <p>${subscription ? 'Support local journalism with a subscription.' : 'Open the maintained source for this issue.'}</p>
+          <a class="cta-btn" style="display:inline-block;padding:12px 24px;background:#1a2744;color:#ffffff;text-decoration:none;border-radius:6px;font-weight:bold" href="${subscription ? storyLink(lead) : fullIssueLink}">${subscription ? 'Subscribe' : (issue.fullIssueLabel || 'Read current coverage')} →</a>
         </div>
-        <div class="ad-block">
+        ${subscription ? '' : `<div class="ad-block">
           <h3>${brand.adTitle}</h3>
           <p>${brand.adCopy}</p>
           <a href="${brand.site}">Get Rates →</a>
-        </div>
+        </div>`}
       </div>
       <div class="email-footer">
         ${brand.name} · <a href="[unsubscribe]">Unsubscribe</a> · <a href="[webversion]">View in browser</a>
@@ -2916,7 +2925,7 @@ function updatePreview() {
             <h3>${lead.title}</h3>
             ${lead.byline ? `<div class="byline">${lead.byline}</div>` : ''}
             <p>${lead.body}</p>
-            <a class="read-more" href="${storyLink(lead)}">Continue reading →</a>
+            <a class="read-more" href="${storyLink(lead)}">${lead.ctaLabel || 'Continue reading'} →</a>
           </div>
         </div>
         <hr class="rule">` : ''}
