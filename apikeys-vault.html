@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SATCOM · API Key Vault</title>
+<style>
+  body{font-family:system-ui,-apple-system,sans-serif;margin:0;background:#0b0f14;color:#e6edf3}
+  header{padding:16px 20px;border-bottom:1px solid #222;display:flex;justify-content:space-between;align-items:center}
+  main{max-width:900px;margin:0 auto;padding:16px}
+  button{background:#1f6feb;color:#fff;border:0;border-radius:8px;padding:10px 14px;font-size:15px;cursor:pointer}
+  button.secondary{background:#30363d} button.danger{background:#b62324}
+  input,textarea{width:100%;box-sizing:border-box;padding:10px;border-radius:8px;border:1px solid #30363d;background:#0d1117;color:#e6edf3;font-size:15px;margin:4px 0 10px}
+  table{width:100%;border-collapse:collapse} td,th{padding:8px;border-bottom:1px solid #21262d;text-align:left;font-size:14px}
+  .card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px;margin:12px 0}
+  .muted{color:#8b949e;font-size:13px} .hidden{display:none} code{word-break:break-all}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<header><strong>🔐 API Key Vault</strong><span class="muted" id="who">checking…</span></header>
+<main>
+  <section id="enroll" class="card hidden">
+    <h3>Set up your passkey</h3>
+    <p class="muted">First time only. Paste the one-time enrollment token from Coolify, or a recovery code.</p>
+    <input id="enrollToken" placeholder="Enrollment token or recovery code" autocomplete="off">
+    <button id="btnEnroll">Enroll passkey (Face ID / Touch ID)</button>
+  </section>
+  <section id="login" class="card hidden">
+    <h3>Sign in</h3><button id="btnLogin">Sign in with passkey</button>
+    <p class="muted"><a href="#" id="lnkRecover" style="color:#58a6ff">Lost your passkeys? Use a recovery code</a></p>
+  </section>
+  <section id="codes" class="card hidden">
+    <h3>Save your recovery codes</h3>
+    <p class="muted">Shown once. Print them and keep them offline with the break-glass kit.</p>
+    <pre id="codeList"></pre><button id="btnCodesDone">I saved them</button>
+  </section>
+  <section id="vault" class="hidden">
+    <div class="card">
+      <h3>Add key</h3>
+      <input id="kName" placeholder="NAME_FROM_CODEX_REGISTRY (e.g. CLOUDINARY_API_KEY)" autocomplete="off">
+      <input id="kService" placeholder="Service (e.g. Cloudinary)"><input id="kOwner" placeholder="Owner bot / app">
+      <textarea id="kValue" rows="2" placeholder="Secret value" autocomplete="off" spellcheck="false"></textarea>
+      <button id="btnAdd">Save to vault</button>
+    </div>
+    <div class="card"><h3>Keys</h3><table><thead><tr><th>Name</th><th>Service</th><th>Ver</th><th>Updated</th><th></th></tr></thead><tbody id="keyRows"></tbody></table></div>
+    <div class="card">
+      <h3>Bot tokens (read-only, scoped)</h3>
+      <input id="tName" placeholder="Bot name (e.g. google-ops)"><input id="tScopes" placeholder="Key names, comma separated">
+      <button id="btnToken">Issue token</button>
+      <p id="tOut" class="muted"></p>
+      <table><tbody id="tokRows"></tbody></table>
+    </div>
+    <div class="card"><h3>Audit log</h3><table><tbody id="auditRows"></tbody></table></div>
+    <div class="row"><button class="secondary" id="btnAddPasskey">Add another passkey</button><button class="secondary" id="btnLogout">Lock vault</button></div>
+  </section>
+</main>
+<script src="/js/apikeys-vault.js" defer></script>
+</body>
+</html>

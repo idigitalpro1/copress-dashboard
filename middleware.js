@@ -7,7 +7,7 @@ export const config = {
   runtime: 'nodejs',
   matcher: [
     '/', '/index', '/index.html',
-    '/apistore', '/apistore.html', '/apikeys',
+    '/apistore', '/apistore.html', '/apikeys', '/apikeys-vault', '/apikeys-vault.html',
     '/csv-manager', '/csv-manager.html',
     '/linear', '/linear.html',
     '/newsletter', '/newsletter.html',

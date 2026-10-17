@@ -1,0 +1,1 @@
+15 3 * * * /bin/sh /etc/periodic/backup.sh >> /backups/backup.log 2>&1
