@@ -28,8 +28,8 @@ Cards rotate every eight seconds while idle. Rotation pauses during playback, ho
 
 1. Paul uploads originals to the existing editorial Drive handoff. Collaborators review/edit there.
 2. Publish the approved final to your existing video host and obtain a public HTTPS MP4/HLS playback URL or an embeddable YouTube video ID. Drive folder/upload links are not playback URLs.
-3. Publish its metadata through the existing editorial system's catalog endpoint, or submit a reviewed change to `data/video-feed.json` for the initial Git-based catalog.
-4. Verify `/api/videos?creator=paul-hill` and the player. Each embedded player refreshes every 30 seconds. A Git-based catalog update requires deployment first; a connected catalog update does not.
+3. Two preview publication paths now exist. Video Studio (`/video/studio`) is on `main` and uses the Review & publish gate plus a Cloudinary overlay. This branch adds SMS/magic-link review at `/video/submit` and `/video/review` (2026-09-27 exception). The publisher has not chosen one exclusive gate. `/api/videos` stays read-only and, when configured, merges Git/connected/Google feed + Studio overlay + SMS-approved `satcom_video` rows.
+4. Verify `/api/videos?creator=paul-hill` and the player. Each embedded player refreshes every 30 seconds. A Git-based catalog update requires deployment first; a connected, overlay, or database catalog update does not.
 
 Keep originals, consent records, internal notes, contact details and private links outside this public repository. Never store tokens or unpublished confidential records in the catalog: repository history remains visible even when an item is not returned by the API. The raw catalog HTTP path redirects to the filtered API before static-file routing.
 
@@ -62,14 +62,31 @@ Operators can prepare branded social cuts, captions, thumbnails and draft entrie
 
 ## Connect an updating catalog
 
-Configure server environment variables on the existing SATCOM project:
+Configure server environment variables on the existing SATCOM project. This repository is public: never commit secrets, reviewer phone numbers, or personal data.
 
 | Variable | Purpose |
 | --- | --- |
 | `VIDEO_FEED_URL` | Fixed HTTPS endpoint returning the version-1 catalog above |
 | `VIDEO_FEED_TOKEN` | Optional bearer token sent only by the server to that endpoint |
+| `SATCOM_VIDEO_SUPABASE_URL` or `SUPABASE_URL` | Supabase project URL for schema `satcom_video` |
+| `SATCOM_VIDEO_SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_SERVICE_ROLE_KEY` | Server-only service role. Never expose to the browser. |
+| `SATCOM_VIDEO_SESSION_SECRET` | Random secret (≥32 bytes) for review/submit cookies |
+| `SATCOM_VIDEO_SUBMIT_USER` / `SATCOM_VIDEO_SUBMIT_PASSWORD` | Login for `/video/submit` only |
+| `SATCOM_VIDEO_PUBLIC_URL` | Public origin used in magic links and Twilio signatures. Example: `https://satcom.5280.menu` |
+| `SATCOM_VIDEO_SMS_PROVIDER` | `inkbox` (default) or `twilio` |
+| `SMS_DRY_RUN` | Defaults **on**. Set `false` only when the publisher authorizes live SMS. Preview and tests stay dry-run. |
+| `SATCOM_VIDEO_MAGIC_LINK_TTL_HOURS` | 24–72, default 48 |
+| `SATCOM_VIDEO_CODE_TTL_HOURS` | Reply-code lifetime, default 72 |
+| `INKBOX_API_KEY` | Inkbox API key (`X-API-Key`) |
+| `INKBOX_PHONE_NUMBER_ID` | Inkbox phone number UUID used to send SMS |
+| `INKBOX_WEBHOOK_SECRET` or `INKBOX_SIGNING_KEY` | Identity signing key. Optional `whsec_` prefix is stripped. |
+| `INKBOX_WEBHOOK_AUTH_TOKEN` | Optional subscription `auth_token`; required as `Authorization: Bearer` when set |
+| `INKBOX_API_BASE_URL` | Optional, default `https://inkbox.ai/api/v1` |
+| `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` / `TWILIO_FROM_NUMBER` | Twilio fallback adapter |
 
-These values are never accepted from a browser query or returned to visitors. The source must return JSON directly without redirects, within five seconds, under 2 MB, with at most 2,000 entries. Without `VIDEO_FEED_URL`, the reviewed repository catalog is used. No public write API or second editorial admin is created. Drive editing access and GitHub editing access remain separate.
+These values are never accepted from a browser query or returned to visitors. The public feed still starts from the Git catalog, `VIDEO_FEED_URL` / Google Video Ed, and the Studio published overlay. When the Supabase pair is set, published `satcom_video.videos` rows are merged on top (same id wins). If they are unset, those SMS-approved rows are simply absent. No public write API is created. The 2026-09-27 SATCOM review page is a scoped exception to the one-admin rule, not a second editorial admin. Which gate is canonical when Studio and SMS are both live is still a publisher decision.
+
+Apply `supabase/migrations/20260927120000_satcom_video.sql` manually to the chosen project. Do not insert reviewer phones in git. After a reviewer row exists, that person texts `START` to the SATCOM video number to opt in, `STOP` to opt out, and `HELP` for instructions. Point the Inkbox `text.received` subscription (and optional Twilio webhook) at `/api/video-review-sms`.
 
 For a real live camera broadcast, send the camera/encoder to the chosen streaming provider. Add the provider's HLS playback URL or YouTube live video ID with `kind: "live"`. A connected catalog should refresh `live_confirmed_at` with the current ISO timestamp only while its provider confirms the broadcast is active. The LIVE badge expires after two minutes without this heartbeat; a persistent channel URL alone is labeled status unconfirmed. Ingest keys must stay with the encoder/provider, never in this feed.
 
