@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Submit video for review | SATCOM</title><link rel="stylesheet" href="/video/player.css"><script src="/video/submit.js" defer></script><style>body{padding:24px 16px}main{max-width:720px;margin:auto}form,.card{border:1px solid var(--line);border-radius:8px;padding:20px;background:var(--panel);margin:18px 0}label{display:grid;gap:6px;margin:12px 0;font-size:13px}input,select,textarea{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px}button{background:var(--accent);border:0;color:var(--bg);border-radius:4px;padding:12px 18px;font-weight:700;cursor:pointer}.muted,#status{color:var(--muted)}</style></head><body><main>
+<nav><a href="/video">← Video network</a></nav>
+<p class="eyebrow">EDITORIAL HANDOFF</p>
+<h1>Submit for review</h1>
+<p class="muted">This form is login-protected. It creates a pending video and texts opted-in reviewers. It is not a public write API.</p>
+<p id="status" role="status"></p>
+<form id="login">
+<label>Username<input name="user" autocomplete="username" required></label>
+<label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+<button type="submit">Sign in</button>
+</form>
+<form id="submit" hidden>
+<label>ID slug<input name="id" required pattern="[a-z0-9]+(?:-[a-z0-9]+)*" placeholder="paul-hill-idaho-springs-001"></label>
+<label>Title<input name="title" required maxlength="200"></label>
+<label>Description<textarea name="description" maxlength="1000" rows="3"></textarea></label>
+<label>Creator<input name="creator" value="paul-hill" required></label>
+<label>Credit<input name="credit" value="Paul Hill · Colorado News Press" required></label>
+<label>Publications (comma slugs)<input name="publications" value="network" required></label>
+<label>Towns (comma slugs)<input name="towns" placeholder="idaho-springs"></label>
+<label>Kind<select name="kind"><option value="recorded">Recorded</option><option value="live">Live</option></select></label>
+<label>Playback type<select name="playback_type"><option value="mp4">MP4</option><option value="hls">HLS</option><option value="youtube">YouTube</option></select></label>
+<label>Playback URL or YouTube ID<input name="playback_value" required placeholder="https://media.example.com/report.mp4"></label>
+<label>Poster URL (optional)<input name="poster_url"></label>
+<button type="submit">Submit for review</button>
+</form>
+</main></body></html>
