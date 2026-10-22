@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>URL-to-video desk | SATCOM</title>
+<link rel="stylesheet" href="/video/player.css">
+<link rel="stylesheet" href="/video/studio.css">
+<script src="/video/url-desk.js" defer></script>
+</head>
+<body>
+<main class="studio-shell">
+  <nav class="studio-nav"><a href="/video/studio">← Video Studio</a><span>URL-to-video desk · <strong>admin</strong> · drafts only</span><button id="logout" class="ghost" type="button" hidden>Sign out</button></nav>
+  <header class="studio-head">
+    <p class="eyebrow">SATCOM · COLORADO NEWS PRESS · THE VILLAGER · REGISTER-CALL</p>
+    <h1>URL-to-video desk</h1>
+    <p class="muted">Paste an article, listing or client site. The server fetches the page and Gemini drafts a video script, title, description and tags. The result lands as a <em>draft</em> in the chosen workspace's review queue. Nothing is generated, uploaded to YouTube or published from here.</p>
+  </header>
+
+  <section id="gate" class="card" aria-live="polite">
+    <p id="gate-status">Checking studio access…</p>
+    <form id="login-form" hidden>
+      <label>Studio password<input id="password" type="password" autocomplete="current-password" required minlength="12"></label>
+      <button class="button" type="submit">Enter studio</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <div id="desk" hidden>
+    <ul id="notes" class="notes"></ul>
+    <section class="card" aria-labelledby="desk-h">
+      <h2 id="desk-h">Draft from a URL</h2>
+      <form id="desk-form">
+        <label>Workspace <select id="workspace"></select></label>
+        <label>Page URL<input id="url" type="url" required maxlength="2000" placeholder="https://example.com/article-or-listing"></label>
+        <div class="row">
+          <label>Title preset<select id="brand"><option value="">None</option></select></label>
+          <label>Length (seconds)<input id="seconds" type="number" min="10" max="90" value="30"></label>
+        </div>
+        <label>Editor angle (optional)<textarea id="angle" rows="2" maxlength="400" placeholder="e.g. lead with the open house on Saturday"></textarea></label>
+        <label class="inline"><input id="request-video" type="checkbox"> Flag this script for video generation (hook only: saved for Patrick's Omni queue, nothing is generated here)</label>
+        <button id="go" class="button" type="submit">Fetch page and draft</button>
+        <p id="status" class="muted small" role="status"></p>
+      </form>
+    </section>
+    <section id="result" class="card" hidden aria-live="polite"></section>
+  </div>
+</main>
+</body>
+</html>
