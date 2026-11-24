@@ -1,6 +1,6 @@
 # SATCOM architecture and MCP runbook
 
-Updated September 7, 2026. The publisher confirmed `satcom.conews.press` as the target for this task. The original `satcom.copress.press` does not resolve; no DNS changes were required.
+Updated September 7, 2026. DEV-027 intended-project map recorded 2026-11-23 (America/Denver). The publisher confirmed `satcom.conews.press` as the target for this task. The original `satcom.copress.press` does not resolve; no DNS changes were required.
 
 ## Structure and ownership
 
@@ -16,6 +16,21 @@ Updated September 7, 2026. The publisher confirmed `satcom.conews.press` as the 
 | Existing Hermes proxy | `/console/api/hermes/*` → `https://codex.conews.press/api/v1/platform/hermes/*` | Preserved; upstream connectivity is not asserted by this release |
 | Local tools | Ace / Hermes / voice / local vault | Must verify machine identity, authentication and actual capability separately |
 | Subscriber alias | `subscribe.thevillager.today` root → `/subscribe-villager/` | Preserved redirect; do not repurpose or break printed destinations |
+
+### Intended Vercel project (DEV-027)
+
+Team `5280menu` (`team_yXUiLQXJG67i2CBkEhLAhE8V`). SATCOM release checks use only this GitHub repo plus **`5280menu/copress-dashboard`** (`prj_khskg2gU0jLL3Y5j3OJxE9q1znkN`). CLI deploys pin that project via committed `.vercel/project.json`. Do not create another Vercel project from this checkout.
+
+Two other team projects are also Git-linked to `idigitalpro1/copress-dashboard`. They are not SATCOM:
+
+| Project | ID | Role | Do not use for |
+|---|---|---|---|
+| `copress-dashboard-x53b` | `prj_FbOoJI2kHplLX4TUzkoOO3qVmYIG` | Accidental CLI duplicate (created 2026-06-30). vercel.app aliases only. | SATCOM previews, production, or MCP checks |
+| `ricks-conews-press` | `prj_Oxy8FrayNdOWc3GcNbxn6z0qhAvU` | Separate host `ricks.conews.press` (verified on that project). | SATCOM release; do not retarget its Git to this repo |
+
+Git-triggered deployments on the two siblings historically reported `BLOCKED` because the same repository is connected three times. When a sibling build later ran, `ricks-conews-press` production `dpl_9u2REwSB4iu6YH3CDgor76Lf4h1x` (2026-10-21) `ERROR`ed: `npm run build` without installed deps (`Cannot find package '@modelcontextprotocol/sdk'`). Canonical `copress-dashboard` production for the same commit stayed `READY` (`dpl_8g8YtyzdBqe8rKMr8HbHb2xuS65K`, 2026-10-23).
+
+Live SATCOM origin for `satcom.conews.press` is Hetzner, not those Vercel aliases. Do not change DNS, `/subscribe`, Stripe, QR destinations, or delete Vercel projects without a separate Patrick GO (LOCK-003, LOCK-016, LOCK-017, LOCK-024). Recommended follow-up: disconnect GitHub from the two siblings in the Vercel dashboard; keep the projects until that GO; keep SATCOM checks on `https://satcom.conews.press`.
 
 The local checkout also contained an unmerged receptionist MCP draft and campaign work. This release starts from remote main and does not merge or activate those drafts. Public MCP has no send, deployment, secret, arbitrary-fetch, subscriber or telephony capability.
 
