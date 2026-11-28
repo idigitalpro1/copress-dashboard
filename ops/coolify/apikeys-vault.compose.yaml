@@ -1,0 +1,79 @@
+# SATCOM API key vault — Coolify Docker Compose (DRAFT, NOT DEPLOYED)
+# Host: Hetzner 2.29.20.177 (LOCK-024). Design: docs/apikeys/DESIGN.md
+# All ${VARS} are set as Coolify secrets. No values live in git (LOCK-008).
+services:
+  openbao:
+    image: quay.io/openbao/openbao:2.4.1   # pin; verify static seal support before deploy
+    command: ["server", "-config=/openbao/config/bao.hcl"]
+    cap_add: [IPC_LOCK]
+    environment:
+      BAO_SEAL_KEY: ${BAO_SEAL_KEY}        # 32 random bytes, base64. Master key. Coolify secret only.
+    volumes:
+      - openbao-data:/openbao/data
+      - openbao-audit:/openbao/audit
+      - ./services/vault-gateway/openbao/bao.hcl:/openbao/config/bao.hcl:ro
+    networks: [vault-internal]
+    # No ports and no Coolify domain: never reachable from the internet.
+    healthcheck:
+      test: ["CMD", "bao", "status", "-address=http://127.0.0.1:8200"]
+      interval: 30s
+      retries: 5
+    restart: unless-stopped
+
+  vault-gateway:
+    build: ./services/vault-gateway
+    environment:
+      BAO_ADDR: http://openbao:8200
+      BAO_GATEWAY_TOKEN: ${BAO_GATEWAY_TOKEN}   # policy satcom-admin only; set after bootstrap
+      RP_ID: conews.press
+      RP_ORIGIN: https://satcom.conews.press
+      ALLOWED_ORIGIN: https://satcom.conews.press
+      SESSION_SECRET: ${SESSION_SECRET}
+      ENROLL_TOKEN: ${ENROLL_TOKEN}             # one-time; delete after first passkey
+      DB_PATH: /data/gateway.sqlite
+      PORT: "8080"
+    volumes:
+      - gateway-data:/data
+    networks: [vault-internal, coolify]
+    read_only: true
+    tmpfs: [/tmp]
+    user: "10001:10001"
+    labels:
+      - coolify.managed=true
+    # Coolify domain: https://vault.conews.press -> port 8080 (Traefik + Let's Encrypt)
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/healthz').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+    depends_on: [openbao]
+    restart: unless-stopped
+
+  vault-backup:
+    image: quay.io/openbao/openbao:2.4.1   # same image so `bao` matches the server
+    # Nightly 03:15 America/Denver: raft snapshot + sqlite backup, age-encrypted, kept on volume
+    # and pushed to R2 once GO-2 exists. See services/vault-gateway/backup.sh
+    entrypoint: ["/bin/sh", "-c", "apk add --no-cache age sqlite >/dev/null && crond -f"]
+    environment:
+      TZ: America/Denver
+      BAO_ADDR: http://openbao:8200
+      BAO_BACKUP_TOKEN: ${BAO_BACKUP_TOKEN}     # policy satcom-backup (raft snapshot read only)
+      BACKUP_AGE_RECIPIENT: ${BACKUP_AGE_RECIPIENT}  # public key only
+      R2_REMOTE: ${R2_REMOTE:-}
+    volumes:
+      - gateway-data:/data:ro
+      - vault-backups:/backups
+      - ./services/vault-gateway/backup.sh:/etc/periodic/backup.sh:ro
+      - ./services/vault-gateway/crontab:/etc/crontabs/root:ro
+    networks: [vault-internal]
+    restart: unless-stopped
+
+volumes:
+  openbao-data:
+  openbao-audit:
+  gateway-data:
+  vault-backups:
+
+networks:
+  vault-internal:
+    internal: true
+  coolify:
+    external: true

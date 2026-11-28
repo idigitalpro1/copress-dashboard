@@ -38,7 +38,7 @@ test('/privacy is served by cleanUrls from privacy.html without a new rewrite', 
     ['/', '/subscribe-villager/'],
   ]);
   assert.deepEqual(vercel.rewrites.map(r => [r.source, r.destination]), [
-    ['/apikeys', '/apistore'],
+    ['/apikeys', '/apikeys-vault'],
     ['/video/studio', '/video/studio.html'],
     ['/video/upload', '/video/creator-upload'],
     ['/video/upload/:token', '/video/creator-upload'],
@@ -51,7 +51,7 @@ test('/privacy is served by cleanUrls from privacy.html without a new rewrite', 
   assert.ok(!vercel.rewrites.some(r => r.source === '/privacy' || r.destination === '/privacy.html'));
 
   const pathname = '/privacy';
-  let file = pathname === '/apikeys' ? '/apistore.html'
+  let file = pathname === '/apikeys' ? '/apikeys-vault.html'
     : pathname === '/video' || pathname === '/video/' ? '/video/index.html'
     : pathname === '/' ? '/index.html' : pathname;
   if (!extname(file)) file += '.html';
