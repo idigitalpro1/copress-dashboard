@@ -166,8 +166,12 @@ test('studio lists incoming creator uploads and can open them as private drafts'
   const login = response();
   await studio({ method: 'POST', url: '/api/studio', body: { op: 'login', password: PASSWORD }, headers: { 'x-studio-request': '1', 'x-forwarded-for': '198.51.100.50' } }, login);
   const cookie = login.headers['Set-Cookie'].split(';')[0];
+  // Paul Hill's phone uploads belong to his workspace, not My properties.
+  const mine = response();
+  await studio({ method: 'POST', url: '/api/studio', headers: { 'x-studio-request': '1', cookie, 'x-forwarded-for': '198.51.100.50' }, body: { op: 'creator-uploads' } }, mine);
+  assert.deepEqual(mine.json.items, []);
   const list = response();
-  await studio({ method: 'POST', url: '/api/studio', headers: { 'x-studio-request': '1', cookie, 'x-forwarded-for': '198.51.100.50' }, body: { op: 'creator-uploads' } }, list);
+  await studio({ method: 'POST', url: '/api/studio', headers: { 'x-studio-request': '1', cookie, 'x-forwarded-for': '198.51.100.50' }, body: { op: 'creator-uploads', workspace: 'paul-hill' } }, list);
   assert.equal(list.statusCode, 200, list.body);
   assert.equal(list.json.published, false);
   assert.equal(list.json.items[0].public_id, 'satcom/paul-hill/incoming/idaho-morning-202610011200-abcd12');
