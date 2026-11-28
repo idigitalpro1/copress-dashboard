@@ -133,6 +133,18 @@
       "destination": "/apistore"
     },
     {
+      "source": "/video/review-continue",
+      "destination": "/video/review-continue.html"
+    },
+    {
+      "source": "/video/review",
+      "destination": "/video/review.html"
+    },
+    {
+      "source": "/video/submit",
+      "destination": "/video/submit.html"
+    },
+    {
       "source": "/video/studio",
       "destination": "/video/studio.html"
     },
