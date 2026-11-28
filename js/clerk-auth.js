@@ -16,7 +16,13 @@
   }
   function safeRedirect(value) {
     const v = String(value || '');
-    return v.startsWith('/') && !v.startsWith('//') && !v.startsWith('/\\') ? v : '/';
+    if (!v.startsWith('/') || v.startsWith('//') || /[\\\u0000-\u001f\u007f]/.test(v)) return '/';
+    try {
+      const url = new URL(v, location.origin);
+      // Dot-segment normalization must not produce a protocol-relative redirect.
+      if (url.origin !== location.origin || url.pathname.startsWith('//')) return '/';
+      return url.pathname + url.search + url.hash;
+    } catch { return '/'; }
   }
   function userButtonHost() {
     let el = document.getElementById('clerk-user');
